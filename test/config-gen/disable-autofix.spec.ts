@@ -1,5 +1,20 @@
 const GEN_MODULE_PATH = '../../src/eslint-types-fixable-only.gen';
 
+const FIXTURES = {
+  zeroFractionNumber: 'zero-fraction-number.js',
+} as const;
+
+const getDisableAutofixPluginRuleNames = async (
+  ...args: Parameters<typeof computeEslintConfig>
+) => {
+  const configResult = await computeEslintConfig(...args);
+
+  return Object.keys(
+    configResult.getConfigByUnPostfix('global-setup/plugins')?.plugins?.['disable-autofix']
+      ?.rules || {},
+  );
+};
+
 describe('`disable-autofix` counterpart rule is added only for fixable rules', () => {
   describe('rule disabled via `addRule`', () => {
     it('adds the disabled counterpart for a fixable rule', async () => {
@@ -61,6 +76,42 @@ describe('`disable-autofix` counterpart rule is added only for fixable rules', (
       expect(configResult.getRuleEntry('cli', 'no-console')).toBe(0);
       expect(configResult.getRuleEntry('cli', 'disable-autofix/no-console')).toBeUndefined();
     });
+  });
+});
+
+describe('`disable-autofix` plugin only holds the rules with an enabled counterpart', () => {
+  it('registers no rules when a config merely enables a fixable rule in bulk', async () => {
+    await expect(getDisableAutofixPluginRuleNames('cli')).resolves.toStrictEqual([]);
+  });
+
+  it('registers the rule whose counterpart is enabled via `disableAutofix`', async () => {
+    await expect(
+      getDisableAutofixPluginRuleNames({
+        unicorn: {
+          overrides: {'unicorn/no-zero-fractions': {severity: 2, disableAutofix: true}},
+        },
+      }),
+    ).resolves.toContain('unicorn/no-zero-fractions');
+  });
+
+  it('reports through the enabled counterpart rule', async () => {
+    const lintResults = await testEslintConfig(
+      {
+        unicorn: {
+          overrides: {'unicorn/no-zero-fractions': {severity: 2, disableAutofix: true}},
+        },
+      },
+      FIXTURES.zeroFractionNumber,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        lintResults,
+        FIXTURES.zeroFractionNumber,
+        'disable-autofix/unicorn/no-zero-fractions',
+      )?.message,
+    ).toMatchInlineSnapshot(`"Don't use a zero fraction in the number."`);
   });
 });
 

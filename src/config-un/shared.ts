@@ -766,13 +766,15 @@ export const processUnOrFlatConfig = (
         });
       }
 
-      if (ruleSeverity !== OFF && !disableAutofix) {
+      if (ruleSeverity !== OFF) {
         context.usedPlugins.add(pluginPrefixCanonical);
 
-        context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
-          ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
-          ruleName,
-        ];
+        if (disableAutofix) {
+          context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
+            ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
+            ruleName,
+          ];
+        }
       }
 
       const shouldCreateDistinctConfigForRule =
