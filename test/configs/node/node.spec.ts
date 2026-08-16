@@ -4,6 +4,7 @@ const FIXTURES = {
   importBuiltinNodeModuleWithoutNodeProtocol: 'import-builtin-node-module-without-node-protocol.js',
   packageJsonWithEnginesNodeFrom14: 'package-json-engines-node-from-14',
   packageJsonWithEnginesNodeFrom20_11: 'package-json-engines-node-from-20-11',
+  packageJsonWithEnginesNodeFrom24: 'package-json-engines-node-from-24',
   packageJsonWithoutEnginesNode: 'package-json-without-engines-node',
 } as const;
 
@@ -110,14 +111,14 @@ describe('rules', () => {
       vi.doUnmock(import('empathic/package'));
     });
 
-    it('enables the rule if supports `import.meta`', async () => {
+    it('leaves the rule untouched if supports `import.meta`', async () => {
       mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
 
       const configResult = await computeEslintConfig('node');
 
       expect(
-        configResult.getRuleEntrySeverity('node', 'unicorn/prefer-import-meta-properties'),
-      ).toBe(2);
+        configResult.getRuleEntry('node', 'unicorn/prefer-import-meta-properties'),
+      ).toBeUndefined();
     });
 
     it('disables the rule if does not support `import.meta`', async () => {
@@ -138,6 +139,36 @@ describe('rules', () => {
       expect(
         configResult.getRuleEntrySeverity('node', 'unicorn/prefer-import-meta-properties'),
       ).toBe(0);
+    });
+  });
+
+  describe("`unicorn/prefer-dispose` rule based on `engines.node` in user's package.json", () => {
+    afterEach(() => {
+      vi.doUnmock(import('empathic/package'));
+    });
+
+    it('leaves the rule untouched if supports explicit resource management', async () => {
+      mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom24);
+
+      const configResult = await computeEslintConfig('node');
+
+      expect(configResult.getRuleEntry('node', 'unicorn/prefer-dispose')).toBeUndefined();
+    });
+
+    it('disables the rule if does not support explicit resource management', async () => {
+      mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
+
+      const configResult = await computeEslintConfig('node');
+
+      expect(configResult.getRuleEntrySeverity('node', 'unicorn/prefer-dispose')).toBe(0);
+    });
+
+    it('disables the rule if `engines.node` is not set in package.json', async () => {
+      mockUserPackageJsonPath(FIXTURES.packageJsonWithoutEnginesNode);
+
+      const configResult = await computeEslintConfig('node');
+
+      expect(configResult.getRuleEntrySeverity('node', 'unicorn/prefer-dispose')).toBe(0);
     });
   });
 });

@@ -570,7 +570,7 @@ export class ConfigEntryBuilder<
       >(
         prefix: P,
         ruleName: N,
-        severity: Severity,
+        severity: Severity | null,
         ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
         options?: AddRuleInternalOptions,
       ) => addRule(prefix, ruleName, severity, ruleOptions, options),

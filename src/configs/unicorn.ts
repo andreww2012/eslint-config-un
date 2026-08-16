@@ -788,7 +788,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-has-check', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('prefer-hoisting-branch-code', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-identifier-import-export-specifiers', ERROR) /** @since 66.0.0 */
-    .addRule('prefer-import-meta-properties', OFF) /** @since 59.0.0 */ // 🔴 used in `node` config
+    .addRule('prefer-import-meta-properties', ERROR) /** @since 59.0.0 */ // 🔴
     .addRule('prefer-includes', ERROR) /** @since 8.0.0 */ // 💭?
     .addRule(
       'prefer-includes-over-repeated-comparisons',

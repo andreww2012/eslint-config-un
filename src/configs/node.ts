@@ -203,6 +203,7 @@ export interface NodeEslintConfigOptions<
 }
 
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
+const EXPLICIT_RESOURCE_MANAGEMENT_AVAILABLE_SINCE = '>=24';
 
 export default defineUnConfig<NodeEslintConfigOptions>('node', {
   enabledBy: true,
@@ -329,11 +330,22 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
     .addRule('prefer-promises/dns', OFF) /** @since 9.0.0 */ // TODO enable?
     .addRule('prefer-promises/fs', OFF) /** @since 9.0.0 */ // TODO enable?
     .addRule('process-exit-as-throw', ERROR) /** @since 1.2.0 */ // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-n/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    // Note: only disabling, since rules may have a different severity set in the `unicorn` config
+    .addAnyRule(
+      'unicorn',
+      'prefer-dispose',
+      isFirstSemverRangeIsSubsetOfSecond(
+        userNodeVersion,
+        EXPLICIT_RESOURCE_MANAGEMENT_AVAILABLE_SINCE,
+      )
+        ? null
+        : OFF,
+    )
     .addAnyRule(
       'unicorn',
       'prefer-import-meta-properties',
       isFirstSemverRangeIsSubsetOfSecond(userNodeVersion, IMPORT_META_PROPERTIES_AVAILABLE_SINCE)
-        ? ERROR
+        ? null
         : OFF,
     )
     .enableConfigTesterForPlugin('node')
