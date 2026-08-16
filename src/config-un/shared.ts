@@ -35,7 +35,7 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {MaybePromise, OmitStrict, Prettify, SetRequired} from '../types';
+import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
 import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
@@ -147,6 +147,9 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
 };
 
 type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
+
+export const ENVIRONMENTS = ['ci', 'editor', 'default'] as const;
+export type Environment = (typeof ENVIRONMENTS)[number];
 
 export interface EslintConfigUnOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -532,6 +535,26 @@ export interface EslintConfigUnOptions<
   gitignore?: boolean | FlatGitignoreOptions;
 
   /**
+   * Tells where ESLint is being run: in CI, within an editor, or in neither of these environments
+   * (`default`).
+   *
+   * By default, the environment is detected by [`ci-info`](https://npmx.dev/ci-info) and
+   * [`is-in-editor`](https://npmx.dev/is-in-editor) packages, and if both of them report a match,
+   * `ci` wins.
+   * The function form is passed the detected environment and may return a nullish value to keep it.
+   *
+   * The resolved environment affects the following:
+   * - the default value of {@link cacheConfigs} (enabled in `editor`);
+   * - the default value of `hide` setting of `fileProgress` config (enabled unless `default`);
+   * - `mode` setting of `importIntegrity` config (set to `editor` in `editor`);
+   * - the configs cache key, i.e. changing the environment invalidates the cache.
+   *
+   * It can also be set by assigning `ESLINT_CONFIG_UN_ENVIRONMENT` environment variable one of the
+   * accepted values, but the explicitly passed value takes precedence.
+   */
+  environment?: MaybeFn<Nullable<Environment>, [detected: Environment]>;
+
+  /**
    * Globally disables all the rules that may perform network requests for validation.
    * @default true <=> `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable is set to non-empty string
    */
@@ -547,7 +570,8 @@ export interface EslintConfigUnOptions<
    * - `package.json`, lockfile contents or package manager
    * - ESLint config file contents
    * - Node.JS version
-   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmx.dev/is-in-editor))
+   * - Resolved {@link environment}
+   * @default true <=> the resolved {@link environment} is `editor`
    */
   cacheConfigs?: boolean;
 
@@ -649,6 +673,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
 
   meta: {
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
+    environment: Environment;
   };
 
   logger: ConsolaInstance;

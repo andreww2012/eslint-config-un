@@ -977,21 +977,32 @@ By default, files from `.gitignore` (read from [the current working directory](h
 Set this option to `false` to disable this behavior.
 You may also provide an object which configures [eslint-config-flat-gitignore](https://npmx.dev/eslint-config-flat-gitignore), which actually provides this functionality.
 
+### `environment`
+
+**Type**: `'ci' | 'editor' | 'default' | ((detected: 'ci' | 'editor' | 'default') => 'ci' | 'editor' | 'default' | null | undefined)`
+
+Tells where ESLint is being run: in CI, within an editor, or in neither of these environments (`default`).
+
+By default, the environment is detected by [`ci-info`](https://npmx.dev/ci-info) and [`is-in-editor`](https://npmx.dev/is-in-editor) packages.
+The function form is passed the detected environment and may return a nullish value to keep it.
+
+It can also be set by assigning [`ESLINT_CONFIG_UN_ENVIRONMENT`](#eslint_config_un_environment) environment variable one of the accepted values, but the explicitly passed value takes precedence.
+
 ### `offlineMode`
 
 **Type**: `boolean`
 
 Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
 
-It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
+It can also be enabled by setting [`ESLINT_CONFIG_UN_OFFLINE_MODE`](#eslint_config_un_offline_mode) environment variable to non-empty string, but the explicitly passed value takes precedence.
 
 ### `cacheConfigs`
 
 **Type**: `boolean`
 
 Enables flat config caching.
-This option is enabled by default when running in editor (detected by [`is-in-editor`](https://npmx.dev/is-in-editor)).
-It can also be enabled by setting `ESLINT_CONFIG_UN_CACHE_CONFIGS` environment variable to non-empty string, but the explicitly passed value takes precedence.
+This option is enabled by default when the resolved [`environment`][environment option] is `editor`.
+It can also be enabled by setting [`ESLINT_CONFIG_UN_CACHE_CONFIGS`](#eslint_config_un_cache_configs) environment variable to non-empty string, but the explicitly passed value takes precedence.
 
 There are 2 layers of caching:
 
@@ -1006,6 +1017,7 @@ The cache, regardless of the storage, is considered fresh for 1 hour, unless one
 - `package.json`, lockfile contents or package manager
 - ESLint config file contents
 - Node.JS version
+- Resolved [`environment`][environment option]
 
 ## Environment variables
 
@@ -1019,6 +1031,11 @@ See [`cacheConfigs` option](#cacheconfigs).
 ### `ESLINT_CONFIG_UN_DISABLE_WARNINGS`
 
 Do not print any warnings to the console.
+
+### `ESLINT_CONFIG_UN_ENVIRONMENT`
+
+See [`environment` option][environment option].
+Unlike the boolean environment variables, only the exact values accepted by that option are recognized; any other non-empty value is ignored with a warning.
 
 ### `ESLINT_CONFIG_UN_OFFLINE_MODE`
 
@@ -1309,6 +1326,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [`eslint-plugin-import-x`]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-import-x]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-no-only-tests]: https://npmx.dev/eslint-plugin-no-only-tests
+[environment option]: #environment
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
 [Zod]: ./assets/logos-zod.svg

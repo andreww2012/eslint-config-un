@@ -44,6 +44,7 @@ export const computeEslintConfig = async (
       // Caching is enabled by default when running in an editor, which could make specs reuse
       // each other's configs. Specs can still opt in via `un.cacheConfigs`
       cacheConfigs: false,
+      environment: 'default',
       ...unOptions,
       configs:
         typeof configsOrSingleConfigName === 'string'

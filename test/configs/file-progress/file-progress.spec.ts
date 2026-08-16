@@ -1,13 +1,3 @@
-import {isInEditor} from 'is-in-editor';
-import * as utils from '../../../src/utils';
-
-vi.mock(import('is-in-editor'));
-
-beforeEach(() => {
-  vi.mocked(isInEditor).mockReturnValue(false);
-  vi.spyOn(utils, 'isInCi', 'get').mockReturnValue(false);
-});
-
 describe('basic tests', () => {
   it('creates `file-progress` eslint config and loads `file-progress` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('fileProgress');
@@ -132,26 +122,15 @@ describe('options', () => {
       ).toStrictEqual({hide: false, ...SETTINGS});
     });
 
-    it('sets `hide` to `true` when in CI', async () => {
-      // eslint-disable-next-line ts/no-unused-vars
-      using _ = vi.spyOn(utils, 'isInCi', 'get').mockReturnValue(true);
+    it.each(['ci', 'editor'] as const)(
+      'sets `hide` to `true` when the resolved environment is `%s`',
+      async (environment) => {
+        const configResult = await computeEslintConfig('fileProgress', {un: {environment}});
 
-      const configResult = await computeEslintConfig('fileProgress');
-
-      expect(
-        configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
-      ).toStrictEqual({hide: true});
-    });
-
-    it('sets `hide` to `true` when in editor', async () => {
-      // eslint-disable-next-line ts/no-unused-vars
-      using _ = vi.spyOn(utils, 'isInEditor').mockReturnValue(true);
-
-      const configResult = await computeEslintConfig('fileProgress');
-
-      expect(
-        configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
-      ).toStrictEqual({hide: true});
-    });
+        expect(
+          configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
+        ).toStrictEqual({hide: true});
+      },
+    );
   });
 });

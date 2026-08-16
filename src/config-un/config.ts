@@ -36,6 +36,7 @@ import {
   assignDefaults,
   fetchPackageInfo,
   interopDefault,
+  isInCi,
   isInEditor,
   maybeCall,
   objectEntriesUnsafe,
@@ -59,6 +60,8 @@ import {CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import type {ImportIntegrityPluginSettings} from './import-integrity';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
+  ENVIRONMENTS,
+  type Environment,
   type EslintConfigUnInternalOptions,
   type EslintConfigUnOptions,
   type ExtraPluginsType,
@@ -145,8 +148,45 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   debug('Initialization');
 
-  const isRunningInEditor = isInEditor();
-  debug(`Is likely running in editor: ${isRunningInEditor}`);
+  const isTestMode = internalOptions.testMode ?? Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']);
+
+  if (
+    isTestMode ||
+    (internalOptions.disableWarnings ?? Boolean(process.env['ESLINT_CONFIG_UN_DISABLE_WARNINGS']))
+  ) {
+    debug('Warnings will not be printed');
+    logger.level = 0; // Fatal and Error only
+  }
+
+  const environmentDetected: Environment = isInCi ? 'ci' : isInEditor() ? 'editor' : 'default';
+
+  const environmentFromEnvVar = process.env['ESLINT_CONFIG_UN_ENVIRONMENT'];
+  const isEnvironmentFromEnvVarValid =
+    environmentFromEnvVar != null && arrayIncludes(ENVIRONMENTS, environmentFromEnvVar);
+  if (environmentFromEnvVar && !isEnvironmentFromEnvVarValid) {
+    logger.warn(
+      `Ignoring ESLINT_CONFIG_UN_ENVIRONMENT environment variable: "${environmentFromEnvVar}" is not one of ${ENVIRONMENTS.join(', ')}`,
+    );
+  }
+  const environmentBeforeOption = isEnvironmentFromEnvVarValid
+    ? environmentFromEnvVar
+    : environmentDetected;
+
+  const environmentFromOption = maybeCall(options.environment, environmentBeforeOption);
+  const environment = environmentFromOption ?? environmentBeforeOption;
+  const environmentSource =
+    environmentFromOption == null
+      ? isEnvironmentFromEnvVarValid
+        ? 'via ESLINT_CONFIG_UN_ENVIRONMENT environment variable'
+        : null
+      : 'via the option';
+  debug(
+    `Resolved \`environment\`: \`${environment}\`${
+      environmentSource
+        ? ` (${environmentSource}), the detected environment: \`${environmentDetected}\``
+        : ' (detected)'
+    }`,
+  );
 
   const optionsResolved = assignDefaults(options, {
     mode: 'app',
@@ -157,7 +197,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   optionsResolved.cacheConfigs =
     options.cacheConfigs ??
-    (isRunningInEditor || Boolean(process.env['ESLINT_CONFIG_UN_CACHE_CONFIGS']));
+    (environment === 'editor' || Boolean(process.env['ESLINT_CONFIG_UN_CACHE_CONFIGS']));
   const {cacheConfigs} = optionsResolved;
   debug(`Is config caching enabled: ${cacheConfigs}`);
 
@@ -207,10 +247,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     usedParsers: new Map(),
     usedPackages: new Map(),
     missingPackages: new Set(),
-    meta: {usedPackageManager},
+    meta: {usedPackageManager, environment},
     logger,
     debug,
-    isTestMode: internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']),
+    isTestMode,
     tests: [],
     createConfigBuilder,
   } satisfies PartialDeep<Pick<UnConfigContext, 'packagesInfo' | 'configsMeta'>> &
@@ -218,15 +258,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       UnConfigContext,
       'packagesInfo' | 'configsMeta'
     > as unknown as UnConfigContext<ExtraPlugins>);
-
-  if (
-    context.isTestMode ||
-    internalOptions.disableWarnings ||
-    Boolean(process.env['ESLINT_CONFIG_UN_DISABLE_WARNINGS'])
-  ) {
-    debug('Warnings will not be printed');
-    logger.level = 0; // Fatal and Error only
-  }
 
   if (cacheConfigs) {
     debug('Attempting to restore configs from memory cache');

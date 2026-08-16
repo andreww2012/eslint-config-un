@@ -1,5 +1,4 @@
 import {ERROR} from '../constants';
-import {isInCi, isInEditor} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -10,8 +9,8 @@ import {
 /**
  * An ESlint plugin to print file progress.
  *
- * Even if enabled, it will be disabled by default when it's detected ESLint running
- * in CI or in editor by `ci-info` and `is-in-editor` packages respectively.
+ * Even if enabled, it will be disabled by default unless the resolved `environment`
+ * root option is `default`.
  *
  * 📁 Default `files`: all files
  */
@@ -29,7 +28,7 @@ export interface FileProgressEslintConfigOptions<
   settings?: {
     /**
      * Hides the progress bar.
-     * @default true <=> when it's detected ESLint running in CI or in editor by `ci-info` and `is-in-editor` packages respectively
+     * @default true <=> the resolved `environment` root option is not `default`
      */
     hide?: boolean;
 
@@ -62,7 +61,7 @@ export default defineUnConfig<FileProgressEslintConfigOptions>(
       {
         settings: {
           progress: {
-            hide: isInCi || isInEditor(),
+            hide: context.meta.environment !== 'default',
             ...pluginSettings,
           } satisfies FileProgressEslintConfigOptions['settings'] & {},
         },

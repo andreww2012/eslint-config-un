@@ -46,7 +46,11 @@ const ESLINT_FLAT_CONFIG_FILE_NAMES = [
 
 // TODO more logging
 const computeCacheKey = async (context: UnConfigContext) => {
-  const result: string[] = [process.version, String(context.rootOptions.offlineMode)];
+  const result: string[] = [
+    process.version,
+    String(context.rootOptions.offlineMode),
+    context.meta.environment,
+  ];
 
   const packageManagerInfo = context.meta.usedPackageManager;
   result.push(JSON.stringify(packageManagerInfo));

@@ -1,6 +1,5 @@
 // import type importIntegrityLint from 'import-integrity-lint';
 import {ERROR, OFF} from '../constants';
-import {isInEditor} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -26,8 +25,7 @@ export interface ImportIntegrityPluginSettings {
   /**
    * Set to `auto` by default by the plugin.
    *
-   * Set to `editor` by us if [`is-in-editor`](https://npmx.dev/is-in-editor) detected
-   * the current process is running inside an editor.
+   * Set to `editor` by us if the resolved `environment` root option is `editor`.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#mode
    */
   mode?: 'auto' | 'one-shot' | 'fix' | 'editor';
@@ -142,8 +140,7 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
         settings: {
           'import-integrity': {
             packageRootDir: import.meta.dirname,
-            // TODO make `isInEditor` configurable at root level
-            ...(isInEditor() && {mode: 'editor'}),
+            ...(context.meta.environment === 'editor' && {mode: 'editor'}),
             ...pluginSettings,
           } satisfies ImportIntegrityPluginSettings,
         },

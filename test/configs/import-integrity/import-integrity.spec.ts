@@ -1,5 +1,3 @@
-import * as utils from '../../../src/utils';
-
 const FIXTURES = {
   nodeImportWithoutNodeProtocolPrefix: 'node-import-without-node-protocol-prefix.js',
 } as const;
@@ -164,25 +162,22 @@ describe('options', () => {
       });
     });
 
-    it('does not set `mode` when not running in an editor', async () => {
-      const configResult = await computeEslintConfig('importIntegrity');
+    it.each(['default', 'ci'] as const)(
+      'does not set `mode` when the resolved environment is `%s`',
+      async (environment) => {
+        const configResult = await computeEslintConfig('importIntegrity', {un: {environment}});
 
-      expect(
-        configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
-      ).not.toHaveProperty('mode');
-    });
+        expect(
+          configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
+        ).not.toHaveProperty('mode');
+      },
+    );
 
     describe('running in an editor', () => {
-      beforeEach(() => {
-        vi.spyOn(utils, 'isInEditor').mockReturnValue(true);
-      });
-
-      afterEach(() => {
-        vi.mocked(utils.isInEditor).mockRestore();
-      });
-
       it('sets `mode` to `editor`', async () => {
-        const configResult = await computeEslintConfig('importIntegrity');
+        const configResult = await computeEslintConfig('importIntegrity', {
+          un: {environment: 'editor'},
+        });
 
         expect(
           configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
@@ -190,9 +185,10 @@ describe('options', () => {
       });
 
       it('lets user-provided `settings` override the editor `mode`', async () => {
-        const configResult = await computeEslintConfig({
-          importIntegrity: {settings: {mode: 'fix'}},
-        });
+        const configResult = await computeEslintConfig(
+          {importIntegrity: {settings: {mode: 'fix'}}},
+          {un: {environment: 'editor'}},
+        );
 
         expect(
           configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],

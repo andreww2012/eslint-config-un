@@ -5,6 +5,7 @@ import * as packageUtils from 'empathic/package';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import {exec} from 'tinyexec';
 import type {CacheDataInFs} from '../../src/config-un/cache';
+import type {Environment} from '../../src/config-un/shared';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -98,6 +99,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllEnvs();
 });
 
 afterAll(async () => {
@@ -110,7 +112,34 @@ afterAll(async () => {
   await fs.rm(CACHE_ROOT_DIR, {recursive: true, force: true});
 });
 
+const computeConfigWithDefaultCaching = (environment: Environment) => {
+  vi.stubEnv('ESLINT_CONFIG_UN_CACHE_CONFIGS', '');
+
+  return computeEslintConfig({}, {un: {cacheConfigs: undefined, environment}});
+};
+
 describe('option: `cacheConfigs`', () => {
+  describe('default value', () => {
+    it('enables caching when the resolved environment is `editor`', async () => {
+      const first = await computeConfigWithDefaultCaching('editor');
+
+      await expect(computeConfigWithDefaultCaching('editor')).resolves.toHaveProperty(
+        'config',
+        first.config,
+      );
+    });
+
+    it.each(['ci', 'default'] as const)(
+      'does not enable caching when the resolved environment is `%s`',
+      async (environment) => {
+        const first = await computeConfigWithDefaultCaching(environment);
+        const second = await computeConfigWithDefaultCaching(environment);
+
+        expect(second.config).not.toBe(first.config);
+      },
+    );
+  });
+
   describe('memory cache', () => {
     it('serves the very same config on a subsequent call', async () => {
       const first = await computeCachedConfig();
@@ -128,6 +157,13 @@ describe('option: `cacheConfigs`', () => {
     it('recomputes the config when the cache key changes', async () => {
       const first = await computeCachedConfig();
       const second = await computeCachedConfig({}, {offlineMode: true});
+
+      expect(second.config).not.toBe(first.config);
+    });
+
+    it('recomputes the config when the resolved environment changes', async () => {
+      const first = await computeCachedConfig();
+      const second = await computeCachedConfig({}, {environment: 'ci'});
 
       expect(second.config).not.toBe(first.config);
     });
