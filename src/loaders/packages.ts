@@ -75,6 +75,9 @@ export const packagesLoaders = {
   mergeProcessors: genInferredModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),
+  scsstree: genInferredModuleLoader('scsstree', '@humanwhocodes/scsstree', () =>
+    interopDefault(import('@humanwhocodes/scsstree')),
+  ),
   svelteProcessor: genInferredModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
     interopDefault(import('eslint-plugin-svelte')).then((m) => m.processors.svelte),
   ),

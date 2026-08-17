@@ -9,6 +9,7 @@ import {
   GLOB_MARKDOWN,
   GLOB_MDX,
   GLOB_MD_X_CODE_BLOCKS,
+  GLOB_SCSS,
   GLOB_TOML,
   GLOB_TS_X,
   GLOB_YML_YAML,
@@ -94,6 +95,7 @@ export type SupportedEslintPluginLanguages = ObjectValues<{
 
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   css: [GLOB_CSS],
+  scss: [GLOB_SCSS],
   json: [GLOB_JSON],
   jsonc: [GLOB_JSONC],
   json5: [GLOB_JSON5],
@@ -112,7 +114,7 @@ const PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES: {
     >
   >;
 } = {
-  css: {css: 'css'},
+  css: {css: ['css', 'scss']},
   json: {json: 'json', jsonc: 'jsonc', json5: 'json5'},
   jsonc: {x: ['json', 'jsonc', 'json5'], json: 'json', jsonc: 'jsonc', json5: 'json5'},
   'markdown-preferences': {'extended-syntax': 'md'},
@@ -275,6 +277,9 @@ export class ConfigEntryBuilder<
              * - [`regexp/no-legacy-features`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/no-legacy-features.html)
              *   crashes on `.md` files (only if `language` option is specified in the markdown
              *   config)
+             * - [`css-in-js/color-hex-style`](https://ota-meshi.github.io/eslint-plugin-css/rules/color-hex-style.html)
+             *   crashes on `.scss` files, because it reads `sourceCode.parserServices`, which is
+             *   absent under the `css/css` language
              * - [`strict`](https://eslint.org/docs/latest/rules/strict) crashes on `.html` files
              * - `sonarjs/assertions-in-tests` or
              *   [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)

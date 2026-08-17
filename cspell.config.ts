@@ -65,6 +65,8 @@ export default {
     'libc', // package.json field
     'oxlint',
     'TSES', // `TSESTree` type from `@typescript-eslint/types`
+    'humanwhocodes',
+    'scsstree',
 
     // Technical words/terms
     'arrayify',

@@ -194,6 +194,7 @@
     "@eslint/css-tree": "4.0.5",
     "@eslint/json": "2.0.1",
     "@graphql-eslint/eslint-plugin": "4.4.1",
+    "@humanwhocodes/scsstree": "0.1.1",
     "@intlify/eslint-plugin-vue-i18n": "4.5.1",
     "@jest/environment": "30.4.1",
     "@jest/expect": "30.4.1",
@@ -354,6 +355,7 @@
     "@eslint/css-tree": "^4.0.5",
     "@eslint/json": "^2.0.1",
     "@graphql-eslint/eslint-plugin": "^4.4.1",
+    "@humanwhocodes/scsstree": "^0.1.1",
     "@intlify/eslint-plugin-vue-i18n": "^4.5.1",
     "@next/eslint-plugin-next": "^16.3.1",
     "@ngrx/eslint-plugin": "^21.1.1",
@@ -475,6 +477,9 @@
       "optional": true
     },
     "@graphql-eslint/eslint-plugin": {
+      "optional": true
+    },
+    "@humanwhocodes/scsstree": {
       "optional": true
     },
     "@intlify/eslint-plugin-vue-i18n": {

@@ -18,7 +18,7 @@ describe('markdown: sub config `codeBlocks`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
+        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
       );
       expect(config?.ignores).toBeUndefined();
     });

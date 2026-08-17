@@ -1,0 +1,70 @@
+@use 'sass:math';
+@use 'sass:map';
+@forward 'src/list';
+@import 'a', 'b';
+
+// Single-line comment
+$primary: #333 !default;
+$spacing: 8px;
+$map: (
+  key: value,
+  other: 1px,
+);
+
+%button {
+  padding: math.div($spacing, 2);
+}
+
+@mixin theme($name, $args...) {
+  color: $primary;
+  font-family: Helvetica, sans-serif;
+  margin: 0 auto;
+}
+
+@function double($value) {
+  @return $value * 2;
+}
+
+.card {
+  @extend %button !optional;
+  @include theme('dark');
+
+  font: {
+    family: serif;
+    size: 1.5rem;
+  }
+
+  &__title {
+    color: map.get($map, key);
+  }
+
+  &--wide {
+    width: double(10px);
+  }
+
+  #{$prop}: red;
+
+  @if $spacing > 4px {
+    margin: $spacing;
+  } @else {
+    margin: 0 auto;
+  }
+
+  @each $name, $glyph in $map {
+    .icon-#{$name} {
+      content: $glyph;
+    }
+  }
+}
+
+@media (min-width: $spacing) {
+  .card {
+    display: grid;
+  }
+}
+
+@at-root .root-level {
+  color: $primary;
+}
+
+@debug 'debug';

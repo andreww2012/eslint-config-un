@@ -105,6 +105,8 @@ export const GLOB_VUE = '**/*.vue' as const;
 
 export const GLOB_CSS = '**/*.css' as const;
 
+export const GLOB_SCSS = '**/*.scss' as const;
+
 export const GLOB_ASTRO = '**/*.astro' as const;
 
 export const GLOB_SVELTE = '**/*.svelte' as const;
@@ -138,6 +140,7 @@ const GLOB_SUPPORTED_EXTENSIONS = [
   'toml',
   GLOB_HTM_HTML_EXTENSION,
   'css',
+  'scss',
   'astro',
   'svelte',
   'graphql',
@@ -209,6 +212,9 @@ export const REACT_ROUTER_PACKAGES = REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.ma
   (packageName) => `@react-router/${packageName}` as const,
 );
 
+// `node-sass` is not here because it's deprecated and has order of magnitude less downloads
+export const SASS_PACKAGES = ['sass', 'sass-embedded'] as const;
+
 export const PACKAGES_TO_GET_INFO_FOR = [
   'prettier',
   'typescript',
@@ -221,6 +227,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'storybook',
   'tailwindcss',
   'stylelint',
+  ...SASS_PACKAGES,
   'jest',
   'vitest',
   'ava',

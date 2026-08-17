@@ -494,6 +494,9 @@ importers:
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.1
         version: 4.4.1(@types/node@20.19.43)(@typescript/typescript6@6.0.2)(crossws@0.4.10)(eslint@10.8.1)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(supports-color@7.2.0)
+      '@humanwhocodes/scsstree':
+        specifier: 0.1.1
+        version: 0.1.1(@eslint/css-tree@4.0.5)(@eslint/css@1.4.0)
       '@intlify/eslint-plugin-vue-i18n':
         specifier: 4.5.1
         version: 4.5.1(eslint@10.8.1)(jsonc-eslint-parser@3.3.0)(supports-color@7.2.0)(vue-eslint-parser@10.4.1)(yaml-eslint-parser@2.1.0)
@@ -2860,6 +2863,16 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@humanwhocodes/scsstree@0.1.1':
+    resolution: {integrity: sha512-JnimVoDMkwvNdWiWlYiPJB8psjj5wXlQPQbPw5vo7/YIADb1Oq05BscROsx+rbOKPS3yMOe3n90ct8d6Fm6q8w==}
+    engines: {node: '>=18.18'}
+    peerDependencies:
+      '@eslint/css': '>=1.0.0'
+      '@eslint/css-tree': '>=3.6.0'
+    peerDependenciesMeta:
+      '@eslint/css':
+        optional: true
 
   '@hyrious/bun.lockb@0.0.4':
     resolution: {integrity: sha512-ZjrPKJCxmH3ytp3RUe03rZx1B6WJ4RlCCVkXoatSKv57Pe0KdLwPF/P4TVv58MUpdJn286gAiLWEoeEXWi17HA==}
@@ -14362,6 +14375,12 @@ snapshots:
   '@humanwhocodes/momoa@3.3.10': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@humanwhocodes/scsstree@0.1.1(@eslint/css-tree@4.0.5)(@eslint/css@1.4.0)':
+    dependencies:
+      '@eslint/css-tree': 4.0.5
+    optionalDependencies:
+      '@eslint/css': 1.4.0
 
   '@hyrious/bun.lockb@0.0.4': {}
 

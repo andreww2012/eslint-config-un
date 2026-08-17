@@ -856,6 +856,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['html'],
     ruleDocsUrl: null,
   },
+  '@humanwhocodes/scsstree': {
+    configs: ['css'],
+    gitTag: (version) => `scsstree-v${version}`,
+    ruleDocsUrl: null,
+  },
   '@sveltejs/kit': {
     configs: ['svelte'],
     gitTag: (version) => `@sveltejs/kit@${version}`,
