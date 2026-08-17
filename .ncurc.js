@@ -13,12 +13,24 @@ const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat'
 
 const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Set([
   '@cspell/eslint-plugin',
+  '@docusaurus/eslint-plugin',
   '@next/eslint-plugin-next',
+  '@ngrx/eslint-plugin',
   '@nx/eslint-plugin',
+  '@tanstack/eslint-plugin-query',
+  '@tanstack/eslint-plugin-router',
+  '@tanstack/eslint-plugin-start',
+  '@unhead/eslint-plugin',
   '@unocss/eslint-plugin',
+  'eslint-plugin-drizzle',
+  'eslint-plugin-expo',
+  'eslint-plugin-formatjs',
+  'eslint-plugin-lit-a11y',
+  'eslint-plugin-mobx',
+  'eslint-plugin-qwik',
+  'eslint-plugin-react-hooks',
   'eslint-plugin-storybook',
   'eslint-plugin-turbo',
-  'eslint-plugin-formatjs',
 ]);
 
 const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx', 'import-integrity-lint']);
