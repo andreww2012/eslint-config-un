@@ -44,107 +44,11 @@ yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 
 Commonly used plugins are direct dependencies of this package; you don't need to install them separately.
 We aim to update the dependencies within 1 month after their release.
+
+Many plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
+You need to run ESLint with our config to find out which plugins should be installed manually until it proceeds to the linting stage.
+
 You can always override plugins' implementation with [`pluginOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
-
-Certain plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
-You need to run ESLint with our config once to find out which plugins should be installed manually.
-
-<details>
-<summary>List of optional peer dependencies</summary>
-
-| Package name                                       | Default plugin prefix                |
-| -------------------------------------------------- | ------------------------------------ |
-| `@angular-eslint/eslint-plugin`                    | `angular`                            |
-| `@angular-eslint/eslint-plugin-template`           | `angular-template`                   |
-| `@cspell/eslint-plugin`                            | `cspell`                             |
-| `@darraghor/eslint-plugin-nestjs-typed`            | `nestjs`                             |
-| `@docusaurus/eslint-plugin`                        | `docusaurus`                         |
-| `@eslint-react/eslint-plugin`                      | `eslint-react`                       |
-| `@eslint/json`                                     | `json`                               |
-| `@graphql-eslint/eslint-plugin`                    | `graphql`                            |
-| `@intlify/eslint-plugin-vue-i18n`                  | `vue-i18n`                           |
-| `@next/eslint-plugin-next`                         | `nextjs`                             |
-| `@ngrx/eslint-plugin`                              | `ngrx`                               |
-| `@nuxt/eslint-plugin`                              | `nuxt`                               |
-| `@nx/eslint-plugin`                                | `nx`                                 |
-| `@smarttools/eslint-plugin-rxjs`                   | `rxjs`                               |
-| `@tanstack/eslint-plugin-query`                    | `tanstack-query`                     |
-| `@tanstack/eslint-plugin-router`                   | `tanstack-router`                    |
-| `@tanstack/eslint-plugin-start`                    | `tanstack-start`                     |
-| `@tsrx/eslint-plugin`                              | `ripple`                             |
-| `@unhead/eslint-plugin`                            | `unhead`                             |
-| `@unocss/eslint-plugin`                            | `unocss`                             |
-| `@vitest/eslint-plugin`                            | `vitest`                             |
-| `eslint-plugin-antfu`                              | `antfu`                              |
-| `eslint-plugin-astro`                              | `astro`                              |
-| `eslint-plugin-ava`                                | `ava`                                |
-| `eslint-plugin-awscdk`                             | `awscdk`                             |
-| `eslint-plugin-barrel-files`                       | `barrel-files`                       |
-| `eslint-plugin-better-tailwindcss`                 | `better-tailwindcss`                 |
-| `eslint-plugin-boundaries`                         | `boundaries`                         |
-| `eslint-plugin-case-police`                        | `case-police`                        |
-| `eslint-plugin-check-file`                         | `check-file`                         |
-| `eslint-plugin-clsx`                               | `clsx`                               |
-| `eslint-plugin-command`                            | `command`                            |
-| `eslint-plugin-compat`                             | `compat`                             |
-| `eslint-plugin-cypress`                            | `cypress`                            |
-| `eslint-plugin-de-morgan`                          | `de-morgan`                          |
-| `eslint-plugin-drizzle`                            | `drizzle`                            |
-| `eslint-plugin-ember`                              | `ember`                              |
-| `eslint-plugin-erasable-syntax-only`               | `erasable-syntax-only`               |
-| `eslint-plugin-es-x`                               | `es`                                 |
-| `eslint-plugin-eslint-plugin`                      | `eslint-plugin`                      |
-| `eslint-plugin-expect-type`                        | `expect-type`                        |
-| `eslint-plugin-expo`                               | `expo`                               |
-| `eslint-plugin-format`                             | `format`                             |
-| `eslint-plugin-formatjs`                           | `formatjs`                           |
-| `eslint-plugin-functional`                         | `functional`                         |
-| `eslint-plugin-github-action`                      | `github-actions`                     |
-| `eslint-plugin-header`                             | `header`                             |
-| `eslint-plugin-headers`                            | `headers`                            |
-| `eslint-plugin-import-zod`                         | `import-zod`                         |
-| `eslint-plugin-jest`                               | `jest`                               |
-| `eslint-plugin-jest-dom`                           | `jest-dom`                           |
-| `eslint-plugin-jest-extended`                      | `jest-extended`                      |
-| `eslint-plugin-lit`                                | `lit`                                |
-| `eslint-plugin-lit-a11y`                           | `lit-a11y`                           |
-| `eslint-plugin-mobx`                               | `mobx`                               |
-| `eslint-plugin-mocha`                              | `mocha`                              |
-| `eslint-plugin-no-relative-import-paths`           | `no-relative-import-paths`           |
-| `eslint-plugin-pinia`                              | `pinia`                              |
-| `eslint-plugin-playwright`                         | `playwright`                         |
-| `eslint-plugin-prefer-arrow-functions`             | `prefer-arrow-functions`             |
-| `eslint-plugin-qunit`                              | `qunit`                              |
-| `eslint-plugin-qwik`                               | `qwik`                               |
-| `eslint-plugin-react`                              | `react`                              |
-| `eslint-plugin-react-debug`                        | `react-debug`                        |
-| `eslint-plugin-react-hooks`                        | `react-hooks`                        |
-| `eslint-plugin-react-refresh`                      | `react-refresh`                      |
-| `eslint-plugin-react-you-might-not-need-an-effect` | `react-you-might-not-need-an-effect` |
-| `eslint-plugin-remeda`                             | `remeda`                             |
-| `eslint-plugin-sentences-per-line`                 | `sentences-per-line`                 |
-| `eslint-plugin-solid`                              | `solid`                              |
-| `eslint-plugin-sql`                                | `sql`                                |
-| `eslint-plugin-storybook`                          | `storybook`                          |
-| `eslint-plugin-svelte`                             | `svelte`                             |
-| `eslint-plugin-tailwindcss`                        | `tailwindcss`                        |
-| `eslint-plugin-testing-library`                    | `testing-library`                    |
-| `eslint-plugin-tree-shaking`                       | `tree-shaking`                       |
-| `eslint-plugin-tsdoc`                              | `tsdoc`                              |
-| `eslint-plugin-turbo`                              | `turbo`                              |
-| `eslint-plugin-unused-imports`                     | `unused-imports`                     |
-| `eslint-plugin-vue`                                | `vue`                                |
-| `eslint-plugin-vue-scoped-css`                     | `vue-scoped-css`                     |
-| `eslint-plugin-vuejs-accessibility`                | `vuejs-accessibility`                |
-| `eslint-plugin-wc`                                 | `wc`                                 |
-| `eslint-plugin-you-dont-need-lodash-underscore`    | `you-dont-need-lodash-underscore`    |
-| `eslint-plugin-zod`                                | `zod`                                |
-| `eslint-plugin-zod-core`                           | `zod-core`                           |
-| `eslint-plugin-zod-mini`                           | `zod-mini`                           |
-| `eslint-plugin-zod-openapi`                        | `zod-openapi`                        |
-| `import-integrity-lint`                            | `import-integrity`                   |
-
-</details>
 
 ### Usage
 
