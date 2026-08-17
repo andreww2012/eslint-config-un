@@ -26,6 +26,9 @@ export type ModuleLoader<T, N extends string = string, PackageNullable extends b
 // ESM says "package" for bare specifiers and "module" for paths, CJS always says "module"
 const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find (?:module|package) '([^']+)'/;
 
+// Path starting with a dot or a Windows drive letter are not a package name
+const PATH_SPECIFIER_REGEXP = /^(?:[./\\]|[a-z]:)/i;
+
 function createModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
@@ -65,8 +68,7 @@ function createModuleLoader<T, N extends string>(
             MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP,
           );
           const missingPackageName = missingPackageNameMatch?.[1];
-          /* v8 ignore else - A module-not-found message always names the module */
-          if (missingPackageName) {
+          if (missingPackageName && !PATH_SPECIFIER_REGEXP.test(missingPackageName)) {
             context.missingPackages.add(missingPackageName);
           }
         }
