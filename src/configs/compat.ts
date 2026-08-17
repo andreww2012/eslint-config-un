@@ -38,6 +38,7 @@ export interface CompatEslintConfigOptions<
     lintAllEsApis?: boolean;
 
     /**
+     * Options passed to `browserslist` when resolving the list of the targeted browsers
      * @see https://github.com/amilajack/eslint-plugin-compat#configuring-for-different-environments
      */
     browserslistOpts?: OmitStrict<DefaultBrowsersListOptions, 'path'>;
@@ -51,8 +52,14 @@ export interface CompatEslintConfigOptions<
 
     // TODO The following 2 options are officially not documented, usage: https://github.com/amilajack/eslint-plugin-compat/blob/6388a9b65c0b7b110c94a1225403036c1d9b8428/src/rules/compat.ts#L164
 
+    /**
+     * The browsers to check the compatibility against, overriding the `browserslist` resolution
+     */
     targets?: string[];
 
+    /**
+     * An alias of `targets`
+     */
     browsers?: string[];
   };
 }

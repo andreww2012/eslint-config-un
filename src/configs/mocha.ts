@@ -31,9 +31,23 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
    * applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
+    /**
+     * Wrappers around the Mocha functions that the rules must recognize as those functions
+     */
     additionalCustomNames?: {
+      /**
+       * The name of the wrapper, which may be a member expression such as `describe.only`
+       */
       name: string;
+
+      /**
+       * Which kind of Mocha function the wrapper stands for
+       */
       type: 'config' | 'hook' | 'suite' | 'testCase';
+
+      /**
+       * The Mocha interface the wrapper belongs to
+       */
       interface: 'BDD' | 'TDD' | 'exports';
     }[];
   };

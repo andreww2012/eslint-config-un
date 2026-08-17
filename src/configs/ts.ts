@@ -347,6 +347,7 @@ interface SortTsconfigKeysSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
+   * The order of the top-level `tsconfig.json` keys, `false` to not enforce any
    * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions', 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
    */
   orderTopLevel?: boolean | (TsconfigTopLevelKeys | (string & {}))[];
@@ -368,12 +369,19 @@ interface SortTsconfigKeysSubConfigOptions<
         preset: keyof typeof TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS;
       }
     | {
+        /**
+         * Order the groups of the compiler options rather than the options themselves
+         */
         type: 'order-groups';
 
         /**
          * Unless overridden, order from `antfu` present will be used *within* groups.
          */
         order: (TsconfigCompilerOptionsGroups | (string & {}))[];
+
+        /**
+         * The order of the options within a specific group
+         */
         orderWithinGroup?: {
           [Group in TsconfigCompilerOptionsGroups | (string & {})]?:
             | 'alphabetical'
@@ -383,7 +391,14 @@ interface SortTsconfigKeysSubConfigOptions<
         };
       }
     | {
+        /**
+         * Order the compiler options themselves, ignoring the groups they belong to
+         */
         type: 'order-keys';
+
+        /**
+         * The order of the options
+         */
         order: (TsconfigCompilerOptionsKeys | (string & {}))[];
       };
 

@@ -88,6 +88,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     globalPackage?: string;
 
     /**
+     * Tell the plugin which major version of Jest is used, if it cannot be detected automatically
      * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
      */
     version?: number;
@@ -121,6 +122,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
       >;
 
   /**
+   * Enforces the keyword tests are defined with.
    * Will be merged with the default value.
    * `false` disables the rule.
    *
@@ -136,6 +138,8 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | false;
 
   /**
+   * Enforces the maximum number of assertion calls a test may make.
+   *
    * Affected rule:
    * - [`jest/max-expects`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-expects.md)
    * @default not enforced
@@ -143,6 +147,8 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   maxAssertionCalls?: number;
 
   /**
+   * Enforces the maximum depth of nested `describe` blocks.
+   *
    * Affected rule:
    * - [`jest/max-nested-describe`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-nested-describe.md)
    * @default not enforced

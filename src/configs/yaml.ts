@@ -66,6 +66,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    */
   parserOptions?: {
     /**
+     * The YAML version the parser assumes when the document does not declare one
      * @see https://github.com/ota-meshi/yaml-eslint-parser#advanced-configuration
      */
     defaultYAMLVersion?: '1.2' | '1.1';

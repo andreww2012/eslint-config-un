@@ -24,21 +24,45 @@ export interface HeaderEslintConfigOptions<
    * The single rule (`header`) options.
    */
   options?:
-    | {pathToFileWithComment: string}
     | {
         /**
+         * Path to the file whose contents are the expected header
+         */
+        pathToFileWithComment: string;
+      }
+    | {
+        /**
+         * The comment syntax the header is written with
          * @default 'block'
          */
         commentStyle?: 'block' | 'line';
 
-        comment: MaybeArray<string | {pattern: string; template?: string}>;
+        /**
+         * The expected header, either verbatim or as a pattern with a template to autofix to
+         */
+        comment: MaybeArray<
+          | string
+          | {
+              /**
+               * A regular expression the existing header must match
+               */
+              pattern: string;
+
+              /**
+               * What a missing or non-matching header is replaced with
+               */
+              template?: string;
+            }
+        >;
 
         /**
+         * How many empty lines must separate the header from the rest of the file
          * @default 1
          */
         numberOfNewlinesAfterHeader?: number;
 
         /**
+         * The line endings the header is expected to use
          * @default detected from the current OS
          */
         lineEndings?: 'windows' | 'unix';

@@ -14,6 +14,12 @@ import {
 export interface QwikEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'qwik'> {
+  /**
+   * The directory holding the routes, if it is not the default `src/routes`.
+   *
+   * Affected rule:
+   * - [`qwik/loader-location`](https://qwik.dev/docs/advanced/eslint/#loader-location)
+   */
   routesDir?: string;
 }
 

@@ -116,11 +116,24 @@ type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStri
   EslintFlatConfigEntry,
   'rules'
 > & {
+  /**
+   * Same as the flat config `rules` property, but the rule names and their options are typed
+   */
   rules?: UnFlatConfigEntryOverridesType<UnRulesConfig> & UnExtraPluginsRulesConfig<ExtraPlugins>;
 };
 
 type ValueOrEslintConfigWithValue<T> =
-  T | MaybeArray<Prettify<UnFlatConfigEntryFilesAndIgnores & {value?: T}>>;
+  | T
+  | MaybeArray<
+      Prettify<
+        UnFlatConfigEntryFilesAndIgnores & {
+          /**
+           * The value to apply to the matched files
+           */
+          value?: T;
+        }
+      >
+    >;
 
 // ⚠️ IMPORTANT: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs (below)
 export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
@@ -158,6 +171,10 @@ export interface EslintConfigUnOptions<
 > {
   // #region 🟠 FREQUENTLY USED OPTIONS
 
+  /**
+   * Enables, disables and configures the individual Configs.
+   * The Configs supporting the array notation may be configured several times
+   */
   configs?: {
     [Key in keyof UnConfigs<ExtraPlugins>]?:
       | boolean
@@ -178,7 +195,15 @@ export interface EslintConfigUnOptions<
   ignores?:
     | EslintFlatConfigEntry['ignores']
     | {
+        /**
+         * The patterns themselves
+         */
         files: string[];
+
+        /**
+         * Use only these patterns instead of merging them with ours
+         * @default false
+         */
         override?: boolean;
       };
 
@@ -393,7 +418,14 @@ export interface EslintConfigUnOptions<
   autofixDisabledGloballyFor?:
     | boolean
     | {
+        /**
+         * Disables autofix for every fixable rule of the listed plugins
+         */
         plugins?: Partial<Record<PluginPrefix, boolean>>;
+
+        /**
+         * Disables autofix for the listed rules
+         */
         rules?: Partial<Record<UnFixableRuleNames, boolean>>;
       };
 
@@ -442,7 +474,14 @@ export interface EslintConfigUnOptions<
   useImportIntegrity?:
     | boolean
     | {
+        /**
+         * Settings passed to the `importIntegrity` config
+         */
         pluginSettings?: Partial<ImportIntegrityPluginSettings>;
+
+        /**
+         * Which of the replaceable rules are actually replaced
+         */
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
 
@@ -517,8 +556,30 @@ export interface EslintConfigUnOptions<
    */
   typeInfoRules?:
     | TypeInfoMode
-    | ({mode?: TypeInfoMode; ignores?: string[]} & (
-        {allowDefaultProject?: string[]} | {parserOptions?: TsEslintParserOptions}
+    | ({
+        /**
+         * How the rules requiring type information are handled
+         */
+        mode?: TypeInfoMode;
+
+        /**
+         * Glob patterns excluded from type-aware linting
+         */
+        ignores?: string[];
+      } & (
+        | {
+            /**
+             * A shortcut for
+             * [`parserOptions.projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser/#allowdefaultproject)
+             */
+            allowDefaultProject?: string[];
+          }
+        | {
+            /**
+             * Parser options of the type-aware configs
+             */
+            parserOptions?: TsEslintParserOptions;
+          }
       ));
 
   // #endregion

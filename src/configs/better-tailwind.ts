@@ -148,6 +148,12 @@ export interface BetterTailwindEslintConfigOptions<
   classOrder?:
     GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order'] | false;
 
+  /**
+   * Class names, as regular expressions, that are not allowed to be used.
+   *
+   * Affected rule:
+   * - [`better-tailwindcss/no-restricted-classes`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/no-restricted-classes.md)
+   */
   restrictedClasses?: string[];
 }
 

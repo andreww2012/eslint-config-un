@@ -64,7 +64,14 @@ interface EslintPluginReactSettings {
   propWrapperFunctions?: (
     | string
     | {
+        /**
+         * The name of the wrapper function
+         */
         property: string;
+
+        /**
+         * The object the wrapper function is accessed on
+         */
         object?: string;
 
         /**
@@ -81,6 +88,9 @@ interface EslintPluginReactSettings {
   componentWrapperFunctions?: (
     | string
     | {
+        /**
+         * The name of the wrapper function
+         */
         property: string;
 
         /**
@@ -93,12 +103,38 @@ interface EslintPluginReactSettings {
   /**
    * Components used as alternatives to `<form>` for forms, eg. `<Form endpoint={ url } />`
    */
-  formComponents?: (string | {name: string; formAttribute: string | string[]})[];
+  formComponents?: (
+    | string
+    | {
+        /**
+         * The name of the component
+         */
+        name: string;
+
+        /**
+         * The prop that plays the role of the `action` attribute
+         */
+        formAttribute: string | string[];
+      }
+  )[];
 
   /**
    * Components used as alternatives to `<a>` for linking, eg. `<Link to={ url } />`
    */
-  linkComponents?: (string | {name: string; linkAttribute: string | string[]})[];
+  linkComponents?: (
+    | string
+    | {
+        /**
+         * The name of the component
+         */
+        name: string;
+
+        /**
+         * The prop that plays the role of the `href` attribute
+         */
+        linkAttribute: string | string[];
+      }
+  )[];
 }
 
 interface EslintPluginReactXSettings {
@@ -246,6 +282,8 @@ interface HooksSubConfigOptions<
   };
 
   /**
+   * Enables the [React Compiler](https://react.dev/learn/react-compiler) rules shipped by
+   * `eslint-plugin-react-hooks`
    * @default true
    */
   enableReactCompilerRules?: boolean;

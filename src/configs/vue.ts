@@ -356,6 +356,8 @@ export interface VueEslintConfigOptions<
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
 
   /**
+   * Reports the `eslint-disable` comments inside `<template>` that turn off nothing
+   *
    * Affected rule:
    * - [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html)
    */
@@ -374,6 +376,8 @@ export interface VueEslintConfigOptions<
   enforceApiStyle?: 'setup' | 'options';
 
   /**
+   * Enforce either runtime or type-based `defineProps` declarations.
+   *
    * Affected rule:
    * - [`vue/define-props-declaration`](https://eslint.vuejs.org/rules/define-props-declaration.html)
    * @default 'runtime'
@@ -389,8 +393,23 @@ export interface VueEslintConfigOptions<
    */
   sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
 
+  /**
+   * Set this to `true` if `noPropertyAccessFromIndexSignature` is enabled in your `tsconfig.json`
+   * for Vue files, in which case the affected rule is turned off, since it would conflict with the
+   * compiler option.
+   *
+   * Affected rule:
+   * - [`vue/dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html)
+   */
   noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles?: boolean;
 
+  /**
+   * Files exempted from having multi-word component names, in addition to the ones our config
+   * exempts already.
+   *
+   * Affected rule:
+   * - [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html)
+   */
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
 
   /**

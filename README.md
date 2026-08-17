@@ -952,7 +952,7 @@ The object notation additionally accepts:
 - `ignores`: glob patterns excluded from type-aware linting, appended to the `ignores` of every generated config and of the never-split configs above.
   Useful for TypeScript files that are not part of any `tsconfig.json`.
 - `allowDefaultProject` / `parserOptions` (cannot have both at the same time): the default parser options for the type-aware linting we set up — the `standalone` split configs and, as a default, the `ts` type-aware config.
-  `allowDefaultProject` is a shortcut for `parserOptions.projectService.allowDefaultProject`.
+  `allowDefaultProject` is a shortcut for [`parserOptions.projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser/#allowdefaultproject).
   These mirror the same-named `ts` config options, which take precedence over them for the `ts` type-aware config (`allowDefaultProject` > `parserOptions` > global).
 
   > [!NOTE]

@@ -128,12 +128,25 @@ export interface NodeEslintConfigOptions<
    * `no-unsupported-features/*` rules.
    */
   noUnsupportedFeaturesIgnores?: Prettify<{
+    /**
+     * ECMAScript built-ins to never report
+     */
     esBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/es-builtins'>['ignores'];
+
+    /**
+     * ECMAScript syntax to never report
+     */
     esSyntax?: GetRuleOptions<'node', 'no-unsupported-features/es-syntax'>['ignores'];
+
+    /**
+     * Node.js built-ins to never report
+     */
     nodeBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/node-builtins'>['ignores'];
   }>;
 
   /**
+   * Enforces whether the Node.js APIs that are available both globally and as a built-in module
+   * import are used through the global or through the import
    * @see https://github.com/eslint-community/eslint-plugin-n/tree/HEAD/docs/rules/prefer-global
    */
   preferGlobal?: {

@@ -25,30 +25,56 @@ export interface JsonSchemaValidatorEslintConfigOptions<
    * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/README.md#settings)
    */
   settings?: {
+    /**
+     * Where and for how long the schemas fetched over the network are cached
+     */
     cache?: {
+      /**
+       * The cache directory
+       */
       path?: string;
+
+      /**
+       * How long a cached schema stays fresh
+       */
       ttl?: number | string;
     };
 
+    /**
+     * How the schemas are fetched over the network
+     */
     http?: {
+      /**
+       * Path to a module exporting a custom `get` implementation
+       */
       getModulePath?: string;
+
+      /**
+       * Options passed to the request
+       */
       requestOptions?: RequestOptions;
     };
   };
 
   /**
+   * Validates JSON, JSONC and JSON5 files against their JSON schemas.
+   *
    * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
    * @default true
    */
   configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
 
   /**
+   * Validates YAML files against their JSON schemas.
+   *
    * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
    * @default true
    */
   configYaml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
 
   /**
+   * Validates TOML files against their JSON schemas.
+   *
    * 📁 Default `files`: <code>**&#47;*.toml</code>
    * @default true
    */

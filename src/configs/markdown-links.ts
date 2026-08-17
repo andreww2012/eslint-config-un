@@ -39,6 +39,9 @@ export interface MarkdownLinksEslintConfigOptions<
     [K in IssueType]?:
       | boolean
       | {
+          /**
+           * Options passed to the rule performing this check
+           */
           options?: GetRuleOptions<
             'markdown-links',
             K extends 'deadUrls'
@@ -49,6 +52,10 @@ export interface MarkdownLinksEslintConfigOptions<
                   ? 'no-missing-path'
                   : never
           >;
+
+          /**
+           * Report this check as a warning instead of an error
+           */
           severityWarn?: boolean;
         };
   };

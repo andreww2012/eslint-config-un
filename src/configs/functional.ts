@@ -8,8 +8,19 @@ import {
 } from './index';
 
 interface OverridesSetting {
+  /**
+   * The type the override applies to
+   */
   type: TypeSpecifier;
+
+  /**
+   * The immutability the matched type is treated as having
+   */
   to: Immutability | keyof typeof Immutability;
+
+  /**
+   * Only override the type when it would otherwise have this immutability
+   */
   from?: Immutability | keyof typeof Immutability;
 }
 
@@ -45,7 +56,14 @@ export interface FunctionalEslintConfigOptions<
     overrides?:
       | OverridesSetting[]
       | {
+          /**
+           * Keep the default overrides instead of replacing them
+           */
           keepDefault?: boolean;
+
+          /**
+           * The overrides themselves
+           */
           values?: OverridesSetting[];
         };
   };

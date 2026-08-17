@@ -83,6 +83,9 @@ export interface TestingLibraryEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
   /**
+   * Rules for
+   * [Angular Testing Library](https://testing-library.com/docs/angular-testing-library/intro).
+   *
    * 📁 Default `files`: same as the parent config's default `files`
    * @default true <=> `angular` config is enabled
    */
@@ -91,6 +94,9 @@ export interface TestingLibraryEslintConfigOptions<
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
+   * Rules for
+   * [Marko Testing Library](https://testing-library.com/docs/marko-testing-library/intro).
+   *
    * 📁 Default `files`: same as the parent config's default `files`
    * @default true <=> `marko` package is installed
    */
@@ -99,12 +105,18 @@ export interface TestingLibraryEslintConfigOptions<
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
+   * Rules for
+   * [React Testing Library](https://testing-library.com/docs/react-testing-library/intro).
+   *
    * 📁 Default `files`: same as the parent config's default `files`
    * @default true <=> `react` config is enabled
    */
   configReact?: boolean | ReactSubConfigOptions<ExtraPlugins>;
 
   /**
+   * Rules for
+   * [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/intro).
+   *
    * 📁 Default `files`: same as the parent config's default `files`
    * @default true <=> `svelte` config is enabled
    */
@@ -113,6 +125,8 @@ export interface TestingLibraryEslintConfigOptions<
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
+   * Rules for [Vue Testing Library](https://testing-library.com/docs/vue-testing-library/intro).
+   *
    * 📁 Default `files`: same as the parent config's default `files`
    * @default true <=> `vue` config is enabled
    */

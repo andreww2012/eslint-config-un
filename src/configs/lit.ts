@@ -38,6 +38,9 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
     litHtmlSources?: boolean | string[];
   };
 
+  /**
+   * Custom components that render the corresponding HTML element, checked by various rules
+   */
   customComponents?: Pick<
     JsxA11yEslintConfigOptions['customComponents'] & {},
     | 'areaElements'

@@ -19,6 +19,9 @@ type RuleSubConfig<
       ExtraPlugins,
       Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
     > & {
+      /**
+       * Options of the rule this sub-config enables
+       */
       options?: GetRuleOptions<'perfectionist', T>;
     });
 
@@ -58,6 +61,8 @@ export interface PerfectionistEslintConfigOptions<
   >;
 
   /**
+   * Enforces sorted array values before an `includes` call.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -67,6 +72,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortArrayIncludes?: RuleSubConfig<ExtraPlugins, 'sort-array-includes'>;
 
   /**
+   * Enforces sorted array literal elements.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -76,6 +83,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortArrays?: RuleSubConfig<ExtraPlugins, 'sort-arrays'>;
 
   /**
+   * Enforces sorted class members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -85,6 +94,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortClasses?: RuleSubConfig<ExtraPlugins, 'sort-classes'>;
 
   /**
+   * Enforces sorted decorators.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -94,6 +105,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortDecorators?: RuleSubConfig<ExtraPlugins, 'sort-decorators'>;
 
   /**
+   * Enforces sorted TypeScript enum members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -103,6 +116,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortEnums?: RuleSubConfig<ExtraPlugins, 'sort-enums'>;
 
   /**
+   * Enforces sorted export attributes.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -112,6 +127,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortExportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-export-attributes'>;
 
   /**
+   * Enforces sorted export statements.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -121,6 +138,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortExports?: RuleSubConfig<ExtraPlugins, 'sort-exports'>;
 
   /**
+   * Enforces sorted `extends` and `implements` clauses.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -130,6 +149,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortHeritageClauses?: RuleSubConfig<ExtraPlugins, 'sort-heritage-clauses'>;
 
   /**
+   * Enforces sorted import statements.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -139,6 +160,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortImports?: RuleSubConfig<ExtraPlugins, 'sort-imports'>;
 
   /**
+   * Enforces sorted import attributes.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -148,6 +171,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortImportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-import-attributes'>;
 
   /**
+   * Enforces sorted TypeScript interface members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -157,6 +182,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortInterfaces?: RuleSubConfig<ExtraPlugins, 'sort-interfaces'>;
 
   /**
+   * Enforces sorted TypeScript intersection type members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -166,6 +193,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortIntersectionTypes?: RuleSubConfig<ExtraPlugins, 'sort-intersection-types'>;
 
   /**
+   * Enforces sorted JSX props.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -175,6 +204,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortJsxProps?: RuleSubConfig<ExtraPlugins, 'sort-jsx-props'>;
 
   /**
+   * Enforces sorted `Map` elements.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -184,6 +215,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortMaps?: RuleSubConfig<ExtraPlugins, 'sort-maps'>;
 
   /**
+   * Enforces sorted module members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -193,6 +226,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortModules?: RuleSubConfig<ExtraPlugins, 'sort-modules'>;
 
   /**
+   * Enforces sorted named exports.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -202,6 +237,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortNamedExports?: RuleSubConfig<ExtraPlugins, 'sort-named-exports'>;
 
   /**
+   * Enforces sorted named imports.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -211,6 +248,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortNamedImports?: RuleSubConfig<ExtraPlugins, 'sort-named-imports'>;
 
   /**
+   * Enforces sorted TypeScript object type members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -220,6 +259,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortObjectTypes?: RuleSubConfig<ExtraPlugins, 'sort-object-types'>;
 
   /**
+   * Enforces sorted object properties.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -229,6 +270,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortObjects?: RuleSubConfig<ExtraPlugins, 'sort-objects'>;
 
   /**
+   * Enforces sorted `Set` elements.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -238,6 +281,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortSets?: RuleSubConfig<ExtraPlugins, 'sort-sets'>;
 
   /**
+   * Enforces sorted `switch` cases.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -247,6 +292,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortSwitchCase?: RuleSubConfig<ExtraPlugins, 'sort-switch-case'>;
 
   /**
+   * Enforces sorted TypeScript union type members.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:
@@ -256,6 +303,8 @@ export interface PerfectionistEslintConfigOptions<
   configSortUnionTypes?: RuleSubConfig<ExtraPlugins, 'sort-union-types'>;
 
   /**
+   * Enforces sorted variable declarations.
+   *
    * 📁 Default `files`: all files
    *
    * Affected rule:

@@ -14,7 +14,14 @@ import {
 const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
 
 interface WordsListAndOptionalSeverity {
+  /**
+   * The words themselves
+   */
   words: string[];
+
+  /**
+   * The severity the affected rule is reported with
+   */
   severity?: 'error' | 'warn';
 }
 
@@ -85,7 +92,13 @@ export interface JsxA11yEslintConfigOptions<
    * `ignores` of this config.
    */
   settings?: {
+    /**
+     * Custom names of the standard HTML attributes
+     */
     attributes?: {
+      /**
+       * Attribute names to treat as the `for` attribute of a `<label>`
+       */
       for?: string[];
     };
 

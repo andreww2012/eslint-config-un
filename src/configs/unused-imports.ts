@@ -15,6 +15,12 @@ interface NoUnusedVarsSubConfigOptions<
   ExtraPlugins,
   Pick<UnRulesConfigPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>
 > {
+  /**
+   * Options of the rule this sub-config enables.
+   *
+   * Affected rule:
+   * - [`unused-imports/no-unused-vars`](https://github.com/sweepline/eslint-plugin-unused-imports/blob/HEAD/README.md)
+   */
   ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
 }
 

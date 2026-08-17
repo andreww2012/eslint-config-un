@@ -316,9 +316,16 @@ export interface UnicornEslintConfigOptions<
     | boolean
     | 'namespace'
     | {
+        /**
+         * The style enforced for `NaN` and `Infinity`, either for both at once or per constant
+         */
         constants?:
           | NumberPropertiesStyle
           | Prettify<Partial<Record<'nan' | 'positiveAndNegativeInfinity', 'namespace'>>>;
+
+        /**
+         * The style enforced for `parseInt` and `parseFloat`
+         */
         methods?: 'namespace';
       };
 }

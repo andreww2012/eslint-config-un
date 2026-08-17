@@ -38,12 +38,12 @@ remap = [
 
   # Stupid redirects:
   # Extra trailing slash
-  '^https://(dprint\.dev|typescript-eslint\.io|eslint-plugin-package-json\.dev|ota-meshi\.github\.io/eslint-plugin-astro|sveltejs\.github\.io|github\.github\.com/gfm|nebrius\.github\.io/import-integrity-lint/rules|formatjs\.github\.io|e18e\.dev|qwik\.dev|tsdoc\.org|docs\.npmjs\.com|eslint\.org)(/[^#/][^#]*?)?/*(#[^/]*)?$ https://$1$2/$3',
+  '^https://(dprint\.dev|typescript-eslint\.io|eslint-plugin-package-json\.dev|ota-meshi\.github\.io/eslint-plugin-astro|sveltejs\.github\.io|github\.github\.com/gfm|nebrius\.github\.io/import-integrity-lint/rules|formatjs\.github\.io|e18e\.dev|qwik\.dev|tsdoc\.org|docs\.npmjs\.com|eslint\.org|testing-library\.com)(/[^#/][^#]*?)?/*(#[^/]*)?$ https://$1$2/$3',
   # Extra trailing slash, except on `.html` pages which are real files that 404
   # with a trailing slash. First-match wins, so the `.html` identity guard must
   # come before the slash rule (the `regex` crate has no lookahead to fold them)
-  '^(https://(?:eslint-community|ota-meshi)\.github\.io/[^#]*\.html(?:#[^/]*)?)$ $1',
-  '^(https://(?:eslint-community|ota-meshi)\.github\.io/[^#]*?)/*(#[^/]*)?$ $1/$2',
+  '^(https://(?:eslint-community|ota-meshi|future-architect)\.github\.io/[^#]*\.html(?:#[^/]*)?)$ $1',
+  '^(https://(?:eslint-community|ota-meshi|future-architect)\.github\.io/[^#]*?)/*(#[^/]*)?$ $1/$2',
   # Extra trailing slash + www
   '^https://jsboundaries\.dev/(.*)/?(#[^/]*)?$ https://www.jsboundaries.dev/$1/$2',
 ]

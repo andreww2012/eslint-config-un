@@ -58,6 +58,7 @@ type UnConfigSetupResult<ExtraPlugins extends ExtraPluginsType, ExtraReturnedDat
 
 export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
   /**
+   * What turns the Config on, and what the generated `@default` line of its docs says
    * @default true
    */
   enabledBy?: EnabledBy;
@@ -70,6 +71,7 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
   };
 
   /**
+   * The cascade band the Config is emitted in
    * @default 'default'
    */
   phase?: ConfigPhase;

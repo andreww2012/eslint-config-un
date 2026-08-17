@@ -333,7 +333,15 @@ export interface EsEslintConfigOptions<
    */
   ecmaFeatures?: Partial<{
     [Version in EcmaVersion]:
-      boolean | Prettify<{default?: boolean} & Partial<Record<EcmaFeatures[Version], boolean>>>;
+      | boolean
+      | Prettify<
+          {
+            /**
+             * Whether the features of this version that are not listed explicitly are supported
+             */
+            default?: boolean;
+          } & Partial<Record<EcmaFeatures[Version], boolean>>
+        >;
   }>;
 }
 

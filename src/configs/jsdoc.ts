@@ -56,7 +56,22 @@ interface EslintPluginJsdocSettings {
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#alias-preference
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#default-preferred-aliases for the default list of aliases
    */
-  tagNamePreference?: Record<string, string | {message: string; replacement?: string} | false>;
+  tagNamePreference?: Record<
+    string,
+    | string
+    | {
+        /**
+         * The message reported when the tag is used
+         */
+        message: string;
+
+        /**
+         * The tag name to use instead, omit to report without offering a replacement
+         */
+        replacement?: string;
+      }
+    | false
+  >;
 
   /**
    * Allows the omission of the tags corresponding to `require-*` rules if `@ignore` is present.
@@ -139,6 +154,7 @@ interface EslintPluginJsdocSettings {
     string,
     {
       /**
+       * How the name part of the tag is parsed, `false` to disallow it
        * @default 'text'
        */
       name?:
@@ -149,11 +165,13 @@ interface EslintPluginJsdocSettings {
         | false;
 
       /**
+       * Whether the tag accepts a type, or the list of the types it accepts
        * @default true
        */
       type?: boolean | string[];
 
       /**
+       * The parts of the tag that must be present
        * @default []
        */
       required?: ('name' | 'type' | 'typeOrNameRequired')[];
@@ -167,14 +185,49 @@ interface EslintPluginJsdocSettings {
   contexts?: (
     | string
     | {
+        /**
+         * A regular expression of the names the rule must report
+         */
         disallowName?: string;
+
+        /**
+         * A regular expression of the names the rule must ignore
+         */
         allowName?: string;
+
+        /**
+         * An AST selector of the nodes the rule applies to
+         */
         context?: string;
+
+        /**
+         * An AST selector the JSDoc comment itself must match
+         */
         comment?: string;
+
+        /**
+         * The tags the rule looks at within the matched comments
+         */
         tags?: string[];
+
+        /**
+         * What a disallowed name is replaced with
+         */
         replacement?: string;
+
+        /**
+         * The minimum number of the matched entities the rule requires
+         */
         minimum?: number;
+
+        /**
+         * The message reported instead of the rule's own
+         */
         message?: string;
+
+        /**
+         * Require a `@returns` tag even when the function returns nothing
+         */
         forceRequireReturn?: boolean;
       }
   )[];

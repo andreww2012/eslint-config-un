@@ -42,7 +42,14 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
      * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
      */
     templateLiterals?: {
+      /**
+       * Regular expressions of the tag names marking a template literal as HTML
+       */
       tags?: string[];
+
+      /**
+       * Regular expressions of the leading comments marking a template literal as HTML
+       */
       comments?: string[];
     };
   };

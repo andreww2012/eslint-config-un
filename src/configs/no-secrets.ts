@@ -37,7 +37,14 @@ export interface NoSecretsEslintConfigOptions<
    * Will be merged with the default options.
    * @default {tolerance: 4.5}
    */
-  noSecretsOptions?: Partial<NoSecretsOptions & {severity?: EslintSeverity}>;
+  noSecretsOptions?: Partial<
+    NoSecretsOptions & {
+      /**
+       * The severity the rule is reported with
+       */
+      severity?: EslintSeverity;
+    }
+  >;
 }
 
 export default defineUnConfig<NoSecretsEslintConfigOptions>(

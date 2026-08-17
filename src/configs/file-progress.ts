@@ -38,6 +38,9 @@ export interface FileProgressEslintConfigOptions<
      */
     hideFileName?: boolean;
 
+    /**
+     * The message printed once every file has been linted
+     */
     successMessage?: string;
   };
 }

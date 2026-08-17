@@ -47,7 +47,19 @@ export interface CssInJsEslintConfigOptions<
    * You can also specify property patterns (regexp) that won't be checked.
    * @default false
    */
-  preferNamedColors?: boolean | {flag: boolean; ignoreProperties?: [string, ...string[]]};
+  preferNamedColors?:
+    | boolean
+    | {
+        /**
+         * `true` prefers named colors, `false` prefers their hex equivalents
+         */
+        flag: boolean;
+
+        /**
+         * Regular expressions of the property names that are not checked
+         */
+        ignoreProperties?: [string, ...string[]];
+      };
 
   /**
    * Prefer `.5` over `0.5`

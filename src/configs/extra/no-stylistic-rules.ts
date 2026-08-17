@@ -1113,6 +1113,9 @@ type AllStylisticRules = ObjectValues<{
 export interface NoStylisticRulesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
+  /**
+   * Enables some of the stylistic rules back instead of disabling all of them
+   */
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.

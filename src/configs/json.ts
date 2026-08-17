@@ -18,12 +18,16 @@ export interface JsonEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'json'> {
   /**
+   * Parses the matched files with the `jsonc` language, which allows comments and trailing commas.
+   *
    * 📁 Default `files`: <code>**&#47;*.jsonc</code>
    * @default true
    */
   configJsonc?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json'>;
 
   /**
+   * Parses the matched files with the `json5` language.
+   *
    * 📁 Default `files`: <code>**&#47;*.json5</code>
    * @default true
    */

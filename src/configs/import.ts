@@ -69,6 +69,8 @@ export interface ImportEslintConfigOptions<
   tsResolverOptions?: TypeScriptResolverOptions;
 
   /**
+   * Regular expressions of the import paths that are never reported as unresolved
+   *
    * Affected rule:
    * - [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md)
    */

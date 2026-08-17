@@ -36,7 +36,14 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
      * additional names" - plugin docs
      */
     globalAliases?: {
+      /**
+       * The names `test` is imported under
+       */
       test?: string[];
+
+      /**
+       * The names `expect` is imported under
+       */
       expect?: string[];
     };
 

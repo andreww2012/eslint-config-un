@@ -49,6 +49,7 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   maxPrecisionOfFractionalSeconds?: number;
 
   /**
+   * The maximum number of bits an integer value may require
    * @default 64
    * @see https://toml.io/en/v1.0.0#integer
    */

@@ -27,6 +27,9 @@ export interface ClsxEslintConfigOptions<
      */
     clsx?: string[];
 
+    /**
+     * The import that should be considered a `classnames` import
+     */
     classnames?: string;
   };
 }

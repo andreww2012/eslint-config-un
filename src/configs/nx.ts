@@ -16,8 +16,10 @@ export interface NxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nx'> {
   /**
+   * Enforces the module boundaries declared by the Nx project tags.
+   *
    * Affected rule:
-   * - [`nx/enforce-module-boundaries`](https://nx.dev/technologies/eslint/eslint-plugin/recipes/enforce-module-boundaries)
+   * - [`nx/enforce-module-boundaries`](https://nx.dev/docs/kb/enforce-module-boundaries)
    * @default false
    */
   enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
