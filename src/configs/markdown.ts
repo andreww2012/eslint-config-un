@@ -14,7 +14,6 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnFlatConfigEntryBase,
-  type UnRulesConfigPartial,
   assignDefaults,
   defineUnConfig,
 } from './index';
@@ -53,6 +52,43 @@ const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md'] as const;
 export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown'> {
+  /**
+   * Lint fenced code blocks (\```lang ... ```) inside Markdown files.
+   *
+   * `files` and `ignores` of this config select the ***Markdown*** files whose fenced code blocks
+   * will be linted, not the code blocks themselves.
+   *
+   * 📁 Default `files`: <code>**&#47;*.md</code>
+   * @default true
+   * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoredLanguages: ['yml']}
+   */
+  configCodeBlocks?:
+    | boolean
+    | Prettify<
+        UnFlatConfigEntryBase<ExtraPlugins> & {
+          /**
+           * Note that these languages will be ignored disregarding of the specified `files` and
+           * `ignores`, i.e. this option will create a config ignoring by
+           * <code>\*\*&#47;*.md/\*\*&#47;\*.{extensions}</code> pattern.
+           *
+           * [Markdown only] Since some language codes
+           * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`),
+           * so specifying `javascript` instead of `js` won't have any effect.
+           */
+          ignoredLanguages?: CodeBlockLanguage[];
+
+          /**
+           * Lint fenced code blocks as if its code assumed to be running in JavaScript's
+           * [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+           *
+           * Likely you don't want to change this.
+           * @default true
+           * @see https://github.com/eslint/markdown/blob/HEAD/docs/processors/markdown.md#strict-mode
+           */
+          impliedStrictMode?: boolean;
+        }
+      >;
+
   /**
    * Format fenced code blocks with Prettier.
    * @default true <=> `prettier` package is installed
@@ -102,22 +138,6 @@ export interface MarkdownEslintConfigOptions<
   allowHtmlTags?: boolean | string[];
 
   /**
-   * Lint fenced code blocks (\```lang ... ```) inside Markdown files
-   *
-   * You can also specify which *markdown* files should be subject to fenced code blocks linting.
-   * @default true
-   * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoreLanguages: ['yml']}
-   */
-  lintCodeBlocks?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
-
-  /**
-   * Note that these languages will be ignored disregarding of specified in `.lintCodeBlocks{files,ignores}`, i.e. this option will create a rule ignoring by `**\/*.md/**\/*.{extensions}` pattern.
-   *
-   * [Markdown only] Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
-   */
-  codeBlocksIgnoredLanguages?: CodeBlockLanguage[];
-
-  /**
    * Only these languages codes are allowed in fenced code blocks (\```lang ... ```)
    * By default, all languages, including no language, are allowed. To require any language to be explicitly specified, specify `any-lang-required`.
    *
@@ -128,17 +148,6 @@ export interface MarkdownEslintConfigOptions<
    * @example ['js', 'ts', 'vue']
    */
   codeBlocksAllowedLanguages?: [CodeBlockLanguage, ...CodeBlockLanguage[]] | 'any-lang-required';
-
-  /**
-   * Lint fenced code blocks as if its code assumed to be running in JavaScript's [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
-   *
-   * Likely you don't want to change this.
-   * @default true
-   * @see https://github.com/eslint/markdown/blob/HEAD/docs/processors/markdown.md
-   */
-  codeBlocksImpliedStrictMode?: boolean;
-
-  overridesCodeBlocks?: UnRulesConfigPartial;
 
   /**
    * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.
@@ -152,21 +161,21 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
   optionsRaw,
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {
+    configCodeBlocks: true,
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
     configSentencesPerLine: false,
     files: DEFAULT_FILES,
     lintMarkdown: true,
     language: 'gfm',
     allowHtmlTags: true,
-    lintCodeBlocks: true,
     parseFrontmatter: 'yaml',
-    codeBlocksImpliedStrictMode: true,
   });
 
   const {
     files: parentConfigFiles,
     ignores: parentConfigIgnores,
 
+    configCodeBlocks,
     configFormatFencedCodeBlocks,
     configSentencesPerLine,
 
@@ -174,10 +183,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     language,
     allowHtmlTags,
 
-    lintCodeBlocks,
-    codeBlocksIgnoredLanguages,
     codeBlocksAllowedLanguages,
-    codeBlocksImpliedStrictMode,
 
     parseFrontmatter,
   } = optionsResolved;
@@ -276,72 +282,77 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     }
   }
 
-  if (lintCodeBlocks) {
-    configBuilder?.addConfig(
+  const configBuilderCodeBlocks = context.createConfigBuilder(configCodeBlocks, null);
+
+  const {ignoredLanguages: codeBlocksIgnoredLanguages, impliedStrictMode} = assignDefaults(
+    configCodeBlocks,
+    {impliedStrictMode: true},
+  );
+
+  configBuilderCodeBlocks?.addConfig(
+    [
+      'markdown/setup/code-blocks-processor',
+      {
+        filesDefault: DEFAULT_FILES,
+        ignoresInternal: {
+          md: false,
+        },
+      },
+    ],
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
+    {
+      ...generatePackageToLoadProperty(
+        'processor',
+        ['eslintPluginMarkdown', 'eslintMergeProcessors'],
+        {
+          valueTransformFn: {
+            fn: ({
+              eslintPluginMarkdown,
+              eslintMergeProcessors: {mergeProcessors, processorPassThrough},
+            }) => {
+              const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
+                eslintPluginMarkdown.processors.markdown,
+                processorPassThrough,
+              ]);
+              return processorAllowingLintingBothMarkdownAndCodeBlocks;
+            },
+          },
+        },
+      ),
+    },
+  );
+
+  configBuilderCodeBlocks
+    ?.addConfig(
       [
-        'markdown/setup/code-blocks-processor',
+        'markdown/code-blocks',
         {
           applyUserFilesAndIgnores: false,
-          filesDefault: DEFAULT_FILES,
-          ignoresInternal: {
-            md: false,
-          },
+          filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
+          ignoresInternal: false,
         },
       ],
+      // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
       {
-        // TODO report
-        // eslint-disable-next-line sonarjs/no-gratuitous-expressions
-        ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
-        ...generatePackageToLoadProperty(
-          'processor',
-          ['eslintPluginMarkdown', 'eslintMergeProcessors'],
-          {
-            valueTransformFn: {
-              fn: ({
-                eslintPluginMarkdown,
-                eslintMergeProcessors: {mergeProcessors, processorPassThrough},
-              }) => {
-                const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
-                  eslintPluginMarkdown.processors.markdown,
-                  processorPassThrough,
-                ]);
-                return processorAllowingLintingBothMarkdownAndCodeBlocks;
-              },
-            },
-          },
-        ),
-      },
-    );
-
-    configBuilder
-      ?.addConfig(
-        [
-          'markdown/code-blocks',
-          {
-            applyUserFilesAndIgnores: false,
-            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
-            ignoresInternal: false,
-          },
-        ],
-        // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
-        {
-          languageOptions: {
-            parserOptions: {
-              ecmaFeatures: {
-                impliedStrict: codeBlocksImpliedStrictMode,
-              },
+        languageOptions: {
+          parserOptions: {
+            ecmaFeatures: {
+              impliedStrict: impliedStrictMode,
             },
           },
         },
-      )
-      .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
-      .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
+      },
+    )
+    .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
+    .addOverrides();
 
-    if (codeBlocksIgnoredLanguages?.length) {
-      configBuilder?.addConfig(['markdown/code-blocks/ignore', {applyUserFilesAndIgnores: false}], {
+  if (codeBlocksIgnoredLanguages?.length) {
+    configBuilderCodeBlocks?.addConfig(
+      ['markdown/code-blocks/ignore', {applyUserFilesAndIgnores: false}],
+      {
         ignores: [`**/*.md/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
-      });
-    }
+      },
+    );
   }
 
   const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
@@ -389,7 +400,12 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
   }
 
   return {
-    configs: [configBuilder, configFormatFencedCodeBlocksBuilder, configBuilderSentencesPerLine],
+    configs: [
+      configBuilder,
+      configBuilderCodeBlocks,
+      configFormatFencedCodeBlocksBuilder,
+      configBuilderSentencesPerLine,
+    ],
     optionsResolved,
   };
 });

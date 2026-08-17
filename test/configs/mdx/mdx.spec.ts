@@ -5,14 +5,13 @@ const FIXTURES = {
 } as const;
 
 describe('basic tests', () => {
-  it('creates `mdx/mdx` eslint config and loads `mdx` plugin if set to `true`', async () => {
+  it('creates `mdx/{mdx,setup/code-blocks-processor}` eslint configs and loads `mdx` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('mdx');
 
     const config = configResult.getConfigByUnPostfix('mdx/mdx');
 
     expect(config).toBeDefined();
     expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.mdx"]');
 
     const ignores = config?.ignores;
@@ -23,12 +22,11 @@ describe('basic tests', () => {
     expect(configResult.getLoadedPlugin('mdx')).toBeDefined();
   });
 
-  it('does not create `mdx/mdx` eslint config and does not load `mdx` plugin if set to `false`', async () => {
+  it('does not create `mdx/{mdx,setup/code-blocks-processor}` eslint configs and does not load `mdx` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({mdx: false});
 
     expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
     expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeUndefined();
-    expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeUndefined();
     expect(configResult.getLoadedPlugin('mdx')).toBeUndefined();
   });
 
@@ -103,12 +101,12 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('mdx/mdx')?.files).toStrictEqual(FILES);
     });
 
-    it('disables all `mdx` eslint configs when set to empty array', async () => {
+    it('disables `mdx/{mdx,setup/code-blocks-processor}` eslint configs, but not the sub-configs, when set to empty array', async () => {
       const configResult = await computeEslintConfig({mdx: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
     });
   });
 
@@ -165,142 +163,6 @@ describe('options', () => {
         'mdx/ignore-remark-config': true,
         'mdx/remark-config-path': './.remarkrc.js',
       });
-    });
-  });
-
-  describe('option: `lintCodeBlocks`', () => {
-    it('creates `mdx/code-blocks` eslint config by default', async () => {
-      const configResult = await computeEslintConfig('mdx');
-
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
-    });
-
-    it('creates `mdx/code-blocks` eslint config when set to `true`', async () => {
-      const configResult = await computeEslintConfig({mdx: {lintCodeBlocks: true}});
-
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
-    });
-
-    it('does not create `mdx/code-blocks` eslint config when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {lintCodeBlocks: false},
-      });
-
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeUndefined();
-    });
-
-    it('creates `mdx/code-blocks` eslint config when set to object', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {lintCodeBlocks: {}},
-      });
-
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
-    });
-
-    it('applies custom files from option object to `mdx/setup/code-blocks-processor`', async () => {
-      const FILES = ['docs/**/*.mdx'];
-
-      const configResult = await computeEslintConfig({
-        mdx: {lintCodeBlocks: {files: FILES}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')?.files,
-      ).toStrictEqual(FILES);
-    });
-  });
-
-  describe('option: `codeBlocksImpliedStrictMode`', () => {
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` by default', async () => {
-      const configResult = await computeEslintConfig('mdx');
-      const config = configResult.getConfigByUnPostfix('mdx/code-blocks');
-
-      expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-        '{"ecmaFeatures": {"impliedStrict": true}}',
-      );
-    });
-
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` when set to `true`', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {codeBlocksImpliedStrictMode: true},
-      });
-      const config = configResult.getConfigByUnPostfix('mdx/code-blocks');
-
-      expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-        '{"ecmaFeatures": {"impliedStrict": true}}',
-      );
-    });
-
-    it('sets `impliedStrict` to `false` in code-blocks `parserOptions` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {codeBlocksImpliedStrictMode: false},
-      });
-      const config = configResult.getConfigByUnPostfix('mdx/code-blocks');
-
-      expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-        '{"ecmaFeatures": {"impliedStrict": false}}',
-      );
-    });
-  });
-
-  describe('option: `codeBlocksIgnoredLanguages`', () => {
-    it('does not create `mdx/code-blocks/ignore` eslint config by default', async () => {
-      const configResult = await computeEslintConfig('mdx');
-
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks/ignore')).toBeUndefined();
-    });
-
-    it('creates `mdx/code-blocks/ignore` with correct ignores when array is provided', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {codeBlocksIgnoredLanguages: ['python', 'ruby']},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('mdx/code-blocks/ignore')?.ignores,
-      ).toMatchInlineSnapshot('["**/*.mdx/**/*.{python,ruby}"]');
-    });
-  });
-
-  describe('option: `overridesCodeBlocks`', () => {
-    it('applies overrides to `mdx/code-blocks` eslint config rules', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {overridesCodeBlocks: {'no-console': 0}},
-      });
-
-      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-console')).toBe(0);
-    });
-  });
-
-  describe('disabled rules in embedded code blocks', () => {
-    it('disables default rules in `mdx/code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig('mdx');
-
-      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-console')).toBe(0);
-      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'prefer-const')).toBe(0);
-    });
-
-    it('does not disable a rule in `mdx/code-blocks` when excluded via `markdownCodeBlocksRules.doNotDisable`', async () => {
-      const configResult = await computeEslintConfig('mdx', {
-        un: {markdownCodeBlocksRules: {doNotDisable: {'no-console': true}}},
-      });
-
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'no-console')).toBeUndefined();
-    });
-
-    it('additionally disables a rule in `mdx/code-blocks` when set via `markdownCodeBlocksRules.additionalDisabledRules`', async () => {
-      const configResult = await computeEslintConfig('mdx', {
-        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'no-shadow': true}}},
-      });
-
-      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-shadow')).toBe(0);
-    });
-
-    it('ignores a rule of `markdownCodeBlocksRules.additionalDisabledRules` set to `false`', async () => {
-      const configResult = await computeEslintConfig('mdx', {
-        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'no-shadow': false}}},
-      });
-
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'no-shadow')).toBeUndefined();
     });
   });
 });

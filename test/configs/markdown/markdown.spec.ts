@@ -6,14 +6,12 @@ const FIXTURES = {
 } as const;
 
 describe('basic tests', () => {
-  it('creates `markdown/{markdown,setup/code-blocks-processor,code-blocks}` eslint configs and loads `markdown` plugin if set to `true`', async () => {
+  it('creates `markdown/markdown` eslint config and loads `markdown` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('markdown');
 
     const config = configResult.getConfigByUnPostfix('markdown/markdown');
 
     expect(config).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.md"]');
 
     const ignores = config?.ignores;
@@ -24,14 +22,10 @@ describe('basic tests', () => {
     expect(configResult.getLoadedPlugin('markdown')).toBeDefined();
   });
 
-  it('does not create `markdown/{markdown,setup/code-blocks-processor,code-blocks}` eslint configs and does not load `markdown` plugin if set to `false`', async () => {
+  it('does not create `markdown/markdown` eslint config and does not load `markdown` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({markdown: false});
 
     expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeUndefined();
-    expect(
-      configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
-    ).toBeUndefined();
-    expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
     expect(configResult.getLoadedPlugin('markdown')).toBeUndefined();
   });
 
@@ -111,14 +105,11 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('markdown/markdown')?.files).toStrictEqual(FILES);
     });
 
-    it('disables all `markdown` eslint configs when set to empty array', async () => {
+    it('disables `markdown/markdown` eslint config, but not the sub-configs, when set to empty array', async () => {
       const configResult = await computeEslintConfig({markdown: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeUndefined();
-      expect(
-        configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
-      ).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
     });
   });
 
@@ -260,70 +251,6 @@ describe('options', () => {
     });
   });
 
-  describe('option: `lintCodeBlocks`', () => {
-    it('creates `markdown/code-blocks` eslint config by default', async () => {
-      const configResult = await computeEslintConfig('markdown');
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/code-blocks')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
-      );
-    });
-
-    it('creates `markdown/code-blocks` eslint config when set to `true`', async () => {
-      const configResult = await computeEslintConfig({markdown: {lintCodeBlocks: true}});
-
-      expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
-    });
-
-    it('does not create `markdown/code-blocks` eslint config when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {lintCodeBlocks: false},
-      });
-
-      expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
-    });
-
-    it('creates `markdown/code-blocks` eslint config when `lintCodeBlocks` is object', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {lintCodeBlocks: {files: ['docs/**/*.md']}},
-      });
-
-      expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
-    });
-
-    it('applies custom files from `lintCodeBlocks` object to `markdown/setup/code-blocks-processor`', async () => {
-      const FILES = ['docs/**/*.md'];
-
-      const configResult = await computeEslintConfig({
-        markdown: {lintCodeBlocks: {files: FILES}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor')?.files,
-      ).toStrictEqual(FILES);
-    });
-  });
-
-  describe('option: `codeBlocksIgnoredLanguages`', () => {
-    it('does not create `markdown/code-blocks/ignore` eslint config by default', async () => {
-      const configResult = await computeEslintConfig('markdown');
-
-      expect(configResult.getConfigByUnPostfix('markdown/code-blocks/ignore')).toBeUndefined();
-    });
-
-    it('creates `markdown/code-blocks/ignore` with correct ignores when array is provided', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {codeBlocksIgnoredLanguages: ['python', 'ruby']},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/code-blocks/ignore')?.ignores,
-      ).toMatchInlineSnapshot('["**/*.md/**/*.{python,ruby}"]');
-    });
-  });
-
   describe('option: `codeBlocksAllowedLanguages`', () => {
     it('disables `markdown/fenced-code-language` rule by default', async () => {
       const configResult = await computeEslintConfig('markdown');
@@ -356,42 +283,6 @@ describe('options', () => {
     });
   });
 
-  describe('option: `codeBlocksImpliedStrictMode`', () => {
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` by default', async () => {
-      const configResult = await computeEslintConfig('markdown');
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/code-blocks')?.languageOptions?.[
-          'parserOptions'
-        ],
-      ).toStrictEqual({ecmaFeatures: {impliedStrict: true}});
-    });
-
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` when set to `true`', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {codeBlocksImpliedStrictMode: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/code-blocks')?.languageOptions?.[
-          'parserOptions'
-        ],
-      ).toStrictEqual({ecmaFeatures: {impliedStrict: true}});
-    });
-
-    it('sets `impliedStrict` to `false` in code-blocks `parserOptions` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {codeBlocksImpliedStrictMode: false},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/code-blocks')?.languageOptions?.[
-          'parserOptions'
-        ],
-      ).toStrictEqual({ecmaFeatures: {impliedStrict: false}});
-    });
-  });
-
   describe('option: `parseFrontmatter`', () => {
     it('sets frontmatter to `yaml` in `markdown/markdown` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');
@@ -409,16 +300,6 @@ describe('options', () => {
       expect(
         configResult.getConfigByUnPostfix('markdown/markdown')?.languageOptions?.['frontmatter'],
       ).toBe('toml');
-    });
-  });
-
-  describe('option: `overridesCodeBlocks`', () => {
-    it('applies overrides to `markdown/code-blocks` eslint config rules', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {overridesCodeBlocks: {'no-console': 0}},
-      });
-
-      expect(configResult.getRuleEntrySeverity('markdown/code-blocks', 'no-console')).toBe(0);
     });
   });
 });

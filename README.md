@@ -370,11 +370,14 @@ In the following table, Sub-configs have `/` in their names.
 | Un config name                                               | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                  | Description/Notes                                                                                                         |
 | ------------------------------------------------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | ![Markdown] `markdown`                                       | ✅                                          | [@eslint/markdown](https://npmx.dev/@eslint/markdown) (`markdown`)                                                    | Since v0.7.0<br>Configured to also lint fenced code blocks inside .md files                                               |
-| ![Markdown] `markdown/formatFencedCodeBlocks`                | ✅ (`prettier` is installed)                | [eslint-plugin-prettier](https://npmx.dev/eslint-plugin-prettier) (`prettier`)                                        | Since v1.0.0<br>Format fenced code blocks inside Markdown files using Prettier                                            |
+| ![Markdown] `markdown/codeBlocks`                            | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Lints fenced code blocks inside Markdown files                                                            |
+| ![Markdown] `markdown/formatFencedCodeBlocks`                | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Format fenced code blocks inside Markdown files using Prettier                                            |
 | ![Markdown] `markdown/sentencesPerLine`                      | ❌                                          | [eslint-plugin-sentences-per-line](https://npmx.dev/eslint-plugin-sentences-per-line) (`sentences-per-line`)          | Since v1.0.0                                                                                                              |
 | ![Markdown] `markdownPreferences`                            | ✅                                          | [eslint-plugin-markdown-preferences](https://npmx.dev/eslint-plugin-markdown-preferences) (`markdownPreferences`)     | Since v1.0.0                                                                                                              |
 | ![Markdown] `markdownLinks`                                  | ❌                                          | [eslint-plugin-markdown-links](https://npmx.dev/eslint-plugin-markdown-links) (`markdownLinks`)                       | Since v1.0.0                                                                                                              |
-| ![MDX](./assets/vscode-icons-file-type-mdx.svg) `mdx`        | ✅                                          | [eslint-plugin-mdx](https://npmx.dev/eslint-plugin-mdx) (`mdx`)                                                       | Since v1.0.0<br>Configured to also lint fenced code blocks inside .mdx files                                              |
+| ![MDX] `mdx`                                                 | ✅                                          | [eslint-plugin-mdx](https://npmx.dev/eslint-plugin-mdx) (`mdx`)                                                       | Since v1.0.0<br>Configured to also lint fenced code blocks inside .mdx files                                              |
+| ![MDX] `mdx/codeBlocks`                                      | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Lints fenced code blocks inside MDX files                                                                 |
+| ![MDX] `mdx/formatFencedCodeBlocks`                          | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Format fenced code blocks inside MDX files using Prettier                                                 |
 | ![CSS] `css`                                                 | ✅ (unless `stylelint` is installed)        | [@eslint/css](https://npmx.dev/@eslint/css) (`css`)                                                                   | Since v0.7.0                                                                                                              |
 | ![CSS] `cssInJs`                                             | ✅                                          | [eslint-plugin-css](https://npmx.dev/eslint-plugin-css) (`css-in-js`)                                                 | Since v0.2.0<br>Lints inlined CSS                                                                                         |
 | `jsxA11y`                                                    | ✅                                          | [eslint-plugin-jsx-a11y-x](https://npmx.dev/eslint-plugin-jsx-a11y-x) (`jsx-a11y`)                                    | Since v1.0.0<br>Since v0.8.0 and until v1.0.0, [eslint-plugin-jsx-a11y](https://npmx.dev/eslint-plugin-jsx-a11y) was used |
@@ -715,6 +718,9 @@ This works because under the hood [`@eslint/markdown`](https://npmx.dev/@eslint/
 But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports).
 You can find the full list of disabled rules in `src/configs/markdown.ts` file.
 You have the full control over which rules are disabled/enabled via [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option.
+
+Code blocks linting is a sub-config of the `markdown`/`mdx` configs: `configCodeBlocks`.
+Set it to `false` to not lint code blocks at all, restrict its `files`/`ignores` to select which *Markdown*/*MDX* files have their code blocks linted, or use its `overrides`/`overridesAny` to change the rules applied to the code blocks only.
 
 ### Tailwind CSS
 
@@ -1247,7 +1253,7 @@ If you would like not to wait until the dependencies of `eslint-config-un` are u
 | Package name                                                                          | Reason                                                                           |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) | Has outdated requirements of peer dependencies                                   |
-| [`eslint-plugin-prettier`](https://npmx.dev/eslint-plugin-prettier)                   | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
+| [`eslint-plugin-prettier`][eslint-plugin-prettier]                                    | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
 
 ## Versioning policy
 
@@ -1318,6 +1324,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [CSS]: ./assets/devicon-css3.svg
 [Ember]: ./assets/devicon-ember.svg
 [Markdown]: ./assets/mdi-language-markdown.svg
+[MDX]: ./assets/vscode-icons-file-type-mdx.svg
 [ReactJS]: ./assets/devicon-react.svg
 [TailwindCSS]: ./assets/devicon-tailwindcss.svg
 [Testing Library]: ./assets/logos-testing-library.svg
@@ -1327,6 +1334,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [eslint-plugin-import-x]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-no-only-tests]: https://npmx.dev/eslint-plugin-no-only-tests
 [environment option]: #environment
+[eslint-plugin-prettier]: https://npmx.dev/eslint-plugin-prettier
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
 [Zod]: ./assets/logos-zod.svg

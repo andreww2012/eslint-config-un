@@ -1,7 +1,5 @@
 import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {Prettify} from '../types';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
@@ -20,13 +18,7 @@ import {
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
-    Pick<
-      MarkdownEslintConfigOptions,
-      | 'codeBlocksImpliedStrictMode'
-      | 'codeBlocksIgnoredLanguages'
-      | 'configFormatFencedCodeBlocks'
-      | 'overridesCodeBlocks'
-    > {
+    Pick<MarkdownEslintConfigOptions, 'configCodeBlocks' | 'configFormatFencedCodeBlocks'> {
   /**
    * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
@@ -60,15 +52,6 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
      */
     remarkConfigPath?: string;
   };
-
-  /**
-   * Lint fenced code blocks (\```lang ... ```) inside MDX files
-   *
-   * You can also specify which *MDX* files should be subject to fenced code blocks linting.
-   * @default true
-   * @example {files: ['**\/*.mdx'], ignores: ['ignored-file.mdx']}
-   */
-  lintCodeBlocks?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
 }
 
 const DEFAULT_FILES = [GLOB_MDX];
@@ -79,20 +62,26 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   optionsRaw,
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    lintCodeBlocks: true,
-    codeBlocksImpliedStrictMode: true,
+    configCodeBlocks: true,
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
   });
 
   const {
     settings: pluginSettings,
-    lintCodeBlocks,
-    codeBlocksImpliedStrictMode,
-    codeBlocksIgnoredLanguages,
+    configCodeBlocks,
     configFormatFencedCodeBlocks,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'mdx');
+
+  const configBuilderCodeBlocks = context.createConfigBuilder(configCodeBlocks, null);
+
+  const {
+    files: codeBlocksFiles,
+    ignores: codeBlocksIgnores,
+    ignoredLanguages: codeBlocksIgnoredLanguages,
+    impliedStrictMode,
+  } = assignDefaults(configCodeBlocks, {impliedStrictMode: true});
 
   // Legend:
   // 🟢 - in recommended
@@ -129,50 +118,60 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     .enableConfigTesterForPlugin('mdx')
     .addOverrides();
 
+  // The processor is also what post-processes `mdx/remark` reports, hence it is always added
   configBuilder?.addConfig(
     [
       'mdx/setup/code-blocks-processor',
-      {applyUserFilesAndIgnores: false, filesDefault: DEFAULT_FILES, ignoresInternal: {mdx: false}},
+      {
+        applyUserFilesAndIgnores: false,
+        filesDefault: codeBlocksFiles?.length ? codeBlocksFiles : DEFAULT_FILES,
+        ignoresDefault: codeBlocksIgnores,
+        ignoresInternal: {mdx: false},
+      },
     ],
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
     {
-      ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
       ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
         valueTransformFn: {
-          fn: ({eslintPluginMdx}) => eslintPluginMdx.createRemarkProcessor({lintCodeBlocks: true}),
+          fn: ({eslintPluginMdx}) =>
+            eslintPluginMdx.createRemarkProcessor({
+              lintCodeBlocks: configBuilderCodeBlocks != null,
+            }),
         },
       }),
     },
   );
 
-  if (lintCodeBlocks) {
-    configBuilder
-      ?.addConfig(
-        [
-          'mdx/code-blocks',
-          {
-            applyUserFilesAndIgnores: false,
-            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
-            ignoresInternal: false,
-          },
-        ],
+  configBuilderCodeBlocks
+    ?.addConfig(
+      [
+        'mdx/code-blocks',
         {
-          languageOptions: {
-            parserOptions: {
-              ecmaFeatures: {
-                impliedStrict: codeBlocksImpliedStrictMode,
-              },
+          applyUserFilesAndIgnores: false,
+          filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
+          ignoresInternal: false,
+        },
+      ],
+      {
+        languageOptions: {
+          parserOptions: {
+            ecmaFeatures: {
+              impliedStrict: impliedStrictMode,
             },
           },
         },
-      )
-      .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
-      .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
+      },
+    )
+    .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
+    .addOverrides();
 
-    if (codeBlocksIgnoredLanguages?.length) {
-      configBuilder?.addConfig(['mdx/code-blocks/ignore', {applyUserFilesAndIgnores: false}], {
+  if (codeBlocksIgnoredLanguages?.length) {
+    configBuilderCodeBlocks?.addConfig(
+      ['mdx/code-blocks/ignore', {applyUserFilesAndIgnores: false}],
+      {
         ignores: [`**/*.mdx/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
-      });
-    }
+      },
+    );
   }
 
   const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
@@ -192,7 +191,7 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     .addOverrides();
 
   return {
-    configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
+    configs: [configBuilder, configBuilderCodeBlocks, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
 });
