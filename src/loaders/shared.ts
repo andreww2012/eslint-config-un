@@ -23,7 +23,8 @@ export type ModuleLoader<T, N extends string = string, PackageNullable extends b
   packageName: N;
 };
 
-const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
+// ESM says "package" for bare specifiers and "module" for paths, CJS always says "module"
+const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find (?:module|package) '([^']+)'/;
 
 function createModuleLoader<T, N extends string>(
   property: string,
