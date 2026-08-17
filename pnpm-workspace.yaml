@@ -21,8 +21,7 @@ trustPolicyExclude: []
 
 audit:
   ignore:
-    # Affects ALL `brace-expansion` versions until the specified one - and we can't override them all due to them being of different major versions
-    - GHSA-mh99-v99m-4gvg
+    - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major verion number change
 
 allowBuilds:
   lefthook@2.1.10: true
@@ -47,17 +46,8 @@ dedupePeers: true
 strictPeerDependencies: false
 
 overrides:
-  '@eslint/config-inspector>h3@<=1.15.4': ^1.15.5
-  '@isaacs/brace-expansion@<=5.0.0': '>=5.0.1'
-  tar@<7.5.7: ^7.5.7
-  # GHSA-fx2h-pf6j-xcff
-  # Can't use range like `^8.0.16` as pnpm won't re-resolve the already-locked vite for a range replacement, only for an exact one
-  vite@>=8.0.0 <8.0.16: 8.0.16
-  eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
   brace-expansion@>=5.0.0 <5.0.9: 5.0.9
-  axios@>=1.15.2 <1.18.0: ^1.18.0
-  ip-address@>10.0.0 <=10.3.0: 10.4.0
-  nanoid@>=3 <3.3.18: 3.3.18
+  eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
 
 patchedDependencies:
   '@eslint/compat@2.1.0': patches/@eslint__compat@2.1.0.patch
