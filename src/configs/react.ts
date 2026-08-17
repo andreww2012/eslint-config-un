@@ -298,13 +298,14 @@ interface RefreshSubConfigOptions<
    *
    * Note that we detect some frameworks and add their exports to this list automatically.
    * Names specified here will be added to the final list, not overwrite it.
-   * - **Remix**: see
-   *   [supported exports](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports).
-   *   Detected by checking if *any* of the following packages are installed:
-   *   `@remix-run/{react,node,serve,dev}`.
-   * - **React router**: see
-   *   [supported exports](https://reactrouter.com/explanation/hot-module-replacement#supported-exports).
-   *   Detected packages: `@react-router/{react,node,serve,dev}`.
+   * - **Remix** and **React router**: the route module exports which their Vite plugins either
+   *   strip from the client bundle or accept on refresh.
+   *   Note that the "supported exports" sections of the
+   *   [Remix](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports) and
+   *   [React router](https://reactrouter.com/explanation/hot-module-replacement#supported-exports)
+   *   docs only list a subset of them.
+   *   A single combined list is added if *any* of the following packages is installed:
+   *   `@remix-run/{react,node,serve,dev}`, `@react-router/{react,node,serve,dev}`.
    * - **NextJS**: adds various user exported functions and variables if `next` package is
    *   installed.
    */
@@ -579,29 +580,47 @@ const NO_UNUSED_CLASS_COMPONENT_MEMBERS_SEVERITY = WARNING;
 const NO_UNUSED_STATE_SEVERITY = WARNING;
 const NO_USELESS_FRAGMENT_SEVERITY = WARNING;
 
+// The "supported exports" sections of both frameworks' HMR docs only list a subset of these, so the
+// Vite plugins' `SERVER_ONLY_ROUTE_EXPORTS` and `CLIENT_NON_COMPONENT_EXPORTS` are used instead
 const REMIX_AND_REACT_ROUTER_EXPORTS: readonly string[] = [
   'action',
+  'clientAction',
+  'clientLoader',
+  'clientMiddleware', // React router only
+  'handle',
   'headers',
   'links',
   'loader',
   'meta',
+  'middleware', // React router only
+  'shouldRevalidate',
 ];
+// Entries marked as removed or deprecated are still listed because they remain valid in the versions
+// which predate their removal
 const NEXT_EXPORTS: readonly string[] = [
+  'alt', // https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#config-exports
   'config', // https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config
-  'dynamic', // https://nextjs.org/docs/app/guides/migrating-to-cache-components#dynamic--force-dynamic
-  'dynamicParams', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams
-  'experimental_ppr', // https://nextjs.org/docs/app/guides/migrating-to-cache-components#experimental_ppr
-  'fetchCache', // https://nextjs.org/docs/app/guides/caching-without-cache-components#fetchcache
-  'generateMetadata', // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+  'contentType', // https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#config-exports
+  'dynamic', // Removed in v16 if Cache Components are enabled: https://nextjs.org/docs/app/guides/migrating-to-cache-components#dynamic--force-dynamic
+  'dynamicParams', // Removed in v16 if Cache Components are enabled: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams
+  'experimental_ppr', // Removed in v16: https://nextjs.org/docs/app/guides/migrating-to-cache-components#experimental_ppr
+  'fetchCache', // Removed in v16 if Cache Components are enabled: https://nextjs.org/docs/app/guides/caching-without-cache-components#fetchcache
   'generateImageMetadata', // https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata
+  'generateMetadata', // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
   'generateSitemaps', // https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps
   'generateStaticParams', // https://nextjs.org/docs/app/api-reference/functions/generate-static-params
   'generateViewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport#generateviewport-function
+  'getServerSideProps', // https://nextjs.org/docs/pages/api-reference/functions/get-server-side-props
+  'getStaticPaths', // https://nextjs.org/docs/pages/api-reference/functions/get-static-paths
+  'getStaticProps', // https://nextjs.org/docs/pages/api-reference/functions/get-static-props
+  'instant', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant
   'maxDuration', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/maxDuration
   'metadata', // https://nextjs.org/docs/app/getting-started/metadata-and-og-images#static-metadata
-  'preferredRegion', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/preferredRegion
-  'revalidate', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#version-history
-  'runtime', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime
+  'preferredRegion', // Deprecated in v16: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/preferredRegion
+  'prefetch', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/prefetch
+  'revalidate', // Removed in v16 if Cache Components are enabled: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#version-history
+  'runtime', // Only its `edge` value is deprecated: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime
+  'size', // https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#config-exports
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
