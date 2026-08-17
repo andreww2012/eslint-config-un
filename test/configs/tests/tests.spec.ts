@@ -1,3 +1,8 @@
+const FIXTURES = {
+  emptyFunctionInTestFile: 'empty-function.spec.ts',
+  emptyFunction: 'empty-function.ts',
+} as const;
+
 /** Every rule the config turns off in test files. */
 const DISABLED_RULES = [
   'no-empty-function',
@@ -70,14 +75,6 @@ describe('basic tests', () => {
       await expectConfigState({tests: false}, 'tests', false, 'misc-enabled');
     });
   });
-
-  it('is placed before the `js` eslint config so that it can be overridden', async () => {
-    const configResult = await computeEslintConfig({}, {reset: true});
-
-    const configNames = configResult.getConfigsByUnPostfix(() => true).map(({name}) => name);
-
-    expect(configNames.indexOf('tests')).toBeLessThan(configNames.indexOf('js'));
-  });
 });
 
 describe('rules', async () => {
@@ -100,6 +97,50 @@ describe('rules', async () => {
     const configResult = await computeEslintConfig({}, {reset: true});
 
     expect(configResult.getRuleEntrySeverity('js', 'no-empty-function')).toBe(2);
+  });
+
+  it('`no-empty-function` rule does not fire in a test file', async () => {
+    const results = await testEslintConfig({}, FIXTURES.emptyFunctionInTestFile, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {defaultConfigsStatus: undefined},
+    });
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.emptyFunctionInTestFile,
+        'no-empty-function',
+      ),
+    ).toBeUndefined();
+  });
+
+  it('`no-empty-function` rule fires in the same code placed in a non-test file', async () => {
+    const results = await testEslintConfig({}, FIXTURES.emptyFunction, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {defaultConfigsStatus: undefined},
+    });
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.emptyFunction, 'no-empty-function')?.message,
+    ).toMatchInlineSnapshot(`"Unexpected empty function 'noop'."`);
+  });
+
+  it('`extraConfigs` can re-enable a rule disabled in test files', async () => {
+    const results = await testEslintConfig({}, FIXTURES.emptyFunctionInTestFile, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {
+        defaultConfigsStatus: undefined,
+        extraConfigs: [{name: 'user', rules: {'no-empty-function': 2}}],
+      },
+    });
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.emptyFunctionInTestFile,
+        'no-empty-function',
+      ),
+    ).toBeDefined();
   });
 });
 

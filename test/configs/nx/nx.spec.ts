@@ -280,7 +280,6 @@ describe('options', () => {
   let consoleWarnSpy: MockInstance;
 
   beforeAll(() => {
-    // eslint-disable-next-line ts/no-empty-function
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     globalThis.projectGraph = MOCK_PROJECT_GRAPH;

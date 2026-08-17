@@ -10,7 +10,8 @@ import {generateDefaultTestFiles} from '../shared';
 /**
  * Disables mostly performance rules for most of the well known test file patterns.
  *
- * It is put before all the other Configs to allow for overrides.
+ * It is put after every Config enabling the rules it disables, but before `extraConfigs`, so that
+ * the user still has the final say.
  *
  * 📁 Default `files`:
  * - <code>**&#47*[.-_]spec.?([cm])[jt]s?(x)</code>
@@ -37,7 +38,7 @@ export interface TestsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {}
 
-export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'first'})((
+export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'extra'})((
   context,
   optionsRaw,
 ) => {

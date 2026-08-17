@@ -21,7 +21,6 @@ describe('cascade order', () => {
       eslint-config-un/ignores/gitignore
       eslint-config-un/global-setup/language-options
       eslint-config-un/global-setup/language-options/commonjs
-      eslint-config-un/tests
       eslint-config-un/antfu
       eslint-config-un/arrow-return-style
       eslint-config-un/ava
@@ -230,6 +229,7 @@ describe('cascade order', () => {
       eslint-config-un/config-files
       eslint-config-un/allow-default-export
       eslint-config-un/cli
+      eslint-config-un/tests
       eslint-config-un/no-prettier-incompatible-rules
       eslint-config-un/no-stylistic-rules"
     `);
