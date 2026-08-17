@@ -786,8 +786,8 @@ importers:
         specifier: 3.23.0
         version: 3.23.0(eslint@10.8.1)(svelte@5.55.9)
       eslint-plugin-tailwindcss:
-        specifier: 4.2.0
-        version: 4.2.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)(tailwindcss@4.3.2)
+        specifier: 4.3.0
+        version: 4.3.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)(tailwindcss@4.3.2)
       eslint-plugin-testing-library:
         specifier: 7.16.2
         version: 7.16.2(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
@@ -7721,8 +7721,8 @@ packages:
       svelte:
         optional: true
 
-  eslint-plugin-tailwindcss@4.2.0:
-    resolution: {integrity: sha512-TSygSjEL54Iks7K29FjvM9Lp03cpsYtbh3LJHnj/84FxCOYfLFuvQ+GioHOxgq19WGN5NbHPuvFDz/igIOEtbg==}
+  eslint-plugin-tailwindcss@4.3.0:
+    resolution: {integrity: sha512-8YqqinLSyV78zFvCzVemLX3eKpEW2DbpfvPHmQhv/HK7sKuDw+9/GAQPlJLQICDgbqLOB/D0ZH5BUQ+kuwq93Q==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -19330,7 +19330,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  eslint-plugin-tailwindcss@4.2.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)(tailwindcss@4.3.2):
+  eslint-plugin-tailwindcss@4.3.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)(tailwindcss@4.3.2):
     dependencies:
       '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
