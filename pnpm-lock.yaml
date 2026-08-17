@@ -798,8 +798,8 @@ importers:
         specifier: 0.5.2
         version: 0.5.2(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint-plugin-turbo:
-        specifier: 2.10.9
-        version: 2.10.9(eslint@10.8.1)(turbo@2.9.14)
+        specifier: 2.10.10
+        version: 2.10.10(eslint@10.8.1)(turbo@2.9.14)
       eslint-plugin-unused-imports:
         specifier: 4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.67.0)(eslint@10.8.1)
@@ -7751,8 +7751,8 @@ packages:
   eslint-plugin-tsdoc@0.5.2:
     resolution: {integrity: sha512-BlvqjWZdBJDIPO/YU3zcPCF23CvjYT3gyu63yo6b609NNV3D1b6zceAREy2xnweuBoDpZcLNuPyAUq9cvx6bbQ==}
 
-  eslint-plugin-turbo@2.10.9:
-    resolution: {integrity: sha512-OOo50d6UEXN1qK61PPi7O7+Rx117zjumYqatKqReUNCYbi5OBnAtPudnDTuKhpgEbutG3wF0ApqeWjRKj95vxA==}
+  eslint-plugin-turbo@2.10.10:
+    resolution: {integrity: sha512-COwgw1Nc4vdIQtZLbDPrCAB/m/BiWe9ybacamE1ti/UYFom/Y4PaEaUrsyRugEge8eZEn1yErRv6bRzZUvebSw==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -19376,7 +19376,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-turbo@2.10.9(eslint@10.8.1)(turbo@2.9.14):
+  eslint-plugin-turbo@2.10.10(eslint@10.8.1)(turbo@2.9.14):
     dependencies:
       dotenv: 16.0.3
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
