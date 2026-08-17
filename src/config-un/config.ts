@@ -11,7 +11,6 @@ import {
   DISABLE_AUTOFIX,
   ERROR,
   GLOB_CONFIG_FILES,
-  GLOB_JS_TS_X_EXTENSION,
   PACKAGES_TO_GET_INFO_FOR,
   WARNING,
 } from '../constants';
@@ -472,18 +471,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     })
     .disableAnyRule('import', 'no-extraneous-dependencies')
     .disableAnyRule('node', 'no-unpublished-require');
-  rootConfigBuilder
-    ?.addConfig(['allow-default-export', {applyUserFilesAndIgnores: false}], {
-      files: [
-        ...GLOB_CONFIG_FILES,
-        // Files starting with a dot
-        `**/.*.${GLOB_JS_TS_X_EXTENSION}`,
-        // Storybook
-        `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
-        '.storybook/**/*',
-      ],
-    })
-    .disableAnyRule('import', 'no-default-export');
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores
   const globalIgnores = [

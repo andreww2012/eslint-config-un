@@ -68,6 +68,7 @@ describe('cascade order', () => {
       eslint-config-un/headers
       eslint-config-un/html
       eslint-config-un/import
+      eslint-config-un/import/allow-default-export
       eslint-config-un/import-integrity
       eslint-config-un/import-zod
       eslint-config-un/jest
@@ -227,7 +228,6 @@ describe('cascade order', () => {
       eslint-config-un/mdx/code-blocks
       eslint-config-un/mdx/format-fenced-code-blocks
       eslint-config-un/config-files
-      eslint-config-un/allow-default-export
       eslint-config-un/cli
       eslint-config-un/tests
       eslint-config-un/no-prettier-incompatible-rules

@@ -4,13 +4,22 @@ import type {
   ImportSettings as PluginSettings,
   PluginSettings as PluginSettingsWithPrefixes,
 } from 'eslint-plugin-import-x';
-import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
+import {
+  ERROR,
+  GLOB_CONFIG_FILES,
+  GLOB_JS_TS_X_EXTENSION,
+  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  OFF,
+  WARNING,
+} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
+import type {PickDistributed} from '../types';
 import {arrayify, isNonEmptyArray, objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
   defineUnConfig,
 } from './index';
@@ -35,6 +44,28 @@ export interface ImportEslintConfigOptions<
    * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
    */
   settings?: PluginSettings;
+
+  /**
+   * Allows default exports in the files that are commonly expected to have them: config files,
+   * dotfiles and Storybook stories.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;*.config.?([cm])[jt]s?(x)</code>
+   * - <code>**&#47;.*rc.?([cm])[jt]s?(x)</code>
+   * - <code>**&#47;.*.?([cm])[jt]s?(x)</code>
+   * - <code>**&#47;*.stories.?([cm])[jt]s?(x)</code>
+   * - <code>.storybook&#47;**&#47;*</code>
+   *
+   * Affected rule:
+   * - [`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
+   * @default true
+   */
+  configAllowDefaultExport?:
+    | boolean
+    | UnFlatConfigEntryBase<
+        ExtraPlugins,
+        PickDistributed<UnRulesConfigPartial, 'import/no-default-export'>
+      >;
 
   /**
    * Whether the use of dependencies from `devDependencies` is not going to be reported by the
@@ -102,12 +133,14 @@ export default defineUnConfig<ImportEslintConfigOptions>(
   true,
 )(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
+    configAllowDefaultExport: true,
     isTypescriptEnabled: context.configsMeta.ts.enabled,
     allowDevDependencies: context.rootOptions.mode !== 'lib',
   });
 
   const {
     settings: pluginSettings,
+    configAllowDefaultExport,
     allowDevDependencies,
     extraneousDependenciesWhitelist,
     isTypescriptEnabled,
@@ -262,8 +295,31 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     .enableConfigTesterForPlugin('import')
     .addOverrides();
 
+  const configBuilderAllowDefaultExport = context.createConfigBuilder(
+    configAllowDefaultExport,
+    null,
+  );
+  configBuilderAllowDefaultExport
+    ?.addConfig([
+      'import/allow-default-export',
+      {
+        filesDefault: [
+          ...GLOB_CONFIG_FILES,
+
+          // Files starting with a dot
+          `**/.*.${GLOB_JS_TS_X_EXTENSION}`,
+
+          // Storybook
+          `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
+          '.storybook/**/*',
+        ],
+      },
+    ])
+    .disableAnyRule('import', 'no-default-export')
+    .addOverrides();
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderAllowDefaultExport],
     optionsResolved,
   };
 });
