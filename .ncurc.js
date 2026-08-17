@@ -40,6 +40,7 @@ const PACKAGES_ON_PRERELEASE_CHANNEL = new Set(['all-contributors-cli']);
 const PACKAGE_GROUPS = Object.entries({
   'Package manager': {packages: ['pnpm'], nonEslint: true},
   tsgo: {packages: ['@typescript/native-preview'], nonEslint: true},
+  '@commitlint': {packages: [], nonEslint: true},
   '@effect': {packages: ['effect'], nonEslint: true},
   '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin'], nonEslint: true},
 
