@@ -66,7 +66,7 @@ describe('css: sub config `scss`', () => {
       const processOutput = spyOnProcessOutput();
       using spy = vi
         .spyOn(packagesLoaders, 'scsstree')
-        .mockResolvedValue({module: undefined, packageName: '@humanwhocodes/scsstree'});
+        .mockResolvedValue({module: null, packageName: '@humanwhocodes/scsstree'});
 
       // Real runs die inside `logger.fatal`, but here `process.exit` is neutralized, so the
       // generator carries on until it trips over the syntax it just reported as missing

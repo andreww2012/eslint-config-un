@@ -79,9 +79,10 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
  * - <code>**&#47;*.{spec,test}.?([cm])[jt]s?(x)</code>
  * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
  */
-export interface TestingLibraryEslintConfigOptions<
-  ExtraPlugins extends ExtraPluginsType = never,
-> extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
+export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends
+    OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'>,
+    NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * Rules for
    * [Angular Testing Library](https://testing-library.com/docs/angular-testing-library/intro).
@@ -141,13 +142,20 @@ export interface TestingLibraryEslintConfigOptions<
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;
 }
 
+type ModuleConfigOptions = PickKeysStartingWith<
+  OmitStrict<TestingLibraryEslintConfigOptions, 'configNoOnlyTests'>,
+  'config'
+>;
+
 type SupportedModules = keyof {
   [
-    K in keyof TestingLibraryEslintConfigOptions as K extends `config${infer ModuleName}`
+    K in keyof ModuleConfigOptions as K extends `config${infer ModuleName}`
       ? Lowercase<ModuleName>
       : never
   ]: unknown;
 };
+
+type AllPossibleModuleOptions = ObjectValues<ModuleConfigOptions> & {};
 
 export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary', {
   enabledBy: {package: '@testing-library/dom'},
@@ -170,12 +178,9 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
     disableRootConfigIfFrameworkConfigIsEnabled,
   } = optionsResolved;
 
-  type AllPossibleOptions = ObjectValues<
-    PickKeysStartingWith<TestingLibraryEslintConfigOptions, 'config'>
-  > & {};
   const generateConfigsForModule = (
     module: 'dom' | SupportedModules,
-    options: AllPossibleOptions,
+    options: AllPossibleModuleOptions,
   ) => {
     if (!options) {
       return [];
@@ -339,7 +344,7 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
         react: configReact,
         svelte: configSvelte,
         vue: configVue,
-      } satisfies Record<SupportedModules, AllPossibleOptions>).flatMap(([module, options]) =>
+      } satisfies Record<SupportedModules, AllPossibleModuleOptions>).flatMap(([module, options]) =>
         generateConfigsForModule(module, options),
       ),
     ],

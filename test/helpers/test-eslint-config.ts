@@ -23,7 +23,9 @@ export const computeEslintConfig = async (
      */
     reset?: boolean;
     un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
-    internalOptions?: EslintConfigUnInternalOptions;
+    // `testMode` makes the generator return errors alongside the configs, which these helpers,
+    // returning the configs alone, are not written for
+    internalOptions?: OmitStrict<EslintConfigUnInternalOptions, 'testMode'>;
   },
 ) => {
   // Dynamic import is required so that vi.mock() calls in spec files can intercept
@@ -146,7 +148,7 @@ export const testEslintConfig = async <
     | {
         searchFixturesRelativeToPath?: string;
         un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
-        internalOptions?: EslintConfigUnInternalOptions;
+        internalOptions?: OmitStrict<EslintConfigUnInternalOptions, 'testMode'>;
       },
 ): Promise<
   FixturePaths extends string

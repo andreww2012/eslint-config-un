@@ -167,7 +167,7 @@ describe('lockfile: sub config `package.json`', () => {
       });
 
       it('uses the specified package managers for `lockfile/tracked` when set to an array', async () => {
-        const PACKAGE_MANAGERS = ['npm', 'yarn'];
+        const PACKAGE_MANAGERS = ['npm' as const, 'yarn' as const];
 
         const configResult = await computeEslintConfig({
           lockfile: {packageManager: PACKAGE_MANAGERS},

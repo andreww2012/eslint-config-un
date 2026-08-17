@@ -2,7 +2,13 @@
   "$schema": "https://www.schemastore.org/tsconfig.json",
   "extends": "../tsconfig.json",
   "include": ["**/*.ts"],
+  "exclude": ["**/fixtures/**"],
+  "references": [{"path": ".."}],
   "compilerOptions": {
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "composite": false,
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": "../temp/tsbuild/test.tsbuildinfo"
   }
 }

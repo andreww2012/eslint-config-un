@@ -1,4 +1,5 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
+import {parseForESLint as parseWithTypescriptParser} from '@typescript-eslint/parser';
 import {RuleTester} from 'eslint';
 import {parser as typescriptParser} from 'typescript-eslint';
 import {noDistributiveNeverCheck} from '../../../src/plugin-un/rules/no-distributive-never-check';
@@ -144,7 +145,7 @@ const noParserServicesRuleTester = new RuleTester({
   languageOptions: {
     parser: {
       parseForESLint: (code: string) => {
-        const {services, ...parseResultWithoutServices} = typescriptParser.parseForESLint(code);
+        const {services, ...parseResultWithoutServices} = parseWithTypescriptParser(code);
         return parseResultWithoutServices;
       },
     },

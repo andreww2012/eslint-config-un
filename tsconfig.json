@@ -1,5 +1,6 @@
 {
-  "files": ["type-decls.d.ts"],
+  // JSON modules imported from `src` and `scripts`: `composite` requires every input file to be listed
+  "files": ["type-decls.d.ts", "package.json", ".prettierrc.json"],
   "include": ["src", "scripts", "eslint-local-rules"],
   "exclude": ["node_modules", "scripts/temp", ".claude/worktrees"],
 
@@ -25,12 +26,23 @@
     /* If NOT transpiling with TypeScript: */
     "moduleResolution": "Bundler",
     "module": "ESNext",
-    "noEmit": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./temp/tsbuild/src",
+    "tsBuildInfoFile": "./temp/tsbuild/src.tsbuildinfo",
 
     /* If transpiling with TypeScript: */
     // "moduleResolution": "NodeNext",
     // "module": "NodeNext",
     // "outDir": "dist",
+
+    /* If you're building for a library: */
+    "declaration": true,
+
+    /* If you're building for a library in a monorepo: */
+    // Referenced by `test/tsconfig.json` so that `tsc --build` type checks both projects at once
+    "composite": true,
+    // "sourceMap": true,
+    // "declarationMap": true
 
     /* If your code runs in the DOM: */
     // "lib": ["es2022", "dom", "dom.iterable"],
@@ -38,13 +50,5 @@
     /* If your code doesn't run in the DOM: */
     // Source: https://github.com/tsconfig/bases/blob/12474cd696ec17c6ac4ccc19261860bf3c7fdc56/bases/node22.json
     "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
-
-    /* If you're building for a library: */
-    // "declaration": true,
-
-    /* If you're building for a library in a monorepo: */
-    // "composite": true,
-    // "sourceMap": true,
-    // "declarationMap": true
   },
 }

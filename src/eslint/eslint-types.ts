@@ -94,7 +94,7 @@ export type UnExtraPluginsRules<ExtraPlugins extends ExtraPluginsType> = ObjectV
 }>;
 
 export type UnExtraPluginsRulesConfig<ExtraPlugins extends ExtraPluginsType> = Partial<
-  Record<UnExtraPluginsRules<ExtraPlugins>, EslintRuleEntry>
+  Record<UnExtraPluginsRules<ExtraPlugins>, UnFlatConfigEntryOverridesEntry>
 >;
 
 type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P extends ''
