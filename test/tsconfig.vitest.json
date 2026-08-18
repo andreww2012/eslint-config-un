@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig.json",
+  // Drops the sibling's `references` (not inherited): Vitest typechecks via `tsc -p`, which cannot
+  // build them, so every `src` import would become an unbuilt output (TS6305), i.e. `any`
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Otherwise inferred as `test`, and Vitest's emit-enabled config rejects `src` inputs (TS6059)
+    "rootDir": ".."
+  }
+}

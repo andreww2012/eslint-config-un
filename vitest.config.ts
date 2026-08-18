@@ -33,8 +33,8 @@ export default defineConfig({
     open: false,
     typecheck: {
       enabled: true,
-      tsconfig: './test/tsconfig.json',
-      ignoreSourceErrors: true,
+      tsconfig: './test/tsconfig.vitest.json',
+      ignoreSourceErrors: false,
       exclude, // typecheck exclude are separate from the main exclude
     },
   },
