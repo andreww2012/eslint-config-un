@@ -4,6 +4,7 @@ import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith, Prettify} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
+import {resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -65,9 +66,10 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
   const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_ASTRO_FILES, // Must be assigned to options for `ts` config
     configJsxA11y: true,
   });
+  // Must be assigned to options for `ts` config
+  optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_ASTRO_FILES);
 
   const {
     files: parentConfigFiles,

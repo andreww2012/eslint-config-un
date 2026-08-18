@@ -1,9 +1,35 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YML_YAML} from '../constants';
-import type {UnAllRuleNames} from '../eslint/eslint-types';
+import type {UnAllRuleNames, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {type AllUnionMembers, objectEntriesUnsafe, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
+
+/**
+ * Resolves the `files` option to the patterns themselves, falling back to `filesDefault` if the
+ * option is not passed or its function form returns `undefined`. Only meant for the places
+ * consuming the patterns outside of `ConfigEntryBuilder#addConfig`, which resolves the option on its
+ * own.
+ * @param files The option value as provided by the user
+ * @param filesDefault The patterns `files` would be resolved to if the option was not passed
+ */
+export const resolveFilesOption = (
+  files: UnFlatConfigEntryFilesAndIgnores['files'],
+  filesDefault: string[],
+) => (typeof files === 'function' ? files({filesDefault}) : files) || filesDefault;
+
+/**
+ * Same as {@link resolveFilesOption}, but for `ignores`. The implicitly ignored patterns are only
+ * known when the config is created, hence an empty `ignoresImplicit` is passed to the function.
+ * @param ignores The option value as provided by the user
+ * @param ignoresDefault The patterns `ignores` would be resolved to if the option was not passed
+ */
+export const resolveIgnoresOption = (
+  ignores: UnFlatConfigEntryFilesAndIgnores['ignores'],
+  ignoresDefault: string[],
+) =>
+  (typeof ignores === 'function' ? ignores({ignoresDefault, ignoresImplicit: []}) : ignores) ||
+  ignoresDefault;
 
 export interface IgnoresAdditionalOptions<Patterns extends string | readonly string[]> {
   /**
@@ -43,7 +69,10 @@ export const generateIgnoresWithAdditional =
             ) && fileToIgnore,
         )
         .filter((v) => typeof v === 'string'),
-      ...((typeof config === 'object' ? config.ignores : null) || extraIgnoresFallback || []),
+      ...resolveIgnoresOption(
+        typeof config === 'object' ? config.ignores : undefined,
+        extraIgnoresFallback || [],
+      ),
     ];
     return {
       ...(ignoresFinal.length > 0 && {ignores: ignoresFinal}),

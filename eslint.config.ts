@@ -92,6 +92,9 @@ export default eslintConfig({
         'import/default': 0, // TODO started to produce many false reports, investigate why
       },
       extraneousDependenciesWhitelist: ALWAYS_BUNDLED_DEPENDENCIES,
+      configAllowDefaultExport: {
+        files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts'],
+      },
     },
     packageJson: {
       overrides: {
@@ -196,12 +199,6 @@ export default eslintConfig({
             ],
           },
         ],
-      },
-    },
-    {
-      files: ['src/configs/**/*.ts'],
-      rules: {
-        'import/no-default-export': 0,
       },
     },
     {

@@ -4,7 +4,7 @@ import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
-import {noRestrictedHtmlElementsDefault} from './shared';
+import {noRestrictedHtmlElementsDefault, resolveFilesOption} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
@@ -150,11 +150,12 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
-    files: DEFAULT_SVELTE_FILES, // Must be assigned to options for `ts` config
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
   });
+  // Must be assigned to options for `ts` config
+  optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_SVELTE_FILES);
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
     optionsResolved.configEnforceTypescriptInScriptSection = {
       files: optionsResolved.files,

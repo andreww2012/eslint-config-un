@@ -16,8 +16,8 @@ import type {
   UnAllRuleNames,
   UnExtraPluginsRules,
   UnExtraPluginsRulesConfig,
+  UnFilesAndIgnoresPatterns,
   UnFixableRuleNames,
-  UnFlatConfigEntryFilesAndIgnores,
   UnFlatConfigEntryOverridesEntry,
   UnFlatConfigEntryOverridesType,
   UnRulesConfig,
@@ -126,7 +126,7 @@ type ValueOrEslintConfigWithValue<T> =
   | T
   | MaybeArray<
       Prettify<
-        UnFlatConfigEntryFilesAndIgnores & {
+        UnFilesAndIgnoresPatterns & {
           /**
            * The value to apply to the matched files
            */

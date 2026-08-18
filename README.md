@@ -104,8 +104,10 @@ type UnRuleEntry<RuleName extends string> =
 type UnConfig =
   | boolean
   | {
-      files?: string[];
-      ignores?: string[];
+      files?: string[] | ((params: {filesDefault: string[]}) => string[] | undefined);
+      ignores?:
+        | string[]
+        | ((params: {ignoresDefault: string[]; ignoresImplicit: string[]}) => string[] | undefined);
 
       [RuleName in ('overrides' | 'overridesAny')]?: {
         [RuleName in string]:
@@ -129,6 +131,9 @@ They have exactly the same meaning as the corresponding ESLint flat config item 
 
 - If you specify an empty array for `files`, the Config **will be disabled**, but its Sub-configs remain unaffected.
 - If you specify an empty array for `ignores`, the default ignore list won't be used.
+
+Both options also accept a **function**, which is called with the patterns the option would be resolved to if it was not passed, and whose returned patterns **completely replace** them, unless `undefined` is returned.
+This form can be useful for configs like `import/allowDefaultExport`, where you may want to add your `files` to allow the `export default` in, not to override the default list.
 
 #### `overrides` and `overridesAny`
 

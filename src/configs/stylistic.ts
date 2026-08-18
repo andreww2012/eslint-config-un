@@ -4,6 +4,7 @@ import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {mapKeys} from '../utils';
+import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -218,8 +219,8 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
       'stylistic/spaced-comment',
       {
         applyUserFilesAndIgnores: false,
-        filesDefault: optionsResolved.files,
-        ignoresDefault: optionsResolved.ignores,
+        filesDefault: resolveFilesOption(optionsResolved.files, []),
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
       },
     ])
     .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));

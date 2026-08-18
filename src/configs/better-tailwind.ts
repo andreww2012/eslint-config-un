@@ -1,6 +1,7 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
 import {allUnionMembers} from '../utils';
+import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -195,10 +196,9 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
     );
   }
 
+  const cssFiles = resolveFilesOption(cssResolvedOptions?.files, []);
   const cssLinting =
-    optionsResolved.cssLinting !== false &&
-    cssResolvedOptions != null &&
-    cssResolvedOptions.files?.length !== 0;
+    optionsResolved.cssLinting !== false && cssResolvedOptions != null && cssFiles.length > 0;
 
   const isV3 = tailwindMajorVersion === 3;
 
@@ -213,8 +213,8 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
       'better-tailwindcss',
       {
         ...(cssLinting && {
-          filesMerged: cssResolvedOptions.files,
-          ignoresDefault: cssResolvedOptions.ignores,
+          filesMerged: cssFiles,
+          ignoresDefault: resolveIgnoresOption(cssResolvedOptions.ignores, []),
           ignoresDefaultMergedWithUserIgnores: true,
         }),
         ignoresInternal: {

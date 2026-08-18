@@ -13,7 +13,12 @@ import {
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
-import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './shared';
+import {
+  type ValidAndInvalidHtmlTags,
+  noRestrictedHtmlElementsDefault,
+  resolveFilesOption,
+  resolveIgnoresOption,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -476,7 +481,6 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
-    files: DEFAULT_VUE_FILES, // Must be assigned to options for `ts` config
     majorVersion: isVuePackageMajorVersionSupported
       ? vuePackageMajorVersion
       : DEFAULT_VUE_MAJOR_VERSION,
@@ -490,9 +494,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     enforcePropsDeclarationStyle: 'runtime',
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   });
+  const vueFiles = resolveFilesOption(optionsResolved.files, DEFAULT_VUE_FILES);
+  optionsResolved.files = vueFiles; // Must be assigned to options for `ts` config
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
     optionsResolved.configEnforceTypescriptInScriptSection = {
-      files: optionsResolved.files,
+      files: vueFiles,
       ignores: optionsResolved.ignores,
     };
   }
@@ -561,7 +567,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       },
     ],
     {
-      files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
+      files: [...DEFAULT_VUE_FILES, ...vueFiles],
       ...generatePackageToLoadProperty(
         'processor',
         ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
@@ -1174,8 +1180,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     ?.addConfig([
       'vue/a11y',
       {
-        filesDefault: optionsResolved.files,
-        ignoresDefault: [GLOB_MD_X_CODE_BLOCKS, ...(optionsResolved.ignores || [])],
+        filesDefault: vueFiles,
+        ignoresDefault: [
+          GLOB_MD_X_CODE_BLOCKS,
+          ...resolveIgnoresOption(optionsResolved.ignores, []),
+        ],
       },
     ])
     .addRule('alt-text', ERROR) /** @since 0.1.0 */ // 🟢
@@ -1252,8 +1261,8 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     ?.addConfig([
       'vue/i18n',
       {
-        filesDefault: optionsResolved.files,
-        ignoresDefault: optionsResolved.ignores,
+        filesDefault: vueFiles,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
         settings: {
           'vue-i18n': pluginI18nSettings,
         },

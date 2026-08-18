@@ -27,6 +27,14 @@ export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 
 export type UnAllRuleNames = keyof UnRulesConfig;
 
+/**
+ * `files` and `ignores` accepting the patterns only, i.e. with no support for the function form.
+ */
+export interface UnFilesAndIgnoresPatterns {
+  files?: string[];
+  ignores?: string[];
+}
+
 interface UnFlatConfigEntryFilesOnly {
   /**
    * If the config has "sub-configs", most of the time they WON'T disabled unless otherwise stated
@@ -36,15 +44,40 @@ interface UnFlatConfigEntryFilesOnly {
    * sub-config.
    *
    * Pass an empty array to disable the config, but keep sub-configs intact (if any).
+   *
+   * Can also be a function receiving the patterns this option would be resolved to if it was not
+   * passed. The returned patterns completely replace them, unless `undefined` is returned. An empty
+   * array has the same effect as passing it directly.
+   *
+   * Called for every ESLint config this config generates, as well as whenever the patterns are
+   * resolved earlier, e.g. when they are passed to another config.
    */
-  files?: string[];
+  files?: MaybeFn<string[] | undefined, [params: {readonly filesDefault: readonly string[]}]>;
 }
 
 /**
  * Similar to ESLint's flat config entry type, but with eslint-config-un specific JSDoc comments.
  */
 export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFilesOnly {
-  ignores?: string[];
+  /**
+   * Can also be a function receiving the patterns this option would be resolved to if it was not
+   * passed, split into the config's own defaults (`ignoresDefault`) and the globs of the file types
+   * the config is not meant to lint (`ignoresImplicit`). The returned patterns completely replace
+   * both, unless `undefined` is returned.
+   *
+   * Called for every eslint config this config generates, as well as whenever the patterns are
+   * resolved earlier (e.g. when they are passed to another config), in which case `ignoresImplicit`
+   * is empty.
+   */
+  ignores?: MaybeFn<
+    string[] | undefined,
+    [
+      params: {
+        readonly ignoresDefault: readonly string[];
+        readonly ignoresImplicit: readonly string[];
+      },
+    ]
+  >;
 }
 
 interface DisabledAutofixOption {

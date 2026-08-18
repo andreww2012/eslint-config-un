@@ -1,6 +1,7 @@
 import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
+import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -56,6 +57,7 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {arrowFunctionBodyStyle} = optionsResolved;
+  const userFiles = resolveFilesOption(optionsResolved.files, []);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
@@ -344,11 +346,11 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
 
   configBuilder
     ?.addConfig(['js/stylistic_spaced-comment', {applyUserFilesAndIgnores: false}], {
-      ...(optionsResolved.files?.length && {files: optionsResolved.files}),
+      ...(userFiles.length > 0 && {files: userFiles}),
       // TODO possible to do anything with this?
       // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
       // Might crash on HTML files (if receives a comment node with `CommentContent` type)
-      ignores: [GLOB_YML_YAML, GLOB_HTML, ...(optionsResolved.ignores || [])],
+      ignores: [GLOB_YML_YAML, GLOB_HTML, ...resolveIgnoresOption(optionsResolved.ignores, [])],
     })
     .addAnyRule('stylistic', 'spaced-comment', ERROR, [
       'always',

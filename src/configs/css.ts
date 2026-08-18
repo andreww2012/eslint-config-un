@@ -2,6 +2,7 @@ import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
 import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
+import {resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -166,6 +167,8 @@ export interface CssConfigResult {
   optionsResolved: CssEslintConfigOptions;
 }
 
+const DEFAULT_FILES = [GLOB_CSS];
+
 /**
  * SCSS ships `@function`, and CSS is shipping an unrelated at-rule of the same name that is not
  * baseline yet
@@ -176,10 +179,11 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
   enabledBy: {packageAbsent: 'stylelint'},
 })(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: [GLOB_CSS], // Need to resolve `files` early
     tolerantMode: false,
     configScss: SASS_PACKAGES.some((packageName) => context.packagesInfo[packageName] != null),
   });
+  // Must be resolved because other configs (`betterTailwind`) read these patterns
+  optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_FILES);
 
   const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures, configScss} =
     optionsResolved;

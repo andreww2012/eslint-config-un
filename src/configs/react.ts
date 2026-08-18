@@ -11,7 +11,7 @@ import {
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {OmitStrict, PickDistributed, Prettify} from '../types';
 import {allUnionMembers} from '../utils';
-import {noRestrictedHtmlElementsDefault} from './shared';
+import {noRestrictedHtmlElementsDefault, resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -682,9 +682,10 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     reactVersion: reactPackageInfo?.versions.major ?? LATEST_REACT_VERSION,
   });
 
+  const parentConfigFiles = resolveFilesOption(optionsResolved.files, DEFAULT_FILES);
+  const parentConfigIgnores = resolveIgnoresOption(optionsResolved.ignores, []);
+
   const {
-    files: parentConfigFiles,
-    ignores: parentConfigIgnores,
     settings: pluginSettings,
     configAllowDefaultExportsInJsxFiles,
     configHooks,
@@ -1022,7 +1023,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     ?.addConfig([
       'react/hooks',
       {
-        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        filesDefault: parentConfigFiles,
         ignoresDefault: parentConfigIgnores,
         settings: {
           'react-hooks': configHooksOptions.settings,
@@ -1080,7 +1081,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     ?.addConfig([
       'react/x',
       {
-        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        filesDefault: parentConfigFiles,
         ignoresDefault: parentConfigIgnores,
         settings: {
           'react-x': reactXSettings,
@@ -1277,7 +1278,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
       [
         'react/dom',
         {
-          filesDefault: parentConfigFiles || DEFAULT_FILES,
+          filesDefault: parentConfigFiles,
           ignoresDefault: parentConfigIgnores,
           settings: {
             react: reactOriginalSettings,
@@ -1398,7 +1399,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     ?.addConfig([
       'react/you-might-not-need-an-effect',
       {
-        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        filesDefault: parentConfigFiles,
         ignoresDefault: parentConfigIgnores,
       },
     ])

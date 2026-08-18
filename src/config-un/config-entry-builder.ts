@@ -334,60 +334,75 @@ export class ConfigEntryBuilder<
   ) {
     const [configName, internalOptions] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
-    const {options: configOptions} = this;
-    const applyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
+    const configOptions = this.options;
 
-    const configFilesAndIgnoresNotSpecified =
-      configOptions.files == null && configOptions.ignores == null;
+    const [files, ignores, isConfigDisabled] = (() => {
+      const applyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
+      const configFilesAndIgnoresNotSpecified =
+        configOptions.files == null && configOptions.ignores == null;
 
-    const filesFromUser =
-      configOptions.files ||
-      (configFilesAndIgnoresNotSpecified
-        ? internalOptions.inheritFilesAndIgnoresFrom?.files
-        : undefined);
-    const filesDefault = internalOptions.filesDefault || [];
-    const files =
-      applyUserFilesAndIgnores && filesFromUser?.length
+      const filesOption = applyUserFilesAndIgnores
+        ? configOptions.files ||
+          (configFilesAndIgnoresNotSpecified
+            ? internalOptions.inheritFilesAndIgnoresFrom?.files
+            : undefined)
+        : undefined;
+
+      const filesWhenArray = typeof filesOption === 'function' ? undefined : filesOption;
+      const filesWhenArrayResolved = filesWhenArray?.length
         ? internalOptions.filesDefaultMergedWithUserFiles
-          ? [...filesDefault, ...filesFromUser]
-          : filesFromUser
-        : filesDefault;
-    if (internalOptions.filesMerged?.length && files.length > 0) {
-      files.push(...internalOptions.filesMerged);
-    }
+          ? [...(internalOptions.filesDefault || []), ...filesWhenArray]
+          : filesWhenArray
+        : internalOptions.filesDefault || [];
 
-    const ignoresFromUser =
-      configOptions.ignores ||
-      (configFilesAndIgnoresNotSpecified
-        ? internalOptions.inheritFilesAndIgnoresFrom?.ignores
-        : undefined);
-    const ignoresInternal = objectEntriesUnsafe(
-      FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
-    ).flatMap(([fileType, globs]) =>
-      internalOptions.ignoresInternal === false ||
-      (internalOptions.ignoresInternal !== true &&
-        (internalOptions.ignoresInternal?.[fileType] === false ||
-          (internalOptions.language != null &&
-            arrayify(
-              PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
-                internalOptions.language[1]
-              ],
-            ).includes(fileType))))
-        ? []
-        : globs,
-    );
-    const ignoresDefault = internalOptions.ignoresDefault || [];
-    const ignores = [
-      ...ignoresInternal,
-      ...(applyUserFilesAndIgnores
-        ? [
-            ...(!ignoresFromUser || internalOptions.ignoresDefaultMergedWithUserIgnores
-              ? ignoresDefault
-              : []),
-            ...(ignoresFromUser || []),
-          ]
-        : ignoresDefault),
-    ];
+      const filesDefault =
+        internalOptions.filesMerged?.length && filesWhenArrayResolved.length > 0
+          ? [...filesWhenArrayResolved, ...internalOptions.filesMerged]
+          : filesWhenArrayResolved;
+      const filesWhenFn =
+        typeof filesOption === 'function'
+          ? filesOption({filesDefault: [...filesDefault]})
+          : undefined;
+
+      const ignoresOption = applyUserFilesAndIgnores
+        ? configOptions.ignores ||
+          (configFilesAndIgnoresNotSpecified
+            ? internalOptions.inheritFilesAndIgnoresFrom?.ignores
+            : undefined)
+        : undefined;
+      const ignoresFromUser = typeof ignoresOption === 'function' ? undefined : ignoresOption;
+      const ignoresInternal = objectEntriesUnsafe(
+        FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
+      ).flatMap(([fileType, globs]) =>
+        internalOptions.ignoresInternal === false ||
+        (internalOptions.ignoresInternal !== true &&
+          (internalOptions.ignoresInternal?.[fileType] === false ||
+            (internalOptions.language != null &&
+              arrayify(
+                PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
+                  internalOptions.language[1]
+                ],
+              ).includes(fileType))))
+          ? []
+          : globs,
+      );
+      const ignoresDefault = internalOptions.ignoresDefault || [];
+      const ignoresBeforeUserFn = [
+        ...ignoresInternal,
+        ...(!ignoresFromUser || internalOptions.ignoresDefaultMergedWithUserIgnores
+          ? ignoresDefault
+          : []),
+        ...(ignoresFromUser || []),
+      ];
+
+      return [
+        filesWhenFn || filesDefault,
+        (typeof ignoresOption === 'function'
+          ? ignoresOption({ignoresDefault: [...ignoresDefault], ignoresImplicit: ignoresInternal})
+          : undefined) || ignoresBeforeUserFn,
+        filesWhenFn?.length === 0,
+      ] as const;
+    })();
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
@@ -440,43 +455,47 @@ export class ConfigEntryBuilder<
       })(),
     };
 
-    const configMetadata = this.addFlatConfig(configFinal);
+    const configMetadata: FlatConfigMetadata = isConfigDisabled
+      ? {}
+      : this.addFlatConfig(configFinal);
 
-    if (internalOptions.skipTypeInfoSplit || this.context.internalOptions.skipTypeInfoSplit) {
-      configMetadata.skipTypeInfoSplit = true;
-    }
+    if (!isConfigDisabled) {
+      if (internalOptions.skipTypeInfoSplit || this.context.internalOptions.skipTypeInfoSplit) {
+        configMetadata.skipTypeInfoSplit = true;
+      }
 
-    processUnOrFlatConfig(this.context, configFinal, undefined);
+      processUnOrFlatConfig(this.context, configFinal, undefined);
 
-    const {parser} = internalOptions;
-    if (parser != null) {
-      this.context.usedParsers.set(parser, [
-        ...(this.context.usedParsers.get(parser) || []),
+      const {parser} = internalOptions;
+      if (parser != null) {
+        this.context.usedParsers.set(parser, [
+          ...(this.context.usedParsers.get(parser) || []),
+          configFinal,
+        ]);
+      }
+
+      traverseForEach(
         configFinal,
-      ]);
+        (traverseContext, value) => {
+          if (traverseContext.key !== packageToLoadSymbol) {
+            return;
+          }
+
+          const info = value as PackageToLoadInfo;
+          arrayify(info.package).forEach((packageId) => {
+            this.context.usedPackages.set(packageId, [
+              ...(this.context.usedPackages.get(packageId) || []),
+              {
+                config: configFinal,
+                path: traverseContext.path.slice(0, -1).join('.'),
+                info,
+              },
+            ]);
+          });
+        },
+        {includeSymbols: true},
+      );
     }
-
-    traverseForEach(
-      configFinal,
-      (traverseContext, value) => {
-        if (traverseContext.key !== packageToLoadSymbol) {
-          return;
-        }
-
-        const info = value as PackageToLoadInfo;
-        arrayify(info.package).forEach((packageId) => {
-          this.context.usedPackages.set(packageId, [
-            ...(this.context.usedPackages.get(packageId) || []),
-            {
-              config: configFinal,
-              path: traverseContext.path.slice(0, -1).join('.'),
-              info,
-            },
-          ]);
-        });
-      },
-      {includeSymbols: true},
-    );
 
     /* v8 ignore start */
     let currentCategory = '';
@@ -496,7 +515,7 @@ export class ConfigEntryBuilder<
       // eslint-disable-next-line ts/no-unused-vars
       options?: AddRuleInternalOptions,
     ) => {
-      if (severity == null) {
+      if (severity == null || isConfigDisabled) {
         // eslint-disable-next-line ts/no-use-before-define
         return result;
       }
@@ -585,6 +604,10 @@ export class ConfigEntryBuilder<
         plugin: P,
         ruleNameUnprefixed: GetRuleNamesInPlugin<P>,
       ) => {
+        if (isConfigDisabled) {
+          return result;
+        }
+
         const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
         configFinal.rules[ruleNameResolved] = OFF;
@@ -596,6 +619,10 @@ export class ConfigEntryBuilder<
       },
 
       addOverrides: ({onlyAny = false}: {onlyAny?: boolean} = {}) => {
+        if (isConfigDisabled) {
+          return result;
+        }
+
         processUnOrFlatConfig(
           this.context,
           configFinal,
@@ -607,12 +634,16 @@ export class ConfigEntryBuilder<
       },
 
       addBulkRules: (rules: Prettify<UnRulesConfig> | Falsy) => {
+        if (isConfigDisabled) {
+          return result;
+        }
+
         processUnOrFlatConfig(this.context, configFinal, rules || {}, this);
         return result;
       },
 
       disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | Falsy) => {
-        if (rules && rules.length > 0) {
+        if (!isConfigDisabled && rules && rules.length > 0) {
           const newRuleEntries = Object.fromEntries(
             rules.flatMap((ruleName) => {
               const {pluginPrefixCanonical, ruleNameUnprefixed} =
@@ -649,7 +680,7 @@ export class ConfigEntryBuilder<
         } = {},
       ) => {
         /* v8 ignore start */
-        if (this.context.isTestMode) {
+        if (!isConfigDisabled && this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {
             const commonErrorMessagePrefix = `[config:${styleConfigName(configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
 

@@ -2,7 +2,11 @@ import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../const
 import {generatePackageToLoadProperty} from '../loaders';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
-import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
+import {
+  determineRulesDisabledInEmbeddedCodeBlocks,
+  resolveFilesOption,
+  resolveIgnoresOption,
+} from './shared';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -77,11 +81,13 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   const configBuilderCodeBlocks = context.createConfigBuilder(configCodeBlocks, null);
 
   const {
-    files: codeBlocksFiles,
-    ignores: codeBlocksIgnores,
+    files: codeBlocksFilesOption,
+    ignores: codeBlocksIgnoresOption,
     ignoredLanguages: codeBlocksIgnoredLanguages,
     impliedStrictMode,
   } = assignDefaults(configCodeBlocks, {impliedStrictMode: true});
+  const codeBlocksFiles = resolveFilesOption(codeBlocksFilesOption, []);
+  const codeBlocksIgnores = resolveIgnoresOption(codeBlocksIgnoresOption, []);
 
   // Legend:
   // 🟢 - in recommended
@@ -124,7 +130,7 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
       'mdx/setup/code-blocks-processor',
       {
         applyUserFilesAndIgnores: false,
-        filesDefault: codeBlocksFiles?.length ? codeBlocksFiles : DEFAULT_FILES,
+        filesDefault: codeBlocksFiles.length > 0 ? codeBlocksFiles : DEFAULT_FILES,
         ignoresDefault: codeBlocksIgnores,
         ignoresInternal: {mdx: false},
       },

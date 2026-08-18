@@ -1,3 +1,98 @@
+describe('option: `files`', () => {
+  describe('function form', () => {
+    it('receives the patterns `files` would be resolved to if the option was not passed', async () => {
+      const receivedParams: {readonly filesDefault: readonly string[]}[] = [];
+
+      const configResult = await computeEslintConfig({
+        vitest: {
+          files: (params) => {
+            receivedParams.push(params);
+            return [...params.filesDefault];
+          },
+        },
+      });
+
+      expect(receivedParams).toStrictEqual([
+        {filesDefault: configResult.getConfigByUnPostfix('vitest')?.files},
+      ]);
+    });
+
+    it('replaces the resolved patterns with the returned ones', async () => {
+      const FILES = ['tests/**/*.vitest.ts'];
+
+      const configResult = await computeEslintConfig({vitest: {files: () => FILES}});
+
+      expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual(FILES);
+    });
+
+    it('keeps the resolved patterns if `undefined` is returned', async () => {
+      const configResult = await computeEslintConfig({vitest: {files: () => undefined}});
+
+      expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual(
+        (await computeEslintConfig('vitest')).getConfigByUnPostfix('vitest')?.files,
+      );
+    });
+
+    it('does not create the eslint config if an empty array is returned, keeping sub-configs intact', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {files: () => [], configTypescript: true},
+      });
+
+      expect(configResult.getConfigByUnPostfix('vitest')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('vitest/ts')).toBeDefined();
+    });
+  });
+});
+
+describe('option: `ignores`', () => {
+  describe('function form', () => {
+    it('receives the default and the implicitly ignored patterns separately', async () => {
+      let receivedParams:
+        | {readonly ignoresDefault: readonly string[]; readonly ignoresImplicit: readonly string[]}
+        | undefined;
+
+      const configResult = await computeEslintConfig({
+        import: {
+          ignores: (params) => {
+            receivedParams = params;
+            return [...params.ignoresImplicit, ...params.ignoresDefault];
+          },
+        },
+      });
+
+      expect(receivedParams?.ignoresDefault).toMatchInlineSnapshot('["**/*.md/**/*.*"]');
+      expect(receivedParams?.ignoresImplicit).toMatchInlineSnapshot(
+        '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"]',
+      );
+      expect(configResult.getConfigByUnPostfix('import')?.ignores).toStrictEqual(
+        (await computeEslintConfig('import')).getConfigByUnPostfix('import')?.ignores,
+      );
+    });
+
+    it('replaces both of them with the returned patterns', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({import: {ignores: () => IGNORES}});
+
+      expect(configResult.getConfigByUnPostfix('import')?.ignores).toStrictEqual(IGNORES);
+    });
+
+    it('keeps the resolved patterns if `undefined` is returned', async () => {
+      const configResult = await computeEslintConfig({import: {ignores: () => undefined}});
+
+      expect(configResult.getConfigByUnPostfix('import')?.ignores).toStrictEqual(
+        (await computeEslintConfig('import')).getConfigByUnPostfix('import')?.ignores,
+      );
+    });
+
+    it('results in no `ignores` if an empty array is returned', async () => {
+      const configResult = await computeEslintConfig({import: {ignores: () => []}});
+
+      expect(configResult.getConfigByUnPostfix('import')?.ignores).toBeUndefined();
+    });
+  });
+});
+
 describe('option: `overrides` and `overridesAny`', () => {
   it('if the config supports these options, they should actually work', async () => {
     const configResult = await computeEslintConfig({

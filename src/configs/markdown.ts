@@ -1,7 +1,7 @@
 import type {MarkdownLanguageOptions} from '@eslint/markdown';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import type {UnFilesAndIgnoresPatterns} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {arrayUnique, capitalize} from '../utils';
@@ -9,6 +9,8 @@ import {
   type IgnoresAdditionalOptions,
   determineRulesDisabledInEmbeddedCodeBlocks,
   generateIgnoresWithAdditional,
+  resolveFilesOption,
+  resolveIgnoresOption,
 } from './shared';
 import {
   type ExtraPluginsType,
@@ -141,7 +143,7 @@ export interface MarkdownEslintConfigOptions<
   language?:
     | MarkdownDialect
     | Prettify<
-        UnFlatConfigEntryFilesAndIgnores & {
+        UnFilesAndIgnoresPatterns & {
           /**
            * The dialect the matched files are parsed with
            */
@@ -187,12 +189,12 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     configCodeBlocks: true,
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
     configSentencesPerLine: false,
-    files: DEFAULT_FILES,
     lintMarkdown: true,
     language: 'gfm',
     allowHtmlTags: true,
     parseFrontmatter: 'yaml',
   });
+  optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_FILES);
 
   const {
     files: parentConfigFiles,
@@ -413,7 +415,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
         {
           ...generateIgnoresWithAdditional(
             configSentencesPerLine,
-            parentConfigIgnores,
+            resolveIgnoresOption(parentConfigIgnores, []),
           )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
         },
       )
