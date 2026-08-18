@@ -1,0 +1,12 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig.json",
+  // The specs run ESLint over the fixtures, and type-aware rules make the parser resolve every
+  // linted file to a TS project. `../tsconfig.json` excludes the fixtures on purpose (many are
+  // invalid code samples that would fail the typecheck), hence this project
+  "extends": "../tsconfig.json",
+  "include": ["*/fixtures/**/*"],
+  "exclude": [],
+  "compilerOptions": {
+    "tsBuildInfoFile": "../../temp/tsbuild/test-fixtures.tsbuildinfo"
+  }
+}

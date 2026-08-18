@@ -5,7 +5,7 @@
   "exclude": ["**/fixtures/**"],
   "references": [{"path": ".."}],
   "compilerOptions": {
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"],
     "composite": false,
     "noEmit": true,
     "incremental": true,

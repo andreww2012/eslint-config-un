@@ -10,6 +10,11 @@
       {"name": "@effect/language-service"},
     ],
 
+    // Without the explicit types (which projects are actually expected to have since TS 7),
+    // they only resolve by accident, through `<reference>`ing `node` types in Vite's `.d.ts`
+    // from `@sveltejs/kit` import
+    "types": ["node"],
+
     /* Base Options: */
     "skipLibCheck": true,
     "target": "es2022",
