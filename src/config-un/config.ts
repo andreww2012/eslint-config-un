@@ -469,7 +469,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ?.addConfig(['config-files', {applyUserFilesAndIgnores: false}], {
       files: GLOB_CONFIG_FILES,
     })
-    .disableAnyRule('import', 'no-extraneous-dependencies')
     .disableAnyRule('node', 'no-unpublished-require');
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores

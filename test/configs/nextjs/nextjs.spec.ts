@@ -1,5 +1,4 @@
 /* eslint-disable case-police/string-check */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import pathe from 'pathe';
 
 const FIXTURES = {

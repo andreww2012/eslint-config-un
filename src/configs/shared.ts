@@ -1,5 +1,13 @@
 import type {UnConfigContext} from '../config-un/shared';
-import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YML_YAML} from '../constants';
+import {
+  ERROR,
+  GLOB_JSON,
+  GLOB_JSON5,
+  GLOB_JSONC,
+  GLOB_JS_TS_X_EXTENSION,
+  GLOB_TOML,
+  GLOB_YML_YAML,
+} from '../constants';
 import type {UnAllRuleNames, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {type AllUnionMembers, objectEntriesUnsafe, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
@@ -106,6 +114,12 @@ export const generateDefaultTestFiles = <T extends string>(
   ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []), // 107k
   ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}` as const] : []), // 115k, 2.2k
 ];
+
+export const TESTS_CONFIG_DEFAULT_FILES = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+  includeCypressTests: true,
+  includeStorybookStories: true,
+  includeVitestBenchmarkFiles: true,
+});
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
   boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;

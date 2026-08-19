@@ -1,11 +1,10 @@
-import {GLOB_JS_TS_X_EXTENSION} from '../../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
 } from '../index';
-import {generateDefaultTestFiles} from '../shared';
+import {TESTS_CONFIG_DEFAULT_FILES} from '../shared';
 
 /**
  * Disables mostly performance rules for most of the well known test file patterns.
@@ -51,11 +50,7 @@ export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'extra'
       [
         'tests',
         {
-          filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
-            includeCypressTests: true,
-            includeStorybookStories: true,
-            includeVitestBenchmarkFiles: true,
-          }),
+          filesDefault: TESTS_CONFIG_DEFAULT_FILES,
         },
       ],
       {},

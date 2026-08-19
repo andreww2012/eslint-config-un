@@ -14,7 +14,15 @@ import {
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {PickDistributed} from '../types';
-import {arrayify, isNonEmptyArray, objectEntriesUnsafe, toKebabCase} from '../utils';
+import {
+  type MaybeFn,
+  arrayify,
+  isNonEmptyArray,
+  maybeCall,
+  objectEntriesUnsafe,
+  toKebabCase,
+} from '../utils';
+import {TESTS_CONFIG_DEFAULT_FILES, resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -23,6 +31,22 @@ import {
   assignDefaults,
   defineUnConfig,
 } from './index';
+
+interface ExtraneousDependenciesCheckOptions {
+  /**
+   * Whether the imports of the packages declared in `devDependencies` will be flagged.
+   * Use the object notation to exempt the files matching the given glob patterns from this check.
+   * These patterns are never merged with the default ones - use the function form of the parent
+   * option to extend them.
+   */
+  checkDevDependencies?: boolean | {ignorePatterns: string[]};
+
+  /**
+   * Package names that are never reported.
+   * Use case: you're linting a library code and some packages are bundled.
+   */
+  whitelist?: string[];
+}
 
 /**
  * An ESLint plugin to lint `import`/`export` statements.
@@ -68,22 +92,39 @@ export interface ImportEslintConfigOptions<
       >;
 
   /**
-   * Whether the use of dependencies from `devDependencies` is not going to be reported by the
-   * [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)
-   * rule.
-   * You can specify glob patterns or allow universally by setting this option to `true`.
-   * @default false <=> `mode` root option is set to `lib`
-   */
-  allowDevDependencies?: string[] | boolean;
-
-  /**
-   * Package names that will be not be reported by
-   * [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)
-   * rule.
+   * Finds the imports of packages that are not declared in the closest to the linted file
+   * `package.json`'s `dependencies` or `{dev,optional,peer,bundle(d)}Dependencies`.
    *
-   * Use case: you're linting library code and some packages are bundled.
+   * Possible values:
+   * - boolean: `true` uses the default value described below, `false` disables the check.
+   * - object: whether dev dependency imports will be flagged too, plus the packages that are
+   *   never reported.
+   *   Shallow-merged with the default value, i.e. the properties you don't provide are taken
+   *   from it.
+   * - array: provide rule options as-is.
+   * - function: all the above values may be returned; the first argument is the list of glob
+   *   patterns that should likely be ignored when the dev dependencies check is enabled (see
+   *   below).
+   *   The returned value is treated exactly like the directly provided one, merging included.
+   *
+   * By default, the check is enabled and the imports of dev dependencies are allowed everywhere.
+   * If `mode` root option is set to `lib`, the default value is
+   * `{checkDevDependencies: {ignorePatterns: [...]}}`, where ignored patterns are composed
+   * of the `tests` config resolved `files` and likely config files globs:
+   * - <code>**&#47;*.config.?([cm])[jt]s?(x)</code>
+   * - <code>**&#47;.*rc.?([cm])[jt]s?(x)</code>
+   *
+   * The same ignored patterns are passed as the first argument of this option's function form.
+   *
+   * Affected rule:
+   * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)
    */
-  extraneousDependenciesWhitelist?: string[];
+  extraneousDependenciesCheck?: MaybeFn<
+    | boolean
+    | ExtraneousDependenciesCheckOptions
+    | GetRuleOptions<'import', 'no-extraneous-dependencies', 'all'>,
+    [defaultIgnorePatterns: string[]]
+  >;
 
   /**
    * Recognized automatically and normally should not be set manually.
@@ -132,23 +173,48 @@ export default defineUnConfig<ImportEslintConfigOptions>(
   'import',
   true,
 )(async (context, optionsRaw) => {
+  const testsConfigOptions = context.rootOptions.configs?.tests;
+  const extraneousDependenciesDefaultIgnorePatterns = [
+    ...resolveFilesOption(
+      typeof testsConfigOptions === 'object' ? testsConfigOptions.files : undefined,
+      TESTS_CONFIG_DEFAULT_FILES,
+    ),
+    ...GLOB_CONFIG_FILES,
+  ];
+
+  const extraneousDependenciesCheckDefault: ExtraneousDependenciesCheckOptions = {
+    ...(context.rootOptions.mode === 'lib' && {
+      checkDevDependencies: {ignorePatterns: extraneousDependenciesDefaultIgnorePatterns},
+    }),
+  };
+
   const optionsResolved = assignDefaults(optionsRaw, {
     configAllowDefaultExport: true,
     isTypescriptEnabled: context.configsMeta.ts.enabled,
-    allowDevDependencies: context.rootOptions.mode !== 'lib',
+    extraneousDependenciesCheck: extraneousDependenciesCheckDefault,
   });
 
   const {
     settings: pluginSettings,
     configAllowDefaultExport,
-    allowDevDependencies,
-    extraneousDependenciesWhitelist,
     isTypescriptEnabled,
     noDuplicatesOptions,
     requireModuleExtensions,
     tsResolverOptions,
   } = optionsResolved;
   const noUnresolvedIgnores = arrayify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
+
+  const extraneousDependenciesCheckRaw = maybeCall(
+    optionsResolved.extraneousDependenciesCheck,
+    extraneousDependenciesDefaultIgnorePatterns,
+  );
+  const extraneousDependenciesCheck =
+    extraneousDependenciesCheckRaw === true ? {} : extraneousDependenciesCheckRaw;
+  const extraneousDependenciesCheckObject =
+    typeof extraneousDependenciesCheck === 'object' && !Array.isArray(extraneousDependenciesCheck)
+      ? {...extraneousDependenciesCheckDefault, ...extraneousDependenciesCheck}
+      : undefined;
+  const devDependenciesCheck = extraneousDependenciesCheckObject?.checkDevDependencies;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import');
 
@@ -249,14 +315,23 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     ]) /** @since 0.7.9 */ // 🟡
     .addRule('no-dynamic-require', OFF) /** @since 1.16.0 */
     .addRule('no-empty-named-blocks', ERROR) /** @since 2.27.0 */
-    .addRule('no-extraneous-dependencies', ERROR, [
-      {
-        devDependencies: allowDevDependencies,
-        ...(extraneousDependenciesWhitelist?.length && {
-          whitelist: extraneousDependenciesWhitelist,
-        }),
-      },
-    ]) /** @since 1.6.0 */
+    .addRule(
+      'no-extraneous-dependencies',
+      extraneousDependenciesCheck === false ? OFF : ERROR,
+      Array.isArray(extraneousDependenciesCheck)
+        ? extraneousDependenciesCheck
+        : [
+            {
+              devDependencies:
+                typeof devDependenciesCheck === 'object'
+                  ? devDependenciesCheck.ignorePatterns
+                  : !devDependenciesCheck,
+              ...(isNonEmptyArray(extraneousDependenciesCheckObject?.whitelist) && {
+                whitelist: extraneousDependenciesCheckObject.whitelist,
+              }),
+            },
+          ],
+    ) /** @since 1.6.0 */
     .addRule('no-import-module-exports', OFF) /** @since 2.23.0 */ // TODO enable?
     .addRule('no-internal-modules', OFF) /** @since 1.16.0 */
     .addRule('no-mutable-exports', WARNING) /** @since 1.7.0 */

@@ -1,5 +1,6 @@
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
-import {GLOB_MARKDOWN_ALL_CODE_BLOCKS} from '../../../src/constants';
+import {TESTS_CONFIG_DEFAULT_FILES} from '../../../src/configs/shared';
+import {GLOB_CONFIG_FILES, GLOB_MARKDOWN_ALL_CODE_BLOCKS} from '../../../src/constants';
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
@@ -193,8 +194,11 @@ describe('un options', () => {
 });
 
 describe('options', () => {
-  describe('option: `allowDevDependencies`', () => {
-    it('allows devDependencies by default when mode is not `lib`', async () => {
+  describe('option: `extraneousDependenciesCheck`', () => {
+    const IGNORE_PATTERNS = ['**/test/**', '**/spec/**'];
+    const WHITELIST = ['my-bundled-lib', 'another-lib'];
+
+    it('enables `import/no-extraneous-dependencies` rule and allows dev dependencies by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(
@@ -202,46 +206,194 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
     });
 
-    it('disallows devDependencies by default when mode is `lib`', async () => {
+    it('flags dev dependencies outside of the test and config files by default when `mode` is `lib`', async () => {
       const configResult = await computeEslintConfig({import: true}, {un: {mode: 'lib'}});
+
+      expect(
+        configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
+      ).toMatchInlineSnapshot(
+        '[2, {"devDependencies": ["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)", "**/*.{stories,story}.?([cm])[jt]s?(x)", "**/*.config.?([cm])[jt]s?(x)", "**/.*rc.?([cm])[jt]s?(x)"]}]',
+      );
+    });
+
+    it('respects the `files` of `tests` config in the default ignore patterns when `mode` is `lib`', async () => {
+      const configResult = await computeEslintConfig(
+        {import: true, tests: {files: IGNORE_PATTERNS}},
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: [...IGNORE_PATTERNS, ...GLOB_CONFIG_FILES]}]);
+    });
+
+    it('uses the default value when option is `true`', async () => {
+      const configResult = await computeEslintConfig(
+        {import: {extraneousDependenciesCheck: true}},
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: [...TESTS_CONFIG_DEFAULT_FILES, ...GLOB_CONFIG_FILES]}]);
+    });
+
+    it('disables `import/no-extraneous-dependencies` rule when option is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: false},
+      });
+
+      expect(configResult.getRuleEntrySeverity('import', 'import/no-extraneous-dependencies')).toBe(
+        0,
+      );
+    });
+
+    it('allows dev dependencies when `checkDevDependencies` is not set', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {}},
+      });
+
+      expect(
+        configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
+      ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
+    });
+
+    it('allows dev dependencies when `checkDevDependencies` is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {checkDevDependencies: false}},
+      });
+
+      expect(
+        configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
+      ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
+    });
+
+    it('flags dev dependencies everywhere when `checkDevDependencies` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {checkDevDependencies: true}},
+      });
 
       expect(
         configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
       ).toMatchInlineSnapshot('[2, {"devDependencies": false}]');
     });
 
-    it('allows devDependencies for specific glob patterns', async () => {
-      const PATTERNS = ['**/test/**', '**/spec/**'];
-
+    it('exempts `ignorePatterns` from the dev dependencies check', async () => {
       const configResult = await computeEslintConfig({
-        import: {allowDevDependencies: PATTERNS},
+        import: {
+          extraneousDependenciesCheck: {
+            checkDevDependencies: {ignorePatterns: IGNORE_PATTERNS},
+          },
+        },
       });
 
       expect(
         configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
-      ).toStrictEqual([{devDependencies: PATTERNS}]);
+      ).toStrictEqual([{devDependencies: IGNORE_PATTERNS}]);
     });
-  });
 
-  describe('option: `extraneousDependenciesWhitelist`', () => {
-    it('does not add whitelist to `import/no-extraneous-dependencies` rule by default', async () => {
-      const configResult = await computeEslintConfig('import');
+    it('does not merge `ignorePatterns` with the default ones when `mode` is `lib`', async () => {
+      const configResult = await computeEslintConfig(
+        {
+          import: {
+            extraneousDependenciesCheck: {
+              checkDevDependencies: {ignorePatterns: IGNORE_PATTERNS},
+            },
+          },
+        },
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: IGNORE_PATTERNS}]);
+    });
+
+    it('allows dev dependencies when `checkDevDependencies` is `false` and `mode` is `lib`', async () => {
+      const configResult = await computeEslintConfig(
+        {import: {extraneousDependenciesCheck: {checkDevDependencies: false}}},
+        {un: {mode: 'lib'}},
+      );
 
       expect(
         configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
       ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
     });
 
-    it('adds whitelist to `import/no-extraneous-dependencies` rule when provided', async () => {
-      const WHITELIST = ['my-bundled-lib', 'another-lib'];
-
+    it('never reports the whitelisted packages', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesWhitelist: WHITELIST},
+        import: {extraneousDependenciesCheck: {whitelist: WHITELIST}},
       });
 
       expect(
         configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
       ).toStrictEqual([{devDependencies: true, whitelist: WHITELIST}]);
+    });
+
+    it('merges the object form with the default value', async () => {
+      const configResult = await computeEslintConfig(
+        {import: {extraneousDependenciesCheck: {whitelist: WHITELIST}}},
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([
+        {
+          devDependencies: [...TESTS_CONFIG_DEFAULT_FILES, ...GLOB_CONFIG_FILES],
+          whitelist: WHITELIST,
+        },
+      ]);
+    });
+
+    it('passes the rule options as-is when an array is provided', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: [{includeTypes: true, whitelist: WHITELIST}]},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{includeTypes: true, whitelist: WHITELIST}]);
+    });
+
+    it('does not pass any rule options when an empty array is provided', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: []},
+      });
+
+      expect(
+        configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
+      ).toMatchInlineSnapshot('2');
+    });
+
+    it('passes the default ignore patterns to the function form', async () => {
+      const configResult = await computeEslintConfig({
+        import: {
+          extraneousDependenciesCheck: (defaultIgnorePatterns) => [
+            {devDependencies: defaultIgnorePatterns},
+          ],
+        },
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: [...TESTS_CONFIG_DEFAULT_FILES, ...GLOB_CONFIG_FILES]}]);
+    });
+
+    it('merges the value returned by the function form with the default value', async () => {
+      const configResult = await computeEslintConfig(
+        {import: {extraneousDependenciesCheck: () => ({whitelist: WHITELIST})}},
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([
+        {
+          devDependencies: [...TESTS_CONFIG_DEFAULT_FILES, ...GLOB_CONFIG_FILES],
+          whitelist: WHITELIST,
+        },
+      ]);
     });
   });
 

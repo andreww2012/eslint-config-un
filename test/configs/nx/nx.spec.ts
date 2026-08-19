@@ -1,5 +1,4 @@
 import path from 'node:path';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import pathe from 'pathe';
 import type {MockInstance} from 'vitest';
 
