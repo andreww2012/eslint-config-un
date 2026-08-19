@@ -49,7 +49,7 @@ export default defineUnConfig<SecurityEslintConfigOptions>('security', {
     .addRule('detect-object-injection', OFF) /** @since 1.0.0 */ // 🟡
     .addRule('detect-possible-timing-attacks', OFF) /** @since 1.0.0 */ // 🟡
     .addRule('detect-pseudoRandomBytes', WARNING) /** @since 1.0.0 */ // 🟡
-    .addRule('detect-unsafe-regex', WARNING) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-unsafe-regex', OFF) /** @since 1.0.0 */ // 🟡
     .enableConfigTesterForPlugin('security')
     .addOverrides();
 
