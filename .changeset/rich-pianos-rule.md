@@ -4,7 +4,38 @@
 
 markdown, mdx: the following rules are now disabled in embedded code blocks:
 
+- [`consistent-return`](https://eslint.org/docs/latest/rules/consistent-return)
+- [`no-labels`](https://eslint.org/docs/latest/rules/no-labels)
+- [`no-promise-executor-return`](https://eslint.org/docs/latest/rules/no-promise-executor-return)
+- [`no-restricted-globals`](https://eslint.org/docs/latest/rules/no-restricted-globals)
+- [`no-script-url`](https://eslint.org/docs/latest/rules/no-script-url)
+- [`no-sequences`](https://eslint.org/docs/latest/rules/no-sequences)
+- [`no-shadow`](https://eslint.org/docs/latest/rules/no-shadow)
+- [`no-unreachable`](https://eslint.org/docs/latest/rules/no-unreachable)
+- [`no-useless-constructor`](https://eslint.org/docs/latest/rules/no-useless-constructor)
+- [`no-var`](https://eslint.org/docs/latest/rules/no-var)
 - [`require-await`](https://eslint.org/docs/latest/rules/require-await)
+- e18e/prefer-static-regex
+- [`html/no-extra-spacing-text`](https://html-eslint.org/docs/rules/no-extra-spacing-text)
+- [`html/require-explicit-size`](https://html-eslint.org/docs/rules/require-explicit-size)
+- [`html/require-lang`](https://html-eslint.org/docs/rules/require-lang)
+- [`html/require-meta-charset`](https://html-eslint.org/docs/rules/require-meta-charset)
+- [`html/require-meta-viewport`](https://html-eslint.org/docs/rules/require-meta-viewport)
+- [`html/require-title`](https://html-eslint.org/docs/rules/require-title)
 - [`node/no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
+- [`promise/catch-or-return`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/catch-or-return.md)
 - sonarjs/no-clear-text-protocols
+- sonarjs/no-empty-collection
+- sonarjs/no-global-this
+- sonarjs/no-globals-shadowing
+- sonarjs/no-ignored-exceptions
+- sonarjs/super-linear-regex
+- [`ts/method-signature-style`](https://typescript-eslint.io/rules/method-signature-style)
+- [`ts/no-redeclare`](https://typescript-eslint.io/rules/no-redeclare)
+- [`ts/no-useless-empty-export`](https://typescript-eslint.io/rules/no-useless-empty-export)
 - [`unicorn/consistent-function-scoping`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-function-scoping.md)
+- [`unicorn/no-optional-chaining-on-undeclared-variable`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-optional-chaining-on-undeclared-variable.md)
+- [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md)
+- [`unicorn/no-unsafe-string-replacement`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-string-replacement.md)
+- [`unicorn/prefer-optional-catch-binding`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-optional-catch-binding.md)
+- [`unicorn/prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-response-static-json.md)

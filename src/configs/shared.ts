@@ -233,6 +233,7 @@ export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
 
 // 🟣 - in the default *markdown* processor config
 const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
+  'consistent-return', // [too-strict]
   'eol-last', // 🟣
   'max-classes-per-file', // [too-strict]
   'no-alert', // [runtime-only]
@@ -243,12 +244,22 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'no-eval', // [eval]
   'no-extend-native', // [runtime-only]
   'no-implied-eval', // [eval]
+  // Sometimes object literals are used not assigned to anything, and such object's properties are triggering this rule
+  'no-labels', // [too-strict]
   'no-lone-blocks', // [emptiness]
   'no-new-func', // [eval]
   'no-new', // [runtime-only]
+  'no-promise-executor-return', // [too-strict]
+  'no-restricted-globals', // [too-strict]
+  'no-script-url', // [too-strict]
+  'no-sequences', // [too-strict]
+  'no-shadow', // [too-strict]
+  'no-unreachable', // [runtime-only]
   'no-unused-labels', // [unused]
   'no-unused-private-class-members', // [unused]
   'no-useless-assignment', // [unused]
+  'no-useless-constructor', // [too-strict]
+  'no-var', // [too-strict] - examples can use whatever they want
   'prefer-const', // [too-strict]
   'require-await', // [too-strict]
   'strict', // 🟣
@@ -263,17 +274,20 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'ts/ban-ts-comment', // [runtime-only]
   'ts/class-methods-use-this', // [runtime-only]
   'ts/explicit-function-return-type', // [too-strict]
+  'ts/method-signature-style', // [too-strict]
   'ts/no-empty-function', // [emptiness]
   'ts/no-explicit-any', // [too-strict]
   'ts/no-extraneous-class', // [too-strict]
   'ts/no-import-type-side-effects', // [runtime-only]
   'ts/no-namespace', // [too-strict]
   'ts/no-non-null-assertion', // [too-strict]
+  'ts/no-redeclare', // [runtime-only]
   'ts/no-require-imports', // [runtime-only]
   'ts/no-unused-expressions', // [unused]
   'ts/no-unused-vars', // [unused]
   'ts/no-use-before-define', // [runtime-only]
   'ts/no-unsafe-function-type', // [too-strict]
+  'ts/no-useless-empty-export', // [too-strict] - might be ok in examples
 
   // vue
   // TODO maybe disable?: vue/valid-define-emits, vue/valid-define-props, vue/no-duplicate-attr-inheritance
@@ -319,11 +333,16 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
 
   // unicorn
   // won't disable: unicorn/no-abusive-eslint-disable, unicorn/relative-url-style, unicorn/prefer-string-replace-all, unicorn/prefer-string-starts-ends-with, unicorn/prefer-code-point
+  'unicorn/consistent-function-scoping', // [performance]
   'unicorn/no-process-exit', // [runtime-only]
   'unicorn/prefer-top-level-await', // [runtime-only]
+  'unicorn/no-optional-chaining-on-undeclared-variable', // [runtime-only]
+  'unicorn/no-unused-array-method-return', // [runtime-only]
+  'unicorn/no-unsafe-string-replacement', // [too-strict]
   'unicorn/no-static-only-class', // [too-strict]
   'unicorn/no-top-level-side-effects', // [runtime-only]
-  'unicorn/consistent-function-scoping', // [performance]
+  'unicorn/prefer-optional-catch-binding', // [too-strict]
+  'unicorn/prefer-response-static-json', // [too-strict]
 
   // regexp
   'regexp/no-unused-capturing-group', // [runtime-only]
@@ -370,17 +389,34 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   // sonar — Express/passport wiring rules that judge safety by what the whole program does or does
   // not set up around the app instance, which an isolated snippet never contains
   // won't disable: sonarjs/no-identical-functions
+  // sonarjs/no-hardcoded-passwords - might actually find something
   'sonarjs/content-length', // [runtime-only]
   'sonarjs/cors', // [runtime-only]
   'sonarjs/file-uploads', // [runtime-only]
   'sonarjs/no-clear-text-protocols', // [too-strict]
+  'sonarjs/no-empty-collection', // [runtime-only]
+  'sonarjs/no-global-this', // [too-strict]
+  'sonarjs/no-globals-shadowing', // [runtime-only]
+  'sonarjs/no-ignored-exceptions', // [too-strict]
   'sonarjs/no-session-cookies-on-static-assets', // [runtime-only]
   'sonarjs/production-debug', // [runtime-only]
   'sonarjs/session-regeneration', // [runtime-only]
+  'sonarjs/super-linear-regex', // [runtime-only]
   'sonarjs/x-powered-by', // [runtime-only]
+
+  'e18e/prefer-static-regex', // [performance]
+
+  'html/no-extra-spacing-text', // [too-strict]
+  'html/require-explicit-size', // [too-strict]
+  'html/require-lang', // [too-strict]
+  'html/require-meta-charset', // [too-strict]
+  'html/require-meta-viewport', // [too-strict]
+  'html/require-title', // [too-strict]
 
   // misc
   // won't disable: yaml/file-extension, eslint-comments/no-unlimited-disable
+  // no-secrets/no-secrets - there might actually be accidental/leftover secrets
+  'promise/catch-or-return', // [too-strict]
   'unused-imports/no-unused-imports', // [too-strict]
   'turbo/no-undeclared-env-vars', // [runtime-only]
   'eslint-plugin/no-property-in-node', // [type-aware]
