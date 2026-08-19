@@ -931,7 +931,7 @@ export default defineUnConfig<
     .addRule('no-namespace', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule('no-non-null-asserted-nullish-coalescing', ERROR) /** @since 4.32.0 */ // 🟣
     .addRule('no-non-null-asserted-optional-chain', ERROR) /** @since 2.17.0 */ // 🟣
-    .addRule('no-non-null-assertion', WARNING) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-non-null-assertion', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule('no-restricted-types', OFF) /** @since 8.0.0 */
     .addRule('no-this-alias', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule('no-unnecessary-type-constraint', ERROR) /** @since 4.6.0 */ // 🟣
