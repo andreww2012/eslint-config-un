@@ -250,6 +250,7 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'no-unused-private-class-members', // [unused]
   'no-useless-assignment', // [unused]
   'prefer-const', // [too-strict]
+  'require-await', // [too-strict]
   'strict', // 🟣
   'no-undef', // 🟣
   'no-unused-expressions', // 🟣
@@ -322,6 +323,7 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'unicorn/prefer-top-level-await', // [runtime-only]
   'unicorn/no-static-only-class', // [too-strict]
   'unicorn/no-top-level-side-effects', // [runtime-only]
+  'unicorn/consistent-function-scoping', // [performance]
 
   // regexp
   'regexp/no-unused-capturing-group', // [runtime-only]
@@ -371,6 +373,7 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'sonarjs/content-length', // [runtime-only]
   'sonarjs/cors', // [runtime-only]
   'sonarjs/file-uploads', // [runtime-only]
+  'sonarjs/no-clear-text-protocols', // [too-strict]
   'sonarjs/no-session-cookies-on-static-assets', // [runtime-only]
   'sonarjs/production-debug', // [runtime-only]
   'sonarjs/session-regeneration', // [runtime-only]
