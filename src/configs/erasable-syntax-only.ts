@@ -6,7 +6,8 @@ import {
   defineUnConfig,
 } from './index';
 
-type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProperties';
+type CheckedSyntax =
+  'enums' | 'exportAliases' | 'importAliases' | 'namespaces' | 'parameterProperties';
 
 /**
  * ESLint plugin to granularly enforce TypeScript's
@@ -45,6 +46,7 @@ export default defineUnConfig<ErasableSyntaxOnlyEslintConfigOptions>(
   configBuilder
     ?.addConfig(['erasable-syntax-only', {filesDefault: [GLOB_TS_X]}])
     .addRule('enums', allowedSyntax.enums ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('export-aliases', allowedSyntax.exportAliases ? OFF : ERROR) /** @since 0.6.0 */ // 🟢
     .addRule('import-aliases', allowedSyntax.importAliases ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('namespaces', allowedSyntax.namespaces ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
     .addRule(
