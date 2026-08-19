@@ -1167,6 +1167,11 @@ export default defineConfig(await eslintConfig(/* ... */));
 This is mostly self-explanatory.
 For more info, [refer to the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal).
 
+### I'm getting an error/a warning from pnpm about `unrs-resolver` ignored build script
+
+After eslint-config-un installation, depending on your pnpm configuration, you might see a banner or an error message calling to do something about `unrs-resolver` package build script.
+This package is actually a transitive dependency of our package, and as of time or writing [its build script exists for installing `optionalDependencies` for legacy npm versions](https://github.com/unrs/unrs-resolver/issues/193), and can (should!) be ignored in pnpm.
+
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
 
