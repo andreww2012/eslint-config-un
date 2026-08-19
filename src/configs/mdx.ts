@@ -139,10 +139,14 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     {
       ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
         valueTransformFn: {
-          fn: ({eslintPluginMdx}) =>
-            eslintPluginMdx.createRemarkProcessor({
-              lintCodeBlocks: configBuilderCodeBlocks != null,
-            }),
+          scope: {
+            isConfigBuilderCodeBlocksPresent: configBuilderCodeBlocks != null,
+          },
+          fn({eslintPluginMdx}) {
+            return eslintPluginMdx.createRemarkProcessor({
+              lintCodeBlocks: this.isConfigBuilderCodeBlocksPresent,
+            });
+          },
         },
       }),
     },
