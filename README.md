@@ -33,7 +33,7 @@ Grown out of a personal collection of rules, this ESLint config aspires to cover
 
 Minimum supported versions:
 
-- NodeJS: ^22.23.1 or >=24
+- Node.js: ^22.23.1 or >=24
 - ESLint: ^10 (peer dependency)
 
 ```sh
@@ -45,10 +45,10 @@ yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 Commonly used plugins are direct dependencies of this package; you don't need to install them separately.
 We aim to update the dependencies within 1 month after their release.
 
-Many plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
-You need to run ESLint with our config to find out which plugins should be installed manually until it proceeds to the linting stage.
+Many plugins (usually framework/library-specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
+Run ESLint with our config to find out which plugins have to be installed manually, repeating this until it proceeds to the linting stage.
 
-You can always override plugins' implementation with [`pluginOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
+You can always override a plugin's implementation with the [`pluginOverrides` option](#pluginoverrides) or with your package manager's overrides functionality.
 
 ### Usage
 
@@ -63,7 +63,7 @@ export default eslintConfig({
 ```
 
 > [!NOTE]
-> We highly recommend using TypeScript config file, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
+> We highly recommend using a TypeScript config file, or otherwise adding the [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file.
 
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ## Configs and Sub-configs
@@ -76,14 +76,14 @@ You can enable any Config by setting it to `true` or an object with the Config's
 Passing `false` disables the Config.
 Passing an empty array to `files` disables the Config, but not its Sub-configs.
 
-Sub-config is a Config located within Config's options.
-If the parent config is disabled by passing `false`, all its Sub-configs are disabled too.
+A Sub-config is a Config located within another Config's options.
+If the parent Config is disabled by passing `false`, all its Sub-configs are disabled too.
 
-After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless `loadPluginsOnDemand` option is set to `false`.
+After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless the `loadPluginsOnDemand` option is set to `false`.
 
 ### Config (`UnConfig`) interface
 
-The Config has the following interface (exact types are simplified for docs):
+The Config has the following interface (the exact types are simplified for the docs):
 
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
@@ -109,7 +109,7 @@ type UnConfig =
         | string[]
         | ((params: {ignoresDefault: string[]; ignoresImplicit: string[]}) => string[] | undefined);
 
-      [RuleName in ('overrides' | 'overridesAny')]?: {
+      [OverridesType in ('overrides' | 'overridesAny')]?: {
         [RuleName in string]:
           | UnRuleEntry<RuleName>
           | ((
@@ -119,7 +119,7 @@ type UnConfig =
             ) => UnRuleEntry<RuleName>);
       };
 
-      forceSeverity?: '2' | 'error' | '1' | 'warn';
+      forceSeverity?: 2 | 'error' | 1 | 'warn';
       [`config${string}`]: UnConfig; // These are Sub-configs
       [customOptions: string]: unknown; // Custom options, individual for each Config
     };
@@ -127,29 +127,29 @@ type UnConfig =
 
 #### `files` and `ignores`
 
-They have exactly the same meaning as the corresponding ESLint flat config item properties, with the only difference being an empty array `[]` handling:
+They have exactly the same meaning as the corresponding ESLint flat config item properties, with the only difference being the handling of an empty array `[]`:
 
 - If you specify an empty array for `files`, the Config **will be disabled**, but its Sub-configs remain unaffected.
 - If you specify an empty array for `ignores`, the default ignore list won't be used.
 
-Both options also accept a **function**, which is called with the patterns the option would be resolved to if it was not passed, and whose returned patterns **completely replace** them, unless `undefined` is returned.
-This form can be useful for configs like `import/allowDefaultExport`, where you may want to add your `files` to allow the `export default` in, not to override the default list.
+Both options also accept a **function**, which is called with the patterns the option would be resolved to if it were not passed, and whose returned patterns **completely replace** them, unless `undefined` is returned.
+This form can be useful for configs like `import/allowDefaultExport`, where you may want to add your own patterns to the ones `export default` is allowed in, rather than replace the default list.
 
 #### `overrides` and `overridesAny`
 
 These are similar to ESLint's `rules`, but with a very important advantage: you can provide a function that will be called with the rule severity and options set by eslint-config-un, which allows you to **granularly override the options** or change the severity of each rule.
 
-- The difference between `overrides` and `overridesAny` is that `overridesAny` will allow *any* rule to be overridden (from TypeScript's stand point; technically you can pass any rule to `overrides` too), while `overrides` will only allow those rules which are tied to the config.
+- The difference between `overrides` and `overridesAny` is that `overridesAny` will allow *any* rule to be overridden (from TypeScript's standpoint; technically you can pass any rule to `overrides` too), while `overrides` will only allow those rules which are tied to the config.
 - `overridesAny` will be applied **after** `overrides`.
 
 #### Sub-configs
 
-Sub-configs are the same as Configs, but configured within Config options.
-All Sub-configs use `configXXX` naming convention.
+Sub-configs are the same as Configs, but are configured within another Config's options.
+All Sub-configs follow the `configXXX` naming convention.
 
 #### `forceSeverity`
 
-Allows to bulk override the severity of all the rules not overridden via `overrides` or `overridesAny`.
+Allows you to bulk override the severity of all the rules not overridden via `overrides` or `overridesAny`.
 
 #### Custom options
 
@@ -163,31 +163,31 @@ Normal ESLint severity and rule options.
 
 #### `disableAutofix`
 
-Apply a copy of the rule with `disable-autofix/` prefix and all autofixes disabled.
+Applies a copy of the rule with the `disable-autofix/` prefix and all autofixes disabled.
 
 #### `files` and `ignores`
 
-Allows to limit to which files only the current rule will be applied.
+Allows you to limit the files the current rule will be applied to.
 Only works if:
 
 - At least one of `files` or `ignores` is provided and non-empty;
-- `files` or the current Config is not an empty array.
+- `files` of the current Config is not an empty array.
 
 If these conditions are met, a separate Config will be created with:
 
-- `name` being the current Config's name with `/@rule/<rule name with prefix>` postfix;
+- `name` being the current Config's name with the `/@rule/<rule name with prefix>` suffix;
 - `files` [intersected with the parent's `files`](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation);
 - `ignores` merged with the parent's `ignores`.
 
 ## List of configs
 
-In the following table, Sub-configs have `/` in their names.
+In the following tables, Sub-configs have `/` in their names.
 Configs mentioning `misc-enabled` in the second column are disabled by default and can all be enabled at once by setting the [`defaultConfigsStatus`](#defaultconfigsstatus) option to that value.
 
 > [!WARNING]
-> You will notice that oftentimes the configs are automatically enabled if certain dependency(-ies) are installed.
-> This check is done by [`import-meta-resolve` package](https://npmx.dev/import-meta-resolve) and might produce false positives.
-> Please [read more about this here](#how-does-exactly-eslint-config-un-knows-if-some-package-is-installed).
+> You will notice that configs are often enabled automatically if certain dependencies are installed.
+> This check is done by the [`import-meta-resolve` package](https://npmx.dev/import-meta-resolve) and might produce false positives.
+> Please [read more about this here](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed).
 
 ### Most popular and well known
 
@@ -195,14 +195,14 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | --------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | ![JavaScript](./assets/devicon-javascript.svg) `js` | ✅                                          | [Vanilla ESLint rules](https://eslint.org/docs/latest/rules)                                                                            | -                                                                            |
 | ![TypeScript] `ts`                                  | ✅                                          | [typescript-eslint](https://npmx.dev/typescript-eslint) (`ts`)                                                                          | Only rules **not** requiring type information.                               |
-| ![TypeScript] `ts/setup`                            | ✅                                          | ^                                                                                                                                       | Set ups the plugin for all files requiring TS plugin w/o type checking.      |
+| ![TypeScript] `ts/setup`                            | ✅                                          | ^                                                                                                                                       | Sets up the plugin for all files requiring the TS plugin without type checking. |
 | ![TypeScript] `ts/typeAware`                        | ✅                                          | ^                                                                                                                                       | Only rules requiring type information.                                       |
-| ![TypeScript] `ts/typeAware/setup`                  | ✅                                          | ^                                                                                                                                       | Set ups the plugin for all files requiring type checking.                    |
+| ![TypeScript] `ts/typeAware/setup`                  | ✅                                          | ^                                                                                                                                       | Sets up the plugin for all files requiring type checking.                    |
 | ![TypeScript] `ts/disableNoUnsafe`                  | ❌                                          | ^                                                                                                                                       | Config that disables all the `no-unsafe-*` rules.                            |
 | ![TypeScript] `ts/noTypeAssertion`                  | ✅                                          | [eslint-plugin-no-type-assertion](https://npmx.dev/eslint-plugin-no-type-assertion) (`no-type-assertion`)                               | -                                                                            |
 | ![TypeScript] `ts/sortTsconfigKeys`                 | ❌                                          | -                                                                                                                                       | Sort type-level and `compilerOptions` keys in tsconfig files.                |
 | 🦄 `unicorn`                                        | ✅                                          | [eslint-plugin-unicorn](https://npmx.dev/eslint-plugin-unicorn) (`unicorn`)                                                             | -                                                                            |
-| 🦄 `unicorn/anyLanguage`                            | ✅                                          | ^                                                                                                                                       | Rules the plugin declares as supporting any file type; not restricted to any |
+| 🦄 `unicorn/anyLanguage`                            | ✅                                          | ^                                                                                                                                       | Rules the plugin declares as supporting any file type; applied to all files  |
 | 🦄 `unicorn/css`                                    | ✅ (`css` config is enabled)                | ^                                                                                                                                       | Applies the CSS-supporting rules to `.css` files                             |
 | 🦄 `unicorn/html`                                   | ✅ (`html` config is enabled)               | ^                                                                                                                                       | Applies the HTML-supporting rules to `.htm(l)` files                         |
 | 🦄 `unicorn/json`                                   | ✅ (`json` or `jsonc` config is enabled)    | ^                                                                                                                                       | Applies the JSON-supporting rules to `.json`, `.jsonc` and `.json5` files    |
@@ -214,7 +214,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | `sonar`                                             | ✅                                          | [eslint-plugin-sonarjs](https://npmx.dev/eslint-plugin-sonarjs) (`sonarjs`)                                                             | -                                                                            |
 | `eslintComments`                                    | ✅                                          | [@eslint-community/eslint-plugin-eslint-comments](https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments) (`eslint-comments`) | Since v0.1.3                                                                 |
 | `jsdoc`                                             | ✅                                          | [eslint-plugin-jsdoc](https://npmx.dev/eslint-plugin-jsdoc) (`jsdoc`)                                                                   | Since v0.3.1                                                                 |
-| `jsdoc/typescript`                                  | ✅ (`ts` config is enabled)                 | -                                                                                                                                       | Config for disabling or disabling certain rules for TypeScript files         |
+| `jsdoc/typescript`                                  | ✅ (`ts` config is enabled)                 | -                                                                                                                                       | Config for enabling and disabling certain rules for TypeScript files         |
 | `tsdoc`                                             | ❌                                          | [eslint-plugin-tsdoc](https://npmx.dev/eslint-plugin-tsdoc) (`tsdoc`)                                                                   | -                                                                            |
 | `stylistic`                                         | ✅                                          | [@stylistic/eslint-plugin](https://npmx.dev/@stylistic/eslint-plugin) (`stylistic`)                                                     | Since v1.0.0<br>Only a small number of rules are enabled by default          |
 
@@ -244,12 +244,12 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![NextJS](./assets/devicon-nextjs.svg) `nextJs`                                  | ✅ (`next` is installed)                                 | [@next/eslint-plugin-next](https://npmx.dev/@next/eslint-plugin-next) (`nextjs`)                                                                             | Since v0.9.0                                                                                                                                          |
 | `expo`                                                                           | ✅ (`expo` is installed)                                 | [eslint-plugin-expo](https://npmx.dev/eslint-plugin-expo) (`expo`)                                                                                           | Since v1.0.0                                                                                                                                          |
 | ![SolidJS](./assets/devicon-solidjs.svg) `solid`                                 | ✅ (`solid-js` is installed)                             | [eslint-plugin-solid](https://npmx.dev/eslint-plugin-solid) (`solid`)                                                                                        | Since v0.10.0                                                                                                                                         |
-| ![SolidJS](./assets/devicon-qwik.svg) `qwik`                                     | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmx.dev/eslint-plugin-qwik) (`qwik`)                                                                                           | Since v0.6.0                                                                                                                                          |
+| ![Qwik](./assets/devicon-qwik.svg) `qwik`                                        | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmx.dev/eslint-plugin-qwik) (`qwik`)                                                                                           | Since v0.6.0                                                                                                                                          |
 | `ripple`                                                                         | ✅ (`ripple` is installed)                               | [@tsrx/eslint-plugin](https://npmx.dev/@tsrx/eslint-plugin) (`ripple`)                                                                                       | Since v1.0.0                                                                                                                                          |
-| `ripple/setup`                                                                   | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Sets up `.tsrx` and `.ripple` files parser.                                                                                           |
+| `ripple/setup`                                                                   | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Sets up the parser for `.tsrx` and `.ripple` files.                                                                                   |
 | `ripple/ts`                                                                      | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Module-scope Ripple rules for TypeScript files.                                                                                       |
 | ![Astro] `astro`                                                                 | ✅ (`astro` is installed)                                | [eslint-plugin-astro](https://npmx.dev/eslint-plugin-astro) (`astro`)                                                                                        | Since v0.9.0<br>Without A11Y rules                                                                                                                    |
-| ![Astro] `astro/setup`                                                           | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Set ups Astro files parser.                                                                                                           |
+| ![Astro] `astro/setup`                                                           | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Sets up the Astro files parser.                                                                                                       |
 | ![Astro] `astro/jsxA11y`                                                         | ✅                                                       | ^                                                                                                                                                            | Only A11Y rules from `eslint-plugin-astro`                                                                                                            |
 | ![Svelte](./assets/devicon-svelte.svg) `svelte`                                  | ✅ (`svelte` is installed)                               | [eslint-plugin-svelte](https://npmx.dev/eslint-plugin-svelte) (`svelte`)                                                                                     | Since v0.10.0                                                                                                                                         |
 | ![Svelte](./assets/devicon-svelte.svg) `svelte/enforceTypescriptInScriptSection` | ✅ (`ts` config is enabled)                              | ^                                                                                                                                                            | Since v1.0.0<br>Enforces `lang="ts"` in `<script>` blocks via [`svelte/block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang) |
@@ -267,10 +267,10 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | Un config name                                                                   | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                      | Description/Notes                                                                                                                                                                          |
 | -------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | ![NodeJS](./assets/devicon-nodejs.svg) `node`                                    | ✅                                          | [eslint-plugin-n](https://npmx.dev/eslint-plugin-n) (`node`)                                              | -                                                                                                                                                                                          |
-| ![npm] `packageJson`                                                             | ❌                                          | [eslint-plugin-package-json](https://npmx.dev/eslint-plugin-package-json) (`package-json`)                | Since v0.1.5                                                                                                                                                                               |
+| ![npm] `packageJson`                                                             | ❌                                          | [eslint-plugin-package-json](https://npmx.dev/eslint-plugin-package-json) (`package-json`)                | Since v0.1.5<br>📚 Supports multiple configs                                                                                                                                               |
 | ![npm] `nodeDependencies`                                                        | ✅ (if `misc-enabled`)                   | [eslint-plugin-node-dependencies](https://npmx.dev/eslint-plugin-node-dependencies) (`node-dependencies`) | Since v0.10.0                                                                                                                                                                              |
 | ![npm] `depend`                                                                  | ❌                                          | [eslint-plugin-depend](https://npmx.dev/eslint-plugin-depend) (`depend`)                                  | Since v1.0.0                                                                                                                                                                               |
-| ![pnpm] `pnpm`                                                                   | ✅ (pnpm is detected as a package manager)  | [eslint-plugin-pnpm](https://npmx.dev/eslint-plugin-pnpm) (`pnpm`)                                        | Since v0.8.0<br>Does nothing, split into sub-configs                                                                                                                                       |
+| ![pnpm] `pnpm`                                                                   | ✅ (pnpm is detected as a package manager)  | [eslint-plugin-pnpm](https://npmx.dev/eslint-plugin-pnpm) (`pnpm`)                                        | Since v0.8.0<br>Does nothing itself, split into Sub-configs                                                                                                                                |
 | ![pnpm] `pnpm/packageJson`                                                       | ✅                                          | ^                                                                                                         | Plugin rules related to `package.json` files                                                                                                                                               |
 | ![pnpm] `pnpm/pnpmWorkspace`                                                     | ✅                                          | ^                                                                                                         | Plugin rules related to `pnpm-workspace.yaml` file                                                                                                                                         |
 | ![AWS](./assets/devicon-amazonwebservices-wordmark.svg) `cloudfrontFunctions`    | ❌                                          | -                                                                                                         | Since v0.10.0<br>For linting [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) written for JavaScript Runtime v2 |
@@ -282,13 +282,13 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ------------------------------------------------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | ![Markdown] `markdown`                                       | ✅                                          | [@eslint/markdown](https://npmx.dev/@eslint/markdown) (`markdown`)                                                    | Since v0.7.0<br>Configured to also lint fenced code blocks inside .md files                                               |
 | ![Markdown] `markdown/codeBlocks`                            | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Lints fenced code blocks inside Markdown files                                                            |
-| ![Markdown] `markdown/formatFencedCodeBlocks`                | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Format fenced code blocks inside Markdown files using Prettier                                            |
+| ![Markdown] `markdown/formatFencedCodeBlocks`                | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Formats fenced code blocks inside Markdown files using Prettier                                           |
 | ![Markdown] `markdown/sentencesPerLine`                      | ❌                                          | [eslint-plugin-sentences-per-line](https://npmx.dev/eslint-plugin-sentences-per-line) (`sentences-per-line`)          | Since v1.0.0                                                                                                              |
 | ![Markdown] `markdownPreferences`                            | ✅                                          | [eslint-plugin-markdown-preferences](https://npmx.dev/eslint-plugin-markdown-preferences) (`markdown-preferences`)    | Since v1.0.0                                                                                                              |
 | ![Markdown] `markdownLinks`                                  | ❌                                          | [eslint-plugin-markdown-links](https://npmx.dev/eslint-plugin-markdown-links) (`markdown-links`)                      | Since v1.0.0                                                                                                              |
 | ![MDX] `mdx`                                                 | ✅                                          | [eslint-plugin-mdx](https://npmx.dev/eslint-plugin-mdx) (`mdx`)                                                       | Since v1.0.0<br>Configured to also lint fenced code blocks inside .mdx files                                              |
 | ![MDX] `mdx/codeBlocks`                                      | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Lints fenced code blocks inside MDX files                                                                 |
-| ![MDX] `mdx/formatFencedCodeBlocks`                          | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Format fenced code blocks inside MDX files using Prettier                                                 |
+| ![MDX] `mdx/formatFencedCodeBlocks`                          | ✅ (`prettier` is installed)                | [eslint-plugin-prettier] (`prettier`)                                                                                 | Since v1.0.0<br>Formats fenced code blocks inside MDX files using Prettier                                                |
 | ![CSS] `css`                                                 | ✅ (unless `stylelint` is installed)        | [@eslint/css](https://npmx.dev/@eslint/css) (`css`)                                                                   | Since v0.7.0                                                                                                              |
 | ![CSS] `css/scss`                                            | ✅ (a Sass compiler is installed)           | ^                                                                                                                     | Lints `.scss` files using [@humanwhocodes/scsstree](https://npmx.dev/@humanwhocodes/scsstree), an optional peer dependency |
 | ![CSS] `cssInJs`                                             | ✅                                          | [eslint-plugin-css](https://npmx.dev/eslint-plugin-css) (`css-in-js`)                                                 | Since v0.2.0<br>Lints inlined CSS                                                                                         |
@@ -308,7 +308,8 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![GraphQL](./assets/logos-graphql.svg) `graphql`             | ✅ (`graphql` is installed)                 | [@graphql-eslint/eslint-plugin](https://npmx.dev/@graphql-eslint/eslint-plugin) (`graphql`)                           | Since v1.0.0                                                                                                              |
 | ![GraphQL](./assets/logos-graphql.svg) `graphql/jsProcessor` | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Runs the GraphQL processor on JS/TS files                                                                 |
 
-### Js/ts - miscellaneous
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+### JS/TS - miscellaneous
 
 | Un config name                 | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                           | Description/Notes                                                                                                                                                                                                                         |
 | ------------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -372,7 +373,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![Lodash](./assets/devicon-plain-lodash.svg) `youDontNeedLodashUnderscore`          | ✅ (`lodash`, `lodash-es` or `lodash.*` is installed)                  | [eslint-plugin-you-dont-need-lodash-underscore](https://npmx.dev/eslint-plugin-you-dont-need-lodash-underscore) (`you-dont-need-lodash-underscore`) | Since v1.0.0                                                                                        |
 | ![RxJS](./assets/devicon-rxjs.svg) `rxjs`                                           | ✅ (`rxjs` is installed)                                               | [@smarttools/eslint-plugin-rxjs](https://npmx.dev/@smarttools/eslint-plugin-rxjs) (`rxjs`)                                                          | Since v1.0.0                                                                                        |
 | ![Nx](./assets/vscode-icons-file-type-light-nx.svg) `nx`                            | ✅ (`nx` is installed)                                                 | [@nx/eslint-plugin](https://npmx.dev/@nx/eslint-plugin) (`nx`)                                                                                      | Since v1.0.0                                                                                        |
-| ![Zod] `importZod`                                                                  | ❌                                                                     | [eslint-plugin-import-zod](https://npmx.dev/eslint-plugin-import-zod) (`import-zod`)                                                                | Enforces namespace imports for `zod`. You should probably use `zod` config instead.<br>Since v1.0.0 |
+| ![Zod] `importZod`                                                                  | ❌                                                                     | [eslint-plugin-import-zod](https://npmx.dev/eslint-plugin-import-zod) (`import-zod`)                                                                | Enforces namespace imports for `zod`. You should probably use the `zod` config instead.<br>Since v1.0.0 |
 | ![UnoCSS](./assets/logos-unocss.svg) `unocss`                                       | ✅ (`unocss` is installed)                                             | [@unocss/eslint-plugin](https://npmx.dev/@unocss/eslint-plugin) (`unocss`)                                                                          | Since v1.0.0                                                                                        |
 | ![Zod] `zod`                                                                        | ✅ (`zod@^3\|\|^4` is installed)                                       | [eslint-plugin-zod](https://npmx.dev/eslint-plugin-zod) (`zod`)                                                                                     | Since v1.0.0                                                                                        |
 | ![Zod] `zod/mini`                                                                   | ✅                                                                     | [eslint-plugin-zod-mini](https://npmx.dev/eslint-plugin-zod-mini) (`zod-mini`)                                                                      | Since v1.0.0<br>Rules for [`zod/mini`](https://zod.dev/packages/mini)                               |
@@ -391,14 +392,14 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | Un config name                                                  | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                           | Description/Notes                                                                                                                        |
 | --------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `casePolice`                                                    | ❌                                          | [eslint-plugin-case-police](https://npmx.dev/eslint-plugin-case-police) (`case-police`)                                        | Since v0.9.0                                                                                                                             |
-| `noPrettierIncompatibleRules`                                   | ✅ (`prettier` package is installed)         | -                                                                                                                              | Since v1.0.0<br>Disables rules unnecessary or conflicting with Prettier. Replaces `eslint-config-prettier`.                      |
+| `noPrettierIncompatibleRules`                                   | ✅ (`prettier` package is installed)        | -                                                                                                                              | Since v1.0.0<br>Disables rules that are unnecessary or conflict with Prettier. Replaces `eslint-config-prettier`.                        |
 | `noStylisticRules`                                              | ❌                                          | -                                                                                                                              | Since v1.0.0<br>Config to disable most of the stylistic rules. Can be useful when integrating eslint-config-un into an existing project. |
 | `noRelativeImportPaths`                                         | ❌                                          | [eslint-plugin-no-relative-import-paths](https://npmx.dev/eslint-plugin-no-relative-import-paths) (`no-relative-import-paths`) | Since v1.0.0                                                                                                                      |
 | `noUnsanitized`                                                 | ✅                                          | [eslint-plugin-no-unsanitized](https://npmx.dev/eslint-plugin-no-unsanitized) (`no-unsanitized`)                               | Since v1.0.0                                                                                                                             |
 | ![CSpell](./assets/vscode-icons-file-type-cspell.svg) `cspell`  | ❌                                          | [@cspell/eslint-plugin](https://npmx.dev/@cspell/eslint-plugin) (`cspell`)                                                     | Since v1.0.0                                                                                                                             |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin`           | ❌                                          | [eslint-plugin-eslint-plugin](https://npmx.dev/eslint-plugin-eslint-plugin) (`eslint-plugin`)                                  | Since v1.0.0<br>For linting ESLint plugins                                                                                               |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin/ruleTests` | ❌                                          | ^                                                                                                                              | Since v1.0.0<br>Rules for ESLint rule test files                                                                                         |
-| `fileProgress`                                                  | ❌                                          | [eslint-plugin-file-progress](https://npmx.dev/eslint-plugin-file-progress) (`file-progress`)                                  | Since v1.0.0<br>An ESlint plugin to print file progress                                                                                  |
+| `fileProgress`                                                  | ❌                                          | [eslint-plugin-file-progress](https://npmx.dev/eslint-plugin-file-progress) (`file-progress`)                                  | Since v1.0.0<br>An ESLint plugin that prints file progress                                                                               |
 | `compat`                                                        | ❌                                          | [eslint-plugin-compat](https://npmx.dev/eslint-plugin-compat) (`compat`)                                                       | Since v1.0.0                                                                                                                             |
 | `webComponents`                                                 | ❌                                          | [eslint-plugin-wc](https://npmx.dev/eslint-plugin-wc) (`wc`)                                                                   | Since v1.0.0                                                                                                                             |
 | `header`                                                        | ❌                                          | [eslint-plugin-header](https://npmx.dev/eslint-plugin-header) (`header`)                                                       | Since v1.0.0                                                                                                                             |
@@ -418,7 +419,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | `functional`                                                    | ❌                                          | [eslint-plugin-functional](https://npmx.dev/eslint-plugin-functional) (`functional`)                                           | Since v1.0.0<br>Rules enforcing functional programming patterns                                                                          |
 | `un`                                                            | ✅                                          | Built-in `eslint-plugin-un` (`un`)                                                                                             | Since v1.0.0<br>Rules of our own, not present in any other plugin                                                                        |
 | `cli`                                                           | ✅                                          | -                                                                                                                              | Since v0.4.2<br>Allows `process.exit()` and `console` methods in `bin`, `scripts` and `cli` directories                                  |
-| `tests`                                                         | ✅                                          | -                                                                                                                              | Since v1.0.0<br>Disables mostly performance rules for the well known test file patterns                                                  |
+| `tests`                                                         | ✅                                          | -                                                                                                                              | Since v1.0.0<br>Disables mostly performance rules for the well-known test file patterns                                                  |
 
 ## How to use
 
@@ -441,10 +442,10 @@ export default eslintConfig({
       files: [],
       // This is a Sub-config
       configPinia: {
-        ignores: ['./path/to/pinia/store/with-many-error.ts'],
+        ignores: ['./path/to/pinia/store/with-many-errors.ts'],
       },
     },
-    // This config is disabled too, and if we provide an object with configuration, it will be enabled too
+    // This config is disabled by default, but providing an object with configuration enables it
     perfectionist: {
       files: ['src/big-list-of-something.ts'],
       overrides: {
@@ -453,16 +454,16 @@ export default eslintConfig({
     },
     // This plugin is enabled by default, but we don't use JSDoc so don't need it
     jsdoc: false,
-    // This plugin is conversely disabled by default, but we want to use it
+    // This plugin, conversely, is disabled by default, but we want to use it
     security: true,
   },
 });
 ```
 
-#### Providing user defined flag configs
+#### Providing user-defined flat configs
 
-You can provide your own configs by using `extraConfigs` option.
-The provided configs will be placed after all the eslint-config-un's configs, and before the config which disables Prettier incompatible rules for all files.
+You can provide your own configs by using the `extraConfigs` option.
+The provided configs will be placed after all of eslint-config-un's configs, and before the config which disables Prettier-incompatible rules for all files.
 
 Example:
 
@@ -489,11 +490,11 @@ export default eslintConfig({
 ### Plugin prefixes (`pluginRenames` option)
 
 ESLint plugins are registered with an arbitrary user-provided prefix, such as `unicorn` or `vue`.
-Then the rule name are formed by combining the prefix with the rule name, for example `unicorn/no-useless-undefined`.
+Rule names are then formed by combining the prefix with the rule's own name, for example `unicorn/no-useless-undefined`.
 
 eslint-config-un provides the ability to change any registered plugin prefix.
 Additionally, some plugins are registered with a different prefix than their documentation suggests.
-If you would like to rename them back or rename some other plugins, you can use `pluginRenames` option, which is a map from the "canonical" prefixes to the user defined ones.
+If you would like to rename them back or rename some other plugins, you can use the `pluginRenames` option, which is a map from the "canonical" prefixes to the user-defined ones.
 
 #### Default renames
 
@@ -538,12 +539,12 @@ If you would like to rename them back or rename some other plugins, you can use 
 
 ### Disabling rule autofix
 
-ESLint [doesn't (yet?) have the ability to disable autofix](https://github.com/eslint/rfcs/pull/125) for a rule by the user on per-rule basis.
-Our config attempts to provide this missing functionality by giving the ability to disable autofix for a rule as a whole ("globally") or per-file and per-rule basis, but in the latter case with a caveat that the rule will have `disable-autofix/` prefix in its name.
+ESLint [doesn't (yet?) allow users to disable autofix](https://github.com/eslint/rfcs/pull/125) on a per-rule basis.
+Our config attempts to provide this missing functionality by giving you the ability to disable autofix for a rule as a whole ("globally") or on a per-file and per-rule basis, but in the latter case with a caveat that the rule will have the `disable-autofix/` prefix in its name.
 
 #### Globally disabling rule autofix
 
-You can disable autofix for any fixable rule globally using `autofixDisabledGloballyFor` root option:
+You can disable autofix for any fixable rule globally using the `autofixDisabledGloballyFor` root option:
 
 ```ts
 import {eslintConfig} from 'eslint-config-un';
@@ -557,9 +558,9 @@ export default eslintConfig({
 });
 ```
 
-Note that by default we already globally disable autofix for some rules, the actual list of which can be found in JSDoc of this option.
+Note that by default we already globally disable autofix for some rules, the actual list of which can be found in the JSDoc of this option.
 
-It's also possible to disable autofixes for all the rules in the plugin at once, and then only enable them for the specific rules:
+It's also possible to disable autofixes for all the rules of a plugin at once, and then enable them back for specific rules:
 
 <!-- eslint-skip -->
 
@@ -595,16 +596,16 @@ export default eslintConfig({
 });
 ```
 
-This will technically create a plugin with `disable-autofix` prefix and copy this rule into it.
-The final rule is going to be given a name `disable-autofix/<rule-name>` which would replace `<rule-name>` entry in the resulting config.
+This will technically create a plugin with the `disable-autofix` prefix and copy this rule into it.
+The final rule is going to be given the name `disable-autofix/<rule-name>`, which will replace the `<rule-name>` entry in the resulting config.
 
 ## Configs notes
 
 ### TypeScript
 
-Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation), which are [known to be performance-demanding](https://typescript-eslint.io/getting-started/typed-linting/#performance), are *enabled* by default, and will be applied to the same files as `ts` config is applied to.
+Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation), which are [known to be performance-demanding](https://typescript-eslint.io/getting-started/typed-linting/#performance), are *enabled* by default, and will be applied to the same files as the `ts` config.
 This is just a heads-up; you should make your own decision whether to keep them enabled.
-Use `configTypeAware` to control to which files such rules will be applied to, if any.
+Use `configTypeAware` to control which files such rules will be applied to, if any.
 
 ### Frontend frameworks
 
@@ -616,7 +617,7 @@ Consult JSDoc of each config for more details.
 
 By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to `true` in vue's config options, which in turn is *automatically* set to `true` if `ts` config is enabled.
 If you have `.vue` files authored in both TypeScript and JavaScript, use `enforceTypescriptInScriptSection.{files,ignores}` to manually specify TS & JS Vue components respectively.
-It is not currently possible to apply different ESLint rules depending on the value of `lang` attribute of `<script>` SFC section.
+It is not currently possible to apply different ESLint rules depending on the value of the `lang` attribute of the `<script>` SFC section.
 
 #### Angular
 
@@ -634,29 +635,29 @@ You will be able to choose whether you would like to use only `@eslint-react/esl
 If `markdown`/`mdx` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files.
 This works because under the hood [`@eslint/markdown`](https://npmx.dev/@eslint/markdown)/[`eslint-mdx`](https://npmx.dev/eslint-mdx) will create virtual files for each code block with the same extension as specified after ```.
 
-But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports).
-You can find the full list of disabled rules in `src/configs/markdown.ts` file.
-You have the full control over which rules are disabled/enabled via [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option.
+But applying certain rules to code blocks might not be desirable, because some of them are too strict for code that won't be executed anyway, or even unfixable (like missing imports).
+You can find the full list of disabled rules in the `src/configs/markdown.ts` file.
+You have full control over which rules are disabled/enabled via the [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option.
 
 Code blocks linting is a sub-config of the `markdown`/`mdx` configs: `configCodeBlocks`.
 Set it to `false` to not lint code blocks at all, restrict its `files`/`ignores` to select which *Markdown*/*MDX* files have their code blocks linted, or use its `overrides`/`overridesAny` to change the rules applied to the code blocks only.
 
 ### Tailwind CSS
 
-There exists two plugins working with Tailwind:
+There are two plugins working with Tailwind:
 
 | Package name                                                                            | Default plugin prefix | Supported Tailwind versions (declared in `peerDependencies`) |
 | --------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------ |
 | [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss) | `better-tailwindcss`  | `^3.3.0 \|\| ^4.1.6`                                         |
 | [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss)               | `tailwindcss`         | `^3.4.0`                                                     |
 
-We highly recommend using the former because it supports Tailwind v4 and as of time of writing it is better maintained and more actively updated.
-In addition, if you don't like the verbosity of the default prefix, you can use [`pluginRenames` option](#pluginrenames) to rename it to simply `tailwindcss` or `tailwind`.
+We highly recommend using the former because it supports Tailwind v4 and, as of the time of writing, it is better maintained and more actively updated.
+In addition, if you don't like the verbosity of the default prefix, you can use the [`pluginRenames` option](#pluginrenames) to rename it to simply `tailwindcss` or `tailwind`.
 
 ### Perfectionist
 
-In the `perfectionist` config, even if it's enabled, all rules and Sub-Configs (there is a Sub-Config corresponding to each rule) are turned *off* by default.
-If you want all rules to be on by default, you can manually set every single Sub-Config to `true`, or use the following shorthand — just set this in the `perfectionist` config:
+In the `perfectionist` config, even if it's enabled, all rules and Sub-configs (there is a Sub-config corresponding to each rule) are turned *off* by default.
+If you want all rules to be on by default, you can manually set every single Sub-config to `true`, or use the following shorthand — just set this in the `perfectionist` config:
 
 <!-- eslint-skip -->
 
@@ -671,7 +672,7 @@ perfectionist: {
 The `noPrettierIncompatibleRules` config (enabled by default when `prettier` is installed) disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
 It replaces the previously used [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier): the rule list is inlined, audited against the current state of Prettier, and [plugin prefix renames] are respected.
 
-Rules are grouped by the language Prettier formats. 
+Rules are grouped by the language Prettier formats.
 Groups for languages Prettier can only format via an extra plugin are applied **only if that plugin is installed**:
 
 | Group    | Applied when                          |
@@ -700,11 +701,17 @@ noPrettierIncompatibleRules: {
 
 ### `configs`
 
+**Type**: `Record<string, boolean | object | [object, ...object[]]>`
+
+Enables, disables and configures the individual Configs.
+See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
+
 ### `extraConfigs`
 
-**Type**: `Record<string, boolean | object | [object, ...object][]>`
+**Type**: `object[]`
 
-See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
+Your own flat configs, with a richer `rules` option.
+See [Providing user-defined flat configs](#providing-user-defined-flat-configs).
 
 ### `files`
 
@@ -725,11 +732,11 @@ By default will be merged with our ignore patterns (also exported as [`DEFAULT_G
 
 **Type**: `Record<string, MaybeFn<MaybePromise<EslintPlugin>>>`
 
-Allows to provide additional ESLint plugins.
+Allows you to provide additional ESLint plugins.
 Their prefixes and possibly rule names will appear in configs' `rules` property type.
-They, like all the built-in plugins, by default will be loaded only if used.
+They, like all the built-in plugins, will by default be loaded only if used.
 
-Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or even prefixes you've set via [`pluginRenames`](#pluginrenames).
+Note that their prefixes must not match the built-in/known ones (like `ts` or `unicorn`), or even the prefixes you've set via [`pluginRenames`](#pluginrenames).
 
 ### `linterOptions{NoInlineConfig,ReportUnusedDisableDirectives,ReportUnusedInlineConfigs}`
 
@@ -760,15 +767,15 @@ Sets [`linterOptions.{noInlineConfig,reportUnusedDisableDirectives,reportUnusedI
 Quickly enable/disable multiple configs at once.
 Possible options:
 
-- `all-disabled`: consider all top level configs disabled unless explicitly enabled.
-- `misc-enabled`: consider some configs (see in the table above), all of which are disabled by default, enabled.
+- `all-disabled`: consider all top-level configs disabled unless explicitly enabled.
+- `misc-enabled`: consider some configs (see the tables above), all of which are disabled by default, enabled.
 
 ### `mode`
 
 **Type**: `'app' | 'lib'`
 
 Type of your project, either application (`app`, default) or library (`lib`).
-Will affect certain rules, actual list of which is written in JSDoc of this option.
+Will affect certain rules, the actual list of which is written in the JSDoc of this option.
 
 ### `forceSeverity`
 
@@ -799,17 +806,17 @@ See [Plugin prefixes][plugin prefix renames].
 
 **Type**: `Partial<Record<Exclude<PluginPrefix, ''>, EslintPlugin>>`
 
-Override implementation of some of the plugins.
-This can be useful when this config is used to lint a repository of one of the built-in plugins to provide development version of that plugin.
+Overrides the implementation of some of the plugins.
+This can be useful when this config is used to lint the repository of one of the built-in plugins, to provide the development version of that plugin.
 
 ### `loadPluginsOnDemand`
 
 **Type**: `boolean | {alwaysLoad: LoadablePluginPrefix[]}`
 
-This option controls whether ESLint plugins will be loaded if they are actually used (`true` by default).
+This option controls whether ESLint plugins will be loaded only if they are actually used (`true` by default).
 
-Using object notation, you can also specify concrete plugins that will be loaded.
-This can be useful if you enable certain plugin rules only be using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
+Using the object notation, you can also specify concrete plugins that will always be loaded.
+This can be useful if you enable certain plugin rules only by using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
 
 ### `autofixDisabledGloballyFor`
 
@@ -828,19 +835,19 @@ This option gives you more control over which rules are disabled/enabled.
 
 **Type**: `Partial<Record<Exclude<UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames, RulesDisabledInEmbeddedCodeBlocksByDefault>, boolean>>`
 
-Allows to specify more rules to disable in embedded code blocks.
+Allows you to specify more rules to disable in embedded code blocks.
 
 #### `markdownCodeBlocksRules.doNotDisable`
 
 **Type**: `Partial<Record<RulesDisabledInEmbeddedCodeBlocksByDefault, boolean>>`
 
-Allows to specify which rules should not be disabled by default in embedded code blocks.
+Allows you to specify which rules should not be disabled by default in embedded code blocks.
 
 ### `useImportIntegrity`
 
 **Type**: `boolean | {pluginSettings?: Partial<ImportIntegrityPluginSettings>; replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
 
-Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
+Allows you to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
 
 ### `typeInfoRules`
 
@@ -852,8 +859,8 @@ By default, every such rule is *automatically **moved*** into a separate ESLint 
 The mode (string value or the `mode` property) chooses the strategy:
 
 - `standalone`: the split happens and the parser, including [`projectService`](https://typescript-eslint.io/packages/parser/#projectservice), is configured in the generated config.
-  The default when the `ts/setupTypeAware` config is **disabled**.
-- `splitOnly`: the split happens, but no parser is configured — the project service is expected to be set up by the `ts/setupTypeAware` config.
+  The default when the `ts/type-aware/setup` config is **disabled**.
+- `splitOnly`: the split happens, but no parser is configured — the project service is expected to be set up by the `ts/type-aware/setup` config.
   The default when that config is **enabled** (the most common case).
 - `asIs`: no split happens; rules are left untouched in their original configs.
   You are responsible for making type information available to them.
@@ -908,10 +915,10 @@ You may also provide an object which configures [eslint-config-flat-gitignore](h
 
 Tells where ESLint is being run: in CI, within an editor, or in neither of these environments (`default`).
 
-By default, the environment is detected by [`ci-info`](https://npmx.dev/ci-info) and [`is-in-editor`](https://npmx.dev/is-in-editor) packages.
+By default, the environment is detected by the [`ci-info`](https://npmx.dev/ci-info) and [`is-in-editor`](https://npmx.dev/is-in-editor) packages.
 The function form is passed the detected environment and may return a nullish value to keep it.
 
-It can also be set by assigning [`ESLINT_CONFIG_UN_ENVIRONMENT`](#eslint_config_un_environment) environment variable one of the accepted values, but the explicitly passed value takes precedence.
+It can also be set by assigning one of the accepted values to the [`ESLINT_CONFIG_UN_ENVIRONMENT`](#eslint_config_un_environment) environment variable, but the explicitly passed value takes precedence.
 
 ### `offlineMode`
 
@@ -919,7 +926,7 @@ It can also be set by assigning [`ESLINT_CONFIG_UN_ENVIRONMENT`](#eslint_config_
 
 Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
 
-It can also be enabled by setting [`ESLINT_CONFIG_UN_OFFLINE_MODE`](#eslint_config_un_offline_mode) environment variable to non-empty string, but the explicitly passed value takes precedence.
+It can also be enabled by setting the [`ESLINT_CONFIG_UN_OFFLINE_MODE`](#eslint_config_un_offline_mode) environment variable to a non-empty string, but the explicitly passed value takes precedence.
 
 ### `cacheConfigs`
 
@@ -927,11 +934,11 @@ It can also be enabled by setting [`ESLINT_CONFIG_UN_OFFLINE_MODE`](#eslint_conf
 
 Enables flat config caching.
 This option is enabled by default when the resolved [`environment`][environment option] is `editor`.
-It can also be enabled by setting [`ESLINT_CONFIG_UN_CACHE_CONFIGS`](#eslint_config_un_cache_configs) environment variable to non-empty string, but the explicitly passed value takes precedence.
+It can also be enabled by setting the [`ESLINT_CONFIG_UN_CACHE_CONFIGS`](#eslint_config_un_cache_configs) environment variable to a non-empty string, but the explicitly passed value takes precedence.
 
 There are 2 layers of caching:
 
-- In memory: the cache will be stored in a global variable, and if it's preserved between ESLint extension process re-runs (it does at least in VSCode), it will be preferred over FS cache.
+- In memory: the cache will be stored in a global variable, and if it's preserved between ESLint extension process re-runs (as it is at least in VS Code), it will be preferred over the FS cache.
   This is an **extremely fast** caching option.
 - In file system: the cache will be stored in `node_modules/.cache/eslint-config-un/config.json`.
   Note that in this case caching might fail if the config contains unserializable data, such as functions.
@@ -941,13 +948,13 @@ The cache, regardless of the storage, is considered fresh for 1 hour, unless one
 - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
 - `package.json`, lockfile contents or package manager
 - ESLint config file contents
-- Node.JS version
+- Node.js version
 - Resolved [`environment`][environment option]
 
 ## Environment variables
 
 All environment variables affecting eslint-config-un behavior start with `ESLINT_CONFIG_UN_`.
-Boolean values are transformed via `Boolean` constructor, meaning that if the value is `'0'`, it will be treated as `true`.
+Boolean values are transformed via the `Boolean` constructor, meaning that even if the value is `'0'`, it will be treated as `true`.
 
 ### `ESLINT_CONFIG_UN_CACHE_CONFIGS`
 
@@ -972,22 +979,22 @@ See [`offlineMode` option](#offlinemode).
 
 #### `globals`
 
-Re-exported default export from [`globals` package](https://npmx.dev/globals), which is a direct dependency of eslint-config-un.
+Re-exported default export from the [`globals` package](https://npmx.dev/globals), which is a direct dependency of eslint-config-un.
 
 #### `isInCi`
 
 The constant showing if the current process is *likely* running in CI.
-Info provided by [`ci-info` package](https://npmx.dev/ci-info).
+Info provided by the [`ci-info` package](https://npmx.dev/ci-info).
 
 Use case: disable or enable certain rules or features in CI.
 Use with caution!
 
 #### `isInEditor`
 
-The constant showing if the current process is *likely* running within editor.
-Info provided by [`is-in-editor` package](https://npmx.dev/is-in-editor).
+The constant showing if the current process is *likely* running within an editor.
+Info provided by the [`is-in-editor` package](https://npmx.dev/is-in-editor).
 
-Use case: disable or enable certain rules or features in editor, likely to improve performance.
+Use case: disable or enable certain rules or features in an editor, likely to improve performance.
 
 > [!WARNING]
 > Use this sparingly, as disabling certain rules only in the editor might cause false positive reports on unused directives, which are subject to removal with autofix.
@@ -996,26 +1003,26 @@ Use case: disable or enable certain rules or features in editor, likely to impro
 #### `DEFAULT_GLOBAL_IGNORES`
 
 Default list of global `ignores` values set by eslint-config-un.
-See also [`ignores` option](#ignores)
+See also the [`ignores` option](#ignores).
 
 #### `RuleOptions`
 
-All built-in plugins' options type generated by [`eslint-typegen` package](https://npmx.dev/eslint-typegen).
+Options type for the rules of all built-in plugins, generated by the [`eslint-typegen` package](https://npmx.dev/eslint-typegen).
 
 ### `snippets` entrypoint
 
 #### Rule options generators
 
-Some useful rule options snippet generators are provided which can be tedious to write manually:
+Generators for some useful rule options which can be tedious to write manually:
 
 - `forbidImportingFromUtilityLibraries` for [`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports)
 - `forbid$slotsInsideVueTemplates` for [`vue/no-restricted-syntax`](https://eslint.vuejs.org/rules/no-restricted-syntax.html)
 
-Please refer to JSDoc of exported symbols for proper documentation.
+Please refer to the JSDoc of the exported symbols for proper documentation.
 
 #### `createNoRestricted*Rule`
 
-Utility functions re-exported from [`eslint-no-restricted` package](https://npmx.dev/eslint-no-restricted) which generate `no-restricted-*` rules.
+Utility functions re-exported from the [`eslint-no-restricted` package](https://npmx.dev/eslint-no-restricted) which generate `no-restricted-*` rules.
 Please refer to [the package documentation](https://github.com/bradzacher/eslint-no-restricted/blob/HEAD/README.md) for more info.
 
 ### `globs` entrypoint
@@ -1026,32 +1033,32 @@ Exports various globs that can be useful for specifying `files` or `ignores` ESL
 
 ### How do I add my own flat configs?
 
-Use `extraConfigs` option.
-The configs provided there will be placed after all the eslint-config-un's configs, and before the config which disables Prettier incompatible rules for all files.
-These configs have a richer `rules` option, which allows you to apply more settings like `overrides` option does.
+Use the `extraConfigs` option.
+The configs provided there will be placed after all of eslint-config-un's configs, and before the config which disables Prettier-incompatible rules for all files.
+These configs have a richer `rules` option, which allows you to apply more settings, just like the `overrides` option does.
 
-Alternatively, you can `await` the `eslintConfig()` function and then add your own flat configs to whatever place you like (we recommend use [flat config composer from `eslint-flat-config-utils` package](https://npmx.dev/eslint-flat-config-utils)) for this purpose.
+Alternatively, you can `await` the `eslintConfig()` function and then add your own flat configs wherever you like (for this purpose, we recommend using the [flat config composer from the `eslint-flat-config-utils` package](https://npmx.dev/eslint-flat-config-utils)).
 
 ### Do I have to install any of the used plugins?
 
-Many plugins are direct dependencies of this package, but the rest (the majority) are optional peer dependencies which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed.
+Many plugins are direct dependencies of this package, but the rest (the majority) are optional peer dependencies, which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed.
 Please run ESLint with our config once to get the list of dependencies to be installed manually.
 
 ### How do I know how eslint-config-un configures rules?
 
 It's too much to document, so please have a look at the source code of our config.
-All the configs are placed inside `src/configs` directory.
+All the configs are placed inside the `src/configs` directory.
 
-### How does exactly eslint-config-un knows if some package is installed?
+### How exactly does eslint-config-un know if some package is installed?
 
-We use [`import-meta-resolve`](https://npmx.dev/import-meta-resolve) package to detect if the package is installed and resolve the path to its' `package.json`.
+We use the [`import-meta-resolve`](https://npmx.dev/import-meta-resolve) package to detect if a package is installed and to resolve the path to its `package.json`.
 
 > [!WARNING]
-> This tool replicates the Node.JS resolution algorithm, so there might be false positives
+> This tool replicates the Node.js resolution algorithm, so there might be false positives
 > on package detection if your dependencies are installed in such a way that non-direct dependencies
 > can be resolved.
 >
-> If this is the case, at least 2 additional packages will be considered detected as installed
+> If this is the case, at least 2 additional packages will be detected as installed
 > regardless of whether they are actually installed in the root of your project, because they are
 > sub-dependencies of eslint-config-un's direct dependencies:
 >
@@ -1060,8 +1067,8 @@ We use [`import-meta-resolve`](https://npmx.dev/import-meta-resolve) package to 
 
 ### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
 
-You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command.
-We use [`obug` package](https://npmx.dev/obug) ([`debug`](https://npmx.dev/debug) alternative with compatible API) to print debug messages, so please refer to its documentation for more info.
+You can enable the debug mode by setting the `DEBUG=eslint-config-un` environment variable when running the ESLint command.
+We use the [`obug` package](https://npmx.dev/obug) (a [`debug`](https://npmx.dev/debug) alternative with a compatible API) to print debug messages, so please refer to its documentation for more info.
 
 Alternatively, you can use [`@eslint/config-inspector`](https://npmx.dev/@eslint/config-inspector) to inspect the final config.
 
@@ -1069,27 +1076,27 @@ Alternatively, you can use [`@eslint/config-inspector`](https://npmx.dev/@eslint
 
 ### Prerequisites
 
-Node.JS and ESLint satisfy [minimum required versions](#installation).
+Make sure Node.js and ESLint satisfy the [minimum required versions](#installation).
 Please don't attempt to migrate to ESLint 10 and eslint-config-un at the same time.
 
 ### Migration guide
 
-We recommend that every step and sub-step below is done in a separate commit and on a separate git branch.
+We recommend that every step and sub-step below be done in a separate commit and on a separate git branch.
 If necessary, any step should be additionally split into multiple commits.
-Before committing, please do also run tests, formatter, other linters and tools to ensure that nothing became broken, if you have any.
+Before committing, please also run your tests, formatter, other linters and tools, if you have any, to ensure that nothing is broken.
 
 1. Dependencies:
-   1. Remove **ALL** ESLint related *dev* dependencies - be it plugins, parsers, whatever else or `eslint` itself.
-      This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems.
+   1. Remove **ALL** ESLint-related *dev* dependencies - be it plugins, parsers, anything else or `eslint` itself.
+      This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard-to-debug problems.
    2. Install `eslint-config-un` following [the installation instructions](#installation).
-2. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive to the former.
+2. If you're using a `.js` config file, we highly recommend that you migrate to a `.ts` one, or at least add the `@ts-check` TypeScript directive to the former.
    Please don't forget to install [`jiti`](https://npmx.dev/jiti) for ESLint to be able to read your TypeScript config file.
 3. Following your intuition and/or configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent.
    1. Run ESLint for the first time (without `--fix`!).
       The list of dependencies to be installed might be shown to you.
       Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
    2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using [`pluginRenames` option][plugin prefix renames].
-      Look for `Definition for rule '<rule name>' was not found` comments
+      Look for `Definition for rule '<rule name>' was not found` errors.
 4. Perform the following two steps in any order:
    1. Enable stylistic rules only and fix them automatically (if you wish to do so) by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments will not happen):
 
@@ -1110,27 +1117,27 @@ Before committing, please do also run tests, formatter, other linters and tools 
       // ...
       ```
 
-      **Note:** not every stylistic rule is auto-fixable and not all auto-fixes are safe to apply automatically (although we already maintain a list of rules for which we've disabled autofixes by default for these reasons).
+      **Note:** not every stylistic rule is auto-fixable, and not all auto-fixes are safe to apply automatically (although we already maintain a list of rules for which we've disabled autofixes by default for these reasons).
 
       Please carefully review automatically applied fixes and do not forget about problems requiring manual intervention.
-      It might be worth to fix stylistic issues in two stages: auto and manually fixable problems.
-   2. Now set `configs.noStylisticRules` to `true` to disable purely stylistic rules and run ESLint for the first time with the new config.
-      Please don't use `--fix` option - this may complicate things as you will have less idea of what's changed (plus some autofixes may be unsafe to automatically apply).
+      It might be worth fixing stylistic issues in two stages: automatically fixable problems first, manually fixable ones after.
+   2. Now set `configs.noStylisticRules` to `true` to disable purely stylistic rules and run ESLint with the new config.
+      Please don't use the `--fix` option - this may complicate things as you will have less idea of what's changed (plus some autofixes may be unsafe to apply automatically).
       Thoroughly go through the report and:
-      - Decide which rules need to be disabled, enabled or changed the options of;
-      - Decide which `eslint-ignore` comments are no longer relevant and should be removed;
+      - Decide which rules need to be disabled, enabled or have their options changed;
+      - Decide which `eslint-disable` comments are no longer relevant and should be removed;
       - Possibly set `ts.allowDefaultProject` to include files which are not part of any TypeScript project (tsconfig file), but for which TypeScript type-aware rules (rules requiring type information) should still work.
         Conversely, if for some files type-aware linting should be disabled, specify them in `ts.configTypeAware.ignores` option (or set `ts.configTypeAware` to `false` to disable type-aware linting altogether);
       - Add `<!-- eslint-skip -->` comments before fenced code blocks in Markdown files for which code parsing is failing;
       - Fix/resolve any other issues and difficulties.
-5. Remove `noStylisticRules` config and probably re-run ESLint as you would do normally to make sure everything is working as intended.
+5. Remove the `noStylisticRules` config and probably re-run ESLint as you normally would to make sure everything is working as intended.
 
 ## Troubleshooting & caveats
 
 ### Why are there reports from `node` plugin in my frontend code?
 
-All code is assumed to be Node.JS code by default (`eslint-plugin-n` plugin is run on such code).
-Please specify `files`, `ignores` or disable `node` config altogether to avoid false positives.
+All code is assumed to be Node.js code by default (the `eslint-plugin-n` plugin is run on such code).
+Please specify `files`, `ignores` or disable the `node` config altogether to avoid false positives.
 
 ### I'm getting `The inferred type of 'default' cannot be named without a reference to './node_modules/eslint-config-un/dist/eslint.mjs'. This is likely not portable. A type annotation is necessary` kind of error when exporting the value returned by `eslintConfig()` in ESLint config file
 
@@ -1140,7 +1147,7 @@ Possible fixes are:
 
 #### Do not set `declaration: true` for ESLint config file
 
-ESLint config file might be included in the TypeScript project by mistake.
+Your ESLint config file might be included in the TypeScript project by mistake.
 But it could also be included in a [`composite`](https://www.typescriptlang.org/tsconfig/#composite) config file, which implies `declaration: true`.
 In that case, you need a different fix, unless it's possible to exclude the config file from the composite config.
 
@@ -1163,15 +1170,15 @@ For more info, [refer to the TypeScript docs](https://www.typescriptlang.org/tsc
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
 
-Install `globals` package as a dev dependency.
+Install the `globals` package as a dev dependency.
 
 ### Some dependencies are [bundled with `bundleDependencies` feature](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#bundledependencies)
 
-If you would like not to wait until the dependencies of `eslint-config-un` are updated or by whatever other reason you need to install a different version of a dependency, you can do that using your package manager's settings for all but the following packages:
+If you would like not to wait until the dependencies of `eslint-config-un` are updated, or for whatever other reason need to install a different version of a dependency, you can do that using your package manager's settings for all but the following packages:
 
 | Package name                                                                          | Reason                                                                           |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) | Has outdated requirements of peer dependencies                                   |
+| [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) | Has outdated peer dependency requirements                                        |
 | [`eslint-plugin-prettier`][eslint-plugin-prettier]                                    | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
 
 ## Versioning policy

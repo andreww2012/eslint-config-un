@@ -512,9 +512,9 @@ export interface EslintConfigUnOptions<
    * The string value (or the `mode` property) chooses the strategy:
    * - `standalone`: the split happens and the `typescript-eslint` parser, including
    *   `projectService`, is configured in the generated config.
-   *   This is the default when the `ts/setupTypeAware` config is **disabled**.
+   *   This is the default when the `ts/typeAware/setup` config is **disabled**.
    * - `splitOnly`: the split happens, but no parser is configured — the project service is expected
-   *   to be set up by the `ts/setupTypeAware` config.
+   *   to be set up by the `ts/typeAware/setup` config.
    *   This is the default when that config is **enabled**, and is the most commonly used mode.
    * - `asIs`: no split happens; rules are left untouched in their original configs.
    *   You are responsible for making type information available to them.
@@ -552,7 +552,7 @@ export interface EslintConfigUnOptions<
    * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` type-aware config
    * is enabled (and in `disabled` mode that combination is contradictory, since it both turns off
    * throwing rules and configures type information).
-   * @default 'splitOnly' if `ts/setupTypeAware` config is enabled, otherwise 'standalone'
+   * @default 'splitOnly' if `ts/typeAware/setup` config is enabled, otherwise 'standalone'
    */
   typeInfoRules?:
     | TypeInfoMode
@@ -698,7 +698,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   /**
    * Resolved form of the `typeInfoRules` option.
    * `mode` is finalized after the `ts` config is loaded (it may depend on whether the
-   * `ts/setupTypeAware` config was created).
+   * `ts/typeAware/setup` config was created).
    * NOTE: mutable.
    */
   typeInfoRulesResolved: {

@@ -1,7 +1,7 @@
 import {GLOB_SVELTE, GLOB_TS_X} from '../../src/constants';
 
 describe('rules requiring type information', () => {
-  describe('`ts/setupTypeAware` config is disabled', () => {
+  describe('`ts/typeAware/setup` config is disabled', () => {
     it('moves rules requiring type info to a separate config and enables a parser', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {internalOptions: {}});
 
@@ -223,7 +223,7 @@ describe('rules requiring type information', () => {
     });
   });
 
-  describe('`ts/setupTypeAware` config is enabled', () => {
+  describe('`ts/typeAware/setup` config is enabled', () => {
     it('creates a separate config with "typed" rules w/o parser', async () => {
       const configResult = await computeEslintConfig(
         {eslintPlugin: true, ts: true},
@@ -262,7 +262,7 @@ describe('rules requiring type information', () => {
   });
 
   describe('`typeInfoRules` is set to `standalone`', () => {
-    it('creates a separate config with "typed" rules and a parser even when `ts/setupTypeAware` is enabled', async () => {
+    it('creates a separate config with "typed" rules and a parser even when `ts/typeAware/setup` is enabled', async () => {
       const configResult = await computeEslintConfig(
         {eslintPlugin: true, ts: true},
         {un: {typeInfoRules: 'standalone'}, internalOptions: {}},
