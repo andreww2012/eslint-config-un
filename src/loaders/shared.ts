@@ -39,43 +39,56 @@ function createModuleLoader<T, N extends string>(
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     try {
       const {pluginOverrides} = context.rootOptions;
-      const providedPlugin =
+      const overriddenPluginModule =
         pluginOverrides && isKeyIn(property, pluginOverrides)
           ? await interopDefault(maybeCall(pluginOverrides[property]) as T)
           : null;
-      return {module: providedPlugin || (await interopDefault(module())), packageName};
+
+      return {
+        module: overriddenPluginModule || (await interopDefault(module())),
+        packageName,
+      };
     } catch (error: unknown) {
       const ignoredErrorsFinal: string[] = [
         ...arrayify(ignoredErrors),
         ...(isPluginOptionalPeerDependency ? MODULE_NOT_FOUND_ERROR_CODES : []),
       ];
       if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        typeof error.code === 'string' &&
-        ignoredErrorsFinal.includes(error.code) &&
-        !options?.throwIfNotFound
+        options?.throwIfNotFound ||
+        !(
+          error &&
+          typeof error === 'object' &&
+          'code' in error &&
+          typeof error.code === 'string' &&
+          ignoredErrorsFinal.includes(error.code)
+        )
       ) {
-        // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load, might be not
-        /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
-        if (
-          MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
-          'message' in error &&
-          typeof error.message === 'string'
-        ) {
-          const missingPackageNameMatch = error.message.match(
-            MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP,
-          );
-          const missingPackageName = missingPackageNameMatch?.[1];
-          if (missingPackageName && !PATH_SPECIFIER_REGEXP.test(missingPackageName)) {
-            context.missingPackages.add(missingPackageName);
-          }
-        }
-
-        return {module: null, packageName};
+        throw error;
       }
-      throw error;
+
+      // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load,
+      // might be not
+      /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
+      if (
+        MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
+        'message' in error &&
+        typeof error.message === 'string'
+      ) {
+        const missingPackageNameMatch = error.message.match(MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP);
+        const missingPackageName = missingPackageNameMatch?.[1];
+        if (
+          missingPackageName &&
+          !PATH_SPECIFIER_REGEXP.test(missingPackageName) &&
+          // A loader failing to load its own package is not a missing *dependency*: this case is
+          // reported separately, together with the supported version range, and only if
+          // the package is actually needed
+          !(missingPackageName === packageName || missingPackageName.startsWith(`${packageName}/`))
+        ) {
+          context.missingPackages.add(missingPackageName);
+        }
+      }
+
+      return {module: null, packageName};
     }
   };
   result.packageName = packageName;

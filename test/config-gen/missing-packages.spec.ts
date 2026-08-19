@@ -181,3 +181,14 @@ describe('an installed plugin does not satisfy the supported version range', () 
     expect(stderrOutput()).toBe('');
   });
 });
+
+describe('a plugin is only loaded to check whether a config depending on it can be enabled', () => {
+  it('is not reported when it is not installed', async () => {
+    mockUnresolvablePackage(SVELTE_PLUGIN_PACKAGE);
+
+    await computeEslintConfig({});
+
+    expect(processOutput.exit).not.toHaveBeenCalled();
+    expect(stderrOutput()).not.toContain(SVELTE_PLUGIN_PACKAGE);
+  });
+});
