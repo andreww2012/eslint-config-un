@@ -12,8 +12,9 @@ import {
   WARNING,
 } from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
-import type {OmitStrict, Prettify} from '../types';
-import {arrayIncludes, arrayPartition} from '../utils';
+import type {MergeObjects, OmitIndexSignature, OmitStrict, Prettify} from '../types';
+import {arrayIncludes, arrayPartition, isNonEmptyArray, objectEntriesUnsafe} from '../utils';
+import type {ConfigKey} from './index.gen';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -38,6 +39,43 @@ type LanguageSubConfig<
         `unicorn/${(typeof RULE_CATEGORIES_PER_LANGUAGE)[LanguageCategory][number]}`
       >
     >;
+
+type ConsistentBooleanNameRawOptions = GetRuleOptions<
+  'unicorn',
+  'consistent-boolean-name',
+  'allUnwrapped'
+>;
+type ConsistentBooleanNameOptions = MergeObjects<
+  OmitIndexSignature<GetRuleOptions<'unicorn', 'consistent-boolean-name'>>,
+  {
+    // Vanilla property, but strictly typed
+    ignore?: (string | RegExp)[];
+
+    /**
+     * Boolean name prefixes to allow (`true`) or disallow (`false`).
+     * - *object*: merged with the default prefixes;
+     * - *array*: completely replaces the default prefixes.
+     * @default {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}
+     */
+    prefixes?: ArrayOrBooleanRecord;
+
+    /**
+     * Names of the types wrapping a boolean value and the members providing that value, for
+     * example `{Ref: 'value'}` will make the rule treat `Ref<boolean>` variables as booleans.
+     *
+     * Shallow-merged with the default wrappers, which depend on the enabled Configs:
+     * - `vue` config is enabled: `{Ref,ShallowRef,ComputedRef,WritableComputedRef,ModelRef}.value`;
+     * - `qwik`: `{Signal,ReadonlySignal}.value`;
+     * - `rxjs`: `BehaviorSubject.value`;
+     * - `mobx`: `IObservableValue.get`.
+     *
+     * Specify `false` as a value to drop the corresponding default wrapper.
+     *
+     * ⚠️ Only works for the files provided with type information.
+     */
+    wrappers?: Partial<Record<string, string | false>>;
+  }
+>;
 
 type ConsistentCompoundWordsOptions = GetRuleOptions<
   'unicorn',
@@ -188,16 +226,18 @@ export interface UnicornEslintConfigOptions<
    * one of the allowed prefixes.
    *
    * Possible options:
-   * - `true`: use the default prefixes list;
-   * - `false`: do not enforce prefixes;
-   * - object form will be merged with the default value;
-   * - array form completely overrides the default value.
+   * - `true`: use the default options;
+   * - `false`: do not enforce anything;
+   * - *object*: the rule options, shallow-merged with the default ones.
+   *   `prefixes` and `wrappers` are merged with their own defaults too, see their documentation;
+   * - *array*: the rule options as ESLint accepts them, passed as-is.
    *
    * Affected rule:
    * - [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md)
-   * @default {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}
+   * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}}
    */
-  enforcePrefixForBooleanNames?: boolean | ArrayOrBooleanRecord;
+  enforcePrefixForBooleanNames?:
+    boolean | ConsistentBooleanNameOptions | ConsistentBooleanNameRawOptions;
 
   /**
    * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively in function
@@ -357,13 +397,38 @@ const DEFAULT_ALLOWED_BOOLEAN_PREFIXES = {
 // ⚠️ Must be in sync with the plugin's rule source
 const DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES = new Set([
   'is',
+  'are',
   'has',
+  'have',
   'can',
   'should',
   'was',
+  'were',
   'did',
   'will',
+  'requires',
 ]);
+
+// ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
+const DEFAULT_BOOLEAN_VALUE_WRAPPERS = {
+  vue: {
+    Ref: 'value',
+    ShallowRef: 'value',
+    ComputedRef: 'value',
+    WritableComputedRef: 'value',
+    ModelRef: 'value',
+  },
+  qwik: {
+    Signal: 'value',
+    ReadonlySignal: 'value',
+  },
+  rxjs: {
+    BehaviorSubject: 'value',
+  },
+  mobx: {
+    IObservableValue: 'get',
+  },
+} satisfies Partial<Record<ConfigKey, Record<string, string>>>;
 
 // ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
 const DEFAULT_CALLABLE_OR_CONSTRUCTABLE_PREFIXES = {
@@ -416,7 +481,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     classReferenceInStaticMethodsStyle,
     compoundWordsSuggestedReplacements,
     domDataAttributesStyle,
-    enforcePrefixForBooleanNames: enforcePrefixForBooleanNamesInitial,
+    enforcePrefixForBooleanNames,
     enforceTextEncodingCaseAndNotation,
     explicitTimersDelay,
     functionPrefixesToDisallowForCallables: functionPrefixesToDisallowForCallablesInitial,
@@ -430,20 +495,46 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       ? DEFAULT_NUMBER_PROPERTIES
       : optionsResolved.numberProperties || null;
 
-  const enforcePrefixForBooleanNames = enforcePrefixForBooleanNamesInitial
-    ? Array.isArray(enforcePrefixForBooleanNamesInitial)
-      ? Object.fromEntries([
-          ...Array.from(
-            DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES,
-            (defaultPrefix) => [defaultPrefix, false] as const,
-          ),
-          ...enforcePrefixForBooleanNamesInitial.map((name) => [name, true] as const),
-        ])
-      : {
-          ...DEFAULT_ALLOWED_BOOLEAN_PREFIXES,
-          ...(enforcePrefixForBooleanNamesInitial !== true && enforcePrefixForBooleanNamesInitial),
-        }
-    : null;
+  const consistentBooleanNameOptions = ((): ConsistentBooleanNameRawOptions => {
+    if (!enforcePrefixForBooleanNames) {
+      return [];
+    }
+    if (Array.isArray(enforcePrefixForBooleanNames)) {
+      return enforcePrefixForBooleanNames;
+    }
+
+    const {prefixes, wrappers, ...restOptions}: ConsistentBooleanNameOptions =
+      enforcePrefixForBooleanNames === true ? {} : enforcePrefixForBooleanNames;
+
+    const defaultWrappers = objectEntriesUnsafe(DEFAULT_BOOLEAN_VALUE_WRAPPERS).flatMap(
+      ([configName, configWrappers]) =>
+        configsMeta[configName].enabled ? Object.entries(configWrappers) : [],
+    );
+
+    const wrappersResolved = Object.entries({
+      ...Object.fromEntries(defaultWrappers),
+      ...wrappers,
+    }).flatMap(([wrapperName, memberName]) =>
+      memberName ? [[wrapperName, memberName] as const] : [],
+    );
+
+    return [
+      {
+        checkFunctions: 'prohibit',
+        ...restOptions,
+        prefixes: Array.isArray(prefixes)
+          ? Object.fromEntries([
+              ...Array.from(
+                DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES,
+                (defaultPrefix) => [defaultPrefix, false] as const,
+              ),
+              ...prefixes.map((prefix) => [prefix, true] as const),
+            ])
+          : {...DEFAULT_ALLOWED_BOOLEAN_PREFIXES, ...prefixes},
+        ...(isNonEmptyArray(wrappersResolved) && {wrappers: Object.fromEntries(wrappersResolved)}),
+      },
+    ];
+  })();
 
   const functionPrefixesToDisallowForCallables = functionPrefixesToDisallowForCallablesInitial
     ? Array.isArray(functionPrefixesToDisallowForCallablesInitial)
@@ -494,7 +585,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule(
       'consistent-boolean-name',
       enforcePrefixForBooleanNames ? ERROR : OFF,
-      enforcePrefixForBooleanNames ? [{prefixes: enforcePrefixForBooleanNames}] : [],
+      consistentBooleanNameOptions,
     ) /** @since 67.0.0 */ // 🟣💭?
     .addRule('consistent-class-member-order', OFF) /** @since 66.0.0 */ // 🟣
     .addRule(

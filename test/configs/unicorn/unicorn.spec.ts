@@ -7,6 +7,7 @@ const FIXTURES = {
   textEncodingWithDash: 'text-encoding-with-dash.js',
   textEncodingWithoutDash: 'text-encoding-without-dash.js',
   booleanWithoutPrefix: 'boolean-without-prefix.js',
+  booleanRefAndBooleanVariable: 'boolean-ref-and-boolean-variable.ts',
 } as const;
 
 describe('basic tests', () => {
@@ -458,17 +459,17 @@ describe('options', () => {
   });
 
   describe('option: `enforcePrefixForBooleanNames`', () => {
-    it('enables `unicorn/consistent-boolean-name` with the default prefixes by default', async () => {
+    it('enables `unicorn/consistent-boolean-name` with the default options by default', async () => {
       const configResult = await computeEslintConfig('unicorn');
 
       expect(
         configResult.getRuleEntry('unicorn', 'unicorn/consistent-boolean-name'),
       ).toMatchInlineSnapshot(
-        '[2, {"prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
+        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
       );
     });
 
-    it('enables `unicorn/consistent-boolean-name` with the default prefixes when set to `true`', async () => {
+    it('enables `unicorn/consistent-boolean-name` with the default options when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         unicorn: {enforcePrefixForBooleanNames: true},
       });
@@ -476,7 +477,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('unicorn', 'unicorn/consistent-boolean-name'),
       ).toMatchInlineSnapshot(
-        '[2, {"prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
+        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
       );
     });
 
@@ -490,9 +491,9 @@ describe('options', () => {
       );
     });
 
-    it('merges the object form with the default prefixes', async () => {
+    it('merges the object form of `prefixes` with the default prefixes', async () => {
       const configResult = await computeEslintConfig({
-        unicorn: {enforcePrefixForBooleanNames: {shows: true, is: false}},
+        unicorn: {enforcePrefixForBooleanNames: {prefixes: {shows: true, is: false}}},
       });
 
       expect(
@@ -500,27 +501,94 @@ describe('options', () => {
       ).toMatchObject({prefixes: {shows: true, is: false, has: true}});
     });
 
-    it('replaces the default prefixes with the array form', async () => {
+    it('replaces the default prefixes with the array form of `prefixes`', async () => {
       const configResult = await computeEslintConfig({
-        unicorn: {enforcePrefixForBooleanNames: ['shows']},
+        unicorn: {enforcePrefixForBooleanNames: {prefixes: ['shows']}},
       });
 
       expect(
         configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name'),
       ).toStrictEqual([
         {
+          checkFunctions: 'prohibit',
           prefixes: {
             is: false,
+            are: false,
             has: false,
+            have: false,
             can: false,
             should: false,
             was: false,
+            were: false,
             did: false,
             will: false,
+            requires: false,
             shows: true,
           },
         },
       ]);
+    });
+
+    it('shallow-merges the rest of the object form with the default options', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {enforcePrefixForBooleanNames: {checkFields: 'always', checkFunctions: 'never'}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name')[0],
+      ).toMatchObject({
+        checkFields: 'always',
+        checkFunctions: 'never',
+        prefixes: {is: true},
+      });
+    });
+
+    it('passes the default `wrappers` of the enabled Configs', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: true,
+        vue: true,
+        qwik: true,
+        rxjs: true,
+        mobx: true,
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name')[0],
+      ).toMatchInlineSnapshot(
+        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"BehaviorSubject": "value", "ComputedRef": "value", "IObservableValue": "get", "ModelRef": "value", "ReadonlySignal": "value", "Ref": "value", "ShallowRef": "value", "Signal": "value", "WritableComputedRef": "value"}}',
+      );
+    });
+
+    it('merges the `wrappers` object with the default wrappers, dropping the ones set to `false`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {enforcePrefixForBooleanNames: {wrappers: {ShallowRef: false, Box: 'unwrap'}}},
+        vue: true,
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name')[0],
+      ).toMatchInlineSnapshot(
+        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"Box": "unwrap", "ComputedRef": "value", "ModelRef": "value", "Ref": "value", "WritableComputedRef": "value"}}',
+      );
+    });
+
+    it('passes the array form to the rule as-is', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {enforcePrefixForBooleanNames: [{prefixes: {shows: true}}]},
+        vue: true,
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name'),
+      ).toStrictEqual([{prefixes: {shows: true}}]);
+    });
+
+    it('enables `unicorn/consistent-boolean-name` with no options when set to an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {enforcePrefixForBooleanNames: []},
+      });
+
+      expect(configResult.getRuleEntry('unicorn', 'unicorn/consistent-boolean-name')).toBe(2);
     });
 
     it('triggers for a boolean variable without an allowed prefix by default', async () => {
@@ -555,6 +623,44 @@ describe('options', () => {
       );
 
       expect(error).toBeUndefined();
+    });
+
+    it('does not trigger for a `Ref<boolean>` variable, but still triggers for a plain boolean one, when `vue` config is enabled', async () => {
+      const results = await testEslintConfig(
+        {unicorn: true, ts: true, vue: true},
+        FIXTURES.booleanRefAndBooleanVariable,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.booleanRefAndBooleanVariable,
+          'unicorn/consistent-boolean-name',
+          {all: true},
+        ).map(({message}) => message),
+      ).toMatchInlineSnapshot(
+        '["Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `must`, `may`, `does`, `do`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+      );
+    });
+
+    it('triggers for a `Ref<boolean>` variable when `vue` config is not enabled', async () => {
+      const results = await testEslintConfig(
+        {unicorn: true, ts: true},
+        FIXTURES.booleanRefAndBooleanVariable,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.booleanRefAndBooleanVariable,
+          'unicorn/consistent-boolean-name',
+          {all: true},
+        ).map(({message}) => message),
+      ).toMatchInlineSnapshot(
+        '["`isVisible` starts with `is`, so it should be boolean.", "Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `must`, `may`, `does`, `do`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+      );
     });
   });
 

@@ -11,6 +11,7 @@ export type {
   EmptyObject,
   Falsy,
   MaybePromise,
+  MergeObjects,
   NonEmptyString,
   NonEmptyTuple,
   Nullable,
