@@ -313,8 +313,8 @@ importers:
         specifier: 6.3.1
         version: 6.3.1(@eslint/json@2.0.1)(eslint@10.8.1)(supports-color@7.2.0)
       eslint-plugin-jsonc:
-        specifier: 3.4.1
-        version: 3.4.1(@eslint/json@2.0.1)(eslint@10.8.1)
+        specifier: 3.4.2
+        version: 3.4.2(@eslint/json@2.0.1)(eslint@10.8.1)
       eslint-plugin-jsx-a11y-x:
         specifier: 0.2.0
         version: 0.2.0(eslint@10.8.1)
@@ -7415,8 +7415,8 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
-  eslint-plugin-jsonc@3.4.1:
-    resolution: {integrity: sha512-HHWkjAmVJ3QAffCkfo0XKl3CstLtgbIu5EGfFfVDLQT6vqPrxl4pFbUwFwY03nOlvyuDiiBixhHFrlbzn9u09Q==}
+  eslint-plugin-jsonc@3.4.2:
+    resolution: {integrity: sha512-q5xzjCYFQuhFomTbctXzd3STfDJ8XduvaigjQmMEbP2gzSKrc58y3Fv6D775/cIK1/sRUn+4kpljiU2iW8k0zw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       eslint: '>=9.38.0'
@@ -7957,6 +7957,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -18826,7 +18827,7 @@ snapshots:
       - '@eslint/json'
       - supports-color
 
-  eslint-plugin-jsonc@3.4.1(@eslint/json@2.0.1)(eslint@10.8.1):
+  eslint-plugin-jsonc@3.4.2(@eslint/json@2.0.1)(eslint@10.8.1):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.8.1)
       '@eslint/core': 1.2.1
