@@ -554,8 +554,8 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
       '@unhead/eslint-plugin':
-        specifier: 3.3.2
-        version: 3.3.2(eslint@10.8.1)(unhead@3.3.2)
+        specifier: 3.4.0
+        version: 3.4.0(eslint@10.8.1)(unhead@3.4.0)
       '@unocss/eslint-plugin':
         specifier: 66.8.0
         version: 66.8.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
@@ -5302,11 +5302,11 @@ packages:
   '@ungap/structured-clone@1.3.3':
     resolution: {integrity: sha512-60YRaenCQcVjYEKOcG824+DRGGIQ3VKErcBoAEDJZz5bKIs2ZG+X/H9Nk+Q6EVkwJk5QNApxbrc5QtBSwtrXAg==}
 
-  '@unhead/eslint-plugin@3.3.2':
-    resolution: {integrity: sha512-SqgKlm7TCl2GoVaWM5/Op3TW7X9cE8RQuoaA9AMWmyoANv32m77KVSff64sLqePu03aqC5XlPlRlXzMN5EDi8w==}
+  '@unhead/eslint-plugin@3.4.0':
+    resolution: {integrity: sha512-0tBlrLNRaLk6+jvqSHMpLQCmWFimeyWn4U1UhtQOjeebedrHjmyxWQ+CCptlmUWSpr0mt6NLIokD3357TiJlyQ==}
     peerDependencies:
       eslint: '>=9.0.0'
-      unhead: ^3.3.2
+      unhead: ^3.4.0
 
   '@unicode/unicode-17.0.0@1.6.17':
     resolution: {integrity: sha512-TcBN39y5g7rmQbjnIDsW+4XlEXk6BnJMlhGyUHqUljp00affwlSLv5v7nB37pbdD/ks1BpptvILVQRMp34wPPw==}
@@ -11454,8 +11454,8 @@ packages:
     resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
     engines: {node: '>=20.18.1'}
 
-  unhead@3.3.2:
-    resolution: {integrity: sha512-nys63ms9LcERQX4Z6UV5jrGDiHMhccKb8Jsm9Q7uCWGqYKSKNygiIGi0AsEBTDz5mmaS8J4yXva6U3qZg4FdBQ==}
+  unhead@3.4.0:
+    resolution: {integrity: sha512-OlgpyYjY+NkFyQCaMihg2uTFbbvyr5lZr6TokS68VdFTXJ5jo4JwFtGR8PwKy/wRpjbQYgKF7ZYO+pbRgxtSmw==}
     peerDependencies:
       vite: '>=6.4.2'
     peerDependenciesMeta:
@@ -16558,10 +16558,10 @@ snapshots:
 
   '@ungap/structured-clone@1.3.3': {}
 
-  '@unhead/eslint-plugin@3.3.2(eslint@10.8.1)(unhead@3.3.2)':
+  '@unhead/eslint-plugin@3.4.0(eslint@10.8.1)(unhead@3.4.0)':
     dependencies:
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
-      unhead: 3.3.2(esbuild@0.28.2)(rolldown@1.2.4)(vite@8.0.16)
+      unhead: 3.4.0(esbuild@0.28.2)(rolldown@1.2.4)(vite@8.0.16)
 
   '@unicode/unicode-17.0.0@1.6.17': {}
 
@@ -23917,7 +23917,7 @@ snapshots:
 
   undici@7.29.0: {}
 
-  unhead@3.3.2(esbuild@0.28.2)(rolldown@1.2.4)(vite@8.0.16):
+  unhead@3.4.0(esbuild@0.28.2)(rolldown@1.2.4)(vite@8.0.16):
     dependencies:
       hookable: 6.1.1
       unplugin: 3.3.0(esbuild@0.28.2)(rolldown@1.2.4)(vite@8.0.16)
