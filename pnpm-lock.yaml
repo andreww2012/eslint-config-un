@@ -503,8 +503,8 @@ importers:
         specifier: 16.3.1
         version: 16.3.1(eslint@10.8.1)
       '@ngrx/eslint-plugin':
-        specifier: 21.1.1
-        version: 21.1.1(@typescript-eslint/utils@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(typescript-eslint@8.67.0)
+        specifier: 22.0.0
+        version: 22.0.0(@typescript-eslint/utils@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(typescript-eslint@8.67.0)
       '@nuxt/eslint-plugin':
         specifier: 1.17.0
         version: 1.17.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
@@ -3194,11 +3194,11 @@ packages:
   '@next/eslint-plugin-next@16.3.1':
     resolution: {integrity: sha512-B4SznlXwVpaLDa7Tbi6zLuueria2d/PmFDhXyDymPGrk2r1n/RMJmcn5FZq1L64k+Jsyte1lKvOr7lP9Xo80mQ==}
 
-  '@ngrx/eslint-plugin@21.1.1':
-    resolution: {integrity: sha512-I2RzaBmEPuSDOE/TCwG8m0mMi7ETKo1j+1GRZ8JuhNDj+sEpzj5hQMnbLoVcRjcz2ctGJF6rFI9qADztzvg5wg==}
+  '@ngrx/eslint-plugin@22.0.0':
+    resolution: {integrity: sha512-PJVv+FU4F+jRIikX3+MwYiKdkwYlNIGj206Ajg7rJtC2zjiUAyhjJnyr/ZL6NbGTbKU1mKpiKIIeu5VQjtGqhA==}
     peerDependencies:
       '@typescript-eslint/utils': ^8.0.0
-      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+      eslint: ^9.0.0 || ^10.0.0
       typescript: '*'
       typescript-eslint: ^8.0.0
 
@@ -14770,11 +14770,10 @@ snapshots:
     transitivePeerDependencies:
       - eslint
 
-  '@ngrx/eslint-plugin@21.1.1(@typescript-eslint/utils@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(typescript-eslint@8.67.0)':
+  '@ngrx/eslint-plugin@22.0.0(@typescript-eslint/utils@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(typescript-eslint@8.67.0)':
     dependencies:
       '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
-      strip-json-comments: 3.1.1
       typescript: '@typescript/typescript6@6.0.2'
       typescript-eslint: 8.67.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
 
