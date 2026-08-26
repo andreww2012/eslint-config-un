@@ -653,7 +653,9 @@ const ALL_STYLISTIC_RULES = {
   },
   solid: {
     imports: true,
+    'no-restated-default-options': true,
     'prefer-show': true,
+    'prefer-structured-class': true,
     'self-closing-comp': true,
     'style-prop': true,
   },
