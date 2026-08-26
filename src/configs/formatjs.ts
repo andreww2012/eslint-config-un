@@ -83,7 +83,10 @@ export interface FormatjsEslintConfigOptions<
    * @default {}
    */
   icuElementsBlocklist?: Partial<
-    Record<(GetRuleOptions<'formatjs', 'blocklist-elements'> & {})[number], boolean>
+    Record<
+      Extract<(GetRuleOptions<'formatjs', 'blocklist-elements'> & {})[number], PropertyKey>,
+      boolean
+    >
   >;
 }
 
