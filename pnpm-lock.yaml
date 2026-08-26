@@ -500,8 +500,8 @@ importers:
         specifier: 30.4.1
         version: 30.4.1(supports-color@7.2.0)
       '@next/eslint-plugin-next':
-        specifier: 16.3.1
-        version: 16.3.1(eslint@10.8.1)
+        specifier: 16.3.3
+        version: 16.3.3(eslint@10.8.1)
       '@ngrx/eslint-plugin':
         specifier: 22.0.0
         version: 22.0.0(@typescript-eslint/utils@8.68.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(typescript-eslint@8.68.0)
@@ -3261,8 +3261,8 @@ packages:
       '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.4
       '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.4
 
-  '@next/eslint-plugin-next@16.3.1':
-    resolution: {integrity: sha512-B4SznlXwVpaLDa7Tbi6zLuueria2d/PmFDhXyDymPGrk2r1n/RMJmcn5FZq1L64k+Jsyte1lKvOr7lP9Xo80mQ==}
+  '@next/eslint-plugin-next@16.3.3':
+    resolution: {integrity: sha512-pbEh30vvjKpDoTAmo1v3q2uM4JUi8QaEBpbmjWvGfoec2jLghy/WNtvzAT0bk+Ik9oz6etjt4YjXEk4BQnicCw==}
 
   '@ngrx/eslint-plugin@22.0.0':
     resolution: {integrity: sha512-PJVv+FU4F+jRIikX3+MwYiKdkwYlNIGj206Ajg7rJtC2zjiUAyhjJnyr/ZL6NbGTbKU1mKpiKIIeu5VQjtGqhA==}
@@ -15016,7 +15016,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.3
     optional: true
 
-  '@next/eslint-plugin-next@16.3.1(eslint@10.8.1)':
+  '@next/eslint-plugin-next@16.3.3(eslint@10.8.1)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.1)
       fast-glob: 3.3.1
