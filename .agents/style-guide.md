@@ -4,7 +4,18 @@
 
 # Style Guide
 
-Source: <https://github.com/andreww2012/agents/blob/13966c09b9782f9f0ae1a95b2df17f4a16818be4/.agents/style-guide.md>
+Source: <https://github.com/andreww2012/agents/blob/548a319fe22260b364e7619c103e0a8a647f6a14/.agents/style-guide.md>
+
+## Communication
+
+**CRITICAL:** Use plain English for the output, while still respecting language and prose style used in the current project for generated code.
+Avoid long dashes.
+Avoid terms and phrases like "load-bearing", "byte-identical", "it's not x; it's y" and similar.
+Reduce use of metaphors, jargonisms and complex and rarely used words.
+Don't be verbose in general.
+Sound human.
+In general, your should do your best so that your output/prose reads easily, without sactificing any information you'd like to express.
+All above is not a hard ban - you can use whatever if it actually fits and makes sense.
 
 ## Code
 
@@ -35,39 +46,42 @@ Source: <https://github.com/andreww2012/agents/blob/13966c09b9782f9f0ae1a95b2df1
 - Prefer "direct" conditions over negated:
   - Good: `a ? b : c`, `if (a) { ... } else { ... }`
   - Bad: `!a ? c : b`, `if (!a) { ... } else { ... }`
-- If you need a map that is initially empty and will be mutated, use `Map` instead of a plain object whenever possible.
+- If you need a map that is initially empty and will be mutated, use `Map` instead of a plain object whenever possible: adding or removing object properties is usually *very* bad for performance.
 - Prefer `||` over `??` unless the latter actually changes the logic in a positive way.
 - For constants, use CONSTANT_CASE <=> value is statically constructed:
   - Good: `const FOO = 'bar'`;
   - Good: `const FOO = ['bar', 1 + 2])`;
   - Bad: `const FOO = ['bar', Math.random()]`.
+- Prefer `Record<string, unknown>` over `object` TypeScript type as the former is usually simpler to reason about.
+- Prefer `Array#reduce` over creating an object and modifying its properties in a loop.
 - When a symbol is only used once, prefer to inline it unless it is non-trivial.
 - Keep each sentence in Markdown or JSDoc on a separate line, exactly like in this document.
   Exception: don't do that in `.changeset/*.md` files as they would be rendered differently in the changelog file that [changesets](https://github.com/changesets/changesets) are rendering.
+- Minimize referencing symbol names in comments: if they ever get renamed in the codebase, there's a real risk of your reference becoming stale.
 
 ## General
 
 Don't (un)stage or commit changes unless explicitly asked to.
+If you're asked to, never add yourself as a co-author.
 Prefer not to use a stash to find a root cause, test hypotheses and similar - it's better to use something like a git worktree, or completely avoid that.
 
 Use `kebab-case` for files and directory names, unless they are called differently by convention (like `README.md`, `AGENTS.md`, etc).
 
-Don't invoke other package managers except for the used one - i.e. strongly prefer say `pnpm run` instead of `npm run` if pnpm is clearly used.
-If [`@antfu/ni` commands](https://raw.githubusercontent.com/antfu-collective/ni/refs/heads/main/README.md) are available, prefer them instead of package manager native ones (i.e. `ni` instead of say `pnpm i(nstall)`).
+Avoid British variants of words like *behaviour* or *organisation* unless the project allows them.
 
-Avoid British variants of words like *behaviour* or *organisation*.
-
-Always challenge your implementation for performance, ergonomics and code length issues (remember DRY, KISS principles) and find ways to improve it.
+Always challenge your implementation for performance, ergonomics and code length issues and find ways to improve it.
+Adhere to DRY, KISS, YAGNI, Rule of three and other principles/rules of writing clean and maintainable code.
 Don't over-engineer or over-optimize things though - this is not required in majority of cases.
-
-Never commit or stage changes unless explicitly asked to.
 
 If you're asked to implement X, always consult the `.{agents,claude}/skills` directory of the repo that might contain the relevant implementation info/instructions.
 
+Avoid invoking non-used package managers' commands - i.e. if `pnpm` is used in the project, you must use `pnpm why` instead of `npm why`, unless the equivalent is missing.
+If [`@antfu/ni` commands](https://raw.githubusercontent.com/antfu-collective/ni/refs/heads/main/README.md) are available, prefer them instead of package manager native ones (i.e. `ni` instead of `(p)npm i(nstall)`, `nr` instead of `(p)npm run` and so on).
+
 ## Testing tools, linters and checkers
 
-Always run them on the *all* changed files (not only source files!) unless not possible or instructed otherwise and if the corresponding tools are available *only when the task is done*.
-Ignore the pre-existing issues.
+Always run them on the *all **changed*** files (not only source files!) unless not possible or instructed otherwise and if the corresponding tools are available *only when the task is done*.
+Ignore the pre-existing unrelated issues.
 If there are specific package.json scripts to invoke them, prefer them instead over calling directly:
 
 - TypeScript as type checker (usually `tsc --noEmit` or `vue-tsc --notEmit` for Vue projects)
@@ -89,3 +103,4 @@ If a word to ignore only encountered in a single file:
 ## Meta
 
 Don't say (unless asked explicitly) you have been following this style guide; just follow it.
+In general, don't say you did (not) follow something - that is implied.
