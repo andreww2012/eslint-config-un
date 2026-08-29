@@ -170,10 +170,10 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `extendedMarkdownSyntax`', () => {
-    it('sets `language` to `markdown/commonmark` by default (not enabled)', async () => {
+    it('makes the `parsing` block use `markdown/commonmark` by default (not enabled)', async () => {
       const configResult = await computeEslintConfig('markdownPreferences');
 
-      expect(configResult.getConfigByUnPostfix('markdown-preferences')?.language).toBe(
+      expect(configResult.getConfigByUnPostfix('parsing/markdown/commonmark')?.language).toBe(
         'markdown/commonmark',
       );
     });

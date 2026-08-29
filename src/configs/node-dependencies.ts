@@ -49,7 +49,7 @@ export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependen
       'node-dependencies',
       {
         filesDefault: [GLOB_PACKAGE_JSON],
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
       },
     ])
     .markCategory('Possible Errors')

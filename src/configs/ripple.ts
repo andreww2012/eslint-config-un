@@ -1,5 +1,4 @@
 import {ERROR, GLOB_JS_TS, GLOB_RIPPLE, GLOB_TSRX, WARNING} from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -17,17 +16,7 @@ import {
  */
 export interface RippleEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'ripple'> {
-  /**
-   * Set ups `.tsrx` and `.ripple` files parser.
-   *
-   * 📁 Default `files`:
-   * - <code>**&#47;*.tsrx</code>
-   * - <code>**&#47;*.ripple</code>
-   * @default true
-   */
-  configSetup?: UnFlatConfigEntryFilesAndIgnores;
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'ripple'> {}
 
 const DEFAULT_RIPPLE_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
 
@@ -36,16 +25,8 @@ export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {configSetup: configSetupOptions = {}} = optionsResolved;
-
-  const configBuilderSetup = context.createConfigBuilder(configSetupOptions, null);
-  configBuilderSetup?.addConfig([
-    'ripple/setup',
-    {
-      filesDefault: DEFAULT_RIPPLE_FILES,
-      parser: '@tsrx/eslint-parser',
-    },
-  ]);
+  // The rules also run on plain `.js`/`.ts`, which this parser cannot read
+  context.requestParsing('ripple', {kind: 'setUpOnly'});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ripple');
 
@@ -53,7 +34,13 @@ export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
   // 🔴 - NOT in recommended
 
   configBuilder
-    ?.addConfig(['ripple', {filesDefault: [...DEFAULT_RIPPLE_FILES, GLOB_JS_TS]}])
+    ?.addConfig([
+      'ripple',
+      {
+        filesDefault: [...DEFAULT_RIPPLE_FILES, GLOB_JS_TS],
+        parsingIgnoresInheritedFrom: ['ripple'],
+      },
+    ])
     .addRule('control-flow-jsx', ERROR) /** @since 0.3.25 */
     .addRule('no-lazy-destructuring-in-modules', ERROR) /** @since 0.3.25 */
     .addRule('no-module-scope-track', ERROR) /** @since 0.3.25 */
@@ -65,7 +52,7 @@ export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
     .addOverrides();
 
   return {
-    configs: [configBuilderSetup, configBuilder],
+    configs: [configBuilder],
     optionsResolved,
   };
 });

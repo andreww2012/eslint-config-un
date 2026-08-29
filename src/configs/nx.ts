@@ -58,7 +58,7 @@ export default defineUnConfig<NxEslintConfigOptions>('nx', {enabledBy: {package:
       'nx/json',
       {
         filesDefault: [GLOB_JSON],
-        language: ['jsonc', 'x'],
+        parseWith: 'jsonc',
       },
     ])
     .addRule('dependency-checks', ERROR) /** @since 16.4.0 */

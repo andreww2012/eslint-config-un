@@ -178,7 +178,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
 
   describe('options', () => {
     describe('option: `typescriptRules`', () => {
-      it('flows vue files into `ts/type-aware/setup` eslint config by default', async () => {
+      it('flows vue files into the type information entry by default', async () => {
         const FILES = ['src/**/*.vue'];
 
         const configResult = await computeEslintConfig({
@@ -186,12 +186,12 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
           ts: true,
         });
 
-        expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers(
-          FILES,
-        );
+        expect(
+          configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
+        ).toIncludeAllMembers(FILES);
       });
 
-      it('does not flow vue files into `ts/type-aware/setup` when set to `only-non-type-aware`', async () => {
+      it('does not flow vue files into the type information entry when set to `only-non-type-aware`', async () => {
         const FILES = ['src/**/*.vue'];
 
         const configResult = await computeEslintConfig({
@@ -205,7 +205,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files,
+          configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
         ).not.toIncludeAnyMembers(FILES);
       });
 
@@ -217,11 +217,11 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
           ts: true,
         });
 
+        expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).not.toIncludeAnyMembers(
+          FILES,
+        );
         expect(
-          configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
-        ).not.toIncludeAnyMembers(FILES);
-        expect(
-          configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files,
+          configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
         ).not.toIncludeAnyMembers(FILES);
       });
     });

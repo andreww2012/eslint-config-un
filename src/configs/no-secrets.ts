@@ -91,7 +91,7 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
         filesDefault: [GLOB_JSON],
         ignoresDefault: ['**/package-lock.json'],
         ignoresDefaultMergedWithUserIgnores: true,
-        language: ['jsonc', 'x'],
+        parseWith: 'jsonc',
       },
     ])
     .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions as NoSecretsOptions])

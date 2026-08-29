@@ -9,24 +9,24 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `svelte` and `svelte/setup` eslint configs and loads `svelte` plugin if set to `true`', async () => {
+  it('creates `svelte` and `svelte/system` eslint configs and loads `svelte` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('svelte');
 
     const config = configResult.getConfigByUnPostfix('svelte');
 
     expect(config).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('svelte/system')).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.svelte"]');
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
     expect(configResult.getLoadedPlugin('svelte')).toBeDefined();
   });
 
-  it('does not create `svelte` and `svelte/setup` eslint configs and does not load `svelte` plugin if set to `false`', async () => {
+  it('does not create `svelte` and `svelte/system` eslint configs and does not load `svelte` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({svelte: false});
 
     expect(configResult.getConfigByUnPostfix('svelte')).toBeUndefined();
-    expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('svelte/system')).toBeUndefined();
     expect(configResult.getLoadedPlugin('svelte')).toBeUndefined();
   });
 
@@ -280,7 +280,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(
-        configResult.getConfigByUnPostfix('svelte/setup')?.settings?.['svelte'],
+        configResult.getConfigByUnPostfix('svelte/system')?.settings?.['svelte'],
       ).toBeUndefined();
     });
 
@@ -289,9 +289,9 @@ describe('options', () => {
 
       const configResult = await computeEslintConfig({svelte: {settings: SETTINGS}});
 
-      expect(configResult.getConfigByUnPostfix('svelte/setup')?.settings?.['svelte']).toStrictEqual(
-        SETTINGS,
-      );
+      expect(
+        configResult.getConfigByUnPostfix('svelte/system')?.settings?.['svelte'],
+      ).toStrictEqual(SETTINGS);
     });
   });
 
@@ -301,8 +301,9 @@ describe('options', () => {
 
       expect(
         (
-          configResult.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+          configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
         )?.['svelteConfig'],
       ).toBeUndefined();
     });
@@ -316,8 +317,9 @@ describe('options', () => {
 
       expect(
         (
-          configResult.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+          configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
         )?.['svelteConfig'],
       ).toBe(SVELTE_KIT_CONFIG);
     });
@@ -328,10 +330,10 @@ describe('`svelte` and `ts` configs relationship', () => {
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if not explicitly specified', async () => {
     const configResult = await computeEslintConfig({svelte: true, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      [GLOB_SVELTE],
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers([
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers([
+      GLOB_SVELTE,
+    ]);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers([
       GLOB_SVELTE,
     ]);
   });
@@ -341,10 +343,8 @@ describe('`svelte` and `ts` configs relationship', () => {
 
     const configResult = await computeEslintConfig({svelte: {files: FILES}, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      FILES,
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers(
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers(FILES);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers(
       FILES,
     );
   });
@@ -358,8 +358,8 @@ describe('`svelte` and `ts` configs relationship', () => {
       ts: true,
     });
 
-    const configTsNonTypeAwareSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
-    const configTsTypeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
+    const configTsNonTypeAwareSetup = configResult.getConfigByUnPostfix('parsing/ts');
+    const configTsTypeAwareSetup = configResult.getConfigByUnPostfix('parsing/ts/type-aware');
 
     expect(configTsNonTypeAwareSetup?.files).toIncludeAllMembers(TS_FILES);
     expect(configTsNonTypeAwareSetup?.files).not.toIncludeAllMembers(MAIN_FILES);
@@ -371,11 +371,38 @@ describe('`svelte` and `ts` configs relationship', () => {
   it('empty `files` do not flow to `ts/{non-type-aware,type-aware}/setup` eslint configs', async () => {
     const configResult = await computeEslintConfig({svelte: {files: []}, ts: true});
 
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).not.toIncludeAnyMembers([
+      GLOB_SVELTE,
+    ]);
     expect(
-      configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
+      configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
     ).not.toIncludeAnyMembers([GLOB_SVELTE]);
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).not.toIncludeAnyMembers(
-      [GLOB_SVELTE],
-    );
+  });
+});
+
+describe('`svelte/system` sub config', () => {
+  it('runs the plugin system rules wherever the svelte rules run', async () => {
+    const configResult = await computeEslintConfig('svelte');
+
+    const config = configResult.getConfigByUnPostfix('svelte/system');
+
+    // The plugin leaves the runes modules to the parser alone
+    expect(config?.files).toStrictEqual(['**/*.svelte']);
+    expect(configResult.getConfigByUnPostfix('parsing/svelte')?.files).toStrictEqual([
+      '**/*.svelte',
+      '**/*.svelte.{js,ts}',
+    ]);
+  });
+
+  it('follows the `files` and `ignores` of the parent config', async () => {
+    const FILES = ['src/**/*.svelte'];
+    const IGNORES = ['legacy/**'];
+
+    const configResult = await computeEslintConfig({svelte: {files: FILES, ignores: IGNORES}});
+
+    const config = configResult.getConfigByUnPostfix('svelte/system');
+
+    expect(config?.files).toStrictEqual(FILES);
+    expect(config?.ignores).toIncludeAllMembers(IGNORES);
   });
 });

@@ -1,4 +1,4 @@
-import type {PLUGINS_PROVIDING_LANGUAGES} from '../config-un/config-entry-builder';
+import type {PARSING_LANGUAGES} from '../config-un/parsing';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {objectEntriesUnsafe} from '../utils';
 import {
@@ -35,7 +35,7 @@ export interface JsonEslintConfigOptions<
 }
 
 const JSON_SUB_CONFIGS_FILES: Record<
-  (typeof PLUGINS_PROVIDING_LANGUAGES)['json'][number],
+  keyof (typeof PARSING_LANGUAGES)['json']['dialects'],
   string[]
 > = {
   json: [GLOB_JSON],
@@ -72,7 +72,7 @@ export default defineUnConfig<JsonEslintConfigOptions>(
           `json/${languageName}`,
           {
             filesDefault,
-            language: ['json', languageName],
+            parseWith: ['json', languageName],
           },
         ])
         .addRule('no-duplicate-keys', ERROR) /** @since 0.1.0 */

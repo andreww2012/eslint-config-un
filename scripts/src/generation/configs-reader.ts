@@ -39,6 +39,7 @@ export const CASCADE_LAYOUT = allUnionMembers<CascadeAnchor | ConfigPhase | 'def
   'default',
   'late',
   'last',
+  'parsing',
   'rootConfig',
   'extra',
   'userExtraConfigs',

@@ -256,7 +256,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
       'package-json',
       {
         filesDefault: [GLOB_PACKAGE_JSON],
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
         settings: {
           // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
           packageJson: pluginSettings,

@@ -1,3 +1,5 @@
+import {GLOB_VUE} from '../../../src/constants';
+
 const FIXTURES = {
   componentWithUnusedScopedSelector: 'component-with-unused-scoped-selector.vue',
 } as const;
@@ -12,6 +14,12 @@ describe('vue: sub config `scopedCss`', () => {
       const configResult = await computeEslintConfig('vue');
 
       expect(configResult.getConfigByUnPostfix('vue/scoped-css')).toBeDefined();
+    });
+
+    it('lints the vue files only, the way every sibling config does', async () => {
+      const configResult = await computeEslintConfig('vue');
+
+      expect(configResult.getConfigByUnPostfix('vue/scoped-css')?.files).toStrictEqual([GLOB_VUE]);
     });
 
     it('creates `vue/scoped-css` eslint config when set to `true`', async () => {

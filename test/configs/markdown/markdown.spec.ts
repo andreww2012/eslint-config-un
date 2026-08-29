@@ -163,19 +163,21 @@ describe('options', () => {
   });
 
   describe('option: `language`', () => {
-    it('uses `gfm` dialect by default in `markdown/markdown` eslint config', async () => {
+    it('makes the `parsing` block use the `gfm` dialect by default', async () => {
       const configResult = await computeEslintConfig('markdown');
-      const config = configResult.getConfigByUnPostfix('markdown/markdown');
 
-      expect(config?.language).toBe('markdown/gfm');
+      expect(configResult.getConfigByUnPostfix('parsing/markdown/gfm')?.language).toBe(
+        'markdown/gfm',
+      );
     });
 
-    it('uses `commonmark` dialect when `language` is set to `commonmark`', async () => {
+    it('makes the `parsing` block use the `commonmark` dialect when `language` is set to `commonmark`', async () => {
       const configResult = await computeEslintConfig({markdown: {language: 'commonmark'}});
 
-      expect(configResult.getConfigByUnPostfix('markdown/markdown')?.language).toBe(
+      expect(configResult.getConfigByUnPostfix('parsing/markdown/commonmark')?.language).toBe(
         'markdown/commonmark',
       );
+      expect(configResult.getConfigByUnPostfix('parsing/markdown/gfm')).toBeUndefined();
     });
 
     it('sets `allowLabels` for GFM alerts in `markdown/no-missing-label-refs` rule when dialect is `gfm`', async () => {

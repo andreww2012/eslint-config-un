@@ -110,6 +110,7 @@ export const GLOB_SCSS = '**/*.scss' as const;
 export const GLOB_ASTRO = '**/*.astro' as const;
 
 export const GLOB_SVELTE = '**/*.svelte' as const;
+export const GLOB_SVELTE_SCRIPT = '**/*.svelte.{js,ts}' as const;
 
 export const GLOB_GRAPHQL = '**/*.{graphql,gql}' as const;
 

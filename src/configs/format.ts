@@ -1,6 +1,7 @@
 import type {DprintOptions, OxfmtOptions, PrettierOptions} from 'eslint-plugin-format/rule-options';
 import {ERROR} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
+import {resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -44,6 +45,9 @@ export interface FormatEslintConfigOptions<
    * If the file format you're trying to format is not parsed by any ESLint parser, make sure to set
    * this option to `true` for such files.
    * This will use [`eslint-parser-plain`](https://npmx.dev/eslint-parser-plain) for them.
+   *
+   * Requires `files`: the parser reads nothing, so leaving it unscoped would take the whole project
+   * over.
    */
   usePlainParser?: boolean;
 }
@@ -69,6 +73,12 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
     ? formatterAndMaybeOptions
     : [formatterAndMaybeOptions];
 
+  if (usePlainParser && resolveFilesOption(optionsResolved.files, []).length === 0) {
+    context.logger.warn(
+      '[format] `usePlainParser` was ignored because no `files` were specified. Specify the files that no ESLint parser reads, otherwise the whole project would be parsed as plain text',
+    );
+  }
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'format');
 
   // Legend:
@@ -79,7 +89,9 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
       `format/${usedFormatter}`,
       {
         ignoresInternal: false,
-        ...(usePlainParser && {parser: 'eslint-parser-plain'}),
+        ...(usePlainParser && {
+          parseWith: 'plain',
+        }),
       },
     ])
 

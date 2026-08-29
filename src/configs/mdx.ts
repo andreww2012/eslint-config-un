@@ -98,10 +98,7 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
         'mdx/mdx',
         {
           filesDefault: DEFAULT_FILES,
-          parser: 'mdx-eslint-parser',
-          ignoresInternal: {
-            mdx: false,
-          },
+          parseWith: 'mdx',
           settings: {
             '': Object.fromEntries(
               objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
@@ -127,12 +124,12 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   // The processor is also what post-processes `mdx/remark` reports, hence it is always added
   configBuilder?.addConfig(
     [
-      'mdx/setup/code-blocks-processor',
+      'mdx/code-blocks-processor',
       {
         applyUserFilesAndIgnores: false,
         filesDefault: codeBlocksFiles.length > 0 ? codeBlocksFiles : DEFAULT_FILES,
         ignoresDefault: codeBlocksIgnores,
-        ignoresInternal: {mdx: false},
+        parsingIgnoresInheritedFrom: ['mdx'],
       },
     ],
     // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.

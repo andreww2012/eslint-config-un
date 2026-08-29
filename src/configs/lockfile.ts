@@ -1,6 +1,5 @@
-import type {SupportedEslintPluginLanguages} from '../config-un/config-entry-builder';
+import type {ParsingLanguagesWithDialects} from '../config-un/parsing';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
-import type {ParserPrefix} from '../loaders';
 import type {OmitStrict, Prettify} from '../types';
 import {
   type MaybeArray,
@@ -133,11 +132,11 @@ export interface LockfileEslintConfigOptions<
   packageSpecifiersToAllowLockfilesFor?: Record<string, boolean>;
 }
 
-const LOCKFILE_PARSERS = {
-  json: {language: ['jsonc', 'json']},
-  jsonc: {language: ['jsonc', 'jsonc']},
-  yaml: {language: ['yaml', 'yaml']},
-} satisfies Record<string, {language: SupportedEslintPluginLanguages} | {parser: ParserPrefix}>;
+const LOCKFILE_LANGUAGES = {
+  json: ['jsonc', 'json'],
+  jsonc: ['jsonc', 'jsonc'],
+  yaml: 'yaml',
+} as const satisfies Record<string, ParsingLanguagesWithDialects>;
 
 const LOCKFILES_INFO_MAP = {
   npm: ['json', ['package-lock.json', 'npm-shrinkwrap.json']],
@@ -147,7 +146,7 @@ const LOCKFILES_INFO_MAP = {
   vlt: ['json', ['vlt-lock.json']],
 } satisfies Record<
   SupportedPackageManagers,
-  [languageOrParser: keyof typeof LOCKFILE_PARSERS, lockfileNames: string[]]
+  [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: string[]]
 >;
 
 const LOCKFILES_INFO = objectEntriesUnsafe(LOCKFILES_INFO_MAP);
@@ -182,10 +181,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
         filesDefault: LOCKFILES_INFO.flatMap(([, [, lockfiles]]) =>
           lockfiles.map((lockfile) => `**/${lockfile}`),
         ) satisfies string[],
-        ignoresInternal: {
-          json: false,
-          yaml: false,
-        },
+        parsingIgnoresInheritedFrom: ['jsonc', 'yaml'],
       },
     ])
     .addRule('binary-conflicts', ERROR) /** @since 1.0.0 */ // 🟢
@@ -245,8 +241,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
     }
 
     // eslint-disable-next-line ts/no-non-null-assertion
-    const [languageOrParserName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
-    const languageOrParser = LOCKFILE_PARSERS[languageOrParserName];
+    const [languageName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
 
     configBuilder?.addConfig([
       `lockfile/parser/${parserConfigName}`,
@@ -256,8 +251,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
         ignoresInternal: {
           yaml: false,
         },
-        // ...('parser' in languageOrParser && {parser: languageOrParser.parser}),
-        ...('language' in languageOrParser && {language: languageOrParser.language}),
+        parseWith: LOCKFILE_LANGUAGES[languageName],
       },
     ]);
   });
@@ -276,7 +270,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       'lockfile/package.json',
       {
         filesDefault: [GLOB_PACKAGE_JSON],
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
       },
     ])
     .addRule('no-weakening-config', ERROR) /** @since 2.1.0 */ // 🟢

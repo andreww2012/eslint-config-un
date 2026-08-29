@@ -202,7 +202,7 @@ describe('option: `cacheConfigs`', () => {
       await computeCachedConfig('svelte');
 
       await expect(readCacheFile()).resolves.toHaveProperty('usedParsers', {
-        'svelte-eslint-parser': ['eslint-config-un/svelte/setup'],
+        'svelte-eslint-parser': ['eslint-config-un/parsing/svelte'],
       });
     });
 
@@ -329,11 +329,11 @@ describe('option: `cacheConfigs`', () => {
 
       const restored = await computeCachedConfig(CONFIGS_USING_PACKAGES);
 
-      expect(restored.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parser']).toBe(
-        fresh.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parser'],
+      expect(restored.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.['parser']).toBe(
+        fresh.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.['parser'],
       );
-      expect(restored.getConfigByUnPostfix('svelte/setup')?.processor).toBe(
-        fresh.getConfigByUnPostfix('svelte/setup')?.processor,
+      expect(restored.getConfigByUnPostfix('parsing/svelte')?.processor).toBe(
+        fresh.getConfigByUnPostfix('parsing/svelte')?.processor,
       );
     });
 
@@ -376,7 +376,7 @@ describe('option: `cacheConfigs`', () => {
 
       const restored = await computeCachedConfig(CONFIGS_USING_PACKAGES);
 
-      expect(restored.getConfigByUnPostfix('svelte/setup')?.processor).toBeUndefined();
+      expect(restored.getConfigByUnPostfix('parsing/svelte')?.processor).toBeUndefined();
     });
   });
 

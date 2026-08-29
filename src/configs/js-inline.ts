@@ -147,9 +147,7 @@ export default defineUnConfig<JsInlineEslintConfigOptions>(
         'js-inline',
         {
           filesDefault: [GLOB_HTM_HTML],
-          ignoresInternal: {
-            html: false,
-          },
+          parsingIgnoresInheritedFrom: ['html'],
           settings: {
             html:
               // TODO should `*-extensions` properties be assigned regardless of whether `settings` option is provided?

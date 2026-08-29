@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type {EnabledBy} from '../../../src/config-un/define-config';
+import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
 import {PLUGIN_PACKAGES_META} from '../../shared/packages-meta';
 import {
   CASCADE_LAYOUT,
@@ -36,7 +36,7 @@ const renderPackageCondition = (packageNameAndMaybeRange: string) => {
  * The part of the `@default` line that follows `<=>`.
  * `null` means the Config is unconditionally enabled or disabled
  */
-const deriveEnabledByCondition = (enabledBy: EnabledBy): string | null => {
+const deriveEnabledByCondition = (enabledBy: ConfigEnabledBy): string | null => {
   if (typeof enabledBy === 'boolean' || 'default' in enabledBy) {
     return null;
   }
@@ -62,7 +62,7 @@ const deriveEnabledByCondition = (enabledBy: EnabledBy): string | null => {
   return '`defaultConfigsStatus` is set to `misc-enabled`';
 };
 
-const renderDefaultTag = (enabledBy: EnabledBy = true) => {
+const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {
   const isEnabledByDefault =
     typeof enabledBy === 'boolean'
       ? enabledBy

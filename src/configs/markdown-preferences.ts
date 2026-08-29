@@ -291,9 +291,7 @@ export default defineUnConfig<
       'markdown-preferences',
       {
         filesDefault: [GLOB_MARKDOWN],
-        language: extendedMarkdownSyntax
-          ? ['markdown-preferences', 'extended-syntax']
-          : ['markdown', 'commonmark'],
+        parseWith: ['markdown', extendedMarkdownSyntax ? 'extendedSyntax' : 'commonmark'],
       },
     ])
     .markCategory('Preference')

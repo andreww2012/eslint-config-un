@@ -3,10 +3,11 @@ import semver from 'semver';
 import type {UnConfigs} from '../configs';
 import {MISC_GROUP_CONFIGS} from '../configs/manifests.gen';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {LoadablePluginPrefix} from '../loaders';
+import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
+import {type LoadablePluginPrefix, type PackageToLoadInfo, packageToLoadSymbol} from '../loaders';
 import type {NonEmptyTuple} from '../types';
-import {arrayify, styleConfigName, stylePackageName, styleText} from '../utils';
-import type {ConfigManifest, EnabledBy, PackageToCheck} from './define-config';
+import {arrayify, styleConfigName, stylePackageName, styleText, traverseForEach} from '../utils';
+import type {ConfigEnabledBy, ConfigManifest, PackageToCheck} from './define-config';
 import type {UnConfigContext} from './shared';
 
 const MISC_GROUP_CONFIGS_SET = new Set<keyof UnConfigs>(MISC_GROUP_CONFIGS);
@@ -125,7 +126,7 @@ function getIsConfigEnabled(
 
 const resolveEnabledByCondition = (
   context: UnConfigContext,
-  enabledBy: EnabledBy,
+  enabledBy: ConfigEnabledBy,
 ): boolean | PackageToCheck | NonEmptyTuple<PackageToCheck> => {
   if (typeof enabledBy === 'boolean') {
     return enabledBy;
@@ -176,3 +177,42 @@ export function getIsConfigEnabledByManifest(
     }),
   });
 }
+
+/**
+ * Records every package a config entry defers loading of for caching purposes
+ */
+export const savePackagesToLoadFromConfig = (
+  context: UnConfigContext,
+  config: EslintFlatConfigEntry,
+) => {
+  traverseForEach(
+    config,
+    (traverseContext, value) => {
+      if (traverseContext.key !== packageToLoadSymbol) {
+        return;
+      }
+
+      const info = value as PackageToLoadInfo;
+      arrayify(info.package).forEach((packageId) => {
+        context.usedPackages.set(packageId, [
+          ...(context.usedPackages.get(packageId) || []),
+          {
+            config,
+            path: traverseContext.path.slice(0, -1).join('.'),
+            info,
+          },
+        ]);
+      });
+    },
+    {includeSymbols: true},
+  );
+};
+
+export const configRequestsTypeInformation = (config: EslintFlatConfigEntry) => {
+  const parserOptions = config.languageOptions?.['parserOptions'];
+  return (
+    typeof parserOptions === 'object' &&
+    parserOptions != null &&
+    ('projectService' in parserOptions || 'project' in parserOptions)
+  );
+};

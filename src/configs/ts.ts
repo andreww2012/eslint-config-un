@@ -8,11 +8,10 @@ import {
   OFF,
   WARNING,
 } from '../constants';
-import type {GetRuleNamesInPlugin, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import type {GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
-import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
-import {type MaybeFn, allUnionMembers, isKeyIn, maybeCall, omit} from '../utils';
+import {type MaybeFn, allUnionMembers, arrayUnique, isKeyIn, maybeCall, omit} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
@@ -426,19 +425,6 @@ export interface TsEslintConfigOptions<
   OmitStrict<UnRulesConfigPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
 > {
   /**
-   * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}` for NON-type-aware
-   * rules.
-   * If different files are specified, the extra files will still be appended.
-   *
-   * To configure the setup config for type-aware rules, use `configTypeAware.configSetup` option.
-   *
-   * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code> plus extra files coming from `astro`,
-   * `svelte` and `vue` configs
-   * @default true
-   */
-  configSetup?: UnFlatConfigEntryFilesAndIgnores;
-
-  /**
    * Applies rules requiring type information on the specified `files`.
    *
    * 📁 Default `files` and `ignores`: inherited from the parent config, plus the extra files coming
@@ -446,24 +432,7 @@ export interface TsEslintConfigOptions<
    * @default true
    */
   configTypeAware?:
-    | boolean
-    | Prettify<
-        {
-          /**
-           * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}` for
-           * type-aware rules.
-           * If different files are specified, the extra files will still be appended.
-           *
-           * To configure the setup config for non-type-aware rules, use `configSetup` option on the
-           * root config.
-           *
-           * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code> plus extra files coming from
-           * `astro`, `svelte` and `vue` configs
-           * @default true
-           */
-          configSetup?: UnFlatConfigEntryFilesAndIgnores;
-        } & UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>
-      >;
+    boolean | Prettify<UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>>;
 
   /**
    * Disallows any type assertions.
@@ -533,10 +502,9 @@ export interface TsEslintConfigOptions<
 
   /**
    * Will be merged with the default parser options set by us.
-   * These options will be passed to two setup configs for applying non-type-aware and type-aware
-   * rules.
-   * If a function is provided, it will receive the flag telling to which config the options will be
-   * applied.
+   * The function form is called for the non-type-aware and the type-aware layer separately,
+   * receiving a flag telling which one it is, and the type-aware one wins the conflicts.
+   * `projectService` is read from either call, but only ever reaches the type-aware layer.
    *
    * Note that if you only need to set
    * [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject),
@@ -601,7 +569,6 @@ const mergeParserOptions = (
 export interface TsConfigResult {
   filesTypeAware: string[];
   ignoresTypeAware: string[];
-  setupTypeAwareConfigCreated: boolean;
 }
 
 export default defineUnConfig<
@@ -634,7 +601,6 @@ export default defineUnConfig<
   });
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
-    configSetup,
     configTypeAware,
     configNoTypeAssertion,
     configDisableNoUnsafe,
@@ -656,6 +622,7 @@ export default defineUnConfig<
   const vueTypescriptRules = typeof vueTsConfig === 'object' ? vueTsConfig.typescriptRules : null;
 
   type ConfigsWithExtraExtensionsHandledByTs = [
+    language: 'astro' | 'svelte' | 'vue',
     config: Nullable<UnFlatConfigEntryBase> | boolean,
     options?: {
       filesDefault?: string[];
@@ -665,9 +632,14 @@ export default defineUnConfig<
   ];
   (
     [
-      [astroResolvedOptions],
-      [svelteTsConfig, {filesDefault: resolveFilesOption(svelteResolvedOptions?.files, [])}],
+      ['astro', astroResolvedOptions],
       [
+        'svelte',
+        svelteTsConfig,
+        {filesDefault: resolveFilesOption(svelteResolvedOptions?.files, [])},
+      ],
+      [
+        'vue',
         vueTsConfig,
         {
           filesDefault: resolveFilesOption(vueResolvedOptions?.files, []),
@@ -676,22 +648,29 @@ export default defineUnConfig<
         },
       ],
     ] satisfies ConfigsWithExtraExtensionsHandledByTs[] as ConfigsWithExtraExtensionsHandledByTs[]
-  ).forEach(([config, {filesDefault, additionalCondition, doNotTreatFilesAsTypeAware} = {}]) => {
-    if (typeof config !== 'object' || !config || additionalCondition === false) {
-      return;
-    }
+  ).forEach(
+    ([language, config, {filesDefault, additionalCondition, doNotTreatFilesAsTypeAware} = {}]) => {
+      if (
+        typeof config !== 'object' ||
+        !config ||
+        additionalCondition === false ||
+        context.rootOptions.parsing?.[language] === false
+      ) {
+        return;
+      }
 
-    const extraTsFiles = resolveFilesOption(config.files, filesDefault || []);
-    const extraTsIgnores = resolveIgnoresOption(config.ignores, []);
+      const extraTsFiles = resolveFilesOption(config.files, filesDefault || []);
+      const extraTsIgnores = resolveIgnoresOption(config.ignores, []);
 
-    extraFilesNONTypeAware.push(...extraTsFiles);
-    if (!doNotTreatFilesAsTypeAware) {
-      extraFilesTypeAware.push(...extraTsFiles);
-    }
+      extraFilesNONTypeAware.push(...extraTsFiles);
+      if (!doNotTreatFilesAsTypeAware) {
+        extraFilesTypeAware.push(...extraTsFiles);
+      }
 
-    extraIgnoresNONTypeAware.push(...extraTsIgnores);
-    extraIgnoresTypeAware.push(...extraTsIgnores);
-  });
+      extraIgnoresNONTypeAware.push(...extraTsIgnores);
+      extraIgnoresTypeAware.push(...extraTsIgnores);
+    },
+  );
 
   const userFiles = resolveFilesOption(optionsResolved.files, TS_FILES_DEFAULT);
   const userIgnores = resolveIgnoresOption(optionsResolved.ignores, []);
@@ -710,112 +689,67 @@ export default defineUnConfig<
   const filesTypeAware = [...userFilesTypeAware, ...extraFilesTypeAware];
   const ignoresTypeAware = [...userIgnoresTypeAware, ...extraIgnoresTypeAware];
 
-  const buildSetupParserOptions = (
-    isTypeAware: boolean,
-    userParserOptions: TsEslintParserOptions | undefined,
-  ): TsEslintParserOptions => {
-    const merged = [
-      isTypeAware ? context.typeInfoRulesResolved.parserOptions : undefined,
-      userParserOptions,
-    ].reduce<TsEslintParserOptions>(
-      (accumulated, layer) => (layer ? mergeParserOptions(accumulated, layer) : accumulated),
+  const parserOptionsNONTypeAware = maybeCall(optionsResolved.parserOptions, false) || {};
+  const parserOptionsTypeAware = maybeCall(optionsResolved.parserOptions, true) || {};
+  // Only the type-aware layer may turn the project service on, whichever call asked for it
+  const projectServiceFromUser =
+    parserOptionsTypeAware.projectService ?? parserOptionsNONTypeAware.projectService;
+
+  /** Everything the parser itself needs, which the `parsing` entry owns */
+  const buildParsingParserOptions = (): TsEslintParserOptions => {
+    const merged = mergeParserOptions(
       {sourceType: 'module'},
+      omit(parserOptionsNONTypeAware, ['projectService']),
     );
 
-    const withExtensions: TsEslintParserOptions =
-      extraFileExtensions.length === 0
-        ? merged
-        : {
-            ...merged,
-            extraFileExtensions: [
-              ...new Set([
-                ...(merged.extraFileExtensions || []),
-                ...extraFileExtensions.map((extension) => `.${extension}`),
-              ]),
-            ],
-          };
+    return extraFileExtensions.length === 0
+      ? merged
+      : {
+          ...merged,
+          extraFileExtensions: [
+            ...new Set([
+              ...(merged.extraFileExtensions || []),
+              ...extraFileExtensions.map((extension) => `.${extension}`),
+            ]),
+          ],
+        };
+  };
 
-    if (!isTypeAware) {
-      return withExtensions;
-    }
+  /** Everything the project service touches, which not every parsed file can take */
+  const buildTypeAwareParserOptions = (): TsEslintParserOptions => {
+    const merged = mergeParserOptions(
+      context.typeInfoRulesResolved.parserOptions || {},
+      mergeParserOptions(omit(parserOptionsTypeAware, ['projectService']), {
+        ...(projectServiceFromUser !== undefined && {projectService: projectServiceFromUser}),
+      }),
+    );
 
     const withAllowDefaultProject: TsEslintParserOptions = allowDefaultProject?.length
       ? {
-          ...withExtensions,
-          projectService: isProjectServiceObject(withExtensions.projectService)
-            ? {...withExtensions.projectService, allowDefaultProject}
+          ...merged,
+          projectService: isProjectServiceObject(merged.projectService)
+            ? {...merged.projectService, allowDefaultProject}
             : {allowDefaultProject},
         }
-      : withExtensions;
+      : merged;
 
     return withAllowDefaultProject.projectService === undefined
       ? {...withAllowDefaultProject, projectService: {}}
       : withAllowDefaultProject;
   };
 
-  const generateSetupConfigBuilder = (isTypeAware: boolean) => {
-    const optionsNonTypeAwareForSetup = configSetup || {};
-    const optionsTypeAwareForSetup = configTypeAwareOptions.configSetup || {};
-
-    const options = isTypeAware ? optionsTypeAwareForSetup : optionsNonTypeAwareForSetup;
-    if (isTypeAware) {
-      options.files ||= optionsNonTypeAwareForSetup.files;
-      options.ignores ||= optionsNonTypeAwareForSetup.ignores;
-    }
-
-    const userParserOptions = maybeCall(optionsResolved.parserOptions, isTypeAware);
-
-    // The function form is resolved against these very defaults when the config is created
-    const setupFilesFromUser = typeof options.files === 'function' ? undefined : options.files;
-
-    const configBuilderSetup = context.createConfigBuilder(options, 'ts');
-    configBuilderSetup
-      ?.addConfig(
-        [
-          `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
-          {
-            filesDefault: [
-              ...(setupFilesFromUser?.length ? [] : TS_FILES_DEFAULT),
-              ...(isTypeAware ? extraFilesTypeAware : extraFilesNONTypeAware),
-            ],
-            filesDefaultMergedWithUserFiles: true,
-            ...(isTypeAware && {ignoresDefault: DEFAULT_IGNORES_TYPE_AWARE}),
-          },
-        ],
-        {
-          languageOptions: {
-            ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
-            parserOptions: buildSetupParserOptions(isTypeAware, userParserOptions),
-          },
-        },
-      )
-      .disableAnyRule('', 'class-methods-use-this')
-      .disableAnyRule('', 'default-param-last')
-      .disableAnyRule('', 'init-declarations')
-      .disableAnyRule('', 'max-params')
-      .disableAnyRule('', 'no-array-constructor') // 🟣
-      .disableAnyRule('', 'no-dupe-class-members') // 🟣
-      .disableAnyRule('', 'no-empty-function') // 💅
-      .disableAnyRule('', 'no-invalid-this')
-      .disableAnyRule('', 'no-magic-numbers')
-      .disableAnyRule('', 'no-redeclare')
-      .disableAnyRule('', 'no-shadow')
-      .disableAnyRule('', 'no-unused-expressions') // 🟣
-      .disableAnyRule('', 'no-unused-vars') // 🟣
-      .disableAnyRule('', 'no-use-before-define')
-      .disableAnyRule('', 'no-useless-constructor') // 🟣
-      .disableAnyRule('', 'consistent-return')
-      .disableAnyRule('', 'dot-notation') // 💅
-      .disableAnyRule('', 'no-implied-eval') // 🟣
-      .disableAnyRule('', 'no-throw-literal') // Note: has different name
-      .disableAnyRule('', 'prefer-destructuring')
-      .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
-      .disableAnyRule('', 'require-await'); // 🟣
-
-    return configBuilderSetup;
-  };
-
-  const configBuilderNONTypeAwareSetup = generateSetupConfigBuilder(false);
+  context.requestParsing('ts', {
+    kind: 'setUpOnly',
+    languageOptions: {parserOptions: buildParsingParserOptions()},
+  });
+  // No program covers the code blocks, nor the framework files opted out of type-aware rules
+  context.requestParsing('ts', {
+    kind: 'setUpOnly',
+    nameSuffix: 'type-aware',
+    files: [...TS_FILES_DEFAULT, ...extraFilesTypeAware],
+    ignores: extraIgnoresTypeAware,
+    languageOptions: {parserOptions: buildTypeAwareParserOptions()},
+  });
 
   const configBuilderNONTypeAware = context.createConfigBuilder(
     {
@@ -911,7 +845,29 @@ export default defineUnConfig<
 
   // TODO add rules
   configBuilderNONTypeAware
-    ?.addConfig('ts/non-type-aware/rules')
+    ?.addConfig(['ts/non-type-aware/rules', {parseWith: 'ts'}])
+    .disableAnyRule('', 'class-methods-use-this')
+    .disableAnyRule('', 'default-param-last')
+    .disableAnyRule('', 'init-declarations')
+    .disableAnyRule('', 'max-params')
+    .disableAnyRule('', 'no-array-constructor') // 🟣
+    .disableAnyRule('', 'no-dupe-class-members') // 🟣
+    .disableAnyRule('', 'no-empty-function') // 💅
+    .disableAnyRule('', 'no-invalid-this')
+    .disableAnyRule('', 'no-magic-numbers')
+    .disableAnyRule('', 'no-redeclare')
+    .disableAnyRule('', 'no-shadow')
+    .disableAnyRule('', 'no-unused-expressions') // 🟣
+    .disableAnyRule('', 'no-unused-vars') // 🟣
+    .disableAnyRule('', 'no-use-before-define')
+    .disableAnyRule('', 'no-useless-constructor') // 🟣
+    .disableAnyRule('', 'consistent-return')
+    .disableAnyRule('', 'dot-notation') // 💅
+    .disableAnyRule('', 'no-implied-eval') // 🟣
+    .disableAnyRule('', 'no-throw-literal') // Note: has different name
+    .disableAnyRule('', 'prefer-destructuring')
+    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
+    .disableAnyRule('', 'require-await') // 🟣
     .markCategory('Strict')
     .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
     .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
@@ -1097,8 +1053,6 @@ export default defineUnConfig<
           },
         ];
 
-  const configBuilderTypeAwareSetup = generateSetupConfigBuilder(true);
-
   const configBuilderTypeAware = context.createConfigBuilder(
     // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
     userFiles.length === 0 ? false : configTypeAware,
@@ -1115,6 +1069,7 @@ export default defineUnConfig<
         filesDefault: filesTypeAware,
         ignoresDefault: ignoresTypeAware,
         skipTypeInfoSplit: true,
+        parseWith: 'ts',
       },
     ])
     .markCategory('Strict')
@@ -1256,7 +1211,11 @@ export default defineUnConfig<
     })
     .addOverrides();
 
-  const allTypescriptFiles = [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware];
+  const allTypescriptFiles = arrayUnique([
+    ...TS_FILES_DEFAULT,
+    ...filesNONTypeAware,
+    ...filesTypeAware,
+  ]);
 
   // TODO add rules
   configBuilderNONTypeAware
@@ -1298,7 +1257,7 @@ export default defineUnConfig<
   };
 
   configBuilderNONTypeAware
-    ?.addConfig(['ts/overrides', {applyUserFilesAndIgnores: false}], {
+    ?.addConfig(['ts/overrides', {applyUserFilesAndIgnores: false, parseWith: 'ts'}], {
       files: allTypescriptFiles,
     })
     .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry);
@@ -1403,7 +1362,7 @@ export default defineUnConfig<
         'sort-tsconfig-keys',
         {
           filesDefault: ['{tsconfig,*.tsconfig,tsconfig.*}.json'],
-          language: ['jsonc', 'x'],
+          parseWith: 'jsonc',
         },
       ])
       .addAnyRule('jsonc', 'sort-keys', ERROR, [
@@ -1422,10 +1381,8 @@ export default defineUnConfig<
 
   return {
     configs: [
-      configBuilderNONTypeAwareSetup,
       configBuilderNONTypeAware,
 
-      configBuilderTypeAwareSetup,
       configBuilderTypeAware,
       configBuilderDisableNoUnsafe,
 
@@ -1436,6 +1393,5 @@ export default defineUnConfig<
     optionsResolved,
     filesTypeAware,
     ignoresTypeAware,
-    setupTypeAwareConfigCreated: configBuilderTypeAwareSetup != null,
   };
 });

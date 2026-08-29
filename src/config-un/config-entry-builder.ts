@@ -34,12 +34,7 @@ import {
   getRuleNameAndPluginPrefixByFullName,
   resolveFullRuleName,
 } from '../eslint/eslint-utils';
-import {
-  type PackageToLoadInfo,
-  type ParserPrefix,
-  type PluginPrefix,
-  packageToLoadSymbol,
-} from '../loaders';
+import type {PluginPrefix} from '../loaders';
 import {RULES_REQUIRING_TYPE_INFORMATION} from '../type-aware-rules';
 import type {
   EmptyObject,
@@ -47,23 +42,27 @@ import type {
   NonEmptyString,
   NonEmptyTuple,
   Nullable,
-  ObjectValues,
   OmitStrict,
   Prettify,
   SetRequired,
 } from '../types';
 import {
-  type MaybeArray,
   arrayMap,
   arrayPartition,
-  arrayify,
   findArrayInversions,
   objectEntriesUnsafe,
   styleConfigName,
   styleRuleName,
   styleText,
-  traverseForEach,
 } from '../utils';
+import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
+import {
+  type ImplicitlyIgnoredFileTypeUnlessParsed,
+  PARSING_LANGUAGES,
+  type ParsingLanguageDefinition,
+  type ParsingLanguages,
+  type ParsingLanguagesWithDialects,
+} from './parsing';
 import {
   type ExtraPluginsType,
   type UnConfigContext,
@@ -76,23 +75,6 @@ export type FlatConfigEntryForBuilder = OmitStrict<
   'name' | 'rules' | 'language' | 'settings'
 >;
 
-export const PLUGINS_PROVIDING_LANGUAGES = {
-  css: ['css'],
-  json: ['json', 'jsonc', 'json5'],
-  jsonc: ['x', 'json', 'jsonc', 'json5'],
-  'markdown-preferences': ['extended-syntax'],
-  markdown: ['gfm', 'commonmark'],
-  toml: ['toml'],
-  yaml: ['yaml'],
-} as const satisfies Partial<Record<PluginPrefix, [string, ...string[]]>>;
-
-export type SupportedEslintPluginLanguages = ObjectValues<{
-  [PluginKey in keyof typeof PLUGINS_PROVIDING_LANGUAGES]: [
-    PluginKey,
-    (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginKey][number],
-  ];
-}>;
-
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   css: [GLOB_CSS],
   scss: [GLOB_SCSS],
@@ -104,24 +86,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   html: [GLOB_HTM_HTML],
   toml: [GLOB_TOML],
   yaml: [GLOB_YML_YAML],
-} as const satisfies Record<string, [string, ...string[]]>;
-
-const PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES: {
-  [PluginKey in keyof typeof PLUGINS_PROVIDING_LANGUAGES]?: Partial<
-    Record<
-      (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginKey][number],
-      MaybeArray<keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS>
-    >
-  >;
-} = {
-  css: {css: ['css', 'scss']},
-  json: {json: 'json', jsonc: 'jsonc', json5: 'json5'},
-  jsonc: {x: ['json', 'jsonc', 'json5'], json: 'json', jsonc: 'jsonc', json5: 'json5'},
-  'markdown-preferences': {'extended-syntax': 'md'},
-  markdown: {gfm: 'md', commonmark: 'md'},
-  toml: {toml: 'toml'},
-  yaml: {yaml: 'yaml'},
-};
+} as const satisfies Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>;
 
 type AddRuleInternalOptions = EmptyObject;
 
@@ -231,7 +196,7 @@ export class ConfigEntryBuilder<
    *
    * `rules` and `name` keys cannot be overridden.
    */
-  addConfig<PluginPrefixWithLanguage extends keyof typeof PLUGINS_PROVIDING_LANGUAGES>(
+  addConfig(
     nameAndMaybeOptions:
       | string
       | [
@@ -263,8 +228,6 @@ export class ConfigEntryBuilder<
             ignoresDefaultMergedWithUserIgnores?: boolean;
 
             inheritFilesAndIgnoresFrom?: UnFlatConfigEntryFilesAndIgnores;
-
-            parser?: ParserPrefix;
 
             /**
              * Some rules crash or behave unexpectedly when linting foreign file types.
@@ -303,21 +266,23 @@ export class ConfigEntryBuilder<
              * @default true
              */
             ignoresInternal?:
-              | boolean
-              | Partial<
-                  Record<
-                    keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
-                    boolean
-                  >
-                >;
+              boolean | Partial<Record<ImplicitlyIgnoredFileTypeUnlessParsed, boolean>>;
 
             /**
-             * Type-safe version of `language` config property, also handling plugin prefix renames.
+             * The language this config's rules expect the target files to be written for.
+             *
+             * Setting this option contributes to the final list of files that will be parsed
+             * by the same parser.
              */
-            language?: [
-              PluginPrefixWithLanguage,
-              (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginPrefixWithLanguage][number],
-            ];
+            parseWith?: ParsingLanguagesWithDialects;
+
+            /**
+             * Specifies which `parsing` root option entries this config takes the `ignores` of.
+             *
+             * Primarily meant for configs running on files of a language their rules
+             * were not written for (for example, `unicorn/{json,markdown}`).
+             */
+            parsingIgnoresInheritedFrom?: ParsingLanguages[];
 
             /**
              * Specifies plugin shared settings on the specified property.
@@ -335,6 +300,14 @@ export class ConfigEntryBuilder<
     const [configName, internalOptions] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const configOptions = this.options;
+
+    const {parseWith, parsingIgnoresInheritedFrom} = internalOptions;
+    const parseWithInfo =
+      parseWith == null
+        ? null
+        : typeof parseWith === 'string'
+          ? {language: parseWith}
+          : {language: parseWith[0], dialect: parseWith[1]};
 
     const [files, ignores, isConfigDisabled] = (() => {
       const applyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
@@ -371,18 +344,32 @@ export class ConfigEntryBuilder<
             : undefined)
         : undefined;
       const ignoresFromUser = typeof ignoresOption === 'function' ? undefined : ignoresOption;
+      const ignoresExclusionsOfParsedLanguages = (() => {
+        const fileTypes: ImplicitlyIgnoredFileTypeUnlessParsed[] = [];
+
+        if (parseWithInfo != null) {
+          const {language, dialect} = parseWithInfo;
+          const {dialects, dialectDefault}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
+          fileTypes.push(...(dialects[dialect || dialectDefault]?.ignoresExclusions || []));
+        }
+
+        parsingIgnoresInheritedFrom?.forEach((language) => {
+          const {dialects}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
+          // No dialect is set, so any of them may be the one that ends up set up
+          Object.values(dialects).forEach(({ignoresExclusions}) => {
+            fileTypes.push(...(ignoresExclusions || []));
+          });
+        });
+
+        return fileTypes;
+      })();
       const ignoresInternal = objectEntriesUnsafe(
         FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
       ).flatMap(([fileType, globs]) =>
         internalOptions.ignoresInternal === false ||
         (internalOptions.ignoresInternal !== true &&
           (internalOptions.ignoresInternal?.[fileType] === false ||
-            (internalOptions.language != null &&
-              arrayify(
-                PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
-                  internalOptions.language[1]
-                ],
-              ).includes(fileType))))
+            ignoresExclusionsOfParsedLanguages.includes(fileType)))
           ? []
           : globs,
       );
@@ -415,9 +402,6 @@ export class ConfigEntryBuilder<
         `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
       ),
       rules: {},
-      ...(internalOptions.language && {
-        language: `${this.context.rootOptions.pluginRenames?.[internalOptions.language[0]] ?? internalOptions.language[0]}/${internalOptions.language[1]}`,
-      }),
       ...(() => {
         const {settings: settingsRaw} = internalOptions;
         if (!settingsRaw) {
@@ -466,35 +450,16 @@ export class ConfigEntryBuilder<
 
       processUnOrFlatConfig(this.context, configFinal, undefined);
 
-      const {parser} = internalOptions;
-      if (parser != null) {
-        this.context.usedParsers.set(parser, [
-          ...(this.context.usedParsers.get(parser) || []),
-          configFinal,
-        ]);
+      if (parseWithInfo != null) {
+        const {language, dialect} = parseWithInfo;
+        this.context.requestParsing(language, {config: configFinal, dialect, kind: 'writtenFor'});
       }
 
-      traverseForEach(
-        configFinal,
-        (traverseContext, value) => {
-          if (traverseContext.key !== packageToLoadSymbol) {
-            return;
-          }
+      internalOptions.parsingIgnoresInheritedFrom?.forEach((language) => {
+        this.context.requestParsing(language, {config: configFinal, kind: 'runsOn'});
+      });
 
-          const info = value as PackageToLoadInfo;
-          arrayify(info.package).forEach((packageId) => {
-            this.context.usedPackages.set(packageId, [
-              ...(this.context.usedPackages.get(packageId) || []),
-              {
-                config: configFinal,
-                path: traverseContext.path.slice(0, -1).join('.'),
-                info,
-              },
-            ]);
-          });
-        },
-        {includeSymbols: true},
-      );
+      savePackagesToLoadFromConfig(this.context, configFinal);
     }
 
     /* v8 ignore start */
@@ -821,37 +786,33 @@ export class ConfigEntryBuilder<
 
   resolveAllConfigs() {
     const {
-      mode,
+      mode: typeInfoMode,
       ignores: typeInfoIgnores,
       parserOptions: globalParserOptions,
     } = this.context.typeInfoRulesResolved;
 
     return [...this.configs.values()].flatMap(
       ([config, {rulesRequiringTypeInfo, skipTypeInfoSplit}]) => {
-        if (typeInfoIgnores?.length) {
-          const parserOptions = config.languageOptions?.['parserOptions'];
-
-          if (
-            (skipTypeInfoSplit && rulesRequiringTypeInfo?.size) ||
-            (typeof parserOptions === 'object' &&
-              parserOptions &&
-              ('projectService' in parserOptions || 'project' in parserOptions))
-          ) {
-            config.ignores = [...(config.ignores || []), ...typeInfoIgnores];
-          }
+        if (
+          typeInfoIgnores?.length &&
+          ((skipTypeInfoSplit && rulesRequiringTypeInfo?.size) ||
+            configRequestsTypeInformation(config))
+        ) {
+          config.ignores = [...(config.ignores || []), ...typeInfoIgnores];
         }
 
         if (!rulesRequiringTypeInfo?.size) {
           return config;
         }
 
-        const effectiveMode = mode === 'disabled' ? 'disabled' : skipTypeInfoSplit ? 'asIs' : mode;
+        const typeInfoModeResolved =
+          typeInfoMode === 'disabled' ? 'disabled' : skipTypeInfoSplit ? 'asIs' : typeInfoMode;
 
-        if (effectiveMode === 'asIs') {
+        if (typeInfoModeResolved === 'asIs') {
           return config;
         }
 
-        if (effectiveMode === 'disabled') {
+        if (typeInfoModeResolved === 'disabled') {
           rulesRequiringTypeInfo.forEach(({plugin, ruleName}, ruleEntryName) => {
             const throwsWithoutTypeInfo =
               RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName] === true;
@@ -863,7 +824,7 @@ export class ConfigEntryBuilder<
           return config;
         }
 
-        const shouldConfigureParser = effectiveMode === 'standalone';
+        const shouldConfigureParser = typeInfoModeResolved === 'standalone';
 
         const possibleFiles = new Set<string>([GLOB_TS_X]);
         let extraFileExtensions: Set<string> | undefined;
@@ -917,6 +878,19 @@ export class ConfigEntryBuilder<
         };
 
         this.addFlatConfig(configForTypeInformation);
+
+        // The parent's `ignores` may still grow afterwards (for example, when `parsing.*.ignores`
+        // is set), and the copied config should follow along - so we copy the parent's request too
+        this.context.parsingRequests.forEach((requests, language) => {
+          const parentRequest = requests.find(({config: registered}) => registered === config);
+          if (parentRequest) {
+            this.context.requestParsing(language, {
+              ...parentRequest,
+              config: configForTypeInformation,
+              kind: 'splitOff',
+            });
+          }
+        });
 
         if (shouldConfigureParser) {
           this.context.usedPackages.set('typescriptEslintParser', [

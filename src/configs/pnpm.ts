@@ -114,7 +114,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
       'pnpm/package.json',
       {
         filesDefault: ['**/package.json'],
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
         settings: {
           pnpm: pluginSettings,
         },
@@ -146,7 +146,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
       'pnpm/pnpm-workspace-yaml',
       {
         filesDefault: ['pnpm-workspace.yaml'],
-        language: ['yaml', 'yaml'],
+        parseWith: 'yaml',
       },
     ])
     .addRule(

@@ -1,6 +1,5 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith, Prettify} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
@@ -42,14 +41,6 @@ export interface AstroEslintConfigOptions<
         > &
           OmitStrict<JsxA11yEslintConfigOptions, keyof UnFlatConfigEntryBase>
       >;
-
-  /**
-   * Set ups `.astro` files parser.
-   *
-   * 📁 Default `files`: <code>**&#47;*.astro</code>
-   * @default true
-   */
-  configSetup?: UnFlatConfigEntryFilesAndIgnores;
 }
 
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
@@ -71,41 +62,24 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
   // Must be assigned to options for `ts` config
   optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_ASTRO_FILES);
 
-  const {
-    files: parentConfigFiles,
-    ignores: parentConfigIgnores,
-    configSetup: configSetupOptions = {},
-    configJsxA11y,
-  } = optionsResolved;
-
-  const configBuilderSetup = context.createConfigBuilder(configSetupOptions, null);
+  const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
-  configBuilderSetup?.addConfig(
-    [
-      'astro/setup',
-      {
-        filesDefault: DEFAULT_ASTRO_FILES,
-        parser: 'astro-eslint-parser',
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-        },
+
+  context.requestParsing('astro', {
+    kind: 'setUpOnly',
+    languageOptions: {
+      globals: eslintPluginAstro?.environments.astro.globals,
+      parserOptions: {
+        ...(isTypescriptEnabled &&
+          generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
       },
-    ],
-    {
-      languageOptions: {
-        globals: eslintPluginAstro?.environments.astro.globals,
-        parserOptions: {
-          ...(isTypescriptEnabled &&
-            generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
-        },
-        sourceType: 'module',
-      },
-      ...(isTypescriptEnabled &&
-        generatePackageToLoadProperty('processor', 'astroClientSideTsProcessor')),
+      sourceType: 'module',
     },
-  );
+    ...(isTypescriptEnabled && {
+      entryProperties: generatePackageToLoadProperty('processor', 'astroClientSideTsProcessor'),
+    }),
+  });
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'astro');
 
@@ -117,6 +91,7 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
       'astro',
       {
         filesDefault: DEFAULT_ASTRO_FILES,
+        parseWith: 'astro',
         // TODO why?
         ignoresInternal: {
           md: false,
@@ -155,7 +130,6 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
   return {
     configs: [
       configBuilder,
-      configBuilderSetup,
 
       ...(configJsxA11y === false
         ? []

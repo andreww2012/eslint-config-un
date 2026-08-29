@@ -78,7 +78,7 @@ export default defineUnConfig<TomlEslintConfigOptions>('toml', {enabledBy: {grou
         'toml',
         {
           filesDefault: TOML_DEFAULT_FILES,
-          language: ['toml', 'toml'],
+          parseWith: 'toml',
         },
       ],
       {

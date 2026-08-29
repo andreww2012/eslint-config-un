@@ -57,6 +57,7 @@ import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless} from './config-utils';
 import {CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import type {ImportIntegrityPluginSettings} from './import-integrity';
+import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
   ENVIRONMENTS,
@@ -234,6 +235,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     typeInfoRulesResolved.parserOptions = typeInfoRulesObject.parserOptions;
   }
 
+  const parsingRequests: UnConfigContext['parsingRequests'] = new Map();
   const context = Object.freeze({
     packagesInfo: {},
     rootOptions: optionsResolved,
@@ -246,6 +248,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     usedParsers: new Map(),
     usedPackages: new Map(),
     missingPackages: new Set(),
+    parsingRequests,
+    requestParsing: createRequestParsing(parsingRequests),
     meta: {usedPackageManager, environment},
     logger,
     debug,
@@ -456,9 +460,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   await loadManifestConfig('ts');
 
   if (typeInfoRulesUserMode == null) {
-    context.typeInfoRulesResolved.mode = configResults.ts?.setupTypeAwareConfigCreated
-      ? 'splitOnly'
-      : 'standalone';
+    context.typeInfoRulesResolved.mode = configResults.ts ? 'splitOnly' : 'standalone';
   }
 
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
@@ -478,11 +480,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   ];
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
-  type UnresolvedConfigType =
+  type ConfigUnresolved =
     | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy>
     | MaybeArray<{configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]} | null>;
 
-  const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<UnresolvedConfigType>[]> = {
+  const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<ConfigUnresolved>[]> = {
     globalSetup: [
       (files?.length || 0) > 0 && {
         name: genFlatConfigEntryName('files/global'),
@@ -585,6 +587,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         },
       },
     ],
+    parsing: [],
     rootConfig: [rootConfigBuilder],
     userExtraConfigs: extraConfigs.flatMap((extraConfig, configIndex) => {
       const configName = genFlatConfigEntryName(
@@ -607,7 +610,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     }),
   };
 
-  const cascadeOrder = shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs
+  const configsOrderResolved = shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs
     ? CONFIG_ORDER.flatMap((entry) =>
         entry === 'markdownPreferences'
           ? []
@@ -617,28 +620,37 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       )
     : CONFIG_ORDER;
 
-  const unresolvedConfigs: UnresolvedConfigType[] = await Promise.all(
-    // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
-    cascadeOrder.flatMap((entry) =>
-      arrayIncludes(CASCADE_ANCHORS, entry)
-        ? cascadeAnchorEntries[entry]
-        : loadManifestConfig(entry),
-    ),
-  );
-
-  const resolvedConfigs: EslintFlatConfigEntry[] = unresolvedConfigs
-    .map((unConfigOrEntryBuilders) =>
-      arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
-        configOrBuilder instanceof ConfigEntryBuilder
-          ? configOrBuilder.resolveAllConfigs()
-          : configOrBuilder && 'configs' in configOrBuilder
-            ? configOrBuilder.configs.map((unConfig) => unConfig?.resolveAllConfigs())
-            : configOrBuilder,
-      ),
+  const configsResolved: EslintFlatConfigEntry[] =
+    // Kept grouped by cascade entry so that the `parsing` band, whose content is only known once
+    // every Config has declared what it targets, can be filled in afterwards without losing its place
+    (
+      await Promise.all(
+        configsOrderResolved.map(async (entry) =>
+          arrayIncludes(CASCADE_ANCHORS, entry)
+            ? // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
+              await Promise.all(cascadeAnchorEntries[entry])
+            : [await loadManifestConfig(entry)],
+        ),
+      )
     )
-    .flat(3)
-    // eslint-disable-next-line no-implicit-coercion
-    .filter((v) => !!v);
+      .map((unresolvedConfigs) =>
+        unresolvedConfigs
+          .map((unConfigOrEntryBuilders) =>
+            arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
+              configOrBuilder instanceof ConfigEntryBuilder
+                ? configOrBuilder.resolveAllConfigs()
+                : configOrBuilder && 'configs' in configOrBuilder
+                  ? configOrBuilder.configs.map((unConfig) => unConfig?.resolveAllConfigs())
+                  : configOrBuilder,
+            ),
+          )
+          .flat(3)
+          // eslint-disable-next-line no-implicit-coercion
+          .filter((v) => !!v),
+      )
+      .flatMap((configs, cascadeIndex) =>
+        configsOrderResolved[cascadeIndex] === 'parsing' ? resolveParsingConfigs(context) : configs,
+      );
 
   const usedPluginPrefixes: string[] =
     loadPluginsOnDemand === false
@@ -658,7 +670,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     usedPackagesPrefixes,
   });
 
-  resolvedConfigs.unshift({
+  configsResolved.unshift({
     name: PLUGINS_CONFIG_NAME,
     plugins,
   });
@@ -670,7 +682,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       `Offline mode is active, the following ${RULES_TO_DISABLE_IN_OFFLINE_MODE.length} rules were disabled: ${RULES_TO_DISABLE_IN_OFFLINE_MODE.map(styleRuleName).join(', ')}`,
     );
 
-    resolvedConfigs.push({
+    configsResolved.push({
       name: genFlatConfigEntryName('offline-mode'),
       rules: Object.fromEntries(
         // eslint-disable-next-line ts/ban-ts-comment -- error only in `tsc`, not in `tsgo`
@@ -687,7 +699,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (context.isTestMode) {
     const duplicateConfigNames: string[] = [];
     const uniqueConfigNames = new Set<string>();
-    resolvedConfigs.forEach(({name: configName}) => {
+    configsResolved.forEach(({name: configName}) => {
       if (!configName) {
         return;
       }
@@ -719,16 +731,16 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   }
   /* v8 ignore stop */
 
-  debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
+  debug(`Final config resolved: ${configsResolved.length} flat config items`);
 
   if (cacheConfigs) {
     debug('Attempting to save resolved configs to memory and file system cache');
 
     await saveCacheToMemory(context, {
-      config: resolvedConfigs,
+      config: configsResolved,
     });
 
-    const configsToCache = Array.from(resolvedConfigs, (configItem) => {
+    const configsToCache = Array.from(configsResolved, (configItem) => {
       /* v8 ignore next -- every generated config carries our name prefix */
       if (!isUnFlatConfigEntry(configItem)) {
         return configItem;
@@ -777,10 +789,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (internalOptions.testMode) {
     /* v8 ignore next - The config tester always finds something to report */
     return {
-      configs: resolvedConfigs,
+      configs: configsResolved,
       errors: testErrors || [],
     };
   }
 
-  return resolvedConfigs;
+  return configsResolved;
 }

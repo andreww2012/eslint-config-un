@@ -73,7 +73,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     {
       applyUserFilesAndIgnores: false,
       filesDefault: [...GLIMMER_TEMPLATES_FILES],
-      parser: 'ember-eslint-parser',
+      parseWith: 'ember',
     },
   ]);
 
@@ -88,6 +88,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
       'ember',
       {
         filesDefault: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
+        parsingIgnoresInheritedFrom: ['ember'],
       },
     ])
     .markCategory('Accessibility')

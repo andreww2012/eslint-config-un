@@ -9,40 +9,40 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `astro/setup` and `astro` eslint configs and loads `astro` plugin if set to `true`', async () => {
+  it('creates `astro` and `parsing/astro` eslint configs and loads `astro` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('astro');
 
-    expect(configResult.getConfigByUnPostfix('astro/setup')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('parsing/astro')).toBeDefined();
     expect(configResult.getConfigByUnPostfix('astro')).toBeDefined();
 
     expect(configResult.getLoadedPlugin('astro')).toBeDefined();
   });
 
-  it('does not create `astro/setup` and `astro` eslint configs and does not load `astro` plugin if set to `false`', async () => {
+  it('does not create `astro` and `parsing/astro` eslint configs and does not load `astro` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({astro: false});
 
-    expect(configResult.getConfigByUnPostfix('astro/setup')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('parsing/astro')).toBeUndefined();
     expect(configResult.getConfigByUnPostfix('astro')).toBeUndefined();
     expect(configResult.getLoadedPlugin('astro')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
-    it('does not create `astro/setup` and `astro` eslint configs', async () => {
-      await expectConfigState({}, ['astro/setup', 'astro'], false);
+    it('does not create `astro` and `parsing/astro` eslint configs', async () => {
+      await expectConfigState({}, ['astro', 'parsing/astro'], false);
     });
 
-    it('creates `astro/setup` and `astro` eslint configs if explicitly enabled', async () => {
-      await expectConfigState('astro', ['astro/setup', 'astro'], true);
+    it('creates `astro` and `parsing/astro` eslint configs if explicitly enabled', async () => {
+      await expectConfigState('astro', ['astro', 'parsing/astro'], true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('creates `astro/setup` and `astro` eslint configs by default (astro is installed)', async () => {
-      await expectConfigState({}, ['astro/setup', 'astro'], true, 'default');
+    it('creates `astro` and `parsing/astro` eslint configs by default (astro is installed)', async () => {
+      await expectConfigState({}, ['astro', 'parsing/astro'], true, 'default');
     });
 
-    it('creates `astro/setup` and `astro` eslint configs and prints a warning if explicitly enabled', async () => {
-      await expectConfigState('astro', ['astro/setup', 'astro'], ['astro', true], 'default');
+    it('creates `astro` and `parsing/astro` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('astro', ['astro', 'parsing/astro'], ['astro', true], 'default');
     });
 
     describe('`astro` package is not installed', () => {
@@ -50,18 +50,18 @@ describe('basic tests', () => {
         setInstalledPackages({});
       });
 
-      it('does not create `astro/setup` and `astro` eslint configs', async () => {
-        await expectConfigState({}, ['astro/setup', 'astro'], false, 'default');
+      it('does not create `astro` and `parsing/astro` eslint configs', async () => {
+        await expectConfigState({}, ['astro', 'parsing/astro'], false, 'default');
       });
 
-      it('creates `astro/setup` and `astro` eslint configs if explicitly enabled', async () => {
-        await expectConfigState('astro', ['astro/setup', 'astro'], true, 'default');
+      it('creates `astro` and `parsing/astro` eslint configs if explicitly enabled', async () => {
+        await expectConfigState('astro', ['astro', 'parsing/astro'], true, 'default');
       });
 
-      it('does not create `astro/setup` and `astro` eslint configs and prints a warning if explicitly disabled', async () => {
+      it('does not create `astro` and `parsing/astro` eslint configs and prints a warning if explicitly disabled', async () => {
         await expectConfigState(
           {astro: false},
-          ['astro/setup', 'astro'],
+          ['astro', 'parsing/astro'],
           ['astro', false],
           'default',
         );
@@ -70,22 +70,22 @@ describe('basic tests', () => {
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('does not create `astro/setup` and `astro` eslint configs when `astro` package is not installed', async () => {
+    it('does not create `astro` and `parsing/astro` eslint configs when `astro` package is not installed', async () => {
       setInstalledPackages({});
 
-      await expectConfigState({}, ['astro/setup', 'astro'], false, 'misc-enabled');
+      await expectConfigState({}, ['astro', 'parsing/astro'], false, 'misc-enabled');
     });
 
-    it('creates `astro/setup` and `astro` eslint configs (astro is installed)', async () => {
-      await expectConfigState({}, ['astro/setup', 'astro'], true, 'misc-enabled');
+    it('creates `astro` and `parsing/astro` eslint configs (astro is installed)', async () => {
+      await expectConfigState({}, ['astro', 'parsing/astro'], true, 'misc-enabled');
     });
 
-    it('creates `astro/setup` and `astro` eslint configs and prints a warning if explicitly enabled', async () => {
-      await expectConfigState('astro', ['astro/setup', 'astro'], ['astro', true], 'misc-enabled');
+    it('creates `astro` and `parsing/astro` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('astro', ['astro', 'parsing/astro'], ['astro', true], 'misc-enabled');
     });
 
-    it('does not create `astro/setup` and `astro` eslint configs if explicitly disabled', async () => {
-      await expectConfigState({astro: false}, ['astro/setup', 'astro'], false, 'misc-enabled');
+    it('does not create `astro` and `parsing/astro` eslint configs if explicitly disabled', async () => {
+      await expectConfigState({astro: false}, ['astro', 'parsing/astro'], false, 'misc-enabled');
     });
   });
 });
@@ -132,11 +132,11 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('astro')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `astro`, but not `astro/setup` eslint config when set to empty array', async () => {
+    it('disables `astro`, but keeps the astro files parsed when set to empty array', async () => {
       const configResult = await computeEslintConfig({astro: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('astro')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('astro/setup')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('parsing/astro')).toBeDefined();
     });
   });
 
@@ -179,10 +179,10 @@ describe('`astro` and `ts` configs relationship', () => {
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if not explicitly specified', async () => {
     const configResult = await computeEslintConfig({astro: true, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      [GLOB_ASTRO],
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers([
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers([
+      GLOB_ASTRO,
+    ]);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers([
       GLOB_ASTRO,
     ]);
   });
@@ -192,10 +192,8 @@ describe('`astro` and `ts` configs relationship', () => {
 
     const configResult = await computeEslintConfig({astro: {files: FILES}, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      FILES,
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers(
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers(FILES);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers(
       FILES,
     );
   });
@@ -203,11 +201,11 @@ describe('`astro` and `ts` configs relationship', () => {
   it('empty `files` do not flow to `ts/{non-type-aware,type-aware}/setup` eslint configs', async () => {
     const configResult = await computeEslintConfig({astro: {files: []}, ts: true});
 
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).not.toIncludeAnyMembers([
+      GLOB_ASTRO,
+    ]);
     expect(
-      configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
+      configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
     ).not.toIncludeAnyMembers([GLOB_ASTRO]);
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).not.toIncludeAnyMembers(
-      [GLOB_ASTRO],
-    );
   });
 });

@@ -64,7 +64,7 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
       'github-actions',
       {
         filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
-        language: ['yaml', 'yaml'],
+        parseWith: 'yaml',
       },
     ])
     .addRule('action-name-casing', OFF) /** @since 0.0.2 */

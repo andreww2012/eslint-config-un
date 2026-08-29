@@ -145,7 +145,6 @@ describe('cascade order', () => {
       eslint-config-un/react/you-might-not-need-an-effect
       eslint-config-un/regexp
       eslint-config-un/remeda
-      eslint-config-un/ripple/setup
       eslint-config-un/ripple
       eslint-config-un/rxjs
       eslint-config-un/security
@@ -189,27 +188,23 @@ describe('cascade order', () => {
       eslint-config-un/zod/core
       eslint-config-un/zod-openapi
       eslint-config-un/zod-openapi/@type-information
-      eslint-config-un/ts/non-type-aware/setup
       eslint-config-un/ts/non-type-aware/rules
       eslint-config-un/ts/disable-handled-by-ts-compiler-rules
       eslint-config-un/ts/overrides
-      eslint-config-un/ts/type-aware/setup
       eslint-config-un/ts/type-aware/rules
       eslint-config-un/ts/dts
       eslint-config-un/angular/general
       eslint-config-un/angular/template
       eslint-config-un/astro
-      eslint-config-un/astro/setup
       eslint-config-un/jsx-a11y/astro
       eslint-config-un/es
       eslint-config-un/github-actions
       eslint-config-un/graphql/processor
       eslint-config-un/graphql
-      eslint-config-un/svelte/setup
+      eslint-config-un/svelte/system
       eslint-config-un/svelte
       eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
-      eslint-config-un/vue/setup
       eslint-config-un/vue
       eslint-config-un/vue/allow-single-word-component-names
       eslint-config-un/vue/allow-implicit-slots
@@ -220,13 +215,35 @@ describe('cascade order', () => {
       eslint-config-un/check-file
       eslint-config-un/formatjs
       eslint-config-un/markdown/markdown
-      eslint-config-un/markdown/setup/code-blocks-processor
+      eslint-config-un/markdown/code-blocks-processor
       eslint-config-un/markdown/code-blocks
       eslint-config-un/markdown/format-fenced-code-blocks
       eslint-config-un/mdx/mdx
-      eslint-config-un/mdx/setup/code-blocks-processor
+      eslint-config-un/mdx/code-blocks-processor
       eslint-config-un/mdx/code-blocks
       eslint-config-un/mdx/format-fenced-code-blocks
+      eslint-config-un/parsing/ts
+      eslint-config-un/parsing/ts/type-aware
+      eslint-config-un/parsing/css
+      eslint-config-un/parsing/jsonc/auto
+      eslint-config-un/parsing/jsonc/json
+      eslint-config-un/parsing/jsonc/jsonc
+      eslint-config-un/parsing/json/json
+      eslint-config-un/parsing/json/jsonc
+      eslint-config-un/parsing/json/json5
+      eslint-config-un/parsing/yaml
+      eslint-config-un/parsing/toml
+      eslint-config-un/parsing/markdown/commonmark
+      eslint-config-un/parsing/markdown/gfm
+      eslint-config-un/parsing/html
+      eslint-config-un/parsing/mdx
+      eslint-config-un/parsing/vue
+      eslint-config-un/parsing/svelte
+      eslint-config-un/parsing/astro
+      eslint-config-un/parsing/graphql
+      eslint-config-un/parsing/ember
+      eslint-config-un/parsing/ripple
+      eslint-config-un/parsing/angularTemplate
       eslint-config-un/config-files
       eslint-config-un/cli
       eslint-config-un/tests

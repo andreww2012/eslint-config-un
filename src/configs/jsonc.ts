@@ -72,7 +72,7 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       {
         filesDefault: JSONC_DEFAULT_FILES,
         ignoresInternal: {md: false, mdx: false}, // TODO why?
-        language: ['jsonc', 'x'],
+        parseWith: 'jsonc',
       },
     ])
     .markCategory('Main rules')
@@ -135,7 +135,7 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       {
         filesDefault: [GLOB_JSON],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
       },
     ])
     .addOverrides();
@@ -147,7 +147,7 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       {
         filesDefault: [GLOB_JSONC],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
-        language: ['jsonc', 'jsonc'],
+        parseWith: ['jsonc', 'jsonc'],
       },
     ])
     .addOverrides();
@@ -159,7 +159,7 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       {
         filesDefault: [GLOB_JSON5],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
-        language: ['jsonc', 'json5'],
+        parseWith: ['jsonc', 'json5'],
       },
     ])
     .addOverrides();

@@ -151,7 +151,7 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
       'ava/package.json',
       {
         filesDefault: [GLOB_PACKAGE_JSON],
-        language: ['json', 'json'],
+        parseWith: ['json', 'json'],
       },
     ])
     .addRule('no-ava-in-dependencies', ERROR) /** @since 16.0.0 */ // 🟢

@@ -552,65 +552,52 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
   optionsResolved.vueOrNuxtProjectDir ??= nuxtV4DirectoryStructure ? 'app' : '';
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'vue');
-
-  configBuilder?.addConfig(
-    [
-      'vue/setup',
-      {
-        applyUserFilesAndIgnores: false,
-        parser: 'vue-eslint-parser',
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-        },
-      },
-    ],
-    {
-      files: [...DEFAULT_VUE_FILES, ...vueFiles],
-      ...generatePackageToLoadProperty(
-        'processor',
-        ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
-        {
-          valueTransformFn: {
-            fn(
-              this: {processSfcBlocks: typeof processSfcBlocks},
-              {mergeProcessors: {mergeProcessors}, vueProcessor, vueBlocksProcessor},
-            ) {
-              return mergeProcessors(
-                [
-                  vueProcessor,
-                  (() => {
-                    if (!this.processSfcBlocks) {
-                      return null;
-                    }
-                    const processorOptions =
-                      typeof this.processSfcBlocks === 'object' ? this.processSfcBlocks : {};
-                    return vueBlocksProcessor({
-                      ...processorOptions,
-                      blocks: {
-                        styles: true,
-                        ...processorOptions.blocks,
-                      },
-                    });
-                  })(),
-                ].filter((v) => v != null),
-              );
-            },
-            scope: {processSfcBlocks},
-          },
-        },
-      ),
-      languageOptions: {
-        globals: globals.browser,
-        parserOptions: {
-          ...(isTypescriptEnabled &&
-            generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
-          sourceType: 'module' as const,
-        },
+  context.requestParsing('vue', {
+    kind: 'setUpOnly',
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        ...(isTypescriptEnabled &&
+          generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
+        sourceType: 'module' as const,
       },
     },
-  );
+    entryProperties: generatePackageToLoadProperty(
+      'processor',
+      ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
+      {
+        valueTransformFn: {
+          fn(
+            this: {processSfcBlocks: typeof processSfcBlocks},
+            {mergeProcessors: {mergeProcessors}, vueProcessor, vueBlocksProcessor},
+          ) {
+            return mergeProcessors(
+              [
+                vueProcessor,
+                (() => {
+                  if (!this.processSfcBlocks) {
+                    return null;
+                  }
+                  const processorOptions =
+                    typeof this.processSfcBlocks === 'object' ? this.processSfcBlocks : {};
+                  return vueBlocksProcessor({
+                    ...processorOptions,
+                    blocks: {
+                      styles: true,
+                      ...processorOptions.blocks,
+                    },
+                  });
+                })(),
+              ].filter((v) => v != null),
+            );
+          },
+          scope: {processSfcBlocks},
+        },
+      },
+    ),
+  });
+
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'vue');
 
   const vue2Severity = (severity: RuleSeverity) => (isVue2 ? severity : OFF);
   const vue3Severity = (severity: RuleSeverity) => (isVue3 ? severity : OFF);
@@ -620,7 +607,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   // 2️⃣ = in recommended/vue-2
 
   configBuilder
-    ?.addConfig('vue')
+    ?.addConfig(['vue', {parseWith: 'vue'}])
     .markCategory('Base')
     .addRule('comment-directive', ERROR, [
       // false by default
@@ -1075,7 +1062,14 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     'vue',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig('vue/enforce-typescript-in-script-section')
+    ?.addConfig([
+      'vue/enforce-typescript-in-script-section',
+      {
+        filesDefault: vueFiles,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
+        parseWith: 'vue',
+      },
+    ])
     .addRule('block-lang', ERROR, [
       {
         script: {
@@ -1098,6 +1092,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
         'vue/nuxt',
         {
           filesDefault: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
+          parseWith: 'vue',
         },
       ])
       .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
@@ -1132,30 +1127,38 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
 
   configBuilder
-    ?.addConfig(['vue/allow-single-word-component-names', {applyUserFilesAndIgnores: false}], {
-      files: [
-        resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
-        resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
-        configNuxt && [
-          nuxtLayoutsFilesGlob,
-          ...['app.vue', 'error.vue'].map((fileName) => resolvePathInVueOrNuxtProjectDir(fileName)),
-        ],
+    ?.addConfig(
+      [
+        'vue/allow-single-word-component-names',
+        {applyUserFilesAndIgnores: false, parseWith: 'vue'},
+      ],
+      {
+        files: [
+          resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
+          resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
+          configNuxt && [
+            nuxtLayoutsFilesGlob,
+            ...['app.vue', 'error.vue'].map((fileName) =>
+              resolvePathInVueOrNuxtProjectDir(fileName),
+            ),
+          ],
 
-        optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
-      ]
-        .flat()
-        .filter((v) => typeof v === 'string'),
-    })
+          optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
+        ]
+          .flat()
+          .filter((v) => typeof v === 'string'),
+      },
+    )
     .addRule('multi-word-component-names', OFF);
 
   configBuilder
-    ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false}], {
+    ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
       files: [nuxtLayoutsFilesGlob],
     })
     .addRule('require-explicit-slots', configNuxt ? OFF : null);
 
   configBuilder
-    ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false}], {
+    ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
       files: [
         ...DEFAULT_VUE_FILES,
         configNuxt && [
@@ -1181,6 +1184,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       'vue/a11y',
       {
         filesDefault: vueFiles,
+        parseWith: 'vue',
         ignoresDefault: [
           GLOB_MD_X_CODE_BLOCKS,
           ...resolveIgnoresOption(optionsResolved.ignores, []),
@@ -1314,7 +1318,14 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   // 2️⃣ = in recommended/vue-2
 
   configBuilderScopedCss
-    ?.addConfig('vue/scoped-css')
+    ?.addConfig([
+      'vue/scoped-css',
+      {
+        filesDefault: vueFiles,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
+        parseWith: 'vue',
+      },
+    ])
     .addRule(
       'enforce-style-type',
       typeof optionsScopedCssResolved.allowedStyleType === 'object' ? ERROR : OFF,

@@ -504,6 +504,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
       'jsdoc/ts',
       {
         filesDefault: [GLOB_TS_X],
+        parseWith: 'ts',
         settings: {
           // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
           jsdoc: pluginSettingsForTs,

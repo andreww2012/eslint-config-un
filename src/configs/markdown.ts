@@ -231,7 +231,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
         [
           'markdown/markdown',
           {
-            language: ['markdown', defaultDialect],
+            parseWith: ['markdown', defaultDialect],
           },
         ],
         {
@@ -299,7 +299,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
               applyUserFilesAndIgnores: false,
               filesDefault: markdownLanguageSettings.files,
               ignoresDefault: markdownLanguageSettings.ignores,
-              language: ['markdown', dialect],
+              parseWith: ['markdown', dialect],
             },
           ])
           .addRule('no-missing-label-refs', ERROR, generateNoMissingLabelRefsOptions(dialect));
@@ -316,12 +316,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
 
   configBuilderCodeBlocks?.addConfig(
     [
-      'markdown/setup/code-blocks-processor',
+      'markdown/code-blocks-processor',
       {
         filesDefault: DEFAULT_FILES,
-        ignoresInternal: {
-          md: false,
-        },
+        parsingIgnoresInheritedFrom: ['markdown'],
       },
     ],
     // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.

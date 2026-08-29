@@ -393,6 +393,9 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
       prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
       {
         filesDefault: [GLOB_JSX_TSX],
+        ...(isForAstro && {
+          parseWith: 'astro',
+        }),
         // Direct spreading settings object for `lit-a11y` is not a mistake: https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
         settings: {
           [isForLit ? '' : 'jsx-a11y-x']: pluginSettings,

@@ -1,10 +1,9 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
-import {noRestrictedHtmlElementsDefault, resolveFilesOption} from './shared';
+import {noRestrictedHtmlElementsDefault, resolveFilesOption, resolveIgnoresOption} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
@@ -92,16 +91,6 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       >;
 
   /**
-   * Set ups `.svelte` and `.svelte.{js,ts}` files parser.
-   *
-   * 📁 Default `files`:
-   * - <code>**&#47;*.svelte</code>
-   * - <code>**&#47;*.svelte.{js,ts}</code>
-   * @default true
-   */
-  configSetup?: UnFlatConfigEntryFilesAndIgnores;
-
-  /**
    * Used by some rules like
    * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified (but only if
@@ -130,7 +119,6 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
 const LATEST_SVELTE_MAJOR_VERSION = 5;
 const DEFAULT_SVELTE_FILES = [GLOB_SVELTE];
-const DEFAULT_SVELTE_SCRIPT_FILES = ['**/*.svelte.{js,ts}' as const];
 
 const SVELTE_SYSTEM_RULES = RULE_CATEGORIES_PER_PLUGIN.svelte.system;
 
@@ -144,9 +132,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   phase: 'late',
   after: ['ts'],
 })((context, optionsRaw) => {
-  const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
-
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
+  const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -166,42 +153,39 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   const {
     settings: pluginSettings,
     configEnforceTypescriptInScriptSection,
-    configSetup: configSetupOptions = {},
     svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
 
-  const configBuilderSetup = context.createConfigBuilder(configSetupOptions, 'svelte');
-
-  configBuilderSetup
-    ?.addConfig(
-      [
-        'svelte/setup',
-        {
-          filesDefault: [...DEFAULT_SVELTE_FILES, ...DEFAULT_SVELTE_SCRIPT_FILES],
-          parser: 'svelte-eslint-parser',
-          // TODO why?
-          ignoresInternal: {
-            md: false,
-          },
-          settings: {
-            svelte: pluginSettings,
-          },
-        },
-      ],
-      {
-        languageOptions: {
-          parserOptions: {
-            ...(isTypescriptEnabled &&
-              generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
-            ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),
-          },
-          sourceType: 'module',
-        },
-        ...generatePackageToLoadProperty('processor', 'svelteProcessor'),
+  context.requestParsing('svelte', {
+    kind: 'setUpOnly',
+    languageOptions: {
+      parserOptions: {
+        ...(isTypescriptEnabled &&
+          generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
+        ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),
       },
-    )
+      sourceType: 'module',
+    },
+    entryProperties: generatePackageToLoadProperty('processor', 'svelteProcessor'),
+  });
+
+  const configBuilderSystem = context.createConfigBuilder({}, 'svelte');
+
+  configBuilderSystem
+    ?.addConfig([
+      'svelte/system',
+      {
+        // They only make the other rules work, and the plugin scopes them the same way
+        filesDefault: DEFAULT_SVELTE_FILES,
+        inheritFilesAndIgnoresFrom: optionsResolved,
+        parseWith: 'svelte',
+        settings: {
+          svelte: pluginSettings,
+        },
+      },
+    ])
     .addRule('comment-directive', ERROR, [
       {reportUnusedDisableDirectives: true},
     ]) /** @since 0.0.13 */ // 🟢
@@ -223,7 +207,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   // 💭? - optionally requires type information
 
   configBuilder
-    ?.addConfig('svelte')
+    ?.addConfig(['svelte', {parseWith: 'svelte'}])
     .markCategory('Possible Errors')
     .addRule('infinite-reactive-loop', ERROR) /** @since 2.16.0 */ // 🟢4️⃣
     .addRule('no-bind-value-on-checkable-inputs', ERROR) /** @since 3.21.0 */
@@ -340,7 +324,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('experimental-require-slot-types', OFF) /** @since 2.18.0 */
     .addRule('experimental-require-strict-events', OFF) /** @since 2.18.0 */
     .markCategory('System')
-    // Added in the setup config
+    // Added in the system config
     .enableConfigTesterForPlugin('svelte', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
@@ -353,7 +337,14 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     'svelte',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig('svelte/enforce-typescript-in-script-section')
+    ?.addConfig([
+      'svelte/enforce-typescript-in-script-section',
+      {
+        filesDefault: DEFAULT_SVELTE_FILES,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
+        parseWith: 'svelte',
+      },
+    ])
     .addRule('block-lang', ERROR, [
       {
         script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],
@@ -380,7 +371,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   }
 
   return {
-    configs: [configBuilderSetup, configBuilder, configBuilderEnforceTypescriptInScriptSection],
+    configs: [configBuilderSystem, configBuilder, configBuilderEnforceTypescriptInScriptSection],
     optionsResolved,
   };
 });

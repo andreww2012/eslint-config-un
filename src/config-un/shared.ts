@@ -40,6 +40,7 @@ import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '.
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {ImportPluginReplaceableRules} from './import-integrity';
+import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 
 export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
@@ -186,6 +187,28 @@ export interface EslintConfigUnOptions<
             ]
           : never);
   };
+
+  /**
+   * The single place every non-JS files are taught how to be parsed.
+   *
+   * Every key produces one flat config entry per dialect the enabled Configs asked for,
+   * plus one per element when the array form is used.
+   *
+   * Keys accept:
+   * - `false` - never parse anything as this language.
+   *   The Configs whose rules target it stop matching any file;
+   * - `true` - set the language up even when no enabled Config targets it, using its default
+   *   `files`;
+   * - an entry object, or an array of them, each supporting `files`, `ignores`, `dialect` and the
+   *   `languageOptions` the language or its parser accepts.
+   *
+   * `files` defaults to the union of the `files` of every enabled Config targeting the language.
+   *
+   * `ignores` is also added to the `ignores` of each of those Configs.
+   * @example
+   * {parsing: {css: {ignores: ['foo\/**\/*.css']}}}
+   */
+  parsing?: ParsingOptions;
 
   /**
    * **Global** ignore patterns.
@@ -536,23 +559,22 @@ export interface EslintConfigUnOptions<
    *   make `projectService` throw).
    * - `allowDefaultProject` / `parserOptions` (mutually exclusive): the default parser options for
    *   the type-aware linting `eslint-config-un` sets up — the `standalone` split configs and, as a
-   *   default, the `ts` type-aware config.
+   *   default, the type-aware parsing the `ts` config asks for.
    *   `allowDefaultProject` is a shortcut for `parserOptions.projectService.allowDefaultProject`
    *   (the most common need, e.g. test files not part of any `tsconfig.json`); `parserOptions` is
    *   the full escape hatch.
-   *   These mirror the same-named `ts` config options, which take precedence over them for the `ts`
-   *   type-aware config.
+   *   These mirror the same-named `ts` config options, which take precedence over them there.
    *
    * NOTE: these are accepted regardless of `mode` (they are orthogonal to it), but they only take
    * effect where a type-aware parser is actually set up:
    * - the `standalone` split configs (i.e. only when the resolved `mode` is `standalone`);
-   * - the `ts` type-aware config's parser, whenever that config is enabled — independently of
+   * - the type-aware parsing the `ts` config asks for, whenever it is enabled — independently of
    *   `mode`.
    *
-   * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` type-aware config
-   * is enabled (and in `disabled` mode that combination is contradictory, since it both turns off
-   * throwing rules and configures type information).
-   * @default 'splitOnly' if `ts/typeAware/setup` config is enabled, otherwise 'standalone'
+   * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` config is enabled
+   * (and in `disabled` mode that combination is contradictory, since it both turns off throwing
+   * rules and configures type information).
+   * @default 'splitOnly' if the `ts` config is enabled, otherwise 'standalone'
    */
   typeInfoRules?:
     | TypeInfoMode
@@ -744,6 +766,24 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    * NOTE: mutable
    */
   usedParsers: Map<ParserPrefix, EslintFlatConfigEntry[]>;
+
+  /**
+   * How every config relates to each language, one request per relation.
+   * Read by the `parsing` root option to work out which languages are actually needed, which files
+   * they apply to, and where its `ignores` have to be propagated.
+   *
+   * NOTE: mutable
+   */
+  parsingRequests: Map<ParsingLanguages, ParsingRequest[]>;
+
+  /**
+   * The only door into `parsingRequests`, used by `addConfig` and by the Configs directly.
+   *
+   * A Config reaches for it when it lints more than the parser can read, where `targetLanguage`
+   * would widen the language to every file it lints. Such a `setUpOnly` request lints nothing, so
+   * following the `ignores` still needs `targetLanguage` or `inheritParsingIgnoresFrom`
+   */
+  requestParsing: (language: ParsingLanguages, request: ParsingRequest) => void;
 
   /**
    * NOTE: mutable

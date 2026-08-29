@@ -275,7 +275,7 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
           configName,
           {
             ...(isScss && {filesDefault: [GLOB_SCSS]}),
-            language: ['css', 'css'],
+            parseWith: 'css',
           },
         ],
         {

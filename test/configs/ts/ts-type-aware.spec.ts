@@ -4,13 +4,8 @@ const FIXTURES = {
 
 describe('ts: sub config `typeAware`', () => {
   describe('basic tests', () => {
-    it('creates `ts/type-aware/{setup,rules}` eslint configs by default', async () => {
+    it('creates `ts/type-aware/rules` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ts');
-
-      const configSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
-
-      expect(configSetup).toBeDefined();
-      expect(configSetup?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
 
       const configRules = configResult.getConfigByUnPostfix('ts/type-aware/rules');
 
@@ -18,11 +13,11 @@ describe('ts: sub config `typeAware`', () => {
       expect(configRules?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
     });
 
-    it('does not create `ts/type-aware/rules` eslint config, but still creates `ts/type-aware/setup` when set to `false`', async () => {
+    it('keeps the project service set up when set to `false`', async () => {
       const configResult = await computeEslintConfig({ts: {configTypeAware: false}});
 
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')).toBeDefined();
     });
   });
 
@@ -64,11 +59,11 @@ describe('ts: sub config `typeAware`', () => {
         );
       });
 
-      it('disables `ts/type-aware/rules` eslint config when set to empty array, but not `ts/type-aware/setup`', async () => {
+      it('disables `ts/type-aware/rules` eslint config when set to empty array, but keeps the project service', async () => {
         const configResult = await computeEslintConfig({ts: {configTypeAware: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
-        expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')).toBeDefined();
+        expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')).toBeDefined();
       });
     });
 

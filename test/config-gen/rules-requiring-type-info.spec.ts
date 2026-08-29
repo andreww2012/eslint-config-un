@@ -392,7 +392,7 @@ describe('rules requiring type information', () => {
       );
     });
 
-    it('appends ignores to the `ts/type-aware/setup` config so excluded files do not request type info', async () => {
+    it('appends ignores to the type information entry so excluded files do not request type info', async () => {
       const IGNORES = ['vendor/**'];
 
       const configResult = await computeEslintConfig('ts', {
@@ -400,12 +400,12 @@ describe('rules requiring type information', () => {
         internalOptions: {},
       });
 
-      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.ignores).toStrictEqual(
+      expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.ignores).toStrictEqual(
         expect.arrayContaining(IGNORES),
       );
-      expect(
-        configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.ignores,
-      ).not.toStrictEqual(expect.arrayContaining(IGNORES));
+      expect(configResult.getConfigByUnPostfix('parsing/ts')?.ignores).not.toStrictEqual(
+        expect.arrayContaining(IGNORES),
+      );
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.ignores,
       ).not.toStrictEqual(expect.arrayContaining(IGNORES));

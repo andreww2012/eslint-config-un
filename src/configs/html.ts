@@ -90,10 +90,7 @@ export default defineUnConfig<HtmlEslintConfigOptions>('html', {
         'html',
         {
           filesDefault: [GLOB_HTM_HTML],
-          parser: '@html-eslint/parser',
-          ignoresInternal: {
-            html: false,
-          },
+          parseWith: 'html',
           settings: {
             html: pluginSettings,
           },

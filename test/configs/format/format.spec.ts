@@ -263,17 +263,26 @@ describe('options', () => {
     it('does not set `eslint-parser-plain` parser by default', async () => {
       const configResult = await computeEslintConfig('format');
 
-      expect(
-        configResult.getConfigByUnPostfix('format/prettier')?.languageOptions?.['parser'],
-      ).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('parsing/plain')).toBeUndefined();
     });
 
-    it('sets `eslint-parser-plain` parser when set to `true`', async () => {
+    it('sets `eslint-parser-plain` parser on the `files` of the config when set to `true`', async () => {
+      const FILES = ['**/*.xml'];
+
+      const configResult = await computeEslintConfig({
+        format: [{files: FILES, usePlainParser: true}],
+      });
+
+      const config = configResult.getConfigByUnPostfix('parsing/plain');
+
+      expect(config?.languageOptions?.['parser']).toBeDefined();
+      expect(config?.files).toStrictEqual(FILES);
+    });
+
+    it('sets no parser up when the config specifies no `files`, which would parse the whole project as plain text', async () => {
       const configResult = await computeEslintConfig({format: {usePlainParser: true}});
 
-      expect(
-        configResult.getConfigByUnPostfix('format/prettier')?.languageOptions?.['parser'],
-      ).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('parsing/plain')).toBeUndefined();
     });
   });
 });

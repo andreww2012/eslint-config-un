@@ -499,18 +499,18 @@ describe('options', () => {
   });
 
   describe('option: `processSfcBlocks`', () => {
-    it('creates `vue/setup` config when set to `false`', async () => {
+    it('keeps the vue files parsed when set to `false`', async () => {
       const configResult = await computeEslintConfig({vue: {processSfcBlocks: false}});
 
-      expect(configResult.getConfigByUnPostfix('vue/setup')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('parsing/vue')).toBeDefined();
     });
 
-    it('creates `vue/setup` config when set to object', async () => {
+    it('keeps the vue files parsed when set to object', async () => {
       const configResult = await computeEslintConfig({
         vue: {processSfcBlocks: {blocks: {script: true}}},
       });
 
-      expect(configResult.getConfigByUnPostfix('vue/setup')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('parsing/vue')).toBeDefined();
     });
   });
 });
@@ -539,10 +539,8 @@ describe('`vue` and `ts` configs relationship', () => {
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if not explicitly specified', async () => {
     const configResult = await computeEslintConfig({vue: true, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      [GLOB_VUE],
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers([
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers([GLOB_VUE]);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers([
       GLOB_VUE,
     ]);
   });
@@ -552,10 +550,8 @@ describe('`vue` and `ts` configs relationship', () => {
 
     const configResult = await computeEslintConfig({vue: {files: FILES}, ts: true});
 
-    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toIncludeAllMembers(
-      FILES,
-    );
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toIncludeAllMembers(
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).toIncludeAllMembers(FILES);
+    expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files).toIncludeAllMembers(
       FILES,
     );
   });
@@ -563,11 +559,11 @@ describe('`vue` and `ts` configs relationship', () => {
   it('empty `files` does not flow to `ts/{non-type-aware,type-aware}/setup` eslint configs', async () => {
     const configResult = await computeEslintConfig({vue: {files: []}, ts: true});
 
+    expect(configResult.getConfigByUnPostfix('parsing/ts')?.files).not.toIncludeAnyMembers([
+      GLOB_VUE,
+    ]);
     expect(
-      configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
+      configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.files,
     ).not.toIncludeAnyMembers([GLOB_VUE]);
-    expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).not.toIncludeAnyMembers(
-      [GLOB_VUE],
-    );
   });
 });

@@ -17,7 +17,7 @@ type PackageManager = NonNullable<UnConfigContext['meta']['usedPackageManager']>
  * `text` replaces the `@default` prose the generator would otherwise derive from the condition,
  * while `textAddendum` only appends to it
  */
-export type EnabledBy =
+export type ConfigEnabledBy =
   | boolean
   | ({text?: string; textAddendum?: string} & (
       | {default: boolean}
@@ -37,16 +37,19 @@ export type EnabledBy =
  */
 export type ConfigPhase = 'first' | 'late' | 'last' | 'extra' | 'terminal';
 
-export type CascadeAnchor = 'globalSetup' | 'rootConfig' | 'userExtraConfigs';
+export type CascadeAnchor = 'globalSetup' | 'parsing' | 'rootConfig' | 'userExtraConfigs';
 
 /**
  * Named places in the cascade occupied by entries that are not Configs, and therefore cannot be
  * declared by a manifest: the global `files`/`ignores`/`linterOptions`/`languageOptions` setup, the
- * rule exceptions applied to the well known config files, and the `extraConfigs` root option.
+ * `parsing` root option, which comes after every Config so that nothing a Config sets can override
+ * the parser it chose, the rule exceptions applied to the well known config files, and the
+ * `extraConfigs` root option.
  * Each of them sits on a phase boundary of the cascade layout the artifact generator reads
  */
 export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor>()([
   'globalSetup',
+  'parsing',
   'rootConfig',
   'userExtraConfigs',
 ]);
@@ -61,7 +64,7 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
    * What turns the Config on, and what the generated `@default` line of its docs says
    * @default true
    */
-  enabledBy?: EnabledBy;
+  enabledBy?: ConfigEnabledBy;
 
   /**
    * Additional runtime conditions the Config cannot be enabled without

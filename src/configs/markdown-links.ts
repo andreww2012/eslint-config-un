@@ -116,7 +116,7 @@ export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
       'markdown-links',
       {
         filesDefault: [GLOB_MARKDOWN],
-        language: ['markdown', 'commonmark'],
+        parseWith: ['markdown', 'commonmark'],
       },
     ])
     .addRule('no-dead-urls', ...getCheckSeverity('deadUrls')) /** @since 0.1.0 */

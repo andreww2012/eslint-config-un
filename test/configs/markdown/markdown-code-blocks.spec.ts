@@ -7,9 +7,7 @@ describe('markdown: sub config `codeBlocks`', () => {
     it('creates `markdown/{setup/code-blocks-processor,code-blocks}` eslint configs by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
-      const processorConfig = configResult.getConfigByUnPostfix(
-        'markdown/setup/code-blocks-processor',
-      );
+      const processorConfig = configResult.getConfigByUnPostfix('markdown/code-blocks-processor');
 
       expect(processorConfig?.processor).toBeDefined();
       expect(processorConfig?.files).toMatchInlineSnapshot('["**/*.md"]');
@@ -26,18 +24,14 @@ describe('markdown: sub config `codeBlocks`', () => {
     it('does not create `markdown/{setup/code-blocks-processor,code-blocks}` eslint configs when set to `false`', async () => {
       const configResult = await computeEslintConfig({markdown: {configCodeBlocks: false}});
 
-      expect(
-        configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
-      ).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('markdown/code-blocks-processor')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
     });
 
     it('creates `markdown/{setup/code-blocks-processor,code-blocks}` eslint configs when set to `true`', async () => {
       const configResult = await computeEslintConfig({markdown: {configCodeBlocks: true}});
 
-      expect(
-        configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
-      ).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('markdown/code-blocks-processor')).toBeDefined();
       expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
     });
 
@@ -109,7 +103,7 @@ describe('markdown: sub config `codeBlocks`', () => {
 
   describe('un options', () => {
     describe('option: `files`', () => {
-      it('uses user-provided `files` in `markdown/setup/code-blocks-processor` eslint config', async () => {
+      it('uses user-provided `files` in `markdown/code-blocks-processor` eslint config', async () => {
         const FILES = ['docs/**/*.md'];
 
         const configResult = await computeEslintConfig({
@@ -117,7 +111,7 @@ describe('markdown: sub config `codeBlocks`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor')?.files,
+          configResult.getConfigByUnPostfix('markdown/code-blocks-processor')?.files,
         ).toStrictEqual(FILES);
       });
 
@@ -136,15 +130,13 @@ describe('markdown: sub config `codeBlocks`', () => {
       it('disables both eslint configs when set to empty array', async () => {
         const configResult = await computeEslintConfig({markdown: {configCodeBlocks: {files: []}}});
 
-        expect(
-          configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
-        ).toBeUndefined();
+        expect(configResult.getConfigByUnPostfix('markdown/code-blocks-processor')).toBeUndefined();
         expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
       });
     });
 
     describe('option: `ignores`', () => {
-      it('uses user-provided `ignores` in `markdown/setup/code-blocks-processor` eslint config and merges them with defaults', async () => {
+      it('uses user-provided `ignores` in `markdown/code-blocks-processor` eslint config and merges them with defaults', async () => {
         const IGNORES = ['CHANGELOG.md'];
 
         const configResult = await computeEslintConfig({
@@ -152,7 +144,7 @@ describe('markdown: sub config `codeBlocks`', () => {
         });
 
         const ignores = configResult.getConfigByUnPostfix(
-          'markdown/setup/code-blocks-processor',
+          'markdown/code-blocks-processor',
         )?.ignores;
 
         expect(ignores).toIncludeAllMembers(IGNORES);

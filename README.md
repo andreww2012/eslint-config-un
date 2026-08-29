@@ -195,9 +195,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | --------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | ![JavaScript](./assets/devicon-javascript.svg) `js` | ✅                                          | [Vanilla ESLint rules](https://eslint.org/docs/latest/rules)                                                                            | -                                                                            |
 | ![TypeScript] `ts`                                  | ✅                                          | [typescript-eslint](https://npmx.dev/typescript-eslint) (`ts`)                                                                          | Only rules **not** requiring type information.                               |
-| ![TypeScript] `ts/setup`                            | ✅                                          | ^                                                                                                                                       | Sets up the plugin for all files requiring the TS plugin without type checking. |
 | ![TypeScript] `ts/typeAware`                        | ✅                                          | ^                                                                                                                                       | Only rules requiring type information.                                       |
-| ![TypeScript] `ts/typeAware/setup`                  | ✅                                          | ^                                                                                                                                       | Sets up the plugin for all files requiring type checking.                    |
 | ![TypeScript] `ts/disableNoUnsafe`                  | ❌                                          | ^                                                                                                                                       | Config that disables all the `no-unsafe-*` rules.                            |
 | ![TypeScript] `ts/noTypeAssertion`                  | ✅                                          | [eslint-plugin-no-type-assertion](https://npmx.dev/eslint-plugin-no-type-assertion) (`no-type-assertion`)                               | -                                                                            |
 | ![TypeScript] `ts/sortTsconfigKeys`                 | ❌                                          | -                                                                                                                                       | Sort type-level and `compilerOptions` keys in tsconfig files.                |
@@ -246,10 +244,8 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![SolidJS](./assets/devicon-solidjs.svg) `solid`                                 | ✅ (`solid-js` is installed)                             | [eslint-plugin-solid](https://npmx.dev/eslint-plugin-solid) (`solid`)                                                                                        | Since v0.10.0                                                                                                                                         |
 | ![Qwik](./assets/devicon-qwik.svg) `qwik`                                        | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmx.dev/eslint-plugin-qwik) (`qwik`)                                                                                           | Since v0.6.0                                                                                                                                          |
 | `ripple`                                                                         | ✅ (`ripple` is installed)                               | [@tsrx/eslint-plugin](https://npmx.dev/@tsrx/eslint-plugin) (`ripple`)                                                                                       | Since v1.0.0                                                                                                                                          |
-| `ripple/setup`                                                                   | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Sets up the parser for `.tsrx` and `.ripple` files.                                                                                   |
 | `ripple/ts`                                                                      | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Module-scope Ripple rules for TypeScript files.                                                                                       |
 | ![Astro] `astro`                                                                 | ✅ (`astro` is installed)                                | [eslint-plugin-astro](https://npmx.dev/eslint-plugin-astro) (`astro`)                                                                                        | Since v0.9.0<br>Without A11Y rules                                                                                                                    |
-| ![Astro] `astro/setup`                                                           | ✅                                                       | ^                                                                                                                                                            | Since v1.0.0<br>Sets up the Astro files parser.                                                                                                       |
 | ![Astro] `astro/jsxA11y`                                                         | ✅                                                       | ^                                                                                                                                                            | Only A11Y rules from `eslint-plugin-astro`                                                                                                            |
 | ![Svelte](./assets/devicon-svelte.svg) `svelte`                                  | ✅ (`svelte` is installed)                               | [eslint-plugin-svelte](https://npmx.dev/eslint-plugin-svelte) (`svelte`)                                                                                     | Since v0.10.0                                                                                                                                         |
 | ![Svelte](./assets/devicon-svelte.svg) `svelte/enforceTypescriptInScriptSection` | ✅ (`ts` config is enabled)                              | ^                                                                                                                                                            | Since v1.0.0<br>Enforces `lang="ts"` in `<script>` blocks via [`svelte/block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang) |
@@ -721,6 +717,22 @@ Specifies a list of global `files` patterns.
 When non-empty, a dedicated flat config entry is created with only these `files` (no rules or other keys except for `name`), which tells ESLint that the matched files are meant to be linted.
 This is useful to prevent the `File ignored because no matching configuration was supplied` error for files with extensions that none of the enabled configs target.
 
+### `parsing`
+
+**Type**: `Record<string, boolean | object | object[]>`
+
+The single place every non-JS files are taught how to be parsed.
+
+Every key produces one flat config entry per language dialect the enabled Configs asked for (so `markdown` may emit both a `gfm` and a `commonmark` entry).
+The array form merges into those same entries, unless one of its elements specifies `files` - then each element gets an entry of its own.
+
+For the object/array form:
+
+- `files` defaults to the union of the `files` of every enabled Config whose rules are written for it, and to the language's own defaults for a Config that asks for the language without linting only its files: `parsing.ripple` stays on `.tsrx` and `.ripple` though the `ripple` Config also lints `.js` and `.ts`;
+- `ignores` are added to the `ignores` of every Config that lints files of this language;
+- setting `dialect` collapses every dialect the enabled Configs asked for into that dialect;
+- `languageOptions` will be merged with what Configs have contributed for this option, `parser` included: providing one of your own replaces the parser the dialect would have picked, which is then neither loaded nor assigned.
+
 ### `ignores`
 
 **Type**: `string[] | {files: string[]; override?: boolean}`
@@ -859,8 +871,8 @@ By default, every such rule is *automatically **moved*** into a separate ESLint 
 The mode (string value or the `mode` property) chooses the strategy:
 
 - `standalone`: the split happens and the parser, including [`projectService`](https://typescript-eslint.io/packages/parser/#projectservice), is configured in the generated config.
-  The default when the `ts/type-aware/setup` config is **disabled**.
-- `splitOnly`: the split happens, but no parser is configured — the project service is expected to be set up by the `ts/type-aware/setup` config.
+  The default when the `ts` config is **disabled**.
+- `splitOnly`: the split happens, but no parser is configured - the project service is expected to come from the `parsing` root option, which the `ts` config sets up.
   The default when that config is **enabled** (the most common case).
 - `asIs`: no split happens; rules are left untouched in their original configs.
   You are responsible for making type information available to them.

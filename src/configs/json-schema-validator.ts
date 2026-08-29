@@ -119,7 +119,7 @@ export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchem
       'json-schema-validator/json',
       {
         filesDefault: JSONC_DEFAULT_FILES,
-        language: ['jsonc', 'x'],
+        parseWith: 'jsonc',
         settings: {
           'json-schema-validator': pluginSettings,
         },
@@ -135,7 +135,7 @@ export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchem
       'json-schema-validator/yaml',
       {
         filesDefault: YAML_DEFAULT_FILES,
-        language: ['yaml', 'yaml'],
+        parseWith: 'yaml',
         settings: {
           'json-schema-validator': pluginSettings,
         },
@@ -151,7 +151,7 @@ export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchem
       'json-schema-validator/toml',
       {
         filesDefault: TOML_DEFAULT_FILES,
-        language: ['toml', 'toml'],
+        parseWith: 'toml',
         settings: {
           'json-schema-validator': pluginSettings,
         },

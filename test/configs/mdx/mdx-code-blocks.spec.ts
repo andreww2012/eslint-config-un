@@ -96,16 +96,16 @@ describe('mdx: sub config `codeBlocks`', () => {
 
   describe('un options', () => {
     describe('option: `files`', () => {
-      it('uses user-provided `files` in `mdx/setup/code-blocks-processor` eslint config', async () => {
+      it('uses user-provided `files` in `mdx/code-blocks-processor` eslint config', async () => {
         const FILES = ['docs/**/*.mdx'];
 
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {files: FILES}},
         });
 
-        expect(
-          configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')?.files,
-        ).toStrictEqual(FILES);
+        expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')?.files).toStrictEqual(
+          FILES,
+        );
       });
 
       it('does not apply user-provided `files` to `mdx/code-blocks` eslint config', async () => {
@@ -128,16 +128,14 @@ describe('mdx: sub config `codeBlocks`', () => {
     });
 
     describe('option: `ignores`', () => {
-      it('uses user-provided `ignores` in `mdx/setup/code-blocks-processor` eslint config and merges them with defaults', async () => {
+      it('uses user-provided `ignores` in `mdx/code-blocks-processor` eslint config and merges them with defaults', async () => {
         const IGNORES = ['CHANGELOG.mdx'];
 
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {ignores: IGNORES}},
         });
 
-        const ignores = configResult.getConfigByUnPostfix(
-          'mdx/setup/code-blocks-processor',
-        )?.ignores;
+        const ignores = configResult.getConfigByUnPostfix('mdx/code-blocks-processor')?.ignores;
 
         expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);

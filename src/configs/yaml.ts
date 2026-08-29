@@ -95,7 +95,7 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
           filesDefault: YAML_DEFAULT_FILES,
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
           ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
-          language: ['yaml', 'yaml'],
+          parseWith: 'yaml',
         },
       ],
       {
@@ -153,7 +153,13 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
   if (context.meta.usedPackageManager?.name === 'pnpm') {
     configBuilder
       ?.addConfig(
-        ['yaml/pnpm-workspace.yaml', {applyUserFilesAndIgnores: false, language: ['yaml', 'yaml']}],
+        [
+          'yaml/pnpm-workspace.yaml',
+          {
+            applyUserFilesAndIgnores: false,
+            parseWith: 'yaml',
+          },
+        ],
         {
           files: ['**/pnpm-workspace.yaml'],
         },

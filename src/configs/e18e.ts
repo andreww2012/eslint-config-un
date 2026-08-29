@@ -123,7 +123,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
         'e18e/module-replacements',
         {
           filesDefault: [GLOB_PACKAGE_JSON],
-          language: ['jsonc', 'json'],
+          parseWith: ['jsonc', 'json'],
         },
       ])
       .addRule(

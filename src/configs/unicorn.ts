@@ -1082,7 +1082,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       'unicorn/css',
       {
         filesDefault: [GLOB_CSS],
-        ignoresInternal: {css: false},
+        parseWith: 'css',
         // `no-transition-all` optionally uses type information; letting it be split off into a
         // `**/*.ts` config would defeat the whole point of this Sub-config
         skipTypeInfoSplit: true,
@@ -1111,7 +1111,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       'unicorn/html',
       {
         filesDefault: [GLOB_HTM_HTML],
-        ignoresInternal: {html: false},
+        parseWith: 'html',
       },
     ])
     .addRule('expiring-todo-comments', ERROR)
@@ -1137,7 +1137,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       'unicorn/json',
       {
         filesDefault: [GLOB_JSON, GLOB_JSONC, GLOB_JSON5],
-        ignoresInternal: {json: false, jsonc: false, json5: false},
+        parsingIgnoresInheritedFrom: ['json', 'jsonc'],
       },
     ])
     .addRule('expiring-todo-comments', ERROR)
@@ -1157,7 +1157,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       'unicorn/markdown',
       {
         filesDefault: [GLOB_MARKDOWN, GLOB_MDX],
-        ignoresInternal: {md: false, mdx: false},
+        parsingIgnoresInheritedFrom: ['markdown', 'mdx'],
       },
     ])
     .addRule('expiring-todo-comments', ERROR)

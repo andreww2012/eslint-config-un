@@ -44,7 +44,7 @@ export default defineUnConfig<DependEslintConfigOptions>(
       'depend',
       {
         filesDefault: [GLOB_PACKAGE_JSON],
-        language: ['jsonc', 'json'],
+        parseWith: ['jsonc', 'json'],
       },
     ])
     .addRule(

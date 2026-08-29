@@ -576,10 +576,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
       'angular/template',
       {
         filesDefault: [GLOB_HTML],
-        parser: '@angular-eslint/template-parser',
-        ignoresInternal: {
-          html: false,
-        },
+        parseWith: 'angularTemplate',
       },
     ])
     .addRule(

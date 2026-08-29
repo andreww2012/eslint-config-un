@@ -11,7 +11,7 @@ describe('basic tests', () => {
     const config = configResult.getConfigByUnPostfix('mdx/mdx');
 
     expect(config).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.mdx"]');
 
     const ignores = config?.ignores;
@@ -26,7 +26,7 @@ describe('basic tests', () => {
     const configResult = await computeEslintConfig({mdx: false});
 
     expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
-    expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeUndefined();
     expect(configResult.getLoadedPlugin('mdx')).toBeUndefined();
   });
 
@@ -105,7 +105,7 @@ describe('un options', () => {
       const configResult = await computeEslintConfig({mdx: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
     });
   });
