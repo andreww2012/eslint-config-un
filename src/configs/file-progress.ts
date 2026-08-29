@@ -62,6 +62,7 @@ export default defineUnConfig<FileProgressEslintConfigOptions>(
     ?.addConfig([
       'file-progress',
       {
+        ignoresInternal: false,
         settings: {
           progress: {
             hide: context.meta.environment !== 'default',

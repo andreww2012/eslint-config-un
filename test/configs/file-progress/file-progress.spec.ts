@@ -6,7 +6,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(config?.ignores).toBeUndefined();
 
     expect(configResult.getLoadedPlugin('file-progress')).toBeDefined();
   });
@@ -85,15 +85,14 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `file-progress` eslint config and merges them with defaults', async () => {
+    it('uses user-provided `ignores` in `file-progress` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
 
       const configResult = await computeEslintConfig({fileProgress: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('file-progress')?.ignores;
 
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      expect(ignores).toStrictEqual(IGNORES);
     });
   });
 
