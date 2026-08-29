@@ -495,7 +495,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       gitignore !== false &&
         (typeof gitignore === 'object' || gitignoreFile) &&
         interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
-          ...(typeof gitignore === 'object' ? eslintGitignore(gitignore) : eslintGitignore()),
+          ...eslintGitignore({
+            recursive: true,
+            ...(typeof gitignore === 'object' && gitignore),
+          }),
           name: genFlatConfigEntryName('ignores/gitignore'),
         })),
       ...(

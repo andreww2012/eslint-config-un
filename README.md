@@ -906,6 +906,7 @@ Keys are the canonical package names, values are the names the packages are actu
 **Type**: `boolean | EslintConfigFlatGitignoreOptions`
 
 By default, files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) will be automatically added to the global [`ignores`](#ignores) list.
+Nested `.gitignore` files are respected by default (`recursive` defaults to `true`).
 Set this option to `false` to disable this behavior.
 You may also provide an object which configures [eslint-config-flat-gitignore](https://npmx.dev/eslint-config-flat-gitignore), which actually provides this functionality.
 

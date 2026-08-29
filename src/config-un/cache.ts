@@ -55,7 +55,10 @@ const computeCacheKey = async (context: UnConfigContext) => {
   const packageManagerInfo = context.meta.usedPackageManager;
   result.push(JSON.stringify(packageManagerInfo));
 
-  const gitignorePath = findUp.file('.gitignore'); // TODO sync with logic in config.ts
+  // TODO sync with logic in config.ts: nested `.gitignore` files, which are respected since
+  // `recursive` became the default, are not accounted for - hashing them means walking the whole
+  // project tree on every run
+  const gitignorePath = findUp.file('.gitignore');
   const packageJsonPath = packageUtils.up();
 
   /* v8 ignore next - Every known package manager has its lockfiles grouped */

@@ -605,6 +605,11 @@ export interface EslintConfigUnOptions<
 
   /**
    * Automatically add gitignore'd files to the global `ignores` array.
+   *
+   * Nested `.gitignore` files are respected as well, i.e. the `recursive` option of the underlying
+   * package defaults to `true` by default.
+   *
+   * Passed options will be merged with the defaults.
    * @default true <=> `.gitignore` exists in [the current working directory](https://nodejs.org/api/process.html#processcwd)
    */
   gitignore?: boolean | FlatGitignoreOptions;

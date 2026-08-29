@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore');
+const RECURSIVE_FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore-recursive');
 
 const getGitignoreIgnores = async (
   gitignore: ((Parameters<typeof computeEslintConfig>[1] & {})['un'] & {})['gitignore'],
@@ -27,5 +28,21 @@ describe('option: `gitignore`', () => {
     await expect(
       getGitignoreIgnores({cwd: FIXTURES_DIR, files: ['example.gitignore']}),
     ).resolves.toStrictEqual(['**/ignored-dir/', '**/*.ignored']);
+  });
+
+  it('respects nested `.gitignore` files by default', async () => {
+    await expect(
+      getGitignoreIgnores({cwd: RECURSIVE_FIXTURES_DIR, files: ['example.gitignore']}),
+    ).resolves.toStrictEqual(['**/root-ignored-dir/', 'nested/**/*.nested-ignored']);
+  });
+
+  it('does not respect nested `.gitignore` files when `recursive` is set to `false`', async () => {
+    await expect(
+      getGitignoreIgnores({
+        cwd: RECURSIVE_FIXTURES_DIR,
+        files: ['example.gitignore'],
+        recursive: false,
+      }),
+    ).resolves.toStrictEqual(['**/root-ignored-dir/']);
   });
 });
