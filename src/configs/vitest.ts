@@ -250,7 +250,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
 })(async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
-  context.usedPlugins.add('vitest');
+  context.registerUsedPlugin('vitest');
   /* v8 ignore start */
   if (!eslintPluginVitest) {
     return;

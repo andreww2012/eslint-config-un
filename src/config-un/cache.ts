@@ -17,7 +17,7 @@ import {
   readFileSafe,
   traverseForEach,
 } from '../utils';
-import type {UnConfigContext} from './shared';
+import type {PackageRequester, UnConfigContext} from './shared';
 
 const sha256 = (input: string | Buffer) => {
   const hashInstance = crypto.createHash('sha256');
@@ -134,6 +134,9 @@ const resolveCacheFilePath = (context: UnConfigContext): string | undefined => {
 export interface CacheDataInFs<Serialized extends boolean = true> {
   configs: EslintFlatConfigEntry[];
   usedPlugins: string[];
+  packageRequesters: Serialized extends true
+    ? Record<string /* Package name */, PackageRequester[]>
+    : Map<string /* Package name */, Set<PackageRequester>>;
   usedParsers: Serialized extends true
     ? Record<string, string[] /* Config names */>
     : Map<ParserPrefix, string[] /* Config names */>;
@@ -169,6 +172,12 @@ export const saveCacheToFs = async (
     date: new Date().toISOString(),
     key: cacheKey,
     ...cacheData,
+    packageRequesters: Object.fromEntries(
+      Array.from(cacheData.packageRequesters, ([packageName, requesters]) => [
+        packageName,
+        [...requesters],
+      ]),
+    ),
     usedParsers: Object.fromEntries(cacheData.usedParsers),
     usedPackages: Object.fromEntries(
       Array.from(cacheData.usedPackages, ([packageId, entries]) => [

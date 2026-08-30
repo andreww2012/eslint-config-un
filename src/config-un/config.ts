@@ -54,7 +54,11 @@ import {
   saveCacheToMemory,
 } from './cache';
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
-import {getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless} from './config-utils';
+import {
+  getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless,
+  recordPackageRequester,
+  registerUsedPlugin,
+} from './config-utils';
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import type {ImportIntegrityPluginSettings} from './import-integrity';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
@@ -247,9 +251,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     disabledAutofixes: {},
     fixableRulesPerPlugin,
     usedPlugins: new Set(),
+    packageRequesters: new Map(),
     usedParsers: new Map(),
     usedPackages: new Map(),
-    missingPackages: new Set(),
+    missingPackages: new Map(),
     parsingRequests,
     requestParsing: createRequestParsing(parsingRequests),
     meta: {usedPackageManager, environment},
@@ -258,6 +263,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     isTestMode,
     tests: [],
     createConfigBuilder,
+    registerUsedPlugin,
+    recordPackageRequester,
   } satisfies PartialDeep<Pick<UnConfigContext, 'packagesInfo' | 'configsMeta'>> &
     OmitStrict<
       UnConfigContext,
@@ -350,7 +357,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   } = optionsResolved;
 
   if (useImportIntegrity) {
-    context.usedPlugins.add('import-integrity');
+    context.registerUsedPlugin('import-integrity', 'option:useImportIntegrity');
   }
 
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
@@ -420,11 +427,22 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
    * The recorder lives on its own context so that the Configs can be resolved concurrently
    */
   const runConfigSetup = async (
+    configKey: ManifestConfigKey,
     manifest: AnyConfigManifest,
     configOptions: Parameters<AnyConfigManifest['setup']>[1],
   ) => {
     const configBuilders: ConfigEntryBuilder<ExtraPlugins>[] = [];
-    const result = await manifest.setup({...context, configBuilders}, configOptions, configResults);
+    const packageRequester = `config:${configKey}` as const;
+    const result = await manifest.setup(
+      {
+        ...context,
+        configBuilders,
+        packageRequester,
+        requestParsing: createRequestParsing(parsingRequests, packageRequester),
+      },
+      configOptions,
+      configResults,
+    );
     return {result, configBuilders};
   };
 
@@ -444,7 +462,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     if (Array.isArray(configOptions)) {
       const setupResults = await Promise.all(
         configOptions.map((configOptionsItem, configIndex) =>
-          runConfigSetup(manifestWithSetup, {
+          runConfigSetup(configKey, manifestWithSetup, {
             ...configOptionsItem,
             [configIndexProperty]: configIndex,
           }),
@@ -453,7 +471,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       return setupResults.flatMap(({configBuilders}) => configBuilders);
     }
 
-    const {result, configBuilders} = await runConfigSetup(manifestWithSetup, configOptions);
+    const {result, configBuilders} = await runConfigSetup(
+      configKey,
+      manifestWithSetup,
+      configOptions,
+    );
     if (configKey in configResults) {
       Object.assign(configResults, {[configKey]: result});
     }
@@ -612,7 +634,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         `extra-config/${extraConfig.name || `unnamed${configIndex}`}`,
       );
       const configResolveResult = processUnOrFlatConfig(
-        context,
+        {...context, packageRequester: 'option:extraConfigs'},
         {...extraConfig, name: configName},
         extraConfig.rules,
       );
@@ -678,6 +700,14 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (typeof loadPluginsOnDemand === 'object') {
     usedPluginPrefixes.push(...loadPluginsOnDemand.alwaysLoad);
   }
+  (loadPluginsOnDemand === false
+    ? LOADABLE_PLUGIN_PREFIXES_LIST
+    : typeof loadPluginsOnDemand === 'object'
+      ? loadPluginsOnDemand.alwaysLoad
+      : []
+  ).forEach((pluginPrefix) => {
+    context.recordPackageRequester('plugin', pluginPrefix, 'option:loadPluginsOnDemand');
+  });
   const usedParserPrefixes = [...context.usedParsers.keys()];
   const usedPackagesPrefixes = [...context.usedPackages.keys()];
 
@@ -772,6 +802,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     await saveCacheToFs(context, {
       configs: configsToCache,
       usedPlugins: usedPluginPrefixes,
+      packageRequesters: context.packageRequesters,
       usedParsers: new Map(
         Array.from(context.usedParsers, ([parserPrefix, configs]) => [
           parserPrefix,

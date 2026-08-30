@@ -7,7 +7,7 @@ const MISSING_RELATIVE_PATH = './definitely-not-a-file.mjs';
 describe('module loaders', () => {
   describe('missing packages reporting', () => {
     it('reports a bare specifier package Node fails to resolve', async () => {
-      const missingPackages = new Set<string>();
+      const missingPackages = new Map<string, Set<string>>();
 
       const loader = genModuleLoader(
         'missing',
@@ -20,11 +20,11 @@ describe('module loaders', () => {
       await expect(loader({rootOptions: {}, missingPackages})).resolves.toMatchObject({
         module: null,
       });
-      expect([...missingPackages]).toStrictEqual([MISSING_PACKAGE]);
+      expect([...missingPackages]).toStrictEqual([[MISSING_PACKAGE, new Set([LOADED_PACKAGE])]]);
     });
 
     it('reports a package a CommonJS `require` fails to resolve', async () => {
-      const missingPackages = new Set<string>();
+      const missingPackages = new Map<string, Set<string>>();
 
       const loader = genModuleLoader(
         'missing',
@@ -40,11 +40,11 @@ describe('module loaders', () => {
       await expect(loader({rootOptions: {}, missingPackages})).resolves.toMatchObject({
         module: null,
       });
-      expect([...missingPackages]).toStrictEqual([MISSING_PACKAGE]);
+      expect([...missingPackages]).toStrictEqual([[MISSING_PACKAGE, new Set([LOADED_PACKAGE])]]);
     });
 
     it('reports nothing when the failing import spelled out a path', async () => {
-      const missingPackages = new Set<string>();
+      const missingPackages = new Map<string, Set<string>>();
 
       const loader = genModuleLoader(
         'missing',
@@ -61,7 +61,7 @@ describe('module loaders', () => {
     });
 
     it('reports nothing when the missing package is the one the loader is for', async () => {
-      const missingPackages = new Set<string>();
+      const missingPackages = new Map<string, Set<string>>();
 
       const loader = genModuleLoader(
         'missing',
@@ -78,7 +78,7 @@ describe('module loaders', () => {
     });
 
     it('reports nothing when the missing package is a subpath of the one the loader is for', async () => {
-      const missingPackages = new Set<string>();
+      const missingPackages = new Map<string, Set<string>>();
 
       const loader = genModuleLoader(
         'missing',

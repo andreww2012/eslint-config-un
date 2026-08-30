@@ -33,7 +33,11 @@ import {
 import type {ObjectValues} from '../types';
 import {type MaybeArray, arrayUnique, arrayify, isObject, objectKeysUnsafe} from '../utils';
 import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
-import {type UnConfigContext, intersectParentConfigFilesWithProvidedFiles} from './shared';
+import {
+  type PackageRequester,
+  type UnConfigContext,
+  intersectParentConfigFilesWithProvidedFiles,
+} from './shared';
 
 /**
  * These file types are implicitly added to `ignores` array of every Config
@@ -390,10 +394,16 @@ export interface ParsingRequest {
 
   /** Only read alongside a name suffix */
   ignores?: string[];
+
+  /** Filled in by the context the request came through */
+  requestedBy?: PackageRequester;
 }
 
 interface ResolvedParsingEntry {
   dialect: string;
+
+  /** What the packages the entry ends up needing are attributed to */
+  requesters: PackageRequester[];
   files?: EslintFlatConfigEntry['files'];
   ignores?: string[];
   languageOptions?: object;
@@ -442,7 +452,9 @@ const resolveEntriesForLanguage = (
   const definition: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
 
   if (option === false) {
-    return [{dialect: definition.dialectDefault, ignores: ['**/*'], isDisabled: true}];
+    return [
+      {dialect: definition.dialectDefault, requesters: [], ignores: ['**/*'], isDisabled: true},
+    ];
   }
 
   const userEntries = option == null || typeof option === 'boolean' ? [] : arrayify(option);
@@ -459,6 +471,11 @@ const resolveEntriesForLanguage = (
 
   const layersOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix != null);
+
+  const requestersOfDialect = (dialect: string) =>
+    (requestsByDialect.get(dialect) || [])
+      .map(({requestedBy}) => requestedBy)
+      .filter((v) => v != null);
 
   const contributorsOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix == null);
@@ -513,6 +530,7 @@ const resolveEntriesForLanguage = (
       const dialect = entry.dialect || dialectFallback;
       return {
         dialect,
+        requesters: requestersOfDialect(dialect),
         files: entry.files || filesFromRequests(dialect),
         ignores: entry.ignores,
         languageOptions: mergeLanguageOptions(
@@ -541,6 +559,7 @@ const resolveEntriesForLanguage = (
 
   return dialectsToEmit.map((dialect) => ({
     dialect,
+    requesters: requestersOfDialect(dialect),
     files: filesFromRequests(dialect),
     ignores: ignoresFromUser,
     languageOptions: mergeLanguageOptions(
@@ -620,17 +639,21 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         ...(Reflect.ownKeys(languageOptions).length > 0 && {languageOptions}),
       };
 
+      const requesters: PackageRequester[] =
+        entry.requesters.length > 0 ? entry.requesters : ['option:parsing'];
+
       if ('language' in mechanism) {
-        context.usedPlugins.add(mechanism.language[0]);
+        context.registerUsedPlugin(mechanism.language[0], requesters);
       }
       if (!hasParserAlready && 'parser' in mechanism) {
         context.usedParsers.set(mechanism.parser, [
           ...(context.usedParsers.get(mechanism.parser) || []),
           config,
         ]);
+        context.recordPackageRequester('parser', mechanism.parser, requesters);
       }
 
-      savePackagesToLoadFromConfig(context, config);
+      savePackagesToLoadFromConfig(context, config, requesters);
 
       resultConfigs.push(config);
 
@@ -660,7 +683,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
           layerConfig.ignores = [...(layerConfig.ignores || []), ...typeInfoIgnores];
         }
 
-        savePackagesToLoadFromConfig(context, layerConfig);
+        savePackagesToLoadFromConfig(context, layerConfig, [layer.requestedBy || 'option:parsing']);
 
         resultConfigs.push(layerConfig);
       });
@@ -698,7 +721,13 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
 };
 
 export const createRequestParsing =
-  (parsingRequests: UnConfigContext['parsingRequests']): UnConfigContext['requestParsing'] =>
+  (
+    parsingRequests: UnConfigContext['parsingRequests'],
+    requestedBy?: PackageRequester,
+  ): UnConfigContext['requestParsing'] =>
   (language, request) => {
-    parsingRequests.set(language, [...(parsingRequests.get(language) || []), request]);
+    parsingRequests.set(language, [
+      ...(parsingRequests.get(language) || []),
+      requestedBy ? {requestedBy, ...request} : request,
+    ]);
   };

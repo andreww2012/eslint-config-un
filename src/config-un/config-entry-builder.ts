@@ -522,7 +522,7 @@ export class ConfigEntryBuilder<
           configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
         }
       } else {
-        this.context.usedPlugins.add(plugin);
+        this.context.registerUsedPlugin(plugin);
       }
 
       this.setConfigMetadataForRule(configMetadata, {
@@ -901,6 +901,8 @@ export class ConfigEntryBuilder<
               info: {package: 'typescriptEslintParser', property: 'parser'},
             },
           ]);
+
+          this.context.recordPackageRequester('package', 'typescriptEslintParser');
         }
 
         return [config, configForTypeInformation];

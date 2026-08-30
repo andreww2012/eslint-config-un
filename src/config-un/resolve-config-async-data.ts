@@ -27,7 +27,9 @@ import {
   isKeyIn,
   maybeCall,
   objectEntriesUnsafe,
+  objectKeysUnsafe,
   setByPath,
+  styleConfigName,
   stylePackageName,
   stylePluginPrefix,
   styleRuleName,
@@ -37,6 +39,7 @@ import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
 import {
   type EslintConfigUnOptions,
+  type PackageRequester,
   RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
   type UnConfigContext,
 } from './shared';
@@ -65,6 +68,37 @@ const checkIfModuleCorrectlyLoaded = async (
 };
 
 const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
+
+const PACKAGE_REQUESTER_RENDERERS = {
+  config: (configKeys) =>
+    `${configKeys.map(styleConfigName).join(', ')} config${configKeys.length === 1 ? '' : 's'}`,
+  option: (optionNames) =>
+    `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} option${optionNames.length === 1 ? '' : 's'}`,
+  package: (packageNames) => `a dependency of ${packageNames.map(stylePackageName).join(', ')}`,
+} satisfies Record<string, (names: string[]) => string>;
+
+/**
+ * Turns the requesters of a single package into the reason it is needed, such as
+ * "vue, svelte configs"
+ */
+const renderPackageRequesters = (
+  requesters: ReadonlySet<PackageRequester> | undefined,
+  collator: Intl.Collator,
+) => {
+  const requestersByType = Object.groupBy(requesters || [], (requester) =>
+    requester.slice(0, requester.indexOf(':')),
+  );
+
+  const reasons = objectKeysUnsafe(PACKAGE_REQUESTER_RENDERERS).flatMap((requesterType) => {
+    const names = (requestersByType[requesterType] || [])
+      .map((requester) => requester.slice(requesterType.length + 1))
+      .toSorted((nameA, nameB) => collator.compare(nameA, nameB));
+    return names.length > 0 ? PACKAGE_REQUESTER_RENDERERS[requesterType](names) : [];
+  });
+
+  /* v8 ignore next - Everything requested is requested by someone */
+  return reasons.length > 0 ? reasons.join(', ') : styleText('gray', 'Unknown');
+};
 
 interface ResolveConfigAsyncDataOptions {
   usedPluginPrefixes: string[];
@@ -116,7 +150,7 @@ export const resolveConfigAsyncData = async (
       installedVersion?: string;
     }
   >();
-  const packagesToManuallyInstallPluginPrefixes = new Map<string, Set<PluginPrefix>>();
+  const packagesBackingPlugins = new Set<string>();
 
   const configModifyFns: (() => void)[] = [];
   const modifyConfigs = () => {
@@ -139,13 +173,7 @@ export const resolveConfigAsyncData = async (
           const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
           if (packageToInstall) {
             packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
-            packagesToManuallyInstallPluginPrefixes.set(
-              packageToInstall.name,
-              new Set([
-                ...(packagesToManuallyInstallPluginPrefixes.get(packageToInstall.name) || []),
-                pluginPrefix as PluginPrefix,
-              ]),
-            );
+            packagesBackingPlugins.add(packageToInstall.name);
           }
         }
         if (pluginPrefix) {
@@ -212,15 +240,36 @@ export const resolveConfigAsyncData = async (
     ),
   ]);
 
+  const packageRequesters = new Map<string, Set<PackageRequester>>(
+    cacheData
+      ? Object.entries(cacheData.packageRequesters).map(([packageName, requesters]) => [
+          packageName,
+          new Set(requesters),
+        ])
+      : Array.from(context.packageRequesters, ([packageName, requesters]) => [
+          packageName,
+          new Set(requesters),
+        ]),
+  );
+
   // Must be read only after the modules above were loaded: any of them might have failed to
   // resolve a dependency of its own. Nothing is cached when missing packages are found
-  (cacheData ? [] : context.missingPackages).forEach((missingPackage) => {
-    if (!packagesToManuallyInstallOrUpdate.has(missingPackage)) {
-      packagesToManuallyInstallOrUpdate.set(missingPackage, {
-        versionRange: '',
-      });
-    }
-  });
+  (cacheData ? new Map<string, Set<string>>() : context.missingPackages).forEach(
+    (packagesFailedToLoadIt, missingPackage) => {
+      if (!packagesToManuallyInstallOrUpdate.has(missingPackage)) {
+        packagesToManuallyInstallOrUpdate.set(missingPackage, {
+          versionRange: '',
+        });
+      }
+      packageRequesters.set(
+        missingPackage,
+        new Set([
+          ...(packageRequesters.get(missingPackage) || []),
+          ...Array.from(packagesFailedToLoadIt, (packageName) => `package:${packageName}` as const),
+        ]),
+      );
+    },
+  );
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     const collator = new Intl.Collator();
@@ -232,9 +281,7 @@ export const resolveConfigAsyncData = async (
         return;
       }
       const isUpdates = index === 0;
-      const packageTypes = arrayPartition(packages, (item) =>
-        packagesToManuallyInstallPluginPrefixes.has(item.name),
-      )
+      const packageTypes = arrayPartition(packages, (item) => packagesBackingPlugins.has(item.name))
         .map(
           (packagesOfType, i) =>
             packagesOfType.length > 0 &&
@@ -251,19 +298,13 @@ export const resolveConfigAsyncData = async (
 ${renderTable(
   packages
     .toSorted((a, b) => collator.compare(a.name, b.name))
-    .map(({name, versionRange}) => {
-      const pluginPrefixes = packagesToManuallyInstallPluginPrefixes.get(name);
-      return {
-        Name: stylePackageName(name),
-        'Required version range': versionRange
-          ? styleText('green', versionRange)
-          : styleText('gray', 'Unknown'),
-        ...(pluginPrefixes?.size && {
-          [`Plugin prefix${pluginPrefixes.size === 1 ? '' : /* v8 ignore next - No package backs more than one plugin prefix */ 's'}`]:
-            Array.from(pluginPrefixes, stylePluginPrefix).join(', '),
-        }),
-      };
-    }),
+    .map(({name, versionRange}) => ({
+      Name: stylePackageName(name),
+      'Required version range': versionRange
+        ? styleText('green', versionRange)
+        : styleText('gray', 'Unknown'),
+      'Required by': renderPackageRequesters(packageRequesters.get(name), collator),
+    })),
 )}
 Install them with:
 ${styleText('cyan', generateInstallationCommand(packages.map(({name}) => name)))}

@@ -23,7 +23,7 @@ const formatTypescript = (code: string) =>
 
 const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
   rootOptions: {},
-  missingPackages: new Set(),
+  missingPackages: new Map(),
 };
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});

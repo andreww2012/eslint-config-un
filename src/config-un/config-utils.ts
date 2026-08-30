@@ -4,11 +4,26 @@ import type {UnConfigs} from '../configs';
 import {MISC_GROUP_CONFIGS} from '../configs/manifests.gen';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
-import {type LoadablePluginPrefix, type PackageToLoadInfo, packageToLoadSymbol} from '../loaders';
+import {
+  type LoadablePluginPrefix,
+  type PackageToLoadInfo,
+  type PluginPrefix,
+  packageToLoadSymbol,
+  packagesLoaders,
+  parsersLoaders,
+  pluginsLoaders,
+} from '../loaders';
 import type {NonEmptyTuple} from '../types';
-import {arrayify, styleConfigName, stylePackageName, styleText, traverseForEach} from '../utils';
+import {
+  type MaybeArray,
+  arrayify,
+  styleConfigName,
+  stylePackageName,
+  styleText,
+  traverseForEach,
+} from '../utils';
 import type {ConfigEnabledBy, ConfigManifest, PackageToCheck} from './define-config';
-import type {UnConfigContext} from './shared';
+import type {PackageRequester, UnConfigContext} from './shared';
 
 const MISC_GROUP_CONFIGS_SET = new Set<keyof UnConfigs>(MISC_GROUP_CONFIGS);
 
@@ -178,12 +193,54 @@ export function getIsConfigEnabledByManifest(
   });
 }
 
+type ModuleKind = 'package' | 'parser' | 'plugin';
+
+const MODULE_LOADERS: Record<ModuleKind, Record<string, {packageName: string}>> = {
+  package: packagesLoaders,
+  parser: parsersLoaders,
+  plugin: pluginsLoaders,
+};
+
+/**
+ * Remembers why a module might need to be loaded, attributing it to the context it is called on
+ * unless told otherwise.
+ * A module no loader of ours stands behind, such as a plugin provided through `extraPlugins`, has
+ * no package to report, and is therefore not recorded
+ */
+export function recordPackageRequester(
+  this: UnConfigContext,
+  moduleKind: ModuleKind,
+  modulePrefix: string,
+  requesters: MaybeArray<PackageRequester> | undefined = this.packageRequester,
+) {
+  const packageName = MODULE_LOADERS[moduleKind][modulePrefix]?.packageName;
+  const requestersResolved = arrayify(requesters);
+  if (!packageName || requestersResolved.length === 0) {
+    return;
+  }
+
+  this.packageRequesters.set(
+    packageName,
+    new Set([...(this.packageRequesters.get(packageName) || []), ...requestersResolved]),
+  );
+}
+
+export function registerUsedPlugin(
+  this: UnConfigContext,
+  pluginPrefix: PluginPrefix | (string & {}),
+  requesters?: MaybeArray<PackageRequester>,
+) {
+  this.usedPlugins.add(pluginPrefix);
+  this.recordPackageRequester('plugin', pluginPrefix, requesters);
+}
+
 /**
  * Records every package a config entry defers loading of for caching purposes
  */
 export const savePackagesToLoadFromConfig = (
   context: UnConfigContext,
   config: EslintFlatConfigEntry,
+  requesters?: MaybeArray<PackageRequester>,
 ) => {
   traverseForEach(
     config,
@@ -202,6 +259,7 @@ export const savePackagesToLoadFromConfig = (
             info,
           },
         ]);
+        context.recordPackageRequester('package', packageId, requesters);
       });
     },
     {includeSymbols: true},

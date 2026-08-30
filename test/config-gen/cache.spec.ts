@@ -198,6 +198,14 @@ describe('option: `cacheConfigs`', () => {
       expect(cacheFile.configs.map(({name}) => name)).toContain('eslint-config-un/unicorn');
     });
 
+    it('stores what asked for every package that may need to be loaded', async () => {
+      await computeCachedConfig('deMorgan');
+
+      await expect(readCacheFile()).resolves.toHaveProperty('packageRequesters', {
+        'eslint-plugin-de-morgan': ['config:deMorgan'],
+      });
+    });
+
     it('stores the parsers by the names of the configs using them', async () => {
       await computeCachedConfig('svelte');
 

@@ -43,6 +43,8 @@ const CASE_POLICE_PACKAGE = 'eslint-plugin-case-police';
 const VUE_PARSER_PACKAGE = 'vue-eslint-parser';
 const SVELTE_PLUGIN_PACKAGE = 'eslint-plugin-svelte';
 const MERGE_PROCESSORS_PACKAGE = 'eslint-merge-processors';
+const JSON_PLUGIN_PACKAGE = '@eslint/json';
+const IMPORT_INTEGRITY_PACKAGE = 'import-integrity-lint';
 
 describe('a plugin listed in optional peer dependencies is not installed', () => {
   it('reports the package and exits', async () => {
@@ -57,6 +59,54 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain(DE_MORGAN_PACKAGE);
     expect(output).toContain('not installed');
     expect(output).toContain('Plugin that listed in optional peer dependencies was used');
+  });
+
+  it('names the config that asked for the package', async () => {
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).toContain('deMorgan config');
+  });
+
+  it('names every config that asked for the package', async () => {
+    mockUnresolvablePackage(JSON_PLUGIN_PACKAGE);
+
+    await computeEslintConfig({json: true, ava: true});
+
+    expect(stderrOutput()).toContain('ava, json configs');
+  });
+
+  it('names the root option that asked for the package', async () => {
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig(
+      {},
+      {un: {extraConfigs: [{rules: {'de-morgan/no-negated-conjunction': 'error'}}]}},
+    );
+
+    expect(stderrOutput()).toContain('extraConfigs option');
+  });
+
+  it('names every root option that asked for the package', async () => {
+    mockUnresolvablePackage(IMPORT_INTEGRITY_PACKAGE);
+
+    await computeEslintConfig(
+      {},
+      {un: {useImportIntegrity: true, loadPluginsOnDemand: {alwaysLoad: ['import-integrity']}}},
+    );
+
+    expect(stderrOutput()).toContain('loadPluginsOnDemand, useImportIntegrity options');
+  });
+
+  it('names both the configs and the options that asked for the package', async () => {
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan', {
+      un: {extraConfigs: [{rules: {'de-morgan/no-negated-conjunction': 'error'}}]},
+    });
+
+    expect(stderrOutput()).toContain('deMorgan config, extraConfigs option');
   });
 
   it('suggests an installation command for the required and the minimal version', async () => {
@@ -83,6 +133,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain('Package that listed in optional peer dependencies was used');
     expect(output).toContain('Unknown');
     expect(output).toContain(`${MISSING_DEPENDENCY}@latest`);
+    expect(output).toContain(`a dependency of ${SVELTE_PLUGIN_PACKAGE}`);
   });
 
   it('additionally reports a dependency a lazily loaded plugin failed to load', async () => {
@@ -169,10 +220,10 @@ describe('an installed plugin does not satisfy the supported version range', () 
     expect(output).toContain(DE_MORGAN_PACKAGE);
   });
 
-  it('names the plugin prefix the package is used by', async () => {
+  it('names the config that asked for the package', async () => {
     await computeEslintConfig('deMorgan');
 
-    expect(stderrOutput()).toContain('de-morgan');
+    expect(stderrOutput()).toContain('deMorgan config');
   });
 
   it('prints nothing when the internal `disableWarnings` option is set', async () => {

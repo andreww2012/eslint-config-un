@@ -5,7 +5,7 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
-import type {UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
+import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
@@ -39,6 +39,7 @@ import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '..
 import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
+import type {recordPackageRequester, registerUsedPlugin} from './config-utils';
 import type {ImportPluginReplaceableRules} from './import-integrity';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 
@@ -165,6 +166,16 @@ type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 
 export const ENVIRONMENTS = ['ci', 'editor', 'default'] as const;
 export type Environment = (typeof ENVIRONMENTS)[number];
+
+/**
+ * Why a package might need to be loaded: a Config asked for it, a root option did, or another
+ * package tried to load it as a dependency of its own.
+ * Serialized so that the requesters can be deduplicated and stored in the cache as is
+ */
+export type PackageRequester =
+  | `config:${ConfigKey}`
+  | `option:${Extract<keyof EslintConfigUnOptions, string>}`
+  | `package:${string}`;
 
 export interface EslintConfigUnOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -763,6 +774,32 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   usedPlugins: Set<PluginPrefix | (string & {})>;
 
   /**
+   * Maps a package name to everything that asked for it, so that a package which cannot be loaded
+   * is reported together with the reasons it was needed.
+   *
+   * NOTE: mutable
+   */
+  packageRequesters: Map<string, Set<PackageRequester>>;
+
+  /**
+   * Whatever the packages requested through this context are attributed to.
+   * Absent on the root context every Config's own context is derived from
+   */
+  packageRequester?: PackageRequester;
+
+  /**
+   * Marks a plugin as used, which is also what makes it loaded, and remembers what asked for it
+   */
+  registerUsedPlugin: typeof registerUsedPlugin;
+
+  /**
+   * The same, for a module that is not a plugin.
+   * Only needed where the module is marked as used by hand, since the doors leading to that, such
+   * as `requestParsing` or `addConfig`, record the requester on their own
+   */
+  recordPackageRequester: typeof recordPackageRequester;
+
+  /**
    * NOTE: mutable
    */
   usedParsers: Map<ParserPrefix, EslintFlatConfigEntry[]>;
@@ -794,9 +831,11 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   >;
 
   /**
+   * Maps a package some module failed to import to the packages of the modules that tried to.
+   *
    * NOTE: mutable
    */
-  missingPackages: Set<string>;
+  missingPackages: Map<string, Set<string>>;
 
   meta: {
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
@@ -847,7 +886,7 @@ export const processUnOrFlatConfig = (
   const removedRules: string[] = [];
 
   if (config.language) {
-    context.usedPlugins.add(
+    context.registerUsedPlugin(
       getRuleNameAndPluginPrefixByFullName(context, config.language).pluginPrefixCanonical,
     );
   }
@@ -927,7 +966,7 @@ export const processUnOrFlatConfig = (
       }
 
       if (ruleSeverity !== OFF) {
-        context.usedPlugins.add(pluginPrefixCanonical);
+        context.registerUsedPlugin(pluginPrefixCanonical);
 
         if (disableAutofix) {
           context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [

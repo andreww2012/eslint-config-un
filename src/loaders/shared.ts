@@ -84,7 +84,10 @@ function createModuleLoader<T, N extends string>(
           // the package is actually needed
           !(missingPackageName === packageName || missingPackageName.startsWith(`${packageName}/`))
         ) {
-          context.missingPackages.add(missingPackageName);
+          context.missingPackages.set(
+            missingPackageName,
+            new Set([...(context.missingPackages.get(missingPackageName) || []), packageName]),
+          );
         }
       }
 
