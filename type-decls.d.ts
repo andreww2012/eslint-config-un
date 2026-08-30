@@ -40,12 +40,6 @@ declare module 'eslint-plugin-es-x' {
   export = value;
 }
 
-declare module 'eslint-plugin-html' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  declare const value: EslintPlugin;
-  export = value;
-}
-
 declare module 'eslint-plugin-ava' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   declare const value: EslintPlugin;
