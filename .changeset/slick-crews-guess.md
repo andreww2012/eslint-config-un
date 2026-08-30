@@ -2,7 +2,7 @@
 'eslint-config-un': patch
 ---
 
-unicorn: updated [`eslint-plugin-unicorn` from v72.0.0 to v73.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v72.0.0...v73.0.0):
+unicorn: updated [`eslint-plugin-unicorn` from v72.0.0 to v74.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v72.0.0...v74.0.0):
 
 - 🔴 not enabled [`unicorn/consistent-arrow-return-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-arrow-return-style.md) rule, but added it to the `noStylisticRules` config
 - 🔴 not enabled [`unicorn/iteration-fallback-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/iteration-fallback-style.md) rule, but added it to the `noStylisticRules` config

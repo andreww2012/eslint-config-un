@@ -11,6 +11,7 @@ const UNICORN_LANGUAGES_TO_CATEGORIES = {
   'json/json5': 'json',
   'markdown/commonmark': 'markdown',
   'markdown/gfm': 'markdown',
+  'yml/yaml': 'yaml',
 } as const;
 
 const categorizeUnicornRule: CategorizeRule<
