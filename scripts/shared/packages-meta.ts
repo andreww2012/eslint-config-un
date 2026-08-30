@@ -74,7 +74,7 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
     },
     awscdk: {
       configs: ['awsCdk'],
-      gitTag: (version) => `eslint-plugin-awscdk${version}`,
+      gitTag: (version) => `eslint-plugin-awscdk@${version}`,
       pluginDocsUrl: 'https://awscdk-lint.dev',
       ruleDocsUrl: (ruleName) => `https://awscdk-lint.dev/rules/${ruleName}.html`,
     },
