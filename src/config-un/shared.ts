@@ -815,6 +815,14 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
     ]
   >[];
   createConfigBuilder: typeof createConfigBuilder;
+
+  /**
+   * Every config builder created through this context, in creation order, which is also the order
+   * they are emitted in
+   *
+   * NOTE: mutable
+   */
+  configBuilders?: ConfigEntryBuilder<ExtraPlugins>[];
 }
 
 export const intersectParentConfigFilesWithProvidedFiles = (

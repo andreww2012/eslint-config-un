@@ -63,33 +63,24 @@ export default defineUnConfig<JsonEslintConfigOptions>(
   // Legend:
   // 🔴 - NOT in `recommended`
 
-  const configBuilders = objectEntriesUnsafe(JSON_SUB_CONFIGS_FILES).map(
-    ([languageName, filesDefault]) => {
-      const configBuilder = context.createConfigBuilder(optionsPerLanguage[languageName], 'json');
+  objectEntriesUnsafe(JSON_SUB_CONFIGS_FILES).forEach(([languageName, filesDefault]) => {
+    const configBuilder = context.createConfigBuilder(optionsPerLanguage[languageName], 'json');
 
-      configBuilder
-        ?.addConfig([
-          `json/${languageName}`,
-          {
-            filesDefault,
-            parseWith: ['json', languageName],
-          },
-        ])
-        .addRule('no-duplicate-keys', ERROR) /** @since 0.1.0 */
-        .addRule('no-empty-keys', ERROR) /** @since 0.1.0 */
-        .addRule('no-unnormalized-keys', ERROR) /** @since 0.8.0 */
-        .addRule('no-unsafe-values', ERROR) /** @since 0.7.0 */
-        .addRule('sort-keys', OFF) /** @since 0.10.0 */ // 🔴
-        .addRule('top-level-interop', OFF) /** @since 0.9.0 */ // 🔴
-        .enableConfigTesterForPlugin('json')
-        .addOverrides();
-
-      return configBuilder;
-    },
-  );
-
-  return {
-    configs: configBuilders,
-    optionsResolved,
-  };
+    configBuilder
+      ?.addConfig([
+        `json/${languageName}`,
+        {
+          filesDefault,
+          parseWith: ['json', languageName],
+        },
+      ])
+      .addRule('no-duplicate-keys', ERROR) /** @since 0.1.0 */
+      .addRule('no-empty-keys', ERROR) /** @since 0.1.0 */
+      .addRule('no-unnormalized-keys', ERROR) /** @since 0.8.0 */
+      .addRule('no-unsafe-values', ERROR) /** @since 0.7.0 */
+      .addRule('sort-keys', OFF) /** @since 0.10.0 */ // 🔴
+      .addRule('top-level-interop', OFF) /** @since 0.9.0 */ // 🔴
+      .enableConfigTesterForPlugin('json')
+      .addOverrides();
+  });
 });

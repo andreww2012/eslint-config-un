@@ -135,9 +135,4 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('style-prop', WARNING) /** @since 0.1.0 */ // 🟡
     .enableConfigTesterForPlugin('solid')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -33,9 +33,4 @@ export default defineUnConfig<ModuleInteropEslintConfigOptions>(
     .addRule('prefer-json-modules', ERROR) /** @since 0.3.0 */ // 🟢
     .enableConfigTesterForPlugin('module-interop')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

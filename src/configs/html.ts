@@ -182,9 +182,4 @@ export default defineUnConfig<HtmlEslintConfigOptions>('html', {
     .addRule('sort-attrs', OFF) /** @since 0.21.0 */ // TODO find and enforce a good sorting order?
     .enableConfigTesterForPlugin('html')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -415,7 +415,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     .enableConfigTesterForPlugin('perfectionist')
     .addOverrides();
 
-  const subConfigs = (
+  (
     [
       ['sort-array-includes', configSortArrayIncludes],
       ['sort-arrays', configSortArrays],
@@ -441,7 +441,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
       ['sort-union-types', configSortUnionTypes],
       ['sort-variable-declarations', configSortVariableDeclarations],
     ] as const
-  ).map(([ruleName, ruleSubConfig]) => {
+  ).forEach(([ruleName, ruleSubConfig]) => {
     const configBuilderForRule = context.createConfigBuilder(ruleSubConfig, 'perfectionist');
     configBuilderForRule
       ?.addConfig(`perfectionist/${ruleName}`)
@@ -452,11 +452,5 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
         typeof ruleSubConfig === 'object' && ruleSubConfig.options ? [ruleSubConfig.options] : [],
       )
       .addOverrides();
-    return configBuilderForRule;
   });
-
-  return {
-    configs: [configBuilder, ...subConfigs],
-    optionsResolved,
-  };
 });

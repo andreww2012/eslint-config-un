@@ -32,9 +32,4 @@ export default defineUnConfig<ArrowReturnStyleEslintConfigOptions>(
     .addRule('no-export-default-arrow', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('arrow-return-style')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -31,9 +31,4 @@ export default defineUnConfig<TanstackStartEslintConfigOptions>('tanstackStart',
     .addRule('no-client-code-in-server-component', ERROR) /** @since 0.0.0 */ // 🟢
     .enableConfigTesterForPlugin('tanstack-start')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

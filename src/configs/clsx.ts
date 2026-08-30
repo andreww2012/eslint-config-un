@@ -66,9 +66,4 @@ export default defineUnConfig<ClsxEslintConfigOptions>('clsx', {enabledBy: {pack
     .addRule('prefer-objects-over-logical', WARNING) /** @since 0.0.1 */
     .enableConfigTesterForPlugin('clsx')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -1,7 +1,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_PACKAGE_JSON, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -137,13 +137,9 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
     })
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'ava',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: configFilesFallback},
-  );
+  generateConfigNoOnlyTests(context, 'ava', configNoOnlyTests, optionsResolved, {
+    filesDefault: configFilesFallback,
+  });
 
   const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'ava');
   configBuilderPackageJson
@@ -160,9 +156,4 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
       rulesToSkipInConfig: (ruleName) => ruleName !== 'no-ava-in-dependencies',
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderNoOnlyTests, configBuilderPackageJson],
-    optionsResolved,
-  };
 });

@@ -34,9 +34,4 @@ export default defineUnConfig<ExpoEslintConfigOptions>('expo', {
     .addRule('use-dom-exports', ERROR) /** @since 0.2.0-canary-20250722-599a28f */
     .enableConfigTesterForPlugin('expo')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -37,9 +37,4 @@ export default defineUnConfig<PreferArrowFunctionsEslintConfigOptions>(
     .addRule('prefer-arrow-functions', WARNING) /** @since 3.0.0 */
     .enableConfigTesterForPlugin('prefer-arrow-functions')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

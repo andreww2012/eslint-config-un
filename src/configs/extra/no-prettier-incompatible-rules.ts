@@ -467,11 +467,6 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
         ),
     )
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });
 
 /* eslint-enable perfectionist/sort-objects */

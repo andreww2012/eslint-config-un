@@ -39,9 +39,4 @@ export default defineUnConfig<DocusaurusEslintConfigOptions>('docusaurus', {
     .addRule('string-literal-i18n-messages', ERROR) /** @since 0.0.0-4925 */ // 🟢
     .enableConfigTesterForPlugin('docusaurus')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

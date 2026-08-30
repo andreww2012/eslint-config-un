@@ -65,9 +65,4 @@ export default defineUnConfig<QwikEslintConfigOptions>('qwik', {
     .addRule('valid-lexical-scope', ERROR) /** @since 0.0.26 */ // 🟢🟣
     .enableConfigTesterForPlugin('qwik')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

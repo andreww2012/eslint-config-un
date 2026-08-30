@@ -6,7 +6,7 @@ import {allUnionMembers} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
@@ -253,7 +253,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   context.usedPlugins.add('vitest');
   /* v8 ignore start */
   if (!eslintPluginVitest) {
-    return null;
+    return;
   }
   /* v8 ignore stop */
 
@@ -539,16 +539,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     })
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'vitest',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: defaultVitestFiles},
-  );
-
-  return {
-    configs: [configBuilder, configBuilderTypescript, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
+  generateConfigNoOnlyTests(context, 'vitest', configNoOnlyTests, optionsResolved, {
+    filesDefault: defaultVitestFiles,
+  });
 });

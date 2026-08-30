@@ -50,9 +50,4 @@ export default defineUnConfig<TreeShakingEslintConfigOptions>(
     ) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('tree-shaking')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

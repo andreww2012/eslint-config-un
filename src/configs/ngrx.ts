@@ -69,9 +69,4 @@ export default defineUnConfig<NgrxEslintConfigOptions>('ngrx', {
     .addRule('use-consistent-global-store-name', ERROR) /** @since 14.0.0 */
     .enableConfigTesterForPlugin('ngrx')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

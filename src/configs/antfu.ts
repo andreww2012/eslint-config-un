@@ -48,9 +48,4 @@ export default defineUnConfig<AntfuEslintConfigOptions>(
     .addRule('top-level-function', OFF) /** @since 0.38.0 */
     .enableConfigTesterForPlugin('antfu')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

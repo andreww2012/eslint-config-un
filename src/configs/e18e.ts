@@ -174,13 +174,4 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
       })
       .addOverrides();
   }
-
-  return {
-    configs: [
-      configBuilderModernization,
-      configBuilderModuleReplacements,
-      configBuilderPerformanceImprovements,
-    ],
-    optionsResolved,
-  };
 });

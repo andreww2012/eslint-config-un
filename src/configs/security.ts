@@ -52,9 +52,4 @@ export default defineUnConfig<SecurityEslintConfigOptions>('security', {
     .addRule('detect-unsafe-regex', OFF) /** @since 1.0.0 */ // 🟡
     .enableConfigTesterForPlugin('security')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

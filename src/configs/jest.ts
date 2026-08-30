@@ -6,7 +6,7 @@ import type {ObjectValues, Prettify} from '../types';
 import {allUnionMembers} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
@@ -437,13 +437,9 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
       })
       .addOverrides();
 
-    const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-      context,
-      'jest',
-      configNoOnlyTests,
-      optionsResolved,
-      {filesDefault: defaultJestFiles},
-    );
+    generateConfigNoOnlyTests(context, 'jest', configNoOnlyTests, optionsResolved, {
+      filesDefault: defaultJestFiles,
+    });
 
     const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'jest');
     configBuilderTypescript
@@ -522,15 +518,5 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
 
     // TODO https://npmx.dev/eslint-plugin-jest-dom ?
     // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
-
-    return {
-      configs: [
-        configBuilder,
-        configBuilderNoOnlyTests,
-        configBuilderTypescript,
-        configBuilderJestExtended,
-      ],
-      optionsResolved,
-    };
   },
 );

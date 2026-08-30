@@ -3,7 +3,7 @@ import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {arrayIncludes} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -402,16 +402,11 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     })
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+  generateConfigNoOnlyTests(
     context,
     'ember',
     (typeof configTestFiles === 'object' ? configTestFiles.configNoOnlyTests : null) ?? true,
     configTestFiles,
     {filesDefault: configTestsFilesFallback},
   );
-
-  return {
-    configs: [configBuilder, configBuilderTests, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
 });

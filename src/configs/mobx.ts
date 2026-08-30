@@ -37,9 +37,4 @@ export default defineUnConfig<MobxEslintConfigOptions>('mobx', {enabledBy: {pack
       rulesToSkipInConfig: ['no-anonymous-observer'], // Deprecated, but not marked as such in the meta
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

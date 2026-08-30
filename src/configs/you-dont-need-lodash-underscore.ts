@@ -293,9 +293,4 @@ export default defineUnConfig<YouDontNeedLodashUnderscoreEslintConfigOptions>(
     .addRule(...getRuleSeverity('values')) /** @since 6.1.0 */
     .enableConfigTesterForPlugin('you-dont-need-lodash-underscore')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

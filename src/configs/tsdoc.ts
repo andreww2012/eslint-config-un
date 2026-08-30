@@ -33,9 +33,4 @@ export default defineUnConfig<TsdocEslintConfigOptions>(
     .addRule('syntax', ERROR) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('tsdoc')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

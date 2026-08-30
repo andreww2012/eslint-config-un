@@ -67,9 +67,4 @@ export default defineUnConfig<NestJsEslintConfigOptions>('nestJs', {
     .addRule('use-correct-endpoint-naming-convention', OFF) /** @since 6.11.0 */ // 🔴
     .enableConfigTesterForPlugin('nestjs')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

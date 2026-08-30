@@ -701,11 +701,6 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
         prefixFinal === 'astro' && !ruleName.startsWith('astro/jsx-a11y/'),
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 };
 
 export default defineUnConfig<JsxA11yEslintConfigOptions>(

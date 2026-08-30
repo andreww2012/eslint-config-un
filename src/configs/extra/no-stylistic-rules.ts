@@ -1210,11 +1210,6 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
           .filter((v) => v != null),
       );
   }
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });
 
 /* eslint-enable perfectionist/sort-objects */

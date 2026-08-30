@@ -362,8 +362,6 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
     ]);
 
   return {
-    configs: [configBuilder],
-    optionsResolved,
     finalFlatConfigRules: config?.config.rules || {},
   };
 });

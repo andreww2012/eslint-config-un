@@ -74,9 +74,4 @@ export default defineUnConfig<FileProgressEslintConfigOptions>(
     .addRule('activate', ERROR) /** @since 1.0.0 */ // 🟢
     .enableConfigTesterForPlugin('file-progress')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

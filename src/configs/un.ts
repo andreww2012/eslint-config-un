@@ -32,9 +32,4 @@ export default defineUnConfig<UnEslintConfigOptions>(
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('un')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

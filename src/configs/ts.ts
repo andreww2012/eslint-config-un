@@ -1262,6 +1262,22 @@ export default defineUnConfig<
     })
     .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry);
 
+  const configBuilderDisableNoUnsafe = context.createConfigBuilder(configDisableNoUnsafe, 'ts');
+  configBuilderDisableNoUnsafe
+    ?.addConfig('ts/disable-no-unsafe')
+    .addRule('no-unsafe-argument', OFF)
+    .addRule('no-unsafe-assignment', OFF)
+    .addRule('no-unsafe-call', OFF)
+    .addRule('no-unsafe-enum-comparison', OFF)
+    .addRule('no-unsafe-member-access', OFF)
+    .addRule('no-unsafe-return', OFF)
+    .addRule('no-unsafe-type-assertion', OFF)
+    .enableConfigTesterForPlugin('ts', {
+      /* v8 ignore next */
+      rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_NO_UNSAFE_RULES_SET.has(ruleName),
+    })
+    .addOverrides();
+
   const configBuilderDts = context.createConfigBuilder({}, 'ts');
   configBuilderDts
     ?.addConfig(['ts/dts', {applyUserFilesAndIgnores: false}], {
@@ -1283,22 +1299,6 @@ export default defineUnConfig<
     .disableAnyRule('', 'no-duplicate-imports')
     // Allow `export {}` to be present to ensure the file is a module
     .disableAnyRule('unicorn', 'require-module-specifiers');
-
-  const configBuilderDisableNoUnsafe = context.createConfigBuilder(configDisableNoUnsafe, 'ts');
-  configBuilderDisableNoUnsafe
-    ?.addConfig('ts/disable-no-unsafe')
-    .addRule('no-unsafe-argument', OFF)
-    .addRule('no-unsafe-assignment', OFF)
-    .addRule('no-unsafe-call', OFF)
-    .addRule('no-unsafe-enum-comparison', OFF)
-    .addRule('no-unsafe-member-access', OFF)
-    .addRule('no-unsafe-return', OFF)
-    .addRule('no-unsafe-type-assertion', OFF)
-    .enableConfigTesterForPlugin('ts', {
-      /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_NO_UNSAFE_RULES_SET.has(ruleName),
-    })
-    .addOverrides();
 
   const configBuilderNoTypeAssertions = context.createConfigBuilder(
     configNoTypeAssertion,
@@ -1380,17 +1380,6 @@ export default defineUnConfig<
   }
 
   return {
-    configs: [
-      configBuilderNONTypeAware,
-
-      configBuilderTypeAware,
-      configBuilderDisableNoUnsafe,
-
-      configBuilderDts,
-      configBuilderNoTypeAssertions,
-      configBuilderSortTsconfigKeys,
-    ],
-    optionsResolved,
     filesTypeAware,
     ignoresTypeAware,
   };

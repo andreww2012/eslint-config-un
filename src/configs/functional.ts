@@ -118,9 +118,4 @@ export default defineUnConfig<FunctionalEslintConfigOptions>(
     .addRule('type-declaration-immutability', ERROR) /** @since 4.4.0-beta.1 */ // 🟢🪶💭 📋 noMutations
     .enableConfigTesterForPlugin('functional')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

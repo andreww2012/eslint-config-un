@@ -119,9 +119,4 @@ export default defineUnConfig<TomlEslintConfigOptions>('toml', {enabledBy: {grou
     .addRule('table-bracket-spacing', ERROR) /** @since 0.1.0 */ // 🟣
     .enableConfigTesterForPlugin('toml')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

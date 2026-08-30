@@ -45,20 +45,20 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const configs = (
+  (
     [
       [1, optionsResolved.configV1 || {}],
       [2, optionsResolved],
     ] satisfies [1 | 2, UnFlatConfigEntryBase][]
-  ).flatMap(([runtimeVersion, options]) => {
+  ).forEach(([runtimeVersion, options]) => {
     const isV2 = runtimeVersion === 2;
 
     const {files, ignores} = options;
     if (!files?.length && !ignores?.length) {
-      return [];
+      return;
     }
 
-    const configsEs = buildEsConfigs(context, undefined, {
+    buildEsConfigs(context, undefined, {
       prefix: `cloudfront-functions/v${runtimeVersion}/es-features`,
       options: {
         files,
@@ -155,7 +155,7 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
           },
         },
       },
-    }).configs;
+    });
 
     const allowedImports = getAllowedImports(isV2);
 
@@ -236,12 +236,5 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
         },
       ])
       .addOverrides();
-
-    return [...configsEs, configBuilder];
   });
-
-  return {
-    configs,
-    optionsResolved,
-  };
 });

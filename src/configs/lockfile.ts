@@ -284,9 +284,4 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       rulesToSkipInConfig: (ruleName) => !LOCKFILE_RULES_FOR_PACKAGE_JSON_SET.has(ruleName),
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderPackageJson],
-    optionsResolved,
-  };
 });

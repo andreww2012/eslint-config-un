@@ -189,9 +189,4 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
     .addRule('no-unnamed-entry-point-exports', ERROR) /** @since 1.0.0 */ // 🟢
     .enableConfigTesterForPlugin('import-integrity')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

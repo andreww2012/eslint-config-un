@@ -39,9 +39,4 @@ export default defineUnConfig<NoRelativeImportPathsEslintConfigOptions>(
     .addRule('no-relative-import-paths', ERROR, options ? [options] : []) /** @since 1.0.3 */
     .enableConfigTesterForPlugin('no-relative-import-paths')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

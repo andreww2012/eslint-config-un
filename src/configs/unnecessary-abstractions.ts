@@ -31,9 +31,4 @@ export default defineUnConfig<UnnecessaryAbstractionsEslintConfigOptions>(
     .addRule('no-ternary-wrappers', ERROR) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('unnecessary-abstractions')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

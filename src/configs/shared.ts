@@ -154,7 +154,7 @@ export interface NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins extends Extr
   configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;
 }
 
-export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPluginsType>(
+export const generateConfigNoOnlyTests = <ExtraPlugins extends ExtraPluginsType>(
   context: UnConfigContext<ExtraPlugins>,
   prefix: string,
   configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>['configNoOnlyTests'] & {},
@@ -183,7 +183,6 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
     ])
     .addRule('no-only-tests', ERROR)
     .addOverrides();
-  return configBuilderNoOnlyTests;
 };
 
 export const generateConsistentTestItOptions = ({

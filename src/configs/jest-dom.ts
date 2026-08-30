@@ -54,9 +54,4 @@ export default defineUnConfig<JestDomEslintConfigOptions>('jestDom', {
     .addRule('prefer-to-have-value', ERROR) /** @since 3.5.0 */ // 🟢
     .enableConfigTesterForPlugin('jest-dom')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -392,9 +392,4 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     ])
     .disableAnyRule('import', 'no-default-export')
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderAllowDefaultExport],
-    optionsResolved,
-  };
 });

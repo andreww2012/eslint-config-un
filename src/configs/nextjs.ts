@@ -82,9 +82,4 @@ export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {
     .addRule('no-unwanted-polyfillio', ERROR) /** @since 9.4.5-canary.38 */ // 🟡
     .enableConfigTesterForPlugin('nextjs')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

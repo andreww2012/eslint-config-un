@@ -119,9 +119,4 @@ export default defineUnConfig<HeadersEslintConfigOptions>(
     .addRule('header-format', ERROR, options ? [options] : []) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('headers')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

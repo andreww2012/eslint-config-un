@@ -55,9 +55,4 @@ export default defineUnConfig<ErasableSyntaxOnlyEslintConfigOptions>(
     ) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('erasable-syntax-only')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

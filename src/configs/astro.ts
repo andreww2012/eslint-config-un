@@ -127,25 +127,19 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
     })
     .addOverrides();
 
-  return {
-    configs: [
-      configBuilder,
+  if (configJsxA11y !== false) {
+    const {buildJsxA11yConfigs} = await import('./jsx-a11y');
+    buildJsxA11yConfigs(context, undefined, {
+      prefix: 'astro',
+      options: {
+        files: parentConfigFiles,
+        ignores: parentConfigIgnores,
+        ...(typeof configJsxA11y === 'object' && configJsxA11y),
+      },
+    });
+  }
 
-      ...(configJsxA11y === false
-        ? []
-        : await (async () => {
-            const {buildJsxA11yConfigs} = await import('./jsx-a11y');
-            const result = buildJsxA11yConfigs(context, undefined, {
-              prefix: 'astro',
-              options: {
-                files: parentConfigFiles,
-                ignores: parentConfigIgnores,
-                ...(typeof configJsxA11y === 'object' && configJsxA11y),
-              },
-            });
-            return result.configs;
-          })()),
-    ],
+  return {
     optionsResolved,
   };
 });

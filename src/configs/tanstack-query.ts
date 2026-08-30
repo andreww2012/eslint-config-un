@@ -42,9 +42,4 @@ export default defineUnConfig<TanstackQueryEslintConfigOptions>('tanstackQuery',
     .addRule('stable-query-client', ERROR) /** @since 4.36.0 */ // 🟢
     .enableConfigTesterForPlugin('tanstack-query')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

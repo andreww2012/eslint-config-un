@@ -34,9 +34,4 @@ export default defineUnConfig<BarrelFilesEslintConfigOptions>(
     .addRule('avoid-re-export-all', ERROR) /** @since 2.0.0 */
     .enableConfigTesterForPlugin('barrel-files')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

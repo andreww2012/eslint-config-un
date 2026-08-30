@@ -52,9 +52,4 @@ export default defineUnConfig<AwsCdkEslintConfigOptions>('awsCdk', {
     .addRule('require-props-default-doc', OFF) /** @since 4.0.0 */ // 🔴
     .enableConfigTesterForPlugin('awscdk')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

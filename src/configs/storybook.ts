@@ -69,9 +69,4 @@ export default defineUnConfig<StorybookEslintConfigOptions>('storybook', {
       files: [`.storybook/main.${GLOB_JS_TS_EXTENSION}`],
     })
     .addRule('no-uninstalled-addons', ERROR); // 🟢
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -144,27 +144,18 @@ export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {packag
     .enableConfigTesterForPlugin('lit')
     .addOverrides();
 
-  return {
-    configs: [
-      configBuilder,
-      ...(configA11y === false
-        ? []
-        : await (async () => {
-            const {buildJsxA11yConfigs} = await import('./jsx-a11y');
-            const options = typeof configA11y === 'object' ? configA11y : {};
-            const result = buildJsxA11yConfigs(context, undefined, {
-              prefix: 'lit',
-              options: {
-                files: parentConfigFiles,
-                ignores: parentConfigIgnores,
-                ...options,
-                // `settings` type is different, but doesn't matter here
-                settings: options.settings as JsxA11yEslintConfigOptions['settings'],
-              },
-            });
-            return result.configs;
-          })()),
-    ],
-    optionsResolved,
-  };
+  if (configA11y !== false) {
+    const {buildJsxA11yConfigs} = await import('./jsx-a11y');
+    const options = typeof configA11y === 'object' ? configA11y : {};
+    buildJsxA11yConfigs(context, undefined, {
+      prefix: 'lit',
+      options: {
+        files: parentConfigFiles,
+        ignores: parentConfigIgnores,
+        ...options,
+        // `settings` type is different, but doesn't matter here
+        settings: options.settings as JsxA11yEslintConfigOptions['settings'],
+      },
+    });
+  }
 });

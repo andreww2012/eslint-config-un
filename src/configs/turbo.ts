@@ -44,9 +44,4 @@ export default defineUnConfig<TurboEslintConfigOptions>('turbo', {enabledBy: {pa
     ) /** @since 0.0.1 */
     .enableConfigTesterForPlugin('turbo')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -262,9 +262,4 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
     .addRule('no-unknown-classes', OFF) /** @since 3.0.0 */ /** @aka no-unregistered-classes */ // 🟢
     .enableConfigTesterForPlugin('better-tailwindcss')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

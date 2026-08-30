@@ -67,9 +67,4 @@ export default defineUnConfig<RemedaEslintConfigOptions>('remeda', {
     .addRule('prefer-times', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('remeda')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

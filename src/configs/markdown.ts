@@ -421,14 +421,4 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
       .enableConfigTesterForPlugin('sentences-per-line')
       .addOverrides();
   }
-
-  return {
-    configs: [
-      configBuilder,
-      configBuilderCodeBlocks,
-      configFormatFencedCodeBlocksBuilder,
-      configBuilderSentencesPerLine,
-    ],
-    optionsResolved,
-  };
 });

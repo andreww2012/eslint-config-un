@@ -75,9 +75,4 @@ export default defineUnConfig<MathEslintConfigOptions>(
     .addRule('prefer-number-min-value', ERROR) /** @since 0.7.0 */ // 🟢
     .enableConfigTesterForPlugin('math')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

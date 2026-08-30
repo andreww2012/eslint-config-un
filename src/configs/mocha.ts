@@ -2,7 +2,7 @@ import globals from 'globals';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -158,16 +158,7 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
     .enableConfigTesterForPlugin('mocha')
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'mocha',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: configFilesFallback},
-  );
-
-  return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
+  generateConfigNoOnlyTests(context, 'mocha', configNoOnlyTests, optionsResolved, {
+    filesDefault: configFilesFallback,
+  });
 });

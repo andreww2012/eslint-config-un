@@ -165,9 +165,4 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
       /* v8 ignore stop */
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilderPackageJson, configBuilderPnpmWorkspace],
-    optionsResolved,
-  };
 });

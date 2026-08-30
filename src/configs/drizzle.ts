@@ -54,9 +54,4 @@ export default defineUnConfig<DrizzleEslintConfigOptions>('drizzle', {
     ) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('drizzle')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

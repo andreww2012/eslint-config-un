@@ -66,9 +66,4 @@ export default defineUnConfig<NxEslintConfigOptions>('nx', {enabledBy: {package:
     .addRule('nx-plugin-checks', ERROR) /** @since 16.0.0 */
     .enableConfigTesterForPlugin('nx')
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderJson],
-    optionsResolved,
-  };
 });

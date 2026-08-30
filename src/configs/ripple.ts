@@ -50,9 +50,4 @@ export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
     .addRule('valid-for-of-key', ERROR) /** @since 0.3.25 */
     .enableConfigTesterForPlugin('ripple')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

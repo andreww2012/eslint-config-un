@@ -55,7 +55,7 @@ import {
 } from './cache';
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless} from './config-utils';
-import {CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
+import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import type {ImportIntegrityPluginSettings} from './import-integrity';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
@@ -90,12 +90,14 @@ export function createConfigBuilder<
   ) {
     return null;
   }
-  return new ConfigEntryBuilder<ExtraPlugins, P>(
+  const configBuilder = new ConfigEntryBuilder<ExtraPlugins, P>(
     rulesPrefix,
     // eslint-disable-next-line ts/no-unnecessary-condition
     options && typeof options === 'object' ? options : {},
     this,
   );
+  this.configBuilders?.push(configBuilder);
+  return configBuilder;
 }
 
 const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
@@ -412,34 +414,50 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     vue: null,
   };
 
+  /**
+   * Runs a Config's `setup` on a context that records every config builder created through it, in
+   * creation order, which is the order they are emitted in.
+   * The recorder lives on its own context so that the Configs can be resolved concurrently
+   */
+  const runConfigSetup = async (
+    manifest: AnyConfigManifest,
+    configOptions: Parameters<AnyConfigManifest['setup']>[1],
+  ) => {
+    const configBuilders: ConfigEntryBuilder<ExtraPlugins>[] = [];
+    const result = await manifest.setup({...context, configBuilders}, configOptions, configResults);
+    return {result, configBuilders};
+  };
+
   const setupManifestConfig = async (configKey: ManifestConfigKey) => {
     const manifest = CONFIG_MANIFESTS[configKey];
     /* v8 ignore next 3 -- every manifest key comes from the generated table */
     if (!manifest) {
-      return null;
+      return [];
     }
     if (!context.configsMeta[configKey].enabled) {
-      return null;
+      return [];
     }
 
     const {default: manifestWithSetup} = await manifest.load();
     const configOptions = context.rootOptions.configs?.[configKey];
-    const result = Array.isArray(configOptions)
-      ? await Promise.all(
-          // eslint-disable-next-line ts/await-thenable -- a `setup` may well be synchronous
-          configOptions.map((configOptionsItem, configIndex) =>
-            manifestWithSetup.setup(
-              context,
-              {...configOptionsItem, [configIndexProperty]: configIndex},
-              configResults,
-            ),
-          ),
-        )
-      : await manifestWithSetup.setup(context, configOptions, configResults);
-    if (configKey in configResults && !Array.isArray(result)) {
+
+    if (Array.isArray(configOptions)) {
+      const setupResults = await Promise.all(
+        configOptions.map((configOptionsItem, configIndex) =>
+          runConfigSetup(manifestWithSetup, {
+            ...configOptionsItem,
+            [configIndexProperty]: configIndex,
+          }),
+        ),
+      );
+      return setupResults.flatMap(({configBuilders}) => configBuilders);
+    }
+
+    const {result, configBuilders} = await runConfigSetup(manifestWithSetup, configOptions);
+    if (configKey in configResults) {
       Object.assign(configResults, {[configKey]: result});
     }
-    return result;
+    return configBuilders;
   };
 
   const configSetups = new Map<ManifestConfigKey, ReturnType<typeof setupManifestConfig>>();
@@ -480,9 +498,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   ];
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
-  type ConfigUnresolved =
-    | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy>
-    | MaybeArray<{configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]} | null>;
+  type ConfigUnresolved = MaybeArray<
+    EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy
+  >;
 
   const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<ConfigUnresolved>[]> = {
     globalSetup: [
@@ -625,11 +643,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     // every Config has declared what it targets, can be filled in afterwards without losing its place
     (
       await Promise.all(
-        configsOrderResolved.map(async (entry) =>
-          arrayIncludes(CASCADE_ANCHORS, entry)
-            ? // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
-              await Promise.all(cascadeAnchorEntries[entry])
-            : [await loadManifestConfig(entry)],
+        configsOrderResolved.map(
+          async (entry) =>
+            await (arrayIncludes(CASCADE_ANCHORS, entry)
+              ? // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
+                Promise.all(cascadeAnchorEntries[entry])
+              : loadManifestConfig(entry)),
         ),
       )
     )
@@ -639,12 +658,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
             arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
               configOrBuilder instanceof ConfigEntryBuilder
                 ? configOrBuilder.resolveAllConfigs()
-                : configOrBuilder && 'configs' in configOrBuilder
-                  ? configOrBuilder.configs.map((unConfig) => unConfig?.resolveAllConfigs())
-                  : configOrBuilder,
+                : configOrBuilder,
             ),
           )
-          .flat(3)
+          .flat(2)
           // eslint-disable-next-line no-implicit-coercion
           .filter((v) => !!v),
       )

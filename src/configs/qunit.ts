@@ -2,7 +2,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -90,16 +90,7 @@ export default defineUnConfig<QunitEslintConfigOptions>('qunit', {enabledBy: {pa
     .enableConfigTesterForPlugin('qunit')
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'qunit',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: configFilesFallback},
-  );
-
-  return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
+  generateConfigNoOnlyTests(context, 'qunit', configNoOnlyTests, optionsResolved, {
+    filesDefault: configFilesFallback,
+  });
 });

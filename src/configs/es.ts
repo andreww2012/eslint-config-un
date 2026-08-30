@@ -1150,11 +1150,6 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
     .addRule('no-nonstandard-weakset-prototype-properties', OFF) /** @since 8.2.0 */
     .enableConfigTesterForPlugin('es')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 };
 
 export default defineUnConfig<EsEslintConfigOptions>('es', {

@@ -54,9 +54,4 @@ export default defineUnConfig<DependEslintConfigOptions>(
     ) /** @since 0.2.0 */ // 🟢
     .enableConfigTesterForPlugin('depend')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

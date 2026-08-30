@@ -109,9 +109,4 @@ export default defineUnConfig<TailwindEslintConfigOptions>('tailwind', {
     .addRule('no-unnecessary-arbitrary-value', WARNING) /** @since 3.15.0 */ // 🟡
     .enableConfigTesterForPlugin('tailwindcss')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

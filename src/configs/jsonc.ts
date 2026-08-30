@@ -163,9 +163,4 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       },
     ])
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
-    optionsResolved,
-  };
 });

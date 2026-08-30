@@ -43,9 +43,4 @@ export default defineUnConfig<CspellEslintConfigOptions>(
     ) /** @since 5.18.5 */ /** @aka cspell */ // 🟢
     .enableConfigTesterForPlugin('cspell')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

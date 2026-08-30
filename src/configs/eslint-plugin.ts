@@ -292,9 +292,4 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       /* v8 ignore stop */
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderRuleTests],
-    optionsResolved,
-  };
 });

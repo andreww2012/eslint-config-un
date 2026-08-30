@@ -371,7 +371,6 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   }
 
   return {
-    configs: [configBuilderSystem, configBuilder, configBuilderEnforceTypescriptInScriptSection],
     optionsResolved,
   };
 });

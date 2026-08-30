@@ -37,9 +37,4 @@ export default defineUnConfig<ZodOpenapiEslintConfigOptions>('zodOpenapi', {
     .addRule('require-meta', OFF) /** @since 2.0.0-beta.0 */ // 💭
     .enableConfigTesterForPlugin('zod-openapi')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -58,9 +58,4 @@ export default defineUnConfig<PromiseEslintConfigOptions>(
     .addRule('valid-params', ERROR) /** @since 3.7.0 */ // 🟡
     .enableConfigTesterForPlugin('promise')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

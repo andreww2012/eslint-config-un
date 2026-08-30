@@ -40,9 +40,4 @@ export default defineUnConfig<NoOnlyTestsEslintConfigOptions>(
     .addRule('no-only-tests', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('no-only-tests')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

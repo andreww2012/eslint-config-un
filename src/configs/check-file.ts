@@ -108,9 +108,4 @@ export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
       ...generatePackageToLoadProperty('processor', 'checkFileProcessor'),
     },
   );
-
-  return {
-    configs: [configBuilder, configBuilderEnableCheckFileProcessor],
-    optionsResolved,
-  };
 });

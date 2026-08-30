@@ -521,9 +521,4 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
       rulesToSkipInConfig: () => true,
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderTypescript],
-    optionsResolved,
-  };
 });

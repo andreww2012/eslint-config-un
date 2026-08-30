@@ -1,7 +1,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -63,16 +63,7 @@ export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
     .enableConfigTesterForPlugin('cypress')
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'cypress',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: configFilesFallback},
-  );
-
-  return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
+  generateConfigNoOnlyTests(context, 'cypress', configNoOnlyTests, optionsResolved, {
+    filesDefault: configFilesFallback,
+  });
 });

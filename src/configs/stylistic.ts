@@ -224,9 +224,4 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
       },
     ])
     .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

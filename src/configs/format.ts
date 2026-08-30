@@ -112,9 +112,4 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
     .addRule(usedFormatter, ERROR, formatterOptions ? [formatterOptions] : [])
     // Config tester is not enabled: only single rule is used
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

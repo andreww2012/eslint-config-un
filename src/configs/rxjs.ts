@@ -135,9 +135,4 @@ export default defineUnConfig<RxjsEslintConfigOptions>('rxjs', {enabledBy: {pack
     .addRule('throw-error', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('rxjs')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

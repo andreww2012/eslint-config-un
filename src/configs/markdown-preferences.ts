@@ -410,7 +410,6 @@ export default defineUnConfig<
     .addOverrides();
 
   return {
-    configs: [configBuilder],
     optionsResolved,
   };
 });

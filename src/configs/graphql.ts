@@ -342,9 +342,4 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     .addRule('variables-in-allowed-position', ERROR) /** @since 0.6.0 */ // 🔵📦
     .enableConfigTesterForPlugin('graphql')
     .addOverrides();
-
-  return {
-    configs: [configBuilderProcessor, configBuilder],
-    optionsResolved,
-  };
 });

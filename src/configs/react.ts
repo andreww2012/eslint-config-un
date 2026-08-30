@@ -1414,18 +1414,4 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('no-reset-all-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.3.0)
     .enableConfigTesterForPlugin('react-you-might-not-need-an-effect')
     .addOverrides();
-
-  return {
-    configs: [
-      configBuilderReactOriginal,
-      configBuilderAllowDefaultExportsInJsxFiles,
-      configBuilderHooks,
-      configBuilderReactX,
-      configBuilderReactXTypeAware,
-      configBuilderDom,
-      configBuilderRefresh,
-      configBuilderYouMightNotNeedAnEffect,
-    ],
-    optionsResolved,
-  };
 });

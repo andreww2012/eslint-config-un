@@ -96,9 +96,4 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
     ])
     .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions as NoSecretsOptions])
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderJson],
-    optionsResolved,
-  };
 });

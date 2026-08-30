@@ -449,9 +449,4 @@ export default defineUnConfig<SonarEslintConfigOptions>(
       rulesToSkipInConfig: (ruleName) => ruleName === 'code-eval',
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

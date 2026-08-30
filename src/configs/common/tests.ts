@@ -69,9 +69,4 @@ export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'extra'
     // Triggered on inline snapshots
     .disableAnyRule('unicorn', 'template-indent')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

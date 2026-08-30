@@ -38,9 +38,4 @@ export default defineUnConfig<DeMorganEslintConfigOptions>(
     .addRule('no-negated-disjunction', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('de-morgan')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

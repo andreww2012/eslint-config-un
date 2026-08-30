@@ -79,9 +79,4 @@ export default defineUnConfig<WebComponentsEslintConfigOptions>(
     .addRule('tag-name-matches-class', WARNING) /** @since 2.0.0-ce.1 */
     .enableConfigTesterForPlugin('wc')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

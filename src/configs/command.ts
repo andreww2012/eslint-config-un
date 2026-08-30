@@ -28,9 +28,4 @@ export default defineUnConfig<CommandEslintConfigOptions>(
     .addRule('command', ERROR) /** @since 0.0.0 */
     .enableConfigTesterForPlugin('command')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

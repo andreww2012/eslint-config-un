@@ -76,9 +76,4 @@ export default defineUnConfig<BoundariesEslintConfigOptions>(
     .addRule('no-unknown-files', OFF) /** @since 2.0.0-beta.1 */
     .enableConfigTesterForPlugin('boundaries')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

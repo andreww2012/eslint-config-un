@@ -168,9 +168,4 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .addRule('unicode-property', ERROR) /** @since 2.5.0 */
     .enableConfigTesterForPlugin('regexp')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

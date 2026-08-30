@@ -2,9 +2,8 @@
 import type {ConfigKey, UnConfigResults} from '../configs/index.gen';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {LoadablePluginPrefix} from '../loaders';
-import type {MaybePromise, NonEmptyTuple} from '../types';
+import type {MaybePromise, NonEmptyTuple, ObjectValues} from '../types';
 import {allUnionMembers} from '../utils';
-import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {ExtraPluginsType, UnConfigContext} from './shared';
 
 export type PackageToCheck = `${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`;
@@ -54,11 +53,6 @@ export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor>()([
   'userExtraConfigs',
 ]);
 
-type UnConfigSetupResult<ExtraPlugins extends ExtraPluginsType, ExtraReturnedData> = {
-  configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];
-  optionsResolved: Record<string, unknown>;
-} & ExtraReturnedData;
-
 export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
   /**
    * What turns the Config on, and what the generated `@default` line of its docs says
@@ -98,13 +92,13 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
 }
 
 /**
- * Builds the Config, and reports what the Configs reading it need to know
+ * Builds the Config, and reports what the Configs reading it need to know.
+ * The config builders it creates are recorded by the context it is given, in creation order.
+ * Only a Config declaring a `Result` returns anything: `null` means it has nothing to report
  */
-export type UnConfigSetup<
-  Options,
-  Needs extends readonly ConfigKey[] = [],
-  ExtraReturnedData = unknown,
-> = <ExtraPlugins extends ExtraPluginsType>(
+export type UnConfigSetup<Options, Needs extends readonly ConfigKey[] = [], Result = never> = <
+  ExtraPlugins extends ExtraPluginsType,
+>(
   context: Readonly<UnConfigContext<ExtraPlugins>>,
   configOptions:
     | boolean
@@ -112,7 +106,7 @@ export type UnConfigSetup<
     | Omit<Options, 'overrides' | 'overridesAny'>
     | undefined,
   resolved: Pick<UnConfigResults, Extract<Needs[number], keyof UnConfigResults>>,
-) => MaybePromise<null | UnConfigSetupResult<ExtraPlugins, ExtraReturnedData>>;
+) => [Result] extends [never] ? MaybePromise<void> : MaybePromise<Result | null>;
 
 /**
  * The shape every Config module default export is narrowed to when the loader table is indexed
@@ -126,7 +120,7 @@ export interface AnyConfigManifest extends ConfigManifest<readonly ConfigKey[]> 
     context: Readonly<UnConfigContext<ExtraPlugins>>,
     configOptions: boolean | object | undefined,
     resolved: UnConfigResults,
-  ): MaybePromise<null | UnConfigSetupResult<ExtraPlugins, unknown>>;
+  ): MaybePromise<void> | MaybePromise<ObjectValues<UnConfigResults>>;
 }
 
 export interface ConfigModuleLoader extends ConfigManifest<readonly ConfigKey[]> {
@@ -134,11 +128,11 @@ export interface ConfigModuleLoader extends ConfigManifest<readonly ConfigKey[]>
 }
 
 export const defineUnConfig =
-  <Options, const Needs extends readonly ConfigKey[] = [], ExtraReturnedData = unknown>(
+  <Options, const Needs extends readonly ConfigKey[] = [], Result = never>(
     key: ConfigKey,
     manifest: boolean | ConfigManifest<Needs>,
   ) =>
-  (setup: UnConfigSetup<Options, Needs, ExtraReturnedData>) => ({
+  (setup: UnConfigSetup<Options, Needs, Result>) => ({
     ...(typeof manifest === 'boolean' ? {enabledBy: manifest} : manifest),
     setup,
   });

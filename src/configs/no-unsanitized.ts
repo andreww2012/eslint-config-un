@@ -33,9 +33,4 @@ export default defineUnConfig<NoUnsanitizedEslintConfigOptions>(
     .addRule('property', ERROR) /** @since 1.1.0 */
     .enableConfigTesterForPlugin('no-unsanitized')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

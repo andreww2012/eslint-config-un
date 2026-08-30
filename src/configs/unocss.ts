@@ -35,9 +35,4 @@ export default defineUnConfig<UnocssEslintConfigOptions>('unocss', {
     .addRule('order-attributify', ERROR) /** @since 0.49.3 */ // 🟡
     .enableConfigTesterForPlugin('unocss')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

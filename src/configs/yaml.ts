@@ -166,9 +166,4 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
       )
       .addRule('file-extension', OFF);
   }
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

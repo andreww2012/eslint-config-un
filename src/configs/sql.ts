@@ -56,9 +56,4 @@ export default defineUnConfig<SqlEslintConfigOptions>(
     .addRule('no-unsafe-query', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('sql')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

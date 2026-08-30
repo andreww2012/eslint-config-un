@@ -1171,16 +1171,4 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       /* v8 ignore stop */
     })
     .addOverrides();
-
-  return {
-    configs: [
-      configBuilder,
-      configBuilderAnyLanguage,
-      configBuilderCss,
-      configBuilderHtml,
-      configBuilderJson,
-      configBuilderMarkdown,
-    ],
-    optionsResolved,
-  };
 });

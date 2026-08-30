@@ -382,9 +382,4 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
     )
     .enableConfigTesterForPlugin('node')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

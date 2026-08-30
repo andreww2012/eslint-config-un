@@ -159,9 +159,4 @@ export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchem
     ])
     .addRule('no-invalid', ERROR)
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderJson, configBuilderYaml, configBuilderToml],
-    optionsResolved,
-  };
 });

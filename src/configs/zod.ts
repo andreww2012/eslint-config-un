@@ -389,9 +389,4 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {enabledBy: {packag
     .addRule('consistent-schema-output-type-style', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('zod-core')
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderMini, configBuilderCore],
-    optionsResolved,
-  };
 });

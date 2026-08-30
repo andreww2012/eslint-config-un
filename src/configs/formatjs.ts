@@ -169,9 +169,4 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
     .addRule('prefer-pound-in-plural', ERROR) /** @since 4.7.0 */ // 🟢
     .enableConfigTesterForPlugin('formatjs')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

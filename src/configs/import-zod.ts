@@ -37,9 +37,4 @@ export default defineUnConfig<ImportZodEslintConfigOptions>(
     .addRule('prefer-zod-namespace', ERROR) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('import-zod')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

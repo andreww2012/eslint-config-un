@@ -202,9 +202,4 @@ export default defineUnConfig<JsInlineEslintConfigOptions>(
       },
     },
   );
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

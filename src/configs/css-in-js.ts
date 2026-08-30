@@ -138,9 +138,4 @@ export default defineUnConfig<CssInJsEslintConfigOptions>(
     .addRule('property-casing', ERROR, [propertyCasing]) /** @since 0.1.0 */ // 🟣
     .enableConfigTesterForPlugin('css-in-js')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -109,9 +109,4 @@ export default defineUnConfig<HeaderEslintConfigOptions>(
     ) /** @since 0.0.1 */
     .enableConfigTesterForPlugin('header')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

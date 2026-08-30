@@ -96,9 +96,4 @@ export default defineUnConfig<UnusedImportsEslintConfigOptions>(
         ruleName === ('no-unused-imports' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })
     .addOverrides();
-
-  return {
-    configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
-    optionsResolved,
-  };
 });

@@ -397,9 +397,4 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
         ),
     )
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

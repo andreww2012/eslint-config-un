@@ -196,9 +196,4 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     ])
     .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}])
     .addOverrides();
-
-  return {
-    configs: [configBuilder, configBuilderCodeBlocks, configFormatFencedCodeBlocksBuilder],
-    optionsResolved,
-  };
 });

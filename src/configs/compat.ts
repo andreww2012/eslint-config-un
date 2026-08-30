@@ -89,9 +89,4 @@ export default defineUnConfig<CompatEslintConfigOptions>(
     .addRule('compat', ERROR) /** @since 0.0.4 */
     .enableConfigTesterForPlugin('compat')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

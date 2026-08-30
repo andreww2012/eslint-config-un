@@ -1360,16 +1360,6 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addOverrides();
 
   return {
-    configs: [
-      configBuilder,
-      configBuilderEnforceTypescriptInScriptSection,
-      configBuilderNuxt,
-      configBuilderNuxtConfig,
-      configBuilderA11y,
-      configBuilderPinia,
-      configBuilderI18n,
-      configBuilderScopedCss,
-    ],
     optionsResolved,
   };
 });

@@ -31,9 +31,4 @@ export default defineUnConfig<TanstackRouterEslintConfigOptions>('tanstackRouter
     .addRule('route-param-names', ERROR) /** @since 1.155.0 */ // 🟢
     .enableConfigTesterForPlugin('tanstack-router')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

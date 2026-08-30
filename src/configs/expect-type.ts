@@ -51,9 +51,4 @@ export default defineUnConfig<ExpectTypeEslintConfigOptions>(
     .addRule('expect', ERROR, expectRuleOptions ? [expectRuleOptions] : []) /** @since 0.0.1 */ // 🟢💭
     .enableConfigTesterForPlugin('expect-type')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

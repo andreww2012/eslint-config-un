@@ -2,7 +2,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -176,16 +176,7 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     .enableConfigTesterForPlugin('playwright')
     .addOverrides();
 
-  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
-    context,
-    'playwright',
-    configNoOnlyTests,
-    optionsResolved,
-    {filesDefault: configFilesFallback},
-  );
-
-  return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
-    optionsResolved,
-  };
+  generateConfigNoOnlyTests(context, 'playwright', configNoOnlyTests, optionsResolved, {
+    filesDefault: configFilesFallback,
+  });
 });

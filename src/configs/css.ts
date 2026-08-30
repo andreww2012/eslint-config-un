@@ -259,12 +259,12 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
 
-  const configBuilders = (
+  (
     [
       ['css', optionsResolved],
       ['css/scss', configScss],
     ] as const
-  ).map(([configName, options]) => {
+  ).forEach(([configName, options]) => {
     const configBuilder = context.createConfigBuilder(options, 'css');
 
     const isScss = configName.endsWith('/scss');
@@ -335,12 +335,9 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
       .addRule('use-layers', OFF) /** @since 0.3.0 */
       .enableConfigTesterForPlugin('css')
       .addOverrides();
-
-    return configBuilder;
   });
 
   return {
-    configs: configBuilders,
     optionsResolved,
   };
 });

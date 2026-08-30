@@ -98,9 +98,4 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
     .disableAnyRule('yaml', 'no-empty-mapping-value')
     .enableConfigTesterForPlugin('github-actions')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

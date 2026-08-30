@@ -80,9 +80,4 @@ export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependen
     .addRule('prefer-tilde-range-version', OFF) /** @since 0.8.0 */
     .enableConfigTesterForPlugin('node-dependencies')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

@@ -3,7 +3,7 @@ import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from 
 import {objectEntriesUnsafe} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  generateConfigNoOnlyTestsBuilder,
+  generateConfigNoOnlyTests,
   generateDefaultTestFiles,
 } from './shared';
 import {
@@ -183,7 +183,7 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
     options: AllPossibleModuleOptions,
   ) => {
     if (!options) {
-      return [];
+      return;
     }
 
     const isForFramework = module !== 'dom';
@@ -315,39 +315,33 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
       .enableConfigTesterForPlugin('testing-library')
       .addOverrides();
 
-    const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    generateConfigNoOnlyTests(
       context,
       `testing-library/${module}`,
       configNoOnlyTests,
       moduleOptionsResolved,
       {filesDefault: configFilesFallback},
     );
-
-    return [configBuilder, configBuilderNoOnlyTests];
   };
 
   const isAnyFrameworkConfigEnabled = Boolean(
     configAngular || configMarko || configReact || configSvelte || configVue,
   );
 
-  return {
-    configs: [
-      ...generateConfigsForModule(
-        'dom',
-        isAnyFrameworkConfigEnabled && disableRootConfigIfFrameworkConfigIsEnabled
-          ? false
-          : optionsResolved,
-      ),
-      ...objectEntriesUnsafe({
-        angular: configAngular,
-        marko: configMarko,
-        react: configReact,
-        svelte: configSvelte,
-        vue: configVue,
-      } satisfies Record<SupportedModules, AllPossibleModuleOptions>).flatMap(([module, options]) =>
-        generateConfigsForModule(module, options),
-      ),
-    ],
-    optionsResolved,
-  };
+  generateConfigsForModule(
+    'dom',
+    isAnyFrameworkConfigEnabled && disableRootConfigIfFrameworkConfigIsEnabled
+      ? false
+      : optionsResolved,
+  );
+
+  objectEntriesUnsafe({
+    angular: configAngular,
+    marko: configMarko,
+    react: configReact,
+    svelte: configSvelte,
+    vue: configVue,
+  } satisfies Record<SupportedModules, AllPossibleModuleOptions>).forEach(([module, options]) => {
+    generateConfigsForModule(module, options);
+  });
 });

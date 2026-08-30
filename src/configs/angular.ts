@@ -707,9 +707,4 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-valid-aria */ // ♿
     .enableConfigTesterForPlugin('angular-template', {includeDeprecated: true})
     .addOverrides();
-
-  return {
-    configs: [configBuilderGeneral, configBuilderTemplate],
-    optionsResolved,
-  };
 });

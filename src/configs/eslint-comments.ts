@@ -47,9 +47,4 @@ export default defineUnConfig<EslintCommentsEslintConfigOptions>(
     .addRule('require-description', OFF) /** @since 3.2.0 */
     .enableConfigTesterForPlugin('eslint-comments')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

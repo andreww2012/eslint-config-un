@@ -125,9 +125,4 @@ export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
     .addRule('no-self-destination', ...getCheckSeverity('selfDestinationLinks')) /** @since 0.5.0 */ // 🟢
     .enableConfigTesterForPlugin('markdown-links')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

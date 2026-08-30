@@ -46,9 +46,4 @@ export default defineUnConfig<UnheadEslintConfigOptions>('unhead', {
     .addRule('viewport-user-scalable', ERROR) /** @since 3.0.5 */
     .enableConfigTesterForPlugin('unhead')
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });

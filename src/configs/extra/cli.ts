@@ -104,9 +104,4 @@ export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
     .addBulkRules(RULES_ENABLED_BY_DEFAULT)
     .disableBulkRules(RULE_NAMES_DISABLED_BY_DEFAULT)
     .addOverrides();
-
-  return {
-    configs: [configBuilder],
-    optionsResolved,
-  };
 });
