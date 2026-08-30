@@ -30,8 +30,8 @@ interface PnpmJsonSubConfigOptions<
 
   /**
    * "Prefer having pnpm settings in `pnpm-workspace.yaml` instead of `package.json`.
-   * This would require pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037."
-   * - plugin docs
+   * This would require pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037." -
+   * plugin docs
    *
    * Affected rule:
    * - `pnpm/json-prefer-workspace-settings`

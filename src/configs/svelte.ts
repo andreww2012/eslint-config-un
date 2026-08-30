@@ -33,8 +33,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     /**
      * "Specifies an array of rules to ignore reports within the template.
      * For example, use this to disable rules in the template that may produce unavoidable false
-     * positives"
-     * - plugin docs
+     * positives" -
+     * plugin docs
      */
     ignoreWarnings?: string[];
 
@@ -53,8 +53,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
         | false
         | {
             /**
-             * "Specifies the path to the directory that contains the PostCSS configuration"
-             * - plugin docs
+             * "Specifies the path to the directory that contains the PostCSS configuration" -
+             * plugin docs
              */
             configFilePath?: string;
           };
