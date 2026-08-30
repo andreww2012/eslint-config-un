@@ -6,7 +6,6 @@ temp/
 .nx/
 # @eslint/config-inspector's temporarily generated file
 eslint.config.bundled_*.mjs
-.claude/worktrees/
 
 .lycheecache
 .lychee.report.md
