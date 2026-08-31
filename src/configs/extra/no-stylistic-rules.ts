@@ -1085,7 +1085,9 @@ const ALL_STYLISTIC_RULES = {
   'zod-mini': {
     'consistent-import': true,
     'consistent-schema-output-type-style': true,
+    'prefer-map-set-size-over-min-max': true,
     'prefer-nullish': true,
+    'prefer-string-length-over-min-max': true,
     'schema-error-property-style': true,
   },
   'zod-openapi': {

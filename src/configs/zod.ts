@@ -237,10 +237,9 @@ const resolveConsistentSchemaVarNameOptions = (
   return [severity, options] as const;
 };
 
-export default defineUnConfig<ZodEslintConfigOptions>('zod', {enabledBy: {package: 'zod@^3||^4'}})((
-  context,
-  optionsRaw,
-) => {
+export default defineUnConfig<ZodEslintConfigOptions>('zod', {
+  enabledBy: {package: 'zod@^3||^4'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     arrayStyle: 'method',
     configCore: true,
@@ -303,11 +302,13 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {enabledBy: {packag
     .addRule('no-unnecessary-readonly', ERROR) /** @since 4.8.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
     .addRule('prefer-loose-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
+    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 4.11.0 */
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-nullish', ERROR) /** @since 4.9.0 */ // 🟢
     .addRule('prefer-strict-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
+    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 4.10.0 */
     .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
     .addRule('prefer-top-level-string-formats', severityForRulesOnlyForV4) /** @since 4.1.0 */ // 🟢
     .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🟢
@@ -354,13 +355,17 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {enabledBy: {packag
     .addRule('no-conflicting-checks', ERROR) /** @since 1.5.0 */
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 1.3.0 */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
+    .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-transform-in-record-key', ERROR) /** @since 1.2.0 */
     .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */
     .addRule('no-unnecessary-readonly', ERROR) /** @since 1.5.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 1.8.0 */
     .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('prefer-nullish', ERROR) /** @since 1.6.0 */ // 🟢
+    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 1.7.0 */
     // Note: not considered stylistic because may change types
     .addRule('prefer-tuple-over-array-length', ERROR) /** @since 1.5.0 */
     .addRule('require-brand-type-parameter', ERROR) /** @since 0.1.0 */ // 🟢
