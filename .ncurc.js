@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {defineConfig} from 'npm-check-updates';
-import semver from 'semver';
+import {satisfies, tryParse} from 'verkit';
 import packageJson from './package.json' with {type: 'json'};
 
 const CACHE_DIRECTORY = path.join(import.meta.dirname, 'node_modules/.cache/npm-check-updates');
@@ -38,6 +38,15 @@ const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx', 'import-
 const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-csstree']);
 
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
+
+/**
+ * Blocks *updating to* any version matching the given semver range for a package
+ * (it does not restrict the version we update *from*).
+ * Use to skip a known-broken release until a fix ships.
+ * Each entry should document why it is blocked
+ * @type {Record<string, string>}
+ */
+const IGNORED_PACKAGE_RANGES_TO_UPDATE = {};
 
 const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   '@types/node',
@@ -101,8 +110,14 @@ export default defineConfig({
     const [currentVersion, upgradedVersion] = [currentVersionRaw, upgradedVersionRaw].map((v) =>
       v.split('@').at(-1),
     );
+
+    const blockedVersionRange = IGNORED_PACKAGE_RANGES_TO_UPDATE[packageName];
+    if (blockedVersionRange && satisfies(upgradedVersion || '', blockedVersionRange)) {
+      return false;
+    }
+
     const [currentVersionSemver, upgradedVersionSemver] = [currentVersion, upgradedVersion].map(
-      (v) => semver.parse(v),
+      (v) => tryParse(v || ''),
     );
     return (
       (!PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||

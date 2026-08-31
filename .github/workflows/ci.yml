@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: pnpm spellcheck
+      - run: pnpm check:spelling
 
   formatting:
     name: Formatting check (prettier)
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: pnpm format:check
+      - run: pnpm check:format
 
   typecheck:
     name: Typecheck (tsgo)
@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: pnpm lint:ts
+      - run: pnpm ts
 
   eslint:
     name: ESLint
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: pnpm lint:eslint
+      - run: pnpm eslint
 
   check-links:
     name: Check links

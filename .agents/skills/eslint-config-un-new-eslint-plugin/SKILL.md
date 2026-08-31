@@ -159,7 +159,7 @@ Update `Default renames` section if the chosen plugin prefix differs from what t
 Run `nr prep` first: it validates the manifest and will name the exact problem if there is one.
 
 Then ensure there are no TypeScript/ESLint/prettier/knip/... errors.
-Run `nr check`, or run the individual commands separately if one of them prevents the chain from completing: `nr lint:ts6`, `nr lint:eslint <changed files>`, `nr format`, `nr knip`, `nr spellcheck`.
+Run `nr check`, or run the individual commands separately if one of them prevents the chain from completing: `nr ts6`, `nr eslint <changed files>`, `nr format`, `nr knip`, `nr check:spelling`.
 IMPORTANT: ignore errors in files you haven't modified!
 
 Write tests for the new Config following [`eslint-config-un-config-tests`](../eslint-config-un-config-tests/SKILL.md) instructions.

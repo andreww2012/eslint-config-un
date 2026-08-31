@@ -49,6 +49,7 @@ export default {
     'tinyexec',
     'cleye',
     'unutils',
+    'verkit',
     'knip',
     'tsdown',
     'commitlint',
