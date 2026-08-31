@@ -439,6 +439,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
     .addRule('no-restricted-syntax', OFF) /** @since 33.1.0 */
     .addRule('no-types', OFF) /** @since 7.0.0 */ // 2️⃣
     .addRule('no-undefined-types', ERROR) /** @since 3.6.0 */ // 🟢2️⃣
+    .addRule('no-unnecessary-type-assertion', ERROR) /** @since 64.3.0 */
     .addRule('normalize-see-links', normalizeSeeLinks === false ? OFF : ERROR, [
       typeof normalizeSeeLinks === 'object'
         ? normalizeSeeLinks

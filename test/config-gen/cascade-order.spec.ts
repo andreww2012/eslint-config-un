@@ -78,6 +78,7 @@ describe('cascade order', () => {
       eslint-config-un/js
       eslint-config-un/js/stylistic_spaced-comment
       eslint-config-un/jsdoc
+      eslint-config-un/jsdoc/@type-information
       eslint-config-un/jsdoc/ts
       eslint-config-un/js-inline
       eslint-config-un/js-inline/js-inside-html-inside-markdown

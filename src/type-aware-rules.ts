@@ -72,6 +72,11 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
   jest: {
     rules: asTypeAwareRules(RULE_CATEGORIES_PER_PLUGIN.jest.typeAware),
   },
+  jsdoc: {
+    rules: {
+      'no-unnecessary-type-assertion': 'optional',
+    },
+  },
   nestjs: {
     rules: {
       'api-enum-property-best-practices': true,
