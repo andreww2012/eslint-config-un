@@ -6,26 +6,19 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-tailwindcss@4.3.0
-  - '@html-eslint/eslint-plugin@0.65.0'
-  - '@html-eslint/parser@0.65.0'
-  - '@html-eslint/core@0.65.0'
-  - '@html-eslint/template-parser@0.65.0'
-  - '@html-eslint/template-syntax-parser@0.65.0'
-  - '@html-eslint/types@0.65.0'
+minimumReleaseAgeExclude: []
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude: []
+trustPolicyExclude: # []
+  - '@humanwhocodes/momoa@3.3.12'
 
 audit:
   ignore:
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major verion number change
 
 allowBuilds:
-  lefthook@2.1.10: true
+  lefthook@2.1.12: true
 
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher@2.6.0': false
@@ -39,7 +32,7 @@ allowBuilds:
   # Not relevant for us - present transitively via `@nx/eslint-plugin`
   nx@23.1.2: false
   # The Chrome is only downloaded upon launching script(s) that actually use them to saving disk space
-  puppeteer@25.8.0: false
+  puppeteer@25.9.0: false
   # Runs `napi-postinstall`, which is optional deps checker for legacy npm versions
   unrs-resolver@1.12.2: false
 

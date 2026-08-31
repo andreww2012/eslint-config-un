@@ -1,25 +1,25 @@
 diff --git a/build/index.js b/build/index.js
-index 2ec17f63255b41eeeb48a66bfb89a651ef1a7526..199720645ceae0e9fb902654d886f4b6c43005ed 100644
+index fb82840de43932df085943aa8e0681c43e86da50..a098e8f75110df40c91a3f9e73aee0da6921e52a 100644
 --- a/build/index.js
 +++ b/build/index.js
-@@ -19354,9 +19354,9 @@ async function rp(e, t = {}) {
- 		let o = Or(e[r]), [s, c] = o || [r, e[r]];
- 		if (Rn(c)) return a?.tick(), { version: null };
- 		let l = t.target || "latest", u = typeof l == "string" ? l : l(s, (0, me.parseRange)(c)), [d, f] = u.startsWith("@") ? ["distTag", u.slice(1)] : [u, "latest"];
+@@ -19620,9 +19620,9 @@ async function Sp(e, t = {}) {
+ 		let o = Er(e[r]), [s, c] = o || [r, e[r]];
+ 		if (In(c)) return a?.tick(), { version: null };
+ 		let l = t.target || "latest", u = typeof l == "string" ? l : l(s, (0, pe.parseRange)(c)), [d, f] = u.startsWith("@") ? ["distTag", u.slice(1)] : [u, "latest"];
 -		if (!t.cooldown) {
 +		{
  			let e = t.cacher?.get(s, d);
 -			if (e?.version && (e?.time || !t.format?.includes("time"))) return a?.tick(), e;
 +			if (e?.version && (e?.time || !t.format?.includes("time")) && (!t.cooldown || e?.time)) return a?.tick(), e;
  		}
- 		let p, m = jr(e[r]), h = m ? kf.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
+ 		let p, m = kr(e[r]), h = m ? Jf.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
  		if (!_) {
-@@ -19375,7 +19375,7 @@ async function rp(e, t = {}) {
+@@ -19641,7 +19641,7 @@ async function Sp(e, t = {}) {
  			let t = e ? (e.message || e).toString() : "";
  			t.match(/E504|Gateway Timeout/i) ? p = { error: `${t}. All ${v} retry attempts failed.` } : t.match(/E400|E404|ENOTFOUND|404 Not Found|400 Bad Request/i) ? p = { error: `${t.replace(/ - Not found$/i, "")}. All ${v} retry attempts failed. Either your internet connection is down, the registry is inaccessible, the authentication credentials are invalid, or the package does not exist.` } : e?.code === "ERR_INVALID_URL" ? p = { error: t || "Invalid URL" } : (!process.env.NCU_TESTS && /(Response|network) timeout/i.test(t) && console.error("\n\n" + n.red("FetchError: Request Timeout. npm-registry-fetch defaults to 30000 (30 seconds). Try setting the --timeout option (in milliseconds) to override this.") + "\n"), p = { error: e?.body?.error || String(e) });
  		}
--		return p.version = !m && o && p?.version ? Dr(s, p.version) : p?.version ?? null, a?.tick(), p.version && !t.cooldown && t.cacher?.set(s, d, p.version, p.time), p;
-+		return p.version = !m && o && p?.version ? Dr(s, p.version) : p?.version ?? null, a?.tick(), p.version && !p.cooldownInfo && t.cacher?.set(s, d, p.version, p.time), p;
+-		return p.version = !m && o && p?.version ? Tr(s, p.version) : p?.version ?? null, a?.tick(), p.version && !t.cooldown && t.cacher?.set(s, d, p.version, p.time), p;
++		return p.version = !m && o && p?.version ? Tr(s, p.version) : p?.version ?? null, a?.tick(), p.version && !p.cooldownInfo && t.cacher?.set(s, d, p.version, p.time), p;
  	}
- 	let s = await Wf(r, o, { concurrency: t.concurrency });
- 	return await t.cacher?.save(), t.cacher?.log(), K(s, (e, t) => e.version || e.error || e.cooldownInfo ? { [r[t]]: e } : null);
+ 	let s = await lp(r, o, { concurrency: t.concurrency });
+ 	return await t.cacher?.save(), t.cacher?.log(), J(s, (e, t) => e.version || e.error || e.cooldownInfo ? { [r[t]]: e } : null);
