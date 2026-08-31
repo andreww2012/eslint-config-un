@@ -608,8 +608,8 @@ importers:
         specifier: 3.22.1
         version: 3.22.1
       ember-eslint-parser:
-        specifier: 0.14.5
-        version: 0.14.5(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2)
+        specifier: 0.14.6
+        version: 0.14.6(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2)
       eslint:
         specifier: 10.8.1
         version: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
@@ -6692,8 +6692,8 @@ packages:
   electron-to-chromium@1.5.407:
     resolution: {integrity: sha512-4R8XgQOdfxexCd/u63lRm6wCHjECwI45MV9wxAs2ggtfWe2hwlo1ql97jKsju2IcJ+jFSTwBssyYoiWhh7mauQ==}
 
-  ember-eslint-parser@0.14.5:
-    resolution: {integrity: sha512-oPUFfEfA6OSFutEudrlfGl4AXdTtvsgkM+ZHldZjbFG8hVBardE3xL1gKQB+iGDaebAN8izlR8ZiKpdgk3udZA==}
+  ember-eslint-parser@0.14.6:
+    resolution: {integrity: sha512-Z4fA1E/3uGZeBLPcz5aCiic3OoZ9YVxQBkImgGXdtgHLLuF/51drGor/FCwT9cCs1XZqY8HWRy4aarl+MZCfwQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@babel/eslint-parser': ^7.28.6 || ^8.0.0
@@ -16111,7 +16111,7 @@ snapshots:
 
   '@typescript-eslint/project-service@8.56.1(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.67.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.68.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.68.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
@@ -16120,7 +16120,7 @@ snapshots:
 
   '@typescript-eslint/project-service@8.67.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.67.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.68.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.68.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
@@ -17952,10 +17952,10 @@ snapshots:
 
   electron-to-chromium@1.5.407: {}
 
-  ember-eslint-parser@0.14.5(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2):
+  ember-eslint-parser@0.14.6(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2):
     dependencies:
       '@glimmer/syntax': 0.95.0
-      '@typescript-eslint/tsconfig-utils': 8.67.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.68.0(@typescript/typescript6@6.0.2)
       content-tag: 4.2.0
       ember-estree: 0.6.11
       eslint-scope: 9.1.2
@@ -18558,7 +18558,7 @@ snapshots:
       axobject-query: 4.1.0
       css-tree: 3.2.1
       editorconfig: 3.0.2
-      ember-eslint-parser: 0.14.5(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2)
+      ember-eslint-parser: 0.14.6(@typescript-eslint/parser@8.68.0)(@typescript/typescript6@6.0.2)
       ember-rfc176-data: 0.3.18
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
       eslint-utils: 3.0.0(eslint@10.8.1)
