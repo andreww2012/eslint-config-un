@@ -599,8 +599,7 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
     ripple: {
       configs: ['ripple'],
       gitTag: (version) => `@tsrx/eslint-plugin@${version}`,
-      pluginDocsUrl:
-        'https://github.com/Ripple-TS/ripple/blob/HEAD/packages/eslint-plugin/README.md',
+      pluginDocsUrl: 'https://github.com/tsrx-org/tsrx/blob/HEAD/packages/eslint-plugin/README.md',
       ruleDocsUrl: null, // No docs
     },
     rxjs: {
