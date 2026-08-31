@@ -107,8 +107,10 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('jsx-uses-vars', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-accessor-as-prop', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔵
     .addRule('no-array-handlers', OFF) /** @since 0.10.0 */ // TODO
+    .addRule('no-browser-globals-in-server-function', errorIfSolidVersion2) /** @since 0.17.0 */ // 🔵
     .addRule('no-destructure', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('no-innerhtml', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-invalid-server-capture', errorIfSolidVersion2) /** @since 0.17.0 */ // 🔵
     .addRule('no-module-scope-reactive-primitive', errorIfSolidVersion2) /** @since 0.16.0 */ // 🟣
     .addRule('no-proxy-apis', OFF) /** @since 0.8.0 */
     .addRule('no-react-deps', ERROR) /** @since 0.9.0 */ // 🟡
@@ -126,6 +128,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('prefer-structured-class', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔷🟣
     .addRule('reactivity', ERROR) /** @since 0.4.0 */ // 🟡
     .addRule('removed-api', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔵
+    .addRule('require-async-server-function', errorIfSolidVersion2) /** @since 0.17.0 */ // 🔵
     .addRule('self-closing-comp', ERROR, [
       {
         component: 'none',
@@ -133,6 +136,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
       },
     ]) /** @since 0.7.0 */ // 🟡
     .addRule('style-prop', WARNING) /** @since 0.1.0 */ // 🟡
+    .addRule('valid-use-server', ERROR) /** @since 0.17.0 */ // 🔵
     .enableConfigTesterForPlugin('solid')
     .addOverrides();
 });
