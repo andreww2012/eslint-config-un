@@ -850,14 +850,6 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `css-tree-v${version}`,
     ruleDocsUrl: null,
   },
-  '@jest/environment': {
-    configs: ['jest'],
-    ruleDocsUrl: null,
-  },
-  '@jest/expect': {
-    configs: ['jest'],
-    ruleDocsUrl: null,
-  },
   // Additional packages that are not eslint plugins but are tracked as dependencies
   '@html-eslint/parser': {
     configs: ['html'],
@@ -866,6 +858,14 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
   '@humanwhocodes/scsstree': {
     configs: ['css'],
     gitTag: (version) => `scsstree-v${version}`,
+    ruleDocsUrl: null,
+  },
+  '@jest/environment': {
+    configs: ['jest'],
+    ruleDocsUrl: null,
+  },
+  '@jest/expect': {
+    configs: ['jest'],
     ruleDocsUrl: null,
   },
   '@sveltejs/kit': {
