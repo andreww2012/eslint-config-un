@@ -85,6 +85,12 @@ export interface ImportIntegrityPluginSettings {
   ignoreOverridePatterns?: string[];
 
   /**
+   * Allows to remove certain entries from the default ignore list.
+   * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#defaultignoreoverrides
+   */
+  defaultIgnoreOverrides?: string[];
+
+  /**
    * A list of files that are considered "test" files.
    * This information is used by several rules.
    * Will be merged with the default list.
