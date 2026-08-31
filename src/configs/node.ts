@@ -1,6 +1,6 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import globals from 'globals';
-import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
+import {isRangeSubset as isFirstSemverRangeIsSubsetOfSecond, parseRange} from 'verkit';
 import {ERROR, OFF} from '../constants';
 import type {PackageJson, Prettify} from '../types';
 import {interopDefault, readAndParseJson} from '../utils';
@@ -253,7 +253,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
 
   const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 
-  const userNodeVersion = new Range(closestPackageJson?.engines?.node || '');
+  const userNodeVersion = parseRange(closestPackageJson?.engines?.node || '');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'node');
 

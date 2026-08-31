@@ -399,9 +399,6 @@ importers:
       package-manager-detector:
         specifier: 1.8.0
         version: 1.8.0
-      semver:
-        specifier: 7.8.5
-        version: 7.8.5
       tailwind-csstree:
         specifier: 0.3.3
         version: 0.3.3(@eslint/css@1.4.0)
@@ -414,6 +411,9 @@ importers:
       typescript-eslint:
         specifier: 8.68.0
         version: 8.68.0(@typescript/typescript6@6.0.2)(eslint@10.9.1)(supports-color@7.2.0)
+      verkit:
+        specifier: 0.4.0
+        version: 0.4.0
     devDependencies:
       '@11ty/gray-matter':
         specifier: 3.0.0
@@ -547,9 +547,6 @@ importers:
       '@types/npm-package-arg':
         specifier: 6.1.4
         version: 6.1.4
-      '@types/semver':
-        specifier: 7.8.0
-        version: 7.8.0
       '@types/validate-npm-package-name':
         specifier: 4.0.2
         version: 4.0.2
@@ -919,9 +916,6 @@ importers:
       validate-npm-package-name:
         specifier: 8.0.0
         version: 8.0.0
-      verkit:
-        specifier: 0.4.0
-        version: 0.4.0
       vitest:
         specifier: 4.1.11
         version: 4.1.11(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(@vitest/ui@4.1.11)(vite@8.0.16)

@@ -1,4 +1,4 @@
-import {compare} from 'semver';
+import {compare} from 'verkit';
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import {interopDefault} from '../../src/utils';
 

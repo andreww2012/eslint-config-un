@@ -1,5 +1,5 @@
 import * as findUp from 'empathic/find';
-import semver from 'semver';
+import {satisfies} from 'verkit';
 import type {UnConfigs} from '../configs';
 import {MISC_GROUP_CONFIGS} from '../configs/manifests.gen';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
@@ -52,8 +52,7 @@ const getIsPackageInstalled = (
   const packageInfo = context.packagesInfo[packageName];
   return (
     packageInfo != null &&
-    (!versionRangeToSatisfy ||
-      semver.satisfies(packageInfo.info.version || '', versionRangeToSatisfy))
+    (!versionRangeToSatisfy || satisfies(packageInfo.info.version || '', versionRangeToSatisfy))
   );
 };
 

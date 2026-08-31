@@ -6,13 +6,13 @@ import {jsonParseSafe as jsonParse} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
 import prettier from 'prettier';
+import {exec} from 'tinyexec';
 import {
   compare as compareVersions,
-  parse as parseSemver,
+  isValidRange,
+  tryParse as parseSemver,
   satisfies as rangeSatisfies,
-  validRange,
-} from 'semver';
-import {exec} from 'tinyexec';
+} from 'verkit';
 import {stringify as yamlStringify} from 'yaml';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
@@ -121,11 +121,11 @@ const main = () => {
     errors.push(`Invalid package name: ${packageName}`);
   }
 
-  if (packageVersionsRange && !validRange(packageVersionsRange)) {
+  if (packageVersionsRange && !isValidRange(packageVersionsRange)) {
     errors.push(`Invalid version range: ${packageVersionsRange}`);
   }
 
-  const invalidIgnoredVersions = ignoreVersions.filter((version) => !validRange(version));
+  const invalidIgnoredVersions = ignoreVersions.filter((version) => !isValidRange(version));
   if (invalidIgnoredVersions.length > 0) {
     errors.push(`Invalid ignored version ranges: ${invalidIgnoredVersions.join(', ')}`);
   }
@@ -139,7 +139,7 @@ const main = () => {
     if (!NPM_PACKAGE_NAME_REGEX.test(packageNameToOverride)) {
       invalidPackageNamesToOverride.push(packageNameToOverride);
     }
-    if (override && !validRange(override)) {
+    if (override && !isValidRange(override)) {
       invalidPackageOverrides.push(override);
     }
     return {
@@ -294,7 +294,7 @@ const run = async ({
       }
       const versionParsed = parseSemver(version);
       if (versionParsed) {
-        const fullPrerelease = versionParsed.prerelease.join('.');
+        const fullPrerelease = (versionParsed.prerelease || []).join('.');
         if (fullPrerelease && ignorePrereleaseRegexes.some((regex) => regex.test(fullPrerelease))) {
           versionsIgnoredByPrereleaseRegexes.push(version);
           return null;

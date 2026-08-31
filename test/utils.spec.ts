@@ -177,9 +177,9 @@ describe('fetchPackageInfo', () => {
   });
 
   it('returns the `package.json` contents and the parsed versions of an installed package', async () => {
-    const packageInfo = await fetchPackageInfo('semver');
+    const packageInfo = await fetchPackageInfo('verkit');
 
-    expect(packageInfo?.info.name).toBe('semver');
+    expect(packageInfo?.info.name).toBe('verkit');
     expect(packageInfo?.versions.full).toBeString();
     expect(packageInfo?.versions.major).toBeNumber();
     expect(packageInfo?.versions.majorAndMinor).toBeNumber();

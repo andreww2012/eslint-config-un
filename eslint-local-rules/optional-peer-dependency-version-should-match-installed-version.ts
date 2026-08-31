@@ -2,7 +2,7 @@ import type Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {AST as JsonAST} from 'jsonc-eslint-parser';
-import {minVersion as minSemverVersion, eq as semverVersionsEqual} from 'semver';
+import {findMinimumForRange as minSemverVersion, isEqual as semverVersionsEqual} from 'verkit';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import {jsonParseSafe} from '../src/utils';
@@ -87,9 +87,7 @@ const rule: Eslint.Rule.RuleModule = {
               return;
             }
 
-            if (
-              semverVersionsEqual(minVersionSatisfyingRange.version, installedDevDependencyVersion)
-            ) {
+            if (semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)) {
               return;
             }
 

@@ -1,5 +1,5 @@
 import {renderTable} from 'console-table-printer';
-import semver from 'semver';
+import {satisfies} from 'verkit';
 import {type DisableAutofixPrefix, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {EslintFlatConfigEntry, EslintPlugin} from '../eslint/eslint-types';
@@ -53,10 +53,7 @@ const checkIfModuleCorrectlyLoaded = async (
       ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
       : null;
     const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
-    if (
-      !plugin ||
-      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
-    ) {
+    if (!plugin || (installedPluginVersion && !satisfies(installedPluginVersion, versionRange))) {
       return {
         name: moduleResult.packageName,
         versionRange,
