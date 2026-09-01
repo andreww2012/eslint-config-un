@@ -38,11 +38,11 @@ function createModuleLoader<T, N extends string>(
   const result: ModuleLoader<T, N> = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     try {
-      const {pluginOverrides} = context.rootOptions;
-      const overriddenPluginModule =
-        pluginOverrides && isKeyIn(property, pluginOverrides)
-          ? await interopDefault(maybeCall(pluginOverrides[property]) as T)
-          : null;
+      const {plugins} = context.rootOptions;
+      const providedPlugin = plugins && isKeyIn(property, plugins) && plugins[property]?.plugin;
+      const overriddenPluginModule = providedPlugin
+        ? await interopDefault(maybeCall(providedPlugin) as T)
+        : null;
 
       return {
         module: overriddenPluginModule || (await interopDefault(module())),

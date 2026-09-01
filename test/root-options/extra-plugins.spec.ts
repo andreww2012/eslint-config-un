@@ -63,9 +63,9 @@ describe('option: `extraPlugins`', () => {
       expect(processOutput.getStderrOutput()).toContain('Invalid extra plugin prefixes');
     });
 
-    it('reports a prefix taken by `pluginRenames` and exits', async () => {
+    it('reports a prefix taken by the `plugins` option and exits', async () => {
       await getPluginPrefixes({
-        pluginRenames: {unicorn: 'unicorn-renamed'},
+        plugins: {unicorn: {prefix: 'unicorn-renamed'}},
         extraPlugins: {'unicorn-renamed': EXTRA_PLUGIN},
       });
 

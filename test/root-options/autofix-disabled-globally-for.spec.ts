@@ -65,10 +65,10 @@ describe('option: `autofixDisabledGloballyFor`', () => {
     ).toBeDefined();
   });
 
-  it('respects `pluginRenames`', async () => {
+  it('respects the `prefix` of the `plugins` option', async () => {
     const configResult = await computeEslintConfig('unicorn', {
       un: {
-        pluginRenames: {unicorn: 'unicorn-renamed'},
+        plugins: {unicorn: {prefix: 'unicorn-renamed'}},
         autofixDisabledGloballyFor: {plugins: {unicorn: true}},
       },
     });

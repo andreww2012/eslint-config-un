@@ -146,9 +146,9 @@ describe('rules', async () => {
     ).toBe(0);
   });
 
-  it('respects `pluginRenames` when disabling rules', async () => {
+  it('respects renamed plugin prefixes when disabling rules', async () => {
     const renamedConfigResult = await computeEslintConfig('noPrettierIncompatibleRules', {
-      un: {pluginRenames: {stylistic: 'style'}},
+      un: {plugins: {stylistic: {prefix: 'style'}}},
     });
 
     expect(renamedConfigResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'style/indent')).toBe(0);

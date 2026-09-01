@@ -256,7 +256,7 @@ export interface EslintConfigUnOptions<
    * They will be lazy-loaded only if used.
    *
    * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or
-   * even prefixes you've renamed via `pluginRenames`.
+   * even prefixes you've set via `plugins.<pluginName>.prefix`.
    */
   extraPlugins?: ExtraPlugins;
 
@@ -366,31 +366,37 @@ export interface EslintConfigUnOptions<
   // #region 🟠 PLUGINS RELATED OPTIONS
 
   /**
-   * Allows to change a plugin prefix.
-   * Keys are the default prefixes, value cannot be empty string (or it will be ignored anyway).
-   *
-   * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
+   * Per-plugin settings, keyed by the "canonical" plugin prefix.
    * @example
    * To make all the rules from `eslint-react` plugin have `react-x` prefix:
    * ```ts
-   * {'eslint-react': 'react-x'}
+   * {'eslint-react': {prefix: 'react-x'}}
    * ```
    */
-  pluginRenames?: Partial<Record<Exclude<PluginPrefix, ''>, string>>;
+  plugins?: {
+    [Plugin in Exclude<PluginPrefix, ''>]?: {
+      /**
+       * Allows to change the prefix the plugin is registered under.
+       * Cannot be an empty string (or it will be ignored anyway).
+       *
+       * You have to still use the **canonical** prefix in `overrides`, and the rules will be
+       * automatically renamed.
+       */
+      prefix?: string;
 
-  /**
-   * This option allows you to override any of the used plugins.
-   * This can be useful when this config is used to lint a repository of one of the built-in plugins
-   * to provide development version of that plugin.
-   */
-  pluginOverrides?: {
-    [Plugin in Exclude<PluginPrefix, ''>]?: MaybeFn<
-      MaybePromise<
-        Plugin extends keyof typeof pluginsLoaders
-          ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
-          : EslintPlugin
-      >
-    >;
+      /**
+       * Allows to override the plugin implementation.
+       * This can be useful when this config is used to lint a repository of one of the built-in
+       * plugins to provide development version of that plugin.
+       */
+      plugin?: MaybeFn<
+        MaybePromise<
+          Plugin extends keyof typeof pluginsLoaders
+            ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
+            : EslintPlugin
+        >
+      >;
+    };
   };
 
   /**
@@ -631,7 +637,7 @@ export interface EslintConfigUnOptions<
    * canonical ones.
    *
    * Note that this option is not applicable to ESLint plugins: they are loaded by their canonical
-   * names; use `pluginOverrides` to provide a plugin installed under an alias.
+   * names; use `plugins.<pluginName>.plugin` to provide a plugin installed under an alias.
    * @example {vue: 'vue3'}
    */
   packageAliases?: Partial<Record<(typeof PACKAGES_TO_GET_INFO_FOR)[number], string>>;

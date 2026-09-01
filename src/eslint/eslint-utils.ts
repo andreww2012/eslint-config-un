@@ -74,17 +74,18 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
   return '';
 };
 
+export const resolvePluginPrefix = (
+  context: UnConfigContext,
+  pluginPrefix: PluginPrefix | (string & {}),
+) =>
+  context.rootOptions.plugins?.[pluginPrefix as Exclude<PluginPrefix, ''>]?.prefix || pluginPrefix;
+
 export const getRuleNameAndPluginPrefixByFullName = (
   context: UnConfigContext,
   fullRuleName: string,
 ) => {
-  const pluginRenames = context.rootOptions.pluginRenames || {};
-
   const pluginPrefixCanonical = getPluginPrefixByFullRuleName(context, fullRuleName);
-  const pluginPrefixResolved =
-    pluginPrefixCanonical && pluginPrefixCanonical in pluginRenames
-      ? pluginRenames[pluginPrefixCanonical as Exclude<PluginPrefix, ''>] || pluginPrefixCanonical
-      : pluginPrefixCanonical;
+  const pluginPrefixResolved = resolvePluginPrefix(context, pluginPrefixCanonical);
   const ruleNameUnprefixed = pluginPrefixCanonical
     ? fullRuleName.slice(pluginPrefixCanonical.length + 1 /* `/` character */)
     : fullRuleName;
@@ -106,8 +107,7 @@ export const resolveFullRuleName = (
   pluginPrefix: PluginPrefix,
   ruleNameUnprefixed: string,
 ) => {
-  const pluginPrefixResolved =
-    context.rootOptions.pluginRenames?.[pluginPrefix as Exclude<PluginPrefix, ''>] || pluginPrefix;
+  const pluginPrefixResolved = resolvePluginPrefix(context, pluginPrefix);
   return pluginPrefixResolved
     ? `${pluginPrefixResolved}/${ruleNameUnprefixed}`
     : ruleNameUnprefixed;

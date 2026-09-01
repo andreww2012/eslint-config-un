@@ -7,6 +7,7 @@ import {
   disableAutofixForAllRulesInPlugin,
   getRuleNameAndPluginPrefixByFullName,
   removeRuleLanguagesFromPlugin,
+  resolvePluginPrefix,
 } from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
@@ -175,9 +176,9 @@ export const resolveConfigAsyncData = async (
         }
         if (pluginPrefix) {
           const isProvided =
-            rootOptions.pluginOverrides?.[pluginPrefix as Exclude<PluginPrefix, ''>] != null;
+            rootOptions.plugins?.[pluginPrefix as Exclude<PluginPrefix, ''>]?.plugin != null;
           debug(
-            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from the `plugins` option') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
         }
         const plugin = pluginResult?.module;
@@ -391,10 +392,7 @@ ${styleText(
         ) ||
           internalOptions.disableAutofixForAllFixableRulesOnly)
       ) {
-        const pluginPrefix =
-          pluginPrefixCanonical === ''
-            ? ''
-            : rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+        const pluginPrefix = resolvePluginPrefix(context, pluginPrefixCanonical);
         debug(
           `Created a copy of \`${stylePluginPrefix(pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
         );
@@ -409,10 +407,7 @@ ${styleText(
     : Object.fromEntries(
         objectEntriesUnsafe(loadedPlugins).map(([pluginPrefixCanonical, plugin]) => {
           /* v8 ignore next - The vanilla rules are not registered as a plugin */
-          const pluginPrefix =
-            pluginPrefixCanonical === ''
-              ? ''
-              : rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+          const pluginPrefix = resolvePluginPrefix(context, pluginPrefixCanonical);
           const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
             (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
               ({ruleNameUnprefixed, isAutofixDisabled}) => [ruleNameUnprefixed, isAutofixDisabled],

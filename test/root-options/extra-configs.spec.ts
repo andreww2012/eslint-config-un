@@ -41,7 +41,7 @@ describe('option: `extraConfigs`', () => {
       {},
       {
         un: {
-          pluginRenames: {unicorn: 'unicorn-renamed'},
+          plugins: {unicorn: {prefix: 'unicorn-renamed'}},
           extraConfigs: [{name: 'named', rules: {'unicorn/no-null': 'error'}}],
         },
       },

@@ -12,9 +12,9 @@ const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =
 const {errors} = await eslintConfigInternal(
   {
     loadPluginsOnDemand: false,
-    pluginOverrides: {
-      angular: pluginAngular,
-      'angular-template': pluginAngularTemplate,
+    plugins: {
+      angular: {plugin: pluginAngular},
+      'angular-template': {plugin: pluginAngularTemplate},
     },
     configs: {
       // Ensure all rules are enabled

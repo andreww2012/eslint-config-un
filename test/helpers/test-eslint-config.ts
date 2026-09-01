@@ -132,7 +132,7 @@ export const computeEslintConfig = async (
     getRuleEntryParsed,
     getLoadedPlugin: (pluginPrefix: Exclude<PluginPrefix, ''>) =>
       getConfigByUnPostfix('global-setup/plugins')?.plugins?.[
-        unOptions?.pluginRenames?.[pluginPrefix] ?? pluginPrefix
+        unOptions?.plugins?.[pluginPrefix]?.prefix ?? pluginPrefix
       ],
   };
 };

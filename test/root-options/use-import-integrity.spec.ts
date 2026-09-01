@@ -50,7 +50,7 @@ describe('option: `useImportIntegrity`', () => {
     } satisfies EslintPlugin;
 
     const configResult = await computeEslintConfig('import', {
-      un: {useImportIntegrity: true, pluginOverrides: {'import-integrity': PLUGIN_WITH_SCHEMA}},
+      un: {useImportIntegrity: true, plugins: {'import-integrity': {plugin: PLUGIN_WITH_SCHEMA}}},
     });
 
     expect(configResult.getLoadedPlugin('import')?.rules?.['no-cycle']?.meta?.schema).toStrictEqual(
@@ -62,7 +62,7 @@ describe('option: `useImportIntegrity`', () => {
     const EMPTY_PLUGIN = {rules: {}} satisfies EslintPlugin;
 
     const configResult = await computeEslintConfig('import', {
-      un: {useImportIntegrity: true, pluginOverrides: {'import-integrity': EMPTY_PLUGIN}},
+      un: {useImportIntegrity: true, plugins: {'import-integrity': {plugin: EMPTY_PLUGIN}}},
     });
 
     expect(getReplacedRuleNames(configResult)).toStrictEqual([]);

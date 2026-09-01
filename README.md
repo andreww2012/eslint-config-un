@@ -48,7 +48,7 @@ We aim to update the dependencies within 1 month after their release.
 Many plugins (usually framework/library-specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
 Run ESLint with our config to find out which plugins have to be installed manually, repeating this until it proceeds to the linting stage.
 
-You can always override a plugin's implementation with the [`pluginOverrides` option](#pluginoverrides) or with your package manager's overrides functionality.
+You can always override a plugin's implementation with the [`plugins.<pluginName>.plugin` option][plugins option] or with your package manager's overrides functionality.
 
 ### Usage
 
@@ -483,14 +483,14 @@ export default eslintConfig({
 });
 ```
 
-### Plugin prefixes (`pluginRenames` option)
+### Plugin prefixes (`plugins.<pluginName>.prefix` option)
 
 ESLint plugins are registered with an arbitrary user-provided prefix, such as `unicorn` or `vue`.
 Rule names are then formed by combining the prefix with the rule's own name, for example `unicorn/no-useless-undefined`.
 
 eslint-config-un provides the ability to change any registered plugin prefix.
 Additionally, some plugins are registered with a different prefix than their documentation suggests.
-If you would like to rename them back or rename some other plugins, you can use the `pluginRenames` option, which is a map from the "canonical" prefixes to the user-defined ones.
+If you would like to rename them back or rename some other plugins, set `plugins.<canonical prefix>.prefix` to the prefix you want.
 
 #### Default renames
 
@@ -648,7 +648,7 @@ There are two plugins working with Tailwind:
 | [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss)               | `tailwindcss`         | `^3.4.0`                                                     |
 
 We highly recommend using the former because it supports Tailwind v4 and, as of the time of writing, it is better maintained and more actively updated.
-In addition, if you don't like the verbosity of the default prefix, you can use the [`pluginRenames` option](#pluginrenames) to rename it to simply `tailwindcss` or `tailwind`.
+In addition, if you don't like the verbosity of the default prefix, you can use the [`plugins.<pluginName>.prefix` option][plugins option] to rename it to simply `tailwindcss` or `tailwind`.
 
 ### Perfectionist
 
@@ -748,7 +748,7 @@ Allows you to provide additional ESLint plugins.
 Their prefixes and possibly rule names will appear in configs' `rules` property type.
 They, like all the built-in plugins, will by default be loaded only if used.
 
-Note that their prefixes must not match the built-in/known ones (like `ts` or `unicorn`), or even the prefixes you've set via [`pluginRenames`](#pluginrenames).
+Note that their prefixes must not match the built-in/known ones (like `ts` or `unicorn`), or even the prefixes you've set via [`plugins.<pluginName>.prefix`][plugins option].
 
 ### `linterOptions{NoInlineConfig,ReportUnusedDisableDirectives,ReportUnusedInlineConfigs}`
 
@@ -808,18 +808,18 @@ When enabled:
   Trying to use it results in a type error;
 - every `warning` severity eslint-config-un would otherwise set by default is **rewritten to `error` at runtime**, including the implicit [`linterOptions.reportUnusedDisableDirectives`](#linteroptionsnoinlineconfigreportunuseddisabledirectivesreportunusedinlineconfigs) default (which ESLint sets to `'warn'`).
 
-### `pluginRenames`
+### `plugins`
 
-**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, string>>`
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin}>>`
 
-See [Plugin prefixes][plugin prefix renames].
+Per-plugin settings, keyed by the "canonical" plugin prefix.
 
-### `pluginOverrides`
+`prefix` changes the prefix the plugin is registered under - see [Plugin prefixes][plugin prefix renames].
 
-**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, EslintPlugin>>`
-
-Overrides the implementation of some of the plugins.
+`plugin` overrides the plugin implementation.
 This can be useful when this config is used to lint the repository of one of the built-in plugins, to provide the development version of that plugin.
+
+For example: `{plugins: {'eslint-react': {prefix: 'react-x'}}}`.
 
 ### `loadPluginsOnDemand`
 
@@ -911,7 +911,7 @@ Keys are the canonical package names, values are the names the packages are actu
 
 > [!NOTE]
 > This option is not applicable to ESLint plugins: they are loaded by their canonical names.
-> Use [`pluginOverrides`](#pluginoverrides) to provide a plugin installed under an alias.
+> Use [`plugins.<pluginName>.plugin`][plugins option] to provide a plugin installed under an alias.
 
 ### `gitignore`
 
@@ -1108,7 +1108,7 @@ Before committing, please also run your tests, formatter, other linters and tool
    1. Run ESLint for the first time (without `--fix`!).
       The list of dependencies to be installed might be shown to you.
       Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
-   2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using [`pluginRenames` option][plugin prefix renames].
+   2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using the [`plugins.<pluginName>.prefix` option][plugin prefix renames].
       Look for `Definition for rule '<rule name>' was not found` errors.
 4. Perform the following two steps in any order:
    1. Enable stylistic rules only and fix them automatically (if you wish to do so) by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments will not happen):
@@ -1250,7 +1250,8 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
   </tfoot>
 </table>
 
-[plugin prefix renames]: #plugin-prefixes-pluginrenames-option
+[plugin prefix renames]: #plugin-prefixes-pluginspluginnameprefix-option
+[plugins option]: #plugins
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->

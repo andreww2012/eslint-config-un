@@ -88,9 +88,9 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('cli', 'disable-autofix/node/hashbang')).toBe(0);
   });
 
-  it('respects `pluginRenames`', async () => {
+  it('respects renamed plugin prefixes', async () => {
     const renamedConfigResult = await computeEslintConfig('cli', {
-      un: {pluginRenames: {node: 'nodejs'}},
+      un: {plugins: {node: {prefix: 'nodejs'}}},
     });
 
     expect(renamedConfigResult.getRuleEntrySeverity('cli', 'nodejs/hashbang')).toBe(0);

@@ -39,7 +39,6 @@ import {
   isInEditor,
   maybeCall,
   objectEntriesUnsafe,
-  objectKeysUnsafe,
   omit,
   readFileSafe,
   styleConfigName,
@@ -346,7 +345,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ignores,
     files,
     gitignore,
-    pluginRenames = {},
+    plugins: pluginsOptions = {},
     loadPluginsOnDemand,
     offlineMode,
     useImportIntegrity,
@@ -360,13 +359,19 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     context.registerUsedPlugin('import-integrity', 'option:useImportIntegrity');
   }
 
-  const renamedPlugins = objectKeysUnsafe(pluginRenames);
-  const pluginRenamesList = Object.values(pluginRenames);
+  const pluginRenames = objectEntriesUnsafe(pluginsOptions).flatMap(
+    ([pluginPrefix, pluginOptions]) =>
+      pluginOptions?.prefix == null ? [] : [[pluginPrefix, pluginOptions.prefix] as const],
+  );
+  const renamedPluginPrefixes = new Set<string>(
+    pluginRenames.map(([pluginPrefix]) => pluginPrefix),
+  );
+  const newPluginPrefixes = pluginRenames.map(([, newPrefix]) => newPrefix);
   const occupiedPluginPrefixes = new Set<string>(
-    PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPlugins.includes(prefix)),
+    PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPluginPrefixes.has(prefix)),
   );
   const badPluginRenames = new Set<string>();
-  for (const newName of pluginRenamesList) {
+  for (const newName of newPluginPrefixes) {
     if (newName === DISABLE_AUTOFIX || occupiedPluginPrefixes.has(newName)) {
       badPluginRenames.add(newName);
     }
@@ -382,11 +387,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     Object.keys(extraPlugins || {}).some(
       (extraPluginPrefix) =>
         PLUGIN_PREFIXES_LIST.includes(extraPluginPrefix as PluginPrefix) ||
-        pluginRenamesList.includes(extraPluginPrefix),
+        newPluginPrefixes.includes(extraPluginPrefix),
     )
   ) {
     logger.fatal(
-      'Invalid extra plugin prefixes: using of built-in plugin prefixes or prefixes from `pluginRenames` is forbidden',
+      'Invalid extra plugin prefixes: using of built-in plugin prefixes or prefixes set via the `plugins` option is forbidden',
     );
   }
 

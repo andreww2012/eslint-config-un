@@ -23,7 +23,7 @@ import {
   GLOB_YML_YAML,
 } from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
-import {genFlatConfigEntryName} from '../eslint/eslint-utils';
+import {genFlatConfigEntryName, resolvePluginPrefix} from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
   type ParserPrefix,
@@ -633,7 +633,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         files: entryFiles,
         ...(entry.ignores?.length && {ignores: entry.ignores}),
         ...('language' in mechanism && {
-          language: `${context.rootOptions.pluginRenames?.[mechanism.language[0]] ?? mechanism.language[0]}/${mechanism.language[1]}`,
+          language: `${resolvePluginPrefix(context, mechanism.language[0])}/${mechanism.language[1]}`,
         }),
         ...entry.entryProperties,
         ...(Reflect.ownKeys(languageOptions).length > 0 && {languageOptions}),
