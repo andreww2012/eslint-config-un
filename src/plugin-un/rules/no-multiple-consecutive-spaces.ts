@@ -8,6 +8,12 @@ const RULE_OPTIONS_SCHEMA = {
     allowSpacesOnly: {
       type: 'boolean',
     },
+    allowLeadingSpaces: {
+      type: 'boolean',
+    },
+    allowTrailingSpaces: {
+      type: 'boolean',
+    },
   },
   additionalProperties: false,
 } as const satisfies JSONSchema4;
@@ -26,7 +32,9 @@ const rule: Eslint.Rule.RuleModule = {
     fixable: 'code',
     hasSuggestions: true,
     schema: [RULE_OPTIONS_SCHEMA],
-    defaultOptions: [{allowSpacesOnly: true}] satisfies [RuleOptions],
+    defaultOptions: [
+      {allowSpacesOnly: true, allowLeadingSpaces: true, allowTrailingSpaces: true},
+    ] satisfies [RuleOptions],
     messages: {
       noMultipleConsecutiveSpaces: 'Multiple consecutive spaces in string literal are not allowed.',
       replaceMultipleSpacesWithSingle: 'Replace multiple spaces with a single space',
@@ -45,10 +53,20 @@ const rule: Eslint.Rule.RuleModule = {
           return;
         }
 
+        const isSpacesOnly = SPACES_ONLY_REGEXP.test(value);
+        if (isSpacesOnly && options?.allowSpacesOnly) {
+          return;
+        }
+
         value
           .matchAll(MULTIPLE_CONSECUTIVE_SPACES_REGEXP)
           .forEach(({index: startIndex, 0: matchString}) => {
-            if (options?.allowSpacesOnly && SPACES_ONLY_REGEXP.test(value)) {
+            if (
+              !isSpacesOnly &&
+              // eslint-disable-next-line unicorn/prefer-simple-condition-first
+              ((options?.allowLeadingSpaces && startIndex === 0) ||
+                (options?.allowTrailingSpaces && startIndex + matchString.length === value.length))
+            ) {
               return;
             }
 

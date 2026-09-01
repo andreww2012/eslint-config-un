@@ -20,6 +20,22 @@ ruleTester.run(RULE_NAME, noMultipleConsecutiveSpaces, {
       code: "const value = '  ';",
       options: [{allowSpacesOnly: true}],
     },
+    {
+      code: "const value = '  ';",
+      options: [{allowSpacesOnly: true, allowLeadingSpaces: false, allowTrailingSpaces: false}],
+    },
+
+    "const value = 'a  ';",
+    {
+      code: "const value = 'a  ';",
+      options: [{allowTrailingSpaces: true}],
+    },
+    "const value = '  a';",
+    {
+      code: "const value = '  a';",
+      options: [{allowLeadingSpaces: true}],
+    },
+    "const value = '  a  ';",
   ],
   invalid: [
     {
@@ -117,15 +133,59 @@ ruleTester.run(RULE_NAME, noMultipleConsecutiveSpaces, {
       ],
     },
     {
-      code: "const value = ' a  ';",
-      options: [{allowSpacesOnly: true}],
+      code: "const value = '  ';",
+      options: [{allowSpacesOnly: false, allowLeadingSpaces: true, allowTrailingSpaces: true}],
       errors: [
         {
           messageId: 'noMultipleConsecutiveSpaces',
           suggestions: [
             {
               messageId: 'replaceMultipleSpacesWithSingle',
-              output: "const value = ' a ';",
+              output: "const value = ' ';",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      code: "const value = '  a';",
+      options: [{allowLeadingSpaces: false}],
+      errors: [
+        {
+          messageId: 'noMultipleConsecutiveSpaces',
+          suggestions: [
+            {
+              messageId: 'replaceMultipleSpacesWithSingle',
+              output: "const value = ' a';",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      code: "const value = 'a  ';",
+      options: [{allowTrailingSpaces: false}],
+      errors: [
+        {
+          messageId: 'noMultipleConsecutiveSpaces',
+          suggestions: [
+            {
+              messageId: 'replaceMultipleSpacesWithSingle',
+              output: "const value = 'a ';",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      code: "const value = '  a  b  ';",
+      errors: [
+        {
+          messageId: 'noMultipleConsecutiveSpaces',
+          suggestions: [
+            {
+              messageId: 'replaceMultipleSpacesWithSingle',
+              output: "const value = '  a b  ';",
             },
           ],
         },
