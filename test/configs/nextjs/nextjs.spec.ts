@@ -77,7 +77,7 @@ describe('basic tests', () => {
     });
 
     it('creates `nextjs` eslint config if explicitly enabled', async () => {
-      await expectConfigState({nextJs: true}, 'nextjs', true, 'misc-enabled');
+      await expectConfigState('nextJs', 'nextjs', true, 'misc-enabled');
     });
 
     it('does not create `nextjs` eslint config and prints a warning if explicitly disabled', async () => {
@@ -97,18 +97,19 @@ describe('rules', async () => {
   });
 
   it('`nextjs/no-img-element` rule fires on a tsx file with an <img> element', async () => {
-    const results = await testEslintConfig(
-      {
-        nextJs: {
-          settings: {
-            // To prevent warning printed in the console about `pages` directory not found
-            rootDir: pathe.join(import.meta.dirname, 'fixtures/jsx-with-img-tag'),
+    const results = await testEslintConfig('nextJs', FIXTURES.jsxWithImgTag, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {
+        plugins: {
+          nextjs: {
+            settings: {
+              // To prevent warning printed in the console about `pages` directory not found
+              rootDir: pathe.join(import.meta.dirname, 'fixtures/jsx-with-img-tag'),
+            },
           },
         },
       },
-      FIXTURES.jsxWithImgTag,
-      import.meta.dirname,
-    );
+    });
 
     const error = findLintMessageFromLintResults(
       results,
@@ -176,7 +177,9 @@ describe('options', () => {
     it('sets `next` settings with `rootDir` as a string when provided', async () => {
       const SETTINGS = {rootDir: '/path/to/app'};
 
-      const configResult = await computeEslintConfig({nextJs: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('nextJs', {
+        un: {plugins: {nextjs: {settings: SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('nextjs')?.settings?.['next']).toStrictEqual(
         SETTINGS,

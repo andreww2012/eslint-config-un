@@ -53,7 +53,7 @@ describe('basic tests', () => {
     });
 
     it('creates `compat` eslint config if explicitly enabled', async () => {
-      await expectConfigState({compat: true}, 'compat', true, 'misc-enabled');
+      await expectConfigState('compat', 'compat', true, 'misc-enabled');
     });
 
     it('does not create `compat` eslint config and prints a warning if explicitly disabled', async () => {
@@ -72,11 +72,10 @@ describe('rules', async () => {
   });
 
   it('`compat/compat` rule fires on fetch API with old browser target', async () => {
-    const result = await testEslintConfig(
-      {compat: {settings: {targets: ['ie 11']}}},
-      FIXTURES.fetchApi,
-      import.meta.dirname,
-    );
+    const result = await testEslintConfig('compat', FIXTURES.fetchApi, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {plugins: {compat: {settings: {targets: ['ie 11']}}}},
+    });
 
     const error = findLintMessageFromLintResults(result, FIXTURES.fetchApi, 'compat/compat');
 
@@ -84,11 +83,10 @@ describe('rules', async () => {
   });
 
   it('does not trigger compat rule on widely supported console API', async () => {
-    const result = await testEslintConfig(
-      {compat: {settings: {targets: ['ie 11']}}},
-      FIXTURES.consoleApi,
-      import.meta.dirname,
-    );
+    const result = await testEslintConfig('compat', FIXTURES.consoleApi, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {plugins: {compat: {settings: {targets: ['ie 11']}}}},
+    });
 
     const error = findLintMessageFromLintResults(result, FIXTURES.consoleApi, 'compat/compat');
 
@@ -147,7 +145,9 @@ describe('options', () => {
     it('sets compat settings when set to provided', async () => {
       const SETTINGS = {targets: ['ie 11'], polyfills: ['fetch']};
 
-      const configResult = await computeEslintConfig({compat: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('compat', {
+        un: {plugins: {compat: {settings: SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('compat')?.settings).toStrictEqual(SETTINGS);
     });

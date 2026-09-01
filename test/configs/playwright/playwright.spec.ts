@@ -82,12 +82,7 @@ describe('basic tests', () => {
     });
 
     it('creates `playwright` eslint config if explicitly enabled and prints a warning', async () => {
-      await expectConfigState(
-        {playwright: true},
-        'playwright',
-        ['playwright', true],
-        'misc-enabled',
-      );
+      await expectConfigState('playwright', 'playwright', ['playwright', true], 'misc-enabled');
     });
 
     it('does not create `playwright` eslint config if explicitly disabled', async () => {
@@ -179,7 +174,9 @@ describe('options', () => {
     it('sets `playwright` settings when `settings` is provided', async () => {
       const SETTINGS = {globalAliases: {test: ['myTest']}};
 
-      const configResult = await computeEslintConfig({playwright: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('playwright', {
+        un: {plugins: {playwright: {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('playwright')?.settings?.['playwright'],

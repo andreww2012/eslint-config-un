@@ -85,7 +85,7 @@ describe('basic tests', () => {
       });
 
       it('creates `lit` eslint config and prints a warning if explicitly enabled', async () => {
-        await expectConfigState({lit: true}, 'lit', ['lit', true], 'misc-enabled');
+        await expectConfigState('lit', 'lit', ['lit', true], 'misc-enabled');
       });
 
       it('does not create `lit` eslint config if explicitly disabled', async () => {
@@ -194,8 +194,8 @@ describe('options', () => {
     it('assigns `elementBaseClasses` to `lit` settings property', async () => {
       const ELEMENT_BASE_CLASSES = {elementBaseClasses: ['MyBaseElement']};
 
-      const configResult = await computeEslintConfig({
-        lit: {settings: ELEMENT_BASE_CLASSES},
+      const configResult = await computeEslintConfig('lit', {
+        un: {plugins: {lit: {settings: ELEMENT_BASE_CLASSES}}},
       });
 
       expect(configResult.getConfigByUnPostfix('lit')?.settings?.['lit']).toStrictEqual(

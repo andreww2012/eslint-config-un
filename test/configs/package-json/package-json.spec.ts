@@ -139,7 +139,9 @@ describe('options', () => {
   describe('option: `settings`', async () => {
     const PLUGIN_SETTINGS = {enforceForPrivate: true};
 
-    const configResult = await computeEslintConfig({packageJson: {settings: PLUGIN_SETTINGS}});
+    const configResult = await computeEslintConfig('packageJson', {
+      un: {plugins: {'package-json': {settings: PLUGIN_SETTINGS}}},
+    });
 
     it('sets plugin settings on `package-json` eslint config', () => {
       expect(

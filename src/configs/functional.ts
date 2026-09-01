@@ -25,6 +25,36 @@ interface OverridesSetting {
 }
 
 /**
+ * [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `immutability` property of the `settings` flat config option.
+ * @see https://github.com/eslint-functional/eslint-plugin-functional/tree/HEAD/docs/rules/settings
+ */
+export interface FunctionalPluginSettings {
+  /**
+   * Overrides for how the immutability of types is determined using
+   * [`is-immutable-type`](https://npmx.dev/is-immutable-type).
+   *
+   * Note: When providing custom overrides, the default ones (for `Map`, `Set`, `Date`, `URL`,
+   * `URLSearchParams`) will not be applied.
+   * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed.
+   */
+  overrides?:
+    | OverridesSetting[]
+    | {
+        /**
+         * Keep the default overrides instead of replacing them
+         */
+        keepDefault?: boolean;
+
+        /**
+         * The overrides themselves
+         */
+        values?: OverridesSetting[];
+      };
+}
+
+/**
  * Rules enforcing functional programming patterns.
  *
  * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules
@@ -36,38 +66,7 @@ interface OverridesSetting {
  */
 export interface FunctionalEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'functional'> {
-  /**
-   * [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `immutability` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   * @see https://github.com/eslint-functional/eslint-plugin-functional/tree/HEAD/docs/rules/settings
-   */
-  settings?: {
-    /**
-     * Overrides for how the immutability of types is determined using
-     * [`is-immutable-type`](https://npmx.dev/is-immutable-type).
-     *
-     * Note: When providing custom overrides, the default ones (for `Map`, `Set`, `Date`, `URL`,
-     * `URLSearchParams`) will not be applied.
-     * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed.
-     */
-    overrides?:
-      | OverridesSetting[]
-      | {
-          /**
-           * Keep the default overrides instead of replacing them
-           */
-          keepDefault?: boolean;
-
-          /**
-           * The overrides themselves
-           */
-          values?: OverridesSetting[];
-        };
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'functional'> {}
 
 export default defineUnConfig<FunctionalEslintConfigOptions>(
   'functional',
@@ -75,7 +74,7 @@ export default defineUnConfig<FunctionalEslintConfigOptions>(
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('functional');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'functional');
 

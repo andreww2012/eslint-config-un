@@ -11,7 +11,7 @@ import {
 
 type NormalizeSeeLinksRuleOptions = GetRuleOptions<'jsdoc', 'normalize-see-links'>;
 
-interface EslintPluginJsdocSettings {
+export interface JsdocPluginSettings {
   /**
    * Disables all rules for the comment block on which a `@private` tag (or `@access private`)
    * occurs.
@@ -253,14 +253,6 @@ export interface JsdocEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> {
   /**
-   * [`eslint-plugin-jsdoc`](https://npmx.dev/eslint-plugin-jsdoc) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `jsdoc` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: EslintPluginJsdocSettings;
-
-  /**
    * Explicitly specify or ignore files written in TypeScript.
    * Will be used to disable certain rules like
    * [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md)
@@ -275,9 +267,7 @@ export interface JsdocEslintConfigOptions<
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    * @default true <=> `ts` config is enabled
    */
-  configTypescript?:
-    | boolean
-    | (UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>);
+  configTypescript?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'>;
 
   /**
    * Recognize the specified tags as valid JSDoc tags.
@@ -356,13 +346,14 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
   });
 
   const {
-    settings: pluginSettings,
     configTypescript,
     customTags,
     extraMultilineCommentsStartingWithToIgnore,
     formatTypeValues,
     normalizeSeeLinks,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('jsdoc');
 
   const customTagsList = getKeysOfTruthyValues(customTags);
 
@@ -392,7 +383,6 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
           html: false,
         },
         settings: {
-          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
           jsdoc: pluginSettings,
         },
       },
@@ -497,9 +487,6 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
     .addOverrides();
 
   const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'jsdoc');
-  const configTypescriptOptions = typeof configTypescript === 'object' ? configTypescript : {};
-  const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
-
   configBuilderTypescript
     ?.addConfig([
       'jsdoc/ts',
@@ -507,8 +494,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
         filesDefault: [GLOB_TS_X],
         parseWith: 'ts',
         settings: {
-          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
-          jsdoc: pluginSettingsForTs,
+          jsdoc: pluginSettings,
         },
       },
     ])

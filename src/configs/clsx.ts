@@ -7,32 +7,31 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `clsxOptions` property of the `settings` flat config option.
+ * @default {clsx: ['default', 'clsx']; classnames: 'default'}
+ */
+export interface ClsxPluginSettings {
+  /**
+   * Imports that should be considered `clsx` imports.
+   */
+  clsx?: string[];
+
+  /**
+   * The import that should be considered a `classnames` import
+   */
+  classnames?: string;
+}
+
+/**
  * [clsx](https://github.com/lukeed/clsx) specific rules.
  *
  * 📁 Default `files`: all files
  */
 export interface ClsxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'clsx'> {
-  /**
-   * [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `clsxOptions` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   * @default {clsx: ['default', 'clsx']; classnames: 'default'}
-   */
-  settings?: {
-    /**
-     * Imports that should be considered `clsx` imports.
-     */
-    clsx?: string[];
-
-    /**
-     * The import that should be considered a `classnames` import
-     */
-    classnames?: string;
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'clsx'> {}
 
 export default defineUnConfig<ClsxEslintConfigOptions>('clsx', {enabledBy: {package: 'clsx'}})((
   context,
@@ -40,7 +39,7 @@ export default defineUnConfig<ClsxEslintConfigOptions>('clsx', {enabledBy: {pack
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('clsx');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'clsx');
 

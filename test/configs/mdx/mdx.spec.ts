@@ -60,7 +60,7 @@ describe('basic tests', () => {
     });
 
     it('creates `mdx/mdx` eslint config and prints a warning if explicitly enabled', async () => {
-      await expectConfigState({mdx: true}, 'mdx/mdx', ['mdx', true], 'misc-enabled');
+      await expectConfigState('mdx', 'mdx/mdx', ['mdx', true], 'misc-enabled');
     });
 
     it('does not create `mdx/mdx` eslint config if explicitly disabled', async () => {
@@ -144,13 +144,17 @@ describe('options', () => {
     });
 
     it('sets mdx settings when provided, transforming keys to `mdx/<kebab-case>`', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {
-          settings: {
-            codeBlocks: true,
-            languageMapper: {js: 'jsx'},
-            ignoreRemarkConfig: true,
-            remarkConfigPath: './.remarkrc.js',
+      const configResult = await computeEslintConfig('mdx', {
+        un: {
+          plugins: {
+            mdx: {
+              settings: {
+                codeBlocks: true,
+                languageMapper: {js: 'jsx'},
+                ignoreRemarkConfig: true,
+                remarkConfigPath: './.remarkrc.js',
+              },
+            },
           },
         },
       });

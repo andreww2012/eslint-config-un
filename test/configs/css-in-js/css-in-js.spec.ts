@@ -189,11 +189,13 @@ describe('options', () => {
       });
 
       it('triggers for duplicate properties in custom attribute when `attributes` includes it', async () => {
-        const results = await testEslintConfig(
-          {cssInJs: {settings: {attributes: ['css']}}},
-          FIXTURES.cssAttributeDupe,
-          JSX_EXTRA_CONFIGS,
-        );
+        const results = await testEslintConfig('cssInJs', FIXTURES.cssAttributeDupe, {
+          ...JSX_EXTRA_CONFIGS,
+          un: {
+            ...JSX_EXTRA_CONFIGS.un,
+            plugins: {'css-in-js': {settings: {attributes: ['css']}}},
+          },
+        });
 
         const error = findLintMessageFromLintResults(
           results,
@@ -207,11 +209,13 @@ describe('options', () => {
       });
 
       it('does not trigger for unique properties in custom attribute when `attributes` includes it', async () => {
-        const results = await testEslintConfig(
-          {cssInJs: {settings: {attributes: ['css']}}},
-          FIXTURES.cssAttributeNoDupe,
-          JSX_EXTRA_CONFIGS,
-        );
+        const results = await testEslintConfig('cssInJs', FIXTURES.cssAttributeNoDupe, {
+          ...JSX_EXTRA_CONFIGS,
+          un: {
+            ...JSX_EXTRA_CONFIGS.un,
+            plugins: {'css-in-js': {settings: {attributes: ['css']}}},
+          },
+        });
 
         const error = findLintMessageFromLintResults(
           results,
@@ -241,11 +245,10 @@ describe('options', () => {
       });
 
       it('triggers for duplicate properties in custom function when `defineFunctions` includes it', async () => {
-        const results = await testEslintConfig(
-          {cssInJs: {settings: {defineFunctions: {'my-module': ['myStyleFn']}}}},
-          FIXTURES.defineFunctionDupe,
-          import.meta.dirname,
-        );
+        const results = await testEslintConfig('cssInJs', FIXTURES.defineFunctionDupe, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {plugins: {'css-in-js': {settings: {defineFunctions: {'my-module': ['myStyleFn']}}}}},
+        });
 
         const error = findLintMessageFromLintResults(
           results,
@@ -259,11 +262,10 @@ describe('options', () => {
       });
 
       it('does not trigger for unique properties in custom function when `defineFunctions` includes it', async () => {
-        const results = await testEslintConfig(
-          {cssInJs: {settings: {defineFunctions: {'my-module': ['myStyleFn']}}}},
-          FIXTURES.defineFunctionNoDupe,
-          import.meta.dirname,
-        );
+        const results = await testEslintConfig('cssInJs', FIXTURES.defineFunctionNoDupe, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {plugins: {'css-in-js': {settings: {defineFunctions: {'my-module': ['myStyleFn']}}}}},
+        });
 
         const error = findLintMessageFromLintResults(
           results,

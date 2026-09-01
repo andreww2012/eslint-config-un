@@ -13,6 +13,39 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `playwright` property of the `settings` flat config option.
+ */
+export interface PlaywrightPluginSettings {
+  /**
+   * "If you import Playwright globals (e.g.
+   * `test`, `expect`) with a custom name, you can configure this plugin to be aware of these
+   * additional names" - plugin docs
+   */
+  globalAliases?: {
+    /**
+     * The names `test` is imported under
+     */
+    test?: string[];
+
+    /**
+     * The names `expect` is imported under
+     */
+    expect?: string[];
+  };
+
+  /**
+   * "You can customize the error messages for rules using the `messages` property.
+   * This is useful if you would like to increase the verbosity of error messages or provide
+   * additional context.
+   * Only the message ids you define in this setting will be overridden, so any other messages
+   * will use the default message defined by the plugin" - plugin docs
+   */
+  messages?: Record<string, string>;
+}
+
+/**
  * [Playwright](https://playwright.dev) specific rules.
  *
  * 📁 Default `files`:
@@ -23,40 +56,6 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'playwright'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
-  /**
-   * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `playwright` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * "If you import Playwright globals (e.g.
-     * `test`, `expect`) with a custom name, you can configure this plugin to be aware of these
-     * additional names" - plugin docs
-     */
-    globalAliases?: {
-      /**
-       * The names `test` is imported under
-       */
-      test?: string[];
-
-      /**
-       * The names `expect` is imported under
-       */
-      expect?: string[];
-    };
-
-    /**
-     * "You can customize the error messages for rules using the `messages` property.
-     * This is useful if you would like to increase the verbosity of error messages or provide
-     * additional context.
-     * Only the message ids you define in this setting will be overridden, so any other messages
-     * will use the default message defined by the plugin" - plugin docs
-     */
-    messages?: Record<string, string>;
-  };
-
   /**
    * Names of functions that should be considered to be asserting functions.
    *
@@ -79,12 +78,9 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     configNoOnlyTests: false,
   });
 
-  const {
-    settings: pluginSettings,
-    configNoOnlyTests,
-    customAssertFunctionNames,
-    customAsyncExpectMatches,
-  } = optionsResolved;
+  const {configNoOnlyTests, customAssertFunctionNames, customAsyncExpectMatches} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('playwright');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'playwright');
 

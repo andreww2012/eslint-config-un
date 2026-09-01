@@ -76,7 +76,7 @@ describe('basic tests', () => {
     });
 
     it('creates `clsx` eslint config and prints a warning if explicitly enabled', async () => {
-      await expectConfigState({clsx: true}, 'clsx', ['clsx', true], 'misc-enabled');
+      await expectConfigState('clsx', 'clsx', ['clsx', true], 'misc-enabled');
     });
 
     it('does not create `clsx` eslint config if explicitly disabled', async () => {
@@ -170,8 +170,8 @@ describe('options', () => {
     it('assigns `settings` to `clsxOptions` settings property', async () => {
       const SETTINGS = {clsx: ['cn', 'cx'], classnames: 'default'};
 
-      const configResult = await computeEslintConfig({
-        clsx: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('clsx', {
+        un: {plugins: {clsx: {settings: SETTINGS}}},
       });
 
       const config = configResult.getConfigByUnPostfix('clsx');

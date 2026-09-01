@@ -57,7 +57,7 @@ describe('basic tests', () => {
     });
 
     it('creates `import-integrity` eslint config if explicitly enabled', async () => {
-      await expectConfigState({importIntegrity: true}, 'import-integrity', true, 'misc-enabled');
+      await expectConfigState('importIntegrity', 'import-integrity', true, 'misc-enabled');
     });
 
     it('does not create `import-integrity` eslint config and prints a warning if explicitly disabled', async () => {
@@ -83,13 +83,12 @@ describe('rules', async () => {
 
   it('`import-integrity/require-node-prefix` rule fires on a file that imports a Node.js built-in without the `node:` prefix', async () => {
     const results = await testEslintConfig(
-      {
-        importIntegrity: {
-          settings: {packageRootDir: import.meta.dirname},
-        },
-      },
+      'importIntegrity',
       FIXTURES.nodeImportWithoutNodeProtocolPrefix,
-      import.meta.dirname,
+      {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {plugins: {'import-integrity': {settings: {packageRootDir: import.meta.dirname}}}},
+      },
     );
 
     const error = findLintMessageFromLintResults(
@@ -187,10 +186,9 @@ describe('options', () => {
     );
 
     it('lets user-provided `settings` override the `mode` derived from the environment', async () => {
-      const configResult = await computeEslintConfig(
-        {importIntegrity: {settings: {mode: 'fix'}}},
-        {un: {environment: 'editor'}},
-      );
+      const configResult = await computeEslintConfig('importIntegrity', {
+        un: {plugins: {'import-integrity': {settings: {mode: 'fix'}}}, environment: 'editor'},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
@@ -200,7 +198,9 @@ describe('options', () => {
     it('merges user-provided `settings` into `import-integrity` settings (e.g. overrides `packageRootDir`)', async () => {
       const SETTINGS = {packageRootDir: 'custom-root', mode: 'fix' as const};
 
-      const configResult = await computeEslintConfig({importIntegrity: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('importIntegrity', {
+        un: {plugins: {'import-integrity': {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],

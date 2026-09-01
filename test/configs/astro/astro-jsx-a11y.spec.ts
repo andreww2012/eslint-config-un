@@ -126,9 +126,12 @@ describe('astro: sub config `jsxA11y`', () => {
       it('sets `jsx-a11y-x` settings when set', async () => {
         const SETTINGS = {components: {CardLink: 'a'}};
 
-        const configResult = await computeEslintConfig({
-          astro: {configJsxA11y: {settings: SETTINGS}},
-        });
+        const configResult = await computeEslintConfig(
+          {
+            astro: {configJsxA11y: true},
+          },
+          {un: {plugins: {'jsx-a11y': {settings: SETTINGS}}}},
+        );
 
         expect(
           configResult.getConfigByUnPostfix('jsx-a11y/astro')?.settings?.['jsx-a11y-x'],

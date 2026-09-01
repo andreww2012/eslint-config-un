@@ -79,7 +79,7 @@ describe('basic tests', () => {
     });
 
     it('creates `vitest` eslint config if explicitly enabled and prints a warning', async () => {
-      await expectConfigState({vitest: true}, 'vitest', ['vitest', true], 'misc-enabled');
+      await expectConfigState('vitest', 'vitest', ['vitest', true], 'misc-enabled');
     });
 
     it('does not create `vitest` eslint config if explicitly disabled', async () => {
@@ -174,12 +174,13 @@ describe('options', () => {
     it('sets plugin settings on `vitest` and `vitest/ts` eslint configs', async () => {
       const PLUGIN_SETTINGS = {typecheck: true};
 
-      const configResult = await computeEslintConfig({
-        vitest: {
-          settings: PLUGIN_SETTINGS,
+      const configResult = await computeEslintConfig(
+        {
+          vitest: true,
+          ts: true,
         },
-        ts: true,
-      });
+        {un: {plugins: {vitest: {settings: PLUGIN_SETTINGS}}}},
+      );
 
       expect(configResult.getConfigByUnPostfix('vitest')?.settings?.['vitest']).toStrictEqual(
         PLUGIN_SETTINGS,

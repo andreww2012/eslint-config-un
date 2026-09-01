@@ -9,6 +9,46 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-json-schema-validator`](https://npmx.dev/eslint-plugin-json-schema-validator)
+ * plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `json-schema-validator` property of the `settings` flat config
+ * option.
+ * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/README.md#settings)
+ */
+export interface JsonSchemaValidatorPluginSettings {
+  /**
+   * Where and for how long the schemas fetched over the network are cached
+   */
+  cache?: {
+    /**
+     * The cache directory
+     */
+    path?: string;
+
+    /**
+     * How long a cached schema stays fresh
+     */
+    ttl?: number | string;
+  };
+
+  /**
+   * How the schemas are fetched over the network
+   */
+  http?: {
+    /**
+     * Path to a module exporting a custom `get` implementation
+     */
+    getModulePath?: string;
+
+    /**
+     * Options passed to the request
+     */
+    requestOptions?: RequestOptions;
+  };
+}
+
+/**
  * An ESLint plugin that validates data using JSON Schema Validator.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
@@ -16,46 +56,6 @@ import {
 export interface JsonSchemaValidatorEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'> {
-  /**
-   * [`eslint-plugin-json-schema-validator`](https://npmx.dev/eslint-plugin-json-schema-validator)
-   * plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `json-schema-validator` property and applied to the resolved `files`
-   * and `ignores` of this config.
-   * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/README.md#settings)
-   */
-  settings?: {
-    /**
-     * Where and for how long the schemas fetched over the network are cached
-     */
-    cache?: {
-      /**
-       * The cache directory
-       */
-      path?: string;
-
-      /**
-       * How long a cached schema stays fresh
-       */
-      ttl?: number | string;
-    };
-
-    /**
-     * How the schemas are fetched over the network
-     */
-    http?: {
-      /**
-       * Path to a module exporting a custom `get` implementation
-       */
-      getModulePath?: string;
-
-      /**
-       * Options passed to the request
-       */
-      requestOptions?: RequestOptions;
-    };
-  };
-
   /**
    * Validates JSON, JSONC and JSON5 files against their JSON schemas.
    *
@@ -86,12 +86,9 @@ export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchem
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {
-    settings: pluginSettings,
-    configJson = true,
-    configYaml = true,
-    configToml = true,
-  } = optionsResolved;
+  const {configJson = true, configYaml = true, configToml = true} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('json-schema-validator');
 
   // Legend:
   // 🟢 - in recommended

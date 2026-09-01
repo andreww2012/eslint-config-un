@@ -164,8 +164,8 @@ describe('options', () => {
     });
 
     it('sets default `html-extensions` when `settings` is provided without overrides', async () => {
-      const configResult = await computeEslintConfig({
-        jsInline: {settings: {'html-extensions': {}}},
+      const configResult = await computeEslintConfig('jsInline', {
+        un: {plugins: {'html-processor': {settings: {'html-extensions': {}}}}},
       });
 
       expect(
@@ -182,13 +182,17 @@ describe('options', () => {
       const DISABLED_EXTENSIONS = ['.erb'];
       const ENABLED_EXTENSIONS = ['.custom'];
 
-      const configResult = await computeEslintConfig({
-        jsInline: {
-          settings: {
-            'html-extensions': Object.fromEntries([
-              ...DISABLED_EXTENSIONS.map((ext) => [ext, false] satisfies NonEmptyTuple),
-              ...ENABLED_EXTENSIONS.map((ext) => [ext, true] satisfies NonEmptyTuple),
-            ]),
+      const configResult = await computeEslintConfig('jsInline', {
+        un: {
+          plugins: {
+            'html-processor': {
+              settings: {
+                'html-extensions': Object.fromEntries([
+                  ...DISABLED_EXTENSIONS.map((ext) => [ext, false] satisfies NonEmptyTuple),
+                  ...ENABLED_EXTENSIONS.map((ext) => [ext, true] satisfies NonEmptyTuple),
+                ]),
+              },
+            },
           },
         },
       });
@@ -206,7 +210,9 @@ describe('options', () => {
     });
 
     it('sets `xml-extensions` to defaults when `settings` is provided without `xml-extensions`', async () => {
-      const configResult = await computeEslintConfig({jsInline: {settings: {}}});
+      const configResult = await computeEslintConfig('jsInline', {
+        un: {plugins: {'html-processor': {settings: {}}}},
+      });
 
       expect(
         (
@@ -220,13 +226,17 @@ describe('options', () => {
       const DISABLED_EXTENSIONS = ['.xhtml'];
       const ENABLED_EXTENSIONS = ['.svg'];
 
-      const configResult = await computeEslintConfig({
-        jsInline: {
-          settings: {
-            'xml-extensions': Object.fromEntries([
-              ...DISABLED_EXTENSIONS.map((ext) => [ext, false] satisfies NonEmptyTuple),
-              ...ENABLED_EXTENSIONS.map((ext) => [ext, true] satisfies NonEmptyTuple),
-            ]),
+      const configResult = await computeEslintConfig('jsInline', {
+        un: {
+          plugins: {
+            'html-processor': {
+              settings: {
+                'xml-extensions': Object.fromEntries([
+                  ...DISABLED_EXTENSIONS.map((ext) => [ext, false] satisfies NonEmptyTuple),
+                  ...ENABLED_EXTENSIONS.map((ext) => [ext, true] satisfies NonEmptyTuple),
+                ]),
+              },
+            },
           },
         },
       });
@@ -253,7 +263,9 @@ describe('options', () => {
         'ignore-tags-without-type': false,
       };
 
-      const configResult = await computeEslintConfig({jsInline: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('jsInline', {
+        un: {plugins: {'html-processor': {settings: SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('js-inline')?.settings?.['html']).toMatchObject(
         SETTINGS,

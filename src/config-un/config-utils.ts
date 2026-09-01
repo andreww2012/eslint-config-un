@@ -13,7 +13,7 @@ import {
   parsersLoaders,
   pluginsLoaders,
 } from '../loaders';
-import type {NonEmptyTuple} from '../types';
+import type {NonEmptyTuple, Prettify} from '../types';
 import {
   type MaybeArray,
   arrayify,
@@ -23,6 +23,7 @@ import {
   traverseForEach,
 } from '../utils';
 import type {ConfigEnabledBy, ConfigManifest, PackageToCheck} from './define-config';
+import type {PluginSettingsMap} from './plugin-settings';
 import type {PackageRequester, UnConfigContext} from './shared';
 
 const MISC_GROUP_CONFIGS_SET = new Set<keyof UnConfigs>(MISC_GROUP_CONFIGS);
@@ -221,6 +222,19 @@ export function recordPackageRequester(
   this.packageRequesters.set(
     packageName,
     new Set([...(this.packageRequesters.get(packageName) || []), ...requestersResolved]),
+  );
+}
+
+export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
+  this: UnConfigContext,
+  pluginPrefix: Plugin,
+) {
+  return (
+    // The cast picks out this plugin's settings and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
+    (
+      this.rootOptions.plugins?.[pluginPrefix] as
+        {settings?: Prettify<PluginSettingsMap[Plugin]>} | undefined
+    )?.settings
   );
 }
 

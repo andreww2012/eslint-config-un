@@ -11,6 +11,40 @@ import {
 } from './index';
 
 /**
+ * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `html` property of the `settings` flat config option.
+ */
+export interface HtmlPluginSettings {
+  // TODO
+
+  /**
+   * This plugin allows you to lint not only HTML files but also HTML written in JavaScript
+   * Template Literal.
+   * You can set the `html` rules in your settings to lint JavaScript code without any additional
+   * configuration.
+   *
+   * Not all template literals are recognized as HTML.
+   * There are two ways to make the plugin recognize them as HTML.
+   *
+   * If you want to use keywords other than html for linting, you can configure the settings
+   * option.
+   * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
+   */
+  templateLiterals?: {
+    /**
+     * Regular expressions of the tag names marking a template literal as HTML
+     */
+    tags?: string[];
+
+    /**
+     * Regular expressions of the leading comments marking a template literal as HTML
+     */
+    comments?: string[];
+  };
+}
+
+/**
  * Rules for linting plain HTML files.
  *
  * 📁 Default `files`: <code>**&#47;*.{htm,html}</code>
@@ -19,41 +53,6 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'html'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
-  /**
-   * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `html` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    // TODO
-
-    /**
-     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript
-     * Template Literal.
-     * You can set the `html` rules in your settings to lint JavaScript code without any additional
-     * configuration.
-     *
-     * Not all template literals are recognized as HTML.
-     * There are two ways to make the plugin recognize them as HTML.
-     *
-     * If you want to use keywords other than html for linting, you can configure the settings
-     * option.
-     * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
-     */
-    templateLiterals?: {
-      /**
-       * Regular expressions of the tag names marking a template literal as HTML
-       */
-      tags?: string[];
-
-      /**
-       * Regular expressions of the leading comments marking a template literal as HTML
-       */
-      comments?: string[];
-    };
-  };
-
   /**
    * HTML parser options:
    * - `templateEngineSyntax`: to configure template engine syntax to support different template
@@ -74,7 +73,9 @@ export default defineUnConfig<HtmlEslintConfigOptions>('html', {
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings, parserOptions} = optionsResolved;
+  const {parserOptions} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('html');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'html');
 

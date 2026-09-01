@@ -8,27 +8,26 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `wc` property of the `settings` flat config option.
+ */
+export interface WebComponentsPluginSettings {
+  /**
+   * Recognize the following classes as custom element base classes.
+   * @example ['LitElement']
+   */
+  elementBaseClasses?: string[];
+}
+
+/**
  * Web components specific rules.
  *
  * 📁 Default `files`: all files
  */
 export interface WebComponentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'wc'> {
-  /**
-   * [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `wc` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * Recognize the following classes as custom element base classes.
-     * @example ['LitElement']
-     */
-    elementBaseClasses?: string[];
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'wc'> {}
 
 export default defineUnConfig<WebComponentsEslintConfigOptions>(
   'webComponents',
@@ -36,7 +35,7 @@ export default defineUnConfig<WebComponentsEslintConfigOptions>(
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('wc');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'wc');
 

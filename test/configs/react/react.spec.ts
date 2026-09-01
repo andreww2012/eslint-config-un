@@ -190,8 +190,8 @@ describe('options', () => {
     it('merges user-provided `settings` with auto-detected react version', async () => {
       const EXTRA_SETTINGS = {pragma: 'Preact', fragment: 'Fragment'};
 
-      const configResult = await computeEslintConfig({
-        react: {settings: EXTRA_SETTINGS},
+      const configResult = await computeEslintConfig('react', {
+        un: {plugins: {react: {settings: EXTRA_SETTINGS}}},
       });
 
       expect(

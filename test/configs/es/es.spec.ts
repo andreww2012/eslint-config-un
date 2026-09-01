@@ -58,7 +58,7 @@ describe('basic tests', () => {
     });
 
     it('creates `es` eslint config if explicitly enabled in misc mode', async () => {
-      await expectConfigState({es: true}, 'es', true, 'misc-enabled');
+      await expectConfigState('es', 'es', true, 'misc-enabled');
     });
 
     it('does not create `es` eslint config and prints a warning if explicitly disabled', async () => {
@@ -152,8 +152,8 @@ describe('options', () => {
     it('sets `es-x` settings when `aggressive` is provided', async () => {
       const SETTINGS = {aggressive: true};
 
-      const configResult = await computeEslintConfig({
-        es: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('es', {
+        un: {plugins: {es: {settings: SETTINGS}}},
       });
 
       expect(configResult.getConfigByUnPostfix('es')?.settings?.['es-x']).toStrictEqual(SETTINGS);

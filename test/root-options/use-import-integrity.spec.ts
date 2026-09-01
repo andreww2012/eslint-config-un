@@ -85,11 +85,14 @@ describe('option: `useImportIntegrity`', () => {
     ).toStrictEqual({packageRootDir: expect.any(String) as unknown});
   });
 
-  it('merges `pluginSettings` into the settings config', async () => {
+  it('merges the plugin settings into the settings config', async () => {
     const MONOREPO_ROOT_DIR = '/monorepo';
 
-    const configResult = await computeImportConfig({
-      pluginSettings: {monorepoRootDir: MONOREPO_ROOT_DIR},
+    const configResult = await computeEslintConfig('import', {
+      un: {
+        useImportIntegrity: true,
+        plugins: {'import-integrity': {settings: {monorepoRootDir: MONOREPO_ROOT_DIR}}},
+      },
     });
 
     expect(

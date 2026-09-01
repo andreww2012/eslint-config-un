@@ -128,9 +128,12 @@ describe('vue: sub config `i18n`', () => {
       it('passes `settings` to `vue/i18n` eslint config when provided', async () => {
         const SETTINGS = {localeDir: 'src/locales/**'};
 
-        const configResult = await computeEslintConfig({
-          vue: {configI18n: {settings: SETTINGS}},
-        });
+        const configResult = await computeEslintConfig(
+          {
+            vue: {configI18n: true},
+          },
+          {un: {plugins: {'vue-i18n': {settings: SETTINGS}}}},
+        );
 
         expect(configResult.getConfigByUnPostfix('vue/i18n')?.settings?.['vue-i18n']).toStrictEqual(
           SETTINGS,

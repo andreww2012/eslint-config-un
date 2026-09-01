@@ -203,7 +203,9 @@ describe('options', () => {
     it('sets `pnpm` shared settings on `pnpm/package.json` eslint config when provided, but not on `pnpm/pnpm-workspace-yaml`', async () => {
       const SETTINGS = {ensureWorkspaceFile: true};
 
-      const configResult = await computeEslintConfig({pnpm: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('pnpm', {
+        un: {plugins: {pnpm: {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('pnpm/package.json')?.settings?.['pnpm'],

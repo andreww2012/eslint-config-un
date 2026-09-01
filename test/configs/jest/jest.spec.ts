@@ -83,7 +83,7 @@ describe('basic tests', () => {
     });
 
     it('creates `jest` eslint config if explicitly enabled and prints a warning', async () => {
-      await expectConfigState({jest: true}, 'jest', ['jest', true], 'misc-enabled');
+      await expectConfigState('jest', 'jest', ['jest', true], 'misc-enabled');
     });
 
     it('does not create `jest` eslint config if explicitly disabled', async () => {
@@ -104,11 +104,10 @@ describe('rules', async () => {
   });
 
   it('`jest/no-focused-tests` rule fires on a test with `.only` modifier', async () => {
-    const results = await testEslintConfig(
-      {jest: {settings: {version: 29}}},
-      FIXTURES.testWithOnlyModifier,
-      {searchFixturesRelativeToPath: import.meta.dirname},
-    );
+    const results = await testEslintConfig('jest', FIXTURES.testWithOnlyModifier, {
+      un: {plugins: {jest: {settings: {version: 29}}}},
+      searchFixturesRelativeToPath: import.meta.dirname,
+    });
 
     const error = findLintMessageFromLintResults(
       results,
@@ -171,7 +170,9 @@ describe('options', () => {
     it('sets jest settings when provided', async () => {
       const SETTINGS = {version: 29};
 
-      const configResult = await computeEslintConfig({jest: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('jest', {
+        un: {plugins: {jest: {settings: SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('jest')?.settings?.['jest']).toStrictEqual(SETTINGS);
     });

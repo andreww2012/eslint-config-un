@@ -29,6 +29,77 @@ const DEFAULT_HTML_EXTENSIONS = [
 const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
 /**
+ * [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `html` property of the `settings` flat config option.
+ */
+export interface HtmlProcessorPluginSettings {
+  /**
+   * The extensions that the plugin will be treating as HTML files.
+   * The default list is quite long, and you can disable some of them by setting the corresponding
+   * key to `false` or add new ones by setting them to `true`.
+   *
+   * Note that the presence of the extension in the list does not mean that the file will actually
+   * be linted, you still need to specify files with this extension in `files`.
+   * Unfortunately, this is how the plugin currently works.
+   * By default, only `*.html` and `*.htm` files will be linted.
+   * @default {'.erb': true, '.handlebars': true, '.hbs': true, '.htm': true, '.html': true, '.mustache': true, '.nunjucks': true, '.php': true, '.tag': true, '.riot': true, '.twig': true, '.we': true}
+   */
+  'html-extensions'?: Record<`.${string}`, boolean>;
+
+  /**
+   * See JSDoc for `html-extensions` to understand how this option works.
+   * @default {'.xhtml': true, '.xml': true}
+   */
+  'xml-extensions'?: Record<`.${string}`, boolean>;
+
+  /**
+   * "By default, the code between `<script>` tags is dedented according to the first non-empty
+   * line.
+   * This setting allows to ensure that every script tag follow an uniform indentation.
+   * Like the `indent` rule, you can pass a number of spaces, or "tab" to indent with one tab.
+   * Prefix this value with a + to be relative to the `<script>` tag indentation." - plugin docs
+   */
+  indent?: `${'+' | ''}${number}` | 'tab';
+
+  /**
+   * "By default, this plugin won't warn if it encounters a problematic indentation (ex: a line is
+   * under indented).
+   * If you want to make sure the indentation is correct, use the `html/report-bad-indent` in
+   * conjunction with the `indent` rule.
+   * Pass `'warn'` or `1` to display warnings, `'error'` or `2` to display errors." - plugin docs
+   */
+  'report-bad-indent'?: 'error' | 2 | 'warn' | 1;
+
+  /**
+   * "By default, the code between `<script>` tags is considered as JavaScript.
+   * You can customize which tags should be considered JavaScript by providing one or multiple tag
+   * names" - plugin docs
+   * @example [`script`, `custom-script`]
+   */
+  'javascript-tag-names'?: string[];
+
+  /**
+   * "By default, the code between `<script>` tags is considered as JavaScript code only if there
+   * is no type attribute or if its value matches the pattern
+   * `(application|text)/(x-)?(javascript|babel|ecmascript-6)` or `module` (case insensitive).
+   * You can customize the types that should be considered as JavaScript by providing one or
+   * multiple MIME types.
+   * If a MIME type starts with a `/`, it will be considered as a regular expression." - plugin
+   * docs
+   */
+  'javascript-mime-types'?: string | string[];
+
+  /**
+   * "By default, the code between `<script>` tags is considered JavaScript if there is no `type`
+   * attribute.
+   * You can set this setting to `true` to ignore script tags without a `type` attribute." -
+   * plugin docs
+   */
+  'ignore-tags-without-type'?: boolean;
+}
+
+/**
  * Plugin for linting `<script>` blocks inside HTML files.
  * It does not have any actual rules.
  *
@@ -40,78 +111,6 @@ export interface JsInlineEslintConfigOptions<
   UnFlatConfigEntryBase<ExtraPlugins, 'html-processor'>,
   'overrides' | 'forceSeverity'
 > {
-  /**
-   * [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `html` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * The extensions that the plugin will be treating as HTML files.
-     * The default list is quite long, and you can disable some of them by setting the corresponding
-     * key to `false` or add new ones by setting them to `true`.
-     *
-     * Note that the presence of the extension in the list does not mean that the file will actually
-     * be linted, you still need to specify files with this extension in `files`.
-     * Unfortunately, this is how the plugin currently works.
-     * By default, only `*.html` and `*.htm` files will be linted.
-     * @default {'.erb': true, '.handlebars': true, '.hbs': true, '.htm': true, '.html': true, '.mustache': true, '.nunjucks': true, '.php': true, '.tag': true, '.riot': true, '.twig': true, '.we': true}
-     */
-    'html-extensions'?: Record<`.${string}`, boolean>;
-
-    /**
-     * See JSDoc for `html-extensions` to understand how this option works.
-     * @default {'.xhtml': true, '.xml': true}
-     */
-    'xml-extensions'?: Record<`.${string}`, boolean>;
-
-    /**
-     * "By default, the code between `<script>` tags is dedented according to the first non-empty
-     * line.
-     * This setting allows to ensure that every script tag follow an uniform indentation.
-     * Like the `indent` rule, you can pass a number of spaces, or "tab" to indent with one tab.
-     * Prefix this value with a + to be relative to the `<script>` tag indentation." - plugin docs
-     */
-    indent?: `${'+' | ''}${number}` | 'tab';
-
-    /**
-     * "By default, this plugin won't warn if it encounters a problematic indentation (ex: a line is
-     * under indented).
-     * If you want to make sure the indentation is correct, use the `html/report-bad-indent` in
-     * conjunction with the `indent` rule.
-     * Pass `'warn'` or `1` to display warnings, `'error'` or `2` to display errors." - plugin docs
-     */
-    'report-bad-indent'?: 'error' | 2 | 'warn' | 1;
-
-    /**
-     * "By default, the code between `<script>` tags is considered as JavaScript.
-     * You can customize which tags should be considered JavaScript by providing one or multiple tag
-     * names" - plugin docs
-     * @example [`script`, `custom-script`]
-     */
-    'javascript-tag-names'?: string[];
-
-    /**
-     * "By default, the code between `<script>` tags is considered as JavaScript code only if there
-     * is no type attribute or if its value matches the pattern
-     * `(application|text)/(x-)?(javascript|babel|ecmascript-6)` or `module` (case insensitive).
-     * You can customize the types that should be considered as JavaScript by providing one or
-     * multiple MIME types.
-     * If a MIME type starts with a `/`, it will be considered as a regular expression." - plugin
-     * docs
-     */
-    'javascript-mime-types'?: string | string[];
-
-    /**
-     * "By default, the code between `<script>` tags is considered JavaScript if there is no `type`
-     * attribute.
-     * You can set this setting to `true` to ignore script tags without a `type` attribute." -
-     * plugin docs
-     */
-    'ignore-tags-without-type'?: boolean;
-  };
-
   /**
    * "When linting a HTML with multiple script tags, this plugin tries to emulate the browser
    * behavior by sharing the global scope between scripts by default.
@@ -137,7 +136,9 @@ export default defineUnConfig<JsInlineEslintConfigOptions>(
 
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings, languageOptions} = optionsResolved;
+  const {languageOptions} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('html-processor');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'html-processor');
 
@@ -163,7 +164,7 @@ export default defineUnConfig<JsInlineEslintConfigOptions>(
                       ...pluginSettings['xml-extensions'],
                     }),
                   } satisfies OmitStrict<
-                    JsInlineEslintConfigOptions['settings'] & {},
+                    HtmlProcessorPluginSettings,
                     'html-extensions' | 'xml-extensions'
                   > &
                     Record<Partial<'html-extensions' | 'xml-extensions'>, string[]>)

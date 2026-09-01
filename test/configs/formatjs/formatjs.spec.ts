@@ -159,8 +159,8 @@ describe('options', () => {
         additionalComponentNames: ['Trans'],
       };
 
-      const configResult = await computeEslintConfig({
-        formatJs: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('formatJs', {
+        un: {plugins: {formatjs: {settings: SETTINGS}}},
       });
 
       expect(configResult.getConfigByUnPostfix('formatjs')?.settings?.['formatjs']).toStrictEqual(

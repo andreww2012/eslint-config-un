@@ -12,7 +12,7 @@ import {
   defineUnConfig,
 } from './index';
 
-interface EslintPluginNSettings {
+export interface NodePluginSettings {
   /**
    * Affected rules:
    * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
@@ -106,23 +106,6 @@ interface EslintPluginNSettings {
 export interface NodeEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
-  /**
-   * [`eslint-plugin-n`](https://npmx.dev/eslint-plugin-n) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `node` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   *
-   * Most of the settings are used to override options simultaneously for multiple rules.
-   * The plugin reads `option` value from multiple sources in the following order, and stops when it
-   * finds a valid value:
-   * - Corresponding rule `option`
-   * - `settings.n.option`
-   * - `settings.node.option`
-   * - Option-specific source
-   * - Optional fall back value
-   */
-  settings?: EslintPluginNSettings;
-
   /**
    * Specifies which features will not be reported if detected as supported by
    * `no-unsupported-features/*` rules.
@@ -251,7 +234,9 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
     noUnsupportedFeaturesIgnores: {},
   });
 
-  const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
+  const {preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('node');
 
   const userNodeVersion = parseRange(closestPackageJson?.engines?.node || '');
 
@@ -267,7 +252,6 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
         'node',
         {
           settings: {
-            // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
             node: pluginSettings,
           },
         },

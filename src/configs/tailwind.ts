@@ -1,6 +1,5 @@
 import type {PluginSettings as EslintPluginTailwindcssSettings} from 'eslint-plugin-tailwindcss';
 import {ERROR, OFF, WARNING} from '../constants';
-import type {Prettify} from '../types';
 import {maybeCall, objectKeysUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
@@ -30,7 +29,7 @@ const DEFAULT_PLUGIN_SETTINGS = {
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 
-type TailwindPluginSettings = {
+export type TailwindPluginSettings = {
   [Key in keyof EslintPluginTailwindcssSettings]?: Key extends keyof typeof DEFAULT_PLUGIN_SETTINGS
     ? OverwriteOrDeriveFromDefault<NonNullable<EslintPluginTailwindcssSettings[Key]>>
     : EslintPluginTailwindcssSettings[Key];
@@ -45,22 +44,7 @@ type TailwindPluginSettings = {
  */
 export interface TailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'tailwindcss'> {
-  /**
-   * [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `tailwindcss` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   *
-   * ⚠️ You likely want to set `cssConfigPath` to the path of your Tailwind CSS entry point so the
-   * plugin can resolve the theme.
-   * It defaults to `src/style.css` when not provided.
-   *
-   * Will be merged with the default
-   * [`eslint-plugin-tailwindcss` settings](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/v4/README.md#settings).
-   */
-  settings?: Prettify<TailwindPluginSettings>;
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tailwindcss'> {}
 
 export default defineUnConfig<TailwindEslintConfigOptions>('tailwind', {
   enabledBy: false,
@@ -68,7 +52,7 @@ export default defineUnConfig<TailwindEslintConfigOptions>('tailwind', {
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('tailwindcss');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'tailwindcss');
 

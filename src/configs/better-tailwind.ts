@@ -18,6 +18,90 @@ const SUPPORTED_TAILWIND_VERSIONS = new Set<number>(
 type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-classes'>;
 
 /**
+ * [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `better-tailwindcss` property of the `settings` flat config option.
+ *
+ * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or `tailwindConfig`
+ * (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work properly, and its absence
+ * is reported at runtime. If specified, you must provide exactly one of them.
+ */
+export type BetterTailwindPluginSettings = RequireExactlyOne<{
+  /**
+   * [Tailwind 4 only] The path to the entry file of the css based Tailwind config
+   */
+  entryPoint?: string;
+
+  /**
+   * [Tailwind 3 only] The path to the Tailwind config file (e.g.: `tailwind.config.js`)
+   */
+  tailwindConfig?: string;
+}> & {
+  /**
+   * "The working directory used to resolve `tailwindcss` and related config files.
+   * This is useful for monorepos where linting runs from the repository root but each project has
+   * its own `node_modules` and Tailwind setup." -
+   * [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#cwd)
+   */
+  cwd?: string;
+
+  /**
+   * From plugin docs: The path to the `tsconfig.json` file.
+   * If not specified, the plugin will try to find it automatically.
+   */
+  tsconfig?: string;
+
+  /**
+   * The name of the attribute that contains the tailwind classes.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#attributes
+   */
+  attributes?: AnyRuleOptions['attributes'];
+
+  /**
+   * List of function names which arguments should also get linted.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#callees
+   */
+  callees?: AnyRuleOptions['callees'];
+
+  /**
+   * List of variable names whose initializer should also get linted.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#variables
+   */
+  variables?: AnyRuleOptions['variables'];
+
+  /**
+   * List of template literal tag names whose content should get linted.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#tags
+   */
+  tags?: AnyRuleOptions['tags'];
+
+  /**
+   * The font size of the `<html>` element in pixels.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#rootfontsize
+   */
+  rootFontSize?: AnyRuleOptions['rootFontSize'];
+
+  /**
+   * Customize how linting messages are displayed.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#messagestyle
+   */
+  messageStyle?: AnyRuleOptions['messageStyle'];
+
+  /**
+   * [Custom component classes](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)
+   * that should not be reported as unknown.
+   * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#detectcomponentclasses
+   */
+  detectComponentClasses?: AnyRuleOptions['detectComponentClasses'];
+
+  /**
+   * "Flat list of selectors that determines where Tailwind class strings are linted"
+   * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#selectors)
+   */
+  selectors?: string[];
+};
+
+/**
  * [TailwindCSS](https://tailwindcss.com) specific rules.
  *
  * 📁 Default `files`: all files
@@ -25,92 +109,6 @@ type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-cl
 export interface BetterTailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'> {
-  /**
-   * [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `better-tailwindcss` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   *
-   * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or `tailwindConfig`
-   * (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work properly, and its
-   * absence is reported at runtime.
-   * If specified, you must provide exactly one of them.
-   */
-  settings?: RequireExactlyOne<{
-    /**
-     * [Tailwind 4 only] The path to the entry file of the css based Tailwind config
-     */
-    entryPoint?: string;
-
-    /**
-     * [Tailwind 3 only] The path to the Tailwind config file (e.g.: `tailwind.config.js`)
-     */
-    tailwindConfig?: string;
-  }> & {
-    /**
-     * "The working directory used to resolve `tailwindcss` and related config files.
-     * This is useful for monorepos where linting runs from the repository root but each project has
-     * its own `node_modules` and Tailwind setup." -
-     * [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#cwd)
-     */
-    cwd?: string;
-
-    /**
-     * From plugin docs: The path to the `tsconfig.json` file.
-     * If not specified, the plugin will try to find it automatically.
-     */
-    tsconfig?: string;
-
-    /**
-     * The name of the attribute that contains the tailwind classes.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#attributes
-     */
-    attributes?: AnyRuleOptions['attributes'];
-
-    /**
-     * List of function names which arguments should also get linted.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#callees
-     */
-    callees?: AnyRuleOptions['callees'];
-
-    /**
-     * List of variable names whose initializer should also get linted.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#variables
-     */
-    variables?: AnyRuleOptions['variables'];
-
-    /**
-     * List of template literal tag names whose content should get linted.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#tags
-     */
-    tags?: AnyRuleOptions['tags'];
-
-    /**
-     * The font size of the `<html>` element in pixels.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#rootfontsize
-     */
-    rootFontSize?: AnyRuleOptions['rootFontSize'];
-
-    /**
-     * Customize how linting messages are displayed.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#messagestyle
-     */
-    messageStyle?: AnyRuleOptions['messageStyle'];
-
-    /**
-     * [Custom component classes](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)
-     * that should not be reported as unknown.
-     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#detectcomponentclasses
-     */
-    detectComponentClasses?: AnyRuleOptions['detectComponentClasses'];
-
-    /**
-     * "Flat list of selectors that determines where Tailwind class strings are linted"
-     * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#selectors)
-     */
-    selectors?: string[];
-  };
-
   /**
    * Detected automatically from a major version of the installed version of `tailwindcss` package,
    * but can also be specified manually here.
@@ -167,12 +165,9 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
     classOrder: 'official',
   });
 
-  const {
-    settings: pluginSettings,
-    breakUpClassesIntoMultipleLines,
-    classOrder,
-    restrictedClasses,
-  } = optionsResolved;
+  const {breakUpClassesIntoMultipleLines, classOrder, restrictedClasses} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('better-tailwindcss');
 
   const tailwindPackageInfo = context.packagesInfo.tailwindcss;
   const tailwindMajorVersion =

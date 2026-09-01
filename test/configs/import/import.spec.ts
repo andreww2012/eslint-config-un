@@ -49,7 +49,7 @@ describe('basic tests', () => {
     });
 
     it('creates `import` eslint config if explicitly enabled', async () => {
-      await expectConfigState({import: true}, 'import', true);
+      await expectConfigState('import', 'import', true);
     });
   });
 
@@ -207,7 +207,7 @@ describe('options', () => {
     });
 
     it('flags dev dependencies outside of the test and config files by default when `mode` is `lib`', async () => {
-      const configResult = await computeEslintConfig({import: true}, {un: {mode: 'lib'}});
+      const configResult = await computeEslintConfig('import', {un: {mode: 'lib'}});
 
       expect(
         configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
@@ -562,8 +562,8 @@ describe('options', () => {
     it('adds user-provided settings to `import` config with `import-x/` prefix', async () => {
       const EXTENSIONS = ['.ts', '.tsx', '.js'] as const;
 
-      const configResult = await computeEslintConfig({
-        import: {settings: {extensions: EXTENSIONS}},
+      const configResult = await computeEslintConfig('import', {
+        un: {plugins: {import: {settings: {extensions: EXTENSIONS}}}},
       });
 
       expect(

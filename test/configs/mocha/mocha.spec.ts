@@ -80,7 +80,7 @@ describe('basic tests', () => {
     });
 
     it('creates `mocha` eslint config if explicitly enabled and prints a warning', async () => {
-      await expectConfigState({mocha: true}, 'mocha', ['mocha', true], 'misc-enabled');
+      await expectConfigState('mocha', 'mocha', ['mocha', true], 'misc-enabled');
     });
 
     it('does not create `mocha` eslint config if explicitly disabled', async () => {
@@ -172,7 +172,9 @@ describe('options', () => {
         ],
       };
 
-      const configResult = await computeEslintConfig({mocha: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('mocha', {
+        un: {plugins: {mocha: {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('mocha')?.settings?.['mocha/additionalCustomNames'],

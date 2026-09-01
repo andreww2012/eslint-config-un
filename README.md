@@ -810,16 +810,21 @@ When enabled:
 
 ### `plugins`
 
-**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin}>>`
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin; settings?: object}>>`
 
-Per-plugin settings, keyed by the "canonical" plugin prefix.
+Per-plugin options, keyed by the "canonical" plugin prefix.
 
 `prefix` changes the prefix the plugin is registered under - see [Plugin prefixes][plugin prefix renames].
 
 `plugin` overrides the plugin implementation.
 This can be useful when this config is used to lint the repository of one of the built-in plugins, to provide the development version of that plugin.
 
-For example: `{plugins: {'eslint-react': {prefix: 'react-x'}}}`.
+`settings` are the plugin's [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings).
+It is only available for the plugins that accept any, and is typed per plugin.
+The settings are applied only when at least one Config using that plugin is enabled, and each Config decides which `settings` property they end up under (`eslint-plugin-clsx` settings, for instance, are assigned to `settings.clsxOptions`), so consult the option's JSDoc.
+Some Configs also merge their own values in - `react`, for example, adds the detected React version.
+
+For example: `{plugins: {'eslint-react': {prefix: 'react-x'}, regexp: {settings: {allowedCharacterRanges: 'all'}}}}`.
 
 ### `loadPluginsOnDemand`
 
@@ -857,9 +862,11 @@ Allows you to specify which rules should not be disabled by default in embedded 
 
 ### `useImportIntegrity`
 
-**Type**: `boolean | {pluginSettings?: Partial<ImportIntegrityPluginSettings>; replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
+**Type**: `boolean | {replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
 
 Allows you to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
+
+The plugin's settings are set via [`plugins.import-integrity.settings`][plugins option].
 
 ### `typeInfoRules`
 

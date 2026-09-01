@@ -15,6 +15,40 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `settings` flat config option with keys transformed to
+ * `mdx/<property>` and applied to the resolved `files` and `ignores` of this config.
+ */
+export interface MdxPluginSettings {
+  /**
+   * Whether to lint code blocks inside MDX files.
+   * @default false
+   */
+  codeBlocks?: boolean;
+
+  /**
+   * Maps a code block language to another one for the purpose of linting, e.g. `{js: 'jsx'}` will
+   * treat ` ```js ` blocks as `jsx`.
+   *
+   * Set to `false` to disable the default mapping.
+   */
+  languageMapper?: Record<string, string> | false;
+
+  /**
+   * Whether to ignore the `remark` configuration files when resolving the config for the
+   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
+   */
+  ignoreRemarkConfig?: boolean;
+
+  /**
+   * Path to a `remark` configuration file to use for the
+   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
+   */
+  remarkConfigPath?: string;
+}
+
+/**
  * [MDX](https://mdxjs.com) specific rules.
  *
  * 📁 Default `files`: <code>**&#47;*.mdx</code>
@@ -22,41 +56,7 @@ import {
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
-    Pick<MarkdownEslintConfigOptions, 'configCodeBlocks' | 'configFormatFencedCodeBlocks'> {
-  /**
-   * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `settings` object with keys transformed to `mdx/<property>` and
-   * applied to the resolved `files` and `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * Whether to lint code blocks inside MDX files.
-     * @default false
-     */
-    codeBlocks?: boolean;
-
-    /**
-     * Maps a code block language to another one for the purpose of linting, e.g. `{js: 'jsx'}` will
-     * treat ` ```js ` blocks as `jsx`.
-     *
-     * Set to `false` to disable the default mapping.
-     */
-    languageMapper?: Record<string, string> | false;
-
-    /**
-     * Whether to ignore the `remark` configuration files when resolving the config for the
-     * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
-     */
-    ignoreRemarkConfig?: boolean;
-
-    /**
-     * Path to a `remark` configuration file to use for the
-     * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
-     */
-    remarkConfigPath?: string;
-  };
-}
+    Pick<MarkdownEslintConfigOptions, 'configCodeBlocks' | 'configFormatFencedCodeBlocks'> {}
 
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
@@ -70,11 +70,9 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
   });
 
-  const {
-    settings: pluginSettings,
-    configCodeBlocks,
-    configFormatFencedCodeBlocks,
-  } = optionsResolved;
+  const {configCodeBlocks, configFormatFencedCodeBlocks} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('mdx');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'mdx');
 

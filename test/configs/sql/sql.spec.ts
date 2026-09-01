@@ -52,7 +52,7 @@ describe('basic tests', () => {
     });
 
     it('creates `sql` eslint config if explicitly enabled', async () => {
-      await expectConfigState({sql: true}, 'sql', true, 'misc-enabled');
+      await expectConfigState('sql', 'sql', true, 'misc-enabled');
     });
 
     it('does not create `sql` eslint config and prints a warning if explicitly disabled', async () => {
@@ -139,8 +139,8 @@ describe('options', () => {
     it('assigns `placeholderRule` to `sql` settings property', async () => {
       const SETTINGS = {placeholderRule: String.raw`\?`};
 
-      const configResult = await computeEslintConfig({
-        sql: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('sql', {
+        un: {plugins: {sql: {settings: SETTINGS}}},
       });
 
       expect(configResult.getConfigByUnPostfix('sql')?.settings?.['sql']).toStrictEqual(SETTINGS);

@@ -52,7 +52,7 @@ describe('basic tests', () => {
     });
 
     it('creates `functional` eslint config if explicitly enabled', async () => {
-      await expectConfigState({functional: true}, 'functional', true, 'misc-enabled');
+      await expectConfigState('functional', 'functional', true, 'misc-enabled');
     });
 
     it('does not create `functional` eslint config and prints a warning if explicitly disabled', async () => {
@@ -154,7 +154,9 @@ describe('options', () => {
     it('sets user-provided `immutability` settings on `functional` eslint config', async () => {
       const PLUGIN_SETTINGS = {overrides: [{type: 'ReadonlyDeep', to: 'Immutable'} as const]};
 
-      const configResult = await computeEslintConfig({functional: {settings: PLUGIN_SETTINGS}});
+      const configResult = await computeEslintConfig('functional', {
+        un: {plugins: {functional: {settings: PLUGIN_SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('functional')?.settings?.['immutability'],

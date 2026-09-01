@@ -10,32 +10,31 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `settings` flat config option with keys transformed to
+ * `boundaries/<original property name in kebab case>`.
+ *
+ * Strongly recommended: specify at least `elements` — the plugin needs it to work properly, and its
+ * absence is reported at runtime.
+ * @see https://jsboundaries.dev/docs/settings
+ */
+export type BoundariesPluginSettings = {
+  [
+    K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
+      ? ToCamelCase<Name>
+      : never
+  ]?: EslintPluginBoundariesSettingsWithPrefixes[K];
+};
+
+/**
  * An ESLint plugin to enforce architectural boundaries in JS/TS projects.
  *
  * 📁 Default `files`: all files
  */
 export interface BoundariesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'boundaries'> {
-  /**
-   * [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `settings` object with keys transformed to
-   * `boundaries/<original property name in kebab case>` and applied to the resolved `files` and
-   * `ignores` of this config.
-   *
-   * Strongly recommended: specify at least `elements` — the plugin needs it to work properly, and
-   * its absence is reported at runtime.
-   * @see https://jsboundaries.dev/docs/settings
-   */
-  settings?: {
-    [
-      K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
-        ? ToCamelCase<Name>
-        : never
-    ]?: EslintPluginBoundariesSettingsWithPrefixes[K];
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'boundaries'> {}
 
 export default defineUnConfig<BoundariesEslintConfigOptions>(
   'boundaries',
@@ -43,7 +42,7 @@ export default defineUnConfig<BoundariesEslintConfigOptions>(
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('boundaries');
 
   if (pluginSettings?.elements == null) {
     context.logger.warn(

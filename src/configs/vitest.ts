@@ -30,6 +30,21 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
 ]);
 
 /**
+ * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to `vitest` property and applied to the resolved `files` and `ignores` of
+ * this config, as well as for `ts` sub-config.
+ */
+export interface VitestPluginSettings {
+  /**
+   * You must set this to `true` if you're using
+   * [type testing vitest feature](https://vitest.dev/guide/testing-types).
+   * @see https://github.com/vitest-dev/eslint-plugin-vitest?tab=readme-ov-file#enabling-with-type-testing
+   */
+  typecheck?: boolean;
+}
+
+/**
  * [Vitest](https://vitest.dev) specific rules.
  *
  * 📁 Default `files`:
@@ -40,21 +55,6 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'vitest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
-  /**
-   * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `vitest` property and applied to the resolved `files` and `ignores` of
-   * this config, as well as for `ts` sub-config.
-   */
-  settings?: {
-    /**
-     * You must set this to `true` if you're using
-     * [type testing vitest feature](https://vitest.dev/guide/testing-types).
-     * @see https://github.com/vitest-dev/eslint-plugin-vitest?tab=readme-ov-file#enabling-with-type-testing
-     */
-    typecheck?: boolean;
-  };
-
   /**
    * Names that will be treated as assertions in addition to the rule defaults (`expect`, `assert`),
    * a shortcut for setting the `assertFunctionNames` option of the affected rule.
@@ -269,7 +269,6 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   });
 
   const {
-    settings: pluginSettings,
     configNoOnlyTests,
     configTypescript,
     additionalAssertions,
@@ -284,6 +283,8 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     vitestGlobalsImporting,
     paddingAround,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('vitest');
 
   const vitestMajorVersion = context.packagesInfo.vitest?.versions.major;
 

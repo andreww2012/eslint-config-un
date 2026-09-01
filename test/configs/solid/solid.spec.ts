@@ -77,7 +77,7 @@ describe('basic tests', () => {
     });
 
     it('creates `solid` eslint config if explicitly enabled and prints a warning', async () => {
-      await expectConfigState({solid: true}, 'solid', ['solid', true], 'misc-enabled');
+      await expectConfigState('solid', 'solid', ['solid', true], 'misc-enabled');
     });
 
     it('does not create `solid` eslint config if explicitly disabled', async () => {
@@ -258,8 +258,8 @@ describe('options', () => {
     it('uses user-provided `version` when option is `2`', async () => {
       const SOLID_VERSION_USER_PROVIDED = 2;
 
-      const configResult = await computeEslintConfig({
-        solid: {settings: {version: SOLID_VERSION_USER_PROVIDED}},
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: SOLID_VERSION_USER_PROVIDED}}}},
       });
 
       expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
@@ -268,7 +268,9 @@ describe('options', () => {
     });
 
     it('enables the Solid 2.0 rules when `version` is `2` and installed `solid-js` version is < 2', async () => {
-      const configResult = await computeEslintConfig({solid: {settings: {version: 2}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: 2}}}},
+      });
 
       expect(configResult.getRuleSeverities('solid')).toMatchObject(someSolid2OnlyRuleEntries());
     });
@@ -276,13 +278,17 @@ describe('options', () => {
     it('disables the Solid 2.0 rules when `version` is `1` and installed `solid-js` version is >= 2', async () => {
       addInstalledPackages({'solid-js': '2.0.0'});
 
-      const configResult = await computeEslintConfig({solid: {settings: {version: 1}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: 1}}}},
+      });
 
       expect(configResult.getRuleSeverities('solid')).toMatchObject(someSolid2OnlyRuleEntries(OFF));
     });
 
     it('passes only the major part of `version` to the plugin when option is a full version', async () => {
-      const configResult = await computeEslintConfig({solid: {settings: {version: '2.1.3'}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: '2.1.3'}}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
         solid: {version: 2},
@@ -290,13 +296,17 @@ describe('options', () => {
     });
 
     it('enables the Solid 2.0 rules when `version` is a full 2.x version', async () => {
-      const configResult = await computeEslintConfig({solid: {settings: {version: '2.1.3'}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: '2.1.3'}}}},
+      });
 
       expect(configResult.getRuleSeverities('solid')).toMatchObject(someSolid2OnlyRuleEntries());
     });
 
     it('takes the minor part of `version` into account in `solid/event-handlers` rule options', async () => {
-      const configResult = await computeEslintConfig({solid: {settings: {version: '1.5.7'}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: '1.5.7'}}}},
+      });
 
       expect(configResult.getRuleEntryOptions('solid', 'solid/event-handlers')).toMatchObject([
         {warnOnSpread: true},
@@ -304,7 +314,9 @@ describe('options', () => {
     });
 
     it('takes the minor part of `version` into account in `solid/no-react-specific-props` rule severity', async () => {
-      const configResult = await computeEslintConfig({solid: {settings: {version: '1.3.9'}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: '1.3.9'}}}},
+      });
 
       expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(1);
     });
@@ -312,7 +324,9 @@ describe('options', () => {
     it('borrows the minor part of the installed `solid-js` version when `version` names only the major', async () => {
       addInstalledPackages({'solid-js': '1.9.0'});
 
-      const configResult = await computeEslintConfig({solid: {settings: {version: 1}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: 1}}}},
+      });
 
       expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(2);
     });
@@ -320,7 +334,9 @@ describe('options', () => {
     it('treats a major-only `version` as `x.0` when the installed `solid-js` major version differs', async () => {
       addInstalledPackages({'solid-js': '2.0.0'});
 
-      const configResult = await computeEslintConfig({solid: {settings: {version: 1}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: 1}}}},
+      });
 
       expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(1);
     });
@@ -328,7 +344,9 @@ describe('options', () => {
     it('treats a major-only `version` as `x.0` when `solid-js` is not installed', async () => {
       setInstalledPackages({});
 
-      const configResult = await computeEslintConfig({solid: {settings: {version: 1}}});
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {version: 1}}}},
+      });
 
       expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(1);
     });

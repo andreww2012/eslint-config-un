@@ -26,6 +26,23 @@ type RuleSubConfig<
     });
 
 /**
+ * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `perfectionist` property of the `settings` flat config option.
+ * @see https://perfectionist.dev/guide/getting-started#settings
+ */
+export type PerfectionistPluginSettings = Prettify<
+  Pick<
+    GetRuleOptions<'perfectionist'>,
+    'type' | 'order' | 'fallbackSort' | 'alphabet' | 'ignoreCase' | 'specialCharacters' | 'locales'
+  > &
+    Pick<
+      GetRuleOptions<'perfectionist', 'sort-objects'>,
+      'partitionByComment' | 'partitionByNewLine' | 'newlinesBetween' | 'newlinesInside'
+    >
+>;
+
+/**
  * An ESLint plugin that provides rules for sorting various data, such as objects, imports,
  * TypeScript types, etc.
  *
@@ -36,30 +53,6 @@ type RuleSubConfig<
 export interface PerfectionistEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'perfectionist'> {
-  /**
-   * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `perfectionist` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   * @see https://perfectionist.dev/guide/getting-started#settings
-   */
-  settings?: Prettify<
-    Pick<
-      GetRuleOptions<'perfectionist'>,
-      | 'type'
-      | 'order'
-      | 'fallbackSort'
-      | 'alphabet'
-      | 'ignoreCase'
-      | 'specialCharacters'
-      | 'locales'
-    > &
-      Pick<
-        GetRuleOptions<'perfectionist', 'sort-objects'>,
-        'partitionByComment' | 'partitionByNewLine' | 'newlinesBetween' | 'newlinesInside'
-      >
-  >;
-
   /**
    * Enforces sorted array values before an `includes` call.
    *
@@ -348,7 +341,6 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
   >);
 
   const {
-    settings: pluginSettings,
     configSortArrayIncludes,
     configSortArrays,
     configSortClasses,
@@ -373,6 +365,8 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     configSortUnionTypes,
     configSortVariableDeclarations,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('perfectionist');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'perfectionist');
 

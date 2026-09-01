@@ -224,7 +224,9 @@ describe('options', () => {
     it('sets plugin settings on `node` eslint config when set', async () => {
       const PLUGIN_SETTINGS = {tsconfigPath: 'foo/tsconfig.json'};
 
-      const configResult = await computeEslintConfig({node: {settings: PLUGIN_SETTINGS}});
+      const configResult = await computeEslintConfig('node', {
+        un: {plugins: {node: {settings: PLUGIN_SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('node')?.settings?.['node']).toStrictEqual(
         PLUGIN_SETTINGS,

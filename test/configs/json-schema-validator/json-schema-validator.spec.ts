@@ -63,7 +63,7 @@ describe('basic tests', () => {
 
     it('creates `json-schema-validator/js-ts` eslint config and prints a warning if explicitly enabled', async () => {
       await expectConfigState(
-        {jsonSchemaValidator: true},
+        'jsonSchemaValidator',
         'json-schema-validator/js-ts',
         ['jsonSchemaValidator', true],
         'misc-enabled',
@@ -177,8 +177,8 @@ describe('options', () => {
     it('sets `json-schema-validator` settings when provided', async () => {
       const SETTINGS = {http: {requestOptions: {timeout: 5000}}} as const;
 
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('jsonSchemaValidator', {
+        un: {plugins: {'json-schema-validator': {settings: SETTINGS}}},
       });
       const config = configResult.getConfigByUnPostfix('json-schema-validator/js-ts');
 
@@ -188,8 +188,8 @@ describe('options', () => {
     it('propagates `json-schema-validator` settings to json/yaml/toml sub-configs', async () => {
       const SETTINGS = {http: {requestOptions: {timeout: 5000}}} as const;
 
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('jsonSchemaValidator', {
+        un: {plugins: {'json-schema-validator': {settings: SETTINGS}}},
       });
 
       expect(

@@ -43,9 +43,12 @@ describe('jest: sub config `noOnlyTests`', () => {
 
     it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {
       const results = await testEslintConfig(
-        {jest: {configNoOnlyTests: true, settings: {version: 29}}},
+        {jest: {configNoOnlyTests: true}},
         FIXTURES.testWithOnlyModifier,
-        import.meta.dirname,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {plugins: {jest: {settings: {version: 29}}}},
+        },
       );
 
       const error = findLintMessageFromLintResults(

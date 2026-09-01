@@ -53,83 +53,82 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
   typescriptRules?: boolean | 'only-non-type-aware';
 }
 
+/**
+ * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `vue-i18n` property of the `settings` flat config option.
+ */
+export interface VueI18nPluginSettings {
+  /**
+   * - **string**: a glob for specifying files that store localization messages of project
+   *
+   * Source: plugin docs
+   */
+  localeDir?: MaybeArray<
+    | string
+    | ((
+        | {
+            /**
+             * - `file`: determine the locale name from the filename.
+             *   The resource file should only contain messages for that locale.
+             *   Use this option if you use `vue-cli-plugin-i18n`.
+             *   This option is also used when String option is specified
+             * - `key`: determine the locale name from the root key name of the file contents.
+             *   The value of that key should only contain messages for that locale.
+             *   Used when the resource file is in the format given to the `messages` option of
+             *   the `VueI18n` constructor option.
+             *
+             * Source: plugin docs
+             */
+            localeKey: 'file' | 'key';
+          }
+        | {
+            /**
+             * Determine the locale name from the path.
+             * In this case, the locale must be had structured with your rule on the path.
+             * It can be captured with the regular expression named capture.
+             * The resource file should only contain messages for that locale.
+             *
+             * Source: plugin docs
+             */
+            localeKey: 'path';
+
+            /**
+             * Specifies how to determine pattern the locale for localization messages.
+             * This option means, when `localeKey` is `'path'`, you will need to capture the
+             * locale using a regular expression.
+             * You need to use the locale capture as a named capture `?<locale>`, so it’s be able
+             * to capture from the path of the locale resources.
+             * If you omit it, it will be captured from the resource path with the same regular
+             * expression pattern as `vue-cli-plugin-i18n`.
+             *
+             * Source: plugin docs
+             */
+            localePattern?: RegExp;
+          }
+      ) & {
+        /**
+         * A glob for specifying files that store localization messages of project
+         *
+         * Source: plugin docs
+         */
+        pattern?: string;
+      })
+  >;
+
+  /**
+   * Specify the version of `vue-i18n` you are using.
+   * If not specified, the message will be parsed twice.
+   *
+   * Source: plugin docs
+   */
+  messageSyntaxVersion?: string;
+}
+
 interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
   'vue-i18n'
-> {
-  /**
-   * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `vue-i18n` property and applied to the resolved `files` and `ignores`
-   * of this config.
-   */
-  settings?: {
-    /**
-     * - **string**: a glob for specifying files that store localization messages of project
-     *
-     * Source: plugin docs
-     */
-    localeDir?: MaybeArray<
-      | string
-      | ((
-          | {
-              /**
-               * - `file`: determine the locale name from the filename.
-               *   The resource file should only contain messages for that locale.
-               *   Use this option if you use `vue-cli-plugin-i18n`.
-               *   This option is also used when String option is specified
-               * - `key`: determine the locale name from the root key name of the file contents.
-               *   The value of that key should only contain messages for that locale.
-               *   Used when the resource file is in the format given to the `messages` option of
-               *   the `VueI18n` constructor option.
-               *
-               * Source: plugin docs
-               */
-              localeKey: 'file' | 'key';
-            }
-          | {
-              /**
-               * Determine the locale name from the path.
-               * In this case, the locale must be had structured with your rule on the path.
-               * It can be captured with the regular expression named capture.
-               * The resource file should only contain messages for that locale.
-               *
-               * Source: plugin docs
-               */
-              localeKey: 'path';
-
-              /**
-               * Specifies how to determine pattern the locale for localization messages.
-               * This option means, when `localeKey` is `'path'`, you will need to capture the
-               * locale using a regular expression.
-               * You need to use the locale capture as a named capture `?<locale>`, so it’s be able
-               * to capture from the path of the locale resources.
-               * If you omit it, it will be captured from the resource path with the same regular
-               * expression pattern as `vue-cli-plugin-i18n`.
-               *
-               * Source: plugin docs
-               */
-              localePattern?: RegExp;
-            }
-        ) & {
-          /**
-           * A glob for specifying files that store localization messages of project
-           *
-           * Source: plugin docs
-           */
-          pattern?: string;
-        })
-    >;
-
-    /**
-     * Specify the version of `vue-i18n` you are using.
-     * If not specified, the message will be parsed twice.
-     *
-     * Source: plugin docs
-     */
-    messageSyntaxVersion?: string;
-  };
-}
+> {}
 
 type NuxtPluginNuxtConfigRelatedRules = 'nuxt-config-keys-order';
 
@@ -1247,9 +1246,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .enableConfigTesterForPlugin('pinia')
     .addOverrides();
 
-  const optionsI18nResolved = assignDefaults(configI18n, {});
-
-  const {settings: pluginI18nSettings} = optionsI18nResolved;
+  const pluginI18nSettings = context.getPluginSettings('vue-i18n');
 
   const configBuilderI18n = context.createConfigBuilder(configI18n, 'vue-i18n');
 

@@ -75,6 +75,42 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
 };
 
 /**
+ * [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `jsx-a11y-x` property of the `settings` flat config option.
+ */
+export interface JsxA11yPluginSettings {
+  /**
+   * Custom names of the standard HTML attributes
+   */
+  attributes?: {
+    /**
+     * Attribute names to treat as the `for` attribute of a `<label>`
+     */
+    for?: string[];
+  };
+
+  /**
+   * Keys are custom component names that render an HTML element specified in the value.
+   */
+  components?: Record<string, string>;
+
+  /**
+   * "Defines the prop your code uses to create polymorphic components.
+   * This setting will be used determine the element type in rules that require semantic context.
+   * To restrict polymorphic linting to specified components, additionally set
+   * `polymorphicAllowList` to an array of component names." -
+   * [plugin docs](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y#polymorphic-components).
+   */
+  polymorphicPropName?: string;
+
+  /**
+   * See `polymorphicPropName` docs.
+   */
+  polymorphicAllowList?: string[];
+}
+
+/**
  * Provides accessibility rules for JSX.
  * Applied to all JSX files by default.
  *
@@ -85,43 +121,6 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
 export interface JsxA11yEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsx-a11y'> {
-  /**
-   * [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `jsx-a11y-x` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * Custom names of the standard HTML attributes
-     */
-    attributes?: {
-      /**
-       * Attribute names to treat as the `for` attribute of a `<label>`
-       */
-      for?: string[];
-    };
-
-    /**
-     * Keys are custom component names that render an HTML element specified in the value.
-     */
-    components?: Record<string, string>;
-
-    /**
-     * "Defines the prop your code uses to create polymorphic components.
-     * This setting will be used determine the element type in rules that require semantic context.
-     * To restrict polymorphic linting to specified components, additionally set
-     * `polymorphicAllowList` to an array of component names." -
-     * [plugin docs](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y#polymorphic-components).
-     */
-    polymorphicPropName?: string;
-
-    /**
-     * See `polymorphicPropName` docs.
-     */
-    polymorphicAllowList?: string[];
-  };
-
   /**
    * Elements to check for `alt` attribute on by
    * [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
@@ -350,7 +349,6 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
   });
 
   const {
-    settings: pluginSettings,
     altTextCheckForElements,
     anchorIsValidCheckedAspects,
     ambiguousWordsForAnchorText,
@@ -382,6 +380,8 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
 
   const setRuleOptions = <Options extends readonly unknown[]>(options: Options): Options | [] =>
     isForAstro ? [] : options;
+
+  const pluginSettings = context.getPluginSettings(isForLit ? 'lit-a11y' : 'jsx-a11y');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, prefixFinal);
 

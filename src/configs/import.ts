@@ -1,8 +1,7 @@
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
 import type {
   NewResolver as ImportPluginNewResolver,
-  ImportSettings as PluginSettings,
-  PluginSettings as PluginSettingsWithPrefixes,
+  PluginSettings as ImportPluginSettingsWithPrefixes,
 } from 'eslint-plugin-import-x';
 import {
   ERROR,
@@ -49,6 +48,17 @@ interface ExtraneousDependenciesCheckOptions {
 }
 
 /**
+ * [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned directly to the `settings` flat config option with keys transformed to
+ * `import-x/<original property name in kebab case>`.
+ *
+ * Some settings are set by our config, and the settings you provide here will be merged with ours.
+ * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
+ */
+export type {ImportSettings as ImportPluginSettings} from 'eslint-plugin-import-x';
+
+/**
  * An ESLint plugin to lint `import`/`export` statements.
  *
  * 📁 Default `files`: all files
@@ -56,19 +66,6 @@ interface ExtraneousDependenciesCheckOptions {
 export interface ImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import'> {
-  /**
-   * [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned directly to `settings` flat config option with keys transformed to
-   * `import-x/<original property name in kebab case>` and applied to the resolved `files` and
-   * `ignores` of this config.
-   *
-   * Some settings are set by our config, and the settings you provide here will be merged with
-   * ours.
-   * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
-   */
-  settings?: PluginSettings;
-
   /**
    * Allows default exports in the files that are commonly expected to have them: config files,
    * dotfiles and Storybook stories.
@@ -195,13 +192,15 @@ export default defineUnConfig<ImportEslintConfigOptions>(
   });
 
   const {
-    settings: pluginSettings,
     configAllowDefaultExport,
     isTypescriptEnabled,
     noDuplicatesOptions,
     requireModuleExtensions,
     tsResolverOptions,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('import');
+
   const noUnresolvedIgnores = arrayify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
   const extraneousDependenciesCheckRaw = maybeCall(
@@ -270,11 +269,11 @@ export default defineUnConfig<ImportEslintConfigOptions>(
             }),
             ...Object.fromEntries(
               objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-                `import-x/${toKebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
+                `import-x/${toKebabCase(settingName)}` satisfies keyof ImportPluginSettingsWithPrefixes,
                 settingValue,
               ]),
             ),
-          } satisfies PluginSettingsWithPrefixes,
+          } satisfies ImportPluginSettingsWithPrefixes,
         },
       },
     ])

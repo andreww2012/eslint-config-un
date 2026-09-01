@@ -14,6 +14,56 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `svelte` property of the `settings` flat config option.
+ * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)
+ */
+export interface SveltePluginSettings {
+  /**
+   * "Specifies an array of rules to ignore reports within the template.
+   * For example, use this to disable rules in the template that may produce unavoidable false
+   * positives" -
+   * plugin docs
+   */
+  ignoreWarnings?: string[];
+
+  /**
+   * "Specifies options for Svelte compilation.
+   * This affects rules that rely on Svelte compilation, such as `svelte/valid-compile` and
+   * `svelte/no-unused-svelte-ignore`.
+   * Note that this setting does not impact ESLint’s custom parser" - plugin docs
+   */
+  compileOptions?: {
+    /**
+     * "Specifies options related to PostCSS.
+     * You can disable the PostCSS processing by setting it to `false`" - plugin docs
+     */
+    postcss?:
+      | false
+      | {
+          /**
+           * "Specifies the path to the directory that contains the PostCSS configuration" -
+           * plugin docs
+           */
+          configFilePath?: string;
+        };
+  };
+
+  /**
+   * "Even if `settings.svelte.kit` is not specified, the rules will attempt to load information
+   * from `svelte.config.js`.
+   * However, if the default behavior does not work as expected, you should specify
+   * `settings.svelte.kit` explicitly.
+   * If you are using SvelteKit with a non-default configuration, you need to set the following
+   * options.
+   * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
+   * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
+   */
+  kit?: SvelteKitConfig['kit'];
+}
+
+/**
  * [Svelte](https://svelte.dev) specific rules.
  *
  * 📁 Default `files`: <code>**&#47;*.svelte</code>
@@ -22,57 +72,6 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
-  /**
-   * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `svelte` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)
-   */
-  settings?: {
-    /**
-     * "Specifies an array of rules to ignore reports within the template.
-     * For example, use this to disable rules in the template that may produce unavoidable false
-     * positives" -
-     * plugin docs
-     */
-    ignoreWarnings?: string[];
-
-    /**
-     * "Specifies options for Svelte compilation.
-     * This affects rules that rely on Svelte compilation, such as `svelte/valid-compile` and
-     * `svelte/no-unused-svelte-ignore`.
-     * Note that this setting does not impact ESLint’s custom parser" - plugin docs
-     */
-    compileOptions?: {
-      /**
-       * "Specifies options related to PostCSS.
-       * You can disable the PostCSS processing by setting it to `false`" - plugin docs
-       */
-      postcss?:
-        | false
-        | {
-            /**
-             * "Specifies the path to the directory that contains the PostCSS configuration" -
-             * plugin docs
-             */
-            configFilePath?: string;
-          };
-    };
-
-    /**
-     * "Even if `settings.svelte.kit` is not specified, the rules will attempt to load information
-     * from `svelte.config.js`.
-     * However, if the default behavior does not work as expected, you should specify
-     * `settings.svelte.kit` explicitly.
-     * If you are using SvelteKit with a non-default configuration, you need to set the following
-     * options.
-     * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
-     * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
-     */
-    kit?: SvelteKitConfig['kit'];
-  };
-
   /**
    * Enforces the presence of `lang="ts"` in `<script>` blocks.
    *
@@ -151,12 +150,13 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   }
 
   const {
-    settings: pluginSettings,
     configEnforceTypescriptInScriptSection,
     svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('svelte');
 
   context.requestParsing('svelte', {
     kind: 'setUpOnly',

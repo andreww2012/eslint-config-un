@@ -8,28 +8,27 @@ import {
 } from './index';
 
 /**
+ * [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `next` property of the `settings` flat config option.
+ */
+export interface NextJsPluginSettings {
+  /**
+   * If you're using the plugin in a project where Next.js isn't installed in your root directory
+   * (such as a monorepo), you can tell the plugin where to find your Next.js application.
+   * Path can be relative or absolute, or a glob (i.e. packages/*\/).
+   */
+  rootDir?: string | string[];
+}
+
+/**
  * [Next.js](https://nextjs.org) specific rules.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
  */
 export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'nextjs'> {
-  /**
-   * [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `next` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * If you're using the plugin in a project where Next.js isn't installed in your root directory
-     * (such as a monorepo), you can tell the plugin where to find your Next.js application.
-     * Path can be relative or absolute, or a glob (i.e. packages/*\/).
-     */
-    rootDir?: string | string[];
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'nextjs'> {}
 
 // eslint-disable-next-line case-police/string-check
 export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {package: 'next'}})((
@@ -38,7 +37,7 @@ export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('nextjs');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'nextjs');
 

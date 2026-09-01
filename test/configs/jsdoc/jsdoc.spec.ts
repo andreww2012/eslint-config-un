@@ -151,7 +151,9 @@ describe('options', () => {
     it('sets jsdoc settings when provided', async () => {
       const SETTINGS = {ignorePrivate: true, mode: 'jsdoc'} as const;
 
-      const configResult = await computeEslintConfig({jsdoc: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('jsdoc', {
+        un: {plugins: {jsdoc: {settings: SETTINGS}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('jsdoc')?.settings?.['jsdoc']).toStrictEqual(
         SETTINGS,

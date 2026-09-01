@@ -1,4 +1,3 @@
-import type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -98,6 +97,13 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
 };
 
 /**
+ * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `packageJson` property of the `settings` flat config option.
+ */
+export type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
+
+/**
  * An ESLint plugin with rules for consistent, readable, and valid package.json files.
  *
  * 📁 Default `files`: <code>**&#47;package.json</code>
@@ -110,14 +116,6 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
  */
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
-  /**
-   * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `packageJson` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: PackageJsonPluginSettings;
-
   /**
    * The sorting order of package properties
    * @default 'sort-package-json'
@@ -211,7 +209,6 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
   });
 
   const {
-    settings: pluginSettings,
     order,
     repositoryShorthand,
     propertiesAllowedToBeEmpty,
@@ -220,6 +217,8 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     banTopLevelProperties: banTopLevelPropertiesRaw,
     requireFields,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('package-json');
 
   const propertiesAllowedToBeEmptyList = getKeysOfTruthyValues(
     Array.isArray(propertiesAllowedToBeEmpty)
@@ -258,7 +257,6 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
         filesDefault: [GLOB_PACKAGE_JSON],
         parseWith: ['jsonc', 'json'],
         settings: {
-          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
           packageJson: pluginSettings,
         },
       },

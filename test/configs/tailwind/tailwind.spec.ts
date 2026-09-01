@@ -56,7 +56,7 @@ describe('basic tests', () => {
     });
 
     it('creates `tailwind` eslint config if explicitly enabled', async () => {
-      await expectConfigState({tailwind: true}, 'tailwind', true, 'misc-enabled');
+      await expectConfigState('tailwind', 'tailwind', true, 'misc-enabled');
     });
 
     it('does not create `tailwind` eslint config and prints a warning if explicitly disabled', async () => {
@@ -78,9 +78,12 @@ describe('rules', async () => {
 
   it('`tailwindcss/no-contradicting-classname` rule fires on a file with contradicting class names', async () => {
     const results = await testEslintConfig(
-      {tailwind: {files: ['**'], settings: {cssConfigPath: CSS_CONFIG_PATH}}},
+      {tailwind: {files: ['**']}},
       FIXTURES.contradictingClassnames,
-      import.meta.dirname,
+      {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {plugins: {tailwindcss: {settings: {cssConfigPath: CSS_CONFIG_PATH}}}},
+      },
     );
 
     const error = findLintMessageFromLintResults(
@@ -151,8 +154,8 @@ describe('options', () => {
     it('passes plain settings directly to `tailwindcss` settings property', async () => {
       const SETTINGS = {cssConfigPath: 'src/style.css'};
 
-      const configResult = await computeEslintConfig({
-        tailwind: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('tailwind', {
+        un: {plugins: {tailwindcss: {settings: SETTINGS}}},
       });
 
       expect(
@@ -164,8 +167,8 @@ describe('options', () => {
       it('overwrites default `functions` when provided as array', async () => {
         const FUNCTIONS = ['cn', 'clsx'];
 
-        const configResult = await computeEslintConfig({
-          tailwind: {settings: {functions: FUNCTIONS}},
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {plugins: {tailwindcss: {settings: {functions: FUNCTIONS}}}},
         });
 
         expect(
@@ -175,13 +178,17 @@ describe('options', () => {
 
       it('derives `functions` from defaults when provided as a function', async () => {
         let finalFunctions: string[] = [];
-        const configResult = await computeEslintConfig({
-          tailwind: {
-            settings: {
-              functions: (defaults) => {
-                const result = [...defaults, 'cn'];
-                finalFunctions = [...result];
-                return result;
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {
+            plugins: {
+              tailwindcss: {
+                settings: {
+                  functions: (defaults) => {
+                    const result = [...defaults, 'cn'];
+                    finalFunctions = [...result];
+                    return result;
+                  },
+                },
               },
             },
           },
@@ -197,8 +204,8 @@ describe('options', () => {
       it('overwrites default `ignoredKeys` when provided as array', async () => {
         const IGNORED_KEYS = ['customVariants'];
 
-        const configResult = await computeEslintConfig({
-          tailwind: {settings: {ignoredKeys: IGNORED_KEYS}},
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {plugins: {tailwindcss: {settings: {ignoredKeys: IGNORED_KEYS}}}},
         });
 
         expect(
@@ -208,13 +215,17 @@ describe('options', () => {
 
       it('derives `ignoredKeys` from defaults when provided as a function', async () => {
         let finalIgnoredKeys: string[] = [];
-        const configResult = await computeEslintConfig({
-          tailwind: {
-            settings: {
-              ignoredKeys: (defaults) => {
-                const result = [...defaults, 'customVariants'];
-                finalIgnoredKeys = [...result];
-                return result;
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {
+            plugins: {
+              tailwindcss: {
+                settings: {
+                  ignoredKeys: (defaults) => {
+                    const result = [...defaults, 'customVariants'];
+                    finalIgnoredKeys = [...result];
+                    return result;
+                  },
+                },
               },
             },
           },
@@ -230,8 +241,8 @@ describe('options', () => {
       it('overwrites default `attributes` when provided as array', async () => {
         const ATTRIBUTES = ['class', 'className'];
 
-        const configResult = await computeEslintConfig({
-          tailwind: {settings: {attributes: ATTRIBUTES}},
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {plugins: {tailwindcss: {settings: {attributes: ATTRIBUTES}}}},
         });
 
         expect(
@@ -241,13 +252,17 @@ describe('options', () => {
 
       it('derives `attributes` from defaults when provided as a function', async () => {
         let finalAttributes: string[] = [];
-        const configResult = await computeEslintConfig({
-          tailwind: {
-            settings: {
-              attributes: (defaults) => {
-                const result = [...defaults, 'tw'];
-                finalAttributes = [...result];
-                return result;
+        const configResult = await computeEslintConfig('tailwind', {
+          un: {
+            plugins: {
+              tailwindcss: {
+                settings: {
+                  attributes: (defaults) => {
+                    const result = [...defaults, 'tw'];
+                    finalAttributes = [...result];
+                    return result;
+                  },
+                },
               },
             },
           },

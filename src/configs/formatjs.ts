@@ -10,6 +10,25 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `formatjs` property of the `settings` flat config option.
+ * @see https://formatjs.github.io/docs/tooling/linter#shared-settings
+ */
+export interface FormatjsPluginSettings {
+  /**
+   * Allows you to specify additional function names to check besides `formatMessage` &
+   * `$formatMessage`.
+   */
+  additionalFunctionNames?: string[];
+
+  /**
+   * Allows you to specify additional component names to check besides `FormattedMessage`.
+   */
+  additionalComponentNames?: string[];
+}
+
+/**
  * [FormatJS](https://formatjs.github.io) specific rules.
  *
  * 📁 Default `files`: all files
@@ -17,26 +36,6 @@ import {
 export interface FormatjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'formatjs'> {
-  /**
-   * [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `formatjs` property and applied to the resolved `files` and `ignores`
-   * of this config.
-   * @see https://formatjs.github.io/docs/tooling/linter#shared-settings
-   */
-  settings?: {
-    /**
-     * Allows you to specify additional function names to check besides `formatMessage` &
-     * `$formatMessage`.
-     */
-    additionalFunctionNames?: string[];
-
-    /**
-     * Allows you to specify additional component names to check besides `FormattedMessage`.
-     */
-    additionalComponentNames?: string[];
-  };
-
   /**
    * Enforce `defaultMessage` in the message descriptor.
    *
@@ -100,13 +99,14 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
   });
 
   const {
-    settings: pluginSettings,
     icuElementsBlocklist: icuElementsBlocklistMap,
     enforceDefaultMessage,
     enforceDescription,
     enforcePluralRules,
     enforceId,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('formatjs');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'formatjs');
 

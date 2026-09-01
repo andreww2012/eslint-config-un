@@ -8,6 +8,25 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `css.target` property of the `settings` flat config option.
+ */
+export interface CssInJsPluginSettings {
+  /**
+   * Specifies the attribute name or pattern that uses the style object.
+   * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-attributes
+   */
+  attributes?: string[];
+
+  /**
+   * Specifies the function paths that uses the style object.
+   * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
+   */
+  defineFunctions?: Record<string, string[]>;
+}
+
+/**
  * CSS-in-JS specific rules.
  *
  * 📁 Default `files`: all files
@@ -15,26 +34,6 @@ import {
 export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css-in-js'> {
-  /**
-   * [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `css.target` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * Specifies the attribute name or pattern that uses the style object.
-     * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-attributes
-     */
-    attributes?: string[];
-
-    /**
-     * Specifies the function paths that uses the style object.
-     * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
-     */
-    defineFunctions?: Record<string, string[]>;
-  };
-
   /**
    * `long` is `#RRGGBB(AA)`, short is `#RGB(A)`
    * @default 'long'
@@ -85,12 +84,13 @@ export default defineUnConfig<CssInJsEslintConfigOptions>(
   });
 
   const {
-    settings: pluginSettings,
     hexColorsStyle,
     preferNamedColors: preferNamedColorsRaw,
     avoidLeadingZero,
     propertyCasing,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('css-in-js');
 
   const preferNamedColors =
     typeof preferNamedColorsRaw === 'object'

@@ -152,8 +152,8 @@ describe('options', () => {
     it('sets regexp settings when `settings` is provided', async () => {
       const SETTINGS = {allowedCharacterRanges: 'all'} as const;
 
-      const configResult = await computeEslintConfig({
-        regexp: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('regexp', {
+        un: {plugins: {regexp: {settings: SETTINGS}}},
       });
       const config = configResult.getConfigByUnPostfix('regexp');
 

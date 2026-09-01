@@ -7,45 +7,44 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-solid`](https://npmx.dev/eslint-plugin-solid) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `solid` property of the `settings` flat config option.
+ */
+export interface SolidPluginSettings {
+  /**
+   * Version of Solid the linted code targets.
+   * Specifying the minor part too (`'1.5'`, `'2.0.3'`) is encouraged: a major-only value borrows
+   * the minor from the installed `solid-js` package, falling back to `x.0`.
+   *
+   * Affected rules:
+   * - [`solid/event-handlers`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/event-handlers.md)
+   * - [`solid/imports`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/imports.md)
+   * - [`solid/jsx-no-undef`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-undef.md)
+   * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
+   * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
+   * - [`solid/no-react-deps`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-deps.md)
+   * - [`solid/no-react-specific-props`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-specific-props.md)
+   * - [`solid/no-restated-default-options`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-restated-default-options.md)
+   * - [`solid/no-single-arg-create-effect`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-single-arg-create-effect.md)
+   * - [`solid/no-unknown-namespaces`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unknown-namespaces.md)
+   * - [`solid/prefer-onSettled-for-side-effects`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-onSettled-for-side-effects.md)
+   * - [`solid/prefer-structured-class`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-structured-class.md)
+   * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
+   * - [`solid/removed-api`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/removed-api.md)
+   * @default version of the installed `solid-js` package
+   */
+  version?: number | string;
+}
+
+/**
  * [SolidJS](https://www.solidjs.com) specific rules.
  *
  * 📁 Default `files`: all files
  */
 export interface SolidEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'solid'> {
-  /**
-   * [`eslint-plugin-solid`](https://npmx.dev/eslint-plugin-solid) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `solid` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * Version of Solid the linted code targets.
-     * Specifying the minor part too (`'1.5'`, `'2.0.3'`) is encouraged: a major-only value borrows
-     * the minor from the installed `solid-js` package, falling back to `x.0`.
-     *
-     * Affected rules:
-     * - [`solid/event-handlers`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/event-handlers.md)
-     * - [`solid/imports`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/imports.md)
-     * - [`solid/jsx-no-undef`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-undef.md)
-     * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
-     * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
-     * - [`solid/no-react-deps`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-deps.md)
-     * - [`solid/no-react-specific-props`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-specific-props.md)
-     * - [`solid/no-restated-default-options`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-restated-default-options.md)
-     * - [`solid/no-single-arg-create-effect`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-single-arg-create-effect.md)
-     * - [`solid/no-unknown-namespaces`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unknown-namespaces.md)
-     * - [`solid/prefer-onSettled-for-side-effects`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-onSettled-for-side-effects.md)
-     * - [`solid/prefer-structured-class`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-structured-class.md)
-     * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
-     * - [`solid/removed-api`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/removed-api.md)
-     * @default version of the installed `solid-js` package
-     */
-    version?: number | string;
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'solid'> {}
 
 export default defineUnConfig<SolidEslintConfigOptions>('solid', {
   enabledBy: {package: 'solid-js'},
@@ -55,7 +54,8 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
 
   const solidPackageVersion = context.packagesInfo['solid-js']?.versions.full || '';
-  const solidVersionFromUser = String(optionsResolved.settings?.version ?? '');
+
+  const solidVersionFromUser = String(context.getPluginSettings('solid')?.version ?? '');
 
   const solidMajorVersion = Number.parseInt(solidVersionFromUser || solidPackageVersion, 10) || 0;
   const errorIfSolidVersion2 = solidMajorVersion >= 2 ? ERROR : OFF;

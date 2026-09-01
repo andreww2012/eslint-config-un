@@ -4,7 +4,6 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
-import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
@@ -39,9 +38,10 @@ import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '..
 import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
-import type {recordPackageRequester, registerUsedPlugin} from './config-utils';
+import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from './config-utils';
 import type {ImportPluginReplaceableRules} from './import-integrity';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
+import type {PluginSettingsMap} from './plugin-settings';
 
 export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
@@ -396,7 +396,17 @@ export interface EslintConfigUnOptions<
             : EslintPlugin
         >
       >;
-    };
+    } & (Plugin extends keyof PluginSettingsMap
+      ? {
+          /**
+           * The plugin's
+           * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings).
+           *
+           * Only applied when at least one Config using the plugin is enabled.
+           */
+          settings?: PluginSettingsMap[Plugin];
+        }
+      : unknown);
   };
 
   /**
@@ -514,11 +524,6 @@ export interface EslintConfigUnOptions<
   useImportIntegrity?:
     | boolean
     | {
-        /**
-         * Settings passed to the `importIntegrity` config
-         */
-        pluginSettings?: Partial<ImportIntegrityPluginSettings>;
-
         /**
          * Which of the replaceable rules are actually replaced
          */
@@ -792,6 +797,11 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    * Absent on the root context every Config's own context is derived from
    */
   packageRequester?: PackageRequester;
+
+  /**
+   * Reads the plugin's shared settings off the `plugins` root option
+   */
+  getPluginSettings: typeof getPluginSettings;
 
   /**
    * Marks a plugin as used, which is also what makes it loaded, and remembers what asked for it

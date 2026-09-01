@@ -56,6 +56,34 @@ interface JestExtendedSubConfigOptions<
 }
 
 /**
+ * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to `jest` property and applied to the resolved `files` and `ignores` of
+ * this config, as well as for `ts` and `jestExtended` sub-configs.
+ */
+export interface JestPluginSettings {
+  /**
+   * Tell the plugin about any global methods you have aliased.
+   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals
+   * @example {describe: ['context']}
+   */
+  globalAliases?: Record<string, string[]>;
+
+  /**
+   * Tell the plugin to treat a different package as the source of Jest globals.
+   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jestglobals
+   * @example 'bun:test'
+   */
+  globalPackage?: string;
+
+  /**
+   * Tell the plugin which major version of Jest is used, if it cannot be detected automatically
+   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
+   */
+  version?: number;
+}
+
+/**
  * [Jest](https://jestjs.io) related rules.
  *
  * 📁 Default `files`:
@@ -66,34 +94,6 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'jest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
-  /**
-   * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `jest` property and applied to the resolved `files` and `ignores` of
-   * this config, as well as for `ts` and `jestExtended` sub-configs.
-   */
-  settings?: {
-    /**
-     * Tell the plugin about any global methods you have aliased.
-     * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals
-     * @example {describe: ['context']}
-     */
-    globalAliases?: Record<string, string[]>;
-
-    /**
-     * Tell the plugin to treat a different package as the source of Jest globals.
-     * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jestglobals
-     * @example 'bun:test'
-     */
-    globalPackage?: string;
-
-    /**
-     * Tell the plugin which major version of Jest is used, if it cannot be detected automatically
-     * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
-     */
-    version?: number;
-  };
-
   /**
    * Suggests using `jest-extended` matchers instead of some assertion forms.
    *
@@ -268,7 +268,6 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
     });
 
     const {
-      settings: pluginSettings,
       configJestExtended,
       configNoOnlyTests,
       configTypescript,
@@ -280,6 +279,8 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
       asyncMatchers,
       minAndMaxExpectArgs,
     } = optionsResolved;
+
+    const pluginSettings = context.getPluginSettings('jest');
 
     const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
       languageOptions: {

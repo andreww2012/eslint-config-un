@@ -31,20 +31,26 @@ const CONFIG_MODE_OPTIONS: Record<ConfigMode, ComputeOptions> = {
  *
  * `modeOrComputeOptions`:
  * - `'all-disabled'` (default) / `'default'` / `'misc-enabled'` — preset shorthands
- * - or a raw `computeOptions` object for custom overrides
+ * - or a raw `computeOptions` object, whose `mode` picks the preset the rest is merged into
  */
 export const expectConfigState = async (
   configs: Parameters<typeof computeEslintConfig>[0],
   postfixOrPostfixes: MaybeArray<string>,
   state: boolean | [configName: keyof UnConfigs, action: boolean],
-  modeOrComputeOptions?: ConfigMode | ComputeOptions,
+  modeOrComputeOptions?: ConfigMode | (ComputeOptions & {mode?: ConfigMode}),
 ): Promise<ConfigResultType> => {
   using stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
 
-  const computeOptions =
+  const {mode = 'all-disabled', ...computeOptionsOverrides} =
     typeof modeOrComputeOptions === 'string'
-      ? CONFIG_MODE_OPTIONS[modeOrComputeOptions]
-      : modeOrComputeOptions;
+      ? {mode: modeOrComputeOptions}
+      : modeOrComputeOptions || {};
+  const modeOptions = CONFIG_MODE_OPTIONS[mode];
+  const computeOptions = {
+    ...modeOptions,
+    ...computeOptionsOverrides,
+    un: {...modeOptions?.un, ...computeOptionsOverrides.un},
+  };
 
   const configResult = await computeEslintConfig(configs, computeOptions);
 

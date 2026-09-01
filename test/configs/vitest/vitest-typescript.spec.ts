@@ -118,10 +118,13 @@ describe('vitest: sub config `typescript`', () => {
       it('sets plugin settings on `vitest/ts` eslint config', async () => {
         const PLUGIN_SETTINGS = {typecheck: true};
 
-        const configResult = await computeEslintConfig({
-          vitest: {settings: PLUGIN_SETTINGS},
-          ts: true,
-        });
+        const configResult = await computeEslintConfig(
+          {
+            vitest: true,
+            ts: true,
+          },
+          {un: {plugins: {vitest: {settings: PLUGIN_SETTINGS}}}},
+        );
 
         expect(configResult.getConfigByUnPostfix('vitest/ts')?.settings?.['vitest']).toStrictEqual(
           PLUGIN_SETTINGS,

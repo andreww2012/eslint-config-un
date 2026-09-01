@@ -8,29 +8,28 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `regexp` property of the `settings` flat config option.
+ */
+export interface RegexpPluginSettings {
+  /**
+   * Defines a set of allowed character ranges.
+   * Rules will only allow, create, and fix character ranges defined here.
+   * @default 'alphanumeric'
+   * @see https://ota-meshi.github.io/eslint-plugin-regexp/settings/#allowedcharacterranges
+   */
+  allowedCharacterRanges?: MaybeArray<'alphanumeric' | 'all' | `${string}-${string}`>;
+}
+
+/**
  * An ESLint plugin that finds RegExp mistakes and stylistic issues.
  *
  * 📁 Default `files`: all files
  */
 export interface RegexpEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'regexp'> {
-  /**
-   * [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `regexp` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * Defines a set of allowed character ranges.
-     * Rules will only allow, create, and fix character ranges defined here.
-     * @default 'alphanumeric'
-     * @see https://ota-meshi.github.io/eslint-plugin-regexp/settings/#allowedcharacterranges
-     */
-    allowedCharacterRanges?: MaybeArray<'alphanumeric' | 'all' | `${string}-${string}`>;
-  };
-}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'regexp'> {}
 
 export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
   enabledBy: true,
@@ -39,7 +38,7 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {settings: pluginSettings} = optionsResolved;
+  const pluginSettings = context.getPluginSettings('regexp');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'regexp');
 

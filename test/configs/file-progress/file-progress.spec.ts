@@ -114,7 +114,9 @@ describe('options', () => {
     it('merges default settings with user-provided ones and assignes to `file-progress` settings property', async () => {
       const SETTINGS = {hideFileName: true};
 
-      const configResult = await computeEslintConfig({fileProgress: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('fileProgress', {
+        un: {plugins: {'file-progress': {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],

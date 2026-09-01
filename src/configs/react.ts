@@ -22,7 +22,7 @@ import {
   defineUnConfig,
 } from './index';
 
-interface EslintPluginReactSettings {
+export interface ReactPluginSettings {
   /**
    * Regex for Component Factory to use, default to `createReactClass`
    */
@@ -137,7 +137,7 @@ interface EslintPluginReactSettings {
   )[];
 }
 
-interface EslintPluginReactXSettings {
+export interface ReactXPluginSettings {
   /**
    * A regex pattern matching custom hooks treated as effect hooks.
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionaleffecthooks
@@ -193,16 +193,6 @@ type ReactXTypeAwareRules =
 interface ReactXSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, UnRulesConfigPartial<'eslint-react'>> {
-  /**
-   * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react-x` property and applied to the resolved `files` and `ignores`
-   * of this config.
-   *
-   * Note that they will be merged with `{version: <detected by us React version>}`.
-   */
-  settings?: EslintPluginReactXSettings;
-
   /**
    * By default, usage of [any of the legacy React APIs](https://react.dev/reference/react/legacy),
    * including
@@ -265,22 +255,21 @@ interface ReactXSubConfigOptions<
       >;
 }
 
+/**
+ * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `react-hooks` property of the `settings` flat config option.
+ */
+export interface ReactHooksPluginSettings {
+  /**
+   * A regular expression with custom effect hooks.
+   */
+  additionalEffectHooks?: string;
+}
+
 interface HooksSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react-hooks'> {
-  /**
-   * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react-hooks` property and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * A regular expression with custom effect hooks.
-     */
-    additionalEffectHooks?: string;
-  };
-
   /**
    * Enables the [React Compiler](https://react.dev/learn/react-compiler) rules shipped by
    * `eslint-plugin-react-hooks`
@@ -348,18 +337,6 @@ interface RefreshSubConfigOptions<
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react'> {
-  /**
-   * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   *
-   * Note that they will be merged with `{version: <detected by us React version>}` to avoid
-   * `Warning: React version not specified in eslint-plugin-react settings.` log message when
-   * running ESLint.
-   */
-  settings?: EslintPluginReactSettings;
-
   /**
    * Enables or specifies the configuration for
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin.
@@ -686,7 +663,6 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
   const parentConfigIgnores = resolveIgnoresOption(optionsResolved.ignores, []);
 
   const {
-    settings: pluginSettings,
     configAllowDefaultExportsInJsxFiles,
     configHooks,
     configReactX,
@@ -698,6 +674,8 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     shorthandFragment,
     reactVersion: reactMajorVersion,
   } = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('react');
 
   const reactFullVersion = String(
     (optionsRaw && typeof optionsRaw === 'object' ? optionsRaw.reactVersion : null) ??
@@ -743,13 +721,13 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     ? ({
         version: reactFullVersion,
         ...pluginSettings,
-      } satisfies EslintPluginReactSettings)
+      } satisfies ReactPluginSettings)
     : null;
   const reactXSettings = isReactXEnabled
     ? ({
         version: reactFullVersion,
-        ...configReactXOptions.settings,
-      } satisfies EslintPluginReactXSettings)
+        ...context.getPluginSettings('eslint-react'),
+      } satisfies ReactXPluginSettings)
     : null;
 
   const extraFlatConfigForReactOriginal: EslintFlatConfigEntry = {
@@ -1026,7 +1004,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
         filesDefault: parentConfigFiles,
         ignoresDefault: parentConfigIgnores,
         settings: {
-          'react-hooks': configHooksOptions.settings,
+          'react-hooks': context.getPluginSettings('react-hooks'),
         },
       },
     ])

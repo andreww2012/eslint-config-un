@@ -14,6 +14,34 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `settings` flat config option with keys transformed to
+ * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config.
+ */
+export interface MochaPluginSettings {
+  /**
+   * Wrappers around the Mocha functions that the rules must recognize as those functions
+   */
+  additionalCustomNames?: {
+    /**
+     * The name of the wrapper, which may be a member expression such as `describe.only`
+     */
+    name: string;
+
+    /**
+     * Which kind of Mocha function the wrapper stands for
+     */
+    type: 'config' | 'hook' | 'suite' | 'testCase';
+
+    /**
+     * The Mocha interface the wrapper belongs to
+     */
+    interface: 'BDD' | 'TDD' | 'exports';
+  }[];
+}
+
+/**
  * [Mocha](https://mochajs.org) specific rules.
  *
  * 📁 Default `files`:
@@ -24,34 +52,6 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mocha'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
-  /**
-   * [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `settings` object with keys transformed to `mocha/<property>` and
-   * applied to the resolved `files` and `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * Wrappers around the Mocha functions that the rules must recognize as those functions
-     */
-    additionalCustomNames?: {
-      /**
-       * The name of the wrapper, which may be a member expression such as `describe.only`
-       */
-      name: string;
-
-      /**
-       * Which kind of Mocha function the wrapper stands for
-       */
-      type: 'config' | 'hook' | 'suite' | 'testCase';
-
-      /**
-       * The Mocha interface the wrapper belongs to
-       */
-      interface: 'BDD' | 'TDD' | 'exports';
-    }[];
-  };
-
   /**
    * Affected rule:
    * - [`mocha/consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/consistent-interface.md)
@@ -76,12 +76,9 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
     maxTopLevelSuites: 1,
   });
 
-  const {
-    settings: pluginSettings,
-    configNoOnlyTests,
-    enforceInterface,
-    maxTopLevelSuites,
-  } = optionsResolved;
+  const {configNoOnlyTests, enforceInterface, maxTopLevelSuites} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('mocha');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'mocha');
 

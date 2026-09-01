@@ -52,7 +52,7 @@ describe('basic tests', () => {
     });
 
     it('creates `perfectionist` eslint config if explicitly enabled', async () => {
-      await expectConfigState({perfectionist: true}, 'perfectionist', true, 'misc-enabled');
+      await expectConfigState('perfectionist', 'perfectionist', true, 'misc-enabled');
     });
 
     it('does not create `perfectionist` eslint config and prints a warning if explicitly disabled', async () => {
@@ -132,7 +132,9 @@ describe('options', () => {
   describe('option: `settings`', async () => {
     const PLUGIN_SETTINGS = {ignoreCase: false};
 
-    const configResult = await computeEslintConfig({perfectionist: {settings: PLUGIN_SETTINGS}});
+    const configResult = await computeEslintConfig('perfectionist', {
+      un: {plugins: {perfectionist: {settings: PLUGIN_SETTINGS}}},
+    });
 
     it('sets plugin settings on `perfectionist` eslint config', () => {
       expect(

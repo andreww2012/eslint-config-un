@@ -1,8 +1,8 @@
-import type {BetterTailwindEslintConfigOptions} from '../../../src/configs/better-tailwind';
+import type {BetterTailwindPluginSettings} from '../../../src/configs/better-tailwind';
 
-type Settings = BetterTailwindEslintConfigOptions['settings'];
+type Settings = BetterTailwindPluginSettings;
 
-describe('option: `settings`', () => {
+describe('`plugins.better-tailwindcss.settings`', () => {
   it('allows using only `entryPoint`', () => {
     ({entryPoint: 'src/index.css'}) satisfies Settings;
   });
@@ -22,8 +22,8 @@ describe('option: `settings`', () => {
   it('does not allow using `entryPoint` and `tailwindConfig` properties at the same time', () => {
     ({
       entryPoint: 'src/index.css',
-      // @ts-expect-error - assertion
       tailwindConfig: 'tailwind.config.js',
+      // @ts-expect-error - assertion
     }) satisfies Settings;
   });
 

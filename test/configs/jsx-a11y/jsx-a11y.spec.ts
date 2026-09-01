@@ -139,7 +139,9 @@ describe('options', () => {
     it('sets `jsx-a11y-x` settings when provided', async () => {
       const SETTINGS = {components: {CustomImg: 'img'}} as const;
 
-      const configResult = await computeEslintConfig({jsxA11y: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('jsxA11y', {
+        un: {plugins: {'jsx-a11y': {settings: SETTINGS}}},
+      });
       const config = configResult.getConfigByUnPostfix('jsx-a11y');
 
       expect(config?.settings?.['jsx-a11y-x']).toStrictEqual(SETTINGS);

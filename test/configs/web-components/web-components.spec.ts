@@ -57,7 +57,7 @@ describe('basic tests', () => {
     });
 
     it('creates `web-components` eslint config if explicitly enabled', async () => {
-      await expectConfigState({webComponents: true}, 'web-components', true, 'misc-enabled');
+      await expectConfigState('webComponents', 'web-components', true, 'misc-enabled');
     });
 
     it('does not create `web-components` eslint config and prints a warning if explicitly disabled', async () => {
@@ -158,8 +158,8 @@ describe('options', () => {
     it('sets `wc` settings when `settings` is provided', async () => {
       const SETTINGS = {elementBaseClasses: ['LitElement', 'PolymerElement']};
 
-      const configResult = await computeEslintConfig({
-        webComponents: {settings: SETTINGS},
+      const configResult = await computeEslintConfig('webComponents', {
+        un: {plugins: {wc: {settings: SETTINGS}}},
       });
 
       const config = configResult.getConfigByUnPostfix('web-components');

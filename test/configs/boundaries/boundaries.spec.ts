@@ -2,9 +2,15 @@ const FIXTURES = {
   elementTypesViolation: 'pages/Home.js',
 } as const;
 
+const PLUGIN_SETTINGS_OPTIONS = {
+  un: {plugins: {boundaries: {settings: {elements: []}}}},
+} satisfies Parameters<typeof expectConfigState>[3];
+
 describe('basic tests', () => {
   it('creates `boundaries` eslint config and loads `boundaries` plugin by default', async () => {
-    const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
+    const configResult = await computeEslintConfig('boundaries', {
+      un: {plugins: {boundaries: {settings: {elements: []}}}},
+    });
 
     const config = configResult.getConfigByUnPostfix('boundaries');
 
@@ -28,7 +34,7 @@ describe('basic tests', () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState({boundaries: {settings: {elements: []}}}, 'boundaries', true);
+      await expectConfigState('boundaries', 'boundaries', true, PLUGIN_SETTINGS_OPTIONS);
     });
   });
 
@@ -38,12 +44,10 @@ describe('basic tests', () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState(
-        {boundaries: {settings: {elements: []}}},
-        'boundaries',
-        true,
-        'default',
-      );
+      await expectConfigState('boundaries', 'boundaries', true, {
+        ...PLUGIN_SETTINGS_OPTIONS,
+        mode: 'default',
+      });
     });
 
     it('does not create `boundaries` eslint config and prints a warning if explicitly disabled', async () => {
@@ -57,12 +61,10 @@ describe('basic tests', () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState(
-        {boundaries: {settings: {elements: []}}},
-        'boundaries',
-        true,
-        'misc-enabled',
-      );
+      await expectConfigState('boundaries', 'boundaries', true, {
+        ...PLUGIN_SETTINGS_OPTIONS,
+        mode: 'misc-enabled',
+      });
     });
 
     it('does not create `boundaries` eslint config and prints a warning if explicitly disabled', async () => {
@@ -77,7 +79,9 @@ describe('basic tests', () => {
 });
 
 describe('rules', async () => {
-  const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
+  const configResult = await computeEslintConfig('boundaries', {
+    un: {plugins: {boundaries: {settings: {elements: []}}}},
+  });
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('boundaries')).toMatchObject({
@@ -93,18 +97,26 @@ describe('rules', async () => {
           overrides: {
             'boundaries/dependencies': [2, {default: 'disallow', rules: []}],
           },
-          settings: {
-            elements: [
-              {type: 'component', pattern: 'components/*', mode: 'file'},
-              {type: 'page', pattern: 'pages/*', mode: 'file'},
-            ],
-            // eslint-disable-next-line node/no-path-concat -- doesn't matter in tests
-            rootPath: `${import.meta.dirname}/fixtures`,
-          },
         },
       },
       FIXTURES.elementTypesViolation,
-      import.meta.dirname,
+      {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {
+          plugins: {
+            boundaries: {
+              settings: {
+                elements: [
+                  {type: 'component', pattern: 'components/*', mode: 'file'},
+                  {type: 'page', pattern: 'pages/*', mode: 'file'},
+                ],
+                // eslint-disable-next-line node/no-path-concat -- doesn't matter in tests
+                rootPath: `${import.meta.dirname}/fixtures`,
+              },
+            },
+          },
+        },
+      },
     );
 
     const error = findLintMessageFromLintResults(
@@ -124,17 +136,23 @@ describe('un options', () => {
     it('uses user-provided `files` in `boundaries` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
 
-      const configResult = await computeEslintConfig({
-        boundaries: {files: FILES, settings: {elements: []}},
-      });
+      const configResult = await computeEslintConfig(
+        {
+          boundaries: {files: FILES},
+        },
+        {un: {plugins: {boundaries: {settings: {elements: []}}}}},
+      );
 
       expect(configResult.getConfigByUnPostfix('boundaries')?.files).toStrictEqual(FILES);
     });
 
     it('disables `boundaries` eslint config when set to empty array', async () => {
-      const configResult = await computeEslintConfig({
-        boundaries: {files: [], settings: {elements: []}},
-      });
+      const configResult = await computeEslintConfig(
+        {
+          boundaries: {files: []},
+        },
+        {un: {plugins: {boundaries: {settings: {elements: []}}}}},
+      );
 
       expect(configResult.getConfigByUnPostfix('boundaries')).toBeUndefined();
     });
@@ -144,9 +162,12 @@ describe('un options', () => {
     it('uses user-provided `ignores` in `boundaries` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
 
-      const configResult = await computeEslintConfig({
-        boundaries: {ignores: IGNORES, settings: {elements: []}},
-      });
+      const configResult = await computeEslintConfig(
+        {
+          boundaries: {ignores: IGNORES},
+        },
+        {un: {plugins: {boundaries: {settings: {elements: []}}}}},
+      );
 
       const ignores = configResult.getConfigByUnPostfix('boundaries')?.ignores;
 
@@ -156,13 +177,15 @@ describe('un options', () => {
   });
 
   it('respects `overrides` and `overridesAny` in `boundaries` eslint config', async () => {
-    const configResult = await computeEslintConfig({
-      boundaries: {
-        overrides: {'boundaries/element-types': 0},
-        overridesAny: {'no-console': 0},
-        settings: {elements: []},
+    const configResult = await computeEslintConfig(
+      {
+        boundaries: {
+          overrides: {'boundaries/element-types': 0},
+          overridesAny: {'no-console': 0},
+        },
       },
-    });
+      {un: {plugins: {boundaries: {settings: {elements: []}}}}},
+    );
 
     expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/element-types')).toBe(0);
     expect(configResult.getRuleEntrySeverity('boundaries', 'no-console')).toBe(0);
@@ -186,7 +209,9 @@ describe('options', () => {
     it('does not warn when `settings.elements` is provided', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
 
-      await computeEslintConfig({boundaries: {settings: {elements: []}}});
+      await computeEslintConfig('boundaries', {
+        un: {plugins: {boundaries: {settings: {elements: []}}}},
+      });
 
       expect(stderrSpy.mock.calls).toBeEmpty();
     });
@@ -194,8 +219,8 @@ describe('options', () => {
     it('sets `boundaries/elements` in ESLint config settings when `elements` is provided', async () => {
       const ELEMENTS = [{type: 'component', pattern: 'components/*'}];
 
-      const configResult = await computeEslintConfig({
-        boundaries: {settings: {elements: ELEMENTS}},
+      const configResult = await computeEslintConfig('boundaries', {
+        un: {plugins: {boundaries: {settings: {elements: ELEMENTS}}}},
       });
 
       expect(
@@ -204,10 +229,8 @@ describe('options', () => {
     });
 
     it('transforms camelCase settings key `rootPath` to `boundaries/root-path`', async () => {
-      const configResult = await computeEslintConfig({
-        boundaries: {
-          settings: {elements: [], rootPath: '/src'},
-        },
+      const configResult = await computeEslintConfig('boundaries', {
+        un: {plugins: {boundaries: {settings: {elements: [], rootPath: '/src'}}}},
       });
       const config = configResult.getConfigByUnPostfix('boundaries');
 

@@ -289,6 +289,30 @@ interface EcmaFeatures {
 type EcmaVersion = keyof EcmaFeatures;
 
 /**
+ * [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `es-x` property of the `settings` flat config option.
+ */
+export interface EsPluginSettings {
+  /**
+   * "This plugin never reports prototype methods by default.
+   * Because it's hard to know the type of objects, it will cause false positives.
+   * If you configured the `aggressive` mode, this plugin reports prototype methods even if the
+   * rules couldn't know the type of objects"
+   * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-aggressive-mode)
+   */
+  aggressive?: boolean;
+
+  /**
+   * "This plugin has rules to report forbidden property accesses.
+   * These rules report all forbidden property accesses by default, but if you want to allow
+   * existence-tested properties in your scripts, you can use the `allowTestedProperty` mode"
+   * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-allowtestedproperty-mode)
+   */
+  allowTestedProperty?: boolean;
+}
+
+/**
  * An ESLint plugin to forbid certain JS syntax.
  *
  * 📁 Default `files`: all files
@@ -296,31 +320,6 @@ type EcmaVersion = keyof EcmaFeatures;
 export interface EsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'es'> {
-  /**
-   * [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `es-x` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * "This plugin never reports prototype methods by default.
-     * Because it's hard to know the type of objects, it will cause false positives.
-     * If you configured the `aggressive` mode, this plugin reports prototype methods even if the
-     * rules couldn't know the type of objects"
-     * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-aggressive-mode)
-     */
-    aggressive?: boolean;
-
-    /**
-     * "This plugin has rules to report forbidden property accesses.
-     * These rules report all forbidden property accesses by default, but if you want to allow
-     * existence-tested properties in your scripts, you can use the `allowTestedProperty` mode"
-     * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-allowtestedproperty-mode)
-     */
-    allowTestedProperty?: boolean;
-  };
-
   /**
    * Max supported ECMAScript version.
    * @default 'latest'
@@ -364,7 +363,9 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
     ecmaVersion: 'latest',
   });
 
-  const {settings: pluginSettings, ecmaVersion, ecmaFeatures = {}} = optionsResolved;
+  const {ecmaVersion, ecmaFeatures = {}} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('es');
 
   const getEsVersionFeatures = memoize((version: EcmaVersion) => {
     const overallVersionSupported = ecmaVersion === 'latest' || version <= ecmaVersion;

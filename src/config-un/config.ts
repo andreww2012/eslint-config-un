@@ -55,6 +55,7 @@ import {
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {
   getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless,
+  getPluginSettings,
   recordPackageRequester,
   registerUsedPlugin,
 } from './config-utils';
@@ -262,6 +263,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     isTestMode,
     tests: [],
     createConfigBuilder,
+    getPluginSettings,
     registerUsedPlugin,
     recordPackageRequester,
   } satisfies PartialDeep<Pick<UnConfigContext, 'packagesInfo' | 'configsMeta'>> &
@@ -627,7 +629,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         settings: {
           'import-integrity': {
             packageRootDir: import.meta.dirname,
-            ...(typeof useImportIntegrity === 'object' && useImportIntegrity.pluginSettings),
+            ...pluginsOptions['import-integrity']?.settings,
           } satisfies ImportIntegrityPluginSettings,
         },
       },

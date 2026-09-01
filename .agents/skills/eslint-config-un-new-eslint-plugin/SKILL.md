@@ -78,13 +78,14 @@ This file should export `<ConfigName>EslintConfigOptions<ExtraPlugins extends Ex
 This type includes all the Config's custom options.
 The order of the options is as follows (all are optional):
 
-- `settings`: plugin settings type.
-  Should preferably be imported from the plugin itself, but most of the plugins don't export it, so it should be constructed manually from the docs/source code.
 - `configXxx`: sub-configs.
   Should have the type of `boolean | UnFlatConfigEntryBase<ExtraPlugins, '<configName>'> & { /* optional custom options */}`.
 - All the other custom options.
 
 You may only *suggest* implementing some custom options at the end.
+
+If the plugin accepts any, export a `<PluginName>PluginSettings` type from the Config file, register it in `src/config-un/plugin-settings.ts` under the canonical plugin prefix, and read it in the Config body with `context.getPluginSettings('<plugin prefix>')`.
+The type should preferably be imported from the plugin itself, but most of the plugins don't export it, so it should be constructed manually from the docs/source code.
 
 DO NOT assign `files` or `ignores` to the options - this is needed in exceptional cases (for example, if the resolved `files` array is used in another config) and ruins `filesDefault` logic!
 

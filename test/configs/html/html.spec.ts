@@ -163,8 +163,10 @@ describe('options', () => {
     });
 
     it('sets html settings when provided', async () => {
-      const configResult = await computeEslintConfig({
-        html: {settings: {templateLiterals: {tags: ['html'], comments: ['html']}}},
+      const configResult = await computeEslintConfig('html', {
+        un: {
+          plugins: {html: {settings: {templateLiterals: {tags: ['html'], comments: ['html']}}}},
+        },
       });
       const config = configResult.getConfigByUnPostfix('html');
 

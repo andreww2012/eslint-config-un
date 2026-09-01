@@ -9,35 +9,34 @@ import {
   defineUnConfig,
 } from './index';
 
+/**
+ * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to `settings` object as-is and applied to the resolved `files` and
+ * `ignores` of this config.
+ */
+export interface LitA11yPluginSettings {
+  /**
+   * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html) tagged template
+   * literals are linted.
+   *
+   * If you're importing `lit-html` from a package that re-exports `lit-html`, like for example
+   * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
+   */
+  litHtmlSources?: boolean | string[];
+}
+
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'lit-a11y'>,
     OmitStrict<
       JsxA11yEslintConfigOptions,
-      | 'settings'
       | keyof UnFlatConfigEntryBase
       | 'ambiguousWordsForAnchorText'
       | 'customComponents'
       | 'labelAttributes'
       | 'tabbableRoles'
     > {
-  /**
-   * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `settings` object as-is and applied to the resolved `files` and
-   * `ignores` of this config.
-   */
-  settings?: {
-    /**
-     * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html) tagged template
-     * literals are linted.
-     *
-     * If you're importing `lit-html` from a package that re-exports `lit-html`, like for example
-     * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
-     */
-    litHtmlSources?: boolean | string[];
-  };
-
   /**
    * Custom components that render the corresponding HTML element, checked by various rules
    */
@@ -54,6 +53,18 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
 }
 
 /**
+ * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `lit` property of the `settings` flat config option.
+ */
+export interface LitPluginSettings {
+  /**
+   * Instructs rules to recognize the following classes as sub-classes of `LitElement`
+   */
+  elementBaseClasses?: string[];
+}
+
+/**
  * [Lit](https://lit.dev) specific rules.
  *
  * 📁 Default `files`: all files
@@ -61,19 +72,6 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
 export interface LitEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'lit'> {
-  /**
-   * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `lit` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * Instructs rules to recognize the following classes as sub-classes of `LitElement`
-     */
-    elementBaseClasses?: string[];
-  };
-
   /**
    * A11Y (accessibility) specific rules for Lit components.
    *
@@ -97,12 +95,9 @@ export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {packag
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'lit');
 
-  const {
-    settings: pluginSettings,
-    files: parentConfigFiles,
-    ignores: parentConfigIgnores,
-    configA11y,
-  } = optionsResolved;
+  const {files: parentConfigFiles, ignores: parentConfigIgnores, configA11y} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('lit');
 
   // Legend:
   // 🟢 - in recommended
@@ -146,15 +141,12 @@ export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {packag
 
   if (configA11y !== false) {
     const {buildJsxA11yConfigs} = await import('./jsx-a11y');
-    const options = typeof configA11y === 'object' ? configA11y : {};
     buildJsxA11yConfigs(context, undefined, {
       prefix: 'lit',
       options: {
         files: parentConfigFiles,
         ignores: parentConfigIgnores,
-        ...options,
-        // `settings` type is different, but doesn't matter here
-        settings: options.settings as JsxA11yEslintConfigOptions['settings'],
+        ...(typeof configA11y === 'object' && configA11y),
       },
     });
   }

@@ -56,25 +56,24 @@ interface PnpmYamlSubConfigOptions<
 }
 
 /**
+ * [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `pnpm` property of the `settings` flat config option.
+ */
+export interface PnpmPluginSettings {
+  /**
+   * Whether to create `pnpm-workspace.yaml` if it doesn't exist
+   * @default false
+   */
+  ensureWorkspaceFile?: boolean;
+}
+
+/**
  * Rules specific to pnpm package manager.
  *
  * 📁 Default `files`: ❌ none, sub configs are used instead
  */
 export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
-  /**
-   * [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `pnpm` property and applied to the resolved `files` and `ignores` of
-   * this config.
-   */
-  settings?: {
-    /**
-     * Whether to create `pnpm-workspace.yaml` if it doesn't exist
-     * @default false
-     */
-    ensureWorkspaceFile?: boolean;
-  };
-
   /**
    * Rules for `package.json` files.
    *
@@ -100,7 +99,9 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
     configPnpmWorkspace: true,
   });
 
-  const {settings: pluginSettings, configPackageJson, configPnpmWorkspace} = optionsResolved;
+  const {configPackageJson, configPnpmWorkspace} = optionsResolved;
+
+  const pluginSettings = context.getPluginSettings('pnpm');
 
   const configPackageJsonOptions = assignDefaults(configPackageJson, {
     enforceCatalog: false,

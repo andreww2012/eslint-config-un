@@ -28,7 +28,7 @@ describe('jest: sub config `jestExtended`', () => {
     });
 
     it('creates `jest/extended` eslint config when sub-config is not explicitly enabled but `jest-extended` package is installed', async () => {
-      const configResultWithPackage = await computeEslintConfig({jest: {}});
+      const configResultWithPackage = await computeEslintConfig('jest');
 
       expect(configResultWithPackage.getConfigByUnPostfix('jest/extended')).toBeDefined();
     });
@@ -39,7 +39,7 @@ describe('jest: sub config `jestExtended`', () => {
       });
 
       it('does not create `jest/extended` eslint config by default', async () => {
-        const configResultNoPackage = await computeEslintConfig({jest: {}});
+        const configResultNoPackage = await computeEslintConfig('jest');
 
         expect(configResultNoPackage.getConfigByUnPostfix('jest/extended')).toBeUndefined();
       });
@@ -66,9 +66,12 @@ describe('jest: sub config `jestExtended`', () => {
 
     it('`jest-extended/prefer-to-be-array` rule fires when `Array.isArray` is used in `expect`', async () => {
       const results = await testEslintConfig(
-        {jest: {settings: {version: 29}, configJestExtended: true}},
+        {jest: {configJestExtended: true}},
         FIXTURES.arrayAssertion,
-        {searchFixturesRelativeToPath: import.meta.dirname},
+        {
+          un: {plugins: {jest: {settings: {version: 29}}}},
+          searchFixturesRelativeToPath: import.meta.dirname,
+        },
       );
 
       const error = findLintMessageFromLintResults(

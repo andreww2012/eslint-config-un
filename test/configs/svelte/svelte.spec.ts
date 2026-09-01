@@ -287,7 +287,9 @@ describe('options', () => {
     it('sets svelte settings when `settings` is provided', async () => {
       const SETTINGS = {ignoreWarnings: ['some-rule']};
 
-      const configResult = await computeEslintConfig({svelte: {settings: SETTINGS}});
+      const configResult = await computeEslintConfig('svelte', {
+        un: {plugins: {svelte: {settings: SETTINGS}}},
+      });
 
       expect(
         configResult.getConfigByUnPostfix('svelte/system')?.settings?.['svelte'],

@@ -124,9 +124,12 @@ describe('lit: sub config `a11y`', () => {
       });
 
       it('assigns `litHtmlSources` directly to settings object when provided', async () => {
-        const configResult = await computeEslintConfig({
-          lit: {configA11y: {settings: {litHtmlSources: true}}},
-        });
+        const configResult = await computeEslintConfig(
+          {
+            lit: {configA11y: true},
+          },
+          {un: {plugins: {'lit-a11y': {settings: {litHtmlSources: true}}}}},
+        );
 
         expect(configResult.getConfigByUnPostfix('lit-a11y')?.settings?.['litHtmlSources']).toBe(
           true,

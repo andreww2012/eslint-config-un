@@ -24,7 +24,7 @@ describe('jsdoc: sub config `typescript`', () => {
     });
 
     it('does not create `jsdoc/ts` eslint config when `jsdoc` is enabled, but `ts` is not', async () => {
-      const configResult = await computeEslintConfig({jsdoc: true});
+      const configResult = await computeEslintConfig('jsdoc');
 
       expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
     });
@@ -110,34 +110,21 @@ describe('jsdoc: sub config `typescript`', () => {
   });
 
   describe('options', () => {
-    describe('option: `settings`', () => {
+    describe('`plugins.jsdoc.settings`', () => {
       const SETTINGS = {ignorePrivate: true, mode: 'jsdoc'} as const;
 
-      it('inherits jsdoc settings from root config by default', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {settings: SETTINGS},
-          ts: true,
-        });
+      it('uses the jsdoc plugin settings', async () => {
+        const configResult = await computeEslintConfig(
+          {
+            jsdoc: true,
+            ts: true,
+          },
+          {un: {plugins: {jsdoc: {settings: SETTINGS}}}},
+        );
 
         const config = configResult.getConfigByUnPostfix('jsdoc/ts');
 
         expect(config?.settings?.['jsdoc']).toStrictEqual(SETTINGS);
-      });
-
-      it('uses sub-config-specific jsdoc settings when provided', async () => {
-        const SUB_SETTINGS = {mode: 'typescript'} as const;
-
-        const configResult = await computeEslintConfig({
-          jsdoc: {
-            settings: SETTINGS,
-            configTypescript: {settings: SUB_SETTINGS},
-          },
-          ts: true,
-        });
-
-        const config = configResult.getConfigByUnPostfix('jsdoc/ts');
-
-        expect(config?.settings?.['jsdoc']).toStrictEqual(SUB_SETTINGS);
       });
     });
   });
