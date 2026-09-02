@@ -190,7 +190,7 @@
     "@effect/platform-node": "0.108.1",
     "@eslint-react/eslint-plugin": "5.18.7",
     "@eslint/compat": "2.1.0",
-    "@eslint/config-inspector": "3.3.0",
+    "@eslint/config-inspector": "3.4.0",
     "@eslint/css-tree": "4.1.0",
     "@eslint/json": "2.1.0",
     "@graphql-eslint/eslint-plugin": "4.4.1",
