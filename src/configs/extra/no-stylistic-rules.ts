@@ -637,9 +637,6 @@ const ALL_STYLISTIC_RULES = {
     'prefer-some': true,
     'prefer-times': true,
   },
-  ripple: {
-    // None
-  },
   rxjs: {
     finnish: true,
     'no-finnish': true,
@@ -792,6 +789,9 @@ const ALL_STYLISTIC_RULES = {
     'use-unknown-in-catch-callback-variable': true,
   },
   tsdoc: {
+    // None
+  },
+  tsrx: {
     // None
   },
   turbo: {

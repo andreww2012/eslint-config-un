@@ -272,6 +272,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'ember-source',
   'lit',
   '@nestjs/core',
+  '@tsrx/core',
   'ripple',
 
   // Used in various configs to determine the default values of their options

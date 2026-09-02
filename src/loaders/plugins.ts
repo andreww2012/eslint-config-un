@@ -477,9 +477,6 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  ripple: genModuleLoader('ripple', '@tsrx/eslint-plugin', () =>
-    interopDefault(import('@tsrx/eslint-plugin')),
-  ),
   rxjs: genModuleLoader(
     'rxjs',
     '@smarttools/eslint-plugin-rxjs',
@@ -596,6 +593,9 @@ export const pluginsLoaders = {
   ),
   tsdoc: genModuleLoader('tsdoc', 'eslint-plugin-tsdoc', () =>
     interopDefault(import('eslint-plugin-tsdoc')),
+  ),
+  tsrx: genModuleLoader('tsrx', '@tsrx/eslint-plugin', () =>
+    interopDefault(import('@tsrx/eslint-plugin')),
   ),
   turbo: genModuleLoader('turbo', 'eslint-plugin-turbo', () =>
     interopDefault(import('eslint-plugin-turbo')),

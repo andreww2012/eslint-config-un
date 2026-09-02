@@ -254,24 +254,24 @@ describe('option: `parsing`', () => {
 
   describe('a config asking for a language without linting it', () => {
     it('sets the language up over the files it parses by default', async () => {
-      addInstalledPackages({ripple: '0.1.0'});
+      addInstalledPackages({'@tsrx/core': '0.1.64'});
 
-      const configResult = await computeEslintConfig('ripple');
+      const configResult = await computeEslintConfig('tsrx');
 
       // It also lints plain `.js`/`.ts`, which must not reach the parser
-      expect(configResult.getConfigByUnPostfix('parsing/ripple')?.files).toStrictEqual([
+      expect(configResult.getConfigByUnPostfix('parsing/tsrx')?.files).toStrictEqual([
         '**/*.tsrx',
         '**/*.ripple',
       ]);
-      expect(configResult.getConfigByUnPostfix('ripple')?.files).toContain('**/*.?([cm])[jt]s');
+      expect(configResult.getConfigByUnPostfix('tsrx')?.files).toContain('**/*.?([cm])[jt]s');
     });
 
     it('emits no entry once the config asking for it is disabled', async () => {
-      addInstalledPackages({ripple: '0.1.0'});
+      addInstalledPackages({'@tsrx/core': '0.1.64'});
 
-      const configResult = await computeEslintConfig({ripple: false});
+      const configResult = await computeEslintConfig({tsrx: false});
 
-      expect(configResult.getConfigByUnPostfix('parsing/ripple')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('parsing/tsrx')).toBeUndefined();
     });
   });
 
@@ -339,19 +339,16 @@ describe('option: `parsing`', () => {
     });
 
     it('reaches a config that asked for the language without linting it', async () => {
-      addInstalledPackages({ripple: '0.1.0'});
+      addInstalledPackages({'@tsrx/core': '0.1.64'});
 
-      const configResult = await computeEslintConfig(
-        {ripple: true},
-        {un: {parsing: {ripple: false}}},
-      );
+      const configResult = await computeEslintConfig({tsrx: true}, {un: {parsing: {tsrx: false}}});
 
-      // It keeps linting plain `.js`/`.ts`, which needs no ripple parser
-      expect(configResult.getConfigByUnPostfix('ripple')?.ignores).toIncludeAllMembers([
+      // It keeps linting plain `.js`/`.ts`, which needs no TSRX parser
+      expect(configResult.getConfigByUnPostfix('tsrx')?.ignores).toIncludeAllMembers([
         GLOB_TSRX,
         GLOB_RIPPLE,
       ]);
-      expect(configResult.getConfigByUnPostfix('ripple')?.ignores).not.toContain('**/*');
+      expect(configResult.getConfigByUnPostfix('tsrx')?.ignores).not.toContain('**/*');
     });
   });
 

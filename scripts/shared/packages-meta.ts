@@ -596,12 +596,6 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
       ruleDocsUrl: (ruleName) =>
         `https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/${ruleName}.md`,
     },
-    ripple: {
-      configs: ['ripple'],
-      gitTag: (version) => `@tsrx/eslint-plugin@${version}`,
-      pluginDocsUrl: 'https://github.com/tsrx-org/tsrx/blob/HEAD/packages/eslint-plugin/README.md',
-      ruleDocsUrl: null, // No docs
-    },
     rxjs: {
       configs: ['rxjs'],
       pluginDocsUrl: 'https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/README.md',
@@ -721,6 +715,12 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
       gitTag: (version) => `eslint-plugin-tsdoc_v${version}`,
       pluginDocsUrl: 'https://tsdoc.org/pages/packages/eslint-plugin-tsdoc',
       ruleDocsUrl: null, // Single rule
+    },
+    tsrx: {
+      configs: ['tsrx'],
+      gitTag: (version) => `@tsrx/eslint-plugin@${version}`,
+      pluginDocsUrl: 'https://github.com/tsrx-org/tsrx/blob/HEAD/packages/eslint-plugin/README.md',
+      ruleDocsUrl: null, // No docs
     },
     turbo: {
       configs: ['turbo'],
@@ -874,7 +874,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     ruleDocsUrl: null,
   },
   '@tsrx/eslint-parser': {
-    configs: ['ripple'],
+    configs: ['tsrx'],
     gitTag: (version) => `@tsrx/eslint-parser@${version}`,
     ruleDocsUrl: null,
   },

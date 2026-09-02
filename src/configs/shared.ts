@@ -353,8 +353,8 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'tanstack-start/no-async-client-component', // [runtime-only]
   'tanstack-start/no-client-code-in-server-component', // [runtime-only]
 
-  // ripple — module-scope rules that don't make sense in isolated embedded code snippets
-  'ripple/no-lazy-destructuring-in-modules', // [runtime-only]
+  // tsrx — module-scope rules that don't make sense in isolated embedded code snippets
+  'tsrx/no-lazy-destructuring-in-modules', // [runtime-only]
 
   // drizzle — database-specific operation rules that would false-positive on API usage examples
   'drizzle/enforce-delete-with-where', // [runtime-only]

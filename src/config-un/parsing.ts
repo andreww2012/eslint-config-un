@@ -275,14 +275,14 @@ export const PARSING_LANGUAGES = (
     dialectDefault: 'ember',
   },
 
-  ripple: {
+  tsrx: {
     dialects: {
-      ripple: {
+      tsrx: {
         mechanism: {parser: '@tsrx/eslint-parser'},
         filesDefault: [GLOB_TSRX, GLOB_RIPPLE],
       },
     },
-    dialectDefault: 'ripple',
+    dialectDefault: 'tsrx',
   },
 
   angularTemplate: {

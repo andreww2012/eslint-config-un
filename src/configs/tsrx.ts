@@ -7,45 +7,46 @@ import {
 } from './index';
 
 /**
- * [Ripple](https://github.com/Ripple-TS/ripple) specific rules.
+ * [TSRX](https://tsrx.dev) specific rules.
+ * TSRX is a target-neutral syntax, and [Ripple](https://github.com/Ripple-TS/ripple) is one of its targets.
  *
  * 📁 Default `files`:
  * - <code>**&#47;*.tsrx</code>
  * - <code>**&#47;*.ripple</code>
  * - <code>**&#47;*.?([cm])[jt]s</code>
  */
-export interface RippleEslintConfigOptions<
+export interface TsrxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'ripple'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tsrx'> {}
 
-const DEFAULT_RIPPLE_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
+const DEFAULT_TSRX_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
 
-export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
-  enabledBy: {package: 'ripple'},
+export default defineUnConfig<TsrxEslintConfigOptions>('tsrx', {
+  enabledBy: {packages: ['@tsrx/core', 'ripple']},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   // The rules also run on plain `.js`/`.ts`, which this parser cannot read
-  context.requestParsing('ripple', {kind: 'setUpOnly'});
+  context.requestParsing('tsrx', {kind: 'setUpOnly'});
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'ripple');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'tsrx');
 
   // Legend:
   // 🔴 - NOT in recommended
 
   configBuilder
     ?.addConfig([
-      'ripple',
+      'tsrx',
       {
-        filesDefault: [...DEFAULT_RIPPLE_FILES, GLOB_JS_TS],
-        parsingIgnoresInheritedFrom: ['ripple'],
+        filesDefault: [...DEFAULT_TSRX_FILES, GLOB_JS_TS],
+        parsingIgnoresInheritedFrom: ['tsrx'],
       },
     ])
     .addRule('control-flow-jsx', ERROR) /** @since 0.3.25 */
     .addRule('no-lazy-destructuring-in-modules', ERROR) /** @since 0.3.25 */
-    // TODO note: only applied to .tsrx files in the recommended config, should we do the same?: https://github.com/Ripple-TS/ripple/blob/35ac70052d79efae41bb1df2440fee3f052ca115/packages/eslint-plugin/src/index.ts#L57
+    // TODO note: only applied to .tsrx files in the recommended config, should we do the same?: https://github.com/tsrx-org/tsrx/blob/52aa4cf20a66a03878da89ad2c761c554a9e8c70/packages/eslint-plugin/src/index.ts#L51-L53
     .addRule('require-statement-container-body', ERROR) /** @since 0.3.76 */
     .addRule('valid-for-of-key', ERROR) /** @since 0.3.25 */
-    .enableConfigTesterForPlugin('ripple')
+    .enableConfigTesterForPlugin('tsrx')
     .addOverrides();
 });

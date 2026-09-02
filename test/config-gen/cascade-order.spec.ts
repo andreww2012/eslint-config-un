@@ -146,7 +146,6 @@ describe('cascade order', () => {
       eslint-config-un/react/you-might-not-need-an-effect
       eslint-config-un/regexp
       eslint-config-un/remeda
-      eslint-config-un/ripple
       eslint-config-un/rxjs
       eslint-config-un/security
       eslint-config-un/solid
@@ -172,6 +171,7 @@ describe('cascade order', () => {
       eslint-config-un/toml
       eslint-config-un/tree-shaking
       eslint-config-un/tsdoc
+      eslint-config-un/tsrx
       eslint-config-un/turbo
       eslint-config-un/un
       eslint-config-un/unhead
@@ -243,7 +243,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/astro
       eslint-config-un/parsing/graphql
       eslint-config-un/parsing/ember
-      eslint-config-un/parsing/ripple
+      eslint-config-un/parsing/tsrx
       eslint-config-un/parsing/angularTemplate
       eslint-config-un/config-files
       eslint-config-un/cli
