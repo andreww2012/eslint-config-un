@@ -1,7 +1,6 @@
 const FIXTURES = {
-  topLevelTrackCall: 'top-level-track-call.ts',
-  topLevelTrackCallTsrx: 'top-level-track-call.tsrx',
-  topLevelTrackCallRipple: 'top-level-track-call.ripple',
+  forBlockWithoutTemplateOutputTsrx: 'for-block-without-template-output.tsrx',
+  forBlockWithoutTemplateOutputRipple: 'for-block-without-template-output.ripple',
 } as const;
 
 beforeEach(() => {
@@ -93,61 +92,43 @@ describe('rules', () => {
 
     expect(configResult.getRuleSeverities('ripple')).toMatchObject({
       'ripple/control-flow-jsx': 2,
-      'ripple/prefer-oninput': 1,
+      'ripple/valid-for-of-key': 2,
     });
   });
 
-  it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope', async () => {
+  it('`ripple/control-flow-jsx` rule fires on a `@for` block without template output in a `.tsrx` file', async () => {
     const results = await testEslintConfig(
       'ripple',
-      FIXTURES.topLevelTrackCall,
+      FIXTURES.forBlockWithoutTemplateOutputTsrx,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.topLevelTrackCall,
-      'ripple/no-module-scope-track',
+      FIXTURES.forBlockWithoutTemplateOutputTsrx,
+      'ripple/control-flow-jsx',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. Move it into a function body."',
+      '"@for blocks in returned TSRX should contain template output. Render an element, fragment, or nested template directive."',
     );
   });
 
-  it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope in a `.tsrx` file', async () => {
+  it('`ripple/control-flow-jsx` rule fires on a `@for` block without template output in a `.ripple` file', async () => {
     const results = await testEslintConfig(
       'ripple',
-      FIXTURES.topLevelTrackCallTsrx,
+      FIXTURES.forBlockWithoutTemplateOutputRipple,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.topLevelTrackCallTsrx,
-      'ripple/no-module-scope-track',
+      FIXTURES.forBlockWithoutTemplateOutputRipple,
+      'ripple/control-flow-jsx',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. Move it into a function body."',
-    );
-  });
-
-  it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope in a `.ripple` file', async () => {
-    const results = await testEslintConfig(
-      'ripple',
-      FIXTURES.topLevelTrackCallRipple,
-      import.meta.dirname,
-    );
-
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.topLevelTrackCallRipple,
-      'ripple/no-module-scope-track',
-    );
-
-    expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. Move it into a function body."',
+      '"@for blocks in returned TSRX should contain template output. Render an element, fragment, or nested template directive."',
     );
   });
 });
