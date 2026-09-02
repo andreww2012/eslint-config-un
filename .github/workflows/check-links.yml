@@ -1,7 +1,9 @@
 # cspell:ignore ACMR lycheeverse lycheecache pipefail
 name: Check links (lychee)
 on:
-  workflow_call:
+  # After https://github.com/SchemaStore/schemastore/commit/195da2efaeb9c5b7aa77f1cd8de25b22a53b13f0
+  # change, a bare `workflow_call:` (i.e. null) now fails schema validation
+  workflow_call: {}
 
 permissions:
   contents: read
