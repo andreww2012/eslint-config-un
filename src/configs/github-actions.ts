@@ -80,6 +80,7 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
     .addRule('no-top-level-permissions', OFF) /** @since 0.0.4 */
     .addRule('no-unpinned-uses', OFF) /** @since 0.3.0 */
     .addRule('prefer-cancel-in-progress', OFF) /** @since 0.3.0 */
+    .addRule('prefer-fail-fast', OFF) /** @since 0.0.9 */
     // Reason for disabling: extension should be controlled by `yaml/file-extension`
     .addRule('prefer-file-extension', OFF) /** @since 0.0.8 */ // 🟢
     .addRule(

@@ -689,8 +689,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(@typescript/typescript6@6.0.2)(eslint@10.9.1)(supports-color@7.2.0)
       eslint-plugin-github-action:
-        specifier: 0.3.0
-        version: 0.3.0(eslint@10.9.1)
+        specifier: 0.4.0
+        version: 0.4.0(eslint@10.9.1)
       eslint-plugin-header:
         specifier: 3.1.1
         version: 3.1.1(eslint@10.9.1)
@@ -3306,9 +3306,9 @@ packages:
     resolution: {integrity: sha512-mGUWr1uMnf0le2TwfOZY4SFxZGXGfm4Jtay/nwAa2FLNAKXUoUwaGwBMNH36UHPtinWfTSJ3nqFQr0091CxVGg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@ntnyq/utils@0.15.0':
-    resolution: {integrity: sha512-/V+wlKysA73OD5R+KlA+C1GhzZst7HiRUCAm1l7ebNiG/rGZ0ysYHEO/qcidKvAQoJ5H/KgahKDfzcAGccQHCA==}
-    engines: {node: ^22.13.0 || >=24}
+  '@ntnyq/utils@0.22.0':
+    resolution: {integrity: sha512-HI88N7b2ET1B6B73JpjR0qovRnGq1HEfZaVx2IKPeTjAuBFg5KmXHY8B95Xa8ZnHep7oMI0x5gFn2mkC6/8dVw==}
+    engines: {node: ^22.19.0 || >=24.11.0}
 
   '@nuxt/eslint-plugin@1.17.0':
     resolution: {integrity: sha512-h/fn4K09tA5tvdLj9Zlu5mb3TOVO2zLAetCsfJ1/LLVm2XWtgDVhfSB+Sm93cF1rCGxahmHZd4RJz2nAsWTDvg==}
@@ -7168,8 +7168,8 @@ packages:
       typescript:
         optional: true
 
-  eslint-plugin-github-action@0.3.0:
-    resolution: {integrity: sha512-o61vth6qynHGFUu1xa2wxcSn9nxHT4HUBzv6BOze5m5mHuwJmq6C2kgMru4tW7FqVtCB2UvyciXRq2YfBaYGUA==}
+  eslint-plugin-github-action@0.4.0:
+    resolution: {integrity: sha512-VQQYQuLrjZI1QW3IydLUearNcZh6fMvo4Sr9EsW8lv2ljUG38XjKMwgyVsZrMxy1MxZOSBK+JyDufmFYDF9qLg==}
     engines: {node: ^22.13.0 || >=24}
     peerDependencies:
       eslint: ^9.5.0 || ^10.0.0
@@ -11175,8 +11175,8 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
-  uncase@0.2.0:
-    resolution: {integrity: sha512-Y87FEnnNw6TNUMVx0kpatPwg1E4ya4rzRWUgb75PKCfUWk7nf14/fai5ASXa1g0sP6+RGylTXMLfnsYleeWKqA==}
+  uncase@0.3.0:
+    resolution: {integrity: sha512-8CUer3k7QgMltjQidnNKSLAwGiZdtN4y5k+jEPk7kvLsUTG2SLfcVBoK7L2WD2rDFaGQIkWdaISuYHINMbLMqA==}
 
   unconfig-core@7.5.0:
     resolution: {integrity: sha512-Su3FauozOGP44ZmKdHy2oE6LPjk51M/TRRjHv2HNCWiDvfvCoxC2lno6jevMA91MYAdCdwP05QnWdWpSbncX/w==}
@@ -14719,7 +14719,7 @@ snapshots:
       node-gyp: 12.4.0
       proc-log: 6.1.0
 
-  '@ntnyq/utils@0.15.0': {}
+  '@ntnyq/utils@0.22.0': {}
 
   '@nuxt/eslint-plugin@1.17.0(@typescript/typescript6@6.0.2)(eslint@10.9.1)(supports-color@7.2.0)':
     dependencies:
@@ -18362,13 +18362,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-github-action@0.3.0(eslint@10.9.1):
+  eslint-plugin-github-action@0.4.0(eslint@10.9.1):
     dependencies:
-      '@eslint/core': 1.2.1
-      '@ntnyq/utils': 0.15.0
-      '@types/json-schema': 7.0.15
+      '@ntnyq/utils': 0.22.0
       eslint: 10.9.1(jiti@2.7.0)(supports-color@7.2.0)
-      uncase: 0.2.0
+      uncase: 0.3.0
       yaml-eslint-parser: 2.1.0
 
   eslint-plugin-header@3.1.1(eslint@10.9.1):
@@ -23420,7 +23418,7 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
-  uncase@0.2.0:
+  uncase@0.3.0:
     dependencies:
       change-case: 5.4.4
 
