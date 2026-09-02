@@ -81,6 +81,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
     rules: {
       'api-enum-property-best-practices': true,
       'all-properties-have-explicit-defined': true,
+      'forward-ref-injection-should-use-wrapper-type': 'optional',
       'validated-non-primitive-property-needs-type-decorator': true,
     },
   },

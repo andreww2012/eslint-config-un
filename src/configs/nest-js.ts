@@ -30,6 +30,7 @@ export default defineUnConfig<NestJsEslintConfigOptions>('nestJs', {
   // Legend:
   // 🔴 - NOT in recommended
   // 💭 - requires type information
+  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([
@@ -52,11 +53,14 @@ export default defineUnConfig<NestJsEslintConfigOptions>('nestJs', {
     .addRule('api-property-returning-array-should-set-array', ERROR) /** @since 1.7.0 */
     .addRule('api-property-should-have-api-extra-models', ERROR) /** @since 6.12.0 */
     .addRule('controllers-should-supply-api-tags', ERROR) /** @since 1.6.0 */
+    .addRule('swagger-file-upload-should-be-documented', ERROR) /** @since 7.4.0 */
     .markCategory('Preventing bugs')
     .addRule('all-properties-are-whitelisted', ERROR) /** @since 3.8.0 */
     .addRule('all-properties-have-explicit-defined', ERROR) /** @since 3.15.0 */ // 💭
+    .addRule('forward-ref-injection-should-use-wrapper-type', ERROR) /** @since 7.4.0 */ // 💭?
     .addRule('no-duplicate-decorators', ERROR) /** @since 4.3.0 */
     .addRule('param-decorator-name-matches-route-param', ERROR) /** @since 3.3.0 */
+    .addRule('uploaded-file-should-be-validated', ERROR) /** @since 7.4.0 */
     .addRule('validate-nested-of-array-should-set-each', ERROR) /** @since 3.5.0 */
     .addRule('validated-non-primitive-property-needs-type-decorator', ERROR) /** @since 3.5.0 */ // 💭
     .addRule('validation-pipe-should-use-forbid-unknown', ERROR) /** @since 3.2.0 */ // Renamed from `should-specify-forbid-unknown-values` in v7.0.0
