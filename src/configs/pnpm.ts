@@ -150,6 +150,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
         parseWith: 'yaml',
       },
     ])
+    .addRule('yaml-blank-lines', OFF) /** @since 1.9.0 */
     .addRule(
       'yaml-enforce-settings',
       enforcePnpmWorkspaceSettings ? ERROR : OFF,

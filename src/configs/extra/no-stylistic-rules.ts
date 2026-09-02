@@ -527,7 +527,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-to-have-length': true,
   },
   pnpm: {
-    // None
+    'yaml-blank-lines': true,
   },
   'prefer-arrow-functions': {
     'prefer-arrow-functions': true,
