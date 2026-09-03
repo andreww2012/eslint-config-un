@@ -331,7 +331,7 @@
     "smol-toml": "1.8.0",
     "svelte-eslint-parser": "1.8.1",
     "tailwind-csstree": "0.4.0",
-    "tsdown": "0.22.14",
+    "tsdown": "0.23.0",
     "tsx": "4.23.13",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-7": "npm:typescript@7.0.2",

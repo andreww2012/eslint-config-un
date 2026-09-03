@@ -35,6 +35,10 @@ const readRootPackageJsonBeforeUncommittedChanges = async () => {
   }
 };
 
+// Only the needed field is validated: a full package.json schema models plenty of valid fields too
+// narrowly, for example `devEngines.packageManager.onFail: download`, which is a pnpm extension
+const DependencyRepositoryZod = z.optional(z.union([z.string(), z.object({url: z.string()})]));
+
 const GITHUB_REPO_SHORTHAND_REGEXP = /^[\w-]+\/[\w\-.]+$/;
 const SSH_LIKE_REPO_URL_REGEXP = /^git@github.com:([\w-]+\/[\w\-.]+)\.git?$/;
 const GIT_URL_PROTOCOL_PREFIX_REGEXP = /^git\+/;
@@ -59,22 +63,16 @@ const getDependencyRepoUrl = async (dependency: string) => {
     return '';
   }
 
-  const packageJson = structuredClone(dependencyPackageJson);
-  const {repository} = packageJson;
-  if (typeof repository === 'object') {
-    // https://github.com/vercel/next.js/blob/v15.4.6/packages/eslint-plugin-next/package.json
-    repository.type ||= 'git';
-  }
-
-  const dependencyPackageJsonParseResult = PackageJsonZod.safeParse(packageJson);
-  if (!dependencyPackageJsonParseResult.success) {
+  const repositoryParseResult = DependencyRepositoryZod.safeParse(dependencyPackageJson.repository);
+  if (!repositoryParseResult.success) {
     console.warn(
-      `Failed to parse package.json of ${dependency}:`,
-      dependencyPackageJsonParseResult.error,
+      `Failed to parse the repository field of ${dependency}:`,
+      repositoryParseResult.error,
     );
     return '';
   }
 
+  const repository = repositoryParseResult.data;
   const repoUrl = typeof repository === 'string' ? repository : repository?.url;
   if (!repoUrl) {
     return '';
