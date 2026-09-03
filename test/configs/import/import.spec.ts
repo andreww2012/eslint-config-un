@@ -520,8 +520,6 @@ describe('options', () => {
 
   describe('option: `tsResolverOptions`', () => {
     it('builds the typescript resolver without options when option is not set', async () => {
-      vi.mocked(createTypeScriptImportResolver).mockClear();
-
       await computeEslintConfig({import: true, ts: true});
 
       expect(vi.mocked(createTypeScriptImportResolver)).toHaveBeenLastCalledWith(undefined);
@@ -529,8 +527,6 @@ describe('options', () => {
 
     it('passes user-provided options to the typescript resolver', async () => {
       const TS_RESOLVER_OPTIONS = {alwaysTryTypes: false} as const;
-
-      vi.mocked(createTypeScriptImportResolver).mockClear();
 
       await computeEslintConfig({
         import: {tsResolverOptions: TS_RESOLVER_OPTIONS},
@@ -543,8 +539,6 @@ describe('options', () => {
     });
 
     it('does not build the typescript resolver when the `ts` config is disabled', async () => {
-      vi.mocked(createTypeScriptImportResolver).mockClear();
-
       await computeEslintConfig({import: true, ts: false});
 
       expect(vi.mocked(createTypeScriptImportResolver)).not.toHaveBeenCalled();

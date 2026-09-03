@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as jestExtendedMatchers from 'jest-extended';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {expect} from 'vitest';
+import {type MatchersObject, expect} from 'vitest';
 import {expectConfigState as expectConfigStateImpl} from './helpers/basic-config';
 import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
 import {
@@ -14,7 +14,17 @@ import {
   testEslintConfig as testEslintConfigImpl,
 } from './helpers/test-eslint-config';
 
-expect.extend(jestExtendedMatchers);
+// The published matcher types describe the assertions they produce (`(...expected) => R`),
+// not their real `(received, ...expected)` implementation shape
+expect.extend(jestExtendedMatchers as unknown as MatchersObject);
+
+// `jest-extended` only augments the global `jest` namespace, which Vitest no longer bridges into
+// its own assertion type
+declare module 'vitest' {
+  interface Matchers<
+    R extends void | Promise<void> = void | Promise<void>,
+  > extends jest.Matchers<R> {}
+}
 
 type UtilsModule = typeof import('../src/utils');
 

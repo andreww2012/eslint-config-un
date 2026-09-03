@@ -4,6 +4,8 @@ src/**/*.gen.ts
 TODO.md
 temp/
 .nx/
+# Vitest 5's report/attachment/blob artifacts
+.vitest/
 # @eslint/config-inspector's temporarily generated file
 eslint.config.bundled_*.mjs
 
