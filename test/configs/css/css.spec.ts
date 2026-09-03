@@ -267,6 +267,21 @@ describe('options', () => {
       });
     });
 
+    it('loudly fails when `tailwind-csstree` cannot be loaded', async () => {
+      addInstalledPackages({tailwindcss: '4.0.0'});
+
+      const processOutput = spyOnProcessOutput();
+      using spy = vi
+        .spyOn(packagesLoaders, 'tailwindCsstree')
+        .mockResolvedValue({module: null, packageName: 'tailwind-csstree'});
+
+      await expect(computeEslintConfig('css')).rejects.toThrow();
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(processOutput.exit).toHaveBeenCalledWith(1);
+      expect(processOutput.getStderrOutput()).toContain('tailwind-csstree');
+    });
+
     it('does not request `@eslint/css-tree` when `customSyntax` is a plain object', async () => {
       using spy = vi.spyOn(packagesLoaders, 'eslintCssTreeSyntax');
 

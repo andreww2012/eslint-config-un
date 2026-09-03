@@ -163,7 +163,6 @@
     "ms-ts": "1.0.0",
     "obug": "2.1.4",
     "package-manager-detector": "1.8.0",
-    "tailwind-csstree": "0.4.0",
     "tinyexec": "1.3.0",
     "type-fest": "5.9.0",
     "typescript-eslint": "8.69.0",
@@ -331,6 +330,7 @@
     "shiki": "4.4.3",
     "smol-toml": "1.8.0",
     "svelte-eslint-parser": "1.8.1",
+    "tailwind-csstree": "0.4.0",
     "tsdown": "0.22.14",
     "tsx": "4.23.13",
     "typescript": "npm:@typescript/typescript6@6.0.2",
@@ -445,6 +445,7 @@
     "eslint-processor-vue-blocks": "^2.0.0",
     "import-integrity-lint": "^1.3.0",
     "svelte-eslint-parser": "^1.8.1",
+    "tailwind-csstree": "^0.4.0",
     "vue-eslint-parser": "^10.4.1"
   },
   "peerDependenciesMeta": {
@@ -746,6 +747,9 @@
       "optional": true
     },
     "svelte-eslint-parser": {
+      "optional": true
+    },
+    "tailwind-csstree": {
       "optional": true
     },
     "vue-eslint-parser": {
