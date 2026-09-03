@@ -153,9 +153,11 @@ const RULES_INCOMPATIBLE_WITH_PRETTIER = {
     'ordered-list-marker-start': true,
     'ordered-list-marker-style': true,
     'strikethrough-delimiters-style': true,
-    'table-leading-trailing-pipes': true,
-    'table-pipe-alignment': true,
-    'table-pipe-spacing': true,
+    // The following 3 rules agree with Prettier on alignment, so must not be disabled
+    // The only slight exception is `table-pipe-alignment` with non-default `proseWrap: 'never'`
+    'table-leading-trailing-pipes': false,
+    'table-pipe-alignment': false,
+    'table-pipe-spacing': false,
     'thematic-break-character-style': true,
     'thematic-break-length': true,
     'thematic-break-sequence-pattern': true,
