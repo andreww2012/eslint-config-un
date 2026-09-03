@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
-import type {ConditionalKeys} from '../types';
+import type {ConditionalKeys, NonEmptyTuple} from '../types';
 import {allUnionMembers, arrayIncludes, getKeysOfTruthyValues} from '../utils';
 import {generateDefaultTestFiles} from './shared';
 import {
@@ -31,6 +31,23 @@ const SCHEMA_COMPLETENESS_CHECKS = allUnionMembers<SchemaCompletenessCheck>()([
 const DEFAULT_SCHEMA_COMPLETENESS_CHECKS = {
   explicitAdditionalProperties: true,
 } satisfies Partial<Record<SchemaCompletenessCheck, boolean>>;
+
+/**
+ * [`eslint-plugin-eslint-plugin`](https://npmx.dev/eslint-plugin-eslint-plugin) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `eslint-plugin` property of the `settings` flat config option.
+ * @see https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/README.md#settings
+ */
+export interface EslintPluginPluginSettings {
+  /**
+   * The names allowed for the `RuleTester` constructors.
+   * A string must match the whole name, a regular expression is tested against it.
+   * Must not be empty, the plugin throws otherwise.
+   * @default ['RuleTester']
+   * @see https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/README.md#ruletesterconstructors
+   */
+  ruleTesterConstructors?: NonEmptyTuple<string | RegExp>;
+}
 
 /**
  * An ESLint plugin for linting ESLint plugins.
@@ -150,6 +167,8 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
         : [],
   );
 
+  const pluginSettings = context.getPluginSettings('eslint-plugin');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-plugin');
 
   const getRuleDisallowingMetaPropertySeverity = (
@@ -172,7 +191,14 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
   // 💭 - requires type information
 
   configBuilder
-    ?.addConfig('eslint-plugin')
+    ?.addConfig([
+      'eslint-plugin',
+      {
+        settings: {
+          'eslint-plugin': pluginSettings,
+        },
+      },
+    ])
     .addRule('fixer-return', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('meta-property-ordering', ERROR) /** @since 2.1.0 */
     .addRule('no-deprecated-context-methods', ERROR) /** @since 1.2.0 */ // 🟢
@@ -272,6 +298,9 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       'eslint-plugin/rule-tests',
       {
         filesDefault: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
+        settings: {
+          'eslint-plugin': pluginSettings,
+        },
       },
     ])
     .addRule('consistent-output', ERROR) /** @since 0.7.0 */

@@ -146,6 +146,39 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set eslint-plugin settings by default', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin');
+      const config = configResult.getConfigByUnPostfix('eslint-plugin');
+
+      expect(config?.settings?.['eslint-plugin']).toBeUndefined();
+    });
+
+    it('sets eslint-plugin settings when `settings` is provided', async () => {
+      const SETTINGS = {ruleTesterConstructors: ['MyRuleTester']} as const;
+
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {plugins: {'eslint-plugin': {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('eslint-plugin');
+
+      expect(config?.settings?.['eslint-plugin']).toStrictEqual(SETTINGS);
+    });
+
+    it('sets eslint-plugin settings on the `rule-tests` sub-config too', async () => {
+      const SETTINGS = {ruleTesterConstructors: ['MyRuleTester']} as const;
+
+      const configResult = await computeEslintConfig(
+        {eslintPlugin: {configRuleTests: true}},
+        {un: {plugins: {'eslint-plugin': {settings: SETTINGS}}}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/rule-tests')?.settings?.['eslint-plugin'],
+      ).toStrictEqual(SETTINGS);
+    });
+  });
+
   describe('option: `metaProperties`', () => {
     describe('property: `replacedBy`', () => {
       it('enables `eslint-plugin/no-meta-replaced-by` rule when `replacedBy` is `"disallow"`', async () => {

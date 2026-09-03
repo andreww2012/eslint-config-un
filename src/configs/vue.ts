@@ -57,6 +57,7 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
  * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `vue-i18n` property of the `settings` flat config option.
+ * @see https://eslint-plugin-vue-i18n.intlify.dev/started#settings-vue-i18n
  */
 export interface VueI18nPluginSettings {
   /**
@@ -104,7 +105,7 @@ export interface VueI18nPluginSettings {
              *
              * Source: plugin docs
              */
-            localePattern?: RegExp;
+            localePattern?: string | RegExp;
           }
       ) & {
         /**
@@ -112,7 +113,7 @@ export interface VueI18nPluginSettings {
          *
          * Source: plugin docs
          */
-        pattern?: string;
+        pattern: string;
       })
   >;
 
@@ -123,6 +124,12 @@ export interface VueI18nPluginSettings {
    * Source: plugin docs
    */
   messageSyntaxVersion?: string;
+
+  /**
+   * The directory the relative `localeDir` globs are resolved against.
+   * @default ESLint's working directory
+   */
+  cwd?: string;
 }
 
 interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<

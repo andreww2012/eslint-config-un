@@ -154,6 +154,26 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set remeda settings by default', async () => {
+      const configResult = await computeEslintConfig('remeda');
+      const config = configResult.getConfigByUnPostfix('remeda');
+
+      expect(config?.settings?.['remeda']).toBeUndefined();
+    });
+
+    it('sets remeda settings when `settings` is provided', async () => {
+      const SETTINGS = {pragma: 'R'};
+
+      const configResult = await computeEslintConfig('remeda', {
+        un: {plugins: {remeda: {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('remeda');
+
+      expect(config?.settings?.['remeda']).toStrictEqual(SETTINGS);
+    });
+  });
+
   describe('option: `suggestJsCodeReplacements`', () => {
     it('disables JS code replacement rules by default', async () => {
       const configResult = await computeEslintConfig('remeda');

@@ -98,7 +98,7 @@ export type BetterTailwindPluginSettings = RequireExactlyOne<{
    * "Flat list of selectors that determines where Tailwind class strings are linted"
    * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#selectors)
    */
-  selectors?: string[];
+  selectors?: AnyRuleOptions['selectors'];
 };
 
 /**

@@ -39,7 +39,8 @@ export type PerfectionistPluginSettings = Prettify<
     Pick<
       GetRuleOptions<'perfectionist', 'sort-objects'>,
       'partitionByComment' | 'partitionByNewLine' | 'newlinesBetween' | 'newlinesInside'
-    >
+    > &
+    Pick<GetRuleOptions<'perfectionist', 'sort-imports'>, 'tsconfig'>
 >;
 
 /**

@@ -26,6 +26,17 @@ export interface FormatjsPluginSettings {
    * Allows you to specify additional component names to check besides `FormattedMessage`.
    */
   additionalComponentNames?: string[];
+
+  /**
+   * Skips the message descriptors declared via `defineMessage(s)` calls, only checking the ones
+   * passed to the formatting functions and components.
+   */
+  excludeMessageDeclCalls?: boolean;
+
+  /**
+   * Disables the parsing of the HTML-like tags inside the messages, treating them as plain text.
+   */
+  ignoreTag?: boolean;
 }
 
 /**

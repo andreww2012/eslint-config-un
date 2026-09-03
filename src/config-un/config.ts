@@ -60,7 +60,7 @@ import {
   registerUsedPlugin,
 } from './config-utils';
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
-import type {ImportIntegrityPluginSettings} from './import-integrity';
+import {withDefaultPackageRootDir} from './import-integrity';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
@@ -627,10 +627,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       useImportIntegrity && {
         name: genFlatConfigEntryName('global-setup/import-integrity'),
         settings: {
-          'import-integrity': {
-            packageRootDir: import.meta.dirname,
-            ...pluginsOptions['import-integrity']?.settings,
-          } satisfies ImportIntegrityPluginSettings,
+          'import-integrity': withDefaultPackageRootDir(
+            pluginsOptions['import-integrity']?.settings,
+            import.meta.dirname,
+          ),
         },
       },
     ],

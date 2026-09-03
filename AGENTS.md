@@ -1,15 +1,20 @@
 # `eslint-config-un`
 
+CRITICAL: always strictly follow [the project style guide](./.agents/style-guide.md).
+
+## About
+
 `eslint-config-un` is an ESLint configuration generator, wrapping 100+ ESLint plugins.
 For usage examples, understanding concepts and API documentation [`README.md`](./README.md).
 
-## Style guide
+## Instructions
 
-CRITICAL: strictly follow [the project style guide](./.agents/style-guide.md) when you make **ANY** changes.
+Only ever run the full test suite if you've made the core logic changes and it has a high chance of affecting majority of test files.
+Running it fully takes a lot of resources (time especially and memory too) to complete.
 
-Don't run the full test suite unless absolutely needed to verify the work - it takes a lot of resources (memory and time) to complete.
+Avoid mentioning this package's name in internal comments.
 
-Avoid mentioning this package name in internal comments.
+Never import any Config file (`src/configs/**/*.ts`) statically, unless the import is type-only.
 
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...

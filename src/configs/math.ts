@@ -8,6 +8,21 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-math`](https://npmx.dev/eslint-plugin-math) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `math` property of the `settings` flat config option.
+ */
+export interface MathPluginSettings {
+  /**
+   * Makes the rules report the expressions even when they could not determine the type of the
+   * object, at the cost of possible false positives.
+   * Can also be set per rule via the option of the same name.
+   * @default false
+   */
+  aggressive?: boolean;
+}
+
+/**
  * ESLint rules related to `Math` and `Number` objects.
  *
  * 📁 Default `files`: all files
@@ -33,13 +48,22 @@ export default defineUnConfig<MathEslintConfigOptions>(
 
   const {absoluteValuesConversionMethod} = optionsResolved;
 
+  const pluginSettings = context.getPluginSettings('math');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'math');
 
   // Legend:
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig('math')
+    ?.addConfig([
+      'math',
+      {
+        settings: {
+          math: pluginSettings,
+        },
+      },
+    ])
     .addRule(
       'abs',
       absoluteValuesConversionMethod === false ? OFF : ERROR,

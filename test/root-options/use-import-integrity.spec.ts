@@ -86,6 +86,25 @@ describe('option: `useImportIntegrity`', () => {
   });
 
   it('merges the plugin settings into the settings config', async () => {
+    const ALIAS = {'@': './src'};
+
+    const configResult = await computeEslintConfig('import', {
+      un: {
+        useImportIntegrity: true,
+        plugins: {'import-integrity': {settings: {alias: ALIAS}}},
+      },
+    });
+
+    expect(
+      configResult.getConfigByUnPostfix(SETTINGS_CONFIG_NAME)?.settings?.['import-integrity'],
+    ).toStrictEqual({
+      packageRootDir: expect.any(String) as unknown,
+      alias: ALIAS,
+    });
+  });
+
+  // The plugin validates the monorepo form strictly and errors out on `packageRootDir`
+  it('omits the default package root directory when the monorepo one is specified', async () => {
     const MONOREPO_ROOT_DIR = '/monorepo';
 
     const configResult = await computeEslintConfig('import', {
@@ -97,10 +116,7 @@ describe('option: `useImportIntegrity`', () => {
 
     expect(
       configResult.getConfigByUnPostfix(SETTINGS_CONFIG_NAME)?.settings?.['import-integrity'],
-    ).toStrictEqual({
-      packageRootDir: expect.any(String) as unknown,
-      monorepoRootDir: MONOREPO_ROOT_DIR,
-    });
+    ).toStrictEqual({monorepoRootDir: MONOREPO_ROOT_DIR});
   });
 
   it('still creates the settings config when the `import` config is disabled', async () => {

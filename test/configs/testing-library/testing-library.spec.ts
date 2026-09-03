@@ -189,6 +189,28 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set testing-library settings by default', async () => {
+      const configResult = await computeEslintConfig('testingLibrary');
+      const config = configResult.getConfigByUnPostfix('testing-library/dom');
+
+      expect(config?.settings?.['testing-library/utils-module']).toBeUndefined();
+    });
+
+    it('sets testing-library settings when `settings` is provided', async () => {
+      const SETTINGS = {utilsModule: 'my-test-utils'};
+
+      const configResult = await computeEslintConfig('testingLibrary', {
+        un: {plugins: {'testing-library': {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('testing-library/dom');
+
+      expect(config?.settings?.['testing-library/utils-module']).toStrictEqual(
+        SETTINGS.utilsModule,
+      );
+    });
+  });
+
   describe('option: `allowContainerFirstChild`', () => {
     it('sets `allowContainerFirstChild: true` in `testing-library/no-node-access` rule options by default', async () => {
       const configResult = await computeEslintConfig('testingLibrary');

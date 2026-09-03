@@ -130,6 +130,26 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set math settings by default', async () => {
+      const configResult = await computeEslintConfig('math');
+      const config = configResult.getConfigByUnPostfix('math');
+
+      expect(config?.settings?.['math']).toBeUndefined();
+    });
+
+    it('sets math settings when `settings` is provided', async () => {
+      const SETTINGS = {aggressive: true};
+
+      const configResult = await computeEslintConfig('math', {
+        un: {plugins: {math: {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('math');
+
+      expect(config?.settings?.['math']).toStrictEqual(SETTINGS);
+    });
+  });
+
   describe('option: `absoluteValuesConversionMethod`', () => {
     it('enables `math/abs` rule with `Math.abs` preference when `absoluteValuesConversionMethod` is `"Math.abs"` (default)', async () => {
       const configResult = await computeEslintConfig('math');

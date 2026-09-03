@@ -22,6 +22,13 @@ import {
   defineUnConfig,
 } from './index';
 
+/**
+ * These are read from the root of the `settings` object by the plugin, unlike the rest which are
+ * read from its `react` property
+ */
+type ReactRootPluginSettingName =
+  'componentWrapperFunctions' | 'formComponents' | 'linkComponents' | 'propWrapperFunctions';
+
 export interface ReactPluginSettings {
   /**
    * Regex for Component Factory to use, default to `createReactClass`
@@ -175,6 +182,13 @@ export interface ReactXPluginSettings {
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#polymorphicpropname
    */
   polymorphicPropName?: string;
+
+  /**
+   * The [React Compiler](https://react.dev/learn/react-compiler) compilation mode the project
+   * uses, which tells the rules how the compiler picks up the components and hooks.
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#compilationmode
+   */
+  compilationMode?: 'infer' | 'annotation' | 'syntax' | 'all';
 }
 
 type EslintPluginReactDomRules =
@@ -717,11 +731,26 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
+  const {
+    componentWrapperFunctions,
+    formComponents,
+    linkComponents,
+    propWrapperFunctions,
+    ...namespacedPluginSettings
+  } = pluginSettings || {};
   const reactOriginalSettings = isReactEnabled
     ? ({
         version: reactFullVersion,
-        ...pluginSettings,
-      } satisfies ReactPluginSettings)
+        ...namespacedPluginSettings,
+      } satisfies OmitStrict<ReactPluginSettings, ReactRootPluginSettingName>)
+    : null;
+  const reactOriginalRootSettings = isReactEnabled
+    ? ({
+        componentWrapperFunctions,
+        formComponents,
+        linkComponents,
+        propWrapperFunctions,
+      } satisfies Pick<ReactPluginSettings, ReactRootPluginSettingName>)
     : null;
   const reactXSettings = isReactXEnabled
     ? ({
@@ -757,6 +786,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
         {
           filesDefault: DEFAULT_FILES,
           settings: {
+            '': reactOriginalRootSettings,
             react: reactOriginalSettings,
           },
         },
@@ -1259,6 +1289,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
           filesDefault: parentConfigFiles,
           ignoresDefault: parentConfigIgnores,
           settings: {
+            '': reactOriginalRootSettings,
             react: reactOriginalSettings,
             'react-x': reactXSettings,
           },

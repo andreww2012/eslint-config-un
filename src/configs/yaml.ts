@@ -11,6 +11,21 @@ import {
 const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'];
 
 /**
+ * [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `yml` property of the `settings` flat config option.
+ */
+export interface YamlPluginSettings {
+  /**
+   * The number of spaces in a single indentation level, used as the default by the rules that
+   * indent the code.
+   * Values below 2 are treated as 2.
+   * @default 2
+   */
+  indent?: number;
+}
+
+/**
  * YAML specific rules.
  *
  * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
@@ -82,6 +97,8 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
 
   const {enforceExtension, parserOptions} = optionsResolved;
 
+  const pluginSettings = context.getPluginSettings('yaml');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'yaml');
 
   // Legend:
@@ -96,6 +113,9 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
           ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
           parseWith: 'yaml',
+          settings: {
+            yml: pluginSettings,
+          },
         },
       ],
       {

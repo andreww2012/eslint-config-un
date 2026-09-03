@@ -54,7 +54,7 @@ interface ExtraneousDependenciesCheckOptions {
  * `import-x/<original property name in kebab case>`.
  *
  * Some settings are set by our config, and the settings you provide here will be merged with ours.
- * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
+ * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/README.md#settings
  */
 export type {ImportSettings as ImportPluginSettings} from 'eslint-plugin-import-x';
 

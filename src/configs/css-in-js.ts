@@ -1,4 +1,5 @@
 import {ERROR} from '../constants';
+import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -21,9 +22,12 @@ export interface CssInJsPluginSettings {
 
   /**
    * Specifies the function paths that uses the style object.
+   * Keys are module names, values are the lists of the call paths within that module, where each
+   * path is either a single name or an array of the path segments.
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
+   * @example {'@emotion/react': [['css'], ['default', 'css']]}
    */
-  defineFunctions?: Record<string, string[]>;
+  defineFunctions?: Record<string, MaybeArray<string>[]>;
 }
 
 /**

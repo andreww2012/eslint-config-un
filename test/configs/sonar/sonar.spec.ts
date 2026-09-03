@@ -147,6 +147,26 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set sonar settings by default', async () => {
+      const configResult = await computeEslintConfig('sonar');
+      const config = configResult.getConfigByUnPostfix('sonar');
+
+      expect(config?.settings?.['testFileExtensions']).toBeUndefined();
+    });
+
+    it('sets sonar settings when `settings` is provided', async () => {
+      const SETTINGS = {testFileExtensions: ['.ts'], predefinedGlobals: ['myGlobal']};
+
+      const configResult = await computeEslintConfig('sonar', {
+        un: {plugins: {sonarjs: {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('sonar');
+
+      expect(config?.settings).toMatchObject(SETTINGS);
+    });
+  });
+
   describe('option: `enableAwsRules`', () => {
     it('enables rules specific to `aws-cdk-lib` if set to `true`', async () => {
       const configResult = await computeEslintConfig({sonar: {enableAwsRules: true}});

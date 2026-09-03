@@ -8,6 +8,33 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-sonarjs`](https://npmx.dev/eslint-plugin-sonarjs) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned directly to the `settings` flat config option.
+ */
+export interface SonarPluginSettings {
+  /**
+   * The extensions of the files the rules treat as tests, with or without the leading dot.
+   *
+   * Affected rules:
+   * - `sonarjs/no-debug-commands-in-ui-tests`
+   * - `sonarjs/no-empty-test-file`
+   * - `sonarjs/no-fixed-wait-in-tests`
+   * @default ['.js', '.mjs', '.cjs', '.jsx', '.vue', '.ts', '.mts', '.cts', '.tsx']
+   */
+  testFileExtensions?: string[];
+
+  /**
+   * The names of the globals the rules must treat as already defined, in addition to the ones they
+   * discover in the global scope.
+   *
+   * Affected rule:
+   * - `sonarjs/declarations-in-global-scope`
+   */
+  predefinedGlobals?: string[];
+}
+
+/**
  * An ESLint plugin with multitude of different rules from
  * [SonarSource](https://www.sonarsource.com).
  *
@@ -63,6 +90,8 @@ export default defineUnConfig<SonarEslintConfigOptions>(
   const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testRulesSeverity = testsRules ? ERROR : OFF;
 
+  const pluginSettings = context.getPluginSettings('sonarjs');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'sonarjs');
 
   // Legend:
@@ -83,6 +112,9 @@ export default defineUnConfig<SonarEslintConfigOptions>(
         // TODO why?
         ignoresInternal: {
           html: false,
+        },
+        settings: {
+          '': pluginSettings,
         },
       },
     ])

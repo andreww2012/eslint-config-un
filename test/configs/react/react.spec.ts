@@ -198,6 +198,23 @@ describe('options', () => {
         configResult.getConfigByUnPostfix('react/plugin-original')?.settings?.['react'],
       ).toStrictEqual({version: INSTALLED_REACT_VERSION, fragment: 'Fragment', pragma: 'Preact'});
     });
+
+    it('assigns the settings read from the `settings` root outside of the `react` property', async () => {
+      const ROOT_SETTINGS = {
+        componentWrapperFunctions: ['observer'],
+        formComponents: ['CustomForm'],
+        linkComponents: ['Hyperlink'],
+        propWrapperFunctions: ['forbidExtraProps'],
+      };
+
+      const configResult = await computeEslintConfig('react', {
+        un: {plugins: {react: {settings: ROOT_SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('react/plugin-original');
+
+      expect(config?.settings?.['react']).toStrictEqual({version: INSTALLED_REACT_VERSION});
+      expect(config?.settings).toMatchObject(ROOT_SETTINGS);
+    });
   });
 
   describe('option: `pluginX`', () => {

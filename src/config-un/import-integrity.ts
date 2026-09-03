@@ -1,10 +1,19 @@
+import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 import type {EslintPlugin, GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import type {PluginPrefix} from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {objectEntriesUnsafe} from '../utils';
 import type {UnConfigContext} from './shared';
 
-export type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
+/**
+ * The plugin rejects `packageRootDir` in the monorepo form, so it can only be defaulted when the
+ * user has not opted into that form
+ */
+export const withDefaultPackageRootDir = (
+  settings: ImportIntegrityPluginSettings | undefined,
+  packageRootDir: string,
+): ImportIntegrityPluginSettings =>
+  settings && 'monorepoRootDir' in settings ? settings : {packageRootDir, ...settings};
 
 // TODO: move to configs/import-integrity
 

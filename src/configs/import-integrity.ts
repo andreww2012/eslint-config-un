@@ -1,6 +1,7 @@
-// import type importIntegrityLint from 'import-integrity-lint';
+import {withDefaultPackageRootDir} from '../config-un/import-integrity';
 import type {Environment} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
+import type {Prettify} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -9,21 +10,11 @@ import {
   defineUnConfig,
 } from './index';
 
-export interface ImportIntegrityPluginSettings {
-  /**
-   * Directory path in which the plugin scans for files in the current package.
-   * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#packagerootdir
-   */
-  packageRootDir?: string;
-
-  /**
-   * The absolute path to the monorepo root.
-   * The plugin uses your monorepo's workspace configuration to discover packages underneath this
-   * directory.
-   * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#monoreporootdir
-   */
-  monorepoRootDir?: string;
-
+/**
+ * The settings accepted by both forms of {@link ImportIntegrityPluginSettings}.
+ * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html
+ */
+interface ImportIntegrityCommonPluginSettings {
   /**
    * Set to `auto` by default by the plugin.
    *
@@ -44,7 +35,14 @@ export interface ImportIntegrityPluginSettings {
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#debuglogging
    */
   debugLogging?: boolean;
+}
 
+/**
+ * The settings only accepted by the single-package form of
+ * {@link ImportIntegrityPluginSettings}: the plugin rejects them in the monorepo one.
+ * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html
+ */
+interface ImportIntegrityPackagePluginSettings {
   /**
    * Defines custom module aliases, like it is done in TypeScript config file (`tsconfig.json`).
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#alias
@@ -80,7 +78,7 @@ export interface ImportIntegrityPluginSettings {
   /**
    * A list of files to negate the `ignorePatterns`.
    * Uses the format used by `.gitignore`.
-   * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignorepatterns
+   * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignoreoverridepatterns
    */
   ignoreOverridePatterns?: string[];
 
@@ -98,6 +96,34 @@ export interface ImportIntegrityPluginSettings {
    */
   testFilePatterns?: string[];
 }
+
+/**
+ * The plugin validates these settings strictly and accepts exactly one of the two forms: the
+ * single-package one, keyed by `packageRootDir`, or the monorepo one, keyed by `monorepoRootDir`.
+ * Providing both keys, or the package-level settings alongside `monorepoRootDir`, is a fatal error.
+ */
+export type ImportIntegrityPluginSettings =
+  | Prettify<
+      ImportIntegrityCommonPluginSettings &
+        ImportIntegrityPackagePluginSettings & {
+          /**
+           * Directory path in which the plugin scans for files in the current package.
+           * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#packagerootdir
+           */
+          packageRootDir?: string;
+        }
+    >
+  | Prettify<
+      ImportIntegrityCommonPluginSettings & {
+        /**
+         * The absolute path to the monorepo root.
+         * The plugin uses your monorepo's workspace configuration to discover packages underneath
+         * this directory.
+         * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#monoreporootdir
+         */
+        monorepoRootDir: string;
+      } & Partial<Record<keyof ImportIntegrityPackagePluginSettings | 'packageRootDir', never>>
+    >;
 
 /**
  * A faster alternative to `eslint-plugin-import(-x)` plugins.
@@ -151,11 +177,10 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
       'import-integrity',
       {
         settings: {
-          'import-integrity': {
-            packageRootDir: import.meta.dirname,
-            ...(modeFromEnvironment && {mode: modeFromEnvironment}),
-            ...pluginSettings,
-          } satisfies ImportIntegrityPluginSettings,
+          'import-integrity': withDefaultPackageRootDir(
+            modeFromEnvironment ? {mode: modeFromEnvironment, ...pluginSettings} : pluginSettings,
+            import.meta.dirname,
+          ),
         },
       },
     ])

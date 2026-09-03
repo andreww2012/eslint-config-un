@@ -64,23 +64,24 @@ interface JestExtendedSubConfigOptions<
 export interface JestPluginSettings {
   /**
    * Tell the plugin about any global methods you have aliased.
-   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals
+   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#aliased-jest-globals
    * @example {describe: ['context']}
    */
   globalAliases?: Record<string, string[]>;
 
   /**
    * Tell the plugin to treat a different package as the source of Jest globals.
-   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jestglobals
+   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#aliased-jestglobals
    * @example 'bun:test'
    */
   globalPackage?: string;
 
   /**
-   * Tell the plugin which major version of Jest is used, if it cannot be detected automatically
-   * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
+   * Tell the plugin which version of Jest is used, if it cannot be detected automatically.
+   * A string is accepted too, so that the version can be read from the installed package.
+   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#jest-version-setting
    */
-  version?: number;
+  version?: number | string;
 }
 
 /**

@@ -60,7 +60,7 @@ export interface HtmlProcessorPluginSettings {
    * Like the `indent` rule, you can pass a number of spaces, or "tab" to indent with one tab.
    * Prefix this value with a + to be relative to the `<script>` tag indentation." - plugin docs
    */
-  indent?: `${'+' | ''}${number}` | 'tab';
+  indent?: number | `${'+' | ''}${number}` | `${'+' | ''}tab`;
 
   /**
    * "By default, this plugin won't warn if it encounters a problematic indentation (ex: a line is
@@ -68,8 +68,9 @@ export interface HtmlProcessorPluginSettings {
    * If you want to make sure the indentation is correct, use the `html/report-bad-indent` in
    * conjunction with the `indent` rule.
    * Pass `'warn'` or `1` to display warnings, `'error'` or `2` to display errors." - plugin docs
+   * @default 'off'
    */
-  'report-bad-indent'?: 'error' | 2 | 'warn' | 1;
+  'report-bad-indent'?: 'off' | false | 0 | 'warn' | true | 1 | 'error' | 2;
 
   /**
    * "By default, the code between `<script>` tags is considered as JavaScript.

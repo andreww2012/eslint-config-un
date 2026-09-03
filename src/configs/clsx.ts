@@ -1,4 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
+import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -10,19 +11,16 @@ import {
  * [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `clsxOptions` property of the `settings` flat config option.
- * @default {clsx: ['default', 'clsx']; classnames: 'default'}
+ *
+ * Keys are the modules whose imports should be treated as `clsx`, values are the names of the
+ * imports to look at, where `default` stands for the default import.
+ *
+ * Note that specifying this setting *replaces* the default value rather than being merged with it.
+ * @default {clsx: ['default', 'clsx'], classnames: 'default'}
  */
-export interface ClsxPluginSettings {
-  /**
-   * Imports that should be considered `clsx` imports.
-   */
-  clsx?: string[];
-
-  /**
-   * The import that should be considered a `classnames` import
-   */
-  classnames?: string;
-}
+export type ClsxPluginSettings = Partial<
+  Record<'clsx' | 'classnames' | (string & {}), MaybeArray<string>>
+>;
 
 /**
  * [clsx](https://github.com/lukeed/clsx) specific rules.

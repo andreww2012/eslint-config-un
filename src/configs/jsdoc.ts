@@ -48,7 +48,7 @@ export interface JsdocPluginSettings {
    * @default 'typescript'
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#mode
    */
-  mode?: 'typescript' | 'clojure' | 'jsdoc';
+  mode?: 'typescript' | 'closure' | 'jsdoc' | 'permissive';
 
   /**
    * Preferred alias name for a JSDoc tag.

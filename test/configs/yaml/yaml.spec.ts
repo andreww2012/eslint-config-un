@@ -179,6 +179,26 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set yaml settings by default', async () => {
+      const configResult = await computeEslintConfig('yaml');
+      const config = configResult.getConfigByUnPostfix('yaml');
+
+      expect(config?.settings?.['yml']).toBeUndefined();
+    });
+
+    it('sets yaml settings when `settings` is provided', async () => {
+      const SETTINGS = {indent: 4};
+
+      const configResult = await computeEslintConfig('yaml', {
+        un: {plugins: {yaml: {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('yaml');
+
+      expect(config?.settings?.['yml']).toStrictEqual(SETTINGS);
+    });
+  });
+
   describe('option: `enforceExtension`', () => {
     it('enforces `.yml` extension by default', async () => {
       const configResult = await computeEslintConfig('yaml');

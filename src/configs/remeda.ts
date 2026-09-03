@@ -8,6 +8,20 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-remeda`](https://npmx.dev/eslint-plugin-remeda) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `remeda` property of the `settings` flat config option.
+ */
+export interface RemedaPluginSettings {
+  /**
+   * The name of the object the Remeda functions are called on, so that the rules recognize the
+   * calls made through it and not only the ones made through the imported functions.
+   * @example 'R'
+   */
+  pragma?: string;
+}
+
+/**
  * [Remeda](https://remedajs.com) specific rules.
  *
  * 📁 Default `files`: all files
@@ -42,6 +56,8 @@ export default defineUnConfig<RemedaEslintConfigOptions>('remeda', {
 
   const jsCodeReplacementRuleSeverity = suggestJsCodeReplacements ? ERROR : OFF;
 
+  const pluginSettings = context.getPluginSettings('remeda');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'remeda');
 
   // Legend:
@@ -49,7 +65,14 @@ export default defineUnConfig<RemedaEslintConfigOptions>('remeda', {
   // 🟨 - suggests replacing vanilla JS with Remeda expressions
 
   configBuilder
-    ?.addConfig('remeda')
+    ?.addConfig([
+      'remeda',
+      {
+        settings: {
+          remeda: pluginSettings,
+        },
+      },
+    ])
     .addRule('collection-method-value', ERROR) /** @since 1.0.0 */
     .addRule('collection-return', ERROR) /** @since 1.0.0 */
     .addRule('prefer-constant', jsCodeReplacementRuleSeverity) /** @since 1.0.0 */ // 🟨

@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from '../types';
-import {objectEntriesUnsafe} from '../utils';
+import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTests,
@@ -13,6 +13,38 @@ import {
   assignDefaults,
   defineUnConfig,
 } from './index';
+
+/**
+ * [`eslint-plugin-testing-library`](https://npmx.dev/eslint-plugin-testing-library) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `settings` flat config option with keys transformed to
+ * `testing-library/<original property name in kebab case>`.
+ *
+ * Each of these narrows down what the plugin treats as a Testing Library usage.
+ * Setting one to `off` disables the corresponding
+ * [Aggressive Reporting](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/migration-guides/v4.md#aggressive-reporting)
+ * mechanism instead.
+ * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#shared-settings
+ */
+export interface TestingLibraryPluginSettings {
+  /**
+   * The custom module re-exporting everything from the Testing Library package.
+   * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-libraryutils-module
+   */
+  utilsModule?: (string & {}) | 'off';
+
+  /**
+   * The names of the functions that count as custom renders.
+   * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-renders
+   */
+  customRenders?: string[] | 'off';
+
+  /**
+   * The names or the patterns of the custom queries.
+   * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-queries
+   */
+  customQueries?: string[] | 'off';
+}
 
 interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
@@ -178,6 +210,8 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
     disableRootConfigIfFrameworkConfigIsEnabled,
   } = optionsResolved;
 
+  const pluginSettings = context.getPluginSettings('testing-library');
+
   const generateConfigsForModule = (
     module: 'dom' | SupportedModules,
     options: AllPossibleModuleOptions,
@@ -231,6 +265,14 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
         `testing-library/${module}`,
         {
           filesDefault: configFilesFallback,
+          settings: {
+            '': Object.fromEntries(
+              objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
+                `testing-library/${toKebabCase(settingName)}`,
+                settingValue,
+              ]),
+            ),
+          },
         },
       ])
       .addRule('await-async-events', ERROR, [

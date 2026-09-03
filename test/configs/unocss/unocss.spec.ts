@@ -152,3 +152,25 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('unocss', 'no-console')).toBe(0);
   });
 });
+
+describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set unocss settings by default', async () => {
+      const configResult = await computeEslintConfig('unocss');
+      const config = configResult.getConfigByUnPostfix('unocss');
+
+      expect(config?.settings?.['unocss']).toBeUndefined();
+    });
+
+    it('sets unocss settings when `settings` is provided', async () => {
+      const SETTINGS = {configPath: 'uno.config.ts'};
+
+      const configResult = await computeEslintConfig('unocss', {
+        un: {plugins: {unocss: {settings: SETTINGS}}},
+      });
+      const config = configResult.getConfigByUnPostfix('unocss');
+
+      expect(config?.settings?.['unocss']).toStrictEqual(SETTINGS);
+    });
+  });
+});

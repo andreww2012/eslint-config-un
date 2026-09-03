@@ -180,6 +180,16 @@ describe('options', () => {
         configResult.getConfigByUnPostfix('mocha')?.settings?.['mocha/additionalCustomNames'],
       ).toStrictEqual(SETTINGS.additionalCustomNames);
     });
+
+    it('sets the mocha interface when provided', async () => {
+      const configResult = await computeEslintConfig('mocha', {
+        un: {plugins: {mocha: {settings: {interface: 'require'}}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('mocha')?.settings?.['mocha/interface']).toBe(
+        'require',
+      );
+    });
   });
 
   describe('option: `enforceInterface`', () => {

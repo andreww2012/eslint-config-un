@@ -39,9 +39,23 @@ export interface VitestPluginSettings {
   /**
    * You must set this to `true` if you're using
    * [type testing vitest feature](https://vitest.dev/guide/testing-types).
-   * @see https://github.com/vitest-dev/eslint-plugin-vitest?tab=readme-ov-file#enabling-with-type-testing
+   * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md#enabling-with-type-testing
    */
   typecheck?: boolean;
+
+  /**
+   * Tell the plugin about any global methods you have aliased.
+   * @example {describe: ['context']}
+   */
+  globalAliases?: Record<string, string[]>;
+
+  /**
+   * The modules re-exporting the Vitest API, such as the ones defining custom fixtures.
+   * A string matches the module name exactly, a regular expression is tested against it.
+   * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md#custom-fixtures
+   * @example ['@/tests/fixtures', /test-extend$/]
+   */
+  vitestImports?: (string | RegExp)[];
 }
 
 /**
