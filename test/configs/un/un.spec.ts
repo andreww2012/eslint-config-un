@@ -83,7 +83,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"Multiple consecutive spaces in string literal are not allowed."',
+      '"Multiple consecutive spaces in a string or template literal are not allowed."',
     );
   });
 

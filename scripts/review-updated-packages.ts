@@ -364,7 +364,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   }
   console.log(
     styleText('black', styleText('bgCyanBright', dependency)),
-    `${styleText('gray', oldVersion)} →  ${styleText('green', newVersion)}`,
+    `${styleText('gray', oldVersion)} → ${styleText('green', newVersion)}`,
   );
 
   console.log(styleText('underline', 'Source code diff:'));
