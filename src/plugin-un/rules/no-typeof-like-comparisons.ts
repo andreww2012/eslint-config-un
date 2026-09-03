@@ -1,5 +1,5 @@
 import {findVariable} from '@eslint-community/eslint-utils';
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';

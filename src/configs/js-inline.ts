@@ -1,4 +1,4 @@
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import globals from 'globals';
 import {GLOB_HTM_HTML} from '../constants';
 import {pluginsLoaders} from '../loaders';

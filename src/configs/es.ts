@@ -368,11 +368,11 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
   const pluginSettings = context.getPluginSettings('es');
 
   const getEsVersionFeatures = memoize((version: EcmaVersion) => {
-    const overallVersionSupported = ecmaVersion === 'latest' || version <= ecmaVersion;
-    const esFeatures = ecmaFeatures[version] ?? overallVersionSupported;
+    const isOverallVersionSupported = ecmaVersion === 'latest' || version <= ecmaVersion;
+    const esFeatures = ecmaFeatures[version] ?? isOverallVersionSupported;
     return typeof esFeatures === 'boolean'
       ? {default: esFeatures}
-      : {default: overallVersionSupported, ...esFeatures};
+      : {default: isOverallVersionSupported, ...esFeatures};
   });
   const isEsVersionFullySupported = memoize((version: EcmaVersion) => {
     const esFeatures = getEsVersionFeatures(version);

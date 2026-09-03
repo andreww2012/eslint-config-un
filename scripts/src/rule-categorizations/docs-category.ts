@@ -2,7 +2,6 @@ import type {RuleCategorization} from './shared';
 
 const isInDocsCategory = (rule: {meta?: {docs?: unknown}}, docsCategory: string) => {
   const docs = rule.meta?.docs;
-  // eslint-disable-next-line unicorn/prefer-simple-condition-first
   if (docs == null || typeof docs !== 'object' || !('category' in docs)) {
     return false;
   }

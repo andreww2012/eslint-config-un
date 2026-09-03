@@ -76,9 +76,9 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
 export const readEslintPluginsDb = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
 
-  const exists = yield* fs.exists(knownEslintPluginsPath);
+  const doesExist = yield* fs.exists(knownEslintPluginsPath);
 
-  if (!exists) {
+  if (!doesExist) {
     const emptyData: EslintPluginsDb = {};
     yield* writeEslintPluginsDb(emptyData);
     return emptyData;

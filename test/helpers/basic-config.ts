@@ -54,10 +54,10 @@ export const expectConfigState = async (
 
   const configResult = await computeEslintConfig(configs, computeOptions);
 
-  const enabled = typeof state === 'boolean' ? state : state[1];
+  const isEnabled = typeof state === 'boolean' ? state : state[1];
 
   for (const postfix of arrayify(postfixOrPostfixes)) {
-    if (enabled) {
+    if (isEnabled) {
       expect(configResult.getConfigByUnPostfix(postfix)).toBeDefined();
     } else {
       expect(configResult.getConfigByUnPostfix(postfix)).toBeUndefined();

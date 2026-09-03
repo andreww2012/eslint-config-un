@@ -45,11 +45,11 @@ export class EslintPluginsDbRefTag extends Context.Tag('EslintPluginsDbRef')<
   Ref.Ref<EslintPluginsDb>
 >() {}
 
-export const createLoggerLayer = (verbose = false) =>
+export const createLoggerLayer = (isVerbose = false) =>
   Layer.succeed(
     LoggerTag,
     consola.create({
-      level: verbose ? Number.POSITIVE_INFINITY : 5,
+      level: isVerbose ? Number.POSITIVE_INFINITY : 5,
     }),
   );
 

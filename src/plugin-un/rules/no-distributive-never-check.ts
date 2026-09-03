@@ -1,6 +1,6 @@
 import {findVariable} from '@eslint-community/eslint-utils';
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/types';
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 
 const rule: Eslint.Rule.RuleModule = {

@@ -127,6 +127,7 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     disableRulesRequiringSchema,
   } = optionsResolved;
 
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   const doNotRequireSeparateFilesFor = objectKeysUnsafe(
     pick(requireSeparateFilesFor, (value) => value === false),
   );

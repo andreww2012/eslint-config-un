@@ -174,7 +174,7 @@ const topologicallySort = <T>(
   return {sorted, cycles};
 };
 
-const getIsInMiscGroup = ({enabledBy}: DiscoveredConfig['manifest']) =>
+const isConfigInMiscGroup = ({enabledBy}: DiscoveredConfig['manifest']) =>
   typeof enabledBy === 'object' && 'group' in enabledBy;
 
 const validate = (
@@ -335,7 +335,7 @@ const validate = (
 
   const documentedMiscGroup = new Set(documentedMiscGroupConfigs);
   const actualMiscGroup = new Set(
-    configs.filter(({manifest}) => getIsInMiscGroup(manifest)).map(({key}) => key),
+    configs.filter(({manifest}) => isConfigInMiscGroup(manifest)).map(({key}) => key),
   );
   actualMiscGroup.difference(documentedMiscGroup).forEach((key) => {
     report(key, 'is in the misc group but is not listed in the `defaultConfigsStatus` option docs');
@@ -440,7 +440,7 @@ ${properties.join('\n\n')}
 
 const renderManifests = (configs: readonly DiscoveredConfig[], cascadeOrder: readonly string[]) => {
   const miscGroupConfigs = configs
-    .filter(({manifest}) => getIsInMiscGroup(manifest))
+    .filter(({manifest}) => isConfigInMiscGroup(manifest))
     .map(({key}) => key);
 
   const serializeStaticFacts = ({manifest}: DiscoveredConfig) =>

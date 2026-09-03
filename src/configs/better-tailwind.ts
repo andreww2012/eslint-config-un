@@ -192,6 +192,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
   }
 
   const cssFiles = resolveFilesOption(cssResolvedOptions?.files, []);
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   const cssLinting =
     optionsResolved.cssLinting !== false && cssResolvedOptions != null && cssFiles.length > 0;
 

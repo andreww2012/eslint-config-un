@@ -1,4 +1,4 @@
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
@@ -175,7 +175,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
     )
       .map(([ruleId, ruleImplementation]): [string, Eslint.Rule.RuleModule] | null => {
         const fullRuleName = `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`;
-        const isFixable = ruleImplementation.meta?.fixable;
+        const isFixable = Boolean(ruleImplementation.meta?.fixable);
         if (
           includeRulesWithoutAutofix &&
           (!isFixable || invertOnlyRules === onlyRules?.includes(fullRuleName))

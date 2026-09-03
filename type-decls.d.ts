@@ -53,7 +53,7 @@ declare module 'eslint-plugin-ember' {
 }
 
 declare module 'ember-eslint-parser' {
-  import type ESLint from 'eslint';
+  import type * as ESLint from 'eslint';
   declare const value: ESLint.Linter.Parser; // (!) parser
   export = value;
 }

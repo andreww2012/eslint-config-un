@@ -310,13 +310,13 @@ export class ConfigEntryBuilder<
           : {language: parseWith[0], dialect: parseWith[1]};
 
     const [files, ignores, isConfigDisabled] = (() => {
-      const applyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
-      const configFilesAndIgnoresNotSpecified =
+      const shouldApplyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
+      const areConfigFilesAndIgnoresNotSpecified =
         configOptions.files == null && configOptions.ignores == null;
 
-      const filesOption = applyUserFilesAndIgnores
+      const filesOption = shouldApplyUserFilesAndIgnores
         ? configOptions.files ||
-          (configFilesAndIgnoresNotSpecified
+          (areConfigFilesAndIgnoresNotSpecified
             ? internalOptions.inheritFilesAndIgnoresFrom?.files
             : undefined)
         : undefined;
@@ -337,9 +337,9 @@ export class ConfigEntryBuilder<
           ? filesOption({filesDefault: [...filesDefault]})
           : undefined;
 
-      const ignoresOption = applyUserFilesAndIgnores
+      const ignoresOption = shouldApplyUserFilesAndIgnores
         ? configOptions.ignores ||
-          (configFilesAndIgnoresNotSpecified
+          (areConfigFilesAndIgnoresNotSpecified
             ? internalOptions.inheritFilesAndIgnoresFrom?.ignores
             : undefined)
         : undefined;
@@ -814,9 +814,9 @@ export class ConfigEntryBuilder<
 
         if (typeInfoModeResolved === 'disabled') {
           rulesRequiringTypeInfo.forEach(({plugin, ruleName}, ruleEntryName) => {
-            const throwsWithoutTypeInfo =
+            const doesThrowWithoutTypeInfo =
               RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName] === true;
-            if (throwsWithoutTypeInfo && config.rules) {
+            if (doesThrowWithoutTypeInfo && config.rules) {
               config.rules[ruleEntryName] = OFF;
             }
           });
@@ -849,7 +849,7 @@ export class ConfigEntryBuilder<
           ...(globalParserOptions?.extraFileExtensions || []),
           ...(extraFileExtensions || []),
         ];
-        const globalSetsUpProjectService =
+        const doesGlobalSetUpProjectService =
           globalParserOptions?.projectService != null || globalParserOptions?.project != null;
 
         const configForTypeInformation: SetRequired<EslintFlatConfigEntry, 'name'> = {
@@ -870,7 +870,7 @@ export class ConfigEntryBuilder<
                 ...(splitExtraFileExtensions.length > 0 && {
                   extraFileExtensions: [...new Set(splitExtraFileExtensions)],
                 }),
-                ...(!globalSetsUpProjectService && {projectService: true}),
+                ...(!doesGlobalSetUpProjectService && {projectService: true}),
               }),
             },
           },

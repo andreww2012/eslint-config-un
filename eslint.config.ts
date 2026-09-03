@@ -14,7 +14,6 @@ export default eslintConfig({
       },
     }),
   },
-  defaultConfigsStatus: 'misc-enabled',
   linterOptionsReportUnusedDisableDirectives: {
     ignores: [
       // Some rules are disabled in non-CI for this file
@@ -23,11 +22,42 @@ export default eslintConfig({
     ].filter((v) => v != null),
   },
 
+  defaultConfigsStatus: 'misc-enabled',
   configs: {
+    barrelFiles: true,
+    checkFile: {
+      fileNamingConventions: {
+        '{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE',
+      },
+    },
+    casePolice: true,
+    command: true,
+    e18e: {
+      configModuleReplacements: {
+        options: {
+          allowed: ['eslint-plugin-react', 'eslint-plugin-jest-dom'],
+        },
+      },
+    },
+    erasableSyntaxOnly: true,
+    eslintPlugin: {
+      files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
+    },
+    expectType: true,
+    fileProgress: true,
+    import: {
+      extraneousDependenciesCheck: {whitelist: ALWAYS_BUNDLED_DEPENDENCIES},
+      configAllowDefaultExport: {
+        files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts'],
+      },
+    },
     js: {
       overrides: {
         'arrow-body-style': 2,
       },
+    },
+    jsdoc: {
+      customTags: ['knipignore', 'until', 'aka'],
     },
     lockfile: {
       noNonRegistryDependencySpecifiers: {
@@ -37,21 +67,6 @@ export default eslintConfig({
             explanation: 'Local dependencies are safe',
           },
         ],
-      },
-    },
-    barrelFiles: true,
-    e18e: {
-      configModuleReplacements: {
-        options: {
-          allowed: ['eslint-plugin-react', 'eslint-plugin-jest-dom'],
-        },
-      },
-    },
-    expectType: true,
-    command: true,
-    checkFile: {
-      fileNamingConventions: {
-        '{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE',
       },
     },
     markdown: {
@@ -68,37 +83,11 @@ export default eslintConfig({
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind', 'JSDoc'],
       casingEnforcementIgnorePatterns: ['/changes/i'] /* Added by changeset CLI to CHANGELOG.md */,
     },
-    fileProgress: true,
-    ts: {
-      parserOptions: (isTypeAware) =>
-        isTypeAware
-          ? {
-              projectService: false,
-              project: './tsconfig.eslint.json',
-              tsconfigRootDir: import.meta.dirname,
-            }
-          : {},
-      configSortTsconfigKeys: {
-        orderCompilerOptions: {
-          preset: 'totalTypescript',
-        },
-      },
-    },
-    erasableSyntaxOnly: true,
-    jsxA11y: false,
-    casePolice: true,
-    import: {
-      overrides: {
-        'import/default': 0, // TODO started to produce many false reports, investigate why
-      },
-      extraneousDependenciesCheck: {whitelist: ALWAYS_BUNDLED_DEPENDENCIES},
-      configAllowDefaultExport: {
-        files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts'],
-      },
-    },
-    packageJson: {
-      overrides: {
-        'package-json/no-local-dependencies': 0, // Local deps are bundled
+    nodeDependencies: {
+      enforceAbsoluteVersion: {
+        dependencies: 'always',
+        devDependencies: 'always',
+        peerDependencies: 'never',
       },
     },
     perfectionist: {
@@ -115,46 +104,31 @@ export default eslintConfig({
         ignores: ['src/loaders/{index,shared}.ts'],
       },
     },
-    nodeDependencies: {
-      enforceAbsoluteVersion: {
-        dependencies: 'always',
-        devDependencies: 'always',
-        peerDependencies: 'never',
-      },
-    },
-    jsdoc: {
-      customTags: ['knipignore', 'until', 'aka'],
-    },
-    eslintPlugin: {
-      files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
-    },
-    security: {
-      overrides: {
-        'security/detect-unsafe-regex': 0, // Many false positives
-      },
-    },
-    unicorn: {
-      overrides: {
-        // TODO enable once this gets changed: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3316
-        'unicorn/consistent-boolean-name': 0,
+    ts: {
+      parserOptions: (isTypeAware) =>
+        isTypeAware
+          ? {
+              projectService: false,
+              project: './tsconfig.eslint.json',
+              tsconfigRootDir: import.meta.dirname,
+            }
+          : {},
+      configSortTsconfigKeys: {
+        orderCompilerOptions: {
+          preset: 'totalTypescript',
+        },
       },
     },
     vitest: {
-      overrides: {
-        'vitest/expect-expect': [
-          2,
-          {
-            assertFunctionNames: ['expect', 'expectConfigState'],
-          },
-        ],
-      },
+      additionalAssertions: ['expect', 'expectConfigState'],
     },
 
     // False positives:
     betterTailwind: false,
     clsx: false,
-    graphql: false,
     formatJs: false,
+    graphql: false,
+    jsxA11y: false,
     nx: false,
     rxjs: false,
     svelte: false,

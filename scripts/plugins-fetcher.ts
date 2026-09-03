@@ -75,6 +75,7 @@ class RuntimeLayerTag extends Context.Tag('RuntimeLayer')<
 const TASK_QUEUE_CONCURRENCY = 10;
 const CACHED_DATA_FRESH_FOR_MS = 604800000 satisfies Ms<'1w'>;
 
+// eslint-disable-next-line unicorn/consistent-boolean-name
 const SHOULD_REFETCH_ERRORED_PLUGIN_INFO_AFTER_MINIMUM_MS = 86400000 satisfies Ms<'1d'>;
 
 const argv = cli({

@@ -288,8 +288,8 @@ export const resolveConfigAsyncData = async (
         .filter(Boolean)
         .join(' and ');
 
-      const generateInstallationCommand = (names: string[], exactly = false): string =>
-        `${context.meta.usedPackageManager?.name || '<your package manager>'} i --save-dev${exactly ? ' --save-exact' : ''} ${names.join(' ')}`;
+      const generateInstallationCommand = (names: string[], isExactly = false): string =>
+        `${context.meta.usedPackageManager?.name || '<your package manager>'} i --save-dev${isExactly ? ' --save-exact' : ''} ${names.join(' ')}`;
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
         `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
@@ -431,7 +431,7 @@ ${styleText(
             .filter(([, {meta: ruleMeta}]) => ruleMeta?.fixable)
             .map(([ruleName]) => ruleName);
 
-          const autofixDisabledForAllPluginRulesByDefault =
+          const isAutofixDisabledForAllPluginRulesByDefault =
             autofixDisabledGloballyFor === true ||
             (typeof autofixDisabledGloballyFor === 'object' &&
               autofixDisabledGloballyFor.plugins?.[pluginPrefixCanonical]) ||
@@ -439,7 +439,7 @@ ${styleText(
           const rulesToDisableAutofixFor = fixablePluginRules.filter(
             (ruleName) =>
               pluginRulesAutofixDisabledStatuses[ruleName] ??
-              autofixDisabledForAllPluginRulesByDefault,
+              isAutofixDisabledForAllPluginRulesByDefault,
           );
 
           if (rulesToDisableAutofixFor.length === 0) {

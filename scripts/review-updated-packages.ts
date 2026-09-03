@@ -394,7 +394,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     })
     .filter((v) => v != null);
 
-  let diffForLastFileSkipped = false;
+  let isDiffForLastFileSkipped = false;
   let lastFileExtension: string | undefined;
   for (const line of lines) {
     let isDiffHeader = line.startsWith('--- ') || line.startsWith('+++ ');
@@ -423,23 +423,23 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
           EXTENSIONS_TO_SKIP_IN_DIFF.has(extension) &&
           !fileHeaderMatch[2].endsWith(`.d.${extension}`)
         ) {
-          diffForLastFileSkipped = true;
+          isDiffForLastFileSkipped = true;
         } else if (counterpartExtensions) {
-          diffForLastFileSkipped = filesInDiff.some(
+          isDiffForLastFileSkipped = filesInDiff.some(
             (fileInDiff) =>
               fileInDiff.newPath.extensionLess === filePathExtensionLess &&
               fileInDiff.newPath.extension &&
               counterpartExtensions.includes(fileInDiff.newPath.extension),
           );
         } else {
-          diffForLastFileSkipped = false;
+          isDiffForLastFileSkipped = false;
         }
       }
     }
-    if (isDiffHeader || !diffForLastFileSkipped) {
+    if (isDiffHeader || !isDiffForLastFileSkipped) {
       console.log(`  ${formattedLine}`);
     }
-    if (diffForLastFileSkipped && line.startsWith('+++ ')) {
+    if (isDiffForLastFileSkipped && line.startsWith('+++ ')) {
       console.log(`  ${styleText('yellow', 'Diff for this file is not shown')}`);
     }
   }

@@ -156,6 +156,7 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
 
 interface CacheDataStoredInFs extends CacheDataInFs, CacheMetadata {}
 
+// eslint-disable-next-line unicorn/consistent-boolean-name
 export const saveCacheToFs = async (
   context: UnConfigContext,
   cacheData: CacheDataInFs<false>,

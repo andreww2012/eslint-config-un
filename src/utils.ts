@@ -64,11 +64,13 @@ export function findArrayInversions<T>(array: T[], compareFn: (a: T, b: T) => nu
 export function findArrayInversions<T>(
   array: T[],
   compareFn: (a: T, b: T) => number,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   group: true,
 ): Map<T, T[]>;
 export function findArrayInversions<T>(
   array: T[],
   compareFn: (a: T, b: T) => number,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   group?: boolean,
 ): [T, T][] | Map<T, T[]> {
   const result: [T, T][] = [];
@@ -116,10 +118,19 @@ export function findArrayInversions<T>(
 export const joinPaths = (...paths: (string | Falsy)[]) =>
   path.posix.join(...arrayify(paths).filter((v): v is string => Boolean(v)));
 
-export function readFileSafe(filePath: string, asBinary?: false): Promise<string | null>;
-export function readFileSafe(filePath: string, asBinary: true): Promise<Buffer | null>;
+export function readFileSafe(
+  filePath: string,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
+  asBinary?: false,
+): Promise<string | null>;
+export function readFileSafe(
+  filePath: string,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
+  asBinary: true,
+): Promise<Buffer | null>;
 export async function readFileSafe(
   filePath: string,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
   asBinary = false,
 ): Promise<string | Buffer | null> {
   return await fs.readFile(filePath, asBinary ? null : 'utf8').catch((error: unknown) => {

@@ -3,7 +3,7 @@ import type {
   Plugin as EslintPlugin,
   Severity as EslintSeverity,
 } from '@eslint/core';
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type {ExtraPluginsType} from '../config-un/shared';
 import type {FixableRuleNames as UnFixableRuleNames} from '../eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin as UnRuleOptionsByPlugin} from '../eslint-types-per-plugin.gen';

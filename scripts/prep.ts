@@ -5,7 +5,7 @@ import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from '@andreww20
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
-import prettier from 'prettier';
+import * as prettier from 'prettier';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';

@@ -1,4 +1,4 @@
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';

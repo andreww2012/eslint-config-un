@@ -1,4 +1,4 @@
-import type Eslint from 'eslint';
+import type * as Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 

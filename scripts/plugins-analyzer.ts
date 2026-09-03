@@ -187,7 +187,7 @@ const analyze = Effect.gen(function* () {
     .filter((v) => v != null);
 
   let pluginsSortingCriterion!: (value: (typeof pluginsAnalyzed)[number]) => number;
-  let sortInversedByDefault = false;
+  let shouldSortInversedByDefault = false;
   switch (cliFlags.sort) {
     case 'score': {
       pluginsSortingCriterion = (value) => value.statusMeta.priority;
@@ -195,12 +195,12 @@ const analyze = Effect.gen(function* () {
     }
     case 'deps': {
       pluginsSortingCriterion = (value) => value.allDirectDependencies.length;
-      sortInversedByDefault = true;
+      shouldSortInversedByDefault = true;
       break;
     }
     case 'deps-plugins': {
       pluginsSortingCriterion = (value) => value.directDependenciesOtherEslintPlugins.length;
-      sortInversedByDefault = true;
+      shouldSortInversedByDefault = true;
       break;
     }
     case 'downloads': {
@@ -226,7 +226,7 @@ const analyze = Effect.gen(function* () {
       a.statusMeta.priority - b.statusMeta.priority ||
       (pluginsSortingCriterion(a) - pluginsSortingCriterion(b)) *
         (cliFlags.sortInverse ? -1 : 1) *
-        (sortInversedByDefault ? -1 : 1) ||
+        (shouldSortInversedByDefault ? -1 : 1) ||
       a.score - b.score ||
       a.downloadsPerDayAverage - b.downloadsPerDayAverage ||
       b.allDirectDependencies.length - a.allDirectDependencies.length,

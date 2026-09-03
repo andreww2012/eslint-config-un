@@ -5,7 +5,7 @@ import {styleText} from 'node:util';
 import {jsonParseSafe as jsonParse} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
-import prettier from 'prettier';
+import * as prettier from 'prettier';
 import {exec} from 'tinyexec';
 import {
   compare as compareVersions,
@@ -201,7 +201,7 @@ const getNpmPackageInfo = async (packageName: string) => {
   return NpmPackageInfoZod.parse(await response.json());
 };
 
-const fileExists = async (fullPath: string) =>
+const doesFileExist = async (fullPath: string) =>
   await fs
     .access(fullPath, fs.constants.F_OK)
     .then(() => true)
@@ -251,6 +251,7 @@ const mergeRulesPresenceResults = (
   };
 };
 
+// eslint-disable-next-line unicorn/consistent-boolean-name
 const run = async ({
   packageName,
   packageVersionsRange,
@@ -269,7 +270,7 @@ const run = async ({
 
   const packageJsonPath = generatePathInProject('package.json');
 
-  if (!overwriteIfExists && (await fileExists(packageJsonPath))) {
+  if (!overwriteIfExists && (await doesFileExist(packageJsonPath))) {
     logger.error(
       `Project's package.json already exists at ${packageJsonPath}. Use --no-overwrite to skip overwriting it.`,
     );
@@ -361,8 +362,8 @@ const run = async ({
   ]);
 
   const nodeModulesPath = generatePathInProject('node_modules');
-  const depsInstalled = await Promise.all(
-    Object.keys(generatedPackageJson.dependencies ?? {}).map((name) =>
+  const areDepsInstalled = await Promise.all(
+    Object.keys(generatedPackageJson.dependencies || {}).map((name) =>
       fs
         .access(path.join(nodeModulesPath, name))
         .then(() => true)
@@ -370,14 +371,14 @@ const run = async ({
     ),
   ).then((results) => results.every(Boolean));
 
-  if (skipInstallation === true && !depsInstalled) {
+  if (skipInstallation === true && !areDepsInstalled) {
     logger.error(
       '--skip-installation was set but dependencies are not installed. Remove the flag to install them.',
     );
     return false;
   }
 
-  if (depsInstalled) {
+  if (areDepsInstalled) {
     logger.log('Dependencies already installed, skipping installation.');
   } else {
     logger.log('Installing dependencies...');
@@ -626,6 +627,7 @@ if (!mainResult) {
   process.exit(1);
 }
 
+// eslint-disable-next-line unicorn/consistent-boolean-name
 const result = await run(mainResult);
 
 if (!result) {
