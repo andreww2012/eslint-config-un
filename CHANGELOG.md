@@ -1,5 +1,222 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.0
+
+### Minor Changes
+
+- 8b1ddfe: node: updated [`eslint-plugin-n` from v18.2.2 to v18.3.0](https://github.com/eslint-community/eslint-plugin-n/compare/v18.2.2...v18.3.0):
+  
+  - 🔴 not enabled [`node/prefer-import/assert-strict`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-import/assert-strict.md) rule
+  - 🟢 enabled [`node/prefer-process-get-builtin-module`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-process-get-builtin-module.md) rule
+- 8a08ede: Added a new root option `environment` and `ESLINT_CONFIG_UN_ENVIRONMENT` environment variable to override the detected environment: CI or editor
+- ff5f4d0: [**BREAKING**] Added a new root option `parsing` which is now a single place that controls how non-JS languages are parsed. Following that, these sub-configs have been removed:
+  
+  - `astro/setup`
+  - `ripple/setup`
+  - `svelte/setup`
+  - `ts/setup`
+  - `ts/typeAware/setup`
+  
+  Additionally, `format.usePlainParser` now requires the config to specify `files` and warns when it does not. It previously worked without them only because the parser was assigned at the `format` config's position and every later parser overrode it; parsers are now assigned after all the Configs, so an unscoped `eslint-parser-plain` would parse the whole project as plain text.
+- 9b5b3ae: [`import-integrity-lint` plugin `mode` setting](https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#mode) is now automatically set to `one-shot` if the resolved `environment` is `ci`
+- 57fd3d6: `files` and `ignores` Config options now support the function form, which receives the patterns the option would be resolved to if it was not passed. This form can be useful for configs like `import/allowDefaultExport`, where you may want to add your `files` to allow the `export default` in, not to override the default list
+- 113e50f: zod:
+  
+  - updated [`eslint-plugin-zod` from v4.9.0 to v4.12.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.9.0...eslint-plugin-zod@4.12.0) and enabled the following rules:
+    - 🟢 [`zod/prefer-map-set-size-over-min-max`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-map-set-size-over-min-max.md) and added it to the `noStylisticRules` config
+    - 🟢 [`zod/prefer-string-length-over-min-max`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-string-length-over-min-max.md) and added it to the `noStylisticRules` config
+  - updated [`eslint-plugin-zod-mini` from v1.6.0 to v1.9.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.6.0...eslint-plugin-zod-mini@1.9.0) and enabled the following rules:
+    - 🟢 [`zod-mini/no-native-enum`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-native-enum.md) (only if detected zod version if >=4)
+    - 🟢 [`zod-mini/no-promise-schema`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-promise-schema.md) (only if detected zod version if >=4)
+    - 🟢 [`zod-mini/prefer-map-set-size-over-min-max`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/prefer-map-set-size-over-min-max.md) and added it to the `noStylisticRules` config
+    - 🟢 [`zod-mini/prefer-string-length-over-min-max`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/prefer-string-length-over-min-max.md) and added it to the `noStylisticRules` config
+  - updated [`eslint-plugin-zod-core` from v1.0.9 to v1.0.13](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.0.9...eslint-plugin-zod-core@1.0.13)
+- 3017073: un: added a new rule `un/no-distributive-never-check` that reports checking type parameters against `never`: `type IsNever<T> = T extends never ? true : false`.
+  This is almost never what you want because conditional types are distributive in regards to a type parameter and are checking its union members one by one, but `never` is a union of zero members, which leads to the whole conditional resolving to the unexpected third value - neither `true` nor `false` - `never`.
+- ae2326c: solid: updated [`eslint-plugin-solid` from v0.14.5 to v0.17.0](https://github.com/solidjs-community/eslint-plugin-solid/compare/v0.14.5...v0.17.0):
+  
+  - Added the `settings` option, which only accepts the `svelte-js` package `version`. If not specified, it falls back to the detected version. Previous version-dependent rules now use the version resolved from either this settings option or the detected `solid-js` package version (as before)
+  - 🟢 enabled the following rules if the resolved Svelte major version is at least 2:
+    - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
+    - [`solid/no-browser-globals-in-server-function`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-browser-globals-in-server-function.md)
+    - [`solid/no-invalid-server-capture`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-invalid-server-capture.md)
+    - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
+    - [`solid/no-restated-default-options`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-restated-default-options.md)
+    - [`solid/no-single-arg-create-effect`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-single-arg-create-effect.md)
+    - [`solid/prefer-onSettled-for-side-effects`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-onSettled-for-side-effects.md)
+    - [`solid/prefer-structured-class`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-structured-class.md)
+    - [`solid/removed-api`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/removed-api.md)
+    - [`solid/require-async-server-function`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/require-async-server-function.md)
+    - [`solid/valid-use-server`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/valid-use-server.md)
+- dc8f042: node, unicorn: [`unicorn/prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-import-meta-properties.md) rule is now always enabled in the `unicorn` config, and disabled in the `node` config when the supported Node.js version range from `package.json` does not guarantee this feature is fully supported in this range
+- 48c0307: [**BREAKING**] import: added a new option `extraneousDependenciesCheck` that replaces `allowDevDependencies` and `extraneousDependenciesWhitelist` and provides a better control of the [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule options. Additionally, when `mode` root option set to `lib`, all `files` from the `tests` config combined with the patterns targeting config files will not be considered library code and therefore allowed to import modules listed in `devDependencies`; this stops flagging `vitest` imports, for example
+- ace6132: svelte: updated [`eslint-plugin-svelte` from v3.22.0 to v3.23.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.22.0...eslint-plugin-svelte@3.23.0):
+  
+  - 🟢 enabled [`svelte/prefer-attribute-interpolation`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-attribute-interpolation) rule and added it to the `noStylisticRules` config
+- e03f2dd: Now, when a required dependency was failed to resolve, the reason for why it was requested is shown (for example, "used in config X" for plugins)
+- e06b022: unicorn: `enforcePrefixForBooleanNames` option now supports all the [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md) rule option fields with enhanced types and smart defaults. For example, it now sets some [`wrappers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md#wrappers) to support some popular Vue's and other libraries' classes/interfaces that variables with boolean semantics might be typed as, like Vue's `Ref`s
+- 10a68b0: import: added a new sub-config `allowDefaultExport`, enabled by default, which gives an explicit control over which files allow to have default exports
+- 4315067: [**BREAKING**] Dropped support for ESLint 9 as [it reach end of life on 2026-08-06](https://eslint.org/version-support).
+- bb07b36: css: added a new sub-config `scss` which parses `.scss` files via the syntax provided by [`@humanwhocodes/scsstree`](https://npmx.dev/@humanwhocodes/scsstree) and applies the same [`@eslint/css`](https://npmx.dev/@eslint/css) rules
+- b5b809c: Added the following options to built-in `un/no-multiple-consecutive-spaces` rule:
+  
+  - `allow{Leading,Trailing}Spaces`, which control whether multiple leading/trailing consecutive spaces will be flagged by this rule. Each accepts:
+    - `'always'` (default)
+    - `'never'`
+    - `'stringOnly'` (only at the very start/end of the whole string)
+    - `'linesOnly'` (only right after/before a line break). Note that a run of spaces at the start or end of the whole string is governed by the string variant, not the line one.
+  - `checkTemplateLiterals`, defaulting to `true`, which controls whether template literal strings should also be checked.
+  - `checkTaggedTemplateLiterals`, defaulting to `false`, which controls whether tagged template literals (like `sql`, `html`, `css`, `String.raw`, etc.) should also be checked.
+  - `spaceCharacters`, an object controlling which characters count as a space: `space` (U+0020, `true` by default), `tab` and `unicodeSpaces` (every Unicode space separator, like no-break space). The object is merged with the default, so `{tab: true}` keeps regular spaces enabled.
+  - `reportMixedSpaces`, defaulting to `true`, which reports runs made of different kinds of space characters (like a regular space next to a no-break space) regardless of `spaceCharacters`, `allowSpacesOnly` and `allow{Leading,Trailing}Spaces`, since such runs are almost always accidental.
+  - `ignorePatterns`, an array of regular expression strings (compiled with the `u` flag); a string literal or template literal whose source text (between the quotes or backticks) matches any of them is skipped entirely.
+- a5f7842: [**BREAKING**] markdown, mdx: removed `lintCodeBlocks`, `codeBlocksIgnoredLanguages`, `codeBlocksImpliedStrictMode` and `overridesCodeBlocks` config options in favor of the new `codeBlocks` sub-config, enabled by default
+- d68e151: jsdoc: updated [`eslint-plugin-jsdoc` from v63.3.3 to v64.3.4](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.3.3...v64.3.4):
+  
+  - 🟢 enabled [`jsdoc/no-unnecessary-type-assertion`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-unnecessary-type-assertion.md) rule
+- 2e49917: cli: removed the `disabledRules` option in favor of making the `overrides` option strictly typed
+
+### Patch Changes
+
+- 1879bee: jsInline: updated [`eslint-plugin-html` from v8.1.4 to v8.2.0](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.4...28a7c4c16f6152ad5412da0d3fd8cbb56925abc8)
+- 7930965: ember: updated [`eslint-plugin-ember` from v13.4.1 to v13.5.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.4.1...v13.5.0):
+  
+  - 🟢 enabled [`ember/no-legacy-computed`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-legacy-computed.md) rule
+  - 🟢 enabled [`ember/no-legacy-helper-imports`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-legacy-helper-imports.md) rule
+  - 🟢 enabled [`ember/no-test-this-set-get`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-test-this-set-get.md) rule in the ⚙️ `testFiles` sub-config
+- 3223c9a: vue: updated [`@nuxt/eslint-plugin` from v1.16.0 to v1.17.0](https://github.com/nuxt/eslint/compare/v1.16.0...v1.17.0)
+- d005008: vue: updated [`eslint-plugin-vue-scoped-css` from v3.1.1 to v3.1.3](https://github.com/future-architect/eslint-plugin-vue-scoped-css/compare/v3.1.1...v3.1.3)
+- f834df6: awsCdk: updated [`eslint-plugin-awscdk` from v4.4.0 to v4.4.1](https://github.com/ren-yamanashi/awscdk-lint/compare/eslint-plugin-awscdk@4.4.0...eslint-plugin-awscdk@4.4.1)
+- a666b28: storybook: updated [`eslint-plugin-storybook` from v10.5.7 to v10.6.0](https://github.com/storybookjs/storybook/compare/v10.5.7...v10.6.0)
+- a1e1ade: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.6.1 to v7.6.2](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.6.1...v7.6.2)
+- 694eb3e: ember: updated [`ember-eslint-parser` from v0.14.4 to v0.14.6](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.14.4...v0.14.6)
+- db9ad3d: css: updated [`tailwind-csstree` from v0.3.3 to v0.4.0](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.3.3...tailwind-csstree-v0.4.0)
+- c28b884: graphql: updated [`@graphql-eslint/eslint-plugin` from v4.4.0 to v4.4.1](https://github.com/graphql-hive/graphql-eslint/compare/@graphql-eslint/eslint-plugin@4.4.0...@graphql-eslint/eslint-plugin@4.4.1)
+- eeb11bd: [**BREAKING**] `plugin{Renames,Overrides}` root options have been replaced with `plugins.<pluginPrefix>.{prefix,plugin}`, where `plugins` is a new root option which accepts an object, which keys are plugin prefixes and values is an object to which the renaming and overriding functionality has moved. Additionally, all `settings` config options have been removed in favor of providing plugin settings via `plugins.<pluginPrefix>.settings`
+- e2b69ce: nextJs: updated [`@next/eslint-plugin-next` from v16.3.0 to v16.3.4](https://github.com/vercel/next.js/compare/v16.3.0...v16.3.4)
+- 9e89528: angular: updated [`@angular-eslint/{eslint-plugin,eslint-plugin-template,template-parser}` from v22.1.0 to v22.2.0](https://github.com/angular-eslint/angular-eslint/compare/v22.1.0...v22.2.0)
+- 6165804: `.gitignore` files are now being sought recursively by default (`gitignore`'s root option now sets `recursive: true` by default)
+- 25fcd22: ts: updated [`typescript-eslint` from v8.65.0 to v8.69.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.65.0...v8.69.0)
+- 73e8b92: nx: updated [`@nx/eslint-plugin` from v23.1.1 to v23.2.0](https://github.com/nrwl/nx/compare/23.1.1...23.2.0)
+- 4d4d8c2: unocss: updated [`@unocss/eslint-plugin` from v66.7.5 to v66.9.2](https://github.com/unocss/unocss/compare/v66.7.5...v66.9.2)
+- 694eb3e: svelte: updated [`@sveltejs/kit` from v2.70.2 to v2.70.3](https://github.com/sveltejs/kit/compare/@sveltejs/kit@2.70.2...@sveltejs/kit@2.70.3)
+- 926cf08: noStylisticRules: added the following rule:
+  
+  - [`vitest/prefer-hooks-on-top`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-hooks-on-top.md)
+- 80f7159: html: updated [`@html-eslint/{eslint-plugin,parser}` from v0.64.0 to v0.65.0](https://github.com/yeonjuan/html-eslint/compare/v0.64.0...v0.65.0)
+- 57e015e: jest: updated [`eslint-plugin-jest` from v29.16.0 to v29.16.6](https://github.com/jest-community/eslint-plugin-jest/compare/v29.16.0...v29.16.6)
+- 337f865: tsrx: updated [`@tsrx/eslint-{plugin,parser}` from v0.3.118 to v0.3.124](https://github.com/Ripple-TS/ripple/compare/%40tsrx/eslint-plugin%400.3.118...%40tsrx/eslint-plugin%400.3.124) and [from v0.3.124 to v0.3.129](https://github.com/tsrx-org/tsrx/compare/%40tsrx/eslint-plugin%400.3.126...%40tsrx/eslint-plugin%400.3.129):
+  
+  - ❌ `tsrx/no-module-scope-track` rule was removed
+  - ❌ `tsrx/prefer-oninput` rule was removed
+- 685f0d8: css: moved [`tailwind-csstree`](https://npmx.dev/tailwind-csstree) dependency to optional peer dependencies
+- 2ce95d6: css: updated [`@eslint/css` from v1.4.0 to v2.0.0](https://github.com/eslint/css/compare/css-v1.4.0...css-v2.0.0)
+- 165a5e4: tailwind: updated [`eslint-plugin-tailwindcss` from v4.2.0 to v4.4.0](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v4.2.0...v4.4.0):
+  
+  - 🟢 enabled [`tailwindcss/enforces-canonical-classname`](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/docs/rules/enforces-canonical-classname.md) rule
+- c6d3b11: astro: updated [`eslint-plugin-astro` from v3.0.1 to v3.1.0](https://github.com/ota-meshi/eslint-plugin-astro/compare/v3.0.1...v3.1.0)
+- 3f179c2: importIntegrity: updated [`import-integrity-lint` from v1.2.0 to v1.3.0](https://github.com/nebrius/import-integrity-lint/compare/v1.2.0...v1.3.0) and added support for the new [`defaultIgnoreOverrides` setting](https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#defaultignoreoverrides)
+- 79564fd: astro: updated [`astro-eslint-parser` from v3.0.0 to v3.1.0](https://github.com/ota-meshi/astro-eslint-parser/compare/v3.0.0...v3.1.0)
+- 269ae82: yaml: updated [`eslint-plugin-yml` from v3.6.0 to v3.8.1](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.6.0...v3.8.1):
+  
+  - 🔴 not enabled [`yaml/no-boolean-key`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-boolean-key.html) rule
+- af6d8d2: preferArrowFunctions: updated [`eslint-plugin-prefer-arrow-functions` from v3.10.1 to v3.10.2](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions/compare/3.10.1...3.10.2)
+- 6f479bd: erasableSyntaxOnly: updated [`eslint-plugin-erasable-syntax-only` from v0.4.2 to v0.7.1](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/compare/0.4.2...0.7.1):
+  
+  - 🟢 enabled [`erasable-syntax-only/export-aliases`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/export-aliases.md) rule
+- 05bffe4: perfectionist: updated [`eslint-plugin-perfectionist` from v5.10.0 to v5.11.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.10.0...v5.11.0)
+- 4a976ed: turbo: updated [`eslint-plugin-turbo` from v2.10.8 to v2.10.12](https://github.com/vercel/turborepo/compare/v2.10.8...v2.10.12)
+- c8fb1d6: Fixed an issue resulting in progress indicator drawn by `fileProgress` config was not shown on some implicitly ignored files extensions - they are no longer ignored
+- e999c3a: moduleInterop: updated [`eslint-plugin-module-interop` from v0.3.1 to v0.4.0](https://github.com/ota-meshi/eslint-plugin-module-interop/compare/v0.3.1...v0.4.0)
+- 6e3a6c1: githubActions: updated [`eslint-plugin-github-action` from v0.3.0 to v0.4.0](https://github.com/ntnyq/eslint-plugin-github-action/compare/v0.3.0...v0.4.0):
+  
+  - 🔴 not enabled [`github-actions/prefer-fail-fast`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-fail-fast) rule
+- 53f7213: deps: updated [`eslint-config-flat-gitignore` from v2.3.0 to v2.4.0](https://github.com/antfu/eslint-config-flat-gitignore/compare/v2.3.0...v2.4.0)
+- 30126e5: markdown, mdx: the following rules are now disabled in embedded code blocks:
+  
+  - [`consistent-return`](https://eslint.org/docs/latest/rules/consistent-return)
+  - [`no-labels`](https://eslint.org/docs/latest/rules/no-labels)
+  - [`no-promise-executor-return`](https://eslint.org/docs/latest/rules/no-promise-executor-return)
+  - [`no-restricted-globals`](https://eslint.org/docs/latest/rules/no-restricted-globals)
+  - [`no-script-url`](https://eslint.org/docs/latest/rules/no-script-url)
+  - [`no-sequences`](https://eslint.org/docs/latest/rules/no-sequences)
+  - [`no-shadow`](https://eslint.org/docs/latest/rules/no-shadow)
+  - [`no-unreachable`](https://eslint.org/docs/latest/rules/no-unreachable)
+  - [`no-useless-constructor`](https://eslint.org/docs/latest/rules/no-useless-constructor)
+  - [`no-var`](https://eslint.org/docs/latest/rules/no-var)
+  - [`require-await`](https://eslint.org/docs/latest/rules/require-await)
+  - e18e/prefer-static-regex
+  - [`html/no-extra-spacing-text`](https://html-eslint.org/docs/rules/no-extra-spacing-text)
+  - [`html/require-explicit-size`](https://html-eslint.org/docs/rules/require-explicit-size)
+  - [`html/require-lang`](https://html-eslint.org/docs/rules/require-lang)
+  - [`html/require-meta-charset`](https://html-eslint.org/docs/rules/require-meta-charset)
+  - [`html/require-meta-viewport`](https://html-eslint.org/docs/rules/require-meta-viewport)
+  - [`html/require-title`](https://html-eslint.org/docs/rules/require-title)
+  - [`node/no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
+  - [`promise/catch-or-return`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/catch-or-return.md)
+  - sonarjs/no-clear-text-protocols
+  - sonarjs/no-empty-collection
+  - sonarjs/no-global-this
+  - sonarjs/no-globals-shadowing
+  - sonarjs/no-ignored-exceptions
+  - sonarjs/super-linear-regex
+  - [`ts/method-signature-style`](https://typescript-eslint.io/rules/method-signature-style)
+  - [`ts/no-redeclare`](https://typescript-eslint.io/rules/no-redeclare)
+  - [`ts/no-useless-empty-export`](https://typescript-eslint.io/rules/no-useless-empty-export)
+  - [`unicorn/consistent-function-scoping`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-function-scoping.md)
+  - [`unicorn/no-optional-chaining-on-undeclared-variable`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-optional-chaining-on-undeclared-variable.md)
+  - [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md)
+  - [`unicorn/no-unsafe-string-replacement`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-string-replacement.md)
+  - [`unicorn/prefer-optional-catch-binding`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-optional-catch-binding.md)
+  - [`unicorn/prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-response-static-json.md)
+- 43d6ca5: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.101.4 to v5.102.8](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.101.4...@tanstack/eslint-plugin-query@5.102.8)
+- 0d66422: security: disabled `security/detect-unsafe-regex` because of high number of false positives. We recommend using rules from the [`eslint-plugin-regexp` plugin](https://ota-meshi.github.io/eslint-plugin-regexp) instead (the `regexp` config)
+- 22dbeec: compat: updated [`browserslist` from v4.28.7 to v4.28.8](https://github.com/browserslist/browserslist/compare/4.28.7...4.28.8)
+- 05d9bf9: formatJs: updated [`eslint-plugin-formatjs` from v6.4.20 to v6.6.1](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.4.20...eslint-plugin-formatjs@6.6.1)
+- bd81418: unicorn: updated [`eslint-plugin-unicorn` from v72.0.0 to v74.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v72.0.0...v74.0.0):
+  
+  - 🔴 not enabled [`unicorn/consistent-arrow-return-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-arrow-return-style.md) rule, but added it to the `noStylisticRules` config
+  - 🔴 not enabled [`unicorn/iteration-fallback-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/iteration-fallback-style.md) rule, but added it to the `noStylisticRules` config
+  - 🔴 not enabled [`unicorn/no-barrel-files`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-barrel-files.md) rule
+  - 🟢 enabled [`unicorn/no-unsafe-sqlite-interpolation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-sqlite-interpolation.md) rule
+  - 🔴 not enabled [`unicorn/single-line-block-comment-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/single-line-block-comment-style.md) rule, but added it to the `noStylisticRules` config
+- 30fdd65: svelte: updated [`svelte-eslint-parser` from v1.8.0 to v1.8.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.8.0...v1.8.1)
+- db4997c: noPrettierIncompatibleRules: stopped disabling the following rules when the Config is on because most of time they don't conflict with Prettier formatting:
+  
+  - [`markdown-preferences/table-leading-trailing-pipes`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-leading-trailing-pipes.html)
+  - [`markdown-preferences/table-pipe-alignment`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-pipe-alignment.html)
+  - [`markdown-preferences/table-pipe-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-pipe-spacing.html)
+- d19959e: packageJson: updated [`eslint-plugin-package-json` from v1.6.3 to v1.8.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.6.3...v1.8.0):
+  
+  - 🔴 not enabled [`package-json/prefer-rolling-workspace-spec`](https://eslint-plugin-package-json.dev/rules/prefer-rolling-workspace-spec) rule
+- 288da16: vue: updated [`eslint-plugin-vuejs-accessibility` from v2.5.0 to v2.6.0](https://github.com/vue-a11y/eslint-plugin-vuejs-accessibility/compare/v2.5.0...v2.6.0)
+- 2f827de: ngrx: updated [`@ngrx/eslint-plugin` from v21.1.1 to v22.0.0](https://github.com/ngrx/platform/compare/21.1.1...22.0.0)
+- 49bb6b6: deps: updated `eslint-no-restricted` from v0.1.1 to v0.1.2
+- a1961db: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.3.0 to v7.4.0](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.3.0...v7.4.0):
+  
+  - 🟢 enabled [`nestjs/forward-ref-injection-should-use-wrapper-type`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/forward-ref-injection-should-use-wrapper-type.md) rule
+  - 🟢 enabled [`nestjs/swagger-file-upload-should-be-documented`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/swagger-file-upload-should-be-documented.md) rule
+  - 🟢 enabled [`nestjs/uploaded-file-should-be-validated`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/uploaded-file-should-be-validated.md) rule
+- 87a8c87: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v6.3.0 to v6.3.1](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v6.3.0...v6.3.1)
+- 462a891: e18e: updated [`@e18e/eslint-plugin` from v0.6.0 to v0.8.0](https://github.com/e18e/eslint-plugin/compare/0.6.0...0.8.0)
+- a61f2d6: Fixed an incorrect mapping of the graphql's `requireSeparateFilesFor` option to [`graphql/lone-executable-definition`](https://the-guild.dev/graphql/eslint/rules/lone-executable-definition) rule `ignore` option. The option docs now also warns that all 4 values cannot all be set to `false`
+- c86d196: cspell: updated [`@cspell/eslint-plugin` from v10.0.1 to v10.2.0](https://github.com/streetsidesoftware/cspell/compare/v10.0.1...v10.2.0)
+- ab6ae70: unhead: updated [`@unhead/eslint-plugin` from v3.3.1 to v3.4.0](https://github.com/unjs/unhead/compare/v3.3.1...v3.4.0)
+- e170ab9: cypress: updated [`eslint-plugin-cypress` from v6.4.3 to v7.0.1](https://github.com/cypress-io/eslint-plugin-cypress/compare/v6.4.3...v7.0.1)
+- 8f74d61: vitest: updated [`@vitest/eslint-plugin` from v1.6.26 to v1.6.27](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.26...v1.6.27)
+- e920368: jsonc: updated [`eslint-plugin-jsonc` from v3.3.0 to v3.4.2](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v3.3.0...v3.4.2)
+- 7a6a393: boundaries: updated [`eslint-plugin-boundaries` from v7.1.0 to v7.2.0](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.1.0...v7.2.0)
+- af84a4d: pnpm: updated [`eslint-plugin-pnpm` from v1.7.0 to v1.9.1](https://github.com/antfu/pnpm-workspace-utils/compare/v1.7.0...v1.9.1):
+  
+  - 🔴 not enabled `pnpm/yaml-blank-lines` rule
+- 1d8300e: json: updated [`@eslint/json` from v2.0.1 to v2.1.0](https://github.com/eslint/json/compare/json-v2.0.1...json-v2.1.0)
+- f2783ab: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v1.0.1 to v1.0.2](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v1.0.1...v1.0.2)
+- a71837b: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.18.3 to v5.18.7](https://github.com/Rel1cx/eslint-react/compare/v5.18.3...v5.18.7)
+- 9a1c48e: regexp: updated [`eslint-plugin-regexp` from v3.1.1 to v3.2.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v3.1.1...v3.2.0)
+- a8a9c90: [**BREAKING**] Renamed `ripple` config to `tsrx` and changed the condition under which it's enabled: `@tsrx/core` or `ripple` package is installed
+- eb138a1: react: updated [`eslint-plugin-react-refresh` from v0.5.3 to v0.5.6](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.5.3...v0.5.6)
+- 5416794: css: updated [`@eslint/css-tree` from v4.0.5 to v4.1.0](https://github.com/eslint/csstree/compare/css-tree-v4.0.5...css-tree-v4.1.0)
+
 ## 1.0.0-beta.16
 
 ### Minor Changes
