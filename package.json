@@ -163,7 +163,7 @@
     "ms-ts": "1.0.0",
     "obug": "2.1.4",
     "package-manager-detector": "1.8.0",
-    "tailwind-csstree": "0.3.3",
+    "tailwind-csstree": "0.4.0",
     "tinyexec": "1.3.0",
     "type-fest": "5.9.0",
     "typescript-eslint": "8.69.0",
