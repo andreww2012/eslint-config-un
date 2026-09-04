@@ -5,6 +5,16 @@ export type PickKeysNotStartingWith<O, T extends string> = {
   [K in keyof O as K extends `${T}${string}` ? never : K]: O[K];
 };
 
+/** Only a subset of fields we actually read; `package.json` has many more */
+export interface PackageJson {
+  name?: string;
+  version?: string;
+  engines?: {node?: string};
+  peerDependencies?: Record<string, string>;
+  peerDependenciesMeta?: Record<string, {optional?: boolean}>;
+  repository?: string | {type?: string; url?: string};
+}
+
 export type {
   Branded,
   ConditionalKeys,
@@ -30,5 +40,3 @@ export type {
   ToCamelCase,
   UnionToIntersection,
 } from '@andreww2012/unutils';
-
-export type {PackageJson} from 'type-fest';
