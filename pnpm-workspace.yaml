@@ -12,6 +12,7 @@ minimumReleaseAgeExclude: # []
   - '@unocss/core@66.10.0'
   - '@unocss/eslint-plugin@66.10.0'
   - '@unocss/rule-utils@66.10.0'
+  - eslint-plugin-jsdoc@64.3.5
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
