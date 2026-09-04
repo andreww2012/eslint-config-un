@@ -4,7 +4,7 @@ import {styleText} from 'node:util';
 import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
-import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
+import {toSafeString as normalizeIdentifier} from 'json-schema-to-typescript/dist/src/utils.js';
 import * as prettier from 'prettier';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
@@ -21,6 +21,8 @@ const __dirname = import.meta.dirname;
 const formatTypescript = (code: string) =>
   prettier.format(code, {parser: 'typescript', ...prettierConfig});
 
+const COMPILE_OPTIONS = {bannerComment: '', format: false};
+
 const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
   rootOptions: {},
   missingPackages: new Map(),
@@ -28,8 +30,18 @@ const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});
 
-const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode, ruleCategoriesCode} =
-  await generateRuleTypes();
+const {
+  allRuleTypesCode: allRuleTypesCodeUnformatted,
+  perPluginCode: perPluginCodeUnformatted,
+  fixableRulesOnlyCode,
+  allRulesCode,
+  ruleCategoriesCode,
+} = await generateRuleTypes();
+
+const [allRuleTypesCode, perPluginCode] = await Promise.all([
+  formatTypescript(allRuleTypesCodeUnformatted),
+  formatTypescript(perPluginCodeUnformatted),
+]);
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
@@ -56,23 +68,17 @@ export type RuleOptions = {
 }`;
 
 await Promise.all([
-  prettier
-    .format(derivedAllRuleTypesCode, {parser: 'typescript', ...prettierConfig})
-    .then((formattedCode) =>
-      fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), formattedCode),
-    ),
+  formatTypescript(derivedAllRuleTypesCode).then((formattedCode) =>
+    fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), formattedCode),
+  ),
   fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.gen.d.ts'), perPluginCode),
-  prettier
-    .format(fixableRulesOnlyCode, {parser: 'typescript', ...prettierConfig})
-    .then((formattedCode) =>
-      fs.writeFile(path.join(__dirname, '../src/eslint-types-fixable-only.gen.ts'), formattedCode),
-    ),
+  formatTypescript(fixableRulesOnlyCode).then((formattedCode) =>
+    fs.writeFile(path.join(__dirname, '../src/eslint-types-fixable-only.gen.ts'), formattedCode),
+  ),
   fs.writeFile(path.join(__dirname, '../src/eslint-rules.gen.ts'), allRulesCode),
-  prettier
-    .format(ruleCategoriesCode, {parser: 'typescript', ...prettierConfig})
-    .then((formattedCode) =>
-      fs.writeFile(path.join(__dirname, '../src/eslint-rule-categories.gen.ts'), formattedCode),
-    ),
+  formatTypescript(ruleCategoriesCode).then((formattedCode) =>
+    fs.writeFile(path.join(__dirname, '../src/eslint-rule-categories.gen.ts'), formattedCode),
+  ),
   fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
     allRuleTypesCode,
@@ -118,6 +124,7 @@ async function generateRuleTypes() {
   const [allRuleTypesCodeRaw, perPluginCodeRaw] = await Promise.all([
     pluginsToRulesDTS(allPlugins, {
       includeAugmentation: false,
+      compileOptions: COMPILE_OPTIONS,
     }),
 
     Promise.all(
@@ -130,6 +137,7 @@ async function generateRuleTypes() {
             exportTypeName,
             includeIgnoreComments: false,
             includeTypeImports: false,
+            compileOptions: COMPILE_OPTIONS,
           },
         );
         code = code.replaceAll(

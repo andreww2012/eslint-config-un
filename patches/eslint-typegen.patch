@@ -1,0 +1,21 @@
+diff --git a/dist/core.d.mts b/dist/core.d.mts
+index 909d28cd462acedbfc47b5e261ae8cc4fe553731..ceb1b6217bec1f7cb5b00b34a101c51519bcdc03 100644
+--- a/dist/core.d.mts
++++ b/dist/core.d.mts
+@@ -1,4 +1,4 @@
+-import { Options } from "json-schema-to-typescript-lite";
++import { Options } from "json-schema-to-typescript";
+ import { ESLint, Linter, Rule } from "eslint";
+ 
+ //#region src/core.d.ts
+diff --git a/dist/core.mjs b/dist/core.mjs
+index ba36262285a9f95e0008533ad6090f6a57485d96..30d40b8fb4dabfbc54373ecb72b17f3a4a94e91e 100644
+--- a/dist/core.mjs
++++ b/dist/core.mjs
+@@ -1,4 +1,5 @@
+-import { compile, normalizeIdentifier } from "json-schema-to-typescript-lite";
++import { compile } from "json-schema-to-typescript";
++import { toSafeString as normalizeIdentifier } from "json-schema-to-typescript/dist/src/utils.js";
+ 
+ //#region src/core.ts
+ async function flatConfigsToPlugins(configs, options = {}) {
