@@ -517,8 +517,5 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
       ) /** @since 1.1.0 */
       .enableConfigTesterForPlugin('jest-extended')
       .addOverrides();
-
-    // TODO https://npmx.dev/eslint-plugin-jest-dom ?
-    // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
   },
 );
