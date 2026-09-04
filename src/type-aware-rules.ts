@@ -88,6 +88,11 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
   ngrx: {
     rules: asTypeAwareRules(RULE_CATEGORIES_PER_PLUGIN.ngrx.typeAware),
   },
+  qwik: {
+    rules: {
+      'valid-lexical-scope': true,
+    },
+  },
   'eslint-react': {
     rules: {
       'no-implicit-children': true,

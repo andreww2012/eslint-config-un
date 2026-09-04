@@ -135,6 +135,7 @@ describe('cascade order', () => {
       eslint-config-un/promise
       eslint-config-un/qunit
       eslint-config-un/qwik
+      eslint-config-un/qwik/@type-information
       eslint-config-un/react/plugin-original
       eslint-config-un/react/allow-default-export-in-jsx-files
       eslint-config-un/react/hooks
