@@ -1,4 +1,4 @@
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -30,10 +30,7 @@ export default defineUnConfig<SecurityEslintConfigOptions>('security', {
     ?.addConfig([
       'security',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
       },
     ])
     .addRule('detect-bidi-characters', ERROR) /** @since 1.6.0 */ // 🟡

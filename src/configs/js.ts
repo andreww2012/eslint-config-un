@@ -1,4 +1,4 @@
-import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_HTML, GLOB_YML_YAML, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
@@ -77,10 +77,7 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
     ?.addConfig([
       'js',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
       },
     ])
     .markCategory('Possible Problems')

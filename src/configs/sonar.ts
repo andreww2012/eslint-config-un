@@ -1,5 +1,5 @@
 // cspell:disable viem tronweb
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -109,10 +109,7 @@ export default defineUnConfig<SonarEslintConfigOptions>(
     ?.addConfig([
       'sonar',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           '': pluginSettings,
         },

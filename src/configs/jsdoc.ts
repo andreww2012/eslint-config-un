@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TS_X, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ArrayOrBooleanRecord,
@@ -378,10 +378,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
     ?.addConfig([
       'jsdoc',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           jsdoc: pluginSettings,
         },

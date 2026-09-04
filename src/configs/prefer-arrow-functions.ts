@@ -1,4 +1,4 @@
-import {WARNING} from '../constants';
+import {KEEP_LINTING_INLINE_JS, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -28,10 +28,7 @@ export default defineUnConfig<PreferArrowFunctionsEslintConfigOptions>(
     ?.addConfig([
       'prefer-arrow-functions',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
       },
     ])
     .addRule('prefer-arrow-functions', WARNING) /** @since 3.0.0 */

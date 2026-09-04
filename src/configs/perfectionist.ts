@@ -1,4 +1,4 @@
-import {ERROR, OFF} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import type {Prettify, SetRequired} from '../types';
 import {
   type ExtraPluginsType,
@@ -375,10 +375,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     ?.addConfig([
       'perfectionist',
       {
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           perfectionist: pluginSettings,
         },

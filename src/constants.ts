@@ -19,6 +19,18 @@ export const DISABLE_AUTOFIX = 'disable-autofix';
 export const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 export type DisableAutofixPrefix = typeof DISABLE_AUTOFIX;
 
+/**
+ * `ignoresInternal` value for a JS Config whose rules must also reach the JS written inside
+ * `<script>` blocks.
+ *
+ * `eslint-plugin-html`, which the `jsInline` Config sets up, patches the linter instead of
+ * emitting a virtual file per block, so such JS is linted under the path of the HTML file it
+ * came from.
+ * Leaving HTML files implicitly ignored would therefore stop the Config's rules from ever seeing
+ * that JS
+ */
+export const KEEP_LINTING_INLINE_JS = {html: false} as const;
+
 /* Globs - Helpers */
 
 export const GLOB_MAYBE_COMMONJS_OR_ESM = '?([cm])' as const;
