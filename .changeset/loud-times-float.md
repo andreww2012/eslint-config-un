@@ -1,5 +1,5 @@
 ---
-"eslint-config-un": patch
+"eslint-config-un": minor
 ---
 
 erasableSyntaxOnly: updated [`eslint-plugin-erasable-syntax-only` from v0.4.2 to v0.7.1](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/compare/0.4.2...0.7.1):

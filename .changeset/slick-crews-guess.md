@@ -1,5 +1,5 @@
 ---
-'eslint-config-un': patch
+'eslint-config-un': minor
 ---
 
 unicorn: updated [`eslint-plugin-unicorn` from v72.0.0 to v74.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v72.0.0...v74.0.0):

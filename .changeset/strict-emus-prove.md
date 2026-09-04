@@ -1,5 +1,5 @@
 ---
-'eslint-config-un': patch
+'eslint-config-un': minor
 ---
 
 nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.3.0 to v7.4.0](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.3.0...v7.4.0):
