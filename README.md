@@ -261,7 +261,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 
 | Un config name                                                                   | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                      | Description/Notes                                                                                                                                                                          |
 | -------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ![NodeJS](./assets/devicon-nodejs.svg) `node`                                    | ✅                                          | [eslint-plugin-n](https://npmx.dev/eslint-plugin-n) (`node`)                                              | -                                                                                                                                                                                          |
+| ![NodeJS](./assets/devicon-nodejs.svg) `node`                                    | ✅                                          | [eslint-plugin-n](https://npmx.dev/eslint-plugin-n) (`node`)                                              | [Specifying the supported Node.js version](#nodejs-version)                                                                                                                                |
 | ![npm] `packageJson`                                                             | ❌                                          | [eslint-plugin-package-json](https://npmx.dev/eslint-plugin-package-json) (`package-json`)                | Since v0.1.5<br>📚 Supports multiple configs                                                                                                                                               |
 | ![npm] `nodeDependencies`                                                        | ✅ (if `misc-enabled`)                      | [eslint-plugin-node-dependencies](https://npmx.dev/eslint-plugin-node-dependencies) (`node-dependencies`) | Since v0.10.0                                                                                                                                                                              |
 | ![npm] `depend`                                                                  | ❌                                          | [eslint-plugin-depend](https://npmx.dev/eslint-plugin-depend) (`depend`)                                  | Since v1.0.0                                                                                                                                                                               |
@@ -601,6 +601,38 @@ The final rule is going to be given the name `disable-autofix/<rule-name>`, whic
 Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation), which are [known to be performance-demanding](https://typescript-eslint.io/getting-started/typed-linting/#performance), are *enabled* by default, and will be applied to the same files as the `ts` config.
 This is just a heads-up; you should make your own decision whether to keep them enabled.
 Use `configTypeAware` to control which files such rules will be applied to, if any.
+
+### Node.js version
+
+Several rules of the `node` config report based on the range of Node.js versions your code must support: [`no-deprecated-api`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-deprecated-api.md), [`no-unsupported-features/*`](https://github.com/eslint-community/eslint-plugin-n/tree/HEAD/docs/rules/no-unsupported-features) and [`prefer-node-protocol`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-node-protocol.md).
+If that range is not specified anywhere, the plugin falls back to `>=16.0.0`, so everything added to Node.js after v16 gets reported as unsupported.
+
+The recommended way to specify it is the `engines.node` field of your `package.json`:
+
+```json
+{
+  "engines": {
+    "node": "^22.12.0 || >=24"
+  }
+}
+```
+
+Other rules read this field too, for example [`node-dependencies/compat-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html).
+It is also the *only* place we look at to decide whether to enable rules requiring a certain Node.js version, like [`unicorn/prefer-dispose`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dispose.md) (`>=24`) and [`unicorn/prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-import-meta-properties.md) (`>=20.11`); for those we read the `package.json` closest to [the current working directory](https://nodejs.org/api/process.html#processcwd), not to each linted file as the plugin does.
+
+If adding that field is not an option, set the version via the [`plugins.node.settings`][plugins option] root option:
+
+<!-- eslint-skip -->
+
+```ts
+plugins: {
+  node: {
+    settings: {version: '^22.12.0 || >=24'},
+  },
+},
+```
+
+The full resolution order used by the plugin is: `settings.node.version` → `engines.node` → `devEngines.runtime` (the entry with `name: "node"`) → `>=16.0.0`.
 
 ### Frontend frameworks
 
