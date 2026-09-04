@@ -209,7 +209,7 @@ overrides:
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
 
 patchedDependencies:
-  '@eslint/compat@2.1.0': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
+  '@eslint/compat': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
@@ -467,8 +467,8 @@ importers:
         specifier: 5.18.7
         version: 5.18.7(@typescript/typescript6@6.0.2)(eslint@10.9.1)(supports-color@7.2.0)
       '@eslint/compat':
-        specifier: 2.1.0
-        version: 2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)
+        specifier: 2.1.1
+        version: 2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)
       '@eslint/config-inspector':
         specifier: 3.4.0
         version: 3.4.0(eslint@10.9.1)(srvx@0.12.7)
@@ -2541,8 +2541,8 @@ packages:
     resolution: {integrity: sha512-YqVA7lvZiK9DrkEj0s/1tQTDys3dAuWK0SbzMjUJ49zujSTUIOP28A/I0We/SFQ9iTX+6KdVodTOubcRrHc6JA==}
     engines: {node: ^20 || ^22 || >=24}
 
-  '@eslint/compat@2.1.0':
-    resolution: {integrity: sha512-LgaSCymEpw7tF53xvDw9SNsraPb1IBHxpdABIOM0hW8UAlP8znrjYtuxfR58FSJ3L9BhwD+FaPRFQpZq84Nh6g==}
+  '@eslint/compat@2.1.1':
+    resolution: {integrity: sha512-rMcy8GSrwNzcISX/BlTDY/GLB4eCopEuy9woIls3To+15OLxykZrxxq+WUcylCPCQ6F4MujjBM1DX5V1aqI3Vw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       eslint: ^8.40 || 9 || 10
@@ -13712,7 +13712,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@eslint/compat@2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)':
+  '@eslint/compat@2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)':
     dependencies:
       '@eslint/core': 1.2.1
     optionalDependencies:
@@ -18033,7 +18033,7 @@ snapshots:
 
   eslint-config-flat-gitignore@2.4.0(eslint@10.9.1):
     dependencies:
-      '@eslint/compat': 2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)
+      '@eslint/compat': 2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.9.1)
       eslint: 10.9.1(jiti@2.7.0)(supports-color@7.2.0)
 
   eslint-config-prettier@10.1.8(eslint@10.9.1):
