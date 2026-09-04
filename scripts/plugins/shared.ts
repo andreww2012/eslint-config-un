@@ -12,7 +12,7 @@ import type {EslintPluginsDb} from './plugins-db';
 
 export const CACHE_BASE_PATH = '../../node_modules/.cache/eslint-config-un/packages-info';
 
-export class LoggerTag extends Context.Tag('Logger')<LoggerTag, ConsolaInstance>() {}
+export class LoggerTag extends Context.Service<LoggerTag, ConsolaInstance>()('Logger') {}
 
 export type PackageInfo = {
   updatedAt: string;
@@ -35,15 +35,15 @@ export type PackageInfo = {
     }
 );
 
-export class PackagesInfoStorageTag extends Context.Tag('PackagesInfoStorage')<
+export class PackagesInfoStorageTag extends Context.Service<
   PackagesInfoStorageTag,
   UnStorage<PackageInfo>
->() {}
+>()('PackagesInfoStorage') {}
 
-export class EslintPluginsDbRefTag extends Context.Tag('EslintPluginsDbRef')<
+export class EslintPluginsDbRefTag extends Context.Service<
   EslintPluginsDbRefTag,
   Ref.Ref<EslintPluginsDb>
->() {}
+>()('EslintPluginsDbRef') {}
 
 export const createLoggerLayer = (isVerbose = false) =>
   Layer.succeed(

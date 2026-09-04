@@ -1,8 +1,8 @@
 // cspell:ignore millis scandir
 import {styleText} from 'node:util';
 import {Worker} from 'node:worker_threads';
-import {HttpClient, HttpClientError, HttpClientRequest} from '@effect/platform';
-import {Data, DateTime, Duration, Effect} from 'effect';
+import {Data, DateTime, Duration, Effect, Semaphore} from 'effect';
+import {HttpClient, HttpClientError, HttpClientRequest} from 'effect/unstable/http';
 import type {Ms} from 'ms-ts';
 import * as packageFetcher from 'package-json';
 import * as z from 'zod';
@@ -16,7 +16,7 @@ const STATS_THROTTLE_INTERVAL_MS = 3000;
 
 let lastStatsFetchTime = 0;
 
-const statsSemaphore = Effect.unsafeMakeSemaphore(1);
+const statsSemaphore = Semaphore.makeUnsafe(1);
 
 const throttleStats = Effect.gen(function* () {
   const now = Date.now();
@@ -91,7 +91,7 @@ class PackageStatsParseError extends Data.TaggedError('PackageStatsParseError')<
 }> {}
 
 export const fetchPackageStats = (packageName: string) =>
-  statsSemaphore.withPermits(1)(
+  Semaphore.withPermit(statsSemaphore)(
     Effect.gen(function* () {
       yield* throttleStats;
 
@@ -114,7 +114,7 @@ export const fetchPackageStats = (packageName: string) =>
       const responseJson = yield* httpClient.execute(request).pipe(
         Effect.flatMap((response) => response.json),
         Effect.mapError((error) =>
-          error instanceof HttpClientError.ResponseError
+          error instanceof HttpClientError.DecodeError
             ? new PackageStatsParseError({packageName, cause: error})
             : new PackageStatsFetchError({packageName, cause: error}),
         ),

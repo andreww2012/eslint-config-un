@@ -73,22 +73,21 @@ class CaptchaSolveError extends Data.TaggedError('CaptchaSolveError')<{
   cause: unknown;
 }> {}
 
+const FALLBACK_USER_AGENT =
+  // cspell:disable-next-line
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
+
 // https://github.com/2captcha/cloudflare-demo/blob/4216e55a325d868b7ef569dccce891ad393474a6/normalize-ua.js
-const normalizeUserAgent = Effect.tryPromise({
-  try: async () => {
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox'],
-    });
-    const userAgent = await browser.userAgent();
-    let normalized = userAgent.replace('Headless', '');
-    normalized = normalized.replace('Chromium', 'Chrome');
-    await browser.close();
-    return normalized;
-  },
-  catch: () =>
-    // cspell:disable-next-line
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-}).pipe(Effect.catchAll((fallback) => Effect.succeed(fallback)));
+const normalizeUserAgent = Effect.tryPromise(async () => {
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox'],
+  });
+  const userAgent = await browser.userAgent();
+  let normalized = userAgent.replace('Headless', '');
+  normalized = normalized.replace('Chromium', 'Chrome');
+  await browser.close();
+  return normalized;
+}).pipe(Effect.orElseSucceed(() => FALLBACK_USER_AGENT));
 
 const launchBrowser = (userAgent: string) =>
   Effect.tryPromise({
@@ -236,12 +235,11 @@ const fetchPage = (browserPage: Page, page: number, eslintPluginsDbRef: Ref.Ref<
   });
 
 const fetchAllPages = (browserPage: Page, eslintPluginsDbRef: Ref.Ref<EslintPluginsDb>) =>
-  Effect.iterate(startPage, {
-    while: (page) => page > 0,
-    body: (page) =>
-      fetchPage(browserPage, page, eslintPluginsDbRef).pipe(
-        Effect.map((shouldContinue) => (shouldContinue ? page + 1 : -1)),
-      ),
+  Effect.gen(function* () {
+    let page = startPage;
+    while (yield* fetchPage(browserPage, page, eslintPluginsDbRef)) {
+      page += 1;
+    }
   });
 
 const mainProgram = Effect.gen(function* () {
@@ -261,7 +259,8 @@ const mainProgram = Effect.gen(function* () {
 
 const program = mainProgram.pipe(
   Effect.provide(NodeFileSystem.layer),
-  Effect.catchAll((error) => {
+  // eslint-disable-next-line unicorn/prefer-top-level-await -- not a promise chain
+  Effect.catch((error) => {
     if (error instanceof UnexpectedResponseError) {
       logger.fatal('Got unexpected response', error.response);
     } else if (error instanceof CaptchaSolveError) {

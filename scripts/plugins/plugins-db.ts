@@ -1,6 +1,5 @@
 import path from 'node:path';
-import {FileSystem} from '@effect/platform';
-import {Data, Effect} from 'effect';
+import {Data, Effect, FileSystem} from 'effect';
 import jsonStringifyCompact from 'json-stringify-pretty-compact';
 import * as z from 'zod';
 

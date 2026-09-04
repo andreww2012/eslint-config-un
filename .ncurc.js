@@ -56,7 +56,11 @@ const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   'eslint',
 ]);
 
-const PACKAGES_ON_PRERELEASE_CHANNEL = new Set(['all-contributors-cli']);
+const PACKAGES_ON_PRERELEASE_CHANNEL = new Set([
+  '@effect/platform-node',
+  'all-contributors-cli',
+  'effect',
+]);
 
 const PACKAGE_GROUPS = Object.entries({
   'Package manager': {packages: ['pnpm'], nonEslint: true},
