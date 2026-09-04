@@ -35,6 +35,7 @@ export default defineUnConfig<QwikEslintConfigOptions>('qwik', {
   // Legend:
   // 🟢 - in recommended
   // 🟣 - in strict
+  // 💭 - requires type information
 
   configBuilder
     ?.addConfig([
@@ -61,8 +62,7 @@ export default defineUnConfig<QwikEslintConfigOptions>('qwik', {
     // TODO not sure if this is useful - `no-unused-vars` should catch the same problems?
     .addRule('unused-server', ERROR) /** @since 0.24.0 */ // 🟢🟣
     .addRule('use-method-usage', ERROR) /** @since 0.102.0 */ // 🟢🟣
-    // TODO requires type information
-    .addRule('valid-lexical-scope', ERROR) /** @since 0.0.26 */ // 🟢🟣
+    .addRule('valid-lexical-scope', ERROR) /** @since 0.0.26 */ // 🟢🟣💭
     .enableConfigTesterForPlugin('qwik')
     .addOverrides();
 });
