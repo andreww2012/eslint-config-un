@@ -34,29 +34,29 @@ import {
 
 // #region Effect Context Tags
 
-class CliFlagsTag extends Context.Tag('CliFlags')<
+class CliFlagsTag extends Context.Service<
   CliFlagsTag,
   {verbose: boolean; clear: boolean; deep: boolean}
->() {}
+>()('CliFlags') {}
 
-class NewPackagesToCheckRefTag extends Context.Tag('NewPackagesToCheckRef')<
+class NewPackagesToCheckRefTag extends Context.Service<
   NewPackagesToCheckRefTag,
   Ref.Ref<Set<string>>
->() {}
+>()('NewPackagesToCheckRef') {}
 
-class NewEslintPluginsCountRefTag extends Context.Tag('NewEslintPluginsCountRef')<
+class NewEslintPluginsCountRefTag extends Context.Service<
   NewEslintPluginsCountRefTag,
   Ref.Ref<number>
->() {}
+>()('NewEslintPluginsCountRef') {}
 
-class TaskQueueTag extends Context.Tag('TaskQueue')<TaskQueueTag, PQueue>() {}
+class TaskQueueTag extends Context.Service<TaskQueueTag, PQueue>()('TaskQueue') {}
 
-class KnownMissingFromNpmPackagesTag extends Context.Tag('KnownMissingFromNpmPackages')<
+class KnownMissingFromNpmPackagesTag extends Context.Service<
   KnownMissingFromNpmPackagesTag,
   UnStorage<true>
->() {}
+>()('KnownMissingFromNpmPackages') {}
 
-class RuntimeLayerTag extends Context.Tag('RuntimeLayer')<
+class RuntimeLayerTag extends Context.Service<
   RuntimeLayerTag,
   Layer.Layer<
     | LoggerTag
@@ -68,7 +68,7 @@ class RuntimeLayerTag extends Context.Tag('RuntimeLayer')<
     | PackagesInfoStorageTag
     | KnownMissingFromNpmPackagesTag
   >
->() {}
+>()('RuntimeLayer') {}
 
 // #endregion
 
@@ -219,7 +219,7 @@ const fetchPackageInfo = (packageName: string) =>
     const packageMetadata =
       cachedInfo?.metadata ||
       (yield* fetchPackageMetadata(packageName).pipe(
-        Effect.catchAll((error) => {
+        Effect.catch((error) => {
           if (error instanceof PackageMissingError) {
             return Effect.promise(async () => {
               await knownMissingFromNpmPackages.setItem(packageName, true);
@@ -281,7 +281,7 @@ const fetchPackageInfo = (packageName: string) =>
       isPackageLikelyEslintPlugin && isCachedInfoHasNoPluginInfo
         ? yield* executePackageAsEslintPlugin(packageName).pipe(
             // @effect-diagnostics-next-line globalErrorInEffectFailure:off
-            Effect.catchAll(() =>
+            Effect.catch(() =>
               Effect.fail(
                 new Error(
                   `An expected error occurred while executing ${packageName} package as an ESLint plugin`,
@@ -323,7 +323,7 @@ const fetchPackageInfo = (packageName: string) =>
 
     const packageStats = shouldFetchStats
       ? yield* fetchPackageStats(packageName).pipe(
-          Effect.catchAll((error) => {
+          Effect.catch((error) => {
             logger.warn(`Error fetching stats for ${styledPackageName}:`, error);
             return Effect.succeed(null);
           }),
@@ -378,8 +378,8 @@ const queueFetchPackageInfo = (packageName: string, priority: number) =>
       async () => {
         await Effect.runPromise(
           fetchPackageInfo(packageName).pipe(
-            Effect.provide(Layer.mergeAll(runtimeLayerWithSelf, NodeHttpClient.layer)),
-            Effect.catchAll(() => Effect.void),
+            Effect.provide(Layer.mergeAll(runtimeLayerWithSelf, NodeHttpClient.layerUndici)),
+            Effect.catch(() => Effect.void),
           ),
         );
       },
@@ -400,8 +400,8 @@ const saveEslintPluginsDbPeriodically = Effect.gen(function* () {
       logger.verbose('Saving ESLint plugins DB updates');
 
       yield* updateEslintPluginsDb(db).pipe(
-        Effect.tap(() => logger.verbose('Saved ESLint plugins DB updates')),
-        Effect.catchAll((error) => {
+        Effect.tap(() => Effect.sync(() => logger.verbose('Saved ESLint plugins DB updates'))),
+        Effect.catch((error) => {
           logger.warn('Failed to save ESLint plugins DB updates:', error);
           return Effect.void;
         }),
@@ -459,8 +459,8 @@ const mainProgram = Effect.gen(function* () {
     );
   }
 
-  yield* Effect.fork(saveEslintPluginsDbPeriodically.pipe(Effect.provide(FullLayer)));
-  yield* Effect.fork(logQueueSizePeriodically);
+  yield* Effect.forkChild(saveEslintPluginsDbPeriodically.pipe(Effect.provide(FullLayer)));
+  yield* Effect.forkChild(logQueueSizePeriodically);
 
   yield* Effect.promise(() => taskQueue.onIdle());
 
