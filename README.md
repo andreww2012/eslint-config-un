@@ -598,9 +598,13 @@ The final rule is going to be given the name `disable-autofix/<rule-name>`, whic
 
 ### TypeScript
 
-Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation), which are [known to be performance-demanding](https://typescript-eslint.io/getting-started/typed-linting/#performance), are *enabled* by default, and will be applied to the same files as the `ts` config.
-This is just a heads-up; you should make your own decision whether to keep them enabled.
-Use `configTypeAware` to control which files such rules will be applied to, if any.
+Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation) are *enabled* by default, and typed linting [is not free](https://typescript-eslint.io/getting-started/typed-linting/#performance), so decide for yourself whether to keep them.
+Such rules come not only from `typescript-eslint` but from many other plugins as well, and are configured centrally by the [`typeInfoRules`](#typeinforules) root option: set it to `disabled` to opt out of typed linting, or use its `ignores`/`allowDefaultProject` for TypeScript files that are not part of any `tsconfig.json` and would otherwise make [the project service](https://typescript-eslint.io/packages/parser/#projectservice) throw.
+
+Two things that are easy to miss:
+
+- turning these rules off does not make linting faster on its own: while the `ts` config is enabled, the project service is still set up, and that is what takes the time (`ts: {parserOptions: {projectService: false}}` disables it);
+- the `ts` config's `configTypeAware` option only restricts *its own* type-aware rules, the rules from the other plugins follow `typeInfoRules`.
 
 ### Node.js
 
