@@ -55,6 +55,7 @@ patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
   eslint-plugin-prettier@5.5.6: patches/eslint-plugin-prettier@5.5.6.patch
+  eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch
 

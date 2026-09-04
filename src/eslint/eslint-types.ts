@@ -180,6 +180,11 @@ export interface UnFlatConfigEntryBase<
  * A convenient alias of `ConfigObject` from `@eslint/core`
  */
 export type EslintFlatConfigEntry<T extends UnRulesConfigRelaxed = UnRulesConfigRelaxed> =
+  // @ts-expect-error a few plugins augment `RulesConfig` with rule option types they generate
+  // themselves, using `json-schema-to-typescript-lite` where we use `json-schema-to-typescript`
+  // (the former is an old-ish fork of the latter; the latter is now better in terms of correctness)
+  // The two compilers disagree often enough (most visibly on whether an index signature also
+  // admits `undefined`) that such types no longer structurally match ours
   EslintConfigObject<T>;
 
 export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
