@@ -866,7 +866,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     ) /** @since 8.0.0 */ /** @aka prefer-text-content */ // 💭?
     .addRule('prefer-early-return', ERROR) /** @since 66.0.0 */
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣💭?
-    // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
+    // TODO should consider enabling by default when `Error.isError` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
     .addRule('prefer-export-from', ERROR) /** @since 38.0.0 */ // 🟣
@@ -965,7 +965,6 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-reflect-apply', ERROR) /** @since 11.0.0 */
     // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape
     .addRule('prefer-regexp-escape', OFF) /** @since 68.0.0 */ // 🔴💭?
-    // TODO disable when regexp is enabled?
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */ // 💭?
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
     .addRule('prefer-scoped-selector', ERROR) /** @since 66.0.0 */ // 🟣
