@@ -196,6 +196,7 @@ describe('un options', () => {
 describe('options', () => {
   describe('option: `extraneousDependenciesCheck`', () => {
     const IGNORE_PATTERNS = ['**/test/**', '**/spec/**'];
+    const PACKAGE_DIRS = ['.', 'packages/my-package'];
     const WHITELIST = ['my-bundled-lib', 'another-lib'];
 
     it('enables `import/no-extraneous-dependencies` rule and allows dev dependencies by default', async () => {
@@ -328,6 +329,36 @@ describe('options', () => {
       expect(
         configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
       ).toStrictEqual([{devDependencies: true, whitelist: WHITELIST}]);
+    });
+
+    it('looks up the dependencies in the given directory when `packageDir` is a string', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {packageDir: PACKAGE_DIRS[0]}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: true, packageDir: [PACKAGE_DIRS[0]]}]);
+    });
+
+    it('looks up the dependencies in all the given directories when `packageDir` is an array', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {packageDir: PACKAGE_DIRS}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: true, packageDir: PACKAGE_DIRS}]);
+    });
+
+    it('does not set `packageDir` rule option when the option is an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        import: {extraneousDependenciesCheck: {packageDir: []}},
+      });
+
+      expect(
+        configResult.getRuleEntry('import', 'import/no-extraneous-dependencies'),
+      ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
     });
 
     it('merges the object form with the default value', async () => {

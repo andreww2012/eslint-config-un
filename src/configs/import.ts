@@ -14,6 +14,7 @@ import {
 import {generatePackageToLoadProperty} from '../loaders';
 import type {PickDistributed} from '../types';
 import {
+  type MaybeArray,
   type MaybeFn,
   arrayify,
   isNonEmptyArray,
@@ -39,6 +40,18 @@ interface ExtraneousDependenciesCheckOptions {
    * option to extend them.
    */
   checkDevDependencies?: boolean | {ignorePatterns: string[]};
+
+  /**
+   * Directories containing the `package.json` files the dependencies are looked up in.
+   * Relative paths are resolved against
+   * [the current working directory](https://nodejs.org/api/process.html#processcwd).
+   *
+   * By default, only the `package.json` closest to the linted file is consulted, which in a
+   * monorepo means the root one is ignored for the files belonging to a workspace package.
+   * Setting this option replaces that lookup: the dependencies of all the listed `package.json`
+   * files are merged and applied to every linted file.
+   */
+  packageDir?: MaybeArray<string>;
 
   /**
    * Package names that are never reported.
@@ -94,8 +107,8 @@ export interface ImportEslintConfigOptions<
    *
    * Possible values:
    * - boolean: `true` uses the default value described below, `false` disables the check.
-   * - object: whether dev dependency imports will be flagged too, plus the packages that are
-   *   never reported.
+   * - object: whether dev dependency imports will be flagged too, which `package.json` files the
+   *   dependencies are looked up in, plus the packages that are never reported.
    *   Shallow-merged with the default value, i.e. the properties you don't provide are taken
    *   from it.
    * - array: provide rule options as-is.
@@ -214,6 +227,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
       ? {...extraneousDependenciesCheckDefault, ...extraneousDependenciesCheck}
       : undefined;
   const devDependenciesCheck = extraneousDependenciesCheckObject?.checkDevDependencies;
+  const packageDir = arrayify(extraneousDependenciesCheckObject?.packageDir);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import');
 
@@ -325,6 +339,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
                 typeof devDependenciesCheck === 'object'
                   ? devDependenciesCheck.ignorePatterns
                   : !devDependenciesCheck,
+              ...(isNonEmptyArray(packageDir) && {packageDir}),
               ...(isNonEmptyArray(extraneousDependenciesCheckObject?.whitelist) && {
                 whitelist: extraneousDependenciesCheckObject.whitelist,
               }),

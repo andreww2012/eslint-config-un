@@ -649,6 +649,37 @@ plugins: {
 
 The full resolution order used by the plugin is: `settings.node.version` → `engines.node` → `devEngines.runtime` (the entry with `name: "node"`) → `>=16.0.0`.
 
+### Import
+
+#### Checking the declared dependencies in a monorepo
+
+[`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md), configured by the `extraneousDependenciesCheck` option, only reads the `package.json` closest to the linted file.
+In a monorepo this means the dev tooling installed at the root is reported as undeclared inside workspace packages.
+
+The `packageDir` sub-option lists the directories to read `package.json` from instead.
+Relative paths are resolved against the directory ESLint was launched from, so prefer absolute ones:
+
+```ts
+import path from 'node:path';
+import {eslintConfig} from 'eslint-config-un';
+
+export default eslintConfig({
+  configs: {
+    import: {
+      extraneousDependenciesCheck: {
+        packageDir: [
+          import.meta.dirname,
+          ...['api', 'ui'].map((name) => path.join(import.meta.dirname, 'packages', name)),
+        ],
+      },
+    },
+  },
+});
+```
+
+The dependencies of all the listed `package.json` files are merged into a single list, so one package importing another's dependency won't be reported.
+To avoid that, set the rule per package with [`extraConfigs`](#providing-user-defined-flat-configs) instead, each entry scoped by `files` and listing only the root and that package in `packageDir`.
+
 ### Frontend frameworks
 
 We detect the version of the used frontend framework (Angular, Vue, Svelte, etc.) and apply the appropriate rules depending on the version.
