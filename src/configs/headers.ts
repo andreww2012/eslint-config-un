@@ -17,32 +17,38 @@ import {
 export interface HeadersEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'headers'> {
-  // TODO types are broken
-
   /**
    * The single rule (`header-format`) options.
    */
-  options?: {
-    /**
-     * Where the expected header comes from: the `path` file or the `content` string
-     */
-    source: 'file' | 'string';
+  options?: (
+    | {
+        /**
+         * The expected header comes from the `content` string
+         */
+        source: 'string';
 
+        /**
+         * The expected header itself
+         */
+        content: string;
+      }
+    | {
+        /**
+         * The expected header comes from the `path` file
+         */
+        source: 'file';
+
+        /**
+         * Path to the file holding the expected header
+         */
+        path: string;
+      }
+  ) & {
     /**
      * The comment syntax the header is written with
      * @default 'jsdoc'
      */
     style?: 'line' | 'jsdoc';
-
-    /**
-     * The expected header itself, used when `source` is `'string'`
-     */
-    content?: string;
-
-    /**
-     * Path to the file holding the expected header, used when `source` is `'file'`
-     */
-    path?: string;
 
     /**
      * Keeps the pragmas (such as `@jsx`) of the replaced header
@@ -67,8 +73,9 @@ export interface HeadersEslintConfigOptions<
 
     /**
      * How many empty lines must separate the header from the rest of the file
+     * @default 1
      */
-    trailingNewlines?: boolean;
+    trailingNewlines?: number;
 
     /**
      * Values substituted into the `{{name}}` placeholders of the header
