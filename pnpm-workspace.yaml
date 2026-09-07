@@ -6,13 +6,7 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: # []
-  - eslint-plugin-regexp@3.3.0
-  - '@unocss/config@66.10.0'
-  - '@unocss/core@66.10.0'
-  - '@unocss/eslint-plugin@66.10.0'
-  - '@unocss/rule-utils@66.10.0'
-  - eslint-plugin-jsdoc@64.3.5
+minimumReleaseAgeExclude: []
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
