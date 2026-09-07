@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import url from 'node:url';
@@ -113,6 +114,16 @@ export function findArrayInversions<T>(
 
   return result;
 }
+
+export const sha256 = (input: string | Buffer) => {
+  const hashInstance = crypto.createHash('sha256');
+  if (typeof input === 'string') {
+    hashInstance.update(input, 'utf8');
+  } else {
+    hashInstance.update(input);
+  }
+  return hashInstance.digest('hex');
+};
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
 export const joinPaths = (...paths: (string | Falsy)[]) =>

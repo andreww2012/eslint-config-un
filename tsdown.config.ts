@@ -13,7 +13,7 @@ export default defineConfig({
   format: 'esm',
   unbundle: true,
   deps: {
-    neverBundle: [...ourPackageJson.bundleDependencies],
+    neverBundle: [...ourPackageJson.bundleDependencies, 'nuxt/kit'],
     alwaysBundle: [new RegExp(String.raw`^(?:${ALWAYS_BUNDLED_DEPENDENCIES.join('|')})(?:\/.+)?$`)],
     dts: {
       // `is-immutable-type` imports `typescript` types, which

@@ -1,3 +1,4 @@
+import {regexEscape} from '@andreww2012/unutils';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
 import {
@@ -14,6 +15,7 @@ import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
 import {
+  type NuxtAutoImports,
   type ValidAndInvalidHtmlTags,
   noRestrictedHtmlElementsDefault,
   resolveFilesOption,
@@ -165,10 +167,23 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   nuxtMajorVersion?: 3 | 4;
 
   /**
-   * You may need to set this manually to `true` if you're using
-   * [Nuxt 4 directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure)
-   * in Nuxt 3.
-   * @default true <=> Nuxt version is 4
+   * A path to the [Nuxt build directory](https://nuxt.com/docs/4.x/api/nuxt-config#builddir),
+   * absolute or relative to the current working directory, holding the generated auto-imports.
+   * Only needed when they cannot be read on their own, i.e. when your Nuxt config cannot be
+   * loaded, or when it sits anywhere other than the directory ESLint runs in.
+   * Note that the auto-imports are all this option recovers: with no Nuxt config to read the
+   * directory layout from, `vueOrNuxtProjectDir` has to be set as well unless your app happens to
+   * sit where it would by default.
+   * @default // read from your Nuxt config
+   */
+  buildDir?: string;
+
+  /**
+   * Whether the app lives in a directory of its own rather than directly at the project root.
+   * The [directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure)
+   * Nuxt 4 introduced, and backported to Nuxt 3, is the usual reason for it, but pointing `srcDir`
+   * elsewhere in a Nuxt 3 project counts just the same.
+   * @default // whether your Nuxt config resolves `srcDir` away from the project root, falling back to `true` <=> Nuxt version is 4
    */
   v4DirectoryStructure?: boolean;
 }
@@ -286,7 +301,20 @@ export interface VueEslintConfigOptions<
    *   `vueOrNuxtProjectDir` directory;
    * - Another sub-config, `configNuxtConfig`, will control whether
    *   [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
-   *   rule will be applied to Nuxt config file (`true` by default).
+   *   rule will be applied to Nuxt config file (`true` by default);
+   * - [Auto-imports](https://nuxt.com/docs/4.x/guide/concepts/auto-imports) will be read from the
+   *   Nuxt build directory (`.nuxt` unless `buildDir` says otherwise in your Nuxt config) and
+   *   declared as globals, separately for app, `server` and `shared` code, so that
+   *   [`no-undef`](https://eslint.org/docs/latest/rules/no-undef) does not report them.
+   *   The auto-imported components and directives are additionally exempted from
+   *   [`vue/no-undef-components`](https://eslint.vuejs.org/rules/no-undef-components.html) and
+   *   [`vue/no-undef-directives`](https://eslint.vuejs.org/rules/no-undef-directives.html).
+   *   Requires `nuxt prepare` (or `nuxt dev`) to have been run, since that is what generates the
+   *   build directory.
+   *   A bare `nuxt build` may not be enough: unless your Nuxt config sets `buildDir`, Nuxt puts a
+   *   production build under `node_modules` instead.
+   *   Should your Nuxt config be unreadable, which is reported as a warning, or should it live
+   *   above the directory ESLint runs in, the `buildDir` option reads the auto-imports anyway.
    *
    * 📁 Default `files`: <code>**&#47;*.vue</code> inside the `vueOrNuxtProjectDir` directory
    *
@@ -451,7 +479,8 @@ export interface VueEslintConfigOptions<
   /**
    * A relative path to your Vue or Nuxt project, i.e. where the app's entry point (`app.vue`),
    * `pages` and nuxt's `layouts` directories are located.
-   * By default, it is the current directory `''` or `app` for Nuxt 4.
+   * For Nuxt projects it defaults to the `srcDir` your Nuxt config resolves to, and otherwise to
+   * the current directory `''`.
    */
   vueOrNuxtProjectDir?: string;
 }
@@ -549,14 +578,32 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   optionsResolved.preferUseTemplateRef ??= isMin3_5;
   const {preferUseTemplateRef} = optionsResolved;
 
+  const nuxtAutoImportsResult = configNuxt ? context.nuxtAutoImports : null;
+  const nuxtAutoImports =
+    nuxtAutoImportsResult && 'globals' in nuxtAutoImportsResult ? nuxtAutoImportsResult : null;
+  const nuxtConfigError = nuxtAutoImportsResult?.error;
+  if (nuxtConfigError != null) {
+    context.logger.warn(
+      nuxtAutoImports
+        ? `[vue/nuxt] Your Nuxt config could not be loaded, so the auto-imports were read from \`buildDir\` but the directory layout had to be guessed: ${nuxtConfigError}. Set \`vueOrNuxtProjectDir\` if the guess is wrong`
+        : `[vue/nuxt] Your Nuxt config could not be loaded, so auto-imported composables, components and directives will be reported as undefined: ${nuxtConfigError}. Set the \`buildDir\` option to read the auto-imports regardless`,
+    );
+  } else if (nuxtAutoImports?.isBuildDirGenerated === false) {
+    context.logger.warn(
+      `[vue/nuxt] \`${nuxtAutoImports.buildDir}\` has not been generated yet. Run \`nuxt prepare\`, otherwise auto-imported composables, components and directives will be reported as undefined`,
+    );
+  }
+
   const nuxtPackageMajorVersion = nuxtPackageInfo?.versions.major;
   const optionsNuxtResolved = assignDefaults(configNuxt, {
     configNuxtConfig: true,
     nuxtMajorVersion: nuxtPackageMajorVersion === 4 ? 4 : 3,
   });
-  optionsNuxtResolved.v4DirectoryStructure ??= optionsNuxtResolved.nuxtMajorVersion === 4;
+  optionsNuxtResolved.v4DirectoryStructure ??=
+    nuxtAutoImports?.isV4DirectoryStructure ?? optionsNuxtResolved.nuxtMajorVersion === 4;
   const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
-  optionsResolved.vueOrNuxtProjectDir ??= nuxtV4DirectoryStructure ? 'app' : '';
+  optionsResolved.vueOrNuxtProjectDir ??=
+    nuxtAutoImports?.dirs?.app ?? (nuxtV4DirectoryStructure ? 'app' : '');
 
   context.requestParsing('vue', {
     kind: 'setUpOnly',
@@ -865,6 +912,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
           '^router-link$',
           '^router-view$',
           configNuxt && '^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)',
+          nuxtAutoImports?.componentNames.map((name) => `^${regexEscape(name)}$`) || [],
           ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
@@ -1022,7 +1070,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.0.0 */
-    .addRule('no-undef-directives', ERROR) /** @since 10.7.0 */
+    .addRule(
+      'no-undef-directives',
+      ERROR,
+      nuxtAutoImports?.directiveNames.length ? [{ignore: nuxtAutoImports.directiveNames}] : [],
+    ) /** @since 10.7.0 */
     .addRule(
       'no-useless-concat',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -1091,6 +1143,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     optionsResolved.vueOrNuxtProjectDir,
   );
 
+  const resolveNuxtRootDir = (directory: string) =>
+    resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}${directory}`);
+  const nuxtServerDir = nuxtAutoImports?.dirs?.server ?? resolveNuxtRootDir('server');
+  const nuxtSharedDir = nuxtAutoImports?.dirs?.shared ?? resolveNuxtRootDir('shared');
+
   const configBuilderNuxt = context.createConfigBuilder(optionsNuxtResolved, 'nuxt');
   if (configNuxt) {
     configBuilderNuxt
@@ -1101,8 +1158,8 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
           parseWith: 'vue',
         },
       ])
-      .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
       .addAnyRule('nuxt', 'no-page-meta-runtime-values', ERROR) /** @since 1.14.0 */
+      .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
         /* v8 ignore next */
@@ -1113,7 +1170,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     optionsNuxtResolved.configNuxtConfig,
     'nuxt',
   );
-  if (configNuxt && optionsNuxtResolved.configNuxtConfig) {
+  if (configNuxt) {
     configBuilderNuxtConfig
       ?.addConfig([
         'vue/nuxt/nuxt-config',
@@ -1121,13 +1178,59 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
           filesDefault: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
         },
       ])
-      .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR) /** @since 0.6.0 */
       .addAnyRule('nuxt', 'no-nuxt-config-test-key', ERROR) /** @since 1.12.0 */
+      .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR) /** @since 0.6.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
         /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_RULES.has(ruleName),
       });
+  }
+
+  if (nuxtAutoImports) {
+    const codeFilesIn = (directory: string) => [
+      joinPaths(directory, `**/*.${GLOB_JS_TS_X_EXTENSION}`),
+      joinPaths(directory, '**/*.vue'),
+    ];
+    const appDir = optionsResolved.vueOrNuxtProjectDir;
+    const isInsideAppDir = (directory: string) =>
+      appDir === '' || appDir === '.' || directory.startsWith(`${appDir}/`);
+
+    (
+      [
+        [
+          'app',
+          codeFilesIn(appDir),
+          // Whichever of the two sits inside the app directory is matched by the globs above as
+          // well, despite each context being given a different set of auto-imports
+          [nuxtServerDir, nuxtSharedDir]
+            .filter((directory) => isInsideAppDir(directory))
+            .map((directory) => `${directory}/**`),
+        ],
+        ['server', codeFilesIn(nuxtServerDir)],
+        ['shared', codeFilesIn(nuxtSharedDir)],
+      ] satisfies [
+        globalsContext: keyof NuxtAutoImports['globals'],
+        files: string[],
+        ignores?: string[],
+      ][]
+    ).forEach(([globalsContext, files, ignores]) => {
+      const autoImportedNames = nuxtAutoImports.globals[globalsContext];
+      if (autoImportedNames.length === 0) {
+        return;
+      }
+
+      configBuilderNuxt?.addConfig(
+        [`vue/nuxt/auto-imports/${globalsContext}`, {applyUserFilesAndIgnores: false}],
+        {
+          files,
+          ...(ignores?.length && {ignores}),
+          languageOptions: {
+            globals: Object.fromEntries(autoImportedNames.map((name) => [name, 'readonly'])),
+          },
+        },
+      );
+    });
   }
 
   const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
@@ -1169,7 +1272,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
         ...DEFAULT_VUE_FILES,
         configNuxt && [
           resolvePathInVueOrNuxtProjectDir('plugins/**/*'),
-          resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}server/**/*`),
+          `${nuxtServerDir}/**/*`,
           resolvePathInVueOrNuxtProjectDir(
             `${nuxtV4DirectoryStructure ? '' : 'app/'}router.options.${GLOB_JS_TS_EXTENSION}`,
           ),

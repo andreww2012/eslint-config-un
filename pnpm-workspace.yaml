@@ -89,3 +89,6 @@ peerDependencyRules:
 
     # Optional peer, unused here; crossws@0.4 comes in via h3@2 (wants ^0.4.1)
     graphql-ws@6>crossws: ^0.4
+
+    # Shell completions for `@nuxt/cli`, never run here; cac@7 is what our other dev tools need
+    '@bomb.sh/tab@0.0>cac': ^7

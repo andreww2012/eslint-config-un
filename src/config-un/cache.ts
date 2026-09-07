@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
@@ -15,19 +14,10 @@ import {
   omit,
   readAndParseJson,
   readFileSafe,
+  sha256,
   traverseForEach,
 } from '../utils';
 import type {PackageRequester, UnConfigContext} from './shared';
-
-const sha256 = (input: string | Buffer) => {
-  const hashInstance = crypto.createHash('sha256');
-  if (typeof input === 'string') {
-    hashInstance.update(input, 'utf8');
-  } else {
-    hashInstance.update(input);
-  }
-  return hashInstance.digest('hex');
-};
 
 const LOCKFILES_PER_PACKAGE_MANAGER = Object.groupBy(
   Object.entries(packageManagerLockfilesReversed),
@@ -46,14 +36,14 @@ const ESLINT_FLAT_CONFIG_FILE_NAMES = [
 
 // TODO more logging
 const computeCacheKey = async (context: UnConfigContext) => {
-  const result: string[] = [
+  const cacheKey: string[] = [
     process.version,
     String(context.rootOptions.offlineMode),
     context.meta.environment,
   ];
 
   const packageManagerInfo = context.meta.usedPackageManager;
-  result.push(JSON.stringify(packageManagerInfo));
+  cacheKey.push(JSON.stringify(packageManagerInfo), context.nuxtAutoImports?.cacheKey || '');
 
   // TODO sync with logic in config.ts: nested `.gitignore` files, which are respected since
   // `recursive` became the default, are not accounted for - hashing them means walking the whole
@@ -97,7 +87,7 @@ const computeCacheKey = async (context: UnConfigContext) => {
     ).then((files) => files.find((v) => v != null)),
   ]);
 
-  result.push(
+  cacheKey.push(
     gitHeadHashResult
       ? gitHeadHashResult.exitCode
         ? String(gitHeadHashResult.exitCode)
@@ -107,8 +97,8 @@ const computeCacheKey = async (context: UnConfigContext) => {
   );
 
   return {
-    source: result,
-    hash: sha256(JSON.stringify(result)),
+    cacheKey,
+    hash: sha256(JSON.stringify(cacheKey)),
   };
 };
 
@@ -167,11 +157,11 @@ export const saveCacheToFs = async (
     return false;
   }
 
-  const {hash: cacheKey, source: cacheKeyRaw} = await computeCacheKey(context);
+  const {hash: cacheKeyHash, cacheKey} = await computeCacheKey(context);
 
   const dataToStore: CacheDataStoredInFs = {
     date: new Date().toISOString(),
-    key: cacheKey,
+    key: cacheKeyHash,
     ...cacheData,
     packageRequesters: Object.fromEntries(
       Array.from(cacheData.packageRequesters, ([packageName, requesters]) => [
@@ -236,9 +226,7 @@ export const saveCacheToFs = async (
 
   try {
     await fs.writeFile(cachePath, dataToStoreStringified, 'utf8');
-    context.debug(
-      `Saved configs to cache, date: ${dataToStore.date}, key: ${cacheKeyRaw.join(',')}`,
-    );
+    context.debug(`Saved configs to cache, date: ${dataToStore.date}, key: ${cacheKey.join(',')}`);
     return true;
   } catch (error: unknown) {
     context.logger.warn('Could not save cache data:', error);

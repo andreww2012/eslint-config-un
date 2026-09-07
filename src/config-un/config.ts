@@ -6,6 +6,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ManifestConfigKey, UnConfigResults} from '../configs/index.gen';
 import {CONFIG_MANIFESTS, CONFIG_ORDER} from '../configs/manifests.gen';
+import {resolveNuxtAutoImports} from '../configs/shared';
 import {
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
@@ -207,13 +208,25 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const {cacheConfigs} = optionsResolved;
   debug(`Is config caching enabled: ${cacheConfigs}`);
 
-  const [usedPackageManager, fixableRulesPerPlugin] = await Promise.all([
+  const {isNuxtConfigDisabled, nuxtBuildDirOption} = (() => {
+    const vueConfigOptions = optionsResolved.configs?.vue;
+    const nuxtConfigOptions =
+      typeof vueConfigOptions === 'object' ? vueConfigOptions.configNuxt : undefined;
+    return {
+      isNuxtConfigDisabled: vueConfigOptions === false || nuxtConfigOptions === false,
+      nuxtBuildDirOption:
+        typeof nuxtConfigOptions === 'object' ? nuxtConfigOptions.buildDir : undefined,
+    };
+  })();
+
+  const [usedPackageManager, fixableRulesPerPlugin, nuxtAutoImports] = await Promise.all([
     detectPackageManager(),
     // The file may be absent since it's generated, and its generator script
     // executes this code
     import('../eslint-types-fixable-only.gen')
       .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
       .catch(() => ({})),
+    isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirOption}),
   ]);
 
   debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
@@ -258,6 +271,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     parsingRequests,
     requestParsing: createRequestParsing(parsingRequests),
     meta: {usedPackageManager, environment},
+    nuxtAutoImports,
     logger,
     debug,
     isTestMode,

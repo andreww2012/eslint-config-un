@@ -5,7 +5,10 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
-import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
+import type {
+  NuxtAutoImportsResult,
+  RulesDisabledInEmbeddedCodeBlocksByDefault,
+} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
   EslintFlatConfigEntry,
@@ -857,6 +860,8 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
     environment: Environment;
   };
+
+  nuxtAutoImports: NuxtAutoImportsResult | null;
 
   logger: ConsolaInstance;
   debug: Debugger;

@@ -1,3 +1,6 @@
+import path from 'node:path';
+import {toKebabCase} from '@andreww2012/unutils';
+import * as findUp from 'empathic/find';
 import type {UnConfigContext} from '../config-un/shared';
 import {
   ERROR,
@@ -9,7 +12,7 @@ import {
   GLOB_YML_YAML,
 } from '../constants';
 import type {UnAllRuleNames, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
-import {type AllUnionMembers, objectEntriesUnsafe, pick} from '../utils';
+import {type AllUnionMembers, objectEntriesUnsafe, pick, readFileSafe, sha256} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 
@@ -435,3 +438,203 @@ export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigCont
       context.rootOptions.markdownCodeBlocksRules?.additionalDisabledRules! || {},
     ).map(([ruleName, shouldDisable]) => (shouldDisable ? ruleName : null)),
   ].filter((v) => v != null);
+
+const NUXT_CONFIG_FILE_NAMES = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map(
+  (extension) => `nuxt.config.${extension}`,
+);
+
+/** Every auto-import is emitted as its own `const <name>: ...` line inside a `declare global` block */
+const NUXT_GLOBAL_DECLARATION_REGEX = /^[\t ]*const[\t ]+([$A-Z_a-z][\w$]*)[\t ]*:/gm;
+
+/** Every auto-imported component is emitted as a top level `export const <Name>: ...` */
+const NUXT_COMPONENT_DECLARATION_REGEX = /^export const ([$A-Z_a-z][\w$]*)[\t ]*:/gm;
+
+/**
+ * Directives are ordinary auto-imports that Nuxt tells apart by name alone, so an unrelated
+ * composable named this way is read as one too - harmless, as the worst it does is stop a directive
+ * name from being reported
+ */
+const NUXT_DIRECTIVE_NAME_REGEX = /^v[A-Z]/;
+
+const extractDeclaredNames = (regex: RegExp, source: string | null) =>
+  source == null
+    ? []
+    : Array.from(source.matchAll(regex), ([, name]) => name).filter((name) => name != null);
+
+const relativeDirectoryWithin = (from: string, to: string) => {
+  const relativePath = path.relative(from, to);
+  // No ESLint pattern can reach outside the directory it is resolved against
+  return relativePath.startsWith('..') || path.isAbsolute(relativePath)
+    ? null
+    : relativePath.replaceAll(path.sep, '/');
+};
+
+const resolveNuxtDirs = (
+  cwd: string,
+  {
+    rootDir,
+    srcDir,
+    serverDir,
+    dir,
+  }: {rootDir: string; srcDir: string; serverDir: string; dir: {shared?: string}},
+) => {
+  const sharedDir = path.resolve(rootDir, dir.shared || 'shared');
+  const app = relativeDirectoryWithin(cwd, srcDir);
+  const server = relativeDirectoryWithin(cwd, serverDir);
+  const shared = relativeDirectoryWithin(cwd, sharedDir);
+  return app != null && server != null && shared != null ? {app, server, shared} : null;
+};
+
+export interface NuxtAutoImports {
+  /** Absolute path the artifacts were read from */
+  buildDir: string;
+
+  /**
+   * Why the Nuxt config could not be loaded, when the build directory was known regardless.
+   * The auto-imports are still read, but the directory layout has to be guessed
+   */
+  error?: string;
+
+  /**
+   * Where each auto-import context lives, relative to the ESLint working directory.
+   * `null` when the Nuxt project root sits above that directory, leaving nothing an ESLint pattern
+   * can express
+   */
+  dirs: Record<'app' | 'server' | 'shared', string> | null;
+
+  /**
+   * Whether the app lives in a directory of its own rather than at the project root.
+   * `undefined` when only the build directory is known, i.e. the Nuxt config could not be loaded
+   */
+  isV4DirectoryStructure?: boolean;
+
+  /**
+   * Nuxt exposes a different set of auto-imports to app code, to Nitro server code and to the
+   * `shared` directory, so that a binding available in one context is still undefined in another
+   */
+  globals: Record<'app' | 'server' | 'shared', string[]>;
+
+  /**
+   * Whether the build directory holds the generated artifacts at all, telling a project Nuxt has
+   * never prepared apart from one that turned auto-imports off and legitimately declares none
+   */
+  isBuildDirGenerated: boolean;
+
+  componentNames: string[];
+
+  /** Each directive under both the name as written and its kebab-cased form */
+  directiveNames: string[];
+
+  /**
+   * Hash of everything that was read, for the resolved config cache to be keyed on: adding or
+   * removing a composable changes nothing else the key already covers
+   */
+  cacheKey: string;
+}
+
+/** A Nuxt config was found, but nothing could be read at all */
+export interface NuxtAutoImportsFailure {
+  error: string;
+
+  /** Keyed on the failure itself, so that a different one is not served from the cache */
+  cacheKey: string;
+}
+
+export type NuxtAutoImportsResult = NuxtAutoImports | NuxtAutoImportsFailure;
+
+const describeError = (error: unknown) =>
+  error instanceof Error ? error.message : typeof error === 'string' ? error : 'unknown error';
+
+const loadNuxtOptions = async (cwd: string) => {
+  try {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    const {loadNuxtConfig} = await import('nuxt/kit');
+    // `dev` because Nuxt otherwise moves the build directory under `node_modules`, while the
+    // development one is where `nuxt prepare` generates the type artifacts.
+    // `dotenv` because loading a config otherwise injects the linted project's `.env` into
+    // `process.env`, which nothing downstream of a config generator should have to expect
+    return {options: await loadNuxtConfig({cwd, dotenv: false, overrides: {dev: true}})};
+  } catch (error: unknown) {
+    return {error: describeError(error)};
+  }
+};
+
+/** Reads Nuxt's auto-imports resolved by `nuxt/kit` (Nuxt 3.3+) */
+export const resolveNuxtAutoImports = async ({
+  cwd = process.cwd(),
+  buildDir: buildDirOption,
+}: {cwd?: string; buildDir?: string} = {}): Promise<NuxtAutoImportsResult | null> => {
+  // Yes, bounded to `cwd` because a potential config above it belongs to a different project
+  const hasNuxtConfig = findUp.any(NUXT_CONFIG_FILE_NAMES, {cwd, last: cwd}) != null;
+  if (!hasNuxtConfig && !buildDirOption) {
+    return null;
+  }
+
+  const loadResult = hasNuxtConfig ? await loadNuxtOptions(cwd) : null;
+  // An explicitly pointed at build directory is enough on its own, so a config we failed to load
+  // only costs us the directory layout
+  if (!buildDirOption && loadResult?.error != null) {
+    return {error: loadResult.error, cacheKey: sha256(loadResult.error)};
+  }
+
+  const nuxtOptions = loadResult?.options || null;
+  const buildDir = buildDirOption ? path.resolve(cwd, buildDirOption) : nuxtOptions?.buildDir;
+  /* v8 ignore next 3 - Either the option provided the directory or the config was loaded */
+  if (buildDir == null) {
+    return null;
+  }
+
+  const dirs = nuxtOptions && resolveNuxtDirs(cwd, nuxtOptions);
+  const isV4DirectoryStructure = nuxtOptions
+    ? nuxtOptions.srcDir !== nuxtOptions.rootDir
+    : undefined;
+
+  const sources = await Promise.all([
+    readFileSafe(path.join(buildDir, 'types', 'imports.d.ts')),
+    readFileSafe(path.join(buildDir, 'types', 'nitro-imports.d.ts')),
+    readFileSafe(path.join(buildDir, 'types', 'shared-imports.d.ts')),
+    readFileSafe(path.join(buildDir, 'components.d.ts')),
+    // Anything other than a missing file, such as the build directory option pointing at something
+    // that is not a directory, would otherwise take the whole ESLint config down with it
+  ]).catch((error: unknown) => describeError(error));
+
+  if (typeof sources === 'string') {
+    return {error: sources, cacheKey: sha256(sources)};
+  }
+
+  const [appSource, serverSource, sharedSource, componentsSource] = sources;
+  const appGlobals = extractDeclaredNames(NUXT_GLOBAL_DECLARATION_REGEX, appSource);
+
+  return {
+    buildDir,
+    ...(loadResult?.error != null && {error: loadResult.error}),
+    dirs,
+    isV4DirectoryStructure,
+    isBuildDirGenerated: sources.some((source) => source != null),
+    globals: {
+      app: appGlobals,
+      server: extractDeclaredNames(NUXT_GLOBAL_DECLARATION_REGEX, serverSource),
+      shared: extractDeclaredNames(NUXT_GLOBAL_DECLARATION_REGEX, sharedSource),
+    },
+    componentNames: extractDeclaredNames(NUXT_COMPONENT_DECLARATION_REGEX, componentsSource).filter(
+      (name) => name !== 'componentNames',
+    ),
+    directiveNames: [
+      // The rule's schema rejects duplicates
+      ...new Set(
+        appGlobals.flatMap((name) =>
+          NUXT_DIRECTIVE_NAME_REGEX.test(name)
+            ? // The rule kebab-cases `vHTMLSafe` differently, so both spellings are needed
+              [name.slice(1), toKebabCase(name.slice(1))]
+            : [],
+        ),
+      ),
+    ],
+    cacheKey: sha256(
+      JSON.stringify([
+        {buildDir, dirs, isV4DirectoryStructure, error: loadResult?.error},
+        ...sources,
+      ]),
+    ),
+  };
+};
