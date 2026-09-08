@@ -287,6 +287,58 @@ describe('options', () => {
     });
   });
 
+  describe('option: `enforcePropsDestructuring`', () => {
+    const RULE_NAME = 'vue/define-props-destructuring';
+
+    it('forbids destructuring in `vue/define-props-destructuring` rule by default', async () => {
+      const configResult = await computeEslintConfig('vue');
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"destructure": "never"}]',
+      );
+    });
+
+    it('forbids destructuring in `vue/define-props-destructuring` rule when option is `never`', async () => {
+      const configResult = await computeEslintConfig({vue: {enforcePropsDestructuring: 'never'}});
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"destructure": "never"}]',
+      );
+    });
+
+    it('forbids destructuring in `vue/define-props-destructuring` rule when option is `true`', async () => {
+      const configResult = await computeEslintConfig({vue: {enforcePropsDestructuring: true}});
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"destructure": "never"}]',
+      );
+    });
+
+    it('disables `vue/define-props-destructuring` rule when option is `false`', async () => {
+      const configResult = await computeEslintConfig({vue: {enforcePropsDestructuring: false}});
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot('0');
+    });
+
+    it('requires destructuring in `vue/define-props-destructuring` rule when option is `always`', async () => {
+      const configResult = await computeEslintConfig({vue: {enforcePropsDestructuring: 'always'}});
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"destructure": "always"}]',
+      );
+    });
+
+    it('requires destructuring only for assigned props in `vue/define-props-destructuring` rule when option is `onlyWhenAssigned`', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {enforcePropsDestructuring: 'onlyWhenAssigned'},
+      });
+
+      expect(configResult.getRuleEntry('vue', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"destructure": "only-when-assigned"}]',
+      );
+    });
+  });
+
   describe('option: `sfcBlockOrder`', () => {
     it('uses template-first block order by default', async () => {
       const configResult = await computeEslintConfig('vue');

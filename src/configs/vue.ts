@@ -429,6 +429,25 @@ export interface VueEslintConfigOptions<
   enforcePropsDeclarationStyle?: 'runtime' | 'type-based';
 
   /**
+   * Whether props are expected to be destructured from
+   * [`defineProps`](https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits).
+   *
+   * Possible values:
+   * - `never` (same as `true`): props must never be destructured;
+   * - `always`: props must always be destructured;
+   * - `onlyWhenAssigned`: props must be destructured only when the `defineProps` result is assigned
+   *   to a variable (the rule's own default);
+   * - `false`: the rule is disabled.
+   *
+   * Note that destructured props only stay reactive since Vue 3.5.
+   *
+   * Affected rule:
+   * - [`vue/define-props-destructuring`](https://eslint.vuejs.org/rules/define-props-destructuring.html)
+   * @default 'never'
+   */
+  enforcePropsDestructuring?: boolean | 'never' | 'always' | 'onlyWhenAssigned';
+
+  /**
    * Enforce <script> SFC section to go before <template> (<style> will still be the last)
    *
    * Affected rule:
@@ -532,6 +551,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
+    enforcePropsDestructuring: 'never',
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   });
   const vueFiles = resolveFilesOption(optionsResolved.files, DEFAULT_VUE_FILES);
@@ -556,6 +576,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     sfcBlockOrder,
     enforceApiStyle,
     enforcePropsDeclarationStyle,
+    enforcePropsDestructuring,
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
   } = optionsResolved;
 
@@ -654,6 +675,13 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       },
     ),
   });
+
+  const propsDestructurePreference =
+    enforcePropsDestructuring === true
+      ? 'never'
+      : enforcePropsDestructuring === 'onlyWhenAssigned'
+        ? 'only-when-assigned'
+        : enforcePropsDestructuring;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'vue');
 
@@ -863,7 +891,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       },
     ]) /** @since 8.7.0 */
     .addRule('define-props-declaration', ERROR, [enforcePropsDeclarationStyle]) /** @since 9.5.0 */
-    .addRule('define-props-destructuring', ERROR, [{destructure: 'never'}]) /** @since 10.1.0 */
+    .addRule(
+      'define-props-destructuring',
+      propsDestructurePreference ? ERROR : OFF,
+      propsDestructurePreference ? [{destructure: propsDestructurePreference}] : undefined,
+    ) /** @since 10.1.0 */
     .addRule('enforce-style-attribute', OFF) /** @since 9.20.0 */
     .addRule('html-button-has-type', ERROR) /** @since 7.6.0 */
     .addRule('html-comment-content-newline', OFF) /** @since 7.0.0 */
