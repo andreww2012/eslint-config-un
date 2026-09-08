@@ -1,10 +1,10 @@
 import consola from 'consola';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
-import {MISC_GROUP_CONFIGS} from '../src/configs/manifests.gen';
+import {CONFIG_MANIFESTS, MISC_GROUP_CONFIGS} from '../src/configs/manifests.gen';
 import {arrayify, styleConfigName, stylePackageName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
-import {CONFIGS_META} from './shared/packages-meta';
+import {CONFIGS_META, PACKAGES_META} from './shared/packages-meta';
 
 const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =
   await generateAngularPluginsWithOldRules();
@@ -48,6 +48,53 @@ if (packagesToMoveToDirectDependencies.length > 0) {
     message: [
       'The following packages should be moved to direct dependencies because they are used in configs from the `misc-enabled` group:',
       ...packagesToMoveToDirectDependencies.map(
+        ({packageName, configs}) =>
+          `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+      ),
+    ],
+  });
+}
+
+const directDependenciesServingOnlyDisabledConfigs = Object.entries(PACKAGES_META).flatMap(
+  ([packageName, {configs, directDependencyReason}]) => {
+    if (!(packageName in ourPackageJson.dependencies) || configs.length === 0) {
+      return [];
+    }
+
+    const doesServeOnlyDisabledConfigs = configs.every(
+      (config) => CONFIG_MANIFESTS[config]?.enabledBy === false,
+    );
+    if (doesServeOnlyDisabledConfigs === (directDependencyReason != null)) {
+      return [];
+    }
+
+    return [{packageName, configs, isReasonNeedless: !doesServeOnlyDisabledConfigs}];
+  },
+);
+
+const packagesToMoveToOptionalPeerDependencies =
+  directDependenciesServingOnlyDisabledConfigs.filter(({isReasonNeedless}) => !isReasonNeedless);
+if (packagesToMoveToOptionalPeerDependencies.length > 0) {
+  errors.push({
+    severity: 'error',
+    message: [
+      'The following packages should be moved to optional peer dependencies because every config they serve is disabled by default, or their plugin metadata should explain why they stay direct dependencies:',
+      ...packagesToMoveToOptionalPeerDependencies.map(
+        ({packageName, configs}) =>
+          `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+      ),
+    ],
+  });
+}
+
+const packagesWithNeedlessDirectDependencyReason =
+  directDependenciesServingOnlyDisabledConfigs.filter(({isReasonNeedless}) => isReasonNeedless);
+if (packagesWithNeedlessDirectDependencyReason.length > 0) {
+  errors.push({
+    severity: 'error',
+    message: [
+      'The following packages needlessly explain why they stay direct dependencies as some config they serve is enabled by default:',
+      ...packagesWithNeedlessDirectDependencyReason.map(
         ({packageName, configs}) =>
           `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
       ),

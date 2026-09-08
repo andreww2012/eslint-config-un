@@ -104,6 +104,12 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
   allRulesStylistic?: true;
 
   /**
+   * Why the package stays a direct dependency although every Config it serves is disabled by
+   * default. Providing it when some served Config is enabled by default is reported as an error
+   */
+  directDependencyReason?: string;
+
+  /**
    * Extends the reach of the generated type-aware config beyond TypeScript files
    */
   typeInfo?: {
@@ -147,6 +153,7 @@ export const PLUGIN_METADATA_KEY_ORDER = allUnionMembers<
   'suggestedPrefix',
   'prettierLanguage',
   'allRulesStylistic',
+  'directDependencyReason',
   'typeInfo',
   'extraPatterns',
   'extraFileExtensions',

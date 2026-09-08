@@ -19,6 +19,12 @@ interface PackageMeta {
   isMainPlugin?: true;
 
   pluginDocsUrl?: string | {label: string; url: string};
+
+  /**
+   * Why the package stays a direct dependency although every Config it serves is disabled by
+   * default
+   */
+  directDependencyReason?: string;
 }
 
 interface PluginPackageMeta extends PackageMeta {
@@ -42,6 +48,9 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
           ...(metadata.gitTag != null && {gitTag: metadata.gitTag}),
           ...(metadata.isMainPlugin && {isMainPlugin: metadata.isMainPlugin}),
           ...(metadata.docsUrl != null && {pluginDocsUrl: metadata.docsUrl}),
+          ...(metadata.directDependencyReason != null && {
+            directDependencyReason: metadata.directDependencyReason,
+          }),
         } satisfies PluginPackageMeta,
       ],
     ];
