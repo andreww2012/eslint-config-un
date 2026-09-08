@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import {toKebabCase} from '@andreww2012/unutils';
 import * as findUp from 'empathic/find';
@@ -582,10 +583,21 @@ export const resolveNuxtAutoImports = async ({
   }
 
   const nuxtOptions = loadResult?.options || null;
-  const buildDir = buildDirOption ? path.resolve(cwd, buildDirOption) : nuxtOptions?.buildDir;
+  const buildDirRaw = buildDirOption || nuxtOptions?.buildDir;
   /* v8 ignore next 3 - Either the option provided the directory or the config was loaded */
-  if (buildDir == null) {
+  if (buildDirRaw == null) {
     return null;
+  }
+
+  // Nuxt reports POSIX separators even on Windows
+  const buildDir = path.resolve(cwd, buildDirRaw);
+
+  // Windows reports reading through a file as `ENOENT`, indistinguishable from a directory that has
+  // never been generated
+  const buildDirStats = await fs.stat(buildDir).catch(() => null);
+  if (buildDirStats?.isDirectory() === false) {
+    const error = `\`${buildDir}\` is not a directory`;
+    return {error, cacheKey: sha256(error)};
   }
 
   const dirs = nuxtOptions && resolveNuxtDirs(cwd, nuxtOptions);
@@ -598,8 +610,8 @@ export const resolveNuxtAutoImports = async ({
     readFileSafe(path.join(buildDir, 'types', 'nitro-imports.d.ts')),
     readFileSafe(path.join(buildDir, 'types', 'shared-imports.d.ts')),
     readFileSafe(path.join(buildDir, 'components.d.ts')),
-    // Anything other than a missing file, such as the build directory option pointing at something
-    // that is not a directory, would otherwise take the whole ESLint config down with it
+    // Anything other than a missing file, such as a directory that cannot be read, would otherwise
+    // take the whole ESLint config down with it
   ]).catch((error: unknown) => describeError(error));
 
   if (typeof sources === 'string') {

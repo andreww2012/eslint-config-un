@@ -409,13 +409,15 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   it('reports a build directory that cannot be read rather than throwing', async () => {
     const {resolveNuxtAutoImports} = await importActualShared();
 
-    // A file rather than a directory, which fails as `ENOTDIR` instead of a missing file
+    // A file rather than a directory, which is reported instead of being read as a missing one
     const result = await resolveNuxtAutoImports({
       cwd: NUXT_PROJECT_DIR,
       buildDir: 'nuxt.config.ts',
     });
 
-    expect(result).toMatchObject({error: expect.stringContaining('ENOTDIR') as unknown});
+    expect(result).toMatchObject({
+      error: expect.stringContaining('is not a directory') as unknown,
+    });
   });
 
   it('keeps reading the auto-imports when `buildDir` is set but the config cannot be loaded', async () => {
