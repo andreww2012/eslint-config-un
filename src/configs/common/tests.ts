@@ -26,10 +26,10 @@ import {TESTS_CONFIG_DEFAULT_FILES} from '../shared';
  * - `e18e/no-delete-property`
  * - `e18e/prefer-static-collator`
  * - `e18e/prefer-static-regex`
- * - `sonarjs/no-hardcoded-ip`
- * - `sonarjs/no-hardcoded-passwords`
- * - `sonarjs/no-hardcoded-secrets`
- * - `sonarjs/no-clear-text-protocols`
+ * - `sonar/no-hardcoded-ip`
+ * - `sonar/no-hardcoded-passwords`
+ * - `sonar/no-hardcoded-secrets`
+ * - `sonar/no-clear-text-protocols`
  * - `ts/no-extraneous-class`
  * - `ts/no-empty-function`
  * - `unicorn/template-indent`

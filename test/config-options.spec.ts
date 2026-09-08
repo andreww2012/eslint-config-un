@@ -363,7 +363,7 @@ describe('option: `forceSeverity`', () => {
 
     expect(
       getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
-        ruleName.startsWith('sonarjs/'),
+        ruleName.startsWith('sonar/'),
       ),
     ).toStrictEqual([2]);
   });
@@ -373,7 +373,7 @@ describe('option: `forceSeverity`', () => {
 
     expect(
       getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
-        ruleName.startsWith('sonarjs/'),
+        ruleName.startsWith('sonar/'),
       ),
     ).toStrictEqual([1]);
   });

@@ -244,7 +244,7 @@ export class ConfigEntryBuilder<
              *   crashes on `.scss` files, because it reads `sourceCode.parserServices`, which is
              *   absent under the `css/css` language
              * - [`strict`](https://eslint.org/docs/latest/rules/strict) crashes on `.html` files
-             * - `sonarjs/assertions-in-tests` or
+             * - `sonar/assertions-in-tests` or
              *   [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
              *   crash on `.toml` files
              * - `.yaml` files are excluded because when no config specifies the language or a

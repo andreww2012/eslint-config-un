@@ -192,7 +192,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     // "This rule is a system rule for working the this plugin. This rule does not report any errors, but make sure the rule is enabled for the this plugin to work properly"
     .addRule('system', ERROR) /** @since 0.0.13 */ // 🟢
     // Crashes on `statement.expression.type` (`expression` is null)
-    .disableAnyRule('sonarjs', 'no-unused-collection')
+    .disableAnyRule('sonar', 'no-unused-collection')
     .enableConfigTesterForPlugin('svelte', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),

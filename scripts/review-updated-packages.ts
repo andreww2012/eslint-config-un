@@ -409,7 +409,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
               : ((isDiffHeader = true), styleText('magentaBright', line));
     const fileHeaderMatch = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
     if (fileHeaderMatch) {
-      // eslint-disable-next-line sonarjs/no-redundant-assignments
+      // eslint-disable-next-line sonar/no-redundant-assignments
       isDiffHeader = true;
       const extensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(fileHeaderMatch[1]);
       lastFileExtension = extensionMatch?.groups.extension;

@@ -87,7 +87,7 @@ export interface PluginSettingsMap {
   regexp: RegexpPluginSettings;
   remeda: RemedaPluginSettings;
   solid: SolidPluginSettings;
-  sonarjs: SonarPluginSettings;
+  sonar: SonarPluginSettings;
   sql: SqlPluginSettings;
   svelte: SveltePluginSettings;
   tailwindcss: TailwindPluginSettings;

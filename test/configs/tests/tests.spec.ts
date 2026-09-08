@@ -9,10 +9,10 @@ const DISABLED_RULES = [
   'e18e/no-delete-property',
   'e18e/prefer-static-collator',
   'e18e/prefer-static-regex',
-  'sonarjs/no-hardcoded-ip',
-  'sonarjs/no-hardcoded-passwords',
-  'sonarjs/no-hardcoded-secrets',
-  'sonarjs/no-clear-text-protocols',
+  'sonar/no-hardcoded-ip',
+  'sonar/no-hardcoded-passwords',
+  'sonar/no-hardcoded-secrets',
+  'sonar/no-clear-text-protocols',
   'ts/no-extraneous-class',
   'ts/no-empty-function',
   'unicorn/template-indent',
@@ -82,8 +82,8 @@ describe('rules', async () => {
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('tests')).toMatchObject({
-      'sonarjs/no-hardcoded-ip': 0,
-      'sonarjs/no-hardcoded-passwords': 0,
+      'sonar/no-hardcoded-ip': 0,
+      'sonar/no-hardcoded-passwords': 0,
     });
   });
 

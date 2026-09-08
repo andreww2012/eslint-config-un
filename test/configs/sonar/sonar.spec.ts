@@ -3,7 +3,7 @@ const FIXTURES = {
 } as const;
 
 describe('basic tests', () => {
-  it('creates `sonar` eslint config and loads `sonarjs` plugin if set to `true`', async () => {
+  it('creates `sonar` eslint config and loads `sonar` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('sonar');
 
     const config = configResult.getConfigByUnPostfix('sonar');
@@ -12,14 +12,14 @@ describe('basic tests', () => {
     expect(config?.files).toBeUndefined();
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
-    expect(configResult.getLoadedPlugin('sonarjs')).toBeDefined();
+    expect(configResult.getLoadedPlugin('sonar')).toBeDefined();
   });
 
-  it('does not create `sonar` eslint config and does not load `sonarjs` plugin if set to `false`', async () => {
+  it('does not create `sonar` eslint config and does not load `sonar` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({sonar: false});
 
     expect(configResult.getConfigByUnPostfix('sonar')).toBeUndefined();
-    expect(configResult.getLoadedPlugin('sonarjs')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('sonar')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -66,13 +66,13 @@ describe('rules', async () => {
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('sonar')).toMatchObject({
-      'sonarjs/arguments-order': 2,
-      'sonarjs/no-clear-text-protocols': 1,
-      'sonarjs/file-header': 0,
+      'sonar/arguments-order': 2,
+      'sonar/no-clear-text-protocols': 1,
+      'sonar/file-header': 0,
     });
   });
 
-  it('`sonarjs/no-empty-collection` rule works', async () => {
+  it('`sonar/no-empty-collection` rule works', async () => {
     const results = await testEslintConfig(
       'sonar',
       FIXTURES.usingIncludesOnEmptyArray,
@@ -82,7 +82,7 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.usingIncludesOnEmptyArray,
-      'sonarjs/no-empty-collection',
+      'sonar/no-empty-collection',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
@@ -136,12 +136,12 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `sonar` eslint config', async () => {
     const configResult = await computeEslintConfig({
       sonar: {
-        overrides: {'sonarjs/no-nested-incdec': 1},
+        overrides: {'sonar/no-nested-incdec': 1},
         overridesAny: {'no-console': 0},
       },
     });
 
-    expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/no-nested-incdec')).toBe(1);
+    expect(configResult.getRuleEntrySeverity('sonar', 'sonar/no-nested-incdec')).toBe(1);
     expect(configResult.getRuleEntrySeverity('sonar', 'no-console')).toBe(0);
   });
 });
@@ -159,7 +159,7 @@ describe('options', () => {
       const SETTINGS = {testFileExtensions: ['.ts'], predefinedGlobals: ['myGlobal']};
 
       const configResult = await computeEslintConfig('sonar', {
-        un: {plugins: {sonarjs: {settings: SETTINGS}}},
+        un: {plugins: {sonar: {settings: SETTINGS}}},
       });
       const config = configResult.getConfigByUnPostfix('sonar');
 
@@ -171,17 +171,13 @@ describe('options', () => {
     it('enables rules specific to `aws-cdk-lib` if set to `true`', async () => {
       const configResult = await computeEslintConfig({sonar: {enableAwsRules: true}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/aws-apigateway-public-api')).toBe(
-        2,
-      );
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/aws-apigateway-public-api')).toBe(2);
     });
 
     it('does not enable rules specific to `aws-cdk-lib` if set to `false`', async () => {
       const configResult = await computeEslintConfig({sonar: {enableAwsRules: false}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/aws-apigateway-public-api')).toBe(
-        0,
-      );
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/aws-apigateway-public-api')).toBe(0);
     });
 
     it('enables rules specific to `aws-cdk-lib` if `aws-cdk-lib` package is detected as installed', async () => {
@@ -189,17 +185,13 @@ describe('options', () => {
 
       const configResult = await computeEslintConfig('sonar');
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/aws-apigateway-public-api')).toBe(
-        2,
-      );
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/aws-apigateway-public-api')).toBe(2);
     });
 
     it('does not enable rules specific to `aws-cdk-lib` if `aws-cdk-lib` package is not detected as installed', async () => {
       const configResult = await computeEslintConfig('sonar');
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/aws-apigateway-public-api')).toBe(
-        0,
-      );
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/aws-apigateway-public-api')).toBe(0);
     });
   });
 
@@ -207,13 +199,13 @@ describe('options', () => {
     it('enables rules specific to `helmet` if set to `true`', async () => {
       const configResult = await computeEslintConfig({sonar: {enableHelmetRules: true}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/content-security-policy')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/content-security-policy')).toBe(2);
     });
 
     it('does not enable rules specific to `helmet` if set to `false`', async () => {
       const configResult = await computeEslintConfig({sonar: {enableHelmetRules: false}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/content-security-policy')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/content-security-policy')).toBe(0);
     });
 
     it('enables rules specific to `helmet` if `helmet` package is detected as installed', async () => {
@@ -221,13 +213,13 @@ describe('options', () => {
 
       const configResult = await computeEslintConfig('sonar');
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/content-security-policy')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/content-security-policy')).toBe(2);
     });
 
     it('does not enable rules specific to `helmet` if `helmet` package is not detected as installed', async () => {
       const configResult = await computeEslintConfig('sonar');
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/content-security-policy')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/content-security-policy')).toBe(0);
     });
   });
 
@@ -235,13 +227,13 @@ describe('options', () => {
     it('enables rules specific to test or assertion libraries if set to `true`', async () => {
       const configResult = await computeEslintConfig({sonar: {testsRules: true}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/assertions-in-tests')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/assertions-in-tests')).toBe(2);
     });
 
     it('does not enable rules specific to test or assertion libraries if set to `false`', async () => {
       const configResult = await computeEslintConfig({sonar: {testsRules: false}});
 
-      expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/assertions-in-tests')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('sonar', 'sonar/assertions-in-tests')).toBe(0);
     });
   });
 });

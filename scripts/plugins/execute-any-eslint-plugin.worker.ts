@@ -39,7 +39,7 @@ try {
     sendMessageToParent({
       error: {
         code: 'INSTALLATION',
-        // eslint-disable-next-line sonarjs/super-linear-regex
+        // eslint-disable-next-line sonar/super-linear-regex
         cause: cause.match(/^\s*(ERR_PNPM_\w+\s+(?:\S.*)?)$/m)?.[1] || cause,
       },
     });

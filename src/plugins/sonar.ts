@@ -1,12 +1,13 @@
 import {definePluginMetadata} from './shared';
 
-export default definePluginMetadata('sonarjs', {
+export default definePluginMetadata('sonar', {
   configs: ['sonar'],
   docsUrl:
     'https://github.com/SonarSource/SonarJS/blob/HEAD/packages/analysis/src/jsts/rules/README.md',
   gitTag: (version) => ({
     url: `https://github.com/SonarSource/SonarJS/blob/___INSERT-REF-HERE___/packages/analysis/src/jsts/rules/CHANGELOG.md#___INSERT-DATE-HERE___-version-${version.replaceAll(/\D/g, '')}`,
   }),
+  suggestedPrefix: ['sonarjs', 'more concise and convenient to use'],
   rules: {
     'anchor-precedence': {requiresTypeInfo: 'optional'},
     'argument-type': {requiresTypeInfo: 'optional'},

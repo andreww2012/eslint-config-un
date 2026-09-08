@@ -1296,7 +1296,7 @@ export default defineUnConfig<
     .disableAnyRule('import', 'no-default-export')
     .disableAnyRule('', 'vars-on-top')
     .disableAnyRule('', 'no-var')
-    .disableAnyRule('sonarjs', 'no-redundant-optional')
+    .disableAnyRule('sonar', 'no-redundant-optional')
     .disableAnyRule('', 'no-duplicate-imports')
     // Allow `export {}` to be present to ensure the file is a module
     .disableAnyRule('unicorn', 'require-module-specifiers');

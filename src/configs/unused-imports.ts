@@ -39,7 +39,7 @@ export interface UnusedImportsEslintConfigOptions<
   /**
    * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars),
    * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and
-   * `sonarjs/no-unused-vars` rules in favor of `unused-imports/no-unused-vars` rule.
+   * `sonar/no-unused-vars` rules in favor of `unused-imports/no-unused-vars` rule.
    *
    * 📁 Default `files`: all files
    * @default false
@@ -88,7 +88,7 @@ export default defineUnConfig<UnusedImportsEslintConfigOptions>(
       ruleOptions === undefined ? [] : [ruleOptions],
     ) /** @since 0.0.2 */
     .disableAnyRule('', 'no-unused-vars')
-    .disableAnyRule('sonarjs', 'no-unused-vars')
+    .disableAnyRule('sonar', 'no-unused-vars')
     .disableAnyRule('ts', 'no-unused-vars')
     .enableConfigTesterForPlugin('unused-imports', {
       /* v8 ignore next 2 */

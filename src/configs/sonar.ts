@@ -17,9 +17,9 @@ export interface SonarPluginSettings {
    * The extensions of the files the rules treat as tests, with or without the leading dot.
    *
    * Affected rules:
-   * - `sonarjs/no-debug-commands-in-ui-tests`
-   * - `sonarjs/no-empty-test-file`
-   * - `sonarjs/no-fixed-wait-in-tests`
+   * - `sonar/no-debug-commands-in-ui-tests`
+   * - `sonar/no-empty-test-file`
+   * - `sonar/no-fixed-wait-in-tests`
    * @default ['.js', '.mjs', '.cjs', '.jsx', '.vue', '.ts', '.mts', '.cts', '.tsx']
    */
   testFileExtensions?: string[];
@@ -29,7 +29,7 @@ export interface SonarPluginSettings {
    * discover in the global scope.
    *
    * Affected rule:
-   * - `sonarjs/declarations-in-global-scope`
+   * - `sonar/declarations-in-global-scope`
    */
   predefinedGlobals?: string[];
 }
@@ -42,7 +42,7 @@ export interface SonarPluginSettings {
  */
 export interface SonarEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'sonarjs'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'sonar'> {
   /**
    * Enables rules that are specific to [aws-cdk-lib](https://npmx.dev/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed
@@ -59,16 +59,16 @@ export interface SonarEslintConfigOptions<
    * Enables rules that are specific to test or assertion libraries
    *
    * Affected rules:
-   * - `sonarjs/assertions-in-tests`
-   * - `sonarjs/async-test-assertions`
-   * - `sonarjs/chai-determinate-assertion`
-   * - `sonarjs/disabled-timeout`
-   * - `sonarjs/hooks-before-test-cases`
-   * - `sonarjs/inverted-assertion-arguments`
-   * - `sonarjs/no-code-after-done`
-   * - `sonarjs/no-incomplete-assertions`
-   * - `sonarjs/no-same-argument-assert`
-   * - `sonarjs/stable-tests`
+   * - `sonar/assertions-in-tests`
+   * - `sonar/async-test-assertions`
+   * - `sonar/chai-determinate-assertion`
+   * - `sonar/disabled-timeout`
+   * - `sonar/hooks-before-test-cases`
+   * - `sonar/inverted-assertion-arguments`
+   * - `sonar/no-code-after-done`
+   * - `sonar/no-incomplete-assertions`
+   * - `sonar/no-same-argument-assert`
+   * - `sonar/stable-tests`
    * @default false
    */
   testsRules?: boolean;
@@ -90,9 +90,9 @@ export default defineUnConfig<SonarEslintConfigOptions>(
   const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testRulesSeverity = testsRules ? ERROR : OFF;
 
-  const pluginSettings = context.getPluginSettings('sonarjs');
+  const pluginSettings = context.getPluginSettings('sonar');
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'sonarjs');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'sonar');
 
   // Legend:
   // [S1234] - Sonar rule code
@@ -188,7 +188,7 @@ export default defineUnConfig<SonarEslintConfigOptions>(
     .addRule('duplicates-in-character-class', OFF) /** @since 1.0.4-alpha.0 */ // [S5869] 🟢💭?🔤
     .addRule('dynamically-constructed-templates', ERROR) /** @since 3.0.6 */ // [S7790] 🟢 📦 `pug`, `ejs`
     .addRule('elseif-without-else', OFF) /** @since 0.9.1 */ // [S126]
-    // ⚠️ `regexp/no-empty-group` (and also `sonarjs/no-empty-group`), `regexp/no-empty-alternative`, `regexp/no-trivially-nested-quantifier`
+    // ⚠️ `regexp/no-empty-group` (and also `sonar/no-empty-group`), `regexp/no-empty-alternative`, `regexp/no-trivially-nested-quantifier`
     .addRule('empty-string-repetition', OFF) /** @since 1.0.4-alpha.0 */ // [S5842] 🟢💭?🔤
     .addRule('encryption-secure-mode', ERROR) /** @since 1.0.4-alpha.0 */ // [S5542] 🟢 📦 `node:crypto`
     // Not disabling because, despite being mostly covered by `regexp/no-useless-dollar-replacements` rule, finds more problems
@@ -472,7 +472,7 @@ export default defineUnConfig<SonarEslintConfigOptions>(
     .addRule('weak-ssl', ERROR) /** @since 1.0.4-alpha.0 */ // [S4423] 🟢 📦 `node:https`, `node:tls`
     .addRule('x-powered-by', ERROR) /** @since 1.0.4-alpha.0 */ // [S5689] 🟢 📦 `express`, `helmet`
     .addRule('xml-parser-xxe', ERROR) /** @since 1.0.4-alpha.0 */ // [S2755] 🟢 📦 `libxmljs`
-    .enableConfigTesterForPlugin('sonarjs', {
+    .enableConfigTesterForPlugin('sonar', {
       // It looks like `code-eval` was accidentally re-introduced in v4.0.1 after removing in v4.0.0
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName === 'code-eval',
