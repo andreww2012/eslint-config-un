@@ -29,7 +29,6 @@ export type {
   OmitIndexSignature,
   OmitStrict,
   PartialDeep,
-  PickDistributed,
   Prettify,
   PrettifyDeep,
   ReadonlyDeep,

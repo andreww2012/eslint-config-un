@@ -12,7 +12,6 @@ import {
   WARNING,
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {PickDistributed} from '../types';
 import {
   type MaybeArray,
   type MaybeFn,
@@ -98,7 +97,7 @@ export interface ImportEslintConfigOptions<
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        PickDistributed<UnRulesConfigPartial, 'import/no-default-export'>
+        Pick<UnRulesConfigPartial<'import'>, 'import/no-default-export'>
       >;
 
   /**
