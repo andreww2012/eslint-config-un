@@ -96,6 +96,7 @@ const ALL_STYLISTIC_RULES = {
     'attributes-order': true,
     'prefer-contextual-for-variables': true,
     'prefer-self-closing-tags': true,
+    'prefer-style-binding': true,
   },
   antfu: {
     'consistent-chaining': true,

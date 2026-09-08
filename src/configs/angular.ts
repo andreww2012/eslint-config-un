@@ -516,6 +516,9 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
         preferStandaloneComponents && angularVersion < 17 ? ERROR : OFF,
       ),
     ) /** @since 16.1.0 */ /** @until 18 */ // 🔴(>=17)
+    .addRule(
+      ...getPluginRuleSeverity('reactive-context-must-read-signal', ERROR),
+    ) /** @since 22.3.0 */
     .addRule(...getPluginRuleSeverity('relative-url-prefix', ERROR)) /** @since 0.0.1-alpha.23 */
     .addRule(...getPluginRuleSeverity('require-lifecycle-on-prototype', ERROR)) /** @since 19.2.0 */
     .addRule(...getPluginRuleSeverity('require-localize-metadata', ERROR)) /** @since 13.2.0 */ // 🌐
@@ -689,6 +692,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-static-string-properties', ERROR),
     ) /** @since 19.1.0 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-style-binding', ERROR)) /** @since 22.4.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-template-literal', ERROR),
     ) /** @since 19.4.0 */
