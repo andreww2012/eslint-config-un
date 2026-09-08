@@ -72,7 +72,7 @@ type StripWarnRuleEntry<Entry> = Entry extends readonly [infer Severity, ...infe
   : StripWarnSeverity<Entry>;
 
 type StripWarnOverrideEntryValue<Value> = Value extends {severity: EslintSeverity}
-  ? OmitStrict<Value, 'severity'> & {severity: StripWarnSeverity<Value['severity']>}
+  ? Prettify<OmitStrict<Value, 'severity'> & {severity: StripWarnSeverity<Value['severity']>}>
   : StripWarnRuleEntry<Value>;
 
 type StripWarnOverrideEntry<Entry> = Entry extends (...args: infer Args) => infer Return
@@ -116,15 +116,14 @@ type EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions extends TypeAff
 type MaybeStripWarningSeverity<Config, TypeAffectingOptions extends TypeAffectingOptionsType> =
   NoWarningsEnabled<TypeAffectingOptions> extends true ? StripWarnFromConfig<Config> : Config;
 
-type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStrict<
-  EslintFlatConfigEntry,
-  'rules'
-> & {
-  /**
-   * Same as the flat config `rules` property, but the rule names and their options are typed
-   */
-  rules?: UnFlatConfigEntryOverridesType<UnRulesConfig> & UnExtraPluginsRulesConfig<ExtraPlugins>;
-};
+type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Prettify<
+  OmitStrict<EslintFlatConfigEntry, 'rules'> & {
+    /**
+     * Same as the flat config `rules` property, but the rule names and their options are typed
+     */
+    rules?: UnFlatConfigEntryOverridesType<UnRulesConfig> & UnExtraPluginsRulesConfig<ExtraPlugins>;
+  }
+>;
 
 type ValueOrEslintConfigWithValue<T> =
   | T
@@ -351,39 +350,41 @@ export interface EslintConfigUnOptions<
    * ```
    */
   plugins?: {
-    [Plugin in Exclude<PluginPrefix, ''>]?: {
-      /**
-       * Allows to change the prefix the plugin is registered under.
-       * Cannot be an empty string (or it will be ignored anyway).
-       *
-       * You have to still use the **canonical** prefix in `overrides`, and the rules will be
-       * automatically renamed.
-       */
-      prefix?: string;
+    [Plugin in Exclude<PluginPrefix, ''>]?: Prettify<
+      {
+        /**
+         * Allows to change the prefix the plugin is registered under.
+         * Cannot be an empty string (or it will be ignored anyway).
+         *
+         * You have to still use the **canonical** prefix in `overrides`, and the rules will be
+         * automatically renamed.
+         */
+        prefix?: string;
 
-      /**
-       * Allows to override the plugin implementation.
-       * This can be useful when this config is used to lint a repository of one of the built-in
-       * plugins to provide development version of that plugin.
-       */
-      plugin?: MaybeFn<
-        MaybePromise<
-          Plugin extends keyof typeof pluginsLoaders
-            ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
-            : EslintPlugin
-        >
-      >;
-    } & (Plugin extends keyof PluginSettingsMap
-      ? {
-          /**
-           * The plugin's
-           * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings).
-           *
-           * Only applied when at least one Config using the plugin is enabled.
-           */
-          settings?: PluginSettingsMap[Plugin];
-        }
-      : unknown);
+        /**
+         * Allows to override the plugin implementation.
+         * This can be useful when this config is used to lint a repository of one of the built-in
+         * plugins to provide development version of that plugin.
+         */
+        plugin?: MaybeFn<
+          MaybePromise<
+            Plugin extends keyof typeof pluginsLoaders
+              ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
+              : EslintPlugin
+          >
+        >;
+      } & (Plugin extends keyof PluginSettingsMap
+        ? {
+            /**
+             * The plugin's
+             * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings).
+             *
+             * Only applied when at least one Config using the plugin is enabled.
+             */
+            settings?: PluginSettingsMap[Plugin];
+          }
+        : unknown)
+    >;
   };
 
   /**

@@ -1,5 +1,11 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from '../types';
+import type {
+  ObjectValues,
+  OmitStrict,
+  PickKeysStartingWith,
+  Prettify,
+  PrettifyDeep,
+} from '../types';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -124,7 +130,9 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
    */
   configAngular?:
     | boolean
-    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | Prettify<
+        SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>
+      >;
 
   /**
    * Rules for
@@ -135,7 +143,9 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
    */
   configMarko?:
     | boolean
-    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | Prettify<
+        SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>
+      >;
 
   /**
    * Rules for
@@ -155,7 +165,9 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
    */
   configSvelte?:
     | boolean
-    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | Prettify<
+        SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>
+      >;
 
   /**
    * Rules for [Vue Testing Library](https://testing-library.com/docs/vue-testing-library/intro).
@@ -165,7 +177,9 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
    */
   configVue?:
     | boolean
-    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | Prettify<
+        SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>
+      >;
 
   /**
    * Disable root (DOM) config if any framework config is enabled.

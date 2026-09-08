@@ -1,4 +1,5 @@
 import type {UnConfigs} from '../../src/configs';
+import type {Prettify} from '../../src/types';
 import {type MaybeArray, arrayify} from '../../src/utils';
 import {computeEslintConfig} from './test-eslint-config';
 
@@ -37,7 +38,7 @@ export const expectConfigState = async (
   configs: Parameters<typeof computeEslintConfig>[0],
   postfixOrPostfixes: MaybeArray<string>,
   state: boolean | [configName: keyof UnConfigs, action: boolean],
-  modeOrComputeOptions?: ConfigMode | (ComputeOptions & {mode?: ConfigMode}),
+  modeOrComputeOptions?: ConfigMode | Prettify<ComputeOptions & {mode?: ConfigMode}>,
 ): Promise<ConfigResultType> => {
   using stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
 

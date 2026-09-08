@@ -15,15 +15,17 @@ type RuleSubConfig<
   T extends keyof UnRuleOptionsByPlugin['perfectionist'],
 > =
   | boolean
-  | (UnFlatConfigEntryBase<
-      ExtraPlugins,
-      Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
-    > & {
-      /**
-       * Options of the rule this sub-config enables
-       */
-      options?: GetRuleOptions<'perfectionist', T>;
-    });
+  | Prettify<
+      UnFlatConfigEntryBase<
+        ExtraPlugins,
+        Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
+      > & {
+        /**
+         * Options of the rule this sub-config enables
+         */
+        options?: GetRuleOptions<'perfectionist', T>;
+      }
+    >;
 
 /**
  * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin

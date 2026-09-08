@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import pathe from 'pathe';
 import type {PluginMetadata} from '../../src/plugins/shared';
+import type {Prettify} from '../../src/types';
 
 const PLUGINS_DIR = pathe.join(import.meta.dirname, '../../src/plugins');
 
@@ -34,7 +35,7 @@ export const readPluginMetadata = async () => {
       const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIR, fileName)).href;
       // eslint-disable-next-line no-unsanitized/method -- the path comes from the plugins directory
       const module = (await import(moduleUrl)) as {
-        default: PluginMetadata & {prefix: string};
+        default: Prettify<PluginMetadata & {prefix: string}>;
       };
       const {prefix, ...metadata} = module.default;
       return {prefix, fileName, metadata};

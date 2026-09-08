@@ -1,7 +1,7 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSX_TSX, OFF, WARNING} from '../constants';
-import type {OmitIndexSignature, OmitStrict} from '../types';
+import type {OmitIndexSignature, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
 import {
   type ExtraPluginsType,
@@ -336,7 +336,7 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
     | undefined,
   customConfig?: {
     prefix: 'astro' | 'lit';
-    options: JsxA11yEslintConfigOptions & UnFlatConfigEntryBase;
+    options: Prettify<JsxA11yEslintConfigOptions & UnFlatConfigEntryBase>;
   },
 ) => {
   const optionsRaw =

@@ -6,6 +6,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import {exec} from 'tinyexec';
 import type {CacheDataInFs} from '../../src/config-un/cache';
 import type {Environment} from '../../src/config-un/shared';
+import type {Prettify} from '../../src/types';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -46,7 +47,7 @@ const MAX_CACHE_VALID_MS = 3_600_000;
  */
 const CONFIGS_USING_PACKAGES = {svelte: true, graphql: true, import: true} as const;
 
-type CacheFileContents = CacheDataInFs & {key: string; date: string};
+type CacheFileContents = Prettify<CacheDataInFs & {key: string; date: string}>;
 
 const readCacheFile = async (): Promise<CacheFileContents> =>
   JSON.parse(await fs.readFile(CACHE_FILE_PATH, 'utf8')) as CacheFileContents;

@@ -14,6 +14,7 @@ import {
 } from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from '../plugins.gen';
+import type {Prettify} from '../types';
 import {
   type AllUnionMembers,
   describeError,
@@ -66,7 +67,7 @@ export interface IgnoresAdditionalOptions<Patterns extends string | readonly str
 
 export const generateIgnoresWithAdditional =
   <Patterns extends string | readonly string[]>(
-    config: boolean | (UnFlatConfigEntryBase & IgnoresAdditionalOptions<Patterns>),
+    config: boolean | Prettify<UnFlatConfigEntryBase & IgnoresAdditionalOptions<Patterns>>,
     extraIgnoresFallback?: string[],
   ) =>
   <

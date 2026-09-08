@@ -1,5 +1,6 @@
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
+import type {Prettify} from '../types';
 import {arrayIncludes} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -34,8 +35,10 @@ export interface EmberEslintConfigOptions<
    */
   configTestFiles?:
     | boolean
-    | (UnFlatConfigEntryBase<ExtraPlugins, 'ember'> &
-        NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | Prettify<
+        UnFlatConfigEntryBase<ExtraPlugins, 'ember'> &
+          NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>
+      >;
 
   /**
    * Affected rule:

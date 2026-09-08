@@ -97,17 +97,19 @@ export type UnFlatConfigEntryOverridesEntry<
   Options extends readonly unknown[] = readonly unknown[],
 > = MaybeFn<
   | ReadonlyDeep<EslintRuleEntry<Options>>
-  | ({
-      severity: EslintSeverity;
-      options?: Options;
+  | Prettify<
+      {
+        severity: EslintSeverity;
+        options?: Options;
 
-      files?: string[];
-      ignores?: string[];
-    } & (RuleName extends UnFixableRuleNames
-      ? DisabledAutofixOption
-      : string extends RuleName
+        files?: string[];
+        ignores?: string[];
+      } & (RuleName extends UnFixableRuleNames
         ? DisabledAutofixOption
-        : unknown)),
+        : string extends RuleName
+          ? DisabledAutofixOption
+          : unknown)
+    >,
   [severity: EslintSeverity & number, options?: Options]
 >;
 
@@ -193,9 +195,9 @@ export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknow
     Options
   >;
 
-export type EslintRuleMetaWithLanguages = NonNullable<
-  NonNullable<EslintPlugin['rules']>[string]['meta']
-> & {languages?: string[]};
+export type EslintRuleMetaWithLanguages = Prettify<
+  NonNullable<NonNullable<EslintPlugin['rules']>[string]['meta']> & {languages?: string[]}
+>;
 
 // TODO report false positive
 // eslint-disable-next-line unicorn/prefer-export-from

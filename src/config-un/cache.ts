@@ -7,7 +7,7 @@ import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector
 import {exec} from 'tinyexec';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
-import type {SetFieldType} from '../types';
+import type {Prettify, SetFieldType} from '../types';
 import {
   isObject,
   isPlainObject,
@@ -141,14 +141,19 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
     ? Partial<
         Record<
           LoadablePackagePrefix,
-          ({configName: string} & SetFieldType<
-            PackageToLoadInfo,
-            'valueTransformFn',
-            [functionSource: string, scope?: unknown] | undefined
-          >)[]
+          Prettify<
+            {configName: string} & SetFieldType<
+              PackageToLoadInfo,
+              'valueTransformFn',
+              [functionSource: string, scope?: unknown] | undefined
+            >
+          >[]
         >
       >
-    : Map<LoadablePackagePrefix, ({configName: string; path: string} & PackageToLoadInfo)[]>;
+    : Map<
+        LoadablePackagePrefix,
+        Prettify<{configName: string; path: string} & PackageToLoadInfo>[]
+      >;
 }
 
 interface CacheDataStoredInFs extends CacheDataInFs, CacheMetadata {}

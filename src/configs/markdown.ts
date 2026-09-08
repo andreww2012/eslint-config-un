@@ -120,8 +120,10 @@ export interface MarkdownEslintConfigOptions<
    */
   configSentencesPerLine?:
     | boolean
-    | (UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> &
-        IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES>);
+    | Prettify<
+        UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> &
+          IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES>
+      >;
 
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)

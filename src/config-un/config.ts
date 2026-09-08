@@ -28,7 +28,14 @@ import {
   pluginsLoaders,
 } from '../loaders';
 import {RULES_TO_DISABLE_IN_OFFLINE_MODE} from '../plugins.gen';
-import type {Falsy, MaybePromise, OmitIndexSignature, OmitStrict, PartialDeep} from '../types';
+import type {
+  Falsy,
+  MaybePromise,
+  OmitIndexSignature,
+  OmitStrict,
+  PartialDeep,
+  Prettify,
+} from '../types';
 import {
   type MaybeArray,
   arrayIncludes,
@@ -113,11 +120,11 @@ interface TestError {
 
 export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
   options?: EslintConfigUnOptions<ExtraPlugins>,
-  internalOptions?: EslintConfigUnInternalOptions & {testMode?: false},
+  internalOptions?: Prettify<EslintConfigUnInternalOptions & {testMode?: false}>,
 ): Promise<EslintFlatConfigEntry[]>;
 export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
   options?: EslintConfigUnOptions<ExtraPlugins>,
-  internalOptions?: EslintConfigUnInternalOptions & {testMode: true},
+  internalOptions?: Prettify<EslintConfigUnInternalOptions & {testMode: true}>,
 ): Promise<{configs: EslintFlatConfigEntry[]; errors: TestError[]}>;
 export async function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
   options: EslintConfigUnOptions<ExtraPlugins> = {},

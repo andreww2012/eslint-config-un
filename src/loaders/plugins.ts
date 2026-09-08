@@ -2,6 +2,7 @@
 import {fixupPluginRules as fixupPluginRulesOriginal} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin} from '../eslint/eslint-types';
+import type {Prettify} from '../types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
 import {
   type EslintParser,
@@ -234,10 +235,12 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-github-action')),
   ),
   graphql: genModuleLoader<
-    EslintPlugin & {
-      processor: EslintProcessor;
-      parser: EslintParser;
-    },
+    Prettify<
+      EslintPlugin & {
+        processor: EslintProcessor;
+        parser: EslintParser;
+      }
+    >,
     '@graphql-eslint/eslint-plugin'
   >('graphql', '@graphql-eslint/eslint-plugin', () =>
     // @ts-expect-error types mismatch
@@ -313,9 +316,11 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-markdown-links')),
   ),
   'markdown-preferences': genModuleLoader<
-    EslintPlugin & {
-      resources: (typeof import('eslint-plugin-markdown-preferences'))['resources'];
-    },
+    Prettify<
+      EslintPlugin & {
+        resources: (typeof import('eslint-plugin-markdown-preferences'))['resources'];
+      }
+    >,
     'eslint-plugin-markdown-preferences'
   >('markdown-preferences', 'eslint-plugin-markdown-preferences', () =>
     interopDefault(import('eslint-plugin-markdown-preferences')),

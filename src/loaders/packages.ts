@@ -1,5 +1,5 @@
 import type {EslintPlugin} from '../eslint/eslint-types';
-import type {OmitStrict} from '../types';
+import type {OmitStrict, Prettify} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
 import {type EslintParser, type EslintProcessor, genInferredModuleLoader} from './shared';
 
@@ -47,10 +47,12 @@ export const packagesLoaders = {
     '@graphql-eslint/eslint-plugin',
     () =>
       interopDefault(import('@graphql-eslint/eslint-plugin')) as Promise<
-        EslintPlugin & {
-          processor: EslintProcessor;
-          parser: EslintParser;
-        }
+        Prettify<
+          EslintPlugin & {
+            processor: EslintProcessor;
+            parser: EslintParser;
+          }
+        >
       >,
   ),
   eslintPluginImportX: genInferredModuleLoader(

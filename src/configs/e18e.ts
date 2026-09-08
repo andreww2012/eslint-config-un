@@ -1,6 +1,7 @@
 // cspell:ignore canparse charcode
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
+import type {Prettify} from '../types';
 import {arrayIncludes} from '../utils';
 import {
   type ExtraPluginsType,
@@ -46,12 +47,14 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    */
   configModuleReplacements?:
     | boolean
-    | (SubConfigOptions<ExtraPlugins, 'moduleReplacements'> & {
-        /**
-         * Options of the only rule in this sub-config, `e18e/ban-dependencies`,
-         */
-        options?: GetRuleOptions<'e18e', 'ban-dependencies'>;
-      });
+    | Prettify<
+        SubConfigOptions<ExtraPlugins, 'moduleReplacements'> & {
+          /**
+           * Options of the only rule in this sub-config, `e18e/ban-dependencies`,
+           */
+          options?: GetRuleOptions<'e18e', 'ban-dependencies'>;
+        }
+      >;
 
   /**
    * "Patterns that can be optimized for better runtime performance" -
