@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import * as findUp from 'empathic/find';
 import type {UnConfigContext} from '../config-un/shared';
 import {
@@ -369,6 +370,21 @@ const loadNuxtOptions = async (cwd: string) => {
     return {error: describeError(error)};
   }
 };
+
+/** Folds the `allowDefaultProject` shortcut into `projectService`, winning over the existing one */
+export const withAllowDefaultProject = (
+  parserOptions: TsEslintParserOptions,
+  allowDefaultProject: string[] | undefined,
+): TsEslintParserOptions =>
+  allowDefaultProject?.length
+    ? {
+        ...parserOptions,
+        projectService: {
+          ...(typeof parserOptions.projectService === 'object' && parserOptions.projectService),
+          allowDefaultProject,
+        },
+      }
+    : parserOptions;
 
 /** Reads Nuxt's auto-imports resolved by `nuxt/kit` (Nuxt 3.3+) */
 export const resolveNuxtAutoImports = async ({

@@ -556,12 +556,12 @@ export interface EslintConfigUnOptions<
    *   configs listed above.
    *   Useful for TypeScript files that are not part of any `tsconfig.json` (which would otherwise
    *   make `projectService` throw).
-   * - `allowDefaultProject` / `parserOptions` (mutually exclusive): the default parser options for
-   *   the type-aware linting `eslint-config-un` sets up — the `standalone` split configs and, as a
-   *   default, the type-aware parsing the `ts` config asks for.
+   * - `allowDefaultProject` / `parserOptions`: the default parser options for the type-aware
+   *   linting `eslint-config-un` sets up — the `standalone` split configs and, as a default, the
+   *   type-aware parsing the `ts` config asks for.
    *   `allowDefaultProject` is a shortcut for `parserOptions.projectService.allowDefaultProject`
    *   (the most common need, e.g. test files not part of any `tsconfig.json`); `parserOptions` is
-   *   the full escape hatch.
+   *   the full escape hatch. They are merged, the shortcut winning if both set it.
    *   These mirror the same-named `ts` config options, which take precedence over them there.
    *
    * NOTE: these are accepted regardless of `mode` (they are orthogonal to it), but they only take
@@ -577,7 +577,7 @@ export interface EslintConfigUnOptions<
    */
   typeInfoRules?:
     | TypeInfoMode
-    | ({
+    | {
         /**
          * How the rules requiring type information are handled
          */
@@ -587,21 +587,19 @@ export interface EslintConfigUnOptions<
          * Glob patterns excluded from type-aware linting
          */
         ignores?: string[];
-      } & (
-        | {
-            /**
-             * A shortcut for
-             * [`parserOptions.projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser/#allowdefaultproject)
-             */
-            allowDefaultProject?: string[];
-          }
-        | {
-            /**
-             * Parser options of the type-aware configs
-             */
-            parserOptions?: TsEslintParserOptions;
-          }
-      ));
+
+        /**
+         * A shortcut for
+         * [`parserOptions.projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser/#allowdefaultproject).
+         * Merged into `parserOptions`, winning over the same option set there.
+         */
+        allowDefaultProject?: string[];
+
+        /**
+         * Parser options of the type-aware configs
+         */
+        parserOptions?: TsEslintParserOptions;
+      };
 
   // #endregion
 

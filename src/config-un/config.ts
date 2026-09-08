@@ -6,7 +6,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ManifestConfigKey, UnConfigResults} from '../configs/index.gen';
 import {CONFIG_MANIFESTS, CONFIG_ORDER} from '../configs/manifests.gen';
-import {resolveNuxtAutoImports} from '../configs/shared';
+import {resolveNuxtAutoImports, withAllowDefaultProject} from '../configs/shared';
 import {
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
@@ -237,16 +237,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (typeInfoRulesObject?.ignores?.length) {
     typeInfoRulesResolved.ignores = typeInfoRulesObject.ignores;
   }
-  if (typeInfoRulesObject && 'allowDefaultProject' in typeInfoRulesObject) {
-    if (typeInfoRulesObject.allowDefaultProject?.length) {
-      typeInfoRulesResolved.parserOptions = {
-        projectService: {
-          allowDefaultProject: typeInfoRulesObject.allowDefaultProject,
-        },
-      };
-    }
-  } else if (typeInfoRulesObject && 'parserOptions' in typeInfoRulesObject) {
-    typeInfoRulesResolved.parserOptions = typeInfoRulesObject.parserOptions;
+  if (typeInfoRulesObject?.parserOptions || typeInfoRulesObject?.allowDefaultProject?.length) {
+    typeInfoRulesResolved.parserOptions = withAllowDefaultProject(
+      typeInfoRulesObject.parserOptions || {},
+      typeInfoRulesObject.allowDefaultProject,
+    );
   }
 
   const parsingRequests: UnConfigContext['parsingRequests'] = new Map();

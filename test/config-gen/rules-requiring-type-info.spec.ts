@@ -316,6 +316,56 @@ describe('rules requiring type information', () => {
         ],
       ).toMatchObject({tsconfigRootDir: '/global/root', projectService: true});
     });
+
+    it('merges the global `allowDefaultProject` into the global `parserOptions`', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {
+          typeInfoRules: {
+            mode: 'standalone',
+            allowDefaultProject: ['*.ts'],
+            parserOptions: {
+              tsconfigRootDir: '/global/root',
+              projectService: {
+                maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 100,
+                allowDefaultProject: ['*.js'],
+              },
+            },
+          },
+        },
+        internalOptions: {},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toStrictEqual({
+        tsconfigRootDir: '/global/root',
+        projectService: {
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 100,
+          allowDefaultProject: ['*.ts'],
+        },
+      });
+    });
+
+    it('replaces the boolean global `projectService` when merging `allowDefaultProject`', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {
+          typeInfoRules: {
+            mode: 'standalone',
+            allowDefaultProject: ['*.ts'],
+            parserOptions: {projectService: true},
+          },
+        },
+        internalOptions: {},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toStrictEqual({projectService: {allowDefaultProject: ['*.ts']}});
+    });
   });
 
   describe('`typeInfoRules` is set to `asIs`', () => {

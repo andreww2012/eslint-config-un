@@ -12,7 +12,7 @@ import type {GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, allUnionMembers, arrayUnique, isKeyIn, maybeCall, omit} from '../utils';
-import {resolveFilesOption, resolveIgnoresOption} from './shared';
+import {resolveFilesOption, resolveIgnoresOption, withAllowDefaultProject} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -537,21 +537,13 @@ export interface TsEslintConfigOptions<
 const TS_FILES_DEFAULT = [GLOB_TS_X];
 const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS];
 
-const isProjectServiceObject = (
-  value: TsEslintParserOptions['projectService'],
-): value is Exclude<TsEslintParserOptions['projectService'], boolean | undefined> =>
-  typeof value === 'object';
-
 const mergeParserOptions = (
   lower: TsEslintParserOptions,
   higher: TsEslintParserOptions,
 ): TsEslintParserOptions => {
   const merged: TsEslintParserOptions = {...lower, ...higher};
 
-  if (
-    isProjectServiceObject(lower.projectService) &&
-    isProjectServiceObject(higher.projectService)
-  ) {
+  if (typeof lower.projectService === 'object' && typeof higher.projectService === 'object') {
     merged.projectService = {...lower.projectService, ...higher.projectService};
   }
 
@@ -724,18 +716,9 @@ export default defineUnConfig<
       }),
     );
 
-    const withAllowDefaultProject: TsEslintParserOptions = allowDefaultProject?.length
-      ? {
-          ...merged,
-          projectService: isProjectServiceObject(merged.projectService)
-            ? {...merged.projectService, allowDefaultProject}
-            : {allowDefaultProject},
-        }
-      : merged;
+    const result = withAllowDefaultProject(merged, allowDefaultProject);
 
-    return withAllowDefaultProject.projectService === undefined
-      ? {...withAllowDefaultProject, projectService: {}}
-      : withAllowDefaultProject;
+    return result.projectService == null ? {...result, projectService: {}} : result;
   };
 
   context.requestParsing('ts', {
