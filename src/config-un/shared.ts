@@ -5,10 +5,7 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
-import type {
-  NuxtAutoImportsResult,
-  RulesDisabledInEmbeddedCodeBlocksByDefault,
-} from '../configs/shared';
+import type {NuxtAutoImportsResult} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
   EslintFlatConfigEntry,
@@ -37,6 +34,7 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
+import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../plugins.gen';
 import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
 import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
 import type {createConfigBuilder} from './config';
@@ -140,31 +138,6 @@ type ValueOrEslintConfigWithValue<T> =
         }
       >
     >;
-
-// ⚠️ IMPORTANT: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs (below)
-export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
-  object)['rules'] = {
-  // TODO add missing reasons for disabling autofixes
-  'case-police/string-check': true, // May alter JS strings, object properties, etc
-
-  'ts/method-signature-style': true,
-  'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
-
-  'unicorn/catch-error-name': true,
-  'unicorn/consistent-existence-index-check': true,
-  'unicorn/explicit-length-check': true, // Wrong auto-fixes
-  'unicorn/no-useless-undefined': true,
-  'unicorn/prefer-spread': true,
-  'unicorn/prefer-string-raw': true, // Transforms strings to `String.raw` expressions, which may cause type errors
-  'unicorn/prefer-private-class-fields': true, // As per the rule description itself, it skips some patterns that could be used to access autofixed non-private fields
-
-  'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
-
-  'github-actions/action-name-casing': true, // May break the name
-
-  'markdown-preferences/heading-casing': true, // Both *-casing rules may change the meaning of the text
-  'markdown-preferences/table-header-casing': true,
-};
 
 type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 

@@ -47,7 +47,9 @@ If you installed new packages for that, make sure to add them to `src/loaders/{p
 
 ### Step 2: Updating generated artifacts
 
-Run `nr prep`.
+For every new plugin, create `src/plugins/<plugin prefix>.ts` with `configs` and an empty `rules` object first, otherwise the next command fails.
+
+Then run `nr prep`.
 It generates two kinds of artifacts:
 
 - The plugin rules' types — its output gives you the exact rules that this plugin provides;
@@ -130,30 +132,21 @@ After every `addRule` statement, we annotate the rule with:
   IMPORTANT: `🟢`/`🟡` and `🔴` are **mutually exclusive** — pick one system based on which is the minority.
   Every emoji used in annotations must appear in the legend section.
 
-#### Step 4.4: Stylistic rules
+#### Step 4.4: Plugin metadata file
 
-Identify stylistic-only rules and add them to `ALL_STYLISTIC_RULES.<plugin-prefix>` in `src/configs/extra/no-stylistic-rules.ts`.
-If there are none, put a `// None` comment between the braces of the empty rules object.
-The rule of thumb: after fixing the issue reported by the rule, the logic of the program should not change in any way.
-IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.
-See the already added rules for example.
+Fill in `src/plugins/<plugin prefix>.ts`, which holds what we know about the plugin and each of its rules.
+Read `src/plugins/shared.ts` for the contract, and `src/plugins/unicorn.ts` (or any other plugin file) for a file exercising most of it.
 
-#### Step 4.5: Rules not working in embedded code blocks
+Two judgement calls the contract cannot spell out:
 
-Decide what rules don't make sense in Markdown/MDX embedded code blocks.
-Add them to `RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS` in `src/configs/shared.ts`.
-Rules requiring type information are definite candidates for this because type information is not available there.
+- `stylistic`: after fixing the issue reported by the rule, the logic of the program should not change in any way.
+  IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.
+- `disableInCodeBlocks`: rules requiring type information are definite candidates, because type information is not available there.
 
 ### Step 5: Documentation
 
 Document the addition of a new Config and plugin in `README.md`.
 Do NOT add a config logo if it doesn't exists.
-
-Document plugin metadata in `PACKAGES_META` in `scripts/shared/packages-meta.ts`.
-Don't blindly copy URL patterns from other entries - you need to actually figure them out.
-If the Config is served by more than one plugin, mark exactly one of them with `isMainPlugin: true`.
-
-Update `Default renames` section if the chosen plugin prefix differs from what the plugin docs suggests.
 
 ### Step 6: Testing
 

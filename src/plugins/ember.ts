@@ -1,0 +1,37 @@
+import {definePluginMetadata} from './shared';
+
+export default definePluginMetadata('ember', {
+  configs: ['ember'],
+  docsUrl: 'https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/README.md',
+  ruleDocsUrl: (ruleName) =>
+    `https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/${ruleName}.md`,
+  rules: {
+    'no-implicit-service-injection-argument': {stylistic: true},
+    'no-unnecessary-index-route': {stylistic: true},
+    'no-unnecessary-route-path-option': {stylistic: true},
+    'no-unnecessary-service-injection-argument': {stylistic: true},
+    'order-in-components': {stylistic: true},
+    'order-in-controllers': {stylistic: true},
+    'order-in-models': {stylistic: true},
+    'order-in-routes': {stylistic: true},
+    'route-path-style': {stylistic: true},
+    'routes-segments-snake-case': {stylistic: true},
+    'template-attribute-indentation': {stylistic: true},
+    'template-attribute-order': {stylistic: true},
+    'template-block-indentation': {stylistic: true},
+    'template-eol-last': {stylistic: true},
+    'template-linebreak-style': {stylistic: true},
+    'template-modifier-name-case': {stylistic: true},
+    'template-no-curly-component-invocation': {stylistic: true},
+    'template-no-deprecated': {requiresTypeInfo: 'optional'},
+    'template-no-negated-condition': {stylistic: true},
+    'template-no-only-default-slot': {stylistic: true},
+    'template-no-unnecessary-concat': {stylistic: true},
+    'template-no-unnecessary-curly-parens': {stylistic: true},
+    'template-no-unnecessary-curly-strings': {stylistic: true},
+    'template-quotes': {stylistic: true},
+    'template-sort-invocations': {stylistic: true},
+    'template-template-length': {stylistic: true},
+    'use-brace-expansion': {stylistic: true},
+  },
+});

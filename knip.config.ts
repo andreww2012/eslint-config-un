@@ -14,6 +14,8 @@ const config: KnipConfig = {
     // Gitignored, so not discovered on their own, and they are what references every Config module
     'src/configs/index.gen.d.ts',
     'src/configs/manifests.gen.ts',
+    // Read by the prep script through a dynamic import, never statically
+    'src/plugins/*.ts',
   ],
   ignoreDependencies: ['lychee-config-nick2bad4u'],
   tags: ['-knipignore'],

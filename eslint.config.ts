@@ -1,7 +1,10 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import {eslintConfig, isInCi} from './src';
+import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared';
 import {forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
+
+const PLUGIN_METADATA_GROUP_ORDER = [...PLUGIN_METADATA_KEY_ORDER, ...RULE_TRAIT_ORDER];
 
 export default eslintConfig({
   ignores: ['test/**/fixtures/**'],
@@ -26,6 +29,7 @@ export default eslintConfig({
   configs: {
     barrelFiles: true,
     checkFile: {
+      ignores: ['src/plugins/@.ts'],
       fileNamingConventions: {
         '{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE',
       },
@@ -48,7 +52,7 @@ export default eslintConfig({
     import: {
       extraneousDependenciesCheck: {whitelist: ALWAYS_BUNDLED_DEPENDENCIES},
       configAllowDefaultExport: {
-        files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts'],
+        files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts', 'src/plugins/*.ts'],
       },
     },
     js: {
@@ -126,6 +130,22 @@ export default eslintConfig({
   },
 
   extraConfigs: [
+    {
+      name: 'plugins-metadata-key-order',
+      files: ['src/plugins/*.ts'],
+      rules: {
+        'perfectionist/sort-objects': [
+          2,
+          {
+            customGroups: PLUGIN_METADATA_GROUP_ORDER.map((key) => ({
+              groupName: key,
+              elementNamePattern: `^${key}$`,
+            })),
+            groups: [...PLUGIN_METADATA_GROUP_ORDER, 'unknown'],
+          },
+        ],
+      },
+    },
     {
       files: ['scripts/**'],
       rules: {

@@ -17,7 +17,6 @@ import {
 } from '../constants';
 import type {
   EslintFlatConfigEntry,
-  UnAllRuleNames,
   UnFlatConfigEntryBase,
   UnRulesConfig,
 } from '../eslint/eslint-types';
@@ -28,6 +27,7 @@ import {
   type PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
+import {RULES_TO_DISABLE_IN_OFFLINE_MODE} from '../plugins.gen';
 import type {Falsy, MaybePromise, OmitIndexSignature, OmitStrict, PartialDeep} from '../types';
 import {
   type MaybeArray,
@@ -103,18 +103,6 @@ export function createConfigBuilder<
   this.configBuilders?.push(configBuilder);
   return configBuilder;
 }
-
-const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
-  'markdown-links/no-dead-urls',
-  'json-schema-validator/no-invalid',
-  'node-dependencies/compat-engines',
-  'node-dependencies/no-deprecated',
-  'node-dependencies/no-restricted-deps',
-  'node-dependencies/require-provenance-deps',
-  'lockfile/binary-conflicts',
-  'lockfile/integrity',
-  'lockfile/minimum-release-age',
-] satisfies UnAllRuleNames[];
 
 const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
 

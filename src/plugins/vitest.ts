@@ -1,0 +1,42 @@
+import {definePluginMetadata} from './shared';
+
+export default definePluginMetadata('vitest', {
+  configs: ['vitest'],
+  docsUrl: 'https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md',
+  ruleDocsUrl: (ruleName) =>
+    `https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/${ruleName}.md`,
+  rules: {
+    'consistent-test-it': {stylistic: true},
+    'consistent-vitest-vi': {stylistic: true},
+    'no-alias-methods': {stylistic: true},
+    'no-interpolation-in-snapshots': {stylistic: true},
+    'no-unneeded-async-expect-function': {stylistic: true},
+    'padding-around-after-all-blocks': {stylistic: true},
+    'padding-around-after-each-blocks': {stylistic: true},
+    'padding-around-all': {stylistic: true},
+    'padding-around-before-all-blocks': {stylistic: true},
+    'padding-around-before-each-blocks': {stylistic: true},
+    'padding-around-describe-blocks': {stylistic: true},
+    'padding-around-expect-groups': {stylistic: true},
+    'padding-around-test-blocks': {stylistic: true},
+    'prefer-called-exactly-once-with': {stylistic: true},
+    'prefer-called-once': {stylistic: true},
+    'prefer-called-times': {stylistic: true},
+    'prefer-each': {stylistic: true},
+    'prefer-expect-resolves': {stylistic: true},
+    'prefer-expect-type-of': {stylistic: true},
+    'prefer-hooks-in-order': {stylistic: true},
+    'prefer-hooks-on-top': {stylistic: true},
+    'prefer-importing-vitest-globals': {stylistic: true},
+    'prefer-lowercase-title': {
+      stylistic: true,
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
+    'prefer-mock-return-shorthand': {stylistic: true},
+    'prefer-to-be': {stylistic: true},
+    'prefer-to-contain': {stylistic: true},
+    'prefer-to-have-been-called-times': {stylistic: true},
+    'prefer-to-have-length': {stylistic: true},
+    'valid-title': {stylistic: true},
+  },
+});

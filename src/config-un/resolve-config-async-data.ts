@@ -18,6 +18,7 @@ import {
   parsersLoaders,
   pluginsLoaders,
 } from '../loaders';
+import {RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT} from '../plugins.gen';
 import type {NonEmptyTuple} from '../types';
 import {
   arrayPartition,
@@ -38,12 +39,7 @@ import {
 } from '../utils';
 import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
-import {
-  type EslintConfigUnOptions,
-  type PackageRequester,
-  RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
-  type UnConfigContext,
-} from './shared';
+import type {EslintConfigUnOptions, PackageRequester, UnConfigContext} from './shared';
 
 const checkIfModuleCorrectlyLoaded = async (
   moduleResult: {packageName: string; module: unknown} | null,

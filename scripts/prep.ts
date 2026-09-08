@@ -11,8 +11,11 @@ import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
+import {styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {writeConfigArtifacts} from './src/generation/configs';
+import {writePluginMetadataArtifacts} from './src/generation/plugins';
+import {writeReadmeArtifacts} from './src/generation/readme';
 import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
@@ -45,9 +48,7 @@ const [allRuleTypesCode, perPluginCode] = await Promise.all([
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
-const derivedAllRuleTypesCode = `/* eslint-disable */
-/* prettier-ignore */
-// Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
+const derivedAllRuleTypesCode = `// Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
 // of every rule's option type into the TypeScript program
 import type {UnionToIntersection} from '@andreww2012/unutils';
 import type {Linter} from 'eslint';
@@ -85,10 +86,22 @@ await Promise.all([
   ),
 ]);
 
+const {pluginsCount, warnings: pluginMetadataWarnings} =
+  await writePluginMetadataArtifacts(formatTypescript);
+console.log(`Generated the metadata of ${styleText('bold', String(pluginsCount))} plugin(s)`);
+pluginMetadataWarnings.forEach((warning) => {
+  console.log(`  ${styleText('yellow', '⚠')} ${warning}`);
+});
+
+const {renamesCount} = await writeReadmeArtifacts();
+console.log(
+  `Generated the readme table of ${styleText('bold', String(renamesCount))} plugin prefix rename(s)`,
+);
+
 // MUST come last: generating the config artifacts imports every Config module, and several of them
 // may import the rule artifacts written above, which may not exist yet
 const {configsCount} = await writeConfigArtifacts(formatTypescript);
-console.log(`Generated the artifacts of ${configsCount} config(s)`);
+console.log(`Generated the artifacts of ${styleText('bold', String(configsCount))} config(s)`);
 
 async function generateRuleTypes() {
   const [
@@ -275,7 +288,7 @@ ${perPluginCodeRaw
               });
               if (ruleErrors.length > 0) {
                 errors.push(
-                  `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${ruleErrors.join(', ')}`,
+                  `  ${styleRuleName(`${pluginName}/${ruleName}`)}: ${ruleErrors.join(', ')}`,
                 );
               }
               categoriesFound.forEach((category) => {

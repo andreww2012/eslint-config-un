@@ -1,3 +1,4 @@
+import {RULES_TO_DISABLE_IN_TEST_FILES} from '../../plugins.gen';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -55,18 +56,6 @@ export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'extra'
       ],
       {},
     )
-    // ⚠️ DO NOT FORGET to sync the rules list with the jsdoc description of `tests` config
-    .disableAnyRule('', 'no-empty-function')
-    .disableAnyRule('e18e', 'no-delete-property')
-    .disableAnyRule('e18e', 'prefer-static-collator')
-    .disableAnyRule('e18e', 'prefer-static-regex')
-    .disableAnyRule('sonarjs', 'no-hardcoded-ip')
-    .disableAnyRule('sonarjs', 'no-hardcoded-passwords')
-    .disableAnyRule('sonarjs', 'no-hardcoded-secrets')
-    .disableAnyRule('sonarjs', 'no-clear-text-protocols')
-    .disableAnyRule('ts', 'no-extraneous-class')
-    .disableAnyRule('ts', 'no-empty-function')
-    // Triggered on inline snapshots
-    .disableAnyRule('unicorn', 'template-indent')
+    .disableBulkRules([...RULES_TO_DISABLE_IN_TEST_FILES])
     .addOverrides();
 });

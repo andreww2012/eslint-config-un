@@ -35,7 +35,7 @@ import {
   resolveFullRuleName,
 } from '../eslint/eslint-utils';
 import type {PluginPrefix} from '../loaders';
-import {RULES_REQUIRING_TYPE_INFORMATION} from '../type-aware-rules';
+import {RULES_REQUIRING_TYPE_INFORMATION} from '../plugins.gen';
 import type {
   EmptyObject,
   Falsy,

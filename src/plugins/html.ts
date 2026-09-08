@@ -1,0 +1,31 @@
+import {definePluginMetadata} from './shared';
+
+export default definePluginMetadata('html', {
+  configs: ['html'],
+  docsUrl: 'https://html-eslint.org/docs/getting-started',
+  ruleDocsUrl: (ruleName) => `https://html-eslint.org/docs/rules/${ruleName}`,
+  suggestedPrefix: ['@html-eslint', 'more concise and convenient to use; `@` feels redundant'],
+  prettierLanguage: 'html',
+  rules: {
+    'attrs-newline': {stylistic: true, prettierIncompatible: true},
+    'class-spacing': {stylistic: true, prettierIncompatible: true},
+    'element-newline': {stylistic: true, prettierIncompatible: true},
+    'head-order': {stylistic: true},
+    indent: {stylistic: true, prettierIncompatible: true},
+    lowercase: {stylistic: true},
+    'no-extra-spacing-attrs': {stylistic: true, prettierIncompatible: true},
+    'no-extra-spacing-tags': {stylistic: true, prettierIncompatible: true},
+    'no-extra-spacing-text': {prettierIncompatible: true, disableInCodeBlocks: 'tooStrict'},
+    'no-multiple-empty-lines': {stylistic: true, prettierIncompatible: true},
+    'no-trailing-spaces': {stylistic: true, prettierIncompatible: true},
+    'no-whitespace-only-children': {prettierIncompatible: true},
+    quotes: {stylistic: true, prettierIncompatible: true},
+    'require-closing-tags': {prettierIncompatible: true},
+    'require-explicit-size': {disableInCodeBlocks: 'tooStrict'},
+    'require-lang': {disableInCodeBlocks: 'tooStrict'},
+    'require-meta-charset': {disableInCodeBlocks: 'tooStrict'},
+    'require-meta-viewport': {disableInCodeBlocks: 'tooStrict'},
+    'require-title': {disableInCodeBlocks: 'tooStrict'},
+    'sort-attrs': {stylistic: true},
+  },
+});

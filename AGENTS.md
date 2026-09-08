@@ -14,7 +14,7 @@ Running it fully takes a lot of resources (time especially and memory too) to co
 
 Avoid mentioning this package's name in internal comments.
 
-Never import any Config file (`src/configs/**/*.ts`) statically, unless the import is type-only.
+Never statically import at runtime any Config file matching `src/configs/**/*.ts` or the plugin metadata files (`src/plugins/*.ts` except `shared.ts`).
 
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
