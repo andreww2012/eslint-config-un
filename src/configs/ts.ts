@@ -1088,6 +1088,7 @@ export default defineUnConfig<
       },
     ]) /** @since 1.11.0 */ // 🟣
     .addRule('no-for-in-array', ERROR) /** @since 1.3.0 */ // 🟣
+    .addRule('no-generated-empty-object-type', ERROR) /** @since 8.70.0 */ // 🟣
     .addRule('no-meaningless-void-operator', ERROR) /** @since 4.31.0 */ // 🟣
     .addRule('no-misused-promises', ERROR) /** @since 1.13.0 */ // 🟣
     .addRule('no-misused-spread', ERROR) /** @since 8.20.0 */ // 🟣
