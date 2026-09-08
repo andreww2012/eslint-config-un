@@ -1,5 +1,6 @@
 *.json
 *.md
+.claude/
 src/eslint-types.d.ts
 test/**/fixtures/**
 test/__mocks__/loader/packages/
