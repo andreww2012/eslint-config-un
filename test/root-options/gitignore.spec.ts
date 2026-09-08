@@ -1,7 +1,23 @@
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
+import {resolveGitignore} from '../../src/config-un/gitignore';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore');
 const RECURSIVE_FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore-recursive');
+
+const createTemporaryDirectory = async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'eslint-config-un-gitignore-spec-'));
+  onTestFinished(() => fs.rm(directory, {recursive: true, force: true}));
+
+  return directory;
+};
+
+/** The option resolves against the real working directory unless it is given one of its own */
+const stubWorkingDirectory = (directory: string) => {
+  const cwd = vi.spyOn(process, 'cwd').mockReturnValue(directory);
+  onTestFinished(() => cwd.mockRestore());
+};
 
 const getGitignoreIgnores = async (
   gitignore: ((Parameters<typeof computeEslintConfig>[1] & {})['un'] & {})['gitignore'],
@@ -44,5 +60,49 @@ describe('option: `gitignore`', () => {
         recursive: false,
       }),
     ).resolves.toStrictEqual(['**/root-ignored-dir/']);
+  });
+
+  it('is derived from a nested `.gitignore` alone when no options are passed', async () => {
+    const directory = await createTemporaryDirectory();
+    await fs.mkdir(path.join(directory, 'nested'));
+    await fs.writeFile(path.join(directory, 'nested', '.gitignore'), '*.nested-ignored', 'utf8');
+    stubWorkingDirectory(directory);
+
+    await expect(resolveGitignore(undefined)).resolves.toHaveProperty('ignores', [
+      'nested/**/*.nested-ignored',
+    ]);
+  });
+
+  it('resolves to nothing without warning when no ignore file exists at all', async () => {
+    const processOutput = spyOnProcessOutput();
+    stubWorkingDirectory(await createTemporaryDirectory());
+
+    await expect(resolveGitignore(undefined)).resolves.toBeNull();
+
+    expect(processOutput.getStderrOutput()).toBe('');
+  });
+
+  it('is derived from `.gitmodules` alone when no ignore file exists', async () => {
+    const directory = await createTemporaryDirectory();
+    await fs.writeFile(
+      path.join(directory, '.gitmodules'),
+      '[submodule "vendor"]\n\tpath = vendor\n',
+      'utf8',
+    );
+    stubWorkingDirectory(directory);
+
+    await expect(resolveGitignore(undefined)).resolves.toHaveProperty('ignores', ['vendor/**']);
+  });
+
+  it('warns and creates no config when the options point at a missing directory', async () => {
+    const processOutput = spyOnProcessOutput();
+
+    await expect(
+      getGitignoreIgnores({cwd: path.join(await createTemporaryDirectory(), 'does-not-exist')}),
+    ).resolves.toBeUndefined();
+
+    expect(processOutput.getStderrOutput()).toContain(
+      'Could not generate the ignores from the gitignore files',
+    );
   });
 });

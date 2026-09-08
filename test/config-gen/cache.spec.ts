@@ -32,6 +32,8 @@ const CACHE_ROOT_DIR = path.join(os.tmpdir(), 'eslint-config-un-cache-spec');
 // The cache directory resolver appends the name the config generator asks for
 const CACHE_FILE_PATH = path.join(CACHE_ROOT_DIR, 'eslint-config-un', 'config.json');
 
+const GITIGNORE_ROOT_DIR = path.join(os.tmpdir(), 'eslint-config-un-cache-spec-gitignore');
+
 const MEMORY_CACHE_GLOBAL_NAME = 'eslintConfigUnResolvedConfig';
 
 const MAX_CACHE_VALID_MS = 3_600_000;
@@ -110,6 +112,7 @@ afterAll(async () => {
   }
 
   await fs.rm(CACHE_ROOT_DIR, {recursive: true, force: true});
+  await fs.rm(GITIGNORE_ROOT_DIR, {recursive: true, force: true});
 });
 
 const computeConfigWithDefaultCaching = (environment: Environment) => {
@@ -304,6 +307,24 @@ describe('option: `cacheConfigs`', () => {
       vi.mocked(detectPackageManager).mockResolvedValueOnce(packageManager);
 
       await computeCachedConfig();
+
+      await expect(readCacheFile()).resolves.not.toHaveProperty('key', key);
+    });
+
+    it('differs when a nested `.gitignore` changes', async () => {
+      const nestedGitignorePath = path.join(GITIGNORE_ROOT_DIR, 'nested', '.gitignore');
+      await fs.mkdir(path.dirname(nestedGitignorePath), {recursive: true});
+      await fs.writeFile(path.join(GITIGNORE_ROOT_DIR, '.gitignore'), '*.ignored', 'utf8');
+      await fs.writeFile(nestedGitignorePath, '*.nested-ignored', 'utf8');
+
+      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIR}});
+      const {key} = await readCacheFile();
+
+      await fs.rm(CACHE_FILE_PATH, {force: true});
+      clearMemoryCache();
+      await fs.writeFile(nestedGitignorePath, '*.nested-ignored-differently', 'utf8');
+
+      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIR}});
 
       await expect(readCacheFile()).resolves.not.toHaveProperty('key', key);
     });

@@ -42,6 +42,7 @@ import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '.
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from './config-utils';
+import type {ResolvedGitignore} from './gitignore';
 import type {ImportPluginReplaceableRules} from './import-integrity';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
@@ -657,7 +658,9 @@ export interface EslintConfigUnOptions<
    * package defaults to `true` by default.
    *
    * Passed options will be merged with the defaults.
-   * @default true <=> `.gitignore` exists in [the current working directory](https://nodejs.org/api/process.html#processcwd)
+   *
+   * Every source the underlying package reads counts, be it a nested `.gitignore`, one in [the current working directory](https://nodejs.org/api/process.html#processcwd) or above it, `.gitmodules`, or `.git/info/exclude`.
+   * @default true <=> at least one ignore pattern could be derived
    */
   gitignore?: boolean | FlatGitignoreOptions;
 
@@ -695,7 +698,8 @@ export interface EslintConfigUnOptions<
    *
    * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered fresh
    * for 1 hour, unless one of the following is changed:
-   * - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
+   * - Current git revision (`git rev-parse HEAD`)
+   * - Ignore patterns derived from every file the {@link gitignore} option respects
    * - `package.json`, lockfile contents or package manager
    * - ESLint config file contents
    * - Node.JS version
@@ -862,6 +866,8 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   };
 
   nuxtAutoImports: NuxtAutoImportsResult | null;
+
+  gitignore: ResolvedGitignore | null;
 
   logger: ConsolaInstance;
   debug: Debugger;

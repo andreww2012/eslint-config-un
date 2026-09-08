@@ -12,7 +12,14 @@ import {
   GLOB_YML_YAML,
 } from '../constants';
 import type {UnAllRuleNames, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
-import {type AllUnionMembers, objectEntriesUnsafe, pick, readFileSafe, sha256} from '../utils';
+import {
+  type AllUnionMembers,
+  describeError,
+  objectEntriesUnsafe,
+  pick,
+  readFileSafe,
+  sha256,
+} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 
@@ -541,9 +548,6 @@ export interface NuxtAutoImportsFailure {
 }
 
 export type NuxtAutoImportsResult = NuxtAutoImports | NuxtAutoImportsFailure;
-
-const describeError = (error: unknown) =>
-  error instanceof Error ? error.message : typeof error === 'string' ? error : 'unknown error';
 
 const loadNuxtOptions = async (cwd: string) => {
   try {

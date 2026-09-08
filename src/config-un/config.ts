@@ -35,13 +35,11 @@ import {
   arrayify,
   assignDefaults,
   fetchPackageInfo,
-  interopDefault,
   isInCi,
   isInEditor,
   maybeCall,
   objectEntriesUnsafe,
   omit,
-  readFileSafe,
   styleConfigName,
   stylePluginPrefix,
   styleRuleName,
@@ -61,6 +59,7 @@ import {
   registerUsedPlugin,
 } from './config-utils';
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
+import {resolveGitignore} from './gitignore';
 import {withDefaultPackageRootDir} from './import-integrity';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
@@ -219,17 +218,25 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     };
   })();
 
-  const [usedPackageManager, fixableRulesPerPlugin, nuxtAutoImports] = await Promise.all([
-    detectPackageManager(),
-    // The file may be absent since it's generated, and its generator script
-    // executes this code
-    import('../eslint-types-fixable-only.gen')
-      .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
-      .catch(() => ({})),
-    isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirOption}),
-  ]);
+  const [usedPackageManager, fixableRulesPerPlugin, nuxtAutoImports, gitignore] = await Promise.all(
+    [
+      detectPackageManager(),
+      // The file may be absent since it's generated, and its generator script
+      // executes this code
+      import('../eslint-types-fixable-only.gen')
+        .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
+        .catch(() => ({})),
+      isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirOption}),
+      resolveGitignore(optionsResolved.gitignore),
+    ],
+  );
 
   debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
+
+  if (gitignore?.error != null) {
+    logger.warn(`Could not generate the ignores from the gitignore files: ${gitignore.error}`);
+  }
+  debug(`Generated gitignore ignores: ${gitignore?.ignores?.length ?? '<none>'}`);
 
   const typeInfoRulesRaw = optionsResolved.typeInfoRules;
   const typeInfoRulesObject = typeof typeInfoRulesRaw === 'object' ? typeInfoRulesRaw : undefined;
@@ -272,6 +279,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     requestParsing: createRequestParsing(parsingRequests),
     meta: {usedPackageManager, environment},
     nuxtAutoImports,
+    gitignore,
     logger,
     debug,
     isTestMode,
@@ -332,14 +340,13 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ),
   ];
 
-  const [packagesInfoRaw, gitignoreFile, loadablePluginsRaw] = await Promise.all([
+  const [packagesInfoRaw, loadablePluginsRaw] = await Promise.all([
     Promise.all(
       PACKAGES_TO_GET_INFO_FOR.map(
         async (name) =>
           [name, await fetchPackageInfo(optionsResolved.packageAliases?.[name] || name)] as const,
       ),
     ),
-    readFileSafe('.gitignore'),
     Promise.all(
       requiredPluginPrefixes.map(async (pluginPrefix) => {
         const {packageName, module} = await pluginsLoaders[pluginPrefix](context);
@@ -353,14 +360,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
 
-  debug(`Found .gitignore file: ${gitignoreFile != null}`);
-
   const {
     extraConfigs,
     extraPlugins,
     ignores,
     files,
-    gitignore,
     plugins: pluginsOptions = {},
     loadPluginsOnDemand,
     offlineMode,
@@ -555,15 +559,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         name: genFlatConfigEntryName('ignores/global'),
         ignores: globalIgnores,
       },
-      gitignore !== false &&
-        (typeof gitignore === 'object' || gitignoreFile) &&
-        interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
-          ...eslintGitignore({
-            recursive: true,
-            ...(typeof gitignore === 'object' && gitignore),
-          }),
-          name: genFlatConfigEntryName('ignores/gitignore'),
-        })),
+      gitignore?.ignores != null && {
+        name: genFlatConfigEntryName('ignores/gitignore'),
+        ignores: gitignore.ignores,
+      },
       ...(
         [
           [linterOptionsNoInlineConfig, 'noInlineConfig'],

@@ -43,12 +43,12 @@ const computeCacheKey = async (context: UnConfigContext) => {
   ];
 
   const packageManagerInfo = context.meta.usedPackageManager;
-  cacheKey.push(JSON.stringify(packageManagerInfo), context.nuxtAutoImports?.cacheKey || '');
+  cacheKey.push(
+    JSON.stringify(packageManagerInfo),
+    context.nuxtAutoImports?.cacheKey || '',
+    context.gitignore?.cacheKey || '',
+  );
 
-  // TODO sync with logic in config.ts: nested `.gitignore` files, which are respected since
-  // `recursive` became the default, are not accounted for - hashing them means walking the whole
-  // project tree on every run
-  const gitignorePath = findUp.file('.gitignore');
   const packageJsonPath = packageUtils.up();
 
   /* v8 ignore next - Every known package manager has its lockfiles grouped */
@@ -73,7 +73,6 @@ const computeCacheKey = async (context: UnConfigContext) => {
         return null;
       },
     ),
-    gitignorePath && readFileSafe(gitignorePath, true),
     packageJsonPath && readFileSafe(packageJsonPath, true),
     Promise.all(
       // eslint-disable-next-line ts/await-thenable
@@ -100,6 +99,14 @@ const computeCacheKey = async (context: UnConfigContext) => {
     cacheKey,
     hash: sha256(JSON.stringify(cacheKey)),
   };
+};
+
+const CACHE_KEYS_PER_CONTEXT = new WeakMap<UnConfigContext, ReturnType<typeof computeCacheKey>>();
+
+const getCacheKey = (context: UnConfigContext) => {
+  const cacheKey = CACHE_KEYS_PER_CONTEXT.get(context) ?? computeCacheKey(context);
+  CACHE_KEYS_PER_CONTEXT.set(context, cacheKey);
+  return cacheKey;
 };
 
 interface CacheMetadata {
@@ -157,7 +164,7 @@ export const saveCacheToFs = async (
     return false;
   }
 
-  const {hash: cacheKeyHash, cacheKey} = await computeCacheKey(context);
+  const {hash: cacheKeyHash, cacheKey} = await getCacheKey(context);
 
   const dataToStore: CacheDataStoredInFs = {
     date: new Date().toISOString(),
@@ -244,7 +251,7 @@ export const restoreCacheFromFs = async (
   }
 
   const [{hash: cacheKey}, cachedData] = await Promise.all([
-    computeCacheKey(context),
+    getCacheKey(context),
     readAndParseJson<CacheDataStoredInFs>(cachePath),
   ]);
 
@@ -270,7 +277,7 @@ declare const globalThis: typeof global & {
 };
 
 export const saveCacheToMemory = async (context: UnConfigContext, data: CacheDataInMemory) => {
-  const cacheKey = await computeCacheKey(context);
+  const cacheKey = await getCacheKey(context);
 
   globalThis.eslintConfigUnResolvedConfig = {
     ...data,
@@ -280,7 +287,7 @@ export const saveCacheToMemory = async (context: UnConfigContext, data: CacheDat
 };
 
 export const restoreCacheFromMemory = async (context: UnConfigContext) => {
-  const cacheKey = await computeCacheKey(context);
+  const cacheKey = await getCacheKey(context);
 
   const configInMemory = globalThis.eslintConfigUnResolvedConfig;
 

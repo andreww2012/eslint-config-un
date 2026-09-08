@@ -115,6 +115,9 @@ export function findArrayInversions<T>(
   return result;
 }
 
+export const describeError = (error: unknown) =>
+  error instanceof Error ? error.message : typeof error === 'string' ? error : 'unknown error';
+
 export const sha256 = (input: string | Buffer) => {
   const hashInstance = crypto.createHash('sha256');
   if (typeof input === 'string') {
