@@ -6,7 +6,8 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: []
+minimumReleaseAgeExclude: # []
+  - '@eslint-community/eslint-plugin-eslint-comments@4.8.0'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
