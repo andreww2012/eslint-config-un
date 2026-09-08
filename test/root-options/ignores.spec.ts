@@ -5,11 +5,12 @@ const IGNORES = ['**/coverage', '**/temp'];
 const getGlobalIgnores = async (
   ignores: ((Parameters<typeof computeEslintConfig>[1] & {})['un'] & {})['ignores'],
 ) =>
-  (await computeEslintConfig({}, {un: {ignores}})).getConfigByUnPostfix('ignores/global')?.ignores;
+  (await computeEslintConfig({}, {un: {ignores}})).getConfigByUnPostfix('global-setup/ignores')
+    ?.ignores;
 
 describe('option: `ignores`', () => {
   it('creates a config with only the default ignores when option is not set', async () => {
-    const config = (await computeEslintConfig({})).getConfigByUnPostfix('ignores/global');
+    const config = (await computeEslintConfig({})).getConfigByUnPostfix('global-setup/ignores');
 
     expect(config).toStrictEqual({
       name: expect.any(String) as unknown,

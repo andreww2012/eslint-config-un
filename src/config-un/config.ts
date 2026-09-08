@@ -104,7 +104,7 @@ export function createConfigBuilder<
   return configBuilder;
 }
 
-const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
+const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('plugins', {isGlobalSetup: true});
 
 interface TestError {
   message: MaybeArray<string>;
@@ -540,15 +540,15 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<ConfigUnresolved>[]> = {
     globalSetup: [
       (files?.length || 0) > 0 && {
-        name: genFlatConfigEntryName('files/global'),
+        name: genFlatConfigEntryName('files', {isGlobalSetup: true}),
         files,
       },
       globalIgnores.length > 0 && {
-        name: genFlatConfigEntryName('ignores/global'),
+        name: genFlatConfigEntryName('ignores', {isGlobalSetup: true}),
         ignores: globalIgnores,
       },
       gitignore?.ignores != null && {
-        name: genFlatConfigEntryName('ignores/gitignore'),
+        name: genFlatConfigEntryName('ignores/gitignore', {isGlobalSetup: true}),
         ignores: gitignore.ignores,
       },
       ...(
@@ -590,7 +590,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
           return {
             name: genFlatConfigEntryName(
-              `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
+              `linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
+              {isGlobalSetup: true},
             ),
             ...(filesFinal?.length && {files: filesFinal}),
             ...(!shouldDisableForIgnoredPaths &&
@@ -603,7 +604,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         }),
       ),
       {
-        name: genFlatConfigEntryName('global-setup/language-options'),
+        name: genFlatConfigEntryName('language-options', {isGlobalSetup: true}),
         languageOptions: {
           ecmaVersion: 'latest',
           sourceType: 'module',
@@ -617,7 +618,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         } as const,
       },
       {
-        name: genFlatConfigEntryName('global-setup/language-options/commonjs'),
+        name: genFlatConfigEntryName('language-options/commonjs', {isGlobalSetup: true}),
         files: ['**/*.c[jt]s?(x)'],
         languageOptions: {
           globals: {
@@ -626,7 +627,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         },
       },
       useImportIntegrity && {
-        name: genFlatConfigEntryName('global-setup/import-integrity'),
+        name: genFlatConfigEntryName('import-integrity', {isGlobalSetup: true}),
         settings: {
           'import-integrity': withDefaultPackageRootDir(
             pluginsOptions['import-integrity']?.settings,

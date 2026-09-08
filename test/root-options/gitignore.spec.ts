@@ -22,8 +22,9 @@ const stubWorkingDirectory = (directory: string) => {
 const getGitignoreIgnores = async (
   gitignore: ((Parameters<typeof computeEslintConfig>[1] & {})['un'] & {})['gitignore'],
 ) =>
-  (await computeEslintConfig({}, {un: {gitignore}})).getConfigByUnPostfix('ignores/gitignore')
-    ?.ignores;
+  (await computeEslintConfig({}, {un: {gitignore}})).getConfigByUnPostfix(
+    'global-setup/ignores/gitignore',
+  )?.ignores;
 
 describe('option: `gitignore`', () => {
   it('derives the ignores from the `.gitignore` of the current working directory by default', async () => {

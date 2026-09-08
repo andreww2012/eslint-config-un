@@ -17,8 +17,8 @@ describe('cascade order', () => {
 
     expect(configs.map(({name}) => name).join('\n')).toMatchInlineSnapshot(`
       "eslint-config-un/global-setup/plugins
-      eslint-config-un/ignores/global
-      eslint-config-un/ignores/gitignore
+      eslint-config-un/global-setup/ignores
+      eslint-config-un/global-setup/ignores/gitignore
       eslint-config-un/global-setup/language-options
       eslint-config-un/global-setup/language-options/commonjs
       eslint-config-un/antfu
