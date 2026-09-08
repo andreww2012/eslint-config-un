@@ -1,4 +1,3 @@
-import {identity} from '@andreww2012/unutils';
 import type {CSSLanguageOptions} from '@eslint/css';
 import type {MarkdownLanguageOptions} from '@eslint/markdown';
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
@@ -31,7 +30,14 @@ import {
   generatePackageToLoadProperty,
 } from '../loaders';
 import type {ObjectValues} from '../types';
-import {type MaybeArray, arrayUnique, arrayify, isObject, objectKeysUnsafe} from '../utils';
+import {
+  type MaybeArray,
+  arrayUnique,
+  arrayify,
+  identity,
+  isObject,
+  objectKeysUnsafe,
+} from '../utils';
 import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
 import {
   type PackageRequester,

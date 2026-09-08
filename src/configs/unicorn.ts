@@ -1,4 +1,3 @@
-import {objectKeysUnsafe} from '@andreww2012/unutils';
 import {
   ERROR,
   GLOB_CSS,
@@ -13,7 +12,13 @@ import {
 } from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {MergeObjects, OmitIndexSignature, OmitStrict, Prettify} from '../types';
-import {arrayIncludes, arrayPartition, isNonEmptyArray, objectEntriesUnsafe} from '../utils';
+import {
+  arrayIncludes,
+  arrayPartition,
+  isNonEmptyArray,
+  objectEntriesUnsafe,
+  objectKeysUnsafe2 as objectKeysUnsafe,
+} from '../utils';
 import type {ConfigKey} from './index.gen';
 import {
   type ArrayOrBooleanRecord,

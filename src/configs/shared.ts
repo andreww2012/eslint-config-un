@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {toKebabCase} from '@andreww2012/unutils';
 import * as findUp from 'empathic/find';
 import type {UnConfigContext} from '../config-un/shared';
 import {
@@ -21,6 +20,7 @@ import {
   pick,
   readFileSafe,
   sha256,
+  toKebabCase,
 } from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';

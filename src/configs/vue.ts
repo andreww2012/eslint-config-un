@@ -1,4 +1,3 @@
-import {regexEscape} from '@andreww2012/unutils';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
 import {
@@ -13,7 +12,13 @@ import {
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
-import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
+import {
+  type MaybeArray,
+  allUnionMembers,
+  getKeysOfTruthyValues,
+  joinPaths,
+  regexEscape,
+} from '../utils';
 import {
   type NuxtAutoImports,
   type ValidAndInvalidHtmlTags,

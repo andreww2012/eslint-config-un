@@ -196,7 +196,13 @@ export default eslintConfig({
           {
             patterns: [
               forbidImportingFromUtilityLibraries({
-                packageNames: {'local-pkg': true, klona: true, defu: true, destr: true},
+                packageNames: {
+                  'local-pkg': true,
+                  klona: true,
+                  defu: true,
+                  destr: true,
+                  '@andreww2012/unutils': true,
+                },
                 message:
                   'Please do not use this package directly, import utilities from `utils.ts` or `types.ts` instead',
               }),
