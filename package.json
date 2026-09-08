@@ -94,14 +94,6 @@
     "prepublishOnly": "nr build && nr check:public-types",
     "prepack": "nr build"
   },
-  "overrides": {
-    "eslint-plugin-jest": {
-      "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin"
-    },
-    "eslint-plugin-unused-imports": {
-      "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin"
-    }
-  },
   "dependencies": {
     "@andreww2012/unutils": "0.1.0",
     "@antfu/utils": "9.3.0",
