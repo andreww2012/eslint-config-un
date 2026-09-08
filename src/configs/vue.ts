@@ -903,6 +903,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addRule('no-restricted-v-on', OFF) /** @since 9.21.0 */
     .addRule('no-root-v-if', OFF) /** @since 9.12.0 */
     .addRule('no-setup-props-reactivity-loss', ERROR) /** @since 9.17.0 */
+    .addRule('no-shadow-native-events', ERROR) /** @since 10.11.0 */
     .addRule('no-static-inline-styles', OFF) /** @since 7.0.0 */
     .addRule('no-template-target-blank', OFF) /** @since 7.0.0 */
     .addRule('no-this-in-before-route-enter', ERROR) /** @since 7.11.0 */
@@ -916,7 +917,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
           ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
-          .filter(Boolean),
+          .filter((v) => typeof v === 'string'),
       },
     ]) /** @since 8.4.0 */
     // TODO enable if script setup is enforced and only in JS?
