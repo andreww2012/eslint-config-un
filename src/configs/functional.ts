@@ -57,11 +57,6 @@ export interface FunctionalPluginSettings {
 /**
  * Rules enforcing functional programming patterns.
  *
- * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules
- * requiring it are disabled.
- * For the former, they must be included in `files` array of `ts/configTypeAware` config (they are
- * by default).
- *
  * 📁 Default `files`: all files
  */
 export interface FunctionalEslintConfigOptions<
