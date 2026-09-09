@@ -612,8 +612,8 @@ importers:
         specifier: 17.0.1
         version: 17.0.1(eslint@10.10.0)
       eslint-plugin-awscdk:
-        specifier: 4.4.1
-        version: 4.4.1(@typescript/typescript6@6.0.2)(eslint@10.10.0)
+        specifier: 4.4.3
+        version: 4.4.3(@typescript/typescript6@6.0.2)(eslint@10.10.0)
       eslint-plugin-barrel-files:
         specifier: 3.0.1
         version: 3.0.1(eslint@10.10.0)
@@ -7687,8 +7687,8 @@ packages:
     peerDependencies:
       eslint: '>=10'
 
-  eslint-plugin-awscdk@4.4.1:
-    resolution: {integrity: sha512-nAOUtoC9Owbj94mEnyzNMsVO7Isgd0blBFnGU9FT+xbMbxqCrh4tlo6zAKAG5NdgLBNU50jlL2iFHMN1y1Jbbg==}
+  eslint-plugin-awscdk@4.4.3:
+    resolution: {integrity: sha512-p1588xcXDiDEyiNC0iUHf9AsmoHpI2EHAK5tFbt0+bYOOVPTSaA1a+WnlX4i2joo70fgVmrJkZ6v4L3cDbPKgw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
@@ -20586,7 +20586,7 @@ snapshots:
       micro-spelling-correcter: 1.1.1
       resolve-from: 5.0.0
 
-  eslint-plugin-awscdk@4.4.1(@typescript/typescript6@6.0.2)(eslint@10.10.0):
+  eslint-plugin-awscdk@4.4.3(@typescript/typescript6@6.0.2)(eslint@10.10.0):
     dependencies:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
