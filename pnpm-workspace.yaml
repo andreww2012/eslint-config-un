@@ -9,12 +9,12 @@ minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - obug@3.0.0
   - knip@6.35.1
+  - eslint-plugin-jsdoc@64.3.8
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude: # []
-  - '@humanwhocodes/momoa@3.3.12'
+trustPolicyExclude: []
 
 audit:
   ignore: # []
