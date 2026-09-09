@@ -53,6 +53,7 @@ strictPeerDependencies: false
 overrides:
   brace-expansion@>=5.0.0 <5.0.9: 5.0.9
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
+  smol-toml@<=1.7.0: ^1.7.1
 
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
