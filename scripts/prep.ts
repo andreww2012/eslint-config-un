@@ -14,7 +14,6 @@ import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {writeConfigArtifacts} from './src/generation/configs';
-import {writePluginMetadataArtifacts} from './src/generation/plugins';
 import {writeReadmeArtifacts} from './src/generation/readme';
 import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
@@ -87,7 +86,10 @@ await Promise.all([
 ]);
 
 const {pluginsCount, warnings: pluginMetadataWarnings} =
-  await writePluginMetadataArtifacts(formatTypescript);
+  // The module reads the rule artifacts written above, which may not exist yet
+  await import('./src/generation/plugins').then((m) =>
+    m.writePluginMetadataArtifacts(formatTypescript),
+  );
 console.log(`Generated the metadata of ${styleText('bold', String(pluginsCount))} plugin(s)`);
 pluginMetadataWarnings.forEach((warning) => {
   console.log(`  ${styleText('yellow', '⚠')} ${warning}`);
