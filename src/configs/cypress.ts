@@ -40,6 +40,7 @@ export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
 
   // Legend:
   // 🟢 - in recommended
+  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([
@@ -59,7 +60,7 @@ export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
     .addRule('no-pause', ERROR) /** @since 2.12.0 */
     .addRule('no-unnecessary-waiting', ERROR) /** @since 2.1.0 */ // 🟢
     .addRule('require-data-selectors', OFF) /** @since 2.7.0 */
-    .addRule('unsafe-to-chain-command', ERROR) /** @since 2.13.0 */ // 🟢
+    .addRule('unsafe-to-chain-command', ERROR) /** @since 2.13.0 */ // 🟢💭?
     .enableConfigTesterForPlugin('cypress')
     .addOverrides();
 

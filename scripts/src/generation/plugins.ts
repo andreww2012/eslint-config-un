@@ -23,8 +23,9 @@ const RULE_NAMES_PER_PLUGIN: Partial<Record<string, readonly string[]>> = ALL_RU
 const PLUGIN_LOADERS: Partial<Record<string, {packageName: string}>> = pluginsLoaders;
 
 /**
- * The plugins whose rules declare the requirement themselves, so listing it by hand would only
- * make the two drift apart
+ * The plugins whose rules declare the requirement themselves.
+ * Listing a rule by hand there is an override, and only allowed when it says something the plugin
+ * does not
  */
 const TYPE_AWARE_CATEGORIES: Partial<Record<string, readonly string[]>> = Object.fromEntries(
   Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
@@ -99,15 +100,17 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
 
     const knownRuleNames = new Set(RULE_NAMES_PER_PLUGIN[prefix] || []);
 
-    if (TYPE_AWARE_CATEGORIES[prefix]) {
-      const handWritten = ruleEntries(plugin).filter(
-        ({traits}) => readTrait(traits, 'requiresTypeInfo') != null,
-      );
-      if (handWritten.length > 0) {
-        errors.push(
-          `${stylePluginPrefix(prefix)} declares ${styleTrait('requiresTypeInfo')} by hand on ${handWritten.length} rule(s), but the plugin reports it itself`,
-        );
-      }
+    const typeAwareRuleNames = TYPE_AWARE_CATEGORIES[prefix];
+    if (typeAwareRuleNames) {
+      const reportedByThePlugin = new Set(typeAwareRuleNames);
+      ruleEntries(plugin).forEach(({ruleName, fullRuleName, traits}) => {
+        const entry = readTrait(traits, 'requiresTypeInfo');
+        if (entry?.value === true && reportedByThePlugin.has(ruleName)) {
+          errors.push(
+            `${styleRuleName(fullRuleName)} repeats the ${styleTrait('requiresTypeInfo')} value the plugin reports itself: only write it by hand to say something different`,
+          );
+        }
+      });
     }
 
     ruleEntries(plugin).forEach(({ruleName, fullRuleName, traits}) => {
@@ -204,19 +207,34 @@ const renderPerPlugin = (rules: CollectedRules, renderValue: (value: boolean | s
   ).join('\n');
 
 /**
- * What the plugin reports itself wins over anything that could be written by hand
+ * What the plugin reports itself, minus the rules a hand-written entry already speaks for: the
+ * plugin only says that type information is used, never whether the rule survives without it
  */
-const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) => [
-  ...rules,
-  ...plugins.flatMap(({prefix}) =>
-    (TYPE_AWARE_CATEGORIES[prefix] || []).map((ruleName) => ({
-      prefix,
-      ruleName,
-      fullRuleName: prefixRuleName(prefix, ruleName),
-      value: true as const,
-    })),
-  ),
-];
+const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) => {
+  const writtenByHand = new Set(
+    collectTrait(plugins, 'requiresTypeInfo', {includeRejections: true}).map(
+      ({fullRuleName}) => fullRuleName,
+    ),
+  );
+
+  return [
+    ...rules,
+    ...plugins.flatMap(({prefix}) =>
+      (TYPE_AWARE_CATEGORIES[prefix] || []).flatMap((ruleName) =>
+        writtenByHand.has(prefixRuleName(prefix, ruleName))
+          ? []
+          : [
+              {
+                prefix,
+                ruleName,
+                fullRuleName: prefixRuleName(prefix, ruleName),
+                value: true as const,
+              },
+            ],
+      ),
+    ),
+  ];
+};
 
 const renderTypeInfo = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) =>
   Array.from(
@@ -226,7 +244,9 @@ const renderTypeInfo = (plugins: readonly DiscoveredPlugin[], rules: CollectedRu
       return [
         `  '${prefix}': {`,
         '    rules: {',
-        ...pluginRules.map(({ruleName, value}) => `      '${ruleName}': ${JSON.stringify(value)},`),
+        ...pluginRules
+          .toSorted((left, right) => left.ruleName.localeCompare(right.ruleName))
+          .map(({ruleName, value}) => `      '${ruleName}': ${JSON.stringify(value)},`),
         '    },',
         ...(['extraPatterns', 'extraFileExtensions'] as const).flatMap((key) =>
           extra?.[key] ? [`    ${key}: ${JSON.stringify(extra[key])},`] : [],

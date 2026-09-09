@@ -7,10 +7,11 @@ export default definePluginMetadata('e18e', {
   rules: {
     'no-delete-property': {disableInTestFiles: true},
     'no-indexof-equality': {requiresTypeInfo: true, stylistic: true},
-    'prefer-array-at': {stylistic: true},
+    'prefer-array-at': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-array-fill': {stylistic: true},
     'prefer-array-to-reversed': {requiresTypeInfo: 'optional'},
     'prefer-array-to-sorted': {requiresTypeInfo: 'optional'},
+    'prefer-charcode-at-in-loop': {requiresTypeInfo: 'optional'}, // cspell:disable-line
     'prefer-date-now': {stylistic: true},
     'prefer-exponentiation-operator': {stylistic: true},
     'prefer-flatmap-over-map-flat': {stylistic: true},
@@ -18,7 +19,7 @@ export default definePluginMetadata('e18e', {
     'prefer-inline-equality': {requiresTypeInfo: 'optional'},
     'prefer-nullish-coalescing': {stylistic: true},
     'prefer-regex-test': {requiresTypeInfo: 'optional'},
-    'prefer-spread-syntax': {stylistic: true},
+    'prefer-spread-syntax': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-static-collator': {disableInTestFiles: true},
     'prefer-static-regex': {disableInCodeBlocks: 'performance', disableInTestFiles: true},
   },

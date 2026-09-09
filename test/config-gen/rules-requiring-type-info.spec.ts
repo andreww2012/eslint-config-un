@@ -415,6 +415,20 @@ describe('rules requiring type information', () => {
       ).toBe(1);
     });
 
+    it('respects a hand-written requirement overriding what the plugin reports itself', async () => {
+      const configResult = await computeEslintConfig('ts', {
+        un: {typeInfoRules: 'disabled'},
+        internalOptions: {},
+      });
+
+      expect(configResult.getRuleEntrySeverity('ts/type-aware/rules', 'ts/naming-convention')).toBe(
+        2,
+      );
+      expect(
+        configResult.getRuleEntrySeverity('ts/type-aware/rules', 'ts/no-floating-promises'),
+      ).toBe(0);
+    });
+
     it('disables throwing rules even in never-split configs like `vitest/ts`', async () => {
       const configResult = await computeEslintConfig(
         {vitest: {configTypescript: true}},

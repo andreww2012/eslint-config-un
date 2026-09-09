@@ -38,6 +38,7 @@ describe('cascade order', () => {
       eslint-config-un/css
       eslint-config-un/css-in-js
       eslint-config-un/cypress
+      eslint-config-un/cypress/@type-information
       eslint-config-un/cypress/no-only-tests
       eslint-config-un/de-morgan
       eslint-config-un/depend
@@ -101,8 +102,10 @@ describe('cascade order', () => {
       eslint-config-un/markdown-links
       eslint-config-un/markdown-preferences
       eslint-config-un/math
+      eslint-config-un/math/@type-information
       eslint-config-un/mobx
       eslint-config-un/mocha
+      eslint-config-un/mocha/@type-information
       eslint-config-un/mocha/no-only-tests
       eslint-config-un/module-interop
       eslint-config-un/nest-js
@@ -118,6 +121,7 @@ describe('cascade order', () => {
       eslint-config-un/unicorn/json
       eslint-config-un/unicorn/markdown
       eslint-config-un/node
+      eslint-config-un/node/@type-information
       eslint-config-un/node-dependencies
       eslint-config-un/no-only-tests
       eslint-config-un/no-relative-import-paths
@@ -146,8 +150,10 @@ describe('cascade order', () => {
       eslint-config-un/react/refresh
       eslint-config-un/react/you-might-not-need-an-effect
       eslint-config-un/regexp
+      eslint-config-un/regexp/@type-information
       eslint-config-un/remeda
       eslint-config-un/rxjs
+      eslint-config-un/rxjs/@type-information
       eslint-config-un/safeql
       eslint-config-un/security
       eslint-config-un/solid
@@ -160,8 +166,10 @@ describe('cascade order', () => {
       eslint-config-un/stylistic/spaced-comment
       eslint-config-un/tailwind
       eslint-config-un/tanstack-query
+      eslint-config-un/tanstack-query/@type-information
       eslint-config-un/tanstack-router
       eslint-config-un/tanstack-start
+      eslint-config-un/tanstack-start/@type-information
       eslint-config-un/testing-library/angular
       eslint-config-un/testing-library/angular/no-only-tests
       eslint-config-un/testing-library/react
@@ -197,6 +205,7 @@ describe('cascade order', () => {
       eslint-config-un/ts/type-aware/rules
       eslint-config-un/ts/dts
       eslint-config-un/angular/general
+      eslint-config-un/angular/general/@type-information
       eslint-config-un/angular/template
       eslint-config-un/astro
       eslint-config-un/jsx-a11y/astro

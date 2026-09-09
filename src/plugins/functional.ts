@@ -15,6 +15,7 @@ export default definePluginMetadata('functional', {
     'no-throw-statements': {requiresTypeInfo: 'optional'},
     'prefer-immutable-types': {requiresTypeInfo: true},
     'prefer-property-signatures': {requiresTypeInfo: true},
+    'prefer-readonly-type': {requiresTypeInfo: true},
     'prefer-tacit': {requiresTypeInfo: true},
     'readonly-type': {requiresTypeInfo: true, stylistic: true},
     'type-declaration-immutability': {requiresTypeInfo: true},

@@ -54,6 +54,7 @@ export default defineUnConfig<MathEslintConfigOptions>(
 
   // Legend:
   // 🟢 - in recommended
+  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([
@@ -68,7 +69,7 @@ export default defineUnConfig<MathEslintConfigOptions>(
       'abs',
       absoluteValuesConversionMethod === false ? OFF : ERROR,
       absoluteValuesConversionMethod === false ? [] : [{prefer: absoluteValuesConversionMethod}],
-    ) /** @since 0.3.0 */
+    ) /** @since 0.3.0 */ // 💭?
     .addRule('no-static-infinity-calculations', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('no-static-nan-calculations', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('prefer-exponentiation-operator', ERROR) /** @since 0.6.0 */
@@ -86,12 +87,12 @@ export default defineUnConfig<MathEslintConfigOptions>(
     .addRule('prefer-math-sqrt', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('prefer-math-sqrt1-2', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('prefer-math-sqrt2', ERROR) /** @since 0.4.0 */ // 🟢
-    .addRule('prefer-math-sum-precise', OFF) /** @since 0.11.0 */
+    .addRule('prefer-math-sum-precise', OFF) /** @since 0.11.0 */ // 💭?
     .addRule('prefer-math-trunc', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('prefer-number-epsilon', ERROR) /** @since 0.5.0 */ // 🟢
-    .addRule('prefer-number-is-finite', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-number-is-finite', ERROR) /** @since 0.4.0 */ // 🟢💭?
     .addRule('prefer-number-is-integer', ERROR) /** @since 0.2.0 */ // 🟢
-    .addRule('prefer-number-is-nan', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-number-is-nan', ERROR) /** @since 0.4.0 */ // 🟢💭?
     .addRule('prefer-number-is-safe-integer', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('prefer-number-max-safe-integer', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('prefer-number-max-value', ERROR) /** @since 0.5.0 */ // 🟢

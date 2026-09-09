@@ -9,5 +9,6 @@ export default definePluginMetadata('mocha', {
   rules: {
     'consistent-spacing-between-blocks': {stylistic: true},
     'consistent-structure': {stylistic: true},
+    'no-async-in-sync-tests': {requiresTypeInfo: 'optional'},
   },
 });

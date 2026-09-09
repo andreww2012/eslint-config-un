@@ -16,9 +16,18 @@ export default definePluginMetadata('node', {
     'no-missing-import': {disableInCodeBlocks: 'imports'},
     'no-missing-require': {disableInCodeBlocks: 'imports'},
     'no-process-exit': {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
+    'no-sync': {
+      requiresTypeInfo: [
+        false,
+        'only needs type information when `ignores` holds non-string entries, which is not how the config sets it',
+      ],
+    },
     'no-top-level-await': {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
     'no-unsupported-features/es-builtins': {disableInCodeBlocks: 'runtimeOnly'},
-    'no-unsupported-features/es-syntax': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-unsupported-features/es-syntax': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
     'no-unsupported-features/node-builtins': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-global/buffer': {stylistic: true},
     'prefer-global/console': {stylistic: true},

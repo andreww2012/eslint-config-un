@@ -11,6 +11,7 @@ export default definePluginMetadata('regexp', {
     'letter-case': {stylistic: true},
     'match-any': {stylistic: true},
     negation: {stylistic: true},
+    'no-legacy-features': {requiresTypeInfo: 'optional'},
     'no-super-linear-backtracking': {disableInCodeBlocks: 'runtimeOnly'},
     'no-unused-capturing-group': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-character-class': {stylistic: true},

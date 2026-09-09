@@ -92,7 +92,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
   if (configModernization) {
     configBuilderModernization
       ?.addConfig('e18e/modernization')
-      .addRule('prefer-array-at', ERROR) /** @since 0.0.1 */
+      .addRule('prefer-array-at', ERROR) /** @since 0.0.1 */ // 💭?
       .addRule('prefer-array-fill', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-to-reversed', ERROR) /** @since 0.0.1 */ // 💭?
       .addRule('prefer-array-to-sorted', ERROR) /** @since 0.0.1 */ // 💭?
@@ -102,7 +102,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
       .addRule('prefer-includes', ERROR) /** @since 0.0.1 */
       .addRule('prefer-nullish-coalescing', ERROR) /** @since 0.0.1 */
       .addRule('prefer-object-has-own', ERROR) /** @since 0.0.1 */
-      .addRule('prefer-spread-syntax', ERROR) /** @since 0.0.1 */
+      .addRule('prefer-spread-syntax', ERROR) /** @since 0.0.1 */ // 💭?
       .addRule('prefer-url-canparse', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */

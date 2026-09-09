@@ -245,6 +245,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
   // Legend:
   // 🟢 - in recommended
   // ✖️ - `n` rule only
+  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig(
@@ -305,7 +306,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
       noUnsupportedFeaturesIgnores.esSyntax?.length
         ? [{ignores: noUnsupportedFeaturesIgnores.esSyntax}]
         : [],
-    ) /** @since 7.0.0-beta.0 */
+    ) /** @since 7.0.0-beta.0 */ // 💭?
     .addRule(
       'no-unsupported-features/node-builtins',
       ERROR,

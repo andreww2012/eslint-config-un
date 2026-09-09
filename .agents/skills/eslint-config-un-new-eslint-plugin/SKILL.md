@@ -123,8 +123,6 @@ After every `addRule` statement, we annotate the rule with:
   - 🟢 - in `recommended`
   - 🟡 - in `recommended` (warns)
   - 🎨 - in `stylistic`
-  - 💭 - requires type information
-  - 💭? - optionally requires type information
   - 🔴 - NOT in `recommended`
 
   This is not strict and may vary from plugin to plugin.
@@ -136,6 +134,11 @@ After every `addRule` statement, we annotate the rule with:
 
 Fill in `src/plugins/<plugin prefix>.ts`, which holds what we know about the plugin and each of its rules.
 Read `src/plugins/shared.ts` for the contract, and `src/plugins/unicorn.ts` (or any other plugin file) for a file exercising most of it.
+
+Run `nr type-info-rules --plugin <plugin prefix>` to find out which rules consume TypeScript type information, and fill in `requiresTypeInfo` from what it reports.
+Do not copy the report blindly.
+Open the plugin source and confirm every rule it names, because the script cannot prove every case.
+If you decide a reported rule does not count, write `requiresTypeInfo: [false, '<why>']` so that the next run stops reporting it.
 
 Two judgement calls the contract cannot spell out:
 

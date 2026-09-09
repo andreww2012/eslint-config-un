@@ -7,5 +7,6 @@ export default definePluginMetadata('cypress', {
     `https://github.com/cypress-io/eslint-plugin-cypress/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
     'no-and': {stylistic: true},
+    'unsafe-to-chain-command': {requiresTypeInfo: 'optional'},
   },
 });

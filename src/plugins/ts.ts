@@ -29,7 +29,13 @@ export default definePluginMetadata('ts', {
     'max-params': {stylistic: true},
     'member-ordering': {stylistic: true},
     'method-signature-style': {autofixDisabled: true, disableInCodeBlocks: 'tooStrict'},
-    'naming-convention': {stylistic: true},
+    'naming-convention': {
+      requiresTypeInfo: [
+        'optional',
+        'the plugin reports it as type-aware, but the rule asks for the services leniently and only loses the checks that need a type',
+      ],
+      stylistic: true,
+    },
     'no-confusing-non-null-assertion': {stylistic: true},
     'no-empty-function': {disableInCodeBlocks: 'emptiness', disableInTestFiles: true},
     'no-explicit-any': {disableInCodeBlocks: 'tooStrict'},

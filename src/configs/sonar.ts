@@ -368,7 +368,7 @@ export default defineUnConfig<SonarEslintConfigOptions>(
     .addRule('no-session-cookies-on-static-assets', ERROR) /** @since 4.0.0 */ // [S8441] 🟢 📦 `express-session`, `cookie-session`
     // ⚠️ `jest/no-disabled-tests`, `vitest/no-disabled-tests`
     .addRule('no-skipped-tests', OFF) /** @since 3.0.0 */ // [S1607] 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only patterns are checked, not package imports)
-    .addRule('no-small-switch', ERROR) /** @since 0.1.0-0 */ // [S1301] 🟢
+    .addRule('no-small-switch', ERROR) /** @since 0.1.0-0 */ // [S1301]💭? 🟢
     .addRule('no-sonar-comments', OFF) /** @since 3.0.0 */ // [S1291]
     .addRule('no-table-as-layout', ERROR) /** @since 1.0.4-alpha.0 */ // [S5257] 🟢🔵
     .addRule('no-trivial-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5914] 🟢 📦 jest, jasmine, playwright, chai-like, `node:assert`
@@ -445,7 +445,7 @@ export default defineUnConfig<SonarEslintConfigOptions>(
     .addRule('stateful-regex', ERROR) /** @since 1.0.4-alpha.0 */ // [S6351] 🟢🔤
     .addRule('strict-transport-security', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) /** @since 1.0.4-alpha.0 */ // [S3003] 💭?
-    .addRule('super-linear-regex', ERROR) /** @since 4.1.0 */ // [S8786] 🟢
+    .addRule('super-linear-regex', ERROR) /** @since 4.1.0 */ // [S8786]💭? 🟢
     .addRule('synchronous-suite-callback', testRulesSeverity) /** @since 4.2.0 */ // [S8785] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `cypress`
     .addRule('table-header', WARNING) /** @since 1.0.4-alpha.0 */ // [S5256] 🟢🔵
     .addRule('table-header-reference', WARNING) /** @since 1.0.4-alpha.0 */ // [S5260] 🟢🔵

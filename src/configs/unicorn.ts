@@ -643,7 +643,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('error-message', ERROR) /** @since 4.0.0 */
     .addRule('escape-case', ERROR) /** @since 2.0.0 */
     .addRule('expiring-todo-comments', ERROR) /** @since 11.0.0 */
-    .addRule('explicit-length-check', ERROR) /** @since 1.0.0 */ // 🟣💭?
+    .addRule('explicit-length-check', ERROR) /** @since 1.0.0 */ // 🟣
     .addRule(
       'explicit-timer-delay',
       explicitTimersDelay === false ? OFF : ERROR,
@@ -670,13 +670,13 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       OFF,
     ) /** @since 3.0.0 */ /** @aka no-fn-reference-in-iterator */ // 🟣💭?
     .addRule('no-array-concat-in-loop', ERROR) /** @since 68.0.0 */ // 🟣
-    .addRule('no-array-fill-with-reference-type', ERROR) /** @since 65.0.0 */
+    .addRule('no-array-fill-with-reference-type', ERROR) /** @since 65.0.0 */ // 💭?
     .addRule('no-array-from-fill', ERROR) /** @since 65.0.0 */
     .addRule('no-array-front-mutation', OFF) /** @since 68.0.0 */ // 🔴💭?
     .addRule('no-array-method-this-argument', ERROR) /** @since 34.0.0 */ // 💭?
     .addRule('no-array-reduce', OFF) /** @since 20.0.0 */ /** @aka no-reduce */ // 🟣💭?
-    .addRule('no-array-reverse', ERROR) /** @since 60.0.0 */
-    .addRule('no-array-sort', ERROR) /** @since 61.0.0 */
+    .addRule('no-array-reverse', ERROR) /** @since 60.0.0 */ // 💭?
+    .addRule('no-array-sort', ERROR) /** @since 61.0.0 */ // 💭?
     .addRule('no-array-sort-for-min-max', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🔴
@@ -691,8 +691,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-chained-comparison', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-collection-bracket-access', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-computed-property-existence-check', OFF) /** @since 66.0.0 */ // 🟣💭?
-    .addRule('no-confusing-array-splice', ERROR) /** @since 65.0.0 */ // 🟣
-    .addRule('no-confusing-array-with', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-confusing-array-splice', ERROR) /** @since 65.0.0 */ // 🟣💭?
+    .addRule('no-confusing-array-with', ERROR) /** @since 66.0.0 */ // 🟣💭?
     .addRule('no-console-spaces', ERROR) /** @since 7.0.0 */
     .addRule('no-constant-zero-expression', ERROR) /** @since 68.0.0 */
     .addRule('no-declarations-before-early-exit', ERROR) /** @since 66.0.0 */
@@ -700,7 +700,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-double-comparison', ERROR) /** @since 68.0.0 */
     .addRule('no-duplicate-if-branches', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('no-duplicate-logical-operands', ERROR) /** @since 68.0.0 */
-    .addRule('no-duplicate-loops', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-duplicate-loops', ERROR) /** @since 66.0.0 */ // 🟣💭?
     .addRule('no-duplicate-set-values', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-empty-file', ERROR) /** @since 38.0.0 */
     .addRule('no-error-property-assignment', ERROR) /** @since 66.0.0 */
@@ -725,7 +725,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-lonely-if', ERROR) /** @since 24.0.0 */
     .addRule('no-loop-iterable-mutation', ERROR) /** @since 68.0.0 */ // 🟣💭?
     // Passing `Infinity` doesn't work great with TypeScript
-    .addRule('no-magic-array-flat-depth', OFF) /** @since 53.0.0 */
+    .addRule('no-magic-array-flat-depth', OFF) /** @since 53.0.0 */ // 💭?
     .addRule('no-manually-wrapped-comments', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('no-mismatched-map-key', ERROR) /** @since 66.0.0 */ // 🟣💭?
     .addRule(
@@ -742,7 +742,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR) /** @since 54.0.0 */
     .addRule('no-nested-ternary', OFF) /** @since 11.0.0 */ // 🟣
-    .addRule('no-new-array', ERROR) /** @since 26.0.0 */
+    .addRule('no-new-array', ERROR) /** @since 26.0.0 */ // 💭?
     .addRule('no-new-buffer', ERROR) /** @since 2.0.0 */
     .addRule(
       'no-non-function-verb-prefix',
@@ -758,7 +758,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-optional-chaining-on-undeclared-variable', ERROR) /** @since 66.0.0 */ // 🟣🟡
     .addRule('no-process-exit', OFF) /** @since 0.2.0 */ // Used in `node` config
     .addRule('no-redundant-comparison', ERROR) /** @since 66.0.0 */
-    .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣💭?
     .addRule('no-selector-as-dom-name', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('no-shorthand-property-overrides', ERROR) /** @since 72.0.0 */
     .addRule('no-single-promise-in-promise-methods', ERROR) /** @since 52.0.0 */
@@ -773,9 +773,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-typeof-undefined', ERROR) /** @since 45.0.0 */
     .addRule('no-uncalled-method', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-undeclared-class-members', ERROR) /** @since 65.0.0 */ // 🟣🟡
-    .addRule('no-unnecessary-array-flat-depth', ERROR) /** @since 59.0.0 */
+    .addRule('no-unnecessary-array-flat-depth', ERROR) /** @since 59.0.0 */ // 💭?
     .addRule('no-unnecessary-array-flat-map', ERROR) /** @since 70.0.0 */ // 🟣💭?
-    .addRule('no-unnecessary-array-splice-count', ERROR) /** @since 59.0.0 */
+    .addRule('no-unnecessary-array-splice-count', ERROR) /** @since 59.0.0 */ // 💭?
     .addRule('no-unnecessary-await', ERROR) /** @since 44.0.0 */
     .addRule('no-unnecessary-boolean-comparison', ERROR) /** @since 68.0.0 */ // 🟣💭?
     .addRule('no-unnecessary-fetch-options', ERROR) /** @since 70.0.0 */ // 💭?
@@ -785,11 +785,11 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule(
       'no-unnecessary-slice-end',
       ERROR,
-    ) /** @since 55.0.0 */ /** @aka no-length-as-slice-end */
-    .addRule('no-unnecessary-splice', ERROR) /** @since 66.0.0 */ // 🟣
+    ) /** @since 55.0.0 */ /** @aka no-length-as-slice-end */ // 💭?
+    .addRule('no-unnecessary-splice', ERROR) /** @since 66.0.0 */ // 🟣💭?
     .addRule('no-unnecessary-string-trim', ERROR) /** @since 72.0.0 */ // 💭?
     .addRule('no-unreadable-array-destructuring', OFF) /** @since 7.0.0 */
-    .addRule('no-unreadable-for-of-expression', OFF) /** @since 67.0.0 */ // 🟣
+    .addRule('no-unreadable-for-of-expression', OFF) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-unreadable-iife', ERROR) /** @since 42.0.0 */
     .addRule('no-unreadable-new-expression', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('no-unreadable-object-destructuring', OFF) /** @since 42.0.0 */
@@ -798,10 +798,10 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unsafe-promise-all-settled-values', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-unsafe-property-key', ERROR) /** @since 66.0.0 */ // 🟣🟡💭?
     .addRule('no-unsafe-sqlite-interpolation', ERROR) /** @since 73.0.0 */
-    .addRule('no-unsafe-string-replacement', ERROR) /** @since 66.0.0 */ // 🟣
-    .addRule('no-unused-array-method-return', ERROR) /** @since 65.0.0 */
+    .addRule('no-unsafe-string-replacement', ERROR) /** @since 66.0.0 */ // 🟣💭?
+    .addRule('no-unused-array-method-return', ERROR) /** @since 65.0.0 */ // 💭?
     .addRule('no-unused-properties', OFF) /** @since 7.0.0 */ // 🔴
-    .addRule('no-useless-boolean-cast', ERROR) /** @since 66.0.0 */
+    .addRule('no-useless-boolean-cast', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('no-useless-coercion', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('no-useless-collection-argument', ERROR) /** @since 62.0.0 */
     .addRule('no-useless-compound-assignment', ERROR) /** @since 68.0.0 */
@@ -820,7 +820,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-useless-recursion', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-useless-spread', ERROR) /** @since 35.0.0 */ // 💭?
     .addRule('no-useless-switch-case', ERROR) /** @since 42.0.0 */
-    .addRule('no-useless-template-literals', ERROR) /** @since 66.0.0 */
+    .addRule('no-useless-template-literals', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('no-useless-undefined', ERROR, [
       {checkArguments: false, checkArrowFunctionBody: false},
     ]) /** @since 20.0.0 */
@@ -837,7 +837,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-add-event-listener-options', ERROR) /** @since 66.0.0 */
     .addRule('prefer-aggregate-error', ERROR) /** @since 69.0.0 */ // 💭?
     .addRule('prefer-array-find', ERROR) /** @since 21.0.0 */ // 💭?
-    .addRule('prefer-array-flat', ERROR) /** @since 29.0.0 */
+    .addRule('prefer-array-flat', ERROR) /** @since 29.0.0 */ // 💭?
     .addRule('prefer-array-flat-map', ERROR) /** @since 9.0.0 */ /** @aka prefer-flat-map */ // 💭?
     .addRule('prefer-array-from-async', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-array-from-map', ERROR) /** @since 66.0.0 */ // 💭?
@@ -847,7 +847,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-array-last-methods', ERROR) /** @since 65.0.0 */
     .addRule('prefer-array-slice', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('prefer-array-some', ERROR) /** @since 25.0.0 */ // 💭?
-    .addRule('prefer-at', ERROR) /** @since 34.0.0 */ // 💭?
+    .addRule('prefer-at', ERROR) /** @since 34.0.0 */
     .addRule('prefer-await', OFF) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-bigint-literals', ERROR) /** @since 61.0.0 */
     .addRule('prefer-blob-reading-methods', ERROR) /** @since 47.0.0 */
@@ -899,7 +899,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     ) /** @since 65.0.0 */
     .addRule('prefer-iterable-in-constructor', ERROR) /** @since 66.0.0 */
     // Reason for disabling: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565
-    .addRule('prefer-iterator-concat', OFF) /** @since 65.0.0 */ // 🔴
+    .addRule('prefer-iterator-concat', OFF) /** @since 65.0.0 */ // 🔴💭?
     .addRule('prefer-iterator-helpers', ERROR) /** @since 70.0.0 */ // 💭?
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
     .addRule('prefer-iterator-to-array', OFF) /** @since 66.0.0 */ // 🟣
@@ -912,7 +912,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-math-constants', ERROR) /** @since 68.0.0 */
     .addRule('prefer-math-min-max', ERROR) /** @since 56.0.0 */
     .addRule('prefer-math-trunc', ERROR) /** @since 23.0.0 */
-    .addRule('prefer-minimal-ternary', ERROR) /** @since 66.0.0 */
+    .addRule('prefer-minimal-ternary', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-modern-dom-apis', ERROR) /** @since 15.0.0 */ // 💭?
     .addRule('prefer-modern-math-apis', ERROR) /** @since 42.0.0 */
     .addRule('prefer-module', OFF) /** @since 31.0.0 */
@@ -978,17 +978,17 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-set-size', ERROR) /** @since 45.0.0 */ // 💭?
     .addRule('prefer-short-arrow-method', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-simple-condition-first', ERROR) /** @since 64.0.0 */
-    .addRule('prefer-simple-sort-comparator', ERROR) /** @since 64.0.0 */
+    .addRule('prefer-simple-sort-comparator', ERROR) /** @since 64.0.0 */ // 💭?
     .addRule('prefer-simplified-conditions', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('prefer-single-array-predicate', ERROR) /** @since 66.0.0 */ // 💭?
-    .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */
+    .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */ // 💭?
     .addRule('prefer-single-object-destructuring', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-single-replace', ERROR) /** @since 68.0.0 */
     .addRule('prefer-smaller-scope', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-split-limit', ERROR) /** @since 65.0.0 */
     .addRule('prefer-spread', ERROR) /** @since 4.0.0 */ // 🟣💭?
     .addRule('prefer-string-match-all', ERROR) /** @since 65.0.0 */
-    .addRule('prefer-string-pad-start-end', ERROR) /** @since 65.0.0 */
+    .addRule('prefer-string-pad-start-end', ERROR) /** @since 65.0.0 */ // 💭?
     .addRule('prefer-string-raw', ERROR) /** @since 53.0.0 */
     .addRule(
       'prefer-string-repeat',

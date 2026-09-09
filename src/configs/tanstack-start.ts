@@ -24,11 +24,12 @@ export default defineUnConfig<TanstackStartEslintConfigOptions>('tanstackStart',
 
   // Legend:
   // 🟢 - in recommended
+  // 💭 - requires type information
 
   configBuilder
     ?.addConfig(['tanstack-start', {filesDefault: [GLOB_TS_X]}])
-    .addRule('no-async-client-component', ERROR) /** @since 0.0.0 */ // 🟢
-    .addRule('no-client-code-in-server-component', ERROR) /** @since 0.0.0 */ // 🟢
+    .addRule('no-async-client-component', ERROR) /** @since 0.0.0 */ // 🟢💭
+    .addRule('no-client-code-in-server-component', ERROR) /** @since 0.0.0 */ // 🟢💭
     .enableConfigTesterForPlugin('tanstack-start')
     .addOverrides();
 });

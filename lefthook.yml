@@ -15,6 +15,9 @@ pre-push:
       run: nr build:code:test && nr check:dts:no-devdeps-imports
     config:
       run: nr check:config
+    type-info:
+      glob: '{pnpm-lock.yaml,src/plugins/*.ts}'
+      run: nr check:type-info
     peers:
       glob: '{package.json,pnpm-lock.yaml,pnpm-workspace.yaml}'
       run: nr check:deps:peers

@@ -67,6 +67,15 @@ jobs:
       - uses: ./.github/actions/prepare
       - run: pnpm eslint
 
+  type-info:
+    name: Type information rules
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/prepare
+      - run: pnpm check:type-info
+
   check-links:
     name: Check links
     needs: install

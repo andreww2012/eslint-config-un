@@ -313,6 +313,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
   // 🔴 - deprecated
   // eslint-disable-next-line no-secrets/no-secrets
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
+  // 💭 - requires type information
 
   const [angularEslintPlugin, angularTemplateEslintPlugin] = await Promise.all([
     pluginsLoaders.angular(context).then(({module}) => module),
@@ -431,14 +432,14 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
       ...getPluginRuleSeverity('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF),
     ) /** @since 0.0.1-alpha.30 */
     .addRule(...getPluginRuleSeverity('no-conflicting-lifecycle', OFF)) /** @since 0.0.1-alpha.19 */ // 🔴(21)
-    .addRule(...getPluginRuleSeverity('no-developer-preview', WARNING)) /** @since 20.1.0 */
+    .addRule(...getPluginRuleSeverity('no-developer-preview', WARNING)) /** @since 20.1.0 */ // 💭
     .addRule(
       ...getPluginRuleSeverity('no-duplicates-in-metadata-arrays', ERROR),
     ) /** @since 17.4.0 */
     .addRule(
       ...getPluginRuleSeverity('no-empty-lifecycle-method', ERROR),
     ) /** @since 0.1.0-beta.1 */ // 🟢
-    .addRule(...getPluginRuleSeverity('no-experimental', WARNING)) /** @since 20.1.0 */
+    .addRule(...getPluginRuleSeverity('no-experimental', WARNING)) /** @since 20.1.0 */ // 💭
     .addRule(
       ...getPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
     ) /** @since 0.0.1-alpha.23 */
@@ -480,7 +481,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
         forbiddenMetadataProperties.queries ? ERROR : OFF,
       ),
     ) /** @since 0.0.1-alpha.12 */
-    .addRule(...getPluginRuleSeverity('no-uncalled-signals', ERROR)) /** @since 19.7.0 */
+    .addRule(...getPluginRuleSeverity('no-uncalled-signals', ERROR)) /** @since 19.7.0 */ // 💭
     .addRule(
       ...getPluginRuleSeverity('pipe-prefix', ERROR),
       pipePrefixes?.length ? [{prefixes: pipePrefixes}] : [],
@@ -502,8 +503,8 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     ) /** @since 22.1.0 */
     .addRule(
       ...getPluginRuleSeverity('prefer-signal-model', angularVersion >= 19 ? ERROR : OFF),
-    ) /** @since 21.1.0 */
-    .addRule(...getPluginRuleSeverity('prefer-signals', OFF)) /** @since 19.0.0 */
+    ) /** @since 21.1.0 */ // 💭
+    .addRule(...getPluginRuleSeverity('prefer-signals', OFF)) /** @since 19.0.0 */ // 💭
     .addRule(
       ...getPluginRuleSeverity(
         'prefer-standalone',
@@ -518,7 +519,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     ) /** @since 16.1.0 */ /** @until 18 */ // 🔴(>=17)
     .addRule(
       ...getPluginRuleSeverity('reactive-context-must-read-signal', ERROR),
-    ) /** @since 22.3.0 */
+    ) /** @since 22.3.0 */ // 💭
     .addRule(...getPluginRuleSeverity('relative-url-prefix', ERROR)) /** @since 0.0.1-alpha.23 */
     .addRule(...getPluginRuleSeverity('require-lifecycle-on-prototype', ERROR)) /** @since 19.2.0 */
     .addRule(...getPluginRuleSeverity('require-localize-metadata', ERROR)) /** @since 13.2.0 */ // 🌐

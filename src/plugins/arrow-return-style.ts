@@ -12,6 +12,12 @@ export default definePluginMetadata('arrow-return-style', {
   ],
   rules: {
     'arrow-return-style': {stylistic: true},
-    'no-export-default-arrow': {disableInCodeBlocks: 'tooStrict'},
+    'no-export-default-arrow': {
+      requiresTypeInfo: [
+        false,
+        'the plugin sets `requiresTypeChecking`, but the rule never reads the parser services: its `program` is the AST node',
+      ],
+      disableInCodeBlocks: 'tooStrict',
+    },
   },
 });
