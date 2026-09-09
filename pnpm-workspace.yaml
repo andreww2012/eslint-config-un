@@ -12,6 +12,10 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-jsdoc@64.3.8
   - zod@4.6.0
   - eslint-plugin-awscdk@4.4.3
+  - '@unocss/config@66.10.1'
+  - '@unocss/core@66.10.1'
+  - '@unocss/eslint-plugin@66.10.1'
+  - '@unocss/rule-utils@66.10.1'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
