@@ -35,7 +35,6 @@ export default defineUnConfig<ExpectTypeEslintConfigOptions>(
 
   // Legend:
   // 🟢 - in recommended
-  // 💭 - requires type information
 
   configBuilder
     ?.addConfig([
@@ -44,7 +43,7 @@ export default defineUnConfig<ExpectTypeEslintConfigOptions>(
         filesDefault: [GLOB_TS_X],
       },
     ])
-    .addRule('expect', ERROR, expectRuleOptions ? [expectRuleOptions] : []) /** @since 0.0.1 */ // 🟢💭
+    .addRule('expect', ERROR, expectRuleOptions ? [expectRuleOptions] : []) /** @since 0.0.1 */ // 🟢
     .enableConfigTesterForPlugin('expect-type')
     .addOverrides();
 });

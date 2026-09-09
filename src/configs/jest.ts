@@ -305,7 +305,6 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
     // 🟢 - in recommended
     // 🟡 - in recommended (warns)
     // 🎨 - in style
-    // 💭 - requires type information
 
     configBuilder
       ?.addConfig(
@@ -458,14 +457,14 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {pack
         ],
         defaultJestEslintConfig,
       )
-      .addRule('no-error-equal', ERROR) /** @since 29.7.0 */ // 💭
-      .addRule('no-unnecessary-assertion', ERROR) /** @since 29.6.0 */ // 💭
+      .addRule('no-error-equal', ERROR) /** @since 29.7.0 */
+      .addRule('no-unnecessary-assertion', ERROR) /** @since 29.6.0 */
       // Works only on TS files
       .addRule('no-untyped-mock-factory', ERROR) /** @since 27.2.0 */
       // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
-      .addRule('unbound-method', ERROR) /** @since 24.3.0 */ // 💭
+      .addRule('unbound-method', ERROR) /** @since 24.3.0 */
       .disableAnyRule('ts', 'unbound-method')
-      .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
+      .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */
       .enableConfigTesterForPlugin('jest', {
         /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),

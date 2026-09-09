@@ -45,7 +45,6 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
   // Legend:
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
-  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([
@@ -95,7 +94,7 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .addRule('no-empty-string-literal', ERROR) /** @since 2.0.0-next.11 */ // 🟢
     .addRule('no-extra-lookaround-assertions', ERROR) /** @since 1.11.0 */ // 🟢
     .addRule('no-invisible-character', ERROR) /** @since 0.1.0 */ // 🟢
-    .addRule('no-legacy-features', ERROR) /** @since 0.6.0 */ // 🟢💭?
+    .addRule('no-legacy-features', ERROR) /** @since 0.6.0 */ // 🟢
     .addRule('no-non-standard-flag', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('no-obscure-range', WARNING) /** @since 0.9.0 */ // 🟢
     .addRule('no-octal', ERROR) /** @since 0.1.0 */

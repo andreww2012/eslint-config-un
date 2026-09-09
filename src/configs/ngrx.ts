@@ -22,9 +22,6 @@ export default defineUnConfig<NgrxEslintConfigOptions>('ngrx', {
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ngrx');
 
-  // Legend:
-  // 💭 - requires type information
-
   configBuilder
     ?.addConfig(['ngrx', {filesDefault: [GLOB_JS_TS_X]}])
     .markCategory('Component store')
@@ -33,10 +30,10 @@ export default defineUnConfig<NgrxEslintConfigOptions>('ngrx', {
     .addRule('require-super-ondestroy', ERROR) /** @since 19.0.0 */
     .addRule('updater-explicit-return-type', ERROR) /** @since 14.0.0 */
     .markCategory('Effects')
-    .addRule('avoid-cyclic-effects', ERROR) /** @since 14.0.0 */ // 💭
+    .addRule('avoid-cyclic-effects', ERROR) /** @since 14.0.0 */
     .addRule('no-dispatch-in-effects', ERROR) /** @since 14.0.0 */
     .addRule('no-effects-in-providers', ERROR) /** @since 14.0.0 */
-    .addRule('no-multiple-actions-in-effects', ERROR) /** @since 14.0.0 */ // 💭
+    .addRule('no-multiple-actions-in-effects', ERROR) /** @since 14.0.0 */
     .addRule('prefer-action-creator-in-of-type', ERROR) /** @since 14.0.0 */
     .addRule('prefer-effect-callback-in-block-statement', ERROR) /** @since 14.0.0 */
     .addRule('use-effects-lifecycle-interface', ERROR) /** @since 14.0.0 */
@@ -45,9 +42,9 @@ export default defineUnConfig<NgrxEslintConfigOptions>('ngrx', {
     .markCategory('Signals')
     .addRule('enforce-type-call', ERROR) /** @since 20.0.0 */
     .addRule('prefer-protected-state', ERROR) /** @since 18.1.0 */
-    .addRule('signal-state-no-arrays-at-root-level', ERROR) /** @since 18.0.0 */ // 💭
+    .addRule('signal-state-no-arrays-at-root-level', ERROR) /** @since 18.0.0 */
     .addRule('signal-store-feature-should-use-generic-type', ERROR) /** @since 18.0.2 */
-    .addRule('with-state-no-arrays-at-root-level', ERROR) /** @since 18.0.0 */ // 💭
+    .addRule('with-state-no-arrays-at-root-level', ERROR) /** @since 18.0.0 */
     .markCategory('Store')
     .addRule('avoid-combining-selectors', ERROR) /** @since 14.0.0 */
     .addRule('avoid-dispatching-multiple-actions-sequentially', ERROR) /** @since 14.0.0 */

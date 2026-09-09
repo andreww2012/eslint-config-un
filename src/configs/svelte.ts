@@ -204,7 +204,6 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
   // 🟢 - in recommended
   // 4️⃣ - not relevant in Svelte >=5, unless legacy features are used
   // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
-  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig(['svelte', {parseWith: 'svelte'}])
@@ -228,7 +227,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('no-unknown-style-directive-property', ERROR) /** @since 0.31.0 */ // 🟢
     .addRule('prefer-svelte-reactivity', ERROR) /** @since 3.11.0 */ // 🟢
     .addRule('require-store-callbacks-use-set-param', ERROR) /** @since 2.12.0 */
-    .addRule('require-store-reactive-access', ERROR) /** @since 2.12.0 */ // 🟢💭?
+    .addRule('require-store-reactive-access', ERROR) /** @since 2.12.0 */ // 🟢
     .addRule('valid-compile', ERROR) /** @since 0.7.0 */
     .addRule('valid-style-parse', ERROR) /** @since 3.0.0 */
     .markCategory('Security Vulnerability')
@@ -250,7 +249,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('no-svelte-internal', ERROR) /** @since 2.39.0 */ // 🟢
     .addRule('no-unnecessary-state-wrap', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-unused-class-name', OFF) /** @since 2.31.0 */
-    .addRule('no-unused-props', ERROR) /** @since 3.2.0 */ // 🟢💭?
+    .addRule('no-unused-props', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-unused-svelte-ignore', ERROR) /** @since 0.19.0 */ // 🟢
     .addRule('no-useless-children-snippet', ERROR) /** @since 3.0.0-next.9 */ // 🟢
     .addRule('no-useless-mustaches', ERROR, [
@@ -307,7 +306,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('prefer-class-directive', ERROR) /** @since 0.0.1 */
     // "Style directive were added in Svelte v3.46"
     .addRule('prefer-style-directive', svelteVersion >= 3.46 ? WARNING : OFF) /** @since 0.22.0 */
-    .addRule('require-event-prefix', svelteVersion >= 5 ? ERROR : OFF) /** @since 3.6.0 */ // 💅💭?
+    .addRule('require-event-prefix', svelteVersion >= 5 ? ERROR : OFF) /** @since 3.6.0 */ // 💅
     .addRule('shorthand-attribute', ERROR) /** @since 0.5.0 */ // 💅
     .addRule('shorthand-directive', ERROR) /** @since 0.24.0 */ // 💅
     .addRule('sort-attributes', ERROR) /** @since 2.4.0 */
@@ -318,7 +317,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('no-trailing-spaces', OFF) /** @since 2.7.0 */ // 💅
     .markCategory('SvelteKit')
     .addRule('no-export-load-in-svelte-module-in-kit-pages', ERROR) /** @since 2.12.0 */ // 🟢
-    .addRule('no-navigation-without-resolve', ERROR) /** @since 3.12.0 */ // 🟢💭?
+    .addRule('no-navigation-without-resolve', ERROR) /** @since 3.12.0 */ // 🟢
     .addRule('valid-prop-names-in-kit-pages', ERROR) /** @since 2.12.0 */ // 🟢
     .markCategory('Experimental')
     .addRule('experimental-require-slot-types', OFF) /** @since 2.18.0 */

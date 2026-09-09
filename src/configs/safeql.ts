@@ -42,16 +42,13 @@ export default defineUnConfig<SafeqlEslintConfigOptions>('safeql', {
     );
   }
 
-  // Legend:
-  // 💭 - requires type information
-
   configBuilder
     ?.addConfig(['safeql', {filesDefault: [GLOB_TS_X]}])
     .addRule(
       'check-sql',
       checkSqlOptions ? ERROR : OFF,
       checkSqlOptions && [checkSqlOptions],
-    ) /** @since 0.0.1 */ // 💭
+    ) /** @since 0.0.1 */
     .enableConfigTesterForPlugin('safeql')
     .addOverrides();
 });

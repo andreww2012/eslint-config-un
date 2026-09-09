@@ -327,7 +327,6 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   // Legend:
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
-  // 💭 - requires type information
 
   // TODO sync settings with `jest` config?
   configBuilder
@@ -499,7 +498,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('prefer-to-have-been-called-times', ERROR) /** @since 1.6.1 */ // (warns in all)
     .addRule('prefer-to-have-length', ERROR) /** @since 0.0.57 */ // (warns in all)
     .addRule('prefer-todo', WARNING) /** @since 0.1.0 */ // (warns in all)
-    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // 💭 (warns in all)
+    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // (warns in all)
     .addRule('require-awaited-expect-poll', WARNING) /** @since 1.4.2 */ // (warns in all)
     .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
@@ -546,7 +545,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
       ],
       defaultVitestEslintConfig,
     )
-    .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // 💭 (warns in all)
+    .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // (warns in all)
     .disableAnyRule('ts', 'unbound-method')
     .enableConfigTesterForPlugin('vitest', {
       /* v8 ignore next */

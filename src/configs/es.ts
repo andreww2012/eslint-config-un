@@ -392,9 +392,6 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'es');
 
-  // Legend:
-  // 💭? - optionally requires type information
-
   const mainConfig = configBuilder?.addConfig([
     customConfig?.prefix || 'es',
     {
@@ -413,7 +410,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-date-prototype-totemporalinstant', // cspell:disable-line
         grs(2027, 'datePrototypeToTemporalInstant'),
-      ) /** @since 9.6.0 */ // 💭?
+      ) /** @since 9.6.0 */
       .addRule('no-disposablestack', grs(2027, 'disposableStack')) /** @since 8.7.0 */
       .addRule('no-iterator-zip', grs(2027, 'iteratorZip')) /** @since 8.7.0 */
       .addRule(
@@ -465,69 +462,69 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-uint8array-prototype-setfrombase64', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeSetFromBase64'),
-      ) /** @since 9.1.0 */ // 💭?
+      ) /** @since 9.1.0 */
       .addRule(
         'no-uint8array-prototype-setfromhex', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeSetFromHex'),
-      ) /** @since 9.1.0 */ // 💭?
+      ) /** @since 9.1.0 */
       .addRule(
         'no-uint8array-prototype-tobase64', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeToBase64'),
-      ) /** @since 9.1.0 */ // 💭?
+      ) /** @since 9.1.0 */
       .addRule(
         'no-uint8array-prototype-tohex', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeToHex'),
-      ) /** @since 9.1.0 */ // 💭?
+      ) /** @since 9.1.0 */
       .markCategory('2026-intl')
       .addRule(
         'no-intl-locale-prototype-firstdayofweek', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeFirstDayOfWeek'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-getcalendars', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetCalendars'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-getcollations', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetCollations'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-gethourcycles', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetHourCycles'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-getnumberingsystems', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetNumberingSystems'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-gettextinfo', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetTextInfo'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-gettimezones', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetTimeZones'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule(
         'no-intl-locale-prototype-getweekinfo', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetWeekInfo'),
-      ) /** @since 9.2.0 */ // 💭?
+      ) /** @since 9.2.0 */
       .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')) /** @since 9.2.0 */
       .addRule(
         'no-map-prototype-getorinsert', // cspell:disable-line
         grs(2026, 'mapPrototypeGetOrInsert'),
-      ) /** @since 9.4.0 */ // 💭?
+      ) /** @since 9.4.0 */
       .addRule(
         'no-map-prototype-getorinsertcomputed', // cspell:disable-line
         grs(2026, 'mapPrototypeGetOrInsertComputed'),
-      ) /** @since 9.4.0 */ // 💭?
+      ) /** @since 9.4.0 */
       .addRule(
         'no-weakmap-prototype-getorinsert', // cspell:disable-line
         grs(2026, 'weakMapPrototypeGetOrInsert'),
-      ) /** @since 9.4.0 */ // 💭?
+      ) /** @since 9.4.0 */
       .addRule(
         'no-weakmap-prototype-getorinsertcomputed', // cspell:disable-line
         grs(2026, 'weakMapPrototypeGetOrInsertComputed'),
-      ); /** @since 9.4.0 */ // 💭?
+      ); /** @since 9.4.0 */
   }
 
   if (!isEsVersionFullySupported(2025)) {
@@ -536,40 +533,40 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-dataview-prototype-getfloat16-setfloat16', // cspell:disable-line
         grs(2025, 'dataviewPrototypeGetFloat16SetFloat16'),
-      ) /** @since 8.5.0 */ // 💭?
+      ) /** @since 8.5.0 */
       .addRule('no-dynamic-import-options', grs(2025, 'dynamicImportOptions')) /** @since 8.1.0 */
       .addRule('no-float16array', grs(2025, 'float16array')) /** @since 8.5.0 */
       .addRule('no-import-attributes', grs(2025, 'importAttributes')) /** @since 8.1.0 */
       .addRule('no-iterator', grs(2025, 'iterator')) /** @since 8.1.0 */
-      .addRule('no-iterator-prototype-drop', grs(2025, 'iteratorPrototypeDrop')) /** @since 8.1.0 */ // 💭?
+      .addRule('no-iterator-prototype-drop', grs(2025, 'iteratorPrototypeDrop')) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-every',
         grs(2025, 'iteratorPrototypeEvery'),
-      ) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-filter',
         grs(2025, 'iteratorPrototypeFilter'),
-      ) /** @since 8.1.0 */ // 💭?
-      .addRule('no-iterator-prototype-find', grs(2025, 'iteratorPrototypeFind')) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
+      .addRule('no-iterator-prototype-find', grs(2025, 'iteratorPrototypeFind')) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-flatmap',
         grs(2025, 'iteratorPrototypeFlatMap'),
-      ) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-foreach',
         grs(2025, 'iteratorPrototypeForEach'),
-      ) /** @since 8.1.0 */ // 💭?
-      .addRule('no-iterator-prototype-map', grs(2025, 'iteratorPrototypeMap')) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
+      .addRule('no-iterator-prototype-map', grs(2025, 'iteratorPrototypeMap')) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-reduce',
         grs(2025, 'iteratorPrototypeReduce'),
-      ) /** @since 8.1.0 */ // 💭?
-      .addRule('no-iterator-prototype-some', grs(2025, 'iteratorPrototypeSome')) /** @since 8.1.0 */ // 💭?
-      .addRule('no-iterator-prototype-take', grs(2025, 'iteratorPrototypeTake')) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
+      .addRule('no-iterator-prototype-some', grs(2025, 'iteratorPrototypeSome')) /** @since 8.1.0 */
+      .addRule('no-iterator-prototype-take', grs(2025, 'iteratorPrototypeTake')) /** @since 8.1.0 */
       .addRule(
         'no-iterator-prototype-toarray', // cspell:disable-line
         grs(2025, 'iteratorPrototypeToArray'),
-      ) /** @since 8.1.0 */ // 💭?
+      ) /** @since 8.1.0 */
       .addRule('no-json-modules', grs(2025, 'jsonModules')) /** @since 8.1.0 */
       .addRule('no-math-f16round', grs(2025, 'mathF16round')) /** @since 8.5.0 */
       .addRule('no-promise-try', grs(2025, 'promiseTry')) /** @since 8.1.0 */
@@ -582,28 +579,28 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-set-prototype-difference',
         grs(2025, 'setPrototypeDifference'),
-      ) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
       .addRule(
         'no-set-prototype-intersection',
         grs(2025, 'setPrototypeIntersection'),
-      ) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
       .addRule(
         'no-set-prototype-isdisjointfrom', // cspell:disable-line
         grs(2025, 'setPrototypeIsDisjointFrom'),
-      ) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
       .addRule(
         'no-set-prototype-issubsetof', // cspell:disable-line
         grs(2025, 'setPrototypeIsSubsetOf'),
-      ) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
       .addRule(
         'no-set-prototype-issupersetof', // cspell:disable-line
         grs(2025, 'setPrototypeIsSupersetOf'),
-      ) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
       .addRule(
         'no-set-prototype-symmetricdifference', // cspell:disable-line
         grs(2025, 'setPrototypeSymmetricDifference'),
-      ) /** @since 7.7.0 */ // 💭?
-      .addRule('no-set-prototype-union', grs(2025, 'setPrototypeUnion')) /** @since 7.7.0 */ // 💭?
+      ) /** @since 7.7.0 */
+      .addRule('no-set-prototype-union', grs(2025, 'setPrototypeUnion')) /** @since 7.7.0 */
       .addRule(
         'no-trailing-dynamic-import-commas',
         grs(2025, 'trailingDynamicImportCommas'),
@@ -618,7 +615,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-arraybuffer-prototype-transfer',
         grs(2024, 'arrayBufferPrototypeTransfer'),
-      ) /** @since 7.6.0 */ // 💭?
+      ) /** @since 7.6.0 */
       .addRule(
         'no-atomics-waitasync', // cspell:disable-line
         grs(2024, 'atomicsWaitAsync'),
@@ -633,15 +630,15 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-resizable-and-growable-arraybuffers',
         grs(2024, 'resizableAndGrowableArrayBuffers'),
-      ) /** @since 7.3.0 */ // 💭?
+      ) /** @since 7.3.0 */
       .addRule(
         'no-string-prototype-iswellformed', // cspell:disable-line
         grs(2024, 'stringPrototypeIsWellFormed'),
-      ) /** @since 8.0.0 */ // 💭?
+      ) /** @since 8.0.0 */
       .addRule(
         'no-string-prototype-towellformed', // cspell:disable-line
         grs(2024, 'stringPrototypeToWellFormed'),
-      ); /** @since 8.0.0 */ // 💭?
+      ); /** @since 8.0.0 */
   }
 
   if (!isEsVersionFullySupported(2023)) {
@@ -650,20 +647,20 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-array-prototype-findlast-findlastindex', // cspell:disable-line
         grs(2023, 'arrayPrototypeFindlastFindLastIndex'),
-      ) /** @since 5.3.0 */ // 💭?
+      ) /** @since 5.3.0 */
       .addRule(
         'no-array-prototype-toreversed', // cspell:disable-line
         grs(2023, 'arrayPrototypeToReversed'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule(
         'no-array-prototype-tosorted', // cspell:disable-line
         grs(2023, 'arrayPrototypeToSorted'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule(
         'no-array-prototype-tospliced', // cspell:disable-line
         grs(2023, 'arrayPrototypeToSpliced'),
-      ) /** @since 6.0.0 */ // 💭?
-      .addRule('no-array-prototype-with', grs(2023, 'arrayPrototypeWith')) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
+      .addRule('no-array-prototype-with', grs(2023, 'arrayPrototypeWith')) /** @since 6.0.0 */
       .addRule('no-hashbang', grs(2023, 'hashbang')) /** @since 5.3.0 */
       .addRule(
         'no-regexp-unicode-property-escapes-2023',
@@ -673,15 +670,15 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-intl-numberformat-prototype-formatrange',
         grs(2023, 'intlNumberFormatPrototypeFormatRange'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule(
         'no-intl-numberformat-prototype-formatrangetoparts', // cspell:disable-line
         grs(2023, 'intlNumberFormatPrototypeFormatRangeToParts'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule(
         'no-intl-pluralrules-prototype-selectrange', // cspell:disable-line
         grs(2023, 'intlPluralRulesPrototypeSelectRange'),
-      ); /** @since 6.0.0 */ // 💭?
+      ); /** @since 6.0.0 */
   }
 
   if (!isEsVersionFullySupported(2022)) {
@@ -691,7 +688,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
         'no-arbitrary-module-namespace-names',
         grs(2022, 'arbitraryModuleNamespaceNames'),
       ) /** @since 5.0.0 */
-      .addRule('no-array-prototype-at', grs(2022, 'arrayPrototypeAt')) /** @since 8.0.0 */ // 💭?
+      .addRule('no-array-prototype-at', grs(2022, 'arrayPrototypeAt')) /** @since 8.0.0 */
       .addRule('no-class-instance-fields', grs(2022, 'classInstanceFields')) /** @since 8.0.0 */
       .addRule('no-class-private-fields', grs(2022, 'classPrivateFields')) /** @since 8.0.0 */
       .addRule('no-class-private-methods', grs(2022, 'classPrivateMethods')) /** @since 8.0.0 */
@@ -705,7 +702,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
         'no-regexp-unicode-property-escapes-2022',
         grs(2022, 'regexpUnicodePropertyEscapes2022'),
       ) /** @since 6.0.0 */
-      .addRule('no-string-prototype-at', grs(2022, 'stringPrototypeAt')) /** @since 8.0.0 */ // 💭?
+      .addRule('no-string-prototype-at', grs(2022, 'stringPrototypeAt')) /** @since 8.0.0 */
       .addRule('no-top-level-await', grs(2022, 'topLevelAwait')) /** @since 5.0.0 */
       .markCategory('2022-intl')
       .addRule('no-intl-segmenter', grs(2022, 'intlSegmenter')) /** @since 6.0.0 */
@@ -731,7 +728,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-string-prototype-replaceall', // cspell:disable-line
         grs(2021, 'stringPrototypeReplaceAll'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-weakrefs', // cspell:disable-line
         grs(2021, 'weakRefs'),
@@ -740,7 +737,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-intl-datetimeformat-prototype-formatrange',
         grs(2021, 'intlDateTimeFormatPrototypeFormatRange'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule('no-intl-displaynames', grs(2021, 'intlDisplayNames')) /** @since 6.0.0 */
       .addRule('no-intl-listformat', grs(2021, 'intlListFormat')); /** @since 6.0.0 */
   }
@@ -766,7 +763,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-string-prototype-matchall',
         grs(2020, 'stringPrototypeMatchAll'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule('no-symbol-matchall', grs(2020, 'symbolMatchAll')) /** @since 9.0.0 */
       .markCategory('2020-intl')
       .addRule('no-intl-locale', grs(2020, 'intlLocale')) /** @since 6.0.0 */
@@ -779,7 +776,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
   if (!isEsVersionFullySupported(2019)) {
     mainConfig
       ?.markCategory('ES2019')
-      .addRule('no-array-prototype-flat', grs(2019, 'arrayPrototypeFlat')) /** @since 5.0.0 */ // 💭?
+      .addRule('no-array-prototype-flat', grs(2019, 'arrayPrototypeFlat')) /** @since 5.0.0 */
       .addRule('no-json-superset', grs(2019, 'jsonSuperset')) /** @since 1.3.0 */
       .addRule(
         'no-object-fromentries', // cspell:disable-line
@@ -793,11 +790,11 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-string-prototype-trimstart-trimend', // cspell:disable-line
         grs(2019, 'stringPrototypeTrimStartTrimEnd'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-symbol-prototype-description',
         grs(2019, 'symbolPrototypeDescription'),
-      ); /** @since 5.0.0 */ // 💭?
+      ); /** @since 5.0.0 */
   }
 
   if (!isEsVersionFullySupported(2018)) {
@@ -811,7 +808,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-promise-prototype-finally',
         grs(2018, 'promisePrototypeFinally'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-regexp-lookbehind-assertions',
         grs(2018, 'regexpLookbehindAssertions'),
@@ -830,7 +827,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-intl-numberformat-prototype-formattoparts',
         grs(2018, 'intlNumberFormatPrototypeFormatToParts'),
-      ) /** @since 6.0.0 */ // 💭?
+      ) /** @since 6.0.0 */
       .addRule('no-intl-pluralrules', grs(2018, 'intlPluralRules')); /** @since 6.0.0 */
   }
 
@@ -849,7 +846,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-string-prototype-padstart-padend',
         grs(2017, 'stringPrototypePadStartPadEnd'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-trailing-function-commas',
         grs(2017, 'trailingFunctionCommas'),
@@ -858,7 +855,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-intl-datetimeformat-prototype-formattoparts',
         grs(2017, 'intlDateTimeFormatPrototypeFormatToParts'),
-      ); /** @since 6.0.0 */ // 💭?
+      ); /** @since 6.0.0 */
   }
 
   if (!isEsVersionFullySupported(2016)) {
@@ -867,7 +864,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-array-prototype-includes',
         grs(2016, 'arrayPrototypeIncludes'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule('no-exponential-operators', grs(2016, 'exponentialOperators')) /** @since 1.0.0 */
       .markCategory('2016-intl')
       .addRule(
@@ -884,16 +881,16 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-array-prototype-copywithin',
         grs(2015, 'arrayPrototypeCopyWithin'),
-      ) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-entries', grs(2015, 'arrayPrototypeEntries')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-fill', grs(2015, 'arrayPrototypeFill')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-find', grs(2015, 'arrayPrototypeFind')) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
+      .addRule('no-array-prototype-entries', grs(2015, 'arrayPrototypeEntries')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-fill', grs(2015, 'arrayPrototypeFill')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-find', grs(2015, 'arrayPrototypeFind')) /** @since 5.0.0 */
       .addRule(
         'no-array-prototype-findindex',
         grs(2015, 'arrayPrototypeFindIndex'),
-      ) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-keys', grs(2015, 'arrayPrototypeKeys')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-values', grs(2015, 'arrayPrototypeValues')) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
+      .addRule('no-array-prototype-keys', grs(2015, 'arrayPrototypeKeys')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-values', grs(2015, 'arrayPrototypeValues')) /** @since 5.0.0 */
       .addRule('no-arrow-functions', grs(2015, 'arrowFunctions')) /** @since 1.0.0 */
       .addRule('no-binary-numeric-literals', grs(2015, 'binaryNumericLiterals')) /** @since 1.0.0 */
       .addRule('no-block-scoped-functions', grs(2015, 'blockScopedFunctions')) /** @since 1.0.0 */
@@ -952,7 +949,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule('no-property-shorthands', grs(2015, 'propertyShorthands')) /** @since 1.0.0 */
       .addRule('no-proxy', grs(2015, 'proxy')) /** @since 1.2.0 */
       .addRule('no-reflect', grs(2015, 'reflect')) /** @since 1.2.0 */
-      .addRule('no-regexp-prototype-flags', grs(2015, 'regexpPrototypeFlags')) /** @since 5.0.0 */ // 💭?
+      .addRule('no-regexp-prototype-flags', grs(2015, 'regexpPrototypeFlags')) /** @since 5.0.0 */
       .addRule('no-regexp-u-flag', grs(2015, 'regexpUFlag')) /** @since 1.0.0 */
       .addRule('no-regexp-y-flag', grs(2015, 'regexpYFlag')) /** @since 1.0.0 */
       .addRule('no-rest-parameters', grs(2015, 'restParameters')) /** @since 1.0.0 */
@@ -962,24 +959,24 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule(
         'no-string-prototype-codepointat',
         grs(2015, 'stringPrototypeCodePointAt'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-string-prototype-endswith',
         grs(2015, 'stringPrototypeEndsWith'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-string-prototype-includes',
         grs(2015, 'stringPrototypeIncludes'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule(
         'no-string-prototype-normalize',
         grs(2015, 'stringPrototypeNormalize'),
-      ) /** @since 5.0.0 */ // 💭?
-      .addRule('no-string-prototype-repeat', grs(2015, 'stringPrototypeRepeat')) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
+      .addRule('no-string-prototype-repeat', grs(2015, 'stringPrototypeRepeat')) /** @since 5.0.0 */
       .addRule(
         'no-string-prototype-startswith',
         grs(2015, 'stringPrototypeStartsWith'),
-      ) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
       .addRule('no-string-raw', grs(2015, 'stringRaw')) /** @since 1.2.0 */
       .addRule('no-subclassing-builtins', grs(2015, 'subclassingBuiltins')) /** @since 1.2.0 */
       .addRule('no-symbol', grs(2015, 'symbol')) /** @since 1.2.0 */
@@ -998,23 +995,23 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       ?.markCategory('ES5')
       .addRule('no-accessor-properties', grs(5, 'accessorProperties')) /** @since 1.1.0 */
       .addRule('no-array-isarray', grs(5, 'arrayIsArray')) /** @since 3.0.0 */
-      .addRule('no-array-prototype-every', grs(5, 'arrayPrototypeEvery')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-filter', grs(5, 'arrayPrototypeFilter')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-foreach', grs(5, 'arrayPrototypeForEach')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-indexof', grs(5, 'arrayPrototypeIndexOf')) /** @since 5.0.0 */ // 💭?
+      .addRule('no-array-prototype-every', grs(5, 'arrayPrototypeEvery')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-filter', grs(5, 'arrayPrototypeFilter')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-foreach', grs(5, 'arrayPrototypeForEach')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-indexof', grs(5, 'arrayPrototypeIndexOf')) /** @since 5.0.0 */
       .addRule(
         'no-array-prototype-lastindexof',
         grs(5, 'arrayPrototypeLastIndexOf'),
-      ) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-map', grs(5, 'arrayPrototypeMap')) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-reduce', grs(5, 'arrayPrototypeReduce')) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
+      .addRule('no-array-prototype-map', grs(5, 'arrayPrototypeMap')) /** @since 5.0.0 */
+      .addRule('no-array-prototype-reduce', grs(5, 'arrayPrototypeReduce')) /** @since 5.0.0 */
       .addRule(
         'no-array-prototype-reduceright',
         grs(5, 'arrayPrototypeReduceRight'),
-      ) /** @since 5.0.0 */ // 💭?
-      .addRule('no-array-prototype-some', grs(5, 'arrayPrototypeSome')) /** @since 5.0.0 */ // 💭?
+      ) /** @since 5.0.0 */
+      .addRule('no-array-prototype-some', grs(5, 'arrayPrototypeSome')) /** @since 5.0.0 */
       .addRule('no-date-now', grs(5, 'dateNow')) /** @since 3.0.0 */
-      .addRule('no-function-prototype-bind', grs(5, 'functionPrototypeBind')) /** @since 5.0.0 */ // 💭?
+      .addRule('no-function-prototype-bind', grs(5, 'functionPrototypeBind')) /** @since 5.0.0 */
       .addRule('no-json', grs(5, 'json')) /** @since 3.0.0 */
       .addRule('no-keyword-properties', grs(5, 'keywordProperties')) /** @since 1.1.0 */
       .addRule('no-object-create', grs(5, 'objectCreate')) /** @since 5.0.0 */
@@ -1036,14 +1033,14 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
       .addRule('no-object-keys', grs(5, 'objectKeys')) /** @since 3.0.0 */
       .addRule('no-object-preventextensions', grs(5, 'objectPreventExtensions')) /** @since 3.0.0 */
       .addRule('no-object-seal', grs(5, 'objectSeal')) /** @since 3.0.0 */
-      .addRule('no-string-prototype-trim', grs(5, 'stringPrototypeTrim')) /** @since 5.0.0 */ // 💭?
+      .addRule('no-string-prototype-trim', grs(5, 'stringPrototypeTrim')) /** @since 5.0.0 */
       .addRule('no-trailing-commas', grs(5, 'trailingCommas')); /** @since 1.1.0 */
   }
 
   mainConfig
     ?.markCategory('Legacy')
-    .addRule('no-date-prototype-getyear-setyear', OFF) /** @since 5.1.0 */ // 💭?
-    .addRule('no-date-prototype-togmtstring', OFF) /** @since 5.1.0 */ // 💭?
+    .addRule('no-date-prototype-getyear-setyear', OFF) /** @since 5.1.0 */
+    .addRule('no-date-prototype-togmtstring', OFF) /** @since 5.1.0 */
     .addRule('no-escape-unescape', OFF) /** @since 5.1.0 */
     .addRule(
       'no-function-declarations-in-if-statement-clauses-without-block',
@@ -1052,103 +1049,103 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
     .addRule('no-initializers-in-for-in', OFF) /** @since 5.1.0 */
     .addRule('no-labelled-function-declarations', OFF) /** @since 5.1.0 */
     .addRule('no-legacy-object-prototype-accessor-methods', OFF) /** @since 5.2.0 */
-    .addRule('no-regexp-prototype-compile', OFF) /** @since 5.1.0 */ // 💭?
+    .addRule('no-regexp-prototype-compile', OFF) /** @since 5.1.0 */
     .addRule('no-shadow-catch-param', OFF) /** @since 5.1.0 */
-    .addRule('no-string-create-html-methods', OFF) /** @since 5.1.0 */ // 💭?
-    .addRule('no-string-prototype-substr', OFF) /** @since 5.1.0 */ // 💭?
-    .addRule('no-string-prototype-trimleft-trimright', OFF) /** @since 5.1.0 */ // 💭?
+    .addRule('no-string-create-html-methods', OFF) /** @since 5.1.0 */
+    .addRule('no-string-prototype-substr', OFF) /** @since 5.1.0 */
+    .addRule('no-string-prototype-trimleft-trimright', OFF) /** @since 5.1.0 */
     .markCategory('Non-standards')
     .addRule('no-nonstandard-array-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-array-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-array-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-arraybuffer-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-arraybuffer-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-arraybuffer-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-asyncdisposablestack-properties', OFF) /** @since 8.7.0 */
-    .addRule('no-nonstandard-asyncdisposablestack-prototype-properties', OFF) /** @since 8.7.0 */ // 💭?
+    .addRule('no-nonstandard-asyncdisposablestack-prototype-properties', OFF) /** @since 8.7.0 */
     .addRule('no-nonstandard-atomics-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-bigint-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-bigint-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-bigint-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-boolean-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-boolean-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-boolean-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-dataview-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-dataview-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-dataview-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-date-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-date-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-date-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-disposablestack-properties', OFF) /** @since 8.7.0 */
-    .addRule('no-nonstandard-disposablestack-prototype-properties', OFF) /** @since 8.7.0 */ // 💭?
+    .addRule('no-nonstandard-disposablestack-prototype-properties', OFF) /** @since 8.7.0 */
     .addRule('no-nonstandard-error-properties', OFF) /** @since 8.7.0 */
     .addRule('no-nonstandard-finalizationregistry-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-finalizationregistry-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-finalizationregistry-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-function-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-collator-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-collator-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-collator-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-datetimeformat-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-datetimeformat-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-datetimeformat-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-displaynames-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-displaynames-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-displaynames-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-durationformat-properties', OFF) /** @since 8.5.0 */
-    .addRule('no-nonstandard-intl-durationformat-prototype-properties', OFF) /** @since 8.5.0 */ // 💭?
+    .addRule('no-nonstandard-intl-durationformat-prototype-properties', OFF) /** @since 8.5.0 */
     .addRule('no-nonstandard-intl-listformat-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-listformat-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-listformat-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-locale-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-locale-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-locale-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-numberformat-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-numberformat-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-numberformat-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-pluralrules-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-pluralrules-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-pluralrules-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-relativetimeformat-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-relativetimeformat-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-relativetimeformat-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-intl-segmenter-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-intl-segmenter-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-intl-segmenter-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-iterator-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-iterator-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-iterator-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-json-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-map-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-map-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-map-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-math-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-number-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-number-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-number-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-object-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-promise-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-promise-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-promise-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-proxy-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-reflect-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-regexp-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-regexp-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-regexp-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-set-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-set-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-set-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-sharedarraybuffer-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-sharedarraybuffer-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-sharedarraybuffer-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-string-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-string-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-string-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-symbol-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-symbol-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-symbol-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-temporal-duration-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-duration-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-duration-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-instant-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-instant-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-instant-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-now-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-plaindate-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-plaindate-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-plaindate-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-plaindatetime-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-plaindatetime-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-plaindatetime-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-plainmonthday-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-plainmonthday-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-plainmonthday-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-plaintime-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-plaintime-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-plaintime-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-plainyearmonth-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-plainyearmonth-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-plainyearmonth-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-zoneddatetime-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-zoneddatetime-prototype-properties', OFF) /** @since 9.6.0 */ // 💭?
+    .addRule('no-nonstandard-temporal-zoneddatetime-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-typed-array-properties', OFF) /** @since 8.2.0 */
-    .addRule('no-nonstandard-typed-array-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-typed-array-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-weakmap-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-weakmap-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-weakmap-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-weakref-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-weakref-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-weakref-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-weakset-properties', OFF) /** @since 8.4.0 */
-    .addRule('no-nonstandard-weakset-prototype-properties', OFF) /** @since 8.2.0 */ // 💭?
+    .addRule('no-nonstandard-weakset-prototype-properties', OFF) /** @since 8.2.0 */
     .enableConfigTesterForPlugin('es')
     .addOverrides();
 };

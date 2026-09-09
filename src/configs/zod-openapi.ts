@@ -25,16 +25,13 @@ export default defineUnConfig<ZodOpenapiEslintConfigOptions>('zodOpenapi', {
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'zod-openapi');
 
-  // Legend:
-  // 💭 - requires type information
-
   configBuilder
     ?.addConfig('zod-openapi')
-    .addRule('prefer-meta-last', ERROR) /** @since 2.0.0-beta.0 */ // 💭
-    .addRule('prefer-zod-default', ERROR) /** @since 0.0.1 */ // 💭
-    .addRule('require-comment', OFF) /** @since 0.0.1 */ // 💭
-    .addRule('require-example', OFF) /** @since 0.0.1 */ // 💭
-    .addRule('require-meta', OFF) /** @since 2.0.0-beta.0 */ // 💭
+    .addRule('prefer-meta-last', ERROR) /** @since 2.0.0-beta.0 */
+    .addRule('prefer-zod-default', ERROR) /** @since 0.0.1 */
+    .addRule('require-comment', OFF) /** @since 0.0.1 */
+    .addRule('require-example', OFF) /** @since 0.0.1 */
+    .addRule('require-meta', OFF) /** @since 2.0.0-beta.0 */
     .enableConfigTesterForPlugin('zod-openapi')
     .addOverrides();
 });

@@ -78,8 +78,6 @@ export default defineUnConfig<FunctionalEslintConfigOptions>(
   // 🔵 - in `strict` only
   // 🎨 - in `stylistic`
   // 🪶 - in `lite`
-  // 💭 - requires type information
-  // 💭? - optionally requires type information
   // 📋 - in the specified domain specific preset(s)
 
   configBuilder
@@ -91,25 +89,25 @@ export default defineUnConfig<FunctionalEslintConfigOptions>(
         },
       },
     ])
-    .addRule('functional-parameters', ERROR) /** @since 0.4.0 */ // 🟢🪶💭? 📋 currying
-    .addRule('immutable-data', ERROR) /** @since 0.4.0 */ // 🟢🪶💭 📋 noMutations
+    .addRule('functional-parameters', ERROR) /** @since 0.4.0 */ // 🟢🪶 📋 currying
+    .addRule('immutable-data', ERROR) /** @since 0.4.0 */ // 🟢🪶 📋 noMutations
     .addRule('no-class-inheritance', ERROR) /** @since 7.1.0 */ // 🟢🪶 📋 noOtherParadigms
     .addRule('no-classes', OFF) /** @since 5.0.0-beta.7 */ // 🟢
-    .addRule('no-conditional-statements', OFF) /** @since 5.0.0-beta.7 */ // 🟢💭 📋 noStatements
-    .addRule('no-expression-statements', OFF) /** @since 5.0.0-beta.7 */ // 🟢💭? 📋 noStatements
+    .addRule('no-conditional-statements', OFF) /** @since 5.0.0-beta.7 */ // 🟢 📋 noStatements
+    .addRule('no-expression-statements', OFF) /** @since 5.0.0-beta.7 */ // 🟢 📋 noStatements
     .addRule('no-let', ERROR) /** @since 0.4.0 */ // 🟢🪶 📋 noMutations
     .addRule('no-loop-statements', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶 📋 noStatements
-    .addRule('no-mixed-types', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶💭 📋 noOtherParadigms
+    .addRule('no-mixed-types', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶 📋 noOtherParadigms
     .addRule('no-promise-reject', OFF) /** @since 0.5.3 */
-    .addRule('no-return-void', ERROR) /** @since 0.4.0 */ // 🟢🪶💭 📋 noStatements
+    .addRule('no-return-void', ERROR) /** @since 0.4.0 */ // 🟢🪶 📋 noStatements
     .addRule('no-this-expressions', OFF) /** @since 5.0.0-beta.7 */ // 🔵 📋 noOtherParadigms
-    .addRule('no-throw-statements', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶💭? 📋 noExceptions
+    .addRule('no-throw-statements', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶 📋 noExceptions
     .addRule('no-try-statements', OFF) /** @since 5.0.0-beta.7 */ // 🔵 📋 noExceptions
-    .addRule('prefer-immutable-types', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶💭 📋 noMutations
-    .addRule('prefer-property-signatures', OFF) /** @since 4.4.0-beta.1 */ // 🎨💭
-    .addRule('prefer-tacit', OFF) /** @since 3.2.0 */ // 🎨(warns)💭
-    .addRule('readonly-type', ERROR) /** @since 5.0.0-beta.15 */ // 🎨💭
-    .addRule('type-declaration-immutability', ERROR) /** @since 4.4.0-beta.1 */ // 🟢🪶💭 📋 noMutations
+    .addRule('prefer-immutable-types', ERROR) /** @since 5.0.0-beta.7 */ // 🟢🪶 📋 noMutations
+    .addRule('prefer-property-signatures', OFF) /** @since 4.4.0-beta.1 */ // 🎨
+    .addRule('prefer-tacit', OFF) /** @since 3.2.0 */ // 🎨(warns)
+    .addRule('readonly-type', ERROR) /** @since 5.0.0-beta.15 */ // 🎨
+    .addRule('type-declaration-immutability', ERROR) /** @since 4.4.0-beta.1 */ // 🟢🪶 📋 noMutations
     .enableConfigTesterForPlugin('functional')
     .addOverrides();
 });

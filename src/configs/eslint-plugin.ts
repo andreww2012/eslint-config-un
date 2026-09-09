@@ -188,7 +188,6 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
 
   // Legend:
   // 🟢 - in recommended
-  // 💭 - requires type information
 
   configBuilder
     ?.addConfig([
@@ -233,7 +232,7 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
     ) /** @since 6.4.0 */ // 🟢(since 7.0.0)
     .addRule('no-missing-message-ids', ERROR) /** @since 4.4.0 */ // 🟢
     .addRule('no-missing-placeholders', ERROR) /** @since 0.3.0 */ // 🟢
-    .addRule('no-property-in-node', ERROR) /** @since 5.3.0 */ // 💭
+    .addRule('no-property-in-node', ERROR) /** @since 5.3.0 */
     .addRule('no-unused-message-ids', ERROR) /** @since 4.4.0 */ // 🟢
     .addRule('no-unused-placeholders', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('no-useless-token-range', ERROR) /** @since 0.6.0 */ // 🟢

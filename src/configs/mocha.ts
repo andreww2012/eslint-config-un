@@ -97,7 +97,6 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
   // Legend:
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
-  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig(
@@ -136,7 +135,7 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
     .addRule('limit-timeout', OFF) /** @since 12.0.0 */
     .addRule('max-top-level-suites', ERROR, [{limit: maxTopLevelSuites}]) /** @since 4.6.0 */
     .addRule('no-async-and-done', ERROR) /** @since 12.0.0 */ // 🟢
-    .addRule('no-async-in-sync-tests', ERROR) /** @since 12.0.0 */ // 🟢💭?
+    .addRule('no-async-in-sync-tests', ERROR) /** @since 12.0.0 */ // 🟢
     .addRule('no-async-suite', ERROR) /** @since 11.0.0 */ // 🟢
     .addRule('no-code-after-done', ERROR) /** @since 12.0.0 */ // 🟢
     .addRule('no-conditional-tests', ERROR) /** @since 12.0.0 */ // 🟢

@@ -1082,7 +1082,6 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
   // 🟢 - in recommended, severity is `error`
   // 🟡 - in recommended, severity is `warn`
   // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `configReactX` is enabled (name is also same if it is not specified)
-  // 💭 - Requires type information
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
   configBuilderReactX
@@ -1266,14 +1265,14 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
         ignoresDefault: tsIgnoresTypeAware,
       },
     ])
-    .addRule('no-implicit-children', ERROR) /** @since 3.0.0-beta.76 */ // 💭
-    .addRule('no-implicit-key', ERROR) /** @since 1.5.0-beta.0 */ // 💭
-    .addRule('no-implicit-ref', ERROR) /** @since 3.0.0-beta.76 */ // 💭
+    .addRule('no-implicit-children', ERROR) /** @since 3.0.0-beta.76 */
+    .addRule('no-implicit-key', ERROR) /** @since 1.5.0-beta.0 */
+    .addRule('no-implicit-ref', ERROR) /** @since 3.0.0-beta.76 */
     .addRule(
       'no-leaked-conditional-rendering',
       getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
-    ) /** @since 0.3.0 */ // 🟡💭 🔄️`jsx-no-leaked-render` (worse)
-    .addRule('no-unused-props', WARNING) /** @since 2.0.0 */ // 💭
+    ) /** @since 0.3.0 */ // 🟡 🔄️`jsx-no-leaked-render` (worse)
+    .addRule('no-unused-props', WARNING) /** @since 2.0.0 */
     .enableConfigTesterForPlugin('eslint-react', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),

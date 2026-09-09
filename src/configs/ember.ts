@@ -84,7 +84,6 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
   // 🟢 - in recommended
   // 🟠 - in recommended-gjs
   // 🔵 - in recommended-gts
-  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([
@@ -295,7 +294,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-tracked-built-ins', ERROR) /** @since 13.0.0 */
     .addRule('no-tracked-properties-from-args', ERROR) /** @since 11.3.0 */ // 🟢
     // TODO
-    .addRule('template-no-deprecated', ERROR) /** @since 13.0.0 */ // 💭?
+    .addRule('template-no-deprecated', ERROR) /** @since 13.0.0 */
     .addRule('template-no-let-reference', ERROR) /** @since 12.0.0-alpha.0 */ // 🟠🔵
     .markCategory('jQuery')
     .addRule('jquery-ember-run', ERROR) /** @since 2.0.0 */ // 🟢
