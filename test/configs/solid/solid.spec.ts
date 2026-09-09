@@ -350,5 +350,49 @@ describe('options', () => {
 
       expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(1);
     });
+
+    it('does not set `moduleSources` when option is not set', async () => {
+      const configResult = await computeEslintConfig('solid');
+
+      expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
+        solid: {version: 1},
+      });
+    });
+
+    it('passes user-provided `moduleSources` to the plugin', async () => {
+      const MODULE_SOURCES = ['my-custom-renderer', '@my-org/solid-wrapper'];
+
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {moduleSources: MODULE_SOURCES}}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
+        solid: {version: 1, moduleSources: MODULE_SOURCES},
+      });
+    });
+
+    it('does not set `moduleSources` when option is an empty array', async () => {
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {moduleSources: []}}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
+        solid: {version: 1},
+      });
+    });
+
+    it('sets `settings.solid` when only `moduleSources` is set and `solid-js` version is unknown', async () => {
+      setInstalledPackages({});
+
+      const MODULE_SOURCES = ['my-custom-renderer'];
+
+      const configResult = await computeEslintConfig('solid', {
+        un: {plugins: {solid: {settings: {moduleSources: MODULE_SOURCES}}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
+        solid: {moduleSources: MODULE_SOURCES},
+      });
+    });
   });
 });

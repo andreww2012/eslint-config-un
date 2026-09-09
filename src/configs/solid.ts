@@ -13,6 +13,26 @@ import {
  */
 export interface SolidPluginSettings {
   /**
+   * Names of the modules Solid's primitives are imported from besides `solid-js` and
+   * `@solidjs/signals`, for example a custom renderer or a re-exporting wrapper module.
+   * The names are matched in whole and are added to the built-in ones instead of replacing them.
+   *
+   * Affected rules:
+   * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
+   * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
+   * - [`solid/no-proxy-apis`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-proxy-apis.md)
+   * - [`solid/no-react-deps`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-deps.md)
+   * - [`solid/no-restated-default-options`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-restated-default-options.md)
+   * - [`solid/no-single-arg-create-effect`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-single-arg-create-effect.md)
+   * - [`solid/no-store-mutation-outside-setter`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-store-mutation-outside-setter.md)
+   * - [`solid/no-unused-signal`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unused-signal.md)
+   * - [`solid/no-write-in-pure-computation`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-write-in-pure-computation.md)
+   * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
+   * @default []
+   */
+  moduleSources?: string[];
+
+  /**
    * Version of Solid the linted code targets.
    * Specifying the minor part too (`'1.5'`, `'2.0.3'`) is encouraged: a major-only value borrows
    * the minor from the installed `solid-js` package, falling back to `x.0`.
@@ -20,18 +40,27 @@ export interface SolidPluginSettings {
    * Affected rules:
    * - [`solid/event-handlers`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/event-handlers.md)
    * - [`solid/imports`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/imports.md)
+   * - [`solid/jsx-no-duplicate-props`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-duplicate-props.md)
    * - [`solid/jsx-no-undef`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-undef.md)
-   * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
-   * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
    * - [`solid/no-react-deps`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-deps.md)
+   * - [`solid/no-unknown-namespaces`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unknown-namespaces.md)
+   * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
+   *
+   * Rules whose severity or options are also derived from this setting:
+   * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
+   * - [`solid/no-browser-globals-in-server-function`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-browser-globals-in-server-function.md)
+   * - [`solid/no-invalid-server-capture`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-invalid-server-capture.md)
+   * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
    * - [`solid/no-react-specific-props`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-specific-props.md)
    * - [`solid/no-restated-default-options`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-restated-default-options.md)
    * - [`solid/no-single-arg-create-effect`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-single-arg-create-effect.md)
-   * - [`solid/no-unknown-namespaces`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unknown-namespaces.md)
+   * - [`solid/no-store-mutation-outside-setter`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-store-mutation-outside-setter.md)
+   * - [`solid/no-unused-signal`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unused-signal.md)
+   * - [`solid/no-write-in-pure-computation`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-write-in-pure-computation.md)
    * - [`solid/prefer-onSettled-for-side-effects`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-onSettled-for-side-effects.md)
    * - [`solid/prefer-structured-class`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-structured-class.md)
-   * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
    * - [`solid/removed-api`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/removed-api.md)
+   * - [`solid/require-async-server-function`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/require-async-server-function.md)
    * @default version of the installed `solid-js` package
    */
   version?: number | string;
@@ -55,7 +84,9 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
 
   const solidPackageVersion = context.packagesInfo['solid-js']?.versions.full || '';
 
-  const solidVersionFromUser = String(context.getPluginSettings('solid')?.version ?? '');
+  const pluginSettings = context.getPluginSettings('solid');
+
+  const solidVersionFromUser = String(pluginSettings?.version ?? '');
 
   const solidMajorVersion = Number.parseInt(solidVersionFromUser || solidPackageVersion, 10) || 0;
   const errorIfSolidVersion2 = solidMajorVersion >= 2 ? ERROR : OFF;
@@ -81,9 +112,12 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
       'solid',
       {
         settings: {
-          ...(solidMajorVersion > 0 && {
-            solid: {version: solidMajorVersion},
-          }),
+          solid: {
+            ...(solidMajorVersion > 0 && {version: solidMajorVersion}),
+            ...(pluginSettings?.moduleSources?.length && {
+              moduleSources: pluginSettings.moduleSources,
+            }),
+          },
         },
       },
     ])
@@ -107,6 +141,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('jsx-uses-vars', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-accessor-as-prop', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔵
     .addRule('no-array-handlers', OFF) /** @since 0.10.0 */ // TODO
+    .addRule('no-boolean-enumerated-attribute', ERROR) /** @since 0.18.0 */ // 🔵
     .addRule('no-browser-globals-in-server-function', errorIfSolidVersion2) /** @since 0.17.0 */ // 🔵
     .addRule('no-destructure', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('no-innerhtml', ERROR) /** @since 0.1.0 */ // 🟢
@@ -121,7 +156,10 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     ) /** @since 0.1.0 */ // 🟡
     .addRule('no-restated-default-options', errorIfSolidVersion2) /** @since 0.16.0 */ // 🟣
     .addRule('no-single-arg-create-effect', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔵
+    .addRule('no-store-mutation-outside-setter', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔵
     .addRule('no-unknown-namespaces', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-unused-signal', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔷
+    .addRule('no-write-in-pure-computation', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔵
     .addRule('prefer-for', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('prefer-onSettled-for-side-effects', errorIfSolidVersion2) /** @since 0.16.0 */ // 🟪
     .addRule('prefer-show', OFF) /** @since 0.4.4 */

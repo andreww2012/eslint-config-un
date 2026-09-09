@@ -69,6 +69,7 @@ export default {
     'humanwhocodes',
     'scsstree',
     'safeql',
+    'solidjs',
 
     // Technical words/terms
     'arrayify',
