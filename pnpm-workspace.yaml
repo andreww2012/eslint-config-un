@@ -8,6 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - obug@3.0.0
+  - knip@6.35.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
