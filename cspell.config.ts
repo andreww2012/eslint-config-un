@@ -68,6 +68,7 @@ export default {
     'TSES', // `TSESTree` type from `@typescript-eslint/types`
     'humanwhocodes',
     'scsstree',
+    'safeql',
 
     // Technical words/terms
     'arrayify',

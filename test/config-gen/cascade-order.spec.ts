@@ -148,6 +148,7 @@ describe('cascade order', () => {
       eslint-config-un/regexp
       eslint-config-un/remeda
       eslint-config-un/rxjs
+      eslint-config-un/safeql
       eslint-config-un/security
       eslint-config-un/solid
       eslint-config-un/sonar

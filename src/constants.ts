@@ -267,6 +267,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'mobx',
   'aws-cdk-lib',
   'remeda',
+  '@ts-safeql/sql-tag',
 
   'astro',
   'vue',

@@ -121,6 +121,7 @@ peerDependencyRules:
     eslint-plugin-react@^7>eslint: '>=10'
 
     '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
+    '@ts-safeql/plugin-utils@5.3>typescript': '>=5'
     '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'
 
     # Optional peer, unused here; crossws@0.4 comes in via h3@2 (wants ^0.4.1)

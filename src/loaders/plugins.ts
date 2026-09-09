@@ -492,6 +492,15 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  safeql: genModuleLoader(
+    'safeql',
+    '@ts-safeql/eslint-plugin',
+    () =>
+      import('@ts-safeql/eslint-plugin/config').then(
+        (m) => m.default.configs.useConfigFile.plugins['@ts-safeql'],
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   security: genModuleLoader('security', 'eslint-plugin-security', () =>
     interopDefault(import('eslint-plugin-security')),
   ),
