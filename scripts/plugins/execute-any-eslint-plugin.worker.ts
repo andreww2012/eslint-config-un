@@ -56,7 +56,7 @@ try {
   const eslintPluginInfo = getEslintPluginInfo(packageModule);
 
   sendMessageToParent(eslintPluginInfo);
-} catch (error: unknown) {
+} catch (error) {
   sendMessageToParent({
     error: {
       code: [
@@ -77,7 +77,7 @@ try {
 } finally {
   try {
     await fs.rm(tempDirectoryPath, {recursive: true, force: true});
-  } catch (error: unknown) {
+  } catch (error) {
     console.warn(`Failed to clean up temporary directory ${tempDirectoryPath}:`, error);
   }
 }

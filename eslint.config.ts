@@ -1,10 +1,17 @@
+import type * as Eslint from 'eslint';
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import {eslintConfig, isInCi} from './src';
 import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared';
-import {forbidImportingFromUtilityLibraries} from './src/snippets';
+import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
 const PLUGIN_METADATA_GROUP_ORDER = [...PLUGIN_METADATA_KEY_ORDER, ...RULE_TRAIT_ORDER];
+
+const noRestrictedSyntaxPlugin = createNoRestrictedSyntaxRule('local-rules', {
+  name: 'no-catch-parameter-type-annotation',
+  selector: 'CatchClause > .param[typeAnnotation]',
+  message: 'Catch clause parameters are already `unknown`, so the annotation is redundant',
+});
 
 export default eslintConfig({
   ignores: ['test/**/fixtures/**'],
@@ -12,6 +19,11 @@ export default eslintConfig({
   extraPlugins: {
     'local-rules': () => ({
       rules: {
+        // `@typescript-eslint` types plugin rules looser than what ESLint itself accepts
+        ...(noRestrictedSyntaxPlugin.rules as Record<
+          keyof typeof noRestrictedSyntaxPlugin.rules,
+          Eslint.Rule.RuleModule
+        >),
         'optional-peer-dependency-version-should-match-installed-version':
           optionalPeerDependencyVersionShouldMatchInstalledVersion,
       },
@@ -156,6 +168,7 @@ export default eslintConfig({
     {
       files: ['**/*.?([cm])ts?(x)'],
       rules: {
+        'local-rules/no-catch-parameter-type-annotation': 2,
         'ts/no-restricted-types': [
           2,
           {

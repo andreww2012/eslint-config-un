@@ -48,7 +48,7 @@ function createModuleLoader<T, N extends string>(
         module: overriddenPluginModule || (await interopDefault(module())),
         packageName,
       };
-    } catch (error: unknown) {
+    } catch (error) {
       const ignoredErrorsFinal: string[] = [
         ...arrayify(ignoredErrors),
         ...(isPluginOptionalPeerDependency ? MODULE_NOT_FOUND_ERROR_CODES : []),

@@ -367,7 +367,7 @@ const loadNuxtOptions = async (cwd: string) => {
     // `dotenv` because loading a config otherwise injects the linted project's `.env` into
     // `process.env`, which nothing downstream of a config generator should have to expect
     return {options: await loadNuxtConfig({cwd, dotenv: false, overrides: {dev: true}})};
-  } catch (error: unknown) {
+  } catch (error) {
     return {error: describeError(error)};
   }
 };

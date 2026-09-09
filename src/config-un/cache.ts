@@ -199,7 +199,7 @@ export const saveCacheToFs = async (
   let dataToStoreStringified: string;
   try {
     dataToStoreStringified = JSON.stringify(dataToStore);
-  } catch (error: unknown) {
+  } catch (error) {
     context.logger.warn('Could not serialize configs to store in cache:', error);
     return false;
   }
@@ -240,7 +240,7 @@ export const saveCacheToFs = async (
     await fs.writeFile(cachePath, dataToStoreStringified, 'utf8');
     context.debug(`Saved configs to cache, date: ${dataToStore.date}, key: ${cacheKey.join(',')}`);
     return true;
-  } catch (error: unknown) {
+  } catch (error) {
     context.logger.warn('Could not save cache data:', error);
     return false;
   }
