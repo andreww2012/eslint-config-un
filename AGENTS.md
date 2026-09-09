@@ -18,6 +18,9 @@ Never statically import at runtime any Config file matching `src/configs/**/*.ts
 
 Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, it won't if any operand is a union).
 
+If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.
+Declare the corresponding array using `allUnionMembers` helper.
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
 
