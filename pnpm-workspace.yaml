@@ -10,6 +10,7 @@ minimumReleaseAgeExclude: # []
   - obug@3.0.0
   - knip@6.35.1
   - eslint-plugin-jsdoc@64.3.8
+  - zod@4.6.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
