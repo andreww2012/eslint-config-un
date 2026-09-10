@@ -72,7 +72,8 @@ export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig('check-file')
+    // TODO reports twice on HTML files (via `@html-eslint/parser`): the plugin visits both `Program` and its `Document` child
+    ?.addConfig(['check-file', {ignoresInternal: false}])
     .addRule('filename-blocklist', OFF) /** @since 2.0.0 */
     .addRule(
       'filename-naming-convention',

@@ -2,6 +2,7 @@ import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
   pascalCasedFilename: 'pascal-cased-filename/MyBadFile.js',
+  pascalCasedJsonFilename: 'pascal-cased-filename/MyBadFile.json',
   pascalCasedFolder: 'pascal-cased-folder/MyBadFolder/index.js',
 } as const;
 
@@ -13,7 +14,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(config?.ignores).toBeUndefined();
 
     expect(configResult.getLoadedPlugin('check-file')).toBeUndefined();
   });
@@ -103,6 +104,24 @@ describe('rules', async () => {
       '"The filename "MyBadFile.js" does not match the "KEBAB_CASE" pattern"',
     );
   });
+
+  it('`check-file/filename-naming-convention` rule fires on a file of a non-JS language', async () => {
+    const results = await testEslintConfig(
+      {checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}}, json: true},
+      FIXTURES.pascalCasedJsonFilename,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.pascalCasedJsonFilename,
+      'check-file/filename-naming-convention',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"The filename "MyBadFile.json" does not match the "KEBAB_CASE" pattern"',
+    );
+  });
 });
 
 describe('un options', () => {
@@ -132,15 +151,13 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `check-file` eslint config and merges them with defaults', async () => {
+    it('uses user-provided `ignores` in `check-file` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
 
       const configResult = await computeEslintConfig({checkFile: {ignores: IGNORES}});
 
-      const ignores = configResult.getConfigByUnPostfix('check-file')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      // No implicit ignores here: the config intentionally applies to every file type
+      expect(configResult.getConfigByUnPostfix('check-file')?.ignores).toStrictEqual(IGNORES);
     });
   });
 
