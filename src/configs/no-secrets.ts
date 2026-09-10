@@ -26,7 +26,8 @@ export interface NoSecretsEslintConfigOptions<
    *
    * ❌ Default `ignores`: <code>**&#47;package-lock.json</code>
    *
-   * ⚠️ Will be merged with the user provided `ignores`
+   * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to
+   * replace them instead
    * @default true
    */
   configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'>;
