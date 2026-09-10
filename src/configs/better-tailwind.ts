@@ -145,7 +145,8 @@ export interface BetterTailwindEslintConfigOptions<
    * @default 'official'
    */
   classOrder?:
-    GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order'] | false;
+    | GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order']
+    | false;
 
   /**
    * Class names, as regular expressions, that are not allowed to be used.

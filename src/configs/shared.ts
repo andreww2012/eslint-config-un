@@ -136,7 +136,8 @@ export const TESTS_CONFIG_DEFAULT_FILES = generateDefaultTestFiles(GLOB_JS_TS_X_
 });
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
-  boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;
+  | boolean
+  | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;
 
 export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**

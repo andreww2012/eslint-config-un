@@ -64,7 +64,8 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * @default true
    */
   configPerformanceImprovements?:
-    boolean | SubConfigOptions<ExtraPlugins, 'performanceImprovements'>;
+    | boolean
+    | SubConfigOptions<ExtraPlugins, 'performanceImprovements'>;
 }
 
 export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {group: 'misc'}})((

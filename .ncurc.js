@@ -126,9 +126,8 @@ export default defineConfig({
     return (
       (!PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
         currentVersionSemver?.major === upgradedVersionSemver?.major) &&
-      (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection */.has(
-        packageName,
-      ) ||
+      (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection */
+        .has(packageName) ||
         !(
           currentVersionSemver &&
           upgradedVersionSemver &&

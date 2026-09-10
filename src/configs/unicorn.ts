@@ -212,7 +212,9 @@ export interface UnicornEslintConfigOptions<
    * @default true
    */
   compoundWordsSuggestedReplacements?:
-    boolean | Record<string, string | false> | ConsistentCompoundWordsOptions;
+    | boolean
+    | Record<string, string | false>
+    | ConsistentCompoundWordsOptions;
 
   /**
    * What DOM API to enforce when working with `data-` attributes:
@@ -243,7 +245,9 @@ export interface UnicornEslintConfigOptions<
    * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}}
    */
   enforcePrefixForBooleanNames?:
-    boolean | ConsistentBooleanNameOptions | ConsistentBooleanNameRawOptions;
+    | boolean
+    | ConsistentBooleanNameOptions
+    | ConsistentBooleanNameRawOptions;
 
   /**
    * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively in function

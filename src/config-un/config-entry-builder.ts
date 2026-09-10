@@ -266,7 +266,8 @@ export class ConfigEntryBuilder<
              * @default true
              */
             ignoresInternal?:
-              boolean | Partial<Record<ImplicitlyIgnoredFileTypeUnlessParsed, boolean>>;
+              | boolean
+              | Partial<Record<ImplicitlyIgnoredFileTypeUnlessParsed, boolean>>;
 
             /**
              * The language this config's rules expect the target files to be written for.

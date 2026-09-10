@@ -62,7 +62,15 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
 
     it('`prettier/prettier` rule fires on a markdown file with an unformatted fenced code block', async () => {
       const results = await testEslintConfig(
-        {markdown: {configFormatFencedCodeBlocks: true}},
+        {
+          markdown: {
+            configFormatFencedCodeBlocks: {
+              overrides: {
+                'prettier/prettier': [2, {singleQuote: true}, {eslintTakeoverMode: true}],
+              },
+            },
+          },
+        },
         FIXTURES.unformattedCodeBlock,
         import.meta.dirname,
       );

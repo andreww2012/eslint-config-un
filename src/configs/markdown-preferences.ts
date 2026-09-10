@@ -67,7 +67,10 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * @default '*'
          */
         emphasis?:
-          false | '*' | '_' | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
+          | false
+          | '*'
+          | '_'
+          | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
 
         /**
          * Choose the style of emphasized for strikethrough.
@@ -96,7 +99,9 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * @default 'Sentence case';
    */
   enforceCasing?:
-    EnforceableCasing | false | Partial<Record<CasingEnforcementPlace, EnforceableCasing>>;
+    | EnforceableCasing
+    | false
+    | Partial<Record<CasingEnforcementPlace, EnforceableCasing>>;
 
   /**
    * Enable experimental support of some extended Markdown syntax:

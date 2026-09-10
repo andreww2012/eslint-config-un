@@ -518,7 +518,8 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+            | Record<string, unknown>
+            | undefined
         )?.['extraFileExtensions'],
       ).toMatchInlineSnapshot('[".astro"]');
     });
@@ -529,7 +530,8 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+            | Record<string, unknown>
+            | undefined
         )?.['extraFileExtensions'],
       ).toMatchInlineSnapshot('[".vue"]');
     });
@@ -540,7 +542,8 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+            | Record<string, unknown>
+            | undefined
         )?.['extraFileExtensions'],
       ).toMatchInlineSnapshot('[".svelte"]');
     });
@@ -555,7 +558,8 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            Record<string, unknown> | undefined
+            | Record<string, unknown>
+            | undefined
         )?.['extraFileExtensions'],
       ).toMatchInlineSnapshot('[".mdx"]');
     });

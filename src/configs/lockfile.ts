@@ -105,7 +105,8 @@ export interface LockfileEslintConfigOptions<
    * @default true
    */
   noNonRegistryDependencySpecifiers?:
-    boolean | GetRuleOptions<'lockfile', 'non-registry-specifiers'>;
+    | boolean
+    | GetRuleOptions<'lockfile', 'non-registry-specifiers'>;
 
   /**
    * The package manager(s) this project uses.

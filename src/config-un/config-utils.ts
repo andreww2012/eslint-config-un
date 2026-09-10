@@ -61,7 +61,9 @@ function getIsConfigEnabled(
   this: UnConfigContext,
   configName: keyof UnConfigs,
   defaultConditionOrPackageInstalled:
-    boolean | PackageToCheck | NonEmptyTuple<PackageToCheck> = true,
+    | boolean
+    | PackageToCheck
+    | NonEmptyTuple<PackageToCheck> = true,
   {
     preCondition,
   }: {
@@ -233,7 +235,8 @@ export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
     // The cast picks out this plugin's settings and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
     (
       this.rootOptions.plugins?.[pluginPrefix] as
-        {settings?: Prettify<PluginSettingsMap[Plugin]>} | undefined
+        | {settings?: Prettify<PluginSettingsMap[Plugin]>}
+        | undefined
     )?.settings
   );
 }

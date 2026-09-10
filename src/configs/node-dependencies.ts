@@ -27,7 +27,9 @@ export interface NodeDependenciesEslintConfigOptions<
    * @default false
    */
   enforceAbsoluteVersion?:
-    boolean | 'never' | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
+    | boolean
+    | 'never'
+    | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
 export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependencies', {

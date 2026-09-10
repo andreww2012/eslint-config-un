@@ -5,7 +5,6 @@ import {styleText} from 'node:util';
 import {jsonParseSafe as jsonParse} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
-import * as prettier from 'prettier';
 import {exec} from 'tinyexec';
 import {
   compare as compareVersions,
@@ -16,8 +15,8 @@ import {
 import {stringify as yamlStringify} from 'yaml';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
-import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import type {generateEslintPluginsRulesPresence} from './shared';
+import {formatTypescript} from './shared/format';
 
 const logger = consola.withTag('rules-finder');
 
@@ -208,7 +207,8 @@ const doesFileExist = async (fullPath: string) =>
     .catch(() => false);
 
 const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
-  string | [override: string, version: string]
+  | string
+  | [override: string, version: string]
 )[] = [
   ...['debug', 'jsx', 'hooks', 'react-hooks', 'react', 'react-dom', 'naming-convention'].map(
     (suffix) => `@eslint-react/eslint-plugin-${suffix}`,
@@ -456,12 +456,9 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
 
   const runnerScriptPath = generatePathInProject('run.ts');
 
-  await prettier
-    .format(generateRunnerScriptSource(batches), {
-      parser: 'typescript',
-      ...prettierConfig,
-    })
-    .then((source) => fs.writeFile(runnerScriptPath, source, 'utf8'));
+  await formatTypescript(generateRunnerScriptSource(batches)).then((source) =>
+    fs.writeFile(runnerScriptPath, source, 'utf8'),
+  );
 
   const batchResults: ReturnType<typeof generateEslintPluginsRulesPresence>[] = [];
 

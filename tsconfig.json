@@ -1,6 +1,6 @@
 {
-  // JSON modules imported from `src` and `scripts`: `composite` requires every input file to be listed
-  "files": ["type-decls.d.ts", "package.json", ".prettierrc.json"],
+  // Modules imported from `src` and `scripts` that `include` misses: `composite` requires every input file to be listed
+  "files": ["type-decls.d.ts", "package.json", "oxfmt.config.ts"],
   "include": ["src", "scripts", "eslint-local-rules"],
   "exclude": ["node_modules", "scripts/temp", ".claude/worktrees"],
 

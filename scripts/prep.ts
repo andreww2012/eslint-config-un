@@ -5,23 +5,19 @@ import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from '@andreww20
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {toSafeString as normalizeIdentifier} from 'json-schema-to-typescript/dist/src/utils.js';
-import * as prettier from 'prettier';
-import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
+import {formatTypescript} from './shared/format';
 import {writeConfigArtifacts} from './src/generation/configs';
 import {writeReadmeArtifacts} from './src/generation/readme';
 import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
-
-const formatTypescript = (code: string) =>
-  prettier.format(code, {parser: 'typescript', ...prettierConfig});
 
 const COMPILE_OPTIONS = {bannerComment: '', format: false};
 

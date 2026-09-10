@@ -432,7 +432,8 @@ export interface TsEslintConfigOptions<
    * @default true
    */
   configTypeAware?:
-    boolean | Prettify<UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>>;
+    | boolean
+    | Prettify<UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>>;
 
   /**
    * Disallows any type assertions.

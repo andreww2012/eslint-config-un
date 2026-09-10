@@ -7,7 +7,11 @@ import {
 } from './index';
 
 type CheckedSyntax =
-  'enums' | 'exportAliases' | 'importAliases' | 'namespaces' | 'parameterProperties';
+  | 'enums'
+  | 'exportAliases'
+  | 'importAliases'
+  | 'namespaces'
+  | 'parameterProperties';
 
 /**
  * ESLint plugin to granularly enforce TypeScript's

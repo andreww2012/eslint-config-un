@@ -41,7 +41,7 @@ jobs:
       - run: pnpm check:spelling
 
   formatting:
-    name: Formatting check (prettier)
+    name: Formatting check (oxfmt)
     needs: install
     runs-on: ubuntu-24.04
     steps:

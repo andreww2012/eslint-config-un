@@ -27,7 +27,10 @@ import {
  * read from its `react` property
  */
 type ReactRootPluginSettingName =
-  'componentWrapperFunctions' | 'formComponents' | 'linkComponents' | 'propWrapperFunctions';
+  | 'componentWrapperFunctions'
+  | 'formComponents'
+  | 'linkComponents'
+  | 'propWrapperFunctions';
 
 export interface ReactPluginSettings {
   /**
@@ -439,7 +442,8 @@ export interface ReactEslintConfigOptions<
    * @default true
    */
   configYouMightNotNeedAnEffect?:
-    boolean | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
+    | boolean
+    | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
 
   /**
    * Controls how rules from

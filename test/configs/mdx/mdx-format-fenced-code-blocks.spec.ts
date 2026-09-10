@@ -58,7 +58,15 @@ describe('mdx: sub config `formatFencedCodeBlocks`', () => {
 
     it('`prettier/prettier` rule fires on an mdx file with an unformatted fenced code block', async () => {
       const results = await testEslintConfig(
-        {mdx: {configFormatFencedCodeBlocks: true}},
+        {
+          mdx: {
+            configFormatFencedCodeBlocks: {
+              overrides: {
+                'prettier/prettier': [2, {singleQuote: true}, {eslintTakeoverMode: true}],
+              },
+            },
+          },
+        },
         FIXTURES.unformattedCodeBlock,
         import.meta.dirname,
       );

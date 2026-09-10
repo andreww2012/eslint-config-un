@@ -1,6 +1,8 @@
 import type * as Eslint from 'eslint';
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
+import oxfmtConfig from './oxfmt.config';
 import {eslintConfig, isInCi} from './src';
+import {GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS} from './src/constants';
 import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared';
 import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
@@ -61,6 +63,17 @@ export default eslintConfig({
     },
     expectType: true,
     fileProgress: true,
+    format: {
+      files: [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS],
+      formatter: [
+        'oxfmt',
+        {
+          bracketSpacing: oxfmtConfig.bracketSpacing,
+          printWidth: oxfmtConfig.printWidth,
+          singleQuote: oxfmtConfig.singleQuote,
+        },
+      ],
+    },
     import: {
       extraneousDependenciesCheck: {whitelist: ALWAYS_BUNDLED_DEPENDENCIES},
       configAllowDefaultExport: {
@@ -74,6 +87,8 @@ export default eslintConfig({
       customTags: ['knipignore', 'until', 'aka'],
     },
     markdown: {
+      // Formats fenced code blocks with `prettier`, superseded by the `format` config above
+      configFormatFencedCodeBlocks: false,
       configSentencesPerLine: {
         ignores: [
           'CHANGELOG.md',

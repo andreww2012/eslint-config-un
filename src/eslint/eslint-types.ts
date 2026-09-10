@@ -190,10 +190,8 @@ export type EslintFlatConfigEntry<T extends UnRulesConfigRelaxed = UnRulesConfig
   EslintConfigObject<T>;
 
 export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
-  Eslint.Linter.RuleEntry<
-    // @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
-    Options
-  >;
+  Eslint.Linter.RuleEntry<// @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
+  Options>;
 
 export type EslintRuleMetaWithLanguages = Prettify<
   NonNullable<NonNullable<EslintPlugin['rules']>[string]['meta']> & {languages?: string[]}
@@ -211,7 +209,10 @@ export type GetRuleOptions<
   Prefix extends PluginPrefix,
   RuleName extends keyof UnRuleOptionsByPlugin[Prefix] = keyof UnRuleOptionsByPlugin[Prefix],
   Index extends
-    (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number) | 0 | 'all' | 'allUnwrapped' = 0,
+    | (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number)
+    | 0
+    | 'all'
+    | 'allUnwrapped' = 0,
   _AllOptions = UnRuleOptionsByPlugin[Prefix][RuleName],
 > = Exclude<
   Index extends 'all'

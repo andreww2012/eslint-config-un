@@ -320,7 +320,9 @@ export interface JsdocEslintConfigOptions<
    * @default false
    */
   normalizeSeeLinks?:
-    boolean | NormalizeSeeLinksRuleOptions['canonicalForm'] | NormalizeSeeLinksRuleOptions;
+    | boolean
+    | NormalizeSeeLinksRuleOptions['canonicalForm']
+    | NormalizeSeeLinksRuleOptions;
 }
 
 export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {

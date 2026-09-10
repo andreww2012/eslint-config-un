@@ -198,18 +198,18 @@ const rule: Eslint.Rule.RuleModule = {
         }
 
         const reportDescriptor:
-          (Eslint.Rule.ReportDescriptorMessage & Eslint.Rule.ReportDescriptorOptions) | null =
-          TYPEOF_POSSIBLE_RETURN_VALUES_SET.has(literalValue)
+          | (Eslint.Rule.ReportDescriptorMessage & Eslint.Rule.ReportDescriptorOptions)
+          | null = TYPEOF_POSSIBLE_RETURN_VALUES_SET.has(literalValue)
+          ? {
+              messageId: 'noTypeofLikeComparison',
+              data: {operandSide: otherNode === rightOperand ? 'right' : 'left'},
+            }
+          : options?.disallow?.includes(literalValue)
             ? {
-                messageId: 'noTypeofLikeComparison',
-                data: {operandSide: otherNode === rightOperand ? 'right' : 'left'},
+                messageId: 'noComparisonWithUserProvidedLiteral',
+                data: {value: literalValue.replaceAll('"', String.raw`\"`)},
               }
-            : options?.disallow?.includes(literalValue)
-              ? {
-                  messageId: 'noComparisonWithUserProvidedLiteral',
-                  data: {value: literalValue.replaceAll('"', String.raw`\"`)},
-                }
-              : null;
+            : null;
         if (!reportDescriptor) {
           return;
         }

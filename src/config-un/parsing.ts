@@ -50,7 +50,16 @@ import {
  * unless the config set ups the parser for this language or opts out.
  */
 export type ImplicitlyIgnoredFileTypeUnlessParsed =
-  'css' | 'html' | 'json' | 'json5' | 'jsonc' | 'md' | 'mdx' | 'scss' | 'toml' | 'yaml';
+  | 'css'
+  | 'html'
+  | 'json'
+  | 'json5'
+  | 'jsonc'
+  | 'md'
+  | 'mdx'
+  | 'scss'
+  | 'toml'
+  | 'yaml';
 
 type ParsingMechanism =
   | {
@@ -321,7 +330,8 @@ export type ParsingLanguages = keyof typeof PARSING_LANGUAGES;
  */
 export type ParsingLanguagesWithDialects = ObjectValues<{
   [Key in ParsingLanguages]:
-    Key | [language: Key, dialect: keyof (typeof PARSING_LANGUAGES)[Key]['dialects']];
+    | Key
+    | [language: Key, dialect: keyof (typeof PARSING_LANGUAGES)[Key]['dialects']];
 }>;
 
 interface ParsingLanguageCustomOptions {

@@ -155,7 +155,7 @@ Do NOT add a config logo if it doesn't exists.
 
 Run `nr prep` first: it validates the manifest and will name the exact problem if there is one.
 
-Then ensure there are no TypeScript/ESLint/prettier/knip/... errors.
+Then ensure there are no TypeScript/ESLint/oxfmt/knip/... errors.
 Run `nr check`, or run the individual commands separately if one of them prevents the chain from completing: `nr ts6`, `nr eslint <changed files>`, `nr format`, `nr knip`, `nr check:spelling`.
 IMPORTANT: ignore errors in files you haven't modified!
 
