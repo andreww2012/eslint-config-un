@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {type IgnoresAdditionalOptions, YAML_DEFAULT_FILES} from './shared';
+import {YAML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -30,22 +30,14 @@ export interface YamlPluginSettings {
  *
  * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
  *
- * If `ignores` is explicitly specified, it still be merged with the default ignore list, excluding
- * items specified in `ignoresAdditional`.
+ * ❌ Default `ignores`: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
  *
- * The default ignore list: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
+ * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to replace
+ * them instead
  */
-export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends
-    UnFlatConfigEntryBase<ExtraPlugins, 'yaml'>,
-    IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
-  /**
-   * `ignores` specified in this config will be merged with the default of
-   * `['**\/yarn.lock', '**\/pnpm-lock.yaml']`.
-   * Set this to `true` to avoid that behavior
-   */
-  doNotMergeIgnoresWithDefault?: boolean;
-
+export interface YamlEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'yaml'> {
   /**
    * Set to `false` to not enforce the extension.
    *
@@ -111,7 +103,7 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
         {
           filesDefault: YAML_DEFAULT_FILES,
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
-          ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
+          ignoresDefaultMergedWithUserIgnores: true,
           parseWith: 'yaml',
           settings: {
             yml: pluginSettings,

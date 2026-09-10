@@ -156,15 +156,22 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `yaml` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+    const IGNORES = ['**/fixtures/**'];
 
+    it('uses user-provided `ignores` in `yaml` eslint config and merges them with defaults', async () => {
       const configResult = await computeEslintConfig({yaml: {ignores: IGNORES}});
 
-      const ignores = configResult.getConfigByUnPostfix('yaml')?.ignores;
+      expect(configResult.getConfigByUnPostfix('yaml')?.ignores).toIncludeAllMembers([
+        '**/yarn.lock',
+        '**/pnpm-lock.yaml',
+        ...IGNORES,
+      ]);
+    });
 
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    it('replaces the default `ignores` when the function form is used', async () => {
+      const configResult = await computeEslintConfig({yaml: {ignores: () => IGNORES}});
+
+      expect(configResult.getConfigByUnPostfix('yaml')?.ignores).toStrictEqual(IGNORES);
     });
   });
 
@@ -306,33 +313,6 @@ describe('options', () => {
       expect(
         configResult.getConfigByUnPostfix('yaml')?.languageOptions?.['parserOptions'],
       ).toStrictEqual(PARSER_OPTIONS);
-    });
-  });
-
-  describe('option: `doNotMergeIgnoresWithDefault`', () => {
-    it('merges user-provided `ignores` with defaults by default', async () => {
-      const IGNORES = ['**/fixtures/**'];
-
-      const configResult = await computeEslintConfig({yaml: {ignores: IGNORES}});
-
-      expect(configResult.getConfigByUnPostfix('yaml')?.ignores).toIncludeAllMembers([
-        '**/yarn.lock',
-        '**/pnpm-lock.yaml',
-        ...IGNORES,
-      ]);
-    });
-
-    it('replaces default `ignores` with user-provided `ignores` when set to `true`', async () => {
-      const IGNORES = ['**/fixtures/**'];
-
-      const configResult = await computeEslintConfig({
-        yaml: {ignores: IGNORES, doNotMergeIgnoresWithDefault: true},
-      });
-
-      const ignores = configResult.getConfigByUnPostfix('yaml')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores).not.toIncludeAnyMembers(['**/yarn.lock', '**/pnpm-lock.yaml']);
     });
   });
 });
