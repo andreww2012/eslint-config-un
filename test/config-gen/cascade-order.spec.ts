@@ -29,6 +29,7 @@ describe('cascade order', () => {
       eslint-config-un/aws-cdk/@type-information
       eslint-config-un/barrel-files
       eslint-config-un/better-tailwindcss
+      eslint-config-un/better-tailwindcss/css
       eslint-config-un/boundaries
       eslint-config-un/case-police
       eslint-config-un/clsx

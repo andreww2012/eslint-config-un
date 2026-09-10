@@ -261,18 +261,18 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
 
   (
     [
-      ['css', optionsResolved],
-      ['css/scss', configScss],
+      ['', optionsResolved],
+      ['scss', configScss],
     ] as const
-  ).forEach(([configName, options]) => {
+  ).forEach(([configPostfix, options]) => {
     const configBuilder = context.createConfigBuilder(options, 'css');
 
-    const isScss = configName.endsWith('/scss');
+    const isScss = configPostfix === 'scss';
 
     configBuilder
       ?.addConfig(
         [
-          configName,
+          ['css', configPostfix].filter(Boolean).join('/'),
           {
             ...(isScss && {filesDefault: [GLOB_SCSS]}),
             parseWith: 'css',

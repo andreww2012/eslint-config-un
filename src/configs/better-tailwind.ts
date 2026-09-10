@@ -124,17 +124,23 @@ export interface BetterTailwindEslintConfigOptions<
   >;
 
   /**
-   * If `css` config is enabled, its `files` and `ignores` will be merged with the same fields of
-   * this config to enable `.css` files linting.
-   * This is because CSS parsing in required in order for `eslint-plugin-better-tailwindcss` to work
-   * on CSS files.
+   * A dedicated config entry for CSS files.
    * [Read more about CSS linting in the docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/parsers/css.md).
    *
-   * If you would like to avoid this behavior or would like to specify different `files` and
-   * `ignores`, set this option to `false` and configure the corresponding fields of this config
-   * manually.
+   * Always disabled if `css` config is disabled or lints no files: this sub-config lints the files
+   * that config parses, using its `files` and `ignores` as the defaults.
+   *
+   * CSS file patterns cannot be derived from the patterns of the files the rest of the rules are
+   * linting, so specifying `files` of the parent config disables this sub-config unless it's
+   * enabled here explicitly.
+   * Set this option to `true` to lint all the files linted by the `css` config, or specify `files`
+   * to narrow them down, which is especially useful in monorepos where only some of the packages
+   * are using Tailwind.
+   *
+   * 📁 Default `files`: `files` of the `css` config
+   * @default true // if `files` option of the parent config is not specified
    */
-  cssLinting?: false;
+  configCss?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'>;
 
   /**
    * Enforces consistent Tailwind class order.
@@ -193,70 +199,79 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
   }
 
   const cssFiles = resolveFilesOption(cssResolvedOptions?.files, []);
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  const cssLinting =
-    optionsResolved.cssLinting !== false && cssResolvedOptions != null && cssFiles.length > 0;
+  const canLintCssFiles = cssResolvedOptions != null && cssFiles.length > 0;
+
+  if (canLintCssFiles && optionsResolved.configCss == null && optionsResolved.files != null) {
+    context.logger.warn(
+      '[betterTailwind] CSS files are not linted because you have specified the `files` option. Set `configCss` to `true` to lint all the files linted by the `css` config, or specify `configCss.files` to narrow them down',
+    );
+  }
 
   const isV3 = tailwindMajorVersion === 3;
-
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'better-tailwindcss');
 
   // Legend:
   // 🟢 - in recommended
   // 4️⃣ - only Tailwind 4
 
-  configBuilder
-    ?.addConfig([
-      'better-tailwindcss',
-      {
-        ...(cssLinting && {
-          filesMerged: cssFiles,
-          ignoresDefault: resolveIgnoresOption(cssResolvedOptions.ignores, []),
-          ignoresDefaultMergedWithUserIgnores: true,
-        }),
-        ignoresInternal: {
-          css: !cssLinting,
+  (
+    [
+      ['', optionsResolved],
+      ['css', canLintCssFiles && (optionsResolved.configCss ?? optionsResolved.files == null)],
+    ] as const
+  ).forEach(([configPostfix, options]) => {
+    const configBuilder = context.createConfigBuilder(options, 'better-tailwindcss');
+
+    configBuilder
+      ?.addConfig([
+        ['better-tailwindcss', configPostfix].filter(Boolean).join('/'),
+        {
+          ...(configPostfix === 'css' && {
+            filesDefault: cssFiles,
+            ignoresDefault: resolveIgnoresOption(cssResolvedOptions?.ignores, []),
+            ignoresDefaultMergedWithUserIgnores: true,
+            parsingIgnoresInheritedFrom: ['css'],
+          }),
+          settings: {
+            'better-tailwindcss': pluginSettings,
+          },
         },
-        settings: {
-          'better-tailwindcss': pluginSettings,
-        },
-      },
-    ])
-    .markCategory('Stylistic rules')
-    .addRule('enforce-canonical-classes', isV3 ? OFF : ERROR) /** @since 4.0.0 */ // 🟢
-    .addRule(
-      'enforce-consistent-class-order',
-      typeof classOrder === 'string' ? WARNING : OFF,
-      typeof classOrder === 'string' ? [{order: classOrder}] : [],
-    ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
-    .addRule('enforce-consistent-important-position', isV3 ? ERROR : OFF, [
-      {position: 'legacy'},
-    ]) /** @since 3.6.0 */
-    .addRule(
-      'enforce-consistent-line-wrapping',
-      breakUpClassesIntoMultipleLines ? WARNING : OFF,
-      breakUpClassesIntoMultipleLines ? [breakUpClassesIntoMultipleLines] : [],
-    ) /** @since 3.0.0 */ /** @aka multiline */ // 🟢
-    .addRule(
-      'enforce-consistent-variable-syntax',
-      // Do not enable in v3 because it doesn't support `parentheses` syntax (`bg-(--primary)`)
-      OFF,
-    ) /** @since 3.1.0 */
-    .addRule('enforce-consistent-variant-order', isV3 ? OFF : ERROR) /** @since 4.4.0 */
-    .addRule('enforce-logical-properties', OFF) /** @since 4.4.0 */
-    .addRule('enforce-shorthand-classes', isV3 ? ERROR : OFF) /** @since 3.5.0 */
-    .addRule('no-deprecated-classes', WARNING) /** @since 3.6.0 */
-    .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
-    .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢
-    .markCategory('Correctness rules')
-    .addRule('no-concatenated-classes', ERROR) /** @since 4.7.0 */ // 🟢
-    .addRule('no-conflicting-classes', ERROR) /** @since 3.0.0 */ // 🟢
-    .addRule(
-      'no-restricted-classes',
-      restrictedClasses?.length ? ERROR : OFF,
-      restrictedClasses?.length ? [{restrict: restrictedClasses}] : [],
-    ) /** @since 3.0.0 */ // 4️⃣
-    .addRule('no-unknown-classes', OFF) /** @since 3.0.0 */ /** @aka no-unregistered-classes */ // 🟢
-    .enableConfigTesterForPlugin('better-tailwindcss')
-    .addOverrides();
+      ])
+      .markCategory('Stylistic rules')
+      .addRule('enforce-canonical-classes', isV3 ? OFF : ERROR) /** @since 4.0.0 */ // 🟢
+      .addRule(
+        'enforce-consistent-class-order',
+        typeof classOrder === 'string' ? WARNING : OFF,
+        typeof classOrder === 'string' ? [{order: classOrder}] : [],
+      ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
+      .addRule('enforce-consistent-important-position', isV3 ? ERROR : OFF, [
+        {position: 'legacy'},
+      ]) /** @since 3.6.0 */
+      .addRule(
+        'enforce-consistent-line-wrapping',
+        breakUpClassesIntoMultipleLines ? WARNING : OFF,
+        breakUpClassesIntoMultipleLines ? [breakUpClassesIntoMultipleLines] : [],
+      ) /** @since 3.0.0 */ /** @aka multiline */ // 🟢
+      .addRule(
+        'enforce-consistent-variable-syntax',
+        // Do not enable in v3 because it doesn't support `parentheses` syntax (`bg-(--primary)`)
+        OFF,
+      ) /** @since 3.1.0 */
+      .addRule('enforce-consistent-variant-order', isV3 ? OFF : ERROR) /** @since 4.4.0 */
+      .addRule('enforce-logical-properties', OFF) /** @since 4.4.0 */
+      .addRule('enforce-shorthand-classes', isV3 ? ERROR : OFF) /** @since 3.5.0 */
+      .addRule('no-deprecated-classes', WARNING) /** @since 3.6.0 */
+      .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
+      .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢
+      .markCategory('Correctness rules')
+      .addRule('no-concatenated-classes', ERROR) /** @since 4.7.0 */ // 🟢
+      .addRule('no-conflicting-classes', ERROR) /** @since 3.0.0 */ // 🟢
+      .addRule(
+        'no-restricted-classes',
+        restrictedClasses?.length ? ERROR : OFF,
+        restrictedClasses?.length ? [{restrict: restrictedClasses}] : [],
+      ) /** @since 3.0.0 */ // 4️⃣
+      .addRule('no-unknown-classes', OFF) /** @since 3.0.0 */ /** @aka no-unregistered-classes */ // 🟢
+      .enableConfigTesterForPlugin('better-tailwindcss')
+      .addOverrides();
+  });
 });

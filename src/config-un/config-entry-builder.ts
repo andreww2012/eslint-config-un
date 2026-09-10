@@ -215,12 +215,6 @@ export class ConfigEntryBuilder<
             filesDefaultMergedWithUserFiles?: boolean;
 
             /**
-             * Files to add to the resolved files list (user files + default files) IF that list is
-             * not empty
-             */
-            filesMerged?: string[];
-
-            /**
              * Will be merged with the internal `ignores`, and, if
              * `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
              */
@@ -329,13 +323,9 @@ export class ConfigEntryBuilder<
           : filesWhenArray
         : internalOptions.filesDefault || [];
 
-      const filesDefault =
-        internalOptions.filesMerged?.length && filesWhenArrayResolved.length > 0
-          ? [...filesWhenArrayResolved, ...internalOptions.filesMerged]
-          : filesWhenArrayResolved;
       const filesWhenFn =
         typeof filesOption === 'function'
-          ? filesOption({filesDefault: [...filesDefault]})
+          ? filesOption({filesDefault: [...filesWhenArrayResolved]})
           : undefined;
 
       const ignoresOption = shouldApplyUserFilesAndIgnores
@@ -384,7 +374,7 @@ export class ConfigEntryBuilder<
       ];
 
       return [
-        filesWhenFn || filesDefault,
+        filesWhenFn || filesWhenArrayResolved,
         (typeof ignoresOption === 'function'
           ? ignoresOption({ignoresDefault: [...ignoresDefault], ignoresImplicit: ignoresInternal})
           : undefined) || ignoresBeforeUserFn,

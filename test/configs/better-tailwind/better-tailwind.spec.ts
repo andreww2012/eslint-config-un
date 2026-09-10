@@ -2,7 +2,6 @@ import path from 'node:path';
 
 const FIXTURES = {
   tailwindInJsxDuplicateClasses: 'tailwind-in-jsx-duplicate-classes.jsx',
-  tailwindInCssDuplicateClasses: 'tailwind-in-css-duplicate-classes.css',
 } as const;
 
 beforeEach(() => {
@@ -199,9 +198,11 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
     });
 
-    it('appends `css` config files to the user-provided `files` when css linting is enabled', async () => {
+    it('does not append `css` config files to the user-provided `files`', async () => {
       const FILES = ['**/*.jsx'];
       const CSS_FILES = ['src/**/*.css'];
+
+      spyOnProcessOutput();
 
       const configResult = await computeEslintConfig(
         {
@@ -211,10 +212,25 @@ describe('un options', () => {
         {un: {plugins: {'better-tailwindcss': {settings: TW3_SETTINGS}}}},
       );
 
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual([
-        ...FILES,
-        ...CSS_FILES,
-      ]);
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual(FILES);
+    });
+
+    it('passes no patterns to the function form of `files` and uses the returned ones', async () => {
+      const FILES = ['**/*.jsx'];
+      const filesFn = vi.fn<() => string[]>(() => FILES);
+
+      spyOnProcessOutput();
+
+      const configResult = await computeEslintConfig(
+        {
+          css: true,
+          betterTailwind: {files: filesFn},
+        },
+        {un: {plugins: {'better-tailwindcss': {settings: TW3_SETTINGS}}}},
+      );
+
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual(FILES);
+      expect(filesFn).toHaveBeenCalledWith({filesDefault: []});
     });
   });
 
@@ -420,64 +436,6 @@ describe('options', () => {
           'better-tailwindcss/enforce-consistent-line-wrapping',
         ),
       ).toMatchInlineSnapshot('[1, {"printWidth": 80}]');
-    });
-  });
-
-  describe('option: `cssLinting`', () => {
-    it('lints CSS files when css config is enabled by default', async () => {
-      const result = await testEslintConfig(
-        {
-          css: true,
-          betterTailwind: true,
-        },
-        FIXTURES.tailwindInCssDuplicateClasses,
-        {
-          searchFixturesRelativeToPath: import.meta.dirname,
-          un: {
-            plugins: {
-              'better-tailwindcss': {
-                settings: {
-                  tailwindConfig: path.resolve(
-                    import.meta.dirname,
-                    'fixtures',
-                    'tailwind.config.js',
-                  ),
-                },
-              },
-            },
-          },
-        },
-      );
-
-      const error = findLintMessageFromLintResults(
-        result,
-        FIXTURES.tailwindInCssDuplicateClasses,
-        'better-tailwindcss/no-duplicate-classes',
-      );
-
-      expect(error?.message).toMatchInlineSnapshot('"Duplicate classname: "flex"."');
-    });
-
-    it('does not lint CSS files when set to `false` even if css config is enabled', async () => {
-      const result = await testEslintConfig(
-        {
-          css: true,
-          betterTailwind: {cssLinting: false},
-        },
-        FIXTURES.tailwindInCssDuplicateClasses,
-        {
-          searchFixturesRelativeToPath: import.meta.dirname,
-          un: {plugins: {'better-tailwindcss': {settings: TW3_SETTINGS}}},
-        },
-      );
-
-      const error = findLintMessageFromLintResults(
-        result,
-        FIXTURES.tailwindInCssDuplicateClasses,
-        'better-tailwindcss/no-duplicate-classes',
-      );
-
-      expect(error).toBeUndefined();
     });
   });
 
