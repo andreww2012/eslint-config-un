@@ -1184,4 +1184,20 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       /* v8 ignore stop */
     })
     .addOverrides();
+
+  // Every `<script>` block is linted as a separate file, so an empty one would be reported as an
+  // empty file. Must come last to also win over the `unicorn/html` Sub-config
+  const configBuilderInlineJs = context.createConfigBuilder(
+    configsMeta.jsInline.enabled,
+    'unicorn',
+  );
+  configBuilderInlineJs
+    ?.addConfig([
+      'unicorn/inline-js',
+      {
+        filesDefault: [GLOB_HTM_HTML],
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
+    .addRule('no-empty-file', OFF);
 });

@@ -120,6 +120,7 @@ describe('cascade order', () => {
       eslint-config-un/unicorn/html
       eslint-config-un/unicorn/json
       eslint-config-un/unicorn/markdown
+      eslint-config-un/unicorn/inline-js
       eslint-config-un/node
       eslint-config-un/node/@type-information
       eslint-config-un/node-dependencies
