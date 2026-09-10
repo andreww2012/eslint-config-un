@@ -1,4 +1,4 @@
-import {ERROR, GLOB_HTML, GLOB_YML_YAML, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
@@ -341,14 +341,20 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
     .enableConfigTesterForPlugin('')
     .addOverrides();
 
+  // TODO possible to do anything with this?
+  // Note: do not exclude YAML or HTML files from ignore-list. This rule is triggered
+  // on all YAML comments because they all are considered Block for whatever reason:
+  // https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
+  // and it might crash on HTML files (if receives a comment node with `CommentContent` type)
   configBuilder
-    ?.addConfig(['js/stylistic_spaced-comment', {applyUserFilesAndIgnores: false}], {
-      ...(userFiles.length > 0 && {files: userFiles}),
-      // TODO possible to do anything with this?
-      // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
-      // Might crash on HTML files (if receives a comment node with `CommentContent` type)
-      ignores: [GLOB_YML_YAML, GLOB_HTML, ...resolveIgnoresOption(optionsResolved.ignores, [])],
-    })
+    ?.addConfig([
+      'js/stylistic_spaced-comment',
+      {
+        applyUserFilesAndIgnores: false,
+        filesDefault: userFiles,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
+      },
+    ])
     .addAnyRule('stylistic', 'spaced-comment', ERROR, [
       'always',
       {

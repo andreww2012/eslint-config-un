@@ -1,4 +1,4 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
   usedConsoleLog: 'used-console-log.js',
@@ -21,7 +21,7 @@ describe('basic tests', () => {
 
     expect(
       configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores,
-    ).toIncludeAllMembers(['**/*.y?(a)ml', '**/*.html']);
+    ).toIncludeAllMembers([...(ignores || []), GLOB_YML_YAML, GLOB_HTM_HTML]);
   });
 
   it('does not create `js` and `js/stylistic_spaced-comment` eslint configs if set to `false`', async () => {
