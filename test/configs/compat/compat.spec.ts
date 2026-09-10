@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   fetchApi: 'fetch-api.js',
+  fetchApiInsideHtml: 'fetch-api-inside-html.html',
   consoleApi: 'console-api.js',
 } as const;
 
@@ -11,7 +14,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('compat')).toBeDefined();
   });
@@ -91,6 +98,25 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(result, FIXTURES.consoleApi, 'compat/compat');
 
     expect(error).toBeUndefined();
+  });
+
+  it('`compat/compat` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const result = await testEslintConfig(
+      {compat: true, jsInline: true},
+      FIXTURES.fetchApiInsideHtml,
+      {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {plugins: {compat: {settings: {targets: ['ie 11']}}}},
+      },
+    );
+
+    const error = findLintMessageFromLintResults(
+      result,
+      FIXTURES.fetchApiInsideHtml,
+      'compat/compat',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"fetch is not supported in IE 11"');
   });
 });
 

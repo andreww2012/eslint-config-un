@@ -1,4 +1,4 @@
-import {ERROR, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -26,7 +26,12 @@ export default defineUnConfig<UnEslintConfigOptions>(
   const configBuilder = context.createConfigBuilder(optionsResolved, 'un');
 
   configBuilder
-    ?.addConfig('un')
+    ?.addConfig([
+      'un',
+      {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
     .addRule('no-distributive-never-check', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */

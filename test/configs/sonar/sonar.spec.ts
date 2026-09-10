@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   usingIncludesOnEmptyArray: 'using-includes-on-empty-array.js',
+  usingIncludesOnEmptyArrayInsideHtml: 'using-includes-on-empty-array-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('sonar')).toBeDefined();
   });
@@ -82,6 +89,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.usingIncludesOnEmptyArray,
+      'sonar/no-empty-collection',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Review this usage of "strings" as it can only be empty here."',
+    );
+  });
+
+  it('`sonar/no-empty-collection` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {sonar: true, jsInline: true},
+      FIXTURES.usingIncludesOnEmptyArrayInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.usingIncludesOnEmptyArrayInsideHtml,
       'sonar/no-empty-collection',
     );
 

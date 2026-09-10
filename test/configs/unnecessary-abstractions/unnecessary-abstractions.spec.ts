@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   ternaryOfParameters: 'ternary-of-parameters.js',
+  ternaryOfParametersInsideHtml: 'ternary-of-parameters-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('unnecessary-abstractions')).toBeDefined();
   });
@@ -107,6 +114,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.ternaryOfParameters,
+      'unnecessary-abstractions/no-ternary-wrappers',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Unnecessary abstraction: Use the ternary expression directly instead of wrapping it in a function."',
+    );
+  });
+
+  it('`unnecessary-abstractions/no-ternary-wrappers` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {unnecessaryAbstractions: true, jsInline: true},
+      FIXTURES.ternaryOfParametersInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.ternaryOfParametersInsideHtml,
       'unnecessary-abstractions/no-ternary-wrappers',
     );
 

@@ -1,4 +1,4 @@
-import {ERROR} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -27,7 +27,12 @@ export default defineUnConfig<UnnecessaryAbstractionsEslintConfigOptions>(
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig('unnecessary-abstractions')
+    ?.addConfig([
+      'unnecessary-abstractions',
+      {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
     .addRule('no-ternary-wrappers', ERROR) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('unnecessary-abstractions')
     .addOverrides();

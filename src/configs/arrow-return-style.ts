@@ -1,4 +1,4 @@
-import {ERROR, OFF} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -27,7 +27,12 @@ export default defineUnConfig<ArrowReturnStyleEslintConfigOptions>(
   // 🔴 - not in recommended
 
   configBuilder
-    ?.addConfig('arrow-return-style')
+    ?.addConfig([
+      'arrow-return-style',
+      {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
     .addRule('arrow-return-style', OFF) /** @since 1.0.0 */
     .addRule('no-export-default-arrow', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('arrow-return-style')

@@ -1,4 +1,4 @@
-import {ERROR, OFF} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -59,6 +59,7 @@ export default defineUnConfig<MathEslintConfigOptions>(
     ?.addConfig([
       'math',
       {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           math: pluginSettings,
         },

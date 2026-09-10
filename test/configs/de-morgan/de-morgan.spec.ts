@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   notOfLogicalAndExpression: 'not-of-logical-and-expression.js',
+  notOfLogicalAndExpressionInsideHtml: 'not-of-logical-and-expression-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('de-morgan')).toBeDefined();
   });
@@ -81,6 +88,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.notOfLogicalAndExpression,
+      'de-morgan/no-negated-conjunction',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Replace negated conjunction `!(a && b)` with `!a || !b`"',
+    );
+  });
+
+  it('`de-morgan/no-negated-conjunction` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {deMorgan: true, jsInline: true},
+      FIXTURES.notOfLogicalAndExpressionInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.notOfLogicalAndExpressionInsideHtml,
       'de-morgan/no-negated-conjunction',
     );
 

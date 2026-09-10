@@ -7,6 +7,7 @@ import {
   GLOB_JSONC,
   GLOB_MARKDOWN,
   GLOB_MDX,
+  KEEP_LINTING_INLINE_JS,
   OFF,
   WARNING,
 } from '../constants';
@@ -567,7 +568,12 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
   // 🟡 - only making sense for plain JS (functionality ~fully covered by TS)
 
   configBuilder
-    ?.addConfig('unicorn')
+    ?.addConfig([
+      'unicorn',
+      {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
     .addRule('better-dom-traversing', ERROR) /** @since 65.0.0 */
     .addRule('catch-error-name', WARNING) /** @since 0.4.0 */ // 🟣
     .addRule(

@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   fixture: 'fixture.js',
+  nanAdditionInsideHtml: 'nan-addition-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('math')).toBeDefined();
   });
@@ -77,6 +84,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.fixture,
+      'math/no-static-nan-calculations',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"This calculation will always result in NaN, use explicit `NaN` or `Number.NaN` instead."',
+    );
+  });
+
+  it('`math/no-static-nan-calculations` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {math: true, jsInline: true},
+      FIXTURES.nanAdditionInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.nanAdditionInsideHtml,
       'math/no-static-nan-calculations',
     );
 

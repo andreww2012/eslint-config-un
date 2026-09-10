@@ -1,5 +1,5 @@
 // cspell:ignore foldl foldr
-import {CHECKED_LODASH_METHODS, ERROR, OFF} from '../constants';
+import {CHECKED_LODASH_METHODS, ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
@@ -217,7 +217,12 @@ export default defineUnConfig<YouDontNeedLodashUnderscoreEslintConfigOptions>(
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig('you-dont-need-lodash-underscore')
+    ?.addConfig([
+      'you-dont-need-lodash-underscore',
+      {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
+      },
+    ])
     .addRule(...getRuleSeverity('all')) /** @since 5.0.0 */
     .addRule(...getRuleSeverity('any')) /** @since 5.0.0 */
     .addRule(...getRuleSeverity('assign')) /** @since 5.0.0 */

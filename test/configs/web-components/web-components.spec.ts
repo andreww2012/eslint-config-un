@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   customElementNameWithoutDash: 'custom-element-name-without-dash/index.js',
+  customElementNameWithoutDashInsideHtml: 'custom-element-name-without-dash-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('wc')).toBeDefined();
   });
@@ -92,6 +99,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.customElementNameWithoutDash,
+      'wc/no-invalid-element-name',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Element name is invalid and should follow the HTML standard's recommendations(https://html.spec.whatwg.org/multipage/custom-elements.html#prod-potentialcustomelementname). Name must contain a hyphen/dash"`,
+    );
+  });
+
+  it('`wc/no-invalid-element-name` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {webComponents: true, jsInline: true},
+      FIXTURES.customElementNameWithoutDashInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.customElementNameWithoutDashInsideHtml,
       'wc/no-invalid-element-name',
     );
 

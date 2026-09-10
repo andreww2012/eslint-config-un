@@ -1,5 +1,5 @@
 // cspell:ignore attributechangedcallback connectedcallback
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -46,6 +46,7 @@ export default defineUnConfig<WebComponentsEslintConfigOptions>(
     ?.addConfig([
       'web-components',
       {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           wc: pluginSettings,
         },

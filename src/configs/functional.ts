@@ -1,5 +1,5 @@
 import type {Immutability, TypeSpecifier} from 'is-immutable-type';
-import {ERROR, OFF} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -84,6 +84,7 @@ export default defineUnConfig<FunctionalEslintConfigOptions>(
     ?.addConfig([
       'functional',
       {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           immutability: pluginSettings,
         },

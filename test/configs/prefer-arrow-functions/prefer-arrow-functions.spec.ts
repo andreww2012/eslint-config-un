@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   plainFunction: 'plain-function.js',
+  plainFunctionInsideHtml: 'plain-function-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -101,6 +102,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.plainFunction,
+      'prefer-arrow-functions/prefer-arrow-functions',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Prefer using arrow functions over plain functions"',
+    );
+  });
+
+  it('`prefer-arrow-functions/prefer-arrow-functions` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {preferArrowFunctions: true, jsInline: true},
+      FIXTURES.plainFunctionInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.plainFunctionInsideHtml,
       'prefer-arrow-functions/prefer-arrow-functions',
     );
 

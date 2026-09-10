@@ -1,3 +1,5 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   interfaceWithUnsortedHeritageClauses: 'interface-with-unsorted-heritage-clauses.ts',
 } as const;
@@ -14,7 +16,11 @@ describe('perfectionist: sub config `sortHeritageClauses`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toBeUndefined();
-      expect(config?.ignores?.length).toBeGreaterThan(0);
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-heritage-clauses` eslint config by default', async () => {

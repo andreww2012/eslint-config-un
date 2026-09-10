@@ -1,5 +1,5 @@
 import type {Options as DefaultBrowsersListOptions} from 'browserslist';
-import {ERROR} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS} from '../constants';
 import type {OmitStrict} from '../types';
 import {
   type ExtraPluginsType,
@@ -79,6 +79,7 @@ export default defineUnConfig<CompatEslintConfigOptions>(
     ?.addConfig([
       'compat',
       {
+        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           '': pluginSettings,
         },

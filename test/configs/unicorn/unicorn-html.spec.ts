@@ -63,13 +63,25 @@ describe('unicorn: sub config `html`', () => {
       );
     });
 
-    it('does not apply the JS-only `unicorn` rules to HTML files', async () => {
+    it('does not add the JS-only `unicorn` rules to `unicorn/html` eslint config', async () => {
       const configResult = await computeEslintConfig({unicorn: true, html: true});
 
       expect(configResult.getRuleEntry('unicorn/html', 'unicorn/no-lonely-if')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('unicorn')?.ignores).toIncludeAllMembers([
-        GLOB_HTM_HTML,
-      ]);
+    });
+
+    // The `unicorn` eslint config does reach HTML files, but only to lint the JS inside `<script>`
+    it('reports no `unicorn` rules other than the HTML ones on an HTML document', async () => {
+      const results = await testEslintConfig(
+        {unicorn: true, html: true},
+        FIXTURES.fileInputWithImageAccept,
+        import.meta.dirname,
+      );
+
+      expect(
+        results[0]?.messages
+          .map(({ruleId}) => ruleId)
+          .filter((ruleId) => ruleId?.startsWith('unicorn/')),
+      ).toStrictEqual(['unicorn/no-invalid-file-input-accept']);
     });
   });
 

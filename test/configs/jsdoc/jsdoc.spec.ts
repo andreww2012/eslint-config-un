@@ -4,6 +4,7 @@ import {objectKeysUnsafe} from '../../../src/utils';
 
 const FIXTURES = {
   wrongParamNames: 'wrong-param-names.js',
+  wrongParamNamesInsideHtml: 'wrong-param-names-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -90,6 +91,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.wrongParamNames,
+      'jsdoc/check-param-names',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Expected @param names to be "a, b". Got "wrongName, anotherWrong"."',
+    );
+  });
+
+  it('`jsdoc/check-param-names` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {jsdoc: true, jsInline: true},
+      FIXTURES.wrongParamNamesInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.wrongParamNamesInsideHtml,
       'jsdoc/check-param-names',
     );
 

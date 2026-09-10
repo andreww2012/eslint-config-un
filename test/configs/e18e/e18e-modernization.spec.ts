@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   hasOwnPropertyCall: 'has-own-property-call.ts',
+  hasOwnPropertyCallInsideHtml: 'has-own-property-call-inside-html.html',
 } as const;
 
 describe('e18e: sub config `modernization`', () => {
@@ -11,6 +14,11 @@ describe('e18e: sub config `modernization`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toBeUndefined();
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `e18e/modernization` eslint config when set to `false`', async () => {
@@ -40,6 +48,28 @@ describe('e18e: sub config `modernization`', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.hasOwnPropertyCall,
+        'e18e/prefer-object-has-own',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Use Object.hasOwn() instead of hasOwnProperty"',
+      );
+    });
+
+    it('`e18e/prefer-object-has-own` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+      const results = await testEslintConfig(
+        {e18e: true, jsInline: true},
+        FIXTURES.hasOwnPropertyCallInsideHtml,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          // Leaves the type information requiring rules to the sub-configs targeting TS files only
+          internalOptions: {},
+        },
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hasOwnPropertyCallInsideHtml,
         'e18e/prefer-object-has-own',
       );
 

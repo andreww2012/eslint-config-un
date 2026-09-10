@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   optionalChaining: 'optional-chaining.js',
+  optionalChainingInsideHtml: 'optional-chaining-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -91,6 +92,22 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.optionalChaining,
+      'es/no-optional-chaining',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"ES2020 optional chaining is forbidden."');
+  });
+
+  it('`es/no-optional-chaining` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {es: {ecmaVersion: 2019}, jsInline: true},
+      FIXTURES.optionalChainingInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.optionalChainingInsideHtml,
       'es/no-optional-chaining',
     );
 

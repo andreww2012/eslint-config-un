@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   consecutiveSpaces: 'consecutive-spaces.js',
+  consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
   neverConditionalTypes: 'never-conditional-types.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
@@ -12,7 +15,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('un')).toBeDefined();
   });
@@ -120,6 +127,24 @@ describe('rules', async () => {
     expect(errors).toHaveLength(1);
     expect(errors[0]?.message).toMatchInlineSnapshot(
       '"This comparison is likely missing `typeof` operator before the left operand and therefore is forbidden. If this is intentional, you may need to suppress this report."',
+    );
+  });
+
+  it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {un: true, jsInline: true},
+      FIXTURES.consecutiveSpacesInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.consecutiveSpacesInsideHtml,
+      'un/no-multiple-consecutive-spaces',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Multiple consecutive spaces in a string or template literal are not allowed."',
     );
   });
 });

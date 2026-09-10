@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   evalWithExpression: 'eval-with-expression.js',
+  evalWithExpressionInsideHtml: 'eval-with-expression-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -88,6 +89,22 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.evalWithExpression,
+      'security/detect-eval-with-expression',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"eval with argument of type Identifier"');
+  });
+
+  it('`security/detect-eval-with-expression` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {security: true, jsInline: true},
+      FIXTURES.evalWithExpressionInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.evalWithExpressionInsideHtml,
       'security/detect-eval-with-expression',
     );
 

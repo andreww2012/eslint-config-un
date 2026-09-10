@@ -1,8 +1,9 @@
-import {GLOB_HTM_HTML} from '../../../src/constants';
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
   nestedIfWithoutElse: 'nested-if-without-else.js',
+  nestedIfWithoutElseInsideHtml: 'nested-if-without-else-inside-html.html',
   combinedCondition: 'combined-condition.js',
   textEncodingWithDash: 'text-encoding-with-dash.js',
   textEncodingWithoutDash: 'text-encoding-without-dash.js',
@@ -22,7 +23,7 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).toIncludeAllMembers([GLOB_HTM_HTML]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('unicorn')).toBeDefined();
   });
@@ -94,6 +95,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.nestedIfWithoutElse,
+      'unicorn/no-lonely-if',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Unexpected `if` as the only statement in a `if` block without `else`."',
+    );
+  });
+
+  it('triggers `unicorn/no-lonely-if` inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {unicorn: true, jsInline: true},
+      FIXTURES.nestedIfWithoutElseInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.nestedIfWithoutElseInsideHtml,
       'unicorn/no-lonely-if',
     );
 

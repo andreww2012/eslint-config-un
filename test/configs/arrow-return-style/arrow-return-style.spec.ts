@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   anonymousArrowDefaultExport: 'anonymous-arrow-default-export.js',
+  anonymousArrowDefaultExportInsideHtml: 'anonymous-arrow-default-export-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -10,7 +13,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('arrow-return-style')).toBeDefined();
   });
@@ -96,6 +103,24 @@ describe('rules', () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.anonymousArrowDefaultExport,
+      'arrow-return-style/no-export-default-arrow',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Disallow export default anonymous arrow function"',
+    );
+  });
+
+  it('`arrow-return-style/no-export-default-arrow` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {arrowReturnStyle: true, jsInline: true},
+      FIXTURES.anonymousArrowDefaultExportInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.anonymousArrowDefaultExportInsideHtml,
       'arrow-return-style/no-export-default-arrow',
     );
 

@@ -1,5 +1,8 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   newDateGetTime: 'new-date-get-time.ts',
+  newDateGetTimeInsideHtml: 'new-date-get-time-inside-html.html',
 } as const;
 
 describe('e18e: sub config `performanceImprovements`', () => {
@@ -11,6 +14,11 @@ describe('e18e: sub config `performanceImprovements`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toBeUndefined();
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `e18e/performance-improvements` eslint config when disabled', async () => {
@@ -42,6 +50,28 @@ describe('e18e: sub config `performanceImprovements`', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.newDateGetTime,
+        'e18e/prefer-date-now',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Use Date.now() to avoid allocating a new Date object."',
+      );
+    });
+
+    it('`e18e/prefer-date-now` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+      const results = await testEslintConfig(
+        {e18e: true, jsInline: true},
+        FIXTURES.newDateGetTimeInsideHtml,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          // Leaves the type information requiring rules to the sub-configs targeting TS files only
+          internalOptions: {},
+        },
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.newDateGetTimeInsideHtml,
         'e18e/prefer-date-now',
       );
 

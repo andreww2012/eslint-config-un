@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   promiseRejectParameterNamedDone: 'promise-reject-parameter-named-done.js',
+  promiseRejectParameterNamedDoneInsideHtml: 'promise-reject-parameter-named-done-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -88,6 +89,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.promiseRejectParameterNamedDone,
+      'promise/param-names',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Promise constructor parameters must be named to match "^_?reject$""',
+    );
+  });
+
+  it('`promise/param-names` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {promise: true, jsInline: true},
+      FIXTURES.promiseRejectParameterNamedDoneInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.promiseRejectParameterNamedDoneInsideHtml,
       'promise/param-names',
     );
 

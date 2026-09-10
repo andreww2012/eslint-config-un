@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   duplicateDisjunctions: 'duplicate-disjunctions.js',
+  duplicateDisjunctionsInsideHtml: 'duplicate-disjunctions-inside-html.html',
 } as const;
 
 describe('basic tests', () => {
@@ -88,6 +89,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.duplicateDisjunctions,
+      'regexp/no-dupe-disjunctions',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Unexpected duplicate alternative. This alternative can be removed."',
+    );
+  });
+
+  it('`regexp/no-dupe-disjunctions` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {regexp: true, jsInline: true},
+      FIXTURES.duplicateDisjunctionsInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.duplicateDisjunctionsInsideHtml,
       'regexp/no-dupe-disjunctions',
     );
 

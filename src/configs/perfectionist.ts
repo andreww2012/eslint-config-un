@@ -438,7 +438,12 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
   ).forEach(([ruleName, ruleSubConfig]) => {
     const configBuilderForRule = context.createConfigBuilder(ruleSubConfig, 'perfectionist');
     configBuilderForRule
-      ?.addConfig(`perfectionist/${ruleName}`)
+      ?.addConfig([
+        `perfectionist/${ruleName}`,
+        {
+          ignoresInternal: KEEP_LINTING_INLINE_JS,
+        },
+      ])
       .addRule(
         ruleName,
         ERROR,

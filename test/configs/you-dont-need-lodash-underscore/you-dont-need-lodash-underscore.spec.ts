@@ -1,7 +1,8 @@
-import {CHECKED_LODASH_METHODS} from '../../../src/constants';
+import {CHECKED_LODASH_METHODS, GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   lodashMapUsage: 'lodash-map-usage.js',
+  lodashMapUsageInsideHtml: 'lodash-map-usage-inside-html.html',
 } as const;
 
 beforeEach(() => {
@@ -16,7 +17,11 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('you-dont-need-lodash-underscore')).toBeDefined();
   });
@@ -166,6 +171,24 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.lodashMapUsage,
+      'you-dont-need-lodash-underscore/map',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Import { map } from 'lodash' detected. Consider using the native Array.prototype.map()"`,
+    );
+  });
+
+  it('`you-dont-need-lodash-underscore/map` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {youDontNeedLodashUnderscore: true, jsInline: true},
+      FIXTURES.lodashMapUsageInsideHtml,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.lodashMapUsageInsideHtml,
       'you-dont-need-lodash-underscore/map',
     );
 
