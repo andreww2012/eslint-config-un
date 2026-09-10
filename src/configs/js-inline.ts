@@ -121,8 +121,17 @@ export interface JsInlineEslintConfigOptions<
    * be shared (the default) or not.
    * To change this, just set it in your ESLint configuration." - plugin docs
    *
+   * Note that `sourceType` here is `module`, inherited from the language options applied to every
+   * file, and not `script`, which is what the plugin's own default is.
+   * Every `<script>` block therefore gets its own top-level scope, which means a variable declared
+   * in one block and used in another is reported as both unused and undefined.
+   * Setting `sourceType` to `script` gets the shared scopes back, at the cost of every
+   * `<script type="module">` block with inline code failing to parse: the plugin applies a single
+   * `sourceType` to every block of a file.
+   * Note that blocks with a `src` attribute are not linted at all, so they are unaffected.
+   *
    * The value provided here will be merged with the default.
-   * @default {sourceType: 'script', globals: <browser globals>}
+   * @default {sourceType: 'module', globals: <browser globals>}
    */
   languageOptions?: Eslint.Linter.LanguageOptions;
 }
