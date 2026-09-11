@@ -762,8 +762,11 @@ const example = 1;
 
 Such a block becomes `README.md/3_example.ts`, so `['**/*.md/**/*_example.ts']` matches it.
 
-Two reports you may run into:
+Reports you may run into:
 
+- *Parsing error* in a block whose language needs its own parser, like Vue, Svelte or GraphQL.
+  Blocks are ordinary files for ESLint, so such a language needs a parser set up for its extension, and the `files` patterns do not have to mention Markdown: `**/*.vue` covers `README.md/0_0.vue` as well.
+  If the Config of that language is enabled, it is already done; if not, set the parser up with the [`parsing`](#parsing) root option (`parsing: {graphql: true}`), or leave such blocks out of linting with the [`ignores`][ignores option] root option (`ignores: ['**/*.md/**/*.graphql']`).
 - *Unused eslint-disable directive*: the comment before a block is also a directive for the Markdown file itself, where it is almost always unused, and you will see it as well if the rule is already disabled in code blocks by default.
   Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.
 - [`eslint-comments/disable-enable-pair`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/disable-enable-pair.html) in MDX files, because they are parsed as code: add `{/* eslint-enable eqeqeq */}` after the block.
@@ -1055,7 +1058,7 @@ Keys are the canonical package names, values are the names the packages are actu
 
 **Type**: `boolean | EslintConfigFlatGitignoreOptions`
 
-By default, files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) will be automatically added to the global [`ignores`](#ignores) list.
+By default, files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) will be automatically added to the global [`ignores`][ignores option] list.
 Nested `.gitignore` files are respected by default (`recursive` defaults to `true`).
 Set this option to `false` to disable this behavior.
 You may also provide an object which configures [eslint-config-flat-gitignore](https://npmx.dev/eslint-config-flat-gitignore), which actually provides this functionality.
@@ -1154,7 +1157,7 @@ Use case: disable or enable certain rules or features in an editor, likely to im
 #### `DEFAULT_GLOBAL_IGNORES`
 
 Default list of global `ignores` values set by eslint-config-un.
-See also the [`ignores` option](#ignores).
+See also the [`ignores` option][ignores option].
 
 #### `RuleOptions`
 
@@ -1413,6 +1416,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [eslint-plugin-no-only-tests]: https://npmx.dev/eslint-plugin-no-only-tests
 [environment option]: #environment
 [extraConfigs option]: #providing-user-defined-flat-configs
+[ignores option]: #ignores
 [eslint-plugin-prettier]: https://npmx.dev/eslint-plugin-prettier
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
