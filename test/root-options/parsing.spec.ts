@@ -187,6 +187,49 @@ describe('option: `parsing`', () => {
       });
     });
 
+    it('wins over a deferred property contributed by a config', async () => {
+      addInstalledPackages({tailwindcss: '4.1.0'});
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+
+      const configResult = await computeEslintConfig(
+        {css: {customSyntax: {atrules: {tailwind: {prelude: '<string>'}}}}},
+        {un: {parsing: {css: {languageOptions: {customSyntax: CUSTOM_SYNTAX}}}}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
+      ).toStrictEqual(CUSTOM_SYNTAX);
+    });
+
+    it('wins over what a config contributes to a layer of the entry', async () => {
+      addInstalledPackages({sass: '1.80.0'});
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+
+      const configResult = await computeEslintConfig('css', {
+        un: {parsing: {css: {languageOptions: {customSyntax: CUSTOM_SYNTAX}}}},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['customSyntax'],
+      ).toStrictEqual(CUSTOM_SYNTAX);
+    });
+
+    it('leaves a deferred property of a layer alone when it sets a different one', async () => {
+      addInstalledPackages({sass: '1.80.0'});
+
+      const configResult = await computeEslintConfig('css', {
+        un: {parsing: {css: {languageOptions: {tolerant: true}}}},
+      });
+
+      const languageOptions =
+        configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions;
+
+      expect(languageOptions?.['tolerant']).toBeTrue();
+      expect(languageOptions?.['customSyntax']).toMatchObject({
+        node: {ScssInterpolation: expect.any(Object) as unknown},
+      });
+    });
+
     it('takes what the configs contribute, so the entry shows the whole parser setup', async () => {
       addInstalledPackages({vue: '3.5.0', typescript: '5.9.0'});
 
@@ -217,6 +260,41 @@ describe('option: `parsing`', () => {
       expect(parserOptions?.['sourceType']).toBe('script');
       // What the config contributed survives the override
       expect(parserOptions?.['parser']).toBeDefined();
+    });
+  });
+
+  describe('language defaults', () => {
+    it('parses CSS with the TailwindCSS syntax when `tailwindcss` is installed, even with the `css` config disabled', async () => {
+      addInstalledPackages({tailwindcss: '4.1.0'});
+
+      const configResult = await computeEslintConfig({css: false}, {un: {parsing: {css: true}}});
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
+      ).toMatchObject({
+        atrules: {theme: expect.any(Object) as unknown, utility: expect.any(Object) as unknown},
+      });
+    });
+
+    it('does not set `customSyntax` when `tailwindcss` is not installed', async () => {
+      const configResult = await computeEslintConfig({css: false}, {un: {parsing: {css: true}}});
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
+      ).toBeUndefined();
+    });
+
+    it('is replaced by the `languageOptions` provided in this option', async () => {
+      addInstalledPackages({tailwindcss: '4.1.0'});
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+
+      const configResult = await computeEslintConfig('css', {
+        un: {parsing: {css: {languageOptions: {customSyntax: CUSTOM_SYNTAX}}}},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
+      ).toStrictEqual(CUSTOM_SYNTAX);
     });
   });
 

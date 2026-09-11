@@ -5,10 +5,6 @@ const FIXTURES = {
   tailwindInCssDuplicateClasses: 'tailwind-in-css-duplicate-classes.css',
 } as const;
 
-beforeEach(() => {
-  addInstalledPackages({tailwindcss: '3.4.17'});
-});
-
 const OPTIONS = {
   un: {
     plugins: {
@@ -20,6 +16,10 @@ const OPTIONS = {
     },
   },
 };
+
+beforeEach(() => {
+  addInstalledPackages({tailwindcss: '3.4.17'});
+});
 
 describe('betterTailwind: sub config `css`', () => {
   describe('basic tests', () => {
@@ -43,10 +43,12 @@ describe('betterTailwind: sub config `css`', () => {
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
     });
 
-    it('does not create `better-tailwindcss/css` eslint config when `css` config is disabled', async () => {
+    it('creates `better-tailwindcss/css` eslint config when `css` config is disabled', async () => {
       const configResult = await computeEslintConfig('betterTailwind', OPTIONS);
 
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')?.files).toStrictEqual([
+        GLOB_CSS,
+      ]);
     });
 
     it('does not create `better-tailwindcss/css` eslint config when `css` config lints no files', async () => {
@@ -58,13 +60,26 @@ describe('betterTailwind: sub config `css`', () => {
       expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')).toBeUndefined();
     });
 
-    it('does not create `better-tailwindcss/css` eslint config when set to `true` but `css` config lints no files', async () => {
+    it('lints all CSS files when set to `true` and `css` config lints none', async () => {
       const configResult = await computeEslintConfig(
         {css: {files: []}, betterTailwind: {configCss: true}},
         OPTIONS,
       );
 
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')?.files).toStrictEqual([
+        GLOB_CSS,
+      ]);
+    });
+
+    it('keeps `better-tailwindcss/css` eslint config off every file when CSS parsing is disabled', async () => {
+      const configResult = await computeEslintConfig(
+        {css: true, betterTailwind: true},
+        {un: {...OPTIONS.un, parsing: {css: false}}},
+      );
+
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')?.ignores).toContain(
+        '**/*',
+      );
     });
 
     it('does not create `better-tailwindcss/css` eslint config when the parent config is disabled', async () => {
@@ -147,6 +162,26 @@ describe('betterTailwind: sub config `css`', () => {
       expect(error?.message).toMatchInlineSnapshot('"Duplicate classname: "flex"."');
     });
 
+    it('`better-tailwindcss/no-duplicate-classes` rule reports duplicate classes in CSS when `css` config is disabled', async () => {
+      const result = await testEslintConfig(
+        {css: false, betterTailwind: true},
+        FIXTURES.tailwindInCssDuplicateClasses,
+        {searchFixturesRelativeToPath: import.meta.dirname, ...OPTIONS},
+      );
+
+      const error = findLintMessageFromLintResults(
+        result,
+        FIXTURES.tailwindInCssDuplicateClasses,
+        'better-tailwindcss/no-duplicate-classes',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Duplicate classname: "flex"."');
+
+      expect(
+        result.flatMap(({messages}) => messages).filter(({ruleId}) => ruleId?.startsWith('css/')),
+      ).toBeEmpty();
+    });
+
     it('does not lint CSS files outside of the user-provided `files`', async () => {
       const result = await testEslintConfig(
         {css: true, betterTailwind: {configCss: {files: ['**/packages/app/**/*.css']}}},
@@ -193,6 +228,21 @@ describe('betterTailwind: sub config `css`', () => {
         expect(configResult.getConfigByUnPostfix('better-tailwindcss/css')?.files).toStrictEqual(
           CSS_FILES,
         );
+      });
+
+      it('adds user-provided `files` to the ones parsed as CSS', async () => {
+        const FILES = ['packages/**/*.css'];
+        const CSS_FILES = ['src/**/*.css'];
+
+        const configResult = await computeEslintConfig(
+          {css: {files: CSS_FILES}, betterTailwind: {configCss: {files: FILES}}},
+          OPTIONS,
+        );
+
+        expect(configResult.getConfigByUnPostfix('parsing/css')?.files).toIncludeAllMembers([
+          ...CSS_FILES,
+          ...FILES,
+        ]);
       });
 
       it('uses user-provided `files` in `better-tailwindcss/css` eslint config', async () => {

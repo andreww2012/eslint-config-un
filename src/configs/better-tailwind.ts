@@ -1,4 +1,4 @@
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
 import {allUnionMembers} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
@@ -127,17 +127,15 @@ export interface BetterTailwindEslintConfigOptions<
    * A dedicated config entry for CSS files.
    * [Read more about CSS linting in the docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/parsers/css.md).
    *
-   * Always disabled if `css` config is disabled or lints no files: this sub-config lints the files
-   * that config parses, using its `files` and `ignores` as the defaults.
+   * Its files are parsed as CSS even if `css` config is disabled, so only `parsing.css` set to
+   * `false` keeps this sub-config off every file.
    *
-   * CSS file patterns cannot be derived from the patterns of the files the rest of the rules are
-   * linting, so specifying `files` of the parent config disables this sub-config unless it's
-   * enabled here explicitly.
-   * Set this option to `true` to lint all the files linted by the `css` config, or specify `files`
-   * to narrow them down, which is especially useful in monorepos where only some of the packages
-   * are using Tailwind.
+   * CSS patterns cannot be guessed from the files the other rules lint, so setting `files` of the
+   * parent config turns this sub-config off.
+   * Set it to `true` to lint CSS files anyway, or pass `files` to choose which ones, which is
+   * useful in monorepos where only some packages use Tailwind.
    *
-   * 📁 Default `files`: `files` of the `css` config
+   * 📁 Default `files`: `files` of the `css` config, or all CSS files if it lints none
    * @default true // if `files` option of the parent config is not specified
    */
   configCss?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'>;
@@ -198,12 +196,12 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
     );
   }
 
-  const cssFiles = resolveFilesOption(cssResolvedOptions?.files, []);
-  const canLintCssFiles = cssResolvedOptions != null && cssFiles.length > 0;
+  const cssFilesFromCssConfig = resolveFilesOption(cssResolvedOptions?.files, []);
+  const cssFiles = cssFilesFromCssConfig.length > 0 ? cssFilesFromCssConfig : [GLOB_CSS];
 
-  if (canLintCssFiles && optionsResolved.configCss == null && optionsResolved.files != null) {
+  if (optionsResolved.configCss == null && optionsResolved.files != null) {
     context.logger.warn(
-      '[betterTailwind] CSS files are not linted because you have specified the `files` option. Set `configCss` to `true` to lint all the files linted by the `css` config, or specify `configCss.files` to narrow them down',
+      '[betterTailwind] CSS files are not linted because you have specified the `files` option. Set `configCss` to `true` to lint them too, or specify `configCss.files` to narrow them down',
     );
   }
 
@@ -216,7 +214,13 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
   (
     [
       ['', optionsResolved],
-      ['css', canLintCssFiles && (optionsResolved.configCss ?? optionsResolved.files == null)],
+      [
+        'css',
+        // Only an enabled `css` config linting nothing means "no CSS files"
+        optionsResolved.configCss ??
+          (optionsResolved.files == null &&
+            (cssResolvedOptions == null || cssFilesFromCssConfig.length > 0)),
+      ],
     ] as const
   ).forEach(([configPostfix, options]) => {
     const configBuilder = context.createConfigBuilder(options, 'better-tailwindcss');
@@ -229,7 +233,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('bette
             filesDefault: cssFiles,
             ignoresDefault: resolveIgnoresOption(cssResolvedOptions?.ignores, []),
             ignoresDefaultMergedWithUserIgnores: true,
-            parsingIgnoresInheritedFrom: ['css'],
+            parseWith: 'css',
           }),
           settings: {
             'better-tailwindcss': pluginSettings,

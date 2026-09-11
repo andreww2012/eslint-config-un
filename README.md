@@ -820,6 +820,7 @@ For the object/array form:
 - `ignores` are added to the `ignores` of every Config that lints files of this language;
 - setting `dialect` collapses every dialect the enabled Configs asked for into that dialect;
 - `languageOptions` will be merged with what Configs have contributed for this option, `parser` included: providing one of your own replaces the parser the dialect would have picked, which is then neither loaded nor assigned.
+  Both win over the defaults of the language itself, like the TailwindCSS syntax used for `.css` files when `tailwindcss` is installed.
 
 ### `ignores`
 

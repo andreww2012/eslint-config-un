@@ -1,4 +1,9 @@
 import type {CSSLanguageOptions} from '@eslint/css';
+import {
+  type CssCustomSyntax,
+  type CssCustomSyntaxOption,
+  generateTailwindCssSyntaxProperty,
+} from '../config-un/css-syntax';
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
 import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
@@ -10,8 +15,6 @@ import {
   assignDefaults,
   defineUnConfig,
 } from './index';
-
-type CssCustomSyntax = Extract<CSSLanguageOptions['customSyntax'], Record<string, unknown>>;
 
 interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
@@ -117,29 +120,7 @@ export interface CssEslintConfigOptions<
    *
    * NOTE: not applied to the `configScss` sub-config, which has an option of the same name.
    */
-  customSyntax?: MaybeFn<
-    CssCustomSyntax,
-    [
-      {
-        /**
-         * Default CSS syntax provided by `@eslint/css`, which in turn coming from
-         * `@eslint/css-tree/definition-syntax-data`.
-         */
-        defaultSyntax: CssCustomSyntax;
-
-        /**
-         * Extra syntax provided by us.
-         * Currently may only be TailwindCSS syntax coming from `tailwind-csstree` based on the
-         * installed version of `tailwindcss` package.
-         *
-         * NOTE: it will already contain the merged default syntax, see
-         * [implementation](https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
-         * for details (`tailwindX.js` files specifically).
-         */
-        extraSyntax?: CssCustomSyntax;
-      },
-    ]
-  >;
+  customSyntax?: CssCustomSyntaxOption;
 
   /**
    * Will be merged with the default value.
@@ -188,48 +169,25 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
   const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures, configScss} =
     optionsResolved;
 
-  const tailwindPackageInfo = context.packagesInfo.tailwindcss;
-  const tailwindMajorVersion = tailwindPackageInfo?.versions.major;
+  // Only the user's own options: the default syntax comes from the parsing entry
+  const cssLanguageOptions = {
+    ...(tolerantMode && {tolerant: true}),
+    ...(customSyntax != null &&
+      (generateTailwindCssSyntaxProperty(context, customSyntax) || {
+        customSyntax:
+          typeof customSyntax === 'function'
+            ? customSyntax({
+                defaultSyntax:
+                  (await packagesLoaders.eslintCssTreeSyntax(context).then(({module}) => module)) ||
+                  {},
+              })
+            : customSyntax,
+      })),
+  };
 
-  const cssLanguageOptions =
-    tailwindPackageInfo && (tailwindMajorVersion === 3 || tailwindMajorVersion === 4)
-      ? generatePackageToLoadProperty(
-          'customSyntax',
-          ['tailwindCsstree', 'eslintCssTreeSyntax', '_utils'],
-          {
-            valueTransformFn: {
-              fn(
-                this: {
-                  tailwindMajorVersion: typeof tailwindMajorVersion;
-                  customSyntax: typeof customSyntax;
-                },
-                {tailwindCsstree, eslintCssTreeSyntax: defaultSyntax, _utils: utils},
-              ) {
-                const tailwindSyntaxFn = tailwindCsstree[`tailwind${this.tailwindMajorVersion}`];
-                const tailwindSyntax = tailwindSyntaxFn(
-                  // @ts-expect-error This is fine - the type is too strict. In real code, only `types` property is expected to exists which already does (see `tailwindX.js` files at https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
-                  defaultSyntax,
-                );
-                return utils.maybeCall(this.customSyntax || tailwindSyntax, {
-                  defaultSyntax,
-                  extraSyntax: tailwindSyntax,
-                });
-              },
-              scope: {tailwindMajorVersion, customSyntax},
-            },
-          },
-        )
-      : customSyntax != null && {
-          customSyntax:
-            typeof customSyntax === 'function'
-              ? customSyntax({
-                  defaultSyntax:
-                    (await packagesLoaders
-                      .eslintCssTreeSyntax(context)
-                      .then(({module}) => module)) || {},
-                })
-              : customSyntax,
-        };
+  const scssFiles = configScss
+    ? resolveFilesOption(typeof configScss === 'object' ? configScss.files : undefined, [GLOB_SCSS])
+    : [];
 
   const scssCustomSyntax = typeof configScss === 'object' ? configScss.customSyntax : undefined;
   const scssLanguageOptions = generatePackageToLoadProperty(
@@ -255,6 +213,19 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
     },
   );
 
+  // SCSS is parsed by the CSS language, so its syntax can only be applied on top of the CSS one
+  if (scssFiles.length > 0) {
+    context.requestParsing('css', {
+      kind: 'setUpOnly',
+      nameSuffix: 'scss',
+      files: scssFiles,
+      languageOptions: {
+        ...(tolerantMode && {tolerant: true}),
+        ...scssLanguageOptions,
+      },
+    });
+  }
+
   // Legend:
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
@@ -270,24 +241,14 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
     const isScss = configPostfix === 'scss';
 
     configBuilder
-      ?.addConfig(
-        [
-          ['css', configPostfix].filter(Boolean).join('/'),
-          {
-            ...(isScss && {filesDefault: [GLOB_SCSS]}),
-            parseWith: 'css',
-          },
-        ],
+      ?.addConfig([
+        ['css', configPostfix].filter(Boolean).join('/'),
         {
-          languageOptions: {
-            ...(tolerantMode && {
-              tolerant: true,
-            }),
-
-            ...(isScss ? scssLanguageOptions : cssLanguageOptions),
-          },
+          ...(isScss && {filesDefault: [GLOB_SCSS]}),
+          parseWith: 'css',
+          ...(!isScss && {parseWithLanguageOptions: cssLanguageOptions}),
         },
-      )
+      ])
       // Cannot see through SCSS variables and functions, which is how font stacks are stored
       .addRule('font-family-fallbacks', isScss ? OFF : WARNING) /** @since 0.11.0 */ // 🟢
       .addRule('no-duplicate-imports', ERROR) /** @since 0.1.0 */ // 🟢

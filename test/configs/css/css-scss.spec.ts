@@ -200,6 +200,14 @@ describe('css: sub config `scss`', () => {
         expect(configResult.getConfigByUnPostfix('css/scss')?.files).toStrictEqual(FILES);
       });
 
+      it('applies the SCSS syntax to the user-provided `files` only', async () => {
+        const FILES = ['src/**/*.scss'];
+
+        const configResult = await computeEslintConfig({css: {configScss: {files: FILES}}});
+
+        expect(configResult.getConfigByUnPostfix('parsing/css/scss')?.files).toStrictEqual(FILES);
+      });
+
       it('disables `css/scss` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({css: {configScss: {files: []}}});
 
@@ -241,7 +249,7 @@ describe('css: sub config `scss`', () => {
         const configResult = await computeEslintConfig('css');
 
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['customSyntax'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['customSyntax'],
         ).toMatchObject({
           node: {ScssInterpolation: expect.any(Object) as unknown},
         });
@@ -255,7 +263,7 @@ describe('css: sub config `scss`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['customSyntax'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['customSyntax'],
         ).toStrictEqual(USER_CUSTOM_SYNTAX);
       });
 
@@ -273,7 +281,7 @@ describe('css: sub config `scss`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['customSyntax'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['customSyntax'],
         ).toMatchObject({
           properties: {color: expect.any(String) as unknown},
           node: {ScssInterpolation: expect.any(Object) as unknown, Foo: {}},
@@ -288,10 +296,10 @@ describe('css: sub config `scss`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+          configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
         ).toStrictEqual(USER_CUSTOM_SYNTAX);
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['customSyntax'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['customSyntax'],
         ).toMatchObject({
           node: {ScssInterpolation: expect.any(Object) as unknown},
         });
@@ -303,7 +311,7 @@ describe('css: sub config `scss`', () => {
         const configResult = await computeEslintConfig('css');
 
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['tolerant'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['tolerant'],
         ).toBeUndefined();
       });
 
@@ -311,7 +319,7 @@ describe('css: sub config `scss`', () => {
         const configResult = await computeEslintConfig({css: {tolerantMode: true}});
 
         expect(
-          configResult.getConfigByUnPostfix('css/scss')?.languageOptions?.['tolerant'],
+          configResult.getConfigByUnPostfix('parsing/css/scss')?.languageOptions?.['tolerant'],
         ).toBeTrue();
       });
     });

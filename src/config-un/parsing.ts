@@ -25,9 +25,11 @@ import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import {genFlatConfigEntryName, resolvePluginPrefix} from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
+  type PackageToLoadInfo,
   type ParserPrefix,
   type PluginPrefix,
   generatePackageToLoadProperty,
+  packageToLoadSymbol,
 } from '../loaders';
 import type {ObjectValues} from '../types';
 import {
@@ -39,6 +41,7 @@ import {
   objectKeysUnsafe,
 } from '../utils';
 import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
+import {generateTailwindCssSyntaxProperty} from './css-syntax';
 import {
   type PackageRequester,
   type UnConfigContext,
@@ -79,6 +82,13 @@ interface ParsingDialectDefinition {
   mechanism: ParsingMechanism;
   filesDefault: string[];
   ignoresExclusions?: ImplicitlyIgnoredFileTypeUnlessParsed[];
+
+  /**
+   * How the dialect is parsed unless a Config or the `parsing` option says otherwise.
+   * Cannot defer loading a package if the mechanism already does: only one deferred property fits
+   * in an object, so one of the two would be silently dropped
+   */
+  languageOptionsDefault?: (context: UnConfigContext) => Record<string, unknown> | null;
 }
 
 export interface ParsingLanguageDefinition {
@@ -122,6 +132,7 @@ export const PARSING_LANGUAGES = (
         mechanism: {language: ['css', 'css']},
         filesDefault: [GLOB_CSS],
         ignoresExclusions: ['css', 'scss'],
+        languageOptionsDefault: generateTailwindCssSyntaxProperty,
       },
     },
     dialectDefault: 'css',
@@ -422,7 +433,11 @@ interface ResolvedParsingEntry {
   requesters: PackageRequester[];
   files?: EslintFlatConfigEntry['files'];
   ignores?: string[];
-  languageOptions?: object;
+  languageOptions?: LanguageOptions;
+
+  /** Kept apart because the layers are emitted over the entry and must not override it */
+  languageOptionsFromUser?: LanguageOptions;
+
   entryProperties?: object;
 
   /** Requests asking for an entry of their own on top of this one */
@@ -437,15 +452,17 @@ interface ResolvedParsingEntry {
 /** Several sources write into these at once, so they are merged rather than replaced */
 const LANGUAGE_OPTIONS_MERGED_KEYS = ['parserOptions', 'globals'] as const;
 
-const mergeLanguageOptions = (
-  lower: Record<string, unknown>,
-  higher: Record<string, unknown> | undefined,
-) => {
+interface LanguageOptions {
+  [key: string]: unknown;
+  [packageToLoadSymbol]?: PackageToLoadInfo;
+}
+
+const mergeLanguageOptions = (lower: LanguageOptions, higher: LanguageOptions | undefined) => {
   if (higher == null) {
     return lower;
   }
 
-  return LANGUAGE_OPTIONS_MERGED_KEYS.reduce<Record<string, unknown>>(
+  const merged = LANGUAGE_OPTIONS_MERGED_KEYS.reduce<LanguageOptions>(
     (result, key) => {
       const lowerValue = lower[key];
       const higherValue = higher[key];
@@ -456,6 +473,18 @@ const mergeLanguageOptions = (
     },
     {...lower, ...higher},
   );
+
+  // A deferred property is only written when its package loads, long after it would have lost here
+  const deferredProperty = lower[packageToLoadSymbol]?.property;
+  if (
+    deferredProperty != null &&
+    higher[packageToLoadSymbol] == null &&
+    deferredProperty in higher
+  ) {
+    Reflect.deleteProperty(merged, packageToLoadSymbol);
+  }
+
+  return merged;
 };
 
 const resolveEntriesForLanguage = (
@@ -553,6 +582,7 @@ const resolveEntriesForLanguage = (
           languageOptionsFromRequests(dialect),
           entry.languageOptions,
         ),
+        languageOptionsFromUser: entry.languageOptions,
         entryProperties: entryPropertiesFromRequests(dialect),
         layers: layersOfDialect(dialect),
       };
@@ -560,7 +590,7 @@ const resolveEntriesForLanguage = (
   }
 
   const ignoresFromUser = arrayUnique(userEntries.flatMap((entry) => entry.ignores || []));
-  const languageOptionsFromUser = userEntries.reduce<Record<string, unknown>>(
+  const languageOptionsFromUser = userEntries.reduce<LanguageOptions>(
     (accumulated, entry) => mergeLanguageOptions(accumulated, entry.languageOptions),
     {},
   );
@@ -582,6 +612,7 @@ const resolveEntriesForLanguage = (
       languageOptionsFromRequests(dialect),
       languageOptionsFromUser,
     ),
+    languageOptionsFromUser,
     entryProperties: entryPropertiesFromRequests(dialect),
     layers: layersOfDialect(dialect),
   }));
@@ -630,12 +661,15 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
       const {mechanism} = dialectDefinition;
       // Whoever provided a parser meant it, so the dialect's own is neither loaded nor assigned
       const hasParserAlready = isObject(entry.languageOptions) && 'parser' in entry.languageOptions;
-      const languageOptions = {
-        ...(!hasParserAlready &&
-          'parserPackage' in mechanism &&
-          generatePackageToLoadProperty('parser', mechanism.parserPackage)),
-        ...entry.languageOptions,
-      };
+      const languageOptions = mergeLanguageOptions(
+        {
+          ...(!hasParserAlready &&
+            'parserPackage' in mechanism &&
+            generatePackageToLoadProperty('parser', mechanism.parserPackage)),
+          ...dialectDefinition.languageOptionsDefault?.(context),
+        },
+        entry.languageOptions,
+      );
       const occurrenceKey = `${language}/${entry.dialect}`;
       const occurrence = occurrences.get(occurrenceKey) || 0;
       occurrences.set(occurrenceKey, occurrence + 1);
@@ -675,7 +709,10 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
 
       entry.layers?.forEach((layer) => {
         const layerIgnores = arrayUnique([...(entry.ignores || []), ...(layer.ignores || [])]);
-        const layerLanguageOptions = {...layer.languageOptions};
+        const layerLanguageOptions = mergeLanguageOptions(
+          {...layer.languageOptions},
+          entry.languageOptionsFromUser,
+        );
         // A layer only ever covers part of what the entry parses, so it cannot reach past it
         const layerFiles = layer.files?.length
           ? layer.files.every((glob) => entryFiles.includes(glob))

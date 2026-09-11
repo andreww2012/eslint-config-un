@@ -156,7 +156,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('css');
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['tolerant'],
       ).toBeUndefined();
     });
 
@@ -165,7 +165,9 @@ describe('options', () => {
         css: {tolerantMode: true},
       });
 
-      expect(configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant']).toBeTrue();
+      expect(
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['tolerant'],
+      ).toBeTrue();
     });
 
     it('does not set `tolerant` language option when set to `false`', async () => {
@@ -174,7 +176,7 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['tolerant'],
       ).toBeUndefined();
     });
   });
@@ -184,7 +186,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('css');
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toBeUndefined();
     });
 
@@ -196,7 +198,7 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toStrictEqual(USER_CUSTOM_SYNTAX);
     });
 
@@ -210,7 +212,7 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toStrictEqual(USER_CUSTOM_SYNTAX);
     });
 
@@ -227,7 +229,7 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toMatchObject({
         atrules: {
           tailwind: {prelude: 'base | components | utilities | variants'},
@@ -242,7 +244,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('css');
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toMatchObject({
         atrules: {
           tailwind: {prelude: 'base | components | utilities | variants'},
@@ -257,7 +259,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('css');
 
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toMatchObject({
         atrules: {
           utility: {prelude: '<ident>'},
@@ -313,7 +315,7 @@ describe('options', () => {
 
       expect(spy).toHaveBeenCalledOnce();
       expect(
-        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+        configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toStrictEqual({});
     });
   });

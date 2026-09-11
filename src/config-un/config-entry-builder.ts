@@ -272,6 +272,13 @@ export class ConfigEntryBuilder<
             parseWith?: ParsingLanguagesWithDialects;
 
             /**
+             * Added to the `languageOptions` of the entry `parseWith` emits, so they apply to
+             * every file parsed as this language, not just the ones this config lints.
+             * Only read alongside `parseWith`
+             */
+            parseWithLanguageOptions?: Record<string, unknown>;
+
+            /**
              * Specifies which `parsing` root option entries this config takes the `ignores` of.
              *
              * Primarily meant for configs running on files of a language their rules
@@ -443,7 +450,12 @@ export class ConfigEntryBuilder<
 
       if (parseWithInfo != null) {
         const {language, dialect} = parseWithInfo;
-        this.context.requestParsing(language, {config: configFinal, dialect, kind: 'writtenFor'});
+        this.context.requestParsing(language, {
+          config: configFinal,
+          dialect,
+          kind: 'writtenFor',
+          languageOptions: internalOptions.parseWithLanguageOptions,
+        });
       }
 
       internalOptions.parsingIgnoresInheritedFrom?.forEach((language) => {
