@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/eslint-config-un.svg" width="110px" alt="eslint-config-un logo" />
+</p>
+
 # eslint-config-un [![npm](https://img.shields.io/npm/v/eslint-config-un)](https://npmx.dev/eslint-config-un)
 
 Grown out of a personal collection of rules, this ESLint config aspires to cover as many rules as possible, be reasonably strict, and be easily configurable.
