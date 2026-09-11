@@ -26,13 +26,19 @@ export default definePluginMetadata('jest', {
     'prefer-expect-resolves': {stylistic: true},
     'prefer-hooks-in-order': {stylistic: true},
     'prefer-hooks-on-top': {stylistic: true},
-    'prefer-lowercase-title': {stylistic: true},
+    'prefer-lowercase-title': {
+      stylistic: true,
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
     'prefer-mock-promise-shorthand': {stylistic: true},
     'prefer-mock-return-shorthand': {stylistic: true},
     'prefer-to-be': {stylistic: true},
     'prefer-to-contain': {stylistic: true},
     'prefer-to-have-been-called-times': {stylistic: true},
     'prefer-to-have-length': {stylistic: true},
-    'valid-title': {stylistic: true},
+    'valid-title': {
+      stylistic: true,
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
   },
 });

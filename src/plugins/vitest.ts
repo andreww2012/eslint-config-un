@@ -41,6 +41,9 @@ export default definePluginMetadata('vitest', {
     'prefer-to-contain': {stylistic: true},
     'prefer-to-have-been-called-times': {stylistic: true},
     'prefer-to-have-length': {stylistic: true},
-    'valid-title': {stylistic: true},
+    'valid-title': {
+      stylistic: true,
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
   },
 });
