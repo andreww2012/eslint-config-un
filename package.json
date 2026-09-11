@@ -93,8 +93,10 @@
     "test": "nr check:deps && nr test:common",
     "ch": "changeset add --message \"___REPLACE_ME___\"",
     "release": "changeset publish",
-    "prepublishOnly": "nr build && nr check:public-types",
-    "prepack": "nr build"
+    "readme:pin-assets": "node --import tsx/esm scripts/pin-readme-asset-urls.ts",
+    "prepublishOnly": "nr build && nr check:public-types && nr readme:pin-assets",
+    "prepack": "nr build",
+    "postpack": "nr readme:pin-assets --unpin"
   },
   "dependencies": {
     "@andreww2012/unutils": "0.1.0",
