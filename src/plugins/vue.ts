@@ -26,6 +26,7 @@ export default definePluginMetadata('vue', {
     'define-emits-declaration': {stylistic: true},
     'define-macros-order': {stylistic: true},
     'define-props-declaration': {stylistic: true, disableInCodeBlocks: 'tooStrict'},
+    'define-props-destructuring': {disableInCodeBlocks: 'tooStrict'},
     'dot-location': {prettierIncompatible: true},
     'dot-notation': {stylistic: true},
     'first-attribute-linebreak': {stylistic: true, prettierIncompatible: true},
