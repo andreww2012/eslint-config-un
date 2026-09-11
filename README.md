@@ -689,7 +689,7 @@ export default eslintConfig({
 ```
 
 The dependencies of all the listed `package.json` files are merged into a single list, so one package importing another's dependency won't be reported.
-To avoid that, set the rule per package with [`extraConfigs`](#providing-user-defined-flat-configs) instead, each entry scoped by `files` and listing only the root and that package in `packageDir`.
+To avoid that, set the rule per package with [`extraConfigs`][extraConfigs option] instead, each entry scoped by `files` and listing only the root and that package in `packageDir`.
 
 ### Frontend frameworks
 
@@ -720,11 +720,53 @@ If `markdown`/`mdx` config is enabled (which is the default), the same rules pro
 This works because under the hood [`@eslint/markdown`](https://npmx.dev/@eslint/markdown)/[`eslint-mdx`](https://npmx.dev/eslint-mdx) will create virtual files for each code block with the same extension as specified after ```.
 
 But applying certain rules to code blocks might not be desirable, because some of them are too strict for code that won't be executed anyway, or even unfixable (like missing imports).
-You can find the full list of disabled rules in the `src/configs/markdown.ts` file.
+The full list of disabled rules is available as autocompletion for the [`markdownCodeBlocksRules.doNotDisable`](#markdowncodeblocksrulesdonotdisable) option.
 You have full control over which rules are disabled/enabled via the [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option.
 
 Code blocks linting is a sub-config of the `markdown`/`mdx` configs: `configCodeBlocks`.
 Set it to `false` to not lint code blocks at all, restrict its `files`/`ignores` to select which *Markdown*/*MDX* files have their code blocks linted, or use its `overrides`/`overridesAny` to change the rules applied to the code blocks only.
+
+#### Disabling a rule in a code block
+
+A code block is not linted as a part of the Markdown file: the processor cuts it out and gives it to ESLint as a separate *virtual* file, named `<Markdown file>/<number>_<name>`, where the name defaults to `<number>.<extension>` (`README.md/0_0.js`, `docs.mdx/1_0.js`).
+The extension comes from the language of the block (`javascript` becomes `js`, and so on), and blocks without a language, as well as skipped ones, are not counted.
+This is why an `eslint-disable` comment placed in the Markdown text does not reach the code inside a block.
+
+What works instead:
+
+- **An HTML comment right before the block** (in MDX, `{/* eslint-disable eqeqeq */}`, because HTML comments are not valid there).
+  It is not rendered, and the processor moves it inside the virtual file:
+
+  ````text
+  <!-- eslint-disable eqeqeq -->
+
+  ```js
+  if (a == b) {}
+  ```
+  ````
+
+  Only comments starting with `eslint` or `global ` are picked up, they apply only to the next block, and anything between them and the block, except blank lines and other such comments, cancels them.
+  `eslint-disable-next-line` refers to the first line of the block, because the comment is added above the code.
+- **An ordinary comment inside the block**: works as in any other file, but your readers will see it.
+- **`<!-- eslint-skip -->` right before the block** (`{/* eslint-skip */}` in MDX): the whole next block is not linted at all.
+- **The config file**, if the rule should be off in many blocks: [`markdownCodeBlocksRules.additionalDisabledRules`](#markdowncodeblocksrulesadditionaldisabledrules) for every block of every file, `overrides` of the `configCodeBlocks` sub-config for every block of the files that config is applied to, or an [`extraConfigs`][extraConfigs option] entry with `files` matching the virtual paths, like `['**/*.md/**/*.ts']` or `['docs/**/*.md/**']`.
+
+Block numbers change as soon as you add or remove a block, so avoid matching them.
+Name the block instead: both `@eslint/markdown` and `eslint-mdx` read the name from the opening fence.
+
+````text
+```ts filename="example.ts"
+const example = 1;
+```
+````
+
+Such a block becomes `README.md/3_example.ts`, so `['**/*.md/**/*_example.ts']` matches it.
+
+Two reports you may run into:
+
+- *Unused eslint-disable directive*: the comment before a block is also a directive for the Markdown file itself, where it is almost always unused, and you will see it as well if the rule is already disabled in code blocks by default.
+  Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.
+- [`eslint-comments/disable-enable-pair`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/disable-enable-pair.html) in MDX files, because they are parsed as code: add `{/* eslint-enable eqeqeq */}` after the block.
 
 ### Tailwind CSS
 
@@ -795,7 +837,7 @@ See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
 **Type**: `object[]`
 
 Your own flat configs, with a richer `rules` option.
-See [Providing user-defined flat configs](#providing-user-defined-flat-configs).
+See [Providing user-defined flat configs][extraConfigs option].
 
 ### `files`
 
@@ -1370,6 +1412,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [eslint-plugin-import-x]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-no-only-tests]: https://npmx.dev/eslint-plugin-no-only-tests
 [environment option]: #environment
+[extraConfigs option]: #providing-user-defined-flat-configs
 [eslint-plugin-prettier]: https://npmx.dev/eslint-plugin-prettier
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
