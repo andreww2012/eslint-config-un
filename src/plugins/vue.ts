@@ -100,6 +100,7 @@ export default definePluginMetadata('vue', {
     'template-curly-spacing': {prettierIncompatible: true},
     'v-bind-style': {stylistic: true},
     'v-for-delimiter-style': {stylistic: true},
+    'v-on-event-hyphenation': {stylistic: true},
     'v-on-handler-style': {stylistic: true},
     'v-slot-style': {stylistic: true},
   },

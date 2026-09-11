@@ -181,7 +181,10 @@ export default definePluginMetadata('unicorn', {
     'prefer-array-slice': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-array-some': {
       requiresTypeInfo: ['optional', 'indirect'],
-      stylistic: [false, 'TODO: reason was not recorded'],
+      stylistic: [
+        false,
+        'a falsy found element flips the check, and the filtered length form calls the predicate for every element',
+      ],
     },
     'prefer-at': {stylistic: true},
     'prefer-await': {requiresTypeInfo: 'optional'},
@@ -196,6 +199,12 @@ export default definePluginMetadata('unicorn', {
     },
     'prefer-continue': {stylistic: true},
     'prefer-date-now': {stylistic: true},
+    'prefer-default-parameters': {
+      stylistic: [
+        false,
+        'a default parameter only applies to undefined, while the reassignment it replaces also catches other falsy values, and the arity changes',
+      ],
+    },
     'prefer-direct-iteration': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-dispose': {requiresTypeInfo: 'optional'},
     'prefer-dom-node-append': {stylistic: true},
@@ -223,10 +232,15 @@ export default definePluginMetadata('unicorn', {
     'prefer-location-assign': {stylistic: true},
     'prefer-logical-operator-over-ternary': {stylistic: true},
     'prefer-math-min-max': {stylistic: true},
-    'prefer-math-trunc': {stylistic: [false, 'TODO: reason was not recorded']},
+    'prefer-math-trunc': {stylistic: [false, 'the bitwise forms it reports wrap above 2**31']},
     'prefer-minimal-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-modern-dom-apis': {requiresTypeInfo: 'optional', stylistic: true},
-    'prefer-modern-math-apis': {stylistic: [false, 'TODO: reason was not recorded']},
+    'prefer-modern-math-apis': {
+      stylistic: [
+        false,
+        'the dedicated methods disagree with the arithmetic they replace in the last digit, and at the extremes',
+      ],
+    },
     'prefer-native-coercion-functions': {stylistic: true},
     'prefer-negative-index': {stylistic: true},
     'prefer-node-protocol': {stylistic: true},

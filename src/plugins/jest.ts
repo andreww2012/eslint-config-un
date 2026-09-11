@@ -31,6 +31,8 @@ export default definePluginMetadata('jest', {
     'prefer-mock-return-shorthand': {stylistic: true},
     'prefer-to-be': {stylistic: true},
     'prefer-to-contain': {stylistic: true},
+    'prefer-to-have-been-called-times': {stylistic: true},
     'prefer-to-have-length': {stylistic: true},
+    'valid-title': {stylistic: true},
   },
 });
