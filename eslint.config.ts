@@ -38,6 +38,13 @@ export default eslintConfig({
       'src/configs/extra/no-prettier-incompatible-rules.ts',
     ].filter((v) => v != null),
   },
+  typeInfoRules: {
+    parserOptions: {
+      projectService: false,
+      project: './tsconfig.eslint.json',
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
 
   defaultConfigsStatus: 'misc-enabled',
   configs: {
@@ -124,14 +131,6 @@ export default eslintConfig({
       },
     },
     ts: {
-      parserOptions: (isTypeAware) =>
-        isTypeAware
-          ? {
-              projectService: false,
-              project: './tsconfig.eslint.json',
-              tsconfigRootDir: import.meta.dirname,
-            }
-          : {},
       configSortTsconfigKeys: {
         orderCompilerOptions: {
           preset: 'totalTypescript',
