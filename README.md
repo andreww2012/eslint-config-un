@@ -61,7 +61,7 @@ You can change any of that without rewriting the defaults by hand.
 
 Minimum supported versions:
 
-- Node.js: ^22.23.1 or >=24
+- Node.js: `^22.23.1 || ^24.18.0 || >=26.4.0`
 - ESLint: ^10 (peer dependency)
 
 ```sh
