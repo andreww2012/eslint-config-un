@@ -1,6 +1,8 @@
 const FIXTURES = {
   fourPartDependencyVersion: 'four-part-dependency-version/package.json',
-  nonAbsoluteVersion: 'non-absolute-version/package.json',
+  nonAbsoluteDependencyVersion: 'non-absolute-dependency-version/package.json',
+  nonAbsoluteDevDependencyVersion: 'non-absolute-dev-dependency-version/package.json',
+  nonAbsolutePeerDependencyVersion: 'non-absolute-peer-dependency-version/package.json',
 } as const;
 
 describe('basic tests', () => {
@@ -184,8 +186,18 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('node-dependencies', 'node-dependencies/absolute-version'),
       ).toMatchInlineSnapshot(
-        '[2, {"optionalDependencies": "ignore", "peerDependencies": "ignore"}]',
+        '[2, {"dependencies": "always", "devDependencies": "always", "optionalDependencies": "ignore", "peerDependencies": "ignore"}]',
       );
+    });
+
+    it("enables `node-dependencies/absolute-version` rule with `always` option when set to `'always'`", async () => {
+      const configResult = await computeEslintConfig({
+        nodeDependencies: {enforceAbsoluteVersion: 'always'},
+      });
+
+      expect(
+        configResult.getRuleEntry('node-dependencies', 'node-dependencies/absolute-version'),
+      ).toMatchInlineSnapshot('[2, "always"]');
     });
 
     it("enables `node-dependencies/absolute-version` rule with `never` option when set to `'never'`", async () => {
@@ -213,17 +225,65 @@ describe('options', () => {
     it('`node-dependencies/absolute-version` rule fires when set to `true` and a dependency uses a range version', async () => {
       const results = await testEslintConfig(
         {nodeDependencies: {enforceAbsoluteVersion: true}},
-        FIXTURES.nonAbsoluteVersion,
+        FIXTURES.nonAbsoluteDependencyVersion,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.nonAbsoluteVersion,
+        FIXTURES.nonAbsoluteDependencyVersion,
         'node-dependencies/absolute-version',
       );
 
       expect(error?.message).toMatchInlineSnapshot('"Use the absolute version instead."');
+    });
+
+    it('`node-dependencies/absolute-version` rule fires when set to `true` and a dev dependency uses a range version', async () => {
+      const results = await testEslintConfig(
+        {nodeDependencies: {enforceAbsoluteVersion: true}},
+        FIXTURES.nonAbsoluteDevDependencyVersion,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.nonAbsoluteDevDependencyVersion,
+        'node-dependencies/absolute-version',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Use the absolute version instead."');
+    });
+
+    it("`node-dependencies/absolute-version` rule fires when set to `'always'` and a peer dependency uses a range version", async () => {
+      const results = await testEslintConfig(
+        {nodeDependencies: {enforceAbsoluteVersion: 'always'}},
+        FIXTURES.nonAbsolutePeerDependencyVersion,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.nonAbsolutePeerDependencyVersion,
+        'node-dependencies/absolute-version',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Use the absolute version instead."');
+    });
+
+    it('`node-dependencies/absolute-version` rule does not fire when set to `true` and a peer dependency uses a range version', async () => {
+      const results = await testEslintConfig(
+        {nodeDependencies: {enforceAbsoluteVersion: true}},
+        FIXTURES.nonAbsolutePeerDependencyVersion,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.nonAbsolutePeerDependencyVersion,
+          'node-dependencies/absolute-version',
+        ),
+      ).toBeUndefined();
     });
   });
 });

@@ -19,7 +19,8 @@ export interface NodeDependenciesEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node-dependencies'> {
   /**
    * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
-   * - `'never'`: enforces not to use the absolute version.
+   * - `'always'`: enforces to use the absolute version on every dependency type, `peerDependencies` and `optionalDependencies` included.
+   * - `'never'`: same scope as `'always'`, but enforces not to use the absolute version.
    * - `false`: do not enforce anything.
    *
    * Affected rule:
@@ -28,8 +29,9 @@ export interface NodeDependenciesEslintConfigOptions<
    */
   enforceAbsoluteVersion?:
     | boolean
+    | 'always'
     | 'never'
-    | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
+    | Extract<GetRuleOptions<'node-dependencies', 'absolute-version'>, object>;
 }
 
 export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependencies', {
@@ -66,6 +68,8 @@ export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependen
         ? [
             enforceAbsoluteVersion === true
               ? {
+                  dependencies: 'always',
+                  devDependencies: 'always',
                   optionalDependencies: 'ignore',
                   peerDependencies: 'ignore',
                 }
