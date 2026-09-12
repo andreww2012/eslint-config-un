@@ -4,11 +4,12 @@
 
 # eslint-config-un [![npm](https://img.shields.io/npm/v/eslint-config-un)](https://npmx.dev/eslint-config-un)
 
-Grown out of a personal collection of rules, this ESLint config aspires to cover as many rules as possible, be reasonably strict, and be easily configurable.
+An ESLint config that supports 100+ plugins.
+Every rule of every plugin was given a default severity and options, and you can change any of them without manually rewriting those defaults.
 
 ## Features
 
-- **Every major plugin** is included (100+ in total):
+- **100+ plugins supported**:
   [![JavaScript](./assets/devicon-javascript.svg) Vanilla JS rules](https://eslint.org/docs/latest/rules),
   [![TypeScript] typescript-eslint](https://typescript-eslint.io/rules/),
   [🦄unicorn](https://npmx.dev/eslint-plugin-unicorn),
@@ -21,17 +22,38 @@ Grown out of a personal collection of rules, this ESLint config aspires to cover
   [![tailwindcss][TailwindCSS] tailwind](https://github.com/francoismassart/eslint-plugin-tailwindcss),
   [![CSS] css](https://github.com/eslint/css),
   [![YAML](./assets/devicon-yaml.svg) yaml](https://github.com/ota-meshi/eslint-plugin-yml)
-  and many more;
-- **Every single rule** was evaluated and given a reasonable default severity and options;
-- **Extremely configurable:** you can easily override any rule's severity and **granularly** alter the default options;
-- **Zero configuration by default:** exporting `eslintConfig()` from `eslint.config.ts` is enough to get started;
+  and many more.
+  The most commonly used ones are direct dependencies of this package, while the rest are optional peer dependencies;
+- **Zero configuration by default:** exporting `eslintConfig()` from your `eslint.config.ts` is enough to get started.
+  Configs for the used frameworks and tools are enabled automatically - you only need to install the respective plugins;
 - **Strictly typed:** all the options and rule names exist in TypeScript types;
-- **Well documented:** every single config, sub-config and their options are documented in JSDoc format;
-- **Respects your root `.gitignore`**: files listed in `.gitignore` are excluded from linting by default;
-- Provides the ability **to disable autofix** on a per-rule basis;
-- **Works great with Prettier**: conflicting rules are disabled if you use Prettier;
-- **Rename plugin prefixes** easily if you would like to;
+- **Well documented:** every single config and their options are documented in JSDoc format, available right in your editor;
+- **Respects your `.gitignore`**: files listed in `.gitignore`, including nested ones, are excluded from linting by default;
+- **Works great with Prettier**: conflicting rules are automatically disabled if you use Prettier;
+- **Rename plugin prefixes** easily if you would like to, and many of them are shortened by default;
 - **Bring your own plugins** and their rules will also be typed as much as possible.
+
+## Problems it solves
+
+- **Changing one option of a rule usually means repeating all the others.**
+  Here you are given the severity and options this config has set, so you only write what you want to change:
+
+  <!-- eslint-skip -->
+
+  ```ts
+  overrides: {
+    'import/order': (severity, options) => [severity, {...options?.[0], 'newlines-between': 'always'}],
+  },
+  ```
+
+- **Rule options are not always convenient to write.**
+  Configs come with [options of their own](#custom-options) which are often simpler and can cover several rules at once: one `jest` option sets up all the `jest/padding-around-*` rules.
+- **A rule whose autofix you don't trust has to be turned off entirely.**
+  ESLint [cannot disable an autofix on its own](https://github.com/eslint/rfcs/pull/125), so this config [does it](#disabling-rule-autofix) for a rule as a whole or per file, and already [disables a few](#autofixdisabledgloballyfor) by default, which you can revert.
+- **Limiting a rule to certain files means writing another config block.**
+  Every [rule entry](#rule-entry-unruleentry-interface) accepts its own `files` and `ignores`.
+- **Rules requiring type information need a config and a parser of their own.**
+  Every such rule is [moved into a separate config](#typeinforules) for TypeScript files, with the parser set up.
 
 ## Installation
 
@@ -93,12 +115,12 @@ The Config has the following interface (the exact types are simplified for the d
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
 type RuleOptions = {
-  /* ... pre-generated all rules' options */
+  /* ... pre-generated options of all rules, each being an array */
 };
 
 type UnRuleEntry<RuleName extends string> =
   | Severity
-  | [Severity, RuleOptions[RuleName]]
+  | [Severity, ...RuleOptions[RuleName]]
   | {
       severity: Severity;
       options?: RuleOptions[RuleName];
