@@ -8,7 +8,7 @@ export default definePluginMetadata('arrow-return-style', {
     `https://github.com/christopher-buss/eslint-plugin-arrow-return-style-x/blob/HEAD/src/rules/${ruleName}/documentation.md`,
   suggestedPrefix: [
     'arrow-return-style-x',
-    'this plugin is a fork and is meant to replace the original plugin with the original prefix',
+    'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
     'arrow-return-style': {stylistic: true},

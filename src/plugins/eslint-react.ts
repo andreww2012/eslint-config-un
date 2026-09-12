@@ -5,7 +5,7 @@ export default definePluginMetadata('eslint-react', {
   ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
   suggestedPrefix: [
     '@eslint-react',
-    "more concise and convenient to use; `@` feels redundant; can't be `react` - already taken by `eslint-plugin-react`",
+    'more concise and convenient to use; `@` feels redundant; `react` is already taken by `eslint-plugin-react`',
   ],
   rules: {
     'jsx-no-key-after-spread': {

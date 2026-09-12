@@ -7,7 +7,7 @@ export default definePluginMetadata('import', {
     `https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/${ruleName}.md`,
   suggestedPrefix: [
     'import-x',
-    'this plugin is a fork and is meant to replace the original plugin with the original prefix',
+    'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
     'consistent-type-specifier-style': {stylistic: true},

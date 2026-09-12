@@ -8,7 +8,7 @@ export default definePluginMetadata('es', {
     `https://eslint-community.github.io/eslint-plugin-es-x/rules/${ruleName}.html`,
   suggestedPrefix: [
     'es-x',
-    'this plugin is a fork and is meant to replace the original plugin with the original prefix',
+    'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
     'no-array-prototype-at': {requiresTypeInfo: 'optional'},

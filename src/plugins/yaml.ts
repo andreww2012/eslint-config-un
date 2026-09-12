@@ -6,7 +6,7 @@ export default definePluginMetadata('yaml', {
   ruleDocsUrl: (ruleName) => `https://ota-meshi.github.io/eslint-plugin-yml/rules/${ruleName}.html`,
   suggestedPrefix: [
     'yml',
-    'consistent with the official language name (also `-yaml` plugin is much less popular)',
+    'consistent with the official language name (and `eslint-plugin-yaml` is far less popular)',
   ],
   prettierLanguage: 'yaml',
   rules: {

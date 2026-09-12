@@ -7,7 +7,7 @@ export default definePluginMetadata('node', {
     `https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/${ruleName}.md`,
   suggestedPrefix: [
     'n',
-    'this plugin is a fork and is meant to replace the original plugin with the original prefix',
+    'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
     'exports-style': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
