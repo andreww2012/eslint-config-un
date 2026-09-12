@@ -1107,6 +1107,13 @@ The object notation additionally accepts:
 
 See the JSDoc of this option for more details.
 
+### `baselineAvailability`
+
+**Type**: `'widely' | 'newly' | number`
+
+The level of [Baseline](https://web.dev/baseline) availability every `use-baseline` rule allows the features to have: `widely` (the default), `newly` or a year in which the features became newly available at the latest.
+It is passed as the `available` option to [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md), [`html/use-baseline`](https://html-eslint.org/docs/rules/use-baseline), [`html-angular/use-baseline`](https://html-eslint.org/docs/angular-template/rules/use-baseline), [`html-react/use-baseline`](https://html-eslint.org/docs/react/rules/use-baseline) and [`html-svelte/use-baseline`](https://html-eslint.org/docs/svelte/rules/use-baseline).
+
 ### `packageAliases`
 
 **Type**: `Partial<Record<(typeof PACKAGES_TO_GET_INFO_FOR)[number], string>>`

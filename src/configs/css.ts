@@ -7,7 +7,7 @@ import {
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
 import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
-import {resolveFilesOption} from './shared';
+import {generateUseBaselineRuleOptions, resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -283,6 +283,7 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
       .addRule('selector-complexity', OFF) /** @since 0.13.0 */
       .addRule('use-baseline', WARNING, [
         {
+          ...generateUseBaselineRuleOptions(context),
           ...((isScss || allowedFeatures?.atRules?.length) && {
             allowAtRules: [
               ...(isScss ? SCSS_ALLOWED_BASELINE_AT_RULES : []),

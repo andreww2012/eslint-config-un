@@ -11,7 +11,12 @@ import {
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {OmitStrict, Prettify} from '../types';
 import {allUnionMembers} from '../utils';
-import {noRestrictedHtmlElementsDefault, resolveFilesOption, resolveIgnoresOption} from './shared';
+import {
+  generateUseBaselineRuleOptions,
+  noRestrictedHtmlElementsDefault,
+  resolveFilesOption,
+  resolveIgnoresOption,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -1460,7 +1465,9 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-obsolete-attrs', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-obsolete-tags', ERROR) /** @since 0.56.0 */ // 🟢
-    .addRule('use-baseline', WARNING) /** @since 0.56.0 */ // 🟡
+    .addRule('use-baseline', WARNING, [
+      generateUseBaselineRuleOptions(context),
+    ]) /** @since 0.56.0 */ // 🟡
     .enableConfigTesterForPlugin('html-react')
     .addOverrides();
 });

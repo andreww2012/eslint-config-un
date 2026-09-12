@@ -2,7 +2,7 @@ import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '.
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, Prettify, Subtract} from '../types';
 import type {fetchPackageInfo} from '../utils';
-import {resolveFilesOption, resolveIgnoresOption} from './shared';
+import {generateUseBaselineRuleOptions, resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -753,7 +753,9 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-obsolete-attrs', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-obsolete-tags', ERROR) /** @since 0.58.0 */ // 🟢
-    .addRule('use-baseline', WARNING) /** @since 0.58.0 */ // 🟡
+    .addRule('use-baseline', WARNING, [
+      generateUseBaselineRuleOptions(context),
+    ]) /** @since 0.58.0 */ // 🟡
     .enableConfigTesterForPlugin('html-angular')
     .addOverrides();
 });

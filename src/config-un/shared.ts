@@ -12,6 +12,7 @@ import type {
   EslintPlugin,
   EslintRuleEntry,
   EslintSeverity,
+  GetRuleOptions,
   UnAllRuleNames,
   UnExtraPluginsRules,
   UnExtraPluginsRulesConfig,
@@ -604,6 +605,23 @@ export interface EslintConfigUnOptions<
          */
         parserOptions?: TsEslintParserOptions;
       };
+
+  /**
+   * The level of [Baseline](https://web.dev/baseline) availability the features must have to be
+   * allowed by every `use-baseline` rule:
+   * - `widely`: supported by all the core browsers for at least 30 months;
+   * - `newly`: supported by all the core browsers;
+   * - a year: became newly available in that year or earlier.
+   *
+   * Affected rules:
+   * - [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md)
+   * - [`html/use-baseline`](https://html-eslint.org/docs/rules/use-baseline)
+   * - [`html-angular/use-baseline`](https://html-eslint.org/docs/angular-template/rules/use-baseline)
+   * - [`html-react/use-baseline`](https://html-eslint.org/docs/react/rules/use-baseline)
+   * - [`html-svelte/use-baseline`](https://html-eslint.org/docs/svelte/rules/use-baseline)
+   * @default 'widely'
+   */
+  baselineAvailability?: GetRuleOptions<'html', 'use-baseline'>['available'];
 
   // #endregion
 

@@ -239,6 +239,11 @@ export const noRestrictedHtmlElementsDefault = Object.fromEntries(
   INVALID_HTML_TAGS.map((tag) => [tag, true]),
 );
 
+export const generateUseBaselineRuleOptions = (context: UnConfigContext) => {
+  const {baselineAvailability} = context.rootOptions;
+  return baselineAvailability == null ? {} : {available: baselineAvailability};
+};
+
 export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
 export const TOML_DEFAULT_FILES = [GLOB_TOML];

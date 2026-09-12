@@ -3,7 +3,12 @@ import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
-import {noRestrictedHtmlElementsDefault, resolveFilesOption, resolveIgnoresOption} from './shared';
+import {
+  generateUseBaselineRuleOptions,
+  noRestrictedHtmlElementsDefault,
+  resolveFilesOption,
+  resolveIgnoresOption,
+} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
@@ -384,7 +389,9 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-obsolete-attrs', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-obsolete-tags', ERROR) /** @since 0.58.0 */ // 🟢
-    .addRule('use-baseline', WARNING) /** @since 0.58.0 */ // 🟡
+    .addRule('use-baseline', WARNING, [
+      generateUseBaselineRuleOptions(context),
+    ]) /** @since 0.58.0 */ // 🟡
     .enableConfigTesterForPlugin('html-svelte')
     .addOverrides();
 

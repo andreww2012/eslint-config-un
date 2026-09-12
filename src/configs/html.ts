@@ -1,7 +1,7 @@
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {ERROR, GLOB_HTM_HTML, OFF, WARNING} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
-import {noRestrictedHtmlElementsDefault} from './shared';
+import {generateUseBaselineRuleOptions, noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
@@ -141,7 +141,9 @@ export default defineUnConfig<HtmlEslintConfigOptions>('html', {
     .addRule('require-li-container', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('require-meta-charset', ERROR) /** @since 0.8.0 */
     .addRule('svg-require-viewbox', ERROR) /** @since 0.59.0 */
-    .addRule('use-baseline', WARNING) /** @since 0.38.0 */ // 🟢
+    .addRule('use-baseline', WARNING, [
+      generateUseBaselineRuleOptions(context),
+    ]) /** @since 0.38.0 */ // 🟢
     .markCategory('SEO')
     .addRule('no-multiple-h1', ERROR) /** @since 0.2.0 */ // 🟢
     .addRule('require-lang', ERROR) /** @since 0.0.2 */ // 🟢
