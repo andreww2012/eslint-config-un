@@ -151,6 +151,7 @@ export default definePluginMetadata('unicorn', {
     'no-useless-length-check': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-logical-operand': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-useless-override': {requiresTypeInfo: 'optional'},
+    'no-useless-recursion': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-spread': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-template-literals': {requiresTypeInfo: 'optional', stylistic: true},
     'no-useless-undefined': {autofixDisabled: true},
