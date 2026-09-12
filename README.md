@@ -766,7 +766,7 @@ const example = 1;
 
 Such a block becomes `README.md/3_example.ts`, so `['**/*.md/**/*_example.ts']` matches it.
 
-Reports you may run into:
+Reports you may see:
 
 - *Parsing error* in a block whose language needs its own parser, like Vue, Svelte or GraphQL.
   Blocks are ordinary files for ESLint, so such a language needs a parser set up for its extension, and the `files` patterns do not have to mention Markdown: `**/*.vue` covers `README.md/0_0.vue` as well.
@@ -1078,6 +1078,9 @@ The function form is passed the detected environment and may return a nullish va
 
 It can also be set by assigning one of the accepted values to the [`ESLINT_CONFIG_UN_ENVIRONMENT`](#eslint_config_un_environment) environment variable, but the explicitly passed value takes precedence.
 
+> [!WARNING]
+> Use with care and keep the [differences between runs][] as small as you can.
+
 ### `offlineMode`
 
 **Type**: `boolean`
@@ -1085,6 +1088,9 @@ It can also be set by assigning one of the accepted values to the [`ESLINT_CONFI
 Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
 
 It can also be enabled by setting the [`ESLINT_CONFIG_UN_OFFLINE_MODE`](#eslint_config_un_offline_mode) environment variable to a non-empty string, but the explicitly passed value takes precedence.
+
+> [!WARNING]
+> Use with care and keep the [differences between runs][] as small as you can.
 
 ### `cacheConfigs`
 
@@ -1145,7 +1151,9 @@ The constant showing if the current process is *likely* running in CI.
 Info provided by the [`ci-info` package](https://npmx.dev/ci-info).
 
 Use case: disable or enable certain rules or features in CI.
-Use with caution!
+
+> [!WARNING]
+> Use with care and keep the [differences between runs][] as small as you can.
 
 #### `isInEditor`
 
@@ -1155,8 +1163,7 @@ Info provided by the [`is-in-editor` package](https://npmx.dev/is-in-editor).
 Use case: disable or enable certain rules or features in an editor, likely to improve performance.
 
 > [!WARNING]
-> Use this sparingly, as disabling certain rules only in the editor might cause false positive reports on unused directives, which are subject to removal with autofix.
-> We recommend also setting [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#:~:text=reportUnusedDisableDirectives) to `!isInEditor()` for files affected by this option.
+> Use with care and keep the [differences between runs][] as small as you can.
 
 #### `DEFAULT_GLOBAL_IGNORES`
 
@@ -1292,6 +1299,31 @@ Before committing, please also run your tests, formatter, other linters and tool
 
 ## Troubleshooting & caveats
 
+### The set of enabled rules can differ between runs
+
+The config is built every time ESLint starts, and some of the things it is built from are outside of your config file:
+
+- The [`environment`][environment option] (CI, an editor or neither): you can turn rules on and off by it, and we use it for a few defaults of our own.
+- The [`offlineMode`](#offlinemode) option: rules making network requests are turned off.
+- The installed packages: a config needs its packages installed, and a detected framework version decides which of its rules are on.
+  An install without dev dependencies changes the result, and so does the `node_modules` layout: depending on the package manager and its settings, the dependencies of your dependencies may end up next to your own, and then they [are detected as installed](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed) too.
+- The [`cacheConfigs`](#cacheconfigs) option, enabled by default in editors: an earlier config is reused for up to an hour, and not every input is a part of the cache key.
+
+This affects `eslint-disable` comments the most.
+A comment for a rule that is off in this run is reported as *Unused eslint-disable directive* and is deleted by `--fix`, which many editors run on save, so the report it was written for comes back in the run where the rule is on.
+If the plugin is not loaded at all (see [`loadPluginsOnDemand`](#loadpluginsondemand)), the comment is an error instead: *Definition for rule ... was not found*.
+
+Keep the differences as small as you can.
+Where you do want them, turn the report off in the runs with fewer rules, and add `--fix-type problem,suggestion,layout` to your `--fix` commands so that they do not delete such comments (editors rarely let you choose the fix types):
+
+```ts
+import {eslintConfig, isInEditor} from 'eslint-config-un';
+
+export default eslintConfig({
+  linterOptionsReportUnusedDisableDirectives: isInEditor() ? 0 : 2,
+});
+```
+
 ### I'm getting `The inferred type of 'default' cannot be named without a reference to './node_modules/eslint-config-un/dist/eslint.mjs'. This is likely not portable. A type annotation is necessary` kind of error when exporting the value returned by `eslintConfig()` in ESLint config file
 
 This error means this file is compiled by TypeScript with [`declaration: true` flag](https://www.typescriptlang.org/tsconfig/#declaration), but some file required to infer the type of the returned value cannot be accessed by the compiler.
@@ -1418,6 +1450,7 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
 [`eslint-plugin-import-x`]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-import-x]: https://npmx.dev/eslint-plugin-import-x
 [eslint-plugin-no-only-tests]: https://npmx.dev/eslint-plugin-no-only-tests
+[differences between runs]: #the-set-of-enabled-rules-can-differ-between-runs
 [environment option]: #environment
 [extraConfigs option]: #providing-user-defined-flat-configs
 [ignores option]: #ignores
