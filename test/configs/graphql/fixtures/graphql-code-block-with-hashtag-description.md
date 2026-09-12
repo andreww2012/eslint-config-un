@@ -1,0 +1,9 @@
+# Heading
+
+```graphql
+# This is a hashtag description for the User type
+type User {
+  id: ID!
+  name: String!
+}
+```

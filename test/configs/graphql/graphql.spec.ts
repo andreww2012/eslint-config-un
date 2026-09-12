@@ -2,6 +2,7 @@ import type {IGraphQLConfig} from '@graphql-eslint/eslint-plugin';
 import {GLOB_GRAPHQL} from '../../../src/constants';
 
 const FIXTURES = {
+  graphqlCodeBlockWithHashtagDescriptionMd: 'graphql-code-block-with-hashtag-description.md',
   typeWithCommentDescription: 'type-with-comment-description.graphql',
 } as const;
 
@@ -124,6 +125,16 @@ describe('basic tests', () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('graphql');
 
+  // TODO possible to test without these constraints?
+  const GRAPHQL_OPTIONS_WITHOUT_SCHEMA = {
+    disableRulesRequiringSchema: true,
+    disableRulesRequiringOperations: true,
+    // All 📦 (graphql-js validation wrapper) rules call `requireGraphQLSchema` and crash without schema
+    overrides: Object.fromEntries(
+      GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
+    ),
+  };
+
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('graphql')).toMatchObject({
       'graphql/no-anonymous-operations': 2,
@@ -133,18 +144,8 @@ describe('rules', async () => {
   });
 
   it('`graphql/no-hashtag-description` rule fires on a type with hashtag description', async () => {
-    // TODO possible to test without these constraints?
     const results = await testEslintConfig(
-      {
-        graphql: {
-          disableRulesRequiringSchema: true,
-          disableRulesRequiringOperations: true,
-          // All 📦 (graphql-js validation wrapper) rules call `requireGraphQLSchema` and crash without schema
-          overrides: Object.fromEntries(
-            GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
-          ),
-        },
-      },
+      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA},
       FIXTURES.typeWithCommentDescription,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );
@@ -152,6 +153,25 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.typeWithCommentDescription,
+      'graphql/no-hashtag-description',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`
+      "Unexpected GraphQL descriptions as hashtag \`#\` for type "User".
+      Prefer using \`"""\` for multiline, or \`"\` for a single line description."
+    `);
+  });
+
+  it('`graphql/no-hashtag-description` rule fires on a GraphQL code block with hashtag description inside a .md file', async () => {
+    const results = await testEslintConfig(
+      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA, markdown: true},
+      FIXTURES.graphqlCodeBlockWithHashtagDescriptionMd,
+      {searchFixturesRelativeToPath: import.meta.dirname},
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.graphqlCodeBlockWithHashtagDescriptionMd,
       'graphql/no-hashtag-description',
     );
 

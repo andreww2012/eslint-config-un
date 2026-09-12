@@ -174,10 +174,6 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
         {
           filesDefault: [GLOB_GRAPHQL],
           parseWith: 'graphql',
-          // TODO why?
-          ignoresInternal: {
-            md: false,
-          },
         },
       ],
       {

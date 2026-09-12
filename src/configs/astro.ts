@@ -92,10 +92,6 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
       {
         filesDefault: DEFAULT_ASTRO_FILES,
         parseWith: 'astro',
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-        },
       },
     ])
     .markCategory('Possible Errors')

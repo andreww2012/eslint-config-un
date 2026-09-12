@@ -71,7 +71,6 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       'jsonc/all',
       {
         filesDefault: JSONC_DEFAULT_FILES,
-        ignoresInternal: {md: false, mdx: false}, // TODO why?
         parseWith: 'jsonc',
       },
     ])
@@ -134,7 +133,6 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       'jsonc/json',
       {
         filesDefault: [GLOB_JSON],
-        ignoresInternal: {md: false, mdx: false}, // TODO why?
         parseWith: ['jsonc', 'json'],
       },
     ])
@@ -146,7 +144,6 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       'jsonc/jsonc',
       {
         filesDefault: [GLOB_JSONC],
-        ignoresInternal: {md: false, mdx: false}, // TODO why?
         parseWith: ['jsonc', 'jsonc'],
       },
     ])
@@ -158,7 +155,6 @@ export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {gr
       'jsonc/json5',
       {
         filesDefault: [GLOB_JSON5],
-        ignoresInternal: {md: false, mdx: false}, // TODO why?
         parseWith: ['jsonc', 'json5'],
       },
     ])

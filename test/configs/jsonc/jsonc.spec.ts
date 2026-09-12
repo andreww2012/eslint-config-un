@@ -1,7 +1,6 @@
-import {GLOB_MARKDOWN, GLOB_MDX} from '../../../src/constants';
-
 const FIXTURES = {
   dupKeysJson: 'dup-keys.json',
+  jsonCodeBlockWithDupKeysMd: 'json-code-block-with-dup-keys.md',
 } as const;
 
 describe('basic tests', () => {
@@ -13,10 +12,9 @@ describe('basic tests', () => {
     expect(config).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
 
-    const ignores = config?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_MDX]);
+    expect(config?.ignores).toMatchInlineSnapshot(
+      '["**/*.css", "**/*.scss", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"]',
+    );
 
     expect(configResult.getLoadedPlugin('jsonc')).toBeDefined();
   });
@@ -83,6 +81,22 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.dupKeysJson,
+      'jsonc/no-dupe-keys',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`"Duplicate key 'key'."`);
+  });
+
+  it('`jsonc/no-dupe-keys` rule fires on a JSON code block with duplicate keys inside a .md file', async () => {
+    const results = await testEslintConfig(
+      {jsonc: true, markdown: true},
+      FIXTURES.jsonCodeBlockWithDupKeysMd,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.jsonCodeBlockWithDupKeysMd,
       'jsonc/no-dupe-keys',
     );
 

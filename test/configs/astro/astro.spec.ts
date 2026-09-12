@@ -1,6 +1,7 @@
-import {GLOB_ASTRO, GLOB_MARKDOWN} from '../../../src/constants';
+import {GLOB_ASTRO} from '../../../src/constants';
 
 const FIXTURES = {
+  astroCodeBlockWithSetHtmlMd: 'astro-code-block-with-set-html.md',
   divWithSetHtml: 'div-with-set-html.astro',
 } as const;
 
@@ -112,6 +113,22 @@ describe('rules', async () => {
 
     expect(error?.message).toMatchInlineSnapshot('"`set:html` can lead to XSS attack."');
   });
+
+  it('`astro/no-set-html-directive` rule fires on an Astro code block using `set:html` inside a .md file', async () => {
+    const results = await testEslintConfig(
+      {astro: true, markdown: true},
+      FIXTURES.astroCodeBlockWithSetHtmlMd,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.astroCodeBlockWithSetHtmlMd,
+      'astro/no-set-html-directive',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"`set:html` can lead to XSS attack."');
+  });
 });
 
 describe('un options', () => {
@@ -144,10 +161,9 @@ describe('un options', () => {
     it('uses implicit default `ignores` in `astro` eslint config', async () => {
       const configResult = await computeEslintConfig('astro');
 
-      const ignores = configResult.getConfigByUnPostfix('astro')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_ASTRO]);
+      expect(configResult.getConfigByUnPostfix('astro')?.ignores).toMatchInlineSnapshot(
+        '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"]',
+      );
     });
 
     it('uses user-provided `ignores` in `astro` eslint config', async () => {
