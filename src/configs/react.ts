@@ -350,6 +350,7 @@ interface RefreshSubConfigOptions<
  * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
  * - `refresh`: rules from `eslint-plugin-react-refresh`.
  * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
+ * - `html`: rules from `@html-eslint/eslint-plugin-react`.
  */
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -444,6 +445,16 @@ export interface ReactEslintConfigOptions<
   configYouMightNotNeedAnEffect?:
     | boolean
     | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
+
+  /**
+   * Enables or specifies the configuration for the HTML rules applied to JSX.
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`@html-eslint/eslint-plugin-react`](https://npmx.dev/@html-eslint/eslint-plugin-react)
+   * @default true
+   */
+  configHtml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'html-react'>;
 
   /**
    * Controls how rules from
@@ -671,6 +682,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     configDom: isReactDomInstalled,
     configRefresh: true,
     configYouMightNotNeedAnEffect: true,
+    configHtml: true,
     pluginX: 'prefer',
     shorthandBoolean: 'prefer',
     shorthandFragment: 'prefer',
@@ -687,6 +699,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     configDom,
     configRefresh,
     configYouMightNotNeedAnEffect,
+    configHtml,
     pluginX,
     shorthandBoolean,
     shorthandFragment,
@@ -1425,5 +1438,29 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('no-pass-live-state-to-parent', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-reset-all-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.3.0)
     .enableConfigTesterForPlugin('react-you-might-not-need-an-effect')
+    .addOverrides();
+
+  const configBuilderHtml = context.createConfigBuilder(configHtml, 'html-react');
+
+  // Legend:
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+
+  configBuilderHtml
+    ?.addConfig([
+      'react/html',
+      {
+        filesDefault: parentConfigFiles,
+        ignoresDefault: parentConfigIgnores,
+      },
+    ])
+    .addRule('classname-spacing', ERROR) /** @since 0.57.0 */ // 🟢
+    .addRule('no-duplicate-classname', ERROR) /** @since 0.57.0 */ // 🟢
+    .addRule('no-ineffective-attrs', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('no-invalid-attr-value', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('no-obsolete-attrs', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('no-obsolete-tags', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('use-baseline', WARNING) /** @since 0.56.0 */ // 🟡
+    .enableConfigTesterForPlugin('html-react')
     .addOverrides();
 });

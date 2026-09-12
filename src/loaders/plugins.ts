@@ -257,8 +257,19 @@ export const pluginsLoaders = {
   html: genModuleLoader('html', '@html-eslint/eslint-plugin', () =>
     interopDefault(import('@html-eslint/eslint-plugin')),
   ),
+  'html-angular': genModuleLoader(
+    'html-angular',
+    '@html-eslint/eslint-plugin-angular-template',
+    () => interopDefault(import('@html-eslint/eslint-plugin-angular-template')),
+  ),
   'html-processor': genModuleLoader('html-processor', 'eslint-plugin-html', () =>
     interopDefault(import('eslint-plugin-html')),
+  ),
+  'html-react': genModuleLoader('html-react', '@html-eslint/eslint-plugin-react', () =>
+    interopDefault(import('@html-eslint/eslint-plugin-react')),
+  ),
+  'html-svelte': genModuleLoader('html-svelte', '@html-eslint/eslint-plugin-svelte', () =>
+    interopDefault(import('@html-eslint/eslint-plugin-svelte')),
   ),
   import: genModuleLoader('import', 'eslint-plugin-import-x', () =>
     interopDefault(import('eslint-plugin-import-x')),

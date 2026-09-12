@@ -90,6 +90,16 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       >;
 
   /**
+   * Enables or specifies the configuration for the HTML rules applied to Svelte components.
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`@html-eslint/eslint-plugin-svelte`](https://npmx.dev/@html-eslint/eslint-plugin-svelte)
+   * @default true
+   */
+  configHtml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'html-svelte'>;
+
+  /**
    * Used by some rules like
    * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified (but only if
@@ -136,6 +146,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
+    configHtml: true,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
@@ -151,6 +162,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
 
   const {
     configEnforceTypescriptInScriptSection,
+    configHtml,
     svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
@@ -349,6 +361,31 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
         script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],
       },
     ])
+    .addOverrides();
+
+  const configBuilderHtml = context.createConfigBuilder(configHtml, 'html-svelte');
+
+  // Legend:
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+
+  configBuilderHtml
+    ?.addConfig([
+      'svelte/html',
+      {
+        filesDefault: optionsResolved.files,
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
+        parseWith: 'svelte',
+      },
+    ])
+    .addRule('class-spacing', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-duplicate-class', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-ineffective-attrs', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-invalid-attr-value', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-obsolete-attrs', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-obsolete-tags', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('use-baseline', WARNING) /** @since 0.58.0 */ // 🟡
+    .enableConfigTesterForPlugin('html-svelte')
     .addOverrides();
 
   if (isPrettierPluginSvelteUsed) {

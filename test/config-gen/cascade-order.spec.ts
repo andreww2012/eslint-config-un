@@ -151,6 +151,7 @@ describe('cascade order', () => {
       eslint-config-un/react/dom
       eslint-config-un/react/refresh
       eslint-config-un/react/you-might-not-need-an-effect
+      eslint-config-un/react/html
       eslint-config-un/regexp
       eslint-config-un/regexp/@type-information
       eslint-config-un/remeda
@@ -209,6 +210,7 @@ describe('cascade order', () => {
       eslint-config-un/angular/general
       eslint-config-un/angular/general/@type-information
       eslint-config-un/angular/template
+      eslint-config-un/angular/template/html
       eslint-config-un/astro
       eslint-config-un/jsx-a11y/astro
       eslint-config-un/es
@@ -219,6 +221,7 @@ describe('cascade order', () => {
       eslint-config-un/svelte
       eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
+      eslint-config-un/svelte/html
       eslint-config-un/vue
       eslint-config-un/vue/allow-single-word-component-names
       eslint-config-un/vue/allow-implicit-slots

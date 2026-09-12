@@ -248,6 +248,9 @@ importers:
       '@html-eslint/eslint-plugin':
         specifier: 0.65.0
         version: 0.65.0(eslint@10.10.0)
+      '@html-eslint/eslint-plugin-react':
+        specifier: 0.65.0
+        version: 0.65.0(eslint@10.10.0)
       '@html-eslint/parser':
         specifier: 0.65.0
         version: 0.65.0
@@ -468,6 +471,12 @@ importers:
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.1
         version: 4.4.1(@types/node@22.20.2)(@typescript/typescript6@6.0.2)(crossws@0.4.12)(eslint@10.10.0)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(supports-color@7.2.0)
+      '@html-eslint/eslint-plugin-angular-template':
+        specifier: 0.65.0
+        version: 0.65.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)
+      '@html-eslint/eslint-plugin-svelte':
+        specifier: 0.65.0
+        version: 0.65.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)
       '@humanwhocodes/scsstree':
         specifier: 0.1.1
         version: 0.1.1(@eslint/css-tree@4.1.0)(@eslint/css@2.0.0)
@@ -2806,6 +2815,26 @@ packages:
   '@html-eslint/core@0.65.0':
     resolution: {integrity: sha512-UJUf0dDI6xq6iitksPXrfLwu2Gc143LGFHMlVnRPZxkoLz1xIzKbkQVxrqxqNmandsSmhWfkGw//U2BsBH/QRw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@html-eslint/eslint-plugin-angular-template@0.65.0':
+    resolution: {integrity: sha512-OZn7uv0xy8BnU6Z6k8uoOfxcdjmL40XaGjV0HJiRRjL/H3Y1u9PGmzpM/pkdJIYeewhLkElpUeAG1E2okx525w==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      '@angular-eslint/template-parser': '>=18.0.0'
+      eslint: '>=8.0.0 || ^10.0.0-0'
+
+  '@html-eslint/eslint-plugin-react@0.65.0':
+    resolution: {integrity: sha512-EAWPTD9/CTgTTLX3eWGhPlITt4tcQPmFdKoZ3RF/Jr/WWO6h3yP5efwjQI7KUZJjFFGt1cTrkwvkkZyklkgamA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: '>=8.0.0 || ^10.0.0-0'
+
+  '@html-eslint/eslint-plugin-svelte@0.65.0':
+    resolution: {integrity: sha512-gkqZHDWL+MOPKv4ddQT5R0zHpYqRbfJLiXQhKLkXVXE0A6j0IY8OleJhwQRgyK/7FUZAbQcWhg2A9OjiaaPbnQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: '>=8.0.0 || ^10.0.0-0'
+      svelte-eslint-parser: ^1.0.0
 
   '@html-eslint/eslint-plugin@0.65.0':
     resolution: {integrity: sha512-zYa4ARNbkp/GPlIY+1NFV5v6H3EDs+jby4/rFnZDaS/S3mFEvBail4+dPqugHljrBmAZ0UkxMATR696ypRvPCQ==}
@@ -15753,6 +15782,24 @@ snapshots:
     dependencies:
       '@html-eslint/types': 0.65.0
       html-standard: 0.0.13
+
+  '@html-eslint/eslint-plugin-angular-template@0.65.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)':
+    dependencies:
+      '@angular-eslint/template-parser': 22.5.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)
+      '@html-eslint/core': 0.65.0
+      '@html-eslint/types': 0.65.0
+      eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
+
+  '@html-eslint/eslint-plugin-react@0.65.0(eslint@10.10.0)':
+    dependencies:
+      '@html-eslint/core': 0.65.0
+      eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
+
+  '@html-eslint/eslint-plugin-svelte@0.65.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)':
+    dependencies:
+      '@html-eslint/core': 0.65.0
+      eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
+      svelte-eslint-parser: 1.8.1(svelte@5.55.9)
 
   '@html-eslint/eslint-plugin@0.65.0(eslint@10.10.0)':
     dependencies:

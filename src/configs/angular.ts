@@ -2,6 +2,7 @@ import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '.
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, Prettify, Subtract} from '../types';
 import type {fetchPackageInfo} from '../utils';
+import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -27,6 +28,17 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
 interface ConfigTemplateSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'angular-template'> {
+  /**
+   * Enables or specifies the configuration for the HTML rules applied to Angular templates.
+   * Never enabled if the parent config is disabled.
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`@html-eslint/eslint-plugin-angular-template`](https://npmx.dev/@html-eslint/eslint-plugin-angular-template)
+   * @default true <=> Angular version >=18
+   */
+  configHtml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'html-angular'>;
+
   /**
    * Enables all a11y (accessibility) rules (all are prefixed with `angular-template`):
    * - [`angular-template/alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md)
@@ -565,12 +577,15 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     ] satisfies NonEmptyTuple;
 
   const configTemplateOptions = assignDefaults(configTemplate, {
+    // The plugin requires `@angular-eslint/template-parser` v18+
+    configHtml: angularVersion >= 18,
     a11yRules: true,
     preferControlFlow: angularVersion >= 19,
     preferNgSrc: false,
     requireLoopIndexes: false,
   });
-  const {a11yRules, preferControlFlow, preferNgSrc, requireLoopIndexes} = configTemplateOptions;
+  const {configHtml, a11yRules, preferControlFlow, preferNgSrc, requireLoopIndexes} =
+    configTemplateOptions;
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;
 
@@ -712,5 +727,33 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
       ...getTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity),
     ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-valid-aria */ // ♿
     .enableConfigTesterForPlugin('angular-template', {includeDeprecated: true})
+    .addOverrides();
+
+  const configBuilderTemplateHtml = context.createConfigBuilder(
+    configTemplate === false ? false : configHtml,
+    'html-angular',
+  );
+
+  // Legend:
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+
+  configBuilderTemplateHtml
+    ?.addConfig([
+      'angular/template/html',
+      {
+        filesDefault: resolveFilesOption(configTemplateOptions.files, [GLOB_HTML]),
+        ignoresDefault: resolveIgnoresOption(configTemplateOptions.ignores, []),
+        parseWith: 'angularTemplate',
+      },
+    ])
+    .addRule('class-spacing', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-duplicate-class', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-ineffective-attrs', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-invalid-attr-value', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-obsolete-attrs', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('no-obsolete-tags', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('use-baseline', WARNING) /** @since 0.58.0 */ // 🟡
+    .enableConfigTesterForPlugin('html-angular')
     .addOverrides();
 });

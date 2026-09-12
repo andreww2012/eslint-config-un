@@ -3,6 +3,7 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('svelte', {
   configs: ['svelte'],
+  isMainPlugin: true,
   docsUrl: 'https://sveltejs.github.io/eslint-plugin-svelte',
   ruleDocsUrl: (ruleName) => `https://sveltejs.github.io/eslint-plugin-svelte/rules/${ruleName}`,
   gitTag: (version) => `eslint-plugin-svelte@${version}`,
