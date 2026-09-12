@@ -300,6 +300,7 @@ export interface EslintConfigUnOptions<
    *   - `lockfile`
    *   - `nodeDependencies`
    *   - `security`
+   *   - `sonar`
    *   - `toml`
    *   - `yaml`
    */

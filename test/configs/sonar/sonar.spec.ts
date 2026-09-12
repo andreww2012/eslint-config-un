@@ -40,16 +40,16 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('creates `sonar` eslint config by default', async () => {
-      await expectConfigState({}, 'sonar', true, 'default');
+    it('does not create `sonar` eslint config', async () => {
+      await expectConfigState({}, 'sonar', false, 'default');
     });
 
-    it('creates `sonar` eslint config and prints a warning if explicitly enabled', async () => {
-      await expectConfigState('sonar', 'sonar', ['sonar', true], 'default');
+    it('creates `sonar` eslint config if explicitly enabled', async () => {
+      await expectConfigState('sonar', 'sonar', true, 'default');
     });
 
-    it('does not create `sonar` eslint config if explicitly disabled', async () => {
-      await expectConfigState({sonar: false}, 'sonar', false, 'default');
+    it('does not create `sonar` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({sonar: false}, 'sonar', ['sonar', false], 'default');
     });
   });
 
@@ -59,7 +59,7 @@ describe('basic tests', () => {
     });
 
     it('creates `sonar` eslint config and prints a warning if explicitly enabled', async () => {
-      await expectConfigState('sonar', 'sonar', ['sonar', true], 'misc-enabled');
+      await expectConfigState({sonar: true}, 'sonar', ['sonar', true], 'misc-enabled');
     });
 
     it('does not create `sonar` eslint config if explicitly disabled', async () => {

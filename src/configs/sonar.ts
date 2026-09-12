@@ -74,10 +74,9 @@ export interface SonarEslintConfigOptions<
   testsRules?: boolean;
 }
 
-export default defineUnConfig<SonarEslintConfigOptions>(
-  'sonar',
-  true,
-)((context, optionsRaw) => {
+export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enableAwsRules: context.packagesInfo['aws-cdk-lib'] != null,
     enableHelmetRules: context.packagesInfo.helmet != null,

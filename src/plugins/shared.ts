@@ -110,6 +110,14 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
   directDependencyReason?: string;
 
   /**
+   * Why the package is an optional peer dependency although it serves a Config of the misc group,
+   * which `defaultConfigsStatus: 'misc-enabled'` turns on in one go and would therefore normally
+   * require the package to be installed for the user.
+   * Providing it when the package is a direct dependency is reported as an error
+   */
+  optionalPeerDependencyReason?: string;
+
+  /**
    * Extends the reach of the generated type-aware config beyond TypeScript files
    */
   typeInfo?: {
@@ -154,6 +162,7 @@ export const PLUGIN_METADATA_KEY_ORDER = allUnionMembers<
   'prettierLanguage',
   'allRulesStylistic',
   'directDependencyReason',
+  'optionalPeerDependencyReason',
   'typeInfo',
   'extraPatterns',
   'extraFileExtensions',

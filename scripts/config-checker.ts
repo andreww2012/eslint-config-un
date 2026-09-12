@@ -33,7 +33,10 @@ const packagesToMoveToDirectDependencies = Array.from(
       const configPackages = CONFIGS_META[config]?.packages || [];
       return configPackages
         .map((packageName) =>
-          packageName in ourPackageJson.dependencies ? null : {config, packageName},
+          packageName in ourPackageJson.dependencies ||
+          PACKAGES_META[packageName]?.optionalPeerDependencyReason != null
+            ? null
+            : {config, packageName},
         )
         .filter((v) => v != null);
     }),
@@ -46,10 +49,28 @@ if (packagesToMoveToDirectDependencies.length > 0) {
   errors.push({
     severity: 'error',
     message: [
-      'The following packages should be moved to direct dependencies because they are used in configs from the `misc-enabled` group:',
+      'The following packages should be moved to direct dependencies because they are used in configs from the `misc-enabled` group, or their plugin metadata should explain why they stay optional peer dependencies:',
       ...packagesToMoveToDirectDependencies.map(
         ({packageName, configs}) =>
           `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+      ),
+    ],
+  });
+}
+
+const packagesWithNeedlessOptionalPeerDependencyReason = Object.keys(PACKAGES_META).filter(
+  (packageName) =>
+    PACKAGES_META[packageName]?.optionalPeerDependencyReason != null &&
+    packageName in ourPackageJson.dependencies,
+);
+
+if (packagesWithNeedlessOptionalPeerDependencyReason.length > 0) {
+  errors.push({
+    severity: 'error',
+    message: [
+      'The following packages needlessly explain why they are optional peer dependencies as they are direct dependencies:',
+      ...packagesWithNeedlessOptionalPeerDependencyReason.map(
+        (packageName) => `\n- ${stylePackageName(packageName)}`,
       ),
     ],
   });

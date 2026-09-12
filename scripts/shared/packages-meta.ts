@@ -25,6 +25,11 @@ interface PackageMeta {
    * default
    */
   directDependencyReason?: string;
+
+  /**
+   * Why the package is an optional peer dependency although it serves a Config of the misc group
+   */
+  optionalPeerDependencyReason?: string;
 }
 
 interface PluginPackageMeta extends PackageMeta {
@@ -50,6 +55,9 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
           ...(metadata.docsUrl != null && {pluginDocsUrl: metadata.docsUrl}),
           ...(metadata.directDependencyReason != null && {
             directDependencyReason: metadata.directDependencyReason,
+          }),
+          ...(metadata.optionalPeerDependencyReason != null && {
+            optionalPeerDependencyReason: metadata.optionalPeerDependencyReason,
           }),
         } satisfies PluginPackageMeta,
       ],

@@ -245,7 +245,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | `promise`                                           | ✅                                          | [eslint-plugin-promise](https://npmx.dev/eslint-plugin-promise) (`promise`)                                                             | -                                                                                                  |
 | `import`                                            | ✅                                          | [eslint-plugin-import-x] (`import`)                                                                                                     | -                                                                                                  |
 | `import/allowDefaultExport`                         | ✅                                          | -                                                                                                                                       | Since v1.0.0<br>Config that allows default exports in config files, dotfiles and Storybook stories |
-| `sonar`                                             | ✅                                          | [eslint-plugin-sonarjs](https://npmx.dev/eslint-plugin-sonarjs) (`sonar`)                                                               | -                                                                                                  |
+| `sonar`                                             | ✅ (if `misc-enabled`)                      | [eslint-plugin-sonarjs](https://npmx.dev/eslint-plugin-sonarjs) (`sonar`)                                                               | -                                                                                                  |
 | `eslintComments`                                    | ✅                                          | [@eslint-community/eslint-plugin-eslint-comments](https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments) (`eslint-comments`) | Since v0.1.3                                                                                       |
 | `jsdoc`                                             | ✅                                          | [eslint-plugin-jsdoc](https://npmx.dev/eslint-plugin-jsdoc) (`jsdoc`)                                                                   | Since v0.3.1                                                                                       |
 | `jsdoc/typescript`                                  | ✅ (`ts` config is enabled)                 | -                                                                                                                                       | Config for enabling and disabling certain rules for TypeScript files                               |
@@ -1289,10 +1289,11 @@ We use the [`import-meta-resolve`](https://npmx.dev/import-meta-resolve) package
 > [!WARNING]
 > That package repeats the Node.js resolution algorithm, so detection can produce false positives
 > whenever your setup lets you resolve packages you did not install yourself.
+> With a flat `node_modules` layout, the dependencies of your own dependencies are the usual source
+> of those.
 >
-> The clearest example is `typescript`: it is a dependency of one of eslint-config-un's own
-> dependencies, so with a flat `node_modules` layout it resolves even if your project never
-> installed it, and the `ts` config and everything that depends on it are then enabled.
+> None of the packages we check for is reachable through eslint-config-un's own dependencies, so we
+> never enable a config because of something *we* pulled in.
 
 ### How do I see which configs are enabled, which rules have their autofix disabled, and so on?
 
