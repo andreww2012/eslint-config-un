@@ -1,9 +1,9 @@
 import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
-import {allUnionMembers} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   generateConfigNoOnlyTests,
@@ -13,9 +13,9 @@ import {
 import {
   type ExtraPluginsType,
   type FlatConfigEntryForBuilder,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
   type UnFlatConfigEntryBase,
-  type UnRuleOptionsByPlugin,
   type UnRulesConfigPartial,
   assignDefaults,
   defineUnConfig,
@@ -119,7 +119,10 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<UnRulesConfigPartial<'jest'>, `jest/${JestRulesForTypescriptFiles}`>
+        Pick<
+          UnRulesConfigPartial<'jest'>,
+          `jest/${(typeof JEST_RULES_FOR_TYPESCRIPT_FILES)[number]}`
+        >
       >;
 
   /**
@@ -237,24 +240,12 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
 
-type JestRulesForTypescriptFiles = keyof Pick<
-  UnRuleOptionsByPlugin['jest'],
-  | 'no-error-equal'
-  | 'no-unnecessary-assertion'
-  | 'no-untyped-mock-factory'
-  | 'unbound-method'
-  | 'valid-expect-with-promise'
->;
+const JEST_RULES_FOR_TYPESCRIPT_FILES = [
+  ...RULE_CATEGORIES_PER_PLUGIN.jest.typeAware,
+  'no-untyped-mock-factory', // Needs TypeScript syntax, but no type information
+] satisfies GetRuleNamesInPlugin<'jest'>[];
 
-const JEST_RULES_FOR_TYPESCRIPT_FILES_SET = new Set<string>(
-  allUnionMembers<JestRulesForTypescriptFiles>()([
-    'no-error-equal',
-    'no-unnecessary-assertion',
-    'no-untyped-mock-factory',
-    'unbound-method',
-    'valid-expect-with-promise',
-  ]),
-);
+const JEST_RULES_FOR_TYPESCRIPT_FILES_SET = new Set<string>(JEST_RULES_FOR_TYPESCRIPT_FILES);
 
 export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {package: 'jest'}})(
   async (context, optionsRaw) => {
