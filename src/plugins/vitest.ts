@@ -32,7 +32,7 @@ export default definePluginMetadata('vitest', {
     'prefer-hooks-on-top': {stylistic: true},
     'prefer-importing-vitest-globals': {stylistic: true},
     'prefer-lowercase-title': {
-      stylistic: true,
+      stylistic: [false, 'titles name snapshots and are matched by test filters'],
       autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
     },
     'prefer-mock-promise-shorthand': {stylistic: true},
@@ -42,7 +42,7 @@ export default definePluginMetadata('vitest', {
     'prefer-to-have-been-called-times': {stylistic: true},
     'prefer-to-have-length': {stylistic: true},
     'valid-title': {
-      stylistic: true,
+      stylistic: [false, 'titles name snapshots and are matched by test filters'],
       autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
     },
   },

@@ -21,10 +21,17 @@ export default definePluginMetadata('playwright', {
     'prefer-equality-matcher': {stylistic: true},
     'prefer-hooks-in-order': {stylistic: true},
     'prefer-hooks-on-top': {stylistic: true},
-    'prefer-lowercase-title': {stylistic: true},
+    'prefer-lowercase-title': {
+      stylistic: [false, 'titles name snapshots and are matched by test filters'],
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
     'prefer-to-be': {stylistic: true},
     'prefer-to-contain': {stylistic: true},
     'prefer-to-have-count': {stylistic: true},
     'prefer-to-have-length': {stylistic: true},
+    'valid-title': {
+      stylistic: [false, 'titles name snapshots and are matched by test filters'],
+      autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
+    },
   },
 });
