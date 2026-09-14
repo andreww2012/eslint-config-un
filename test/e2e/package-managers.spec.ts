@@ -30,6 +30,8 @@ const FIXTURE_EXAMPLE_LINES = (
   await fs.readFile(path.join(FIXTURE_PROJECT_DIR, 'src', 'example.ts'), 'utf8')
 ).split('\n');
 
+// The same version CI installs globally, while locally a different one may be installed
+const PNPM = `pnpm@${packageJson.devEngines.packageManager.version}`;
 const YARN_CLASSIC = 'yarn@1.22.22';
 const YARN_BERRY = 'yarn@4.18.0';
 
@@ -63,11 +65,13 @@ const getYarnBerryFiles = (registryUrl: string, nodeLinker: 'node-modules' | 'pn
     // Enabled by default in CI, but there is no lockfile to keep intact
     'enableImmutableInstalls: false',
     'enableTelemetry: false',
+    'npmMinimalAgeGate: 0',
   ].join('\n'),
   // Marks the directory as a project root
   'yarn.lock': '',
 });
 
+// Release age gates are turned off, as our dependencies are often updated the day they're published
 const PACKAGE_MANAGERS: {
   id: string;
   install: CommandLine;
@@ -81,8 +85,15 @@ const PACKAGE_MANAGERS: {
   },
   {
     id: 'pnpm',
-    install: ['pnpm', 'install', '--no-frozen-lockfile'],
-    eslint: ['pnpm', 'exec', 'eslint'],
+    install: ['corepack', PNPM, 'install', '--no-frozen-lockfile'],
+    eslint: ['corepack', PNPM, 'exec', 'eslint'],
+    getFiles: () => ({
+      'pnpm-workspace.yaml': [
+        'minimumReleaseAge: 0',
+        // Dependencies' build scripts aren't needed, and an empty store reports them as an error
+        'strictDepBuilds: false',
+      ].join('\n'),
+    }),
   },
   {
     id: 'yarn-classic',
@@ -113,12 +124,12 @@ const PACKAGE_MANAGERS: {
   },
   {
     id: 'nub',
-    install: ['nub', 'install', '--no-frozen-lockfile'],
+    install: ['nub', 'install', '--no-frozen-lockfile', '--minimum-release-age=0'],
     eslint: ['nubx', 'eslint'],
   },
   {
     id: 'deno',
-    install: ['deno', 'install'],
+    install: ['deno', 'install', '--minimum-dependency-age=0'],
     eslint: ['deno', 'run', '--allow-all', 'node_modules/eslint/bin/eslint.js'],
   },
 ];
