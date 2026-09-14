@@ -120,6 +120,42 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain(`i --save-dev ${DE_MORGAN_PACKAGE}`);
   });
 
+  it.each([
+    {
+      packageManager: {name: 'npm', agent: 'npm'},
+      command: `npm i --save-dev ${DE_MORGAN_PACKAGE}`,
+      exactCommand: `npm i --save-dev --save-exact ${DE_MORGAN_PACKAGE}`,
+    },
+    {
+      packageManager: {name: 'yarn', agent: 'yarn@berry'},
+      command: `yarn add --dev ${DE_MORGAN_PACKAGE}`,
+      exactCommand: `yarn add --dev --exact ${DE_MORGAN_PACKAGE}`,
+    },
+    {
+      packageManager: {name: 'bun', agent: 'bun'},
+      command: `bun i --dev ${DE_MORGAN_PACKAGE}`,
+      exactCommand: `bun i --dev --exact ${DE_MORGAN_PACKAGE}`,
+    },
+    {
+      packageManager: {name: 'deno', agent: 'deno'},
+      command: `deno add --dev npm:${DE_MORGAN_PACKAGE}`,
+      exactCommand: `deno add --dev --save-exact npm:${DE_MORGAN_PACKAGE}`,
+    },
+  ] as const)(
+    'suggests installation commands supported by $packageManager.name',
+    async ({packageManager, command, exactCommand}) => {
+      vi.mocked(detectPackageManager).mockResolvedValueOnce(packageManager);
+      mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+      await computeEslintConfig('deMorgan');
+
+      const output = stderrOutput();
+
+      expect(output).toContain(command);
+      expect(output).toContain(exactCommand);
+    },
+  );
+
   it('additionally reports a dependency an eagerly loaded plugin failed to load', async () => {
     const MISSING_DEPENDENCY = 'some-uninstalled-dependency';
 

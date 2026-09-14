@@ -1,4 +1,5 @@
 import {renderTable} from 'console-table-printer';
+import type {AgentName} from 'package-manager-detector';
 import {satisfies} from 'verkit';
 import {type DisableAutofixPrefix, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
@@ -62,6 +63,41 @@ const checkIfModuleCorrectlyLoaded = async (
 };
 
 const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
+
+const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Record<
+  AgentName,
+  {subcommand?: 'add' | 'i'; dev?: string; exact?: string}
+> = {
+  aube: {subcommand: 'add'},
+  bun: {dev: '--dev', exact: '--exact'},
+  deno: {subcommand: 'add', dev: '--dev'},
+  npm: {},
+  nub: {},
+  pnpm: {},
+  yarn: {subcommand: 'add', dev: '--dev', exact: '--exact'},
+};
+
+const generateInstallationCommand = (
+  packageManager: UnConfigContext['meta']['usedPackageManager'],
+  packageNames: string[],
+  isExact = false,
+) => {
+  const {
+    subcommand = 'i',
+    dev = '--save-dev',
+    exact = '--save-exact',
+  } = (packageManager && INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER[packageManager.name]) || {};
+  return [
+    packageManager?.name || '<your package manager>',
+    subcommand,
+    dev,
+    ...(isExact ? [exact] : []),
+    // Deno before v2.8 requires the prefix
+    ...(packageManager?.name === 'deno'
+      ? packageNames.map((packageName) => `npm:${packageName}`)
+      : packageNames),
+  ].join(' ');
+};
 
 const PACKAGE_REQUESTER_RENDERERS = {
   config: (configKeys) =>
@@ -284,8 +320,7 @@ export const resolveConfigAsyncData = async (
         .filter(Boolean)
         .join(' and ');
 
-      const generateInstallationCommand = (names: string[], isExactly = false): string =>
-        `${context.meta.usedPackageManager?.name || '<your package manager>'} i --save-dev${isExactly ? ' --save-exact' : ''} ${names.join(' ')}`;
+      const {usedPackageManager} = context.meta;
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
         `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'} to make this error disappear:
@@ -301,11 +336,18 @@ ${renderTable(
     })),
 )}
 Install them with:
-${styleText('cyan', generateInstallationCommand(packages.map(({name}) => name)))}
+${styleText(
+  'cyan',
+  generateInstallationCommand(
+    usedPackageManager,
+    packages.map(({name}) => name),
+  ),
+)}
 ... with explicit version ranges:
 ${styleText(
   'cyan',
   generateInstallationCommand(
+    usedPackageManager,
     packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`),
   ),
 )}
@@ -313,6 +355,7 @@ ${styleText(
 ${styleText(
   'cyan',
   generateInstallationCommand(
+    usedPackageManager,
     packages.map(({name}) => name),
     true,
   ),
@@ -321,6 +364,7 @@ ${styleText(
 ${styleText(
   'cyan',
   generateInstallationCommand(
+    usedPackageManager,
     packages.map(({name, versionRange}) =>
       versionRange
         ? `${name}@${versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '')}`
