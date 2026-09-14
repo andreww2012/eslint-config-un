@@ -821,14 +821,14 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       eslint-plugin-zod:
-        specifier: 4.12.1
-        version: 4.12.1(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
+        specifier: 4.13.0
+        version: 4.13.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
       eslint-plugin-zod-core:
-        specifier: 1.0.14
-        version: 1.0.14(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
+        specifier: 1.1.0
+        version: 1.1.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
       eslint-plugin-zod-mini:
-        specifier: 1.9.1
-        version: 1.9.1(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
+        specifier: 1.10.0
+        version: 1.10.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5)
       eslint-plugin-zod-openapi:
         specifier: 2.0.0
         version: 2.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -2548,8 +2548,8 @@ packages:
       eslint: '*'
       typescript: '*'
 
-  '@eslint-zod/utils@4.0.0':
-    resolution: {integrity: sha512-kqRYnin4TDGI4oA/RH3ttVS7lxSSb+4B3r8spYawNiud3TH6vKewnqfkAi7HqXiFFJy0w1WOTJHeO7hM6To7oQ==}
+  '@eslint-zod/utils@5.0.0':
+    resolution: {integrity: sha512-uOUIOSpSbfV1Icx9x5FJJF5vTa/deJetZFEVo73POf3CKFuu8vCHQpFJFf1savIH7h4Oo3vI+XjOCFRHu9abzQ==}
     engines: {node: ^20 || ^22 || >=24}
 
   '@eslint/compat@2.1.1':
@@ -8499,8 +8499,8 @@ packages:
     resolution: {integrity: sha512-3zkkU/O1agczP7szJGHmisZJS/AknfVl6mb0Zqoc95dvFsdmfK+cbhrn+Ffy0UWB1pgDJwQr7kIO3rPstWs3Dw==}
     engines: {node: '>=4.0'}
 
-  eslint-plugin-zod-core@1.0.14:
-    resolution: {integrity: sha512-209dJtr5gn4DN+xLOI7pkqteav8As1mu/LhLqcIyt3ObFzpH8dLaAsn7rjMNxvteVioMCogdVd7ymuWJNt6rog==}
+  eslint-plugin-zod-core@1.1.0:
+    resolution: {integrity: sha512-RkPbtrpUtKzEbWxwj4WrPB57nSSX3olcSdEHSBEJjcjF/hqT4LWOX6UJft1rlMPSLcTEhqtAeyN68E536X7KJA==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -8514,8 +8514,8 @@ packages:
       zod:
         optional: true
 
-  eslint-plugin-zod-mini@1.9.1:
-    resolution: {integrity: sha512-3wm6A/bJvH1mprnVjAewlng0Mek0qx54FZII/d2LfqpOGWu6yOuh4Gq0IzW2qnFmh53fcrJf9WgBaqiBo7BItQ==}
+  eslint-plugin-zod-mini@1.10.0:
+    resolution: {integrity: sha512-1PfCeHlW2C8zjLZAJ634ThFMknAxYqBY4ZAoXRHSk5RE37J6uA0Q3Bqu8s0YEN1jvqAVCiTOJp6xwi87KhOgDg==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -8533,8 +8533,8 @@ packages:
     resolution: {integrity: sha512-4m44Uir2KlcxG2i/1gpInPMNMiWtcF8sG5k837ReT3t8eT+aNOHDr1vL2SN55yXQ6rQ6tiTmeBZbwg/DicTZ0A==}
     engines: {node: '>=16.11'}
 
-  eslint-plugin-zod@4.12.1:
-    resolution: {integrity: sha512-GutzQgU5aZlYbW0iClmoKhjOB3kWHpWwIJo9MQveiorsV3z5nAIgzATtF5LP+86+S796bIFRa0iJkL9uueLPoQ==}
+  eslint-plugin-zod@4.13.0:
+    resolution: {integrity: sha512-V8i+vB7ewCSVGVRB7VabhUD1tEBgTBu5DlRA/NSd7rujP3qTvImEdStsSqncCeGbnG+Aq3R7lHnwEB2depzshQ==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -15341,7 +15341,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-zod/utils@4.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)':
+  '@eslint-zod/utils@5.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       esquery: 1.7.0
@@ -21813,9 +21813,9 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod-core@1.0.14(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
+  eslint-plugin-zod-core@1.1.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
     dependencies:
-      '@eslint-zod/utils': 4.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+      '@eslint-zod/utils': 5.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
     optionalDependencies:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -21824,9 +21824,9 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-zod-mini@1.9.1(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
+  eslint-plugin-zod-mini@1.10.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
     dependencies:
-      '@eslint-zod/utils': 4.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+      '@eslint-zod/utils': 5.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
     optionalDependencies:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -21843,9 +21843,9 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-zod@4.12.1(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
+  eslint-plugin-zod@4.13.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)(zod@4.6.5):
     dependencies:
-      '@eslint-zod/utils': 4.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+      '@eslint-zod/utils': 5.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
     optionalDependencies:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)

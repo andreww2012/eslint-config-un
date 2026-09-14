@@ -8,5 +8,8 @@ export default definePluginMetadata('zod-core', {
   rules: {
     'consistent-import': {stylistic: true},
     'consistent-schema-output-type-style': {stylistic: true},
+    'prefer-validate': {
+      stylistic: [false, 'validation stops at the first failure, so later refinements may not run'],
+    },
   },
 });

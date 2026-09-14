@@ -11,6 +11,9 @@ export default definePluginMetadata('zod-mini', {
     'prefer-map-set-size-over-min-max': {stylistic: true},
     'prefer-nullish': {stylistic: true},
     'prefer-string-length-over-min-max': {stylistic: true},
+    'prefer-validate': {
+      stylistic: [false, 'validation stops at the first failure, so later refinements may not run'],
+    },
     'schema-error-property-style': {stylistic: true},
   },
 });

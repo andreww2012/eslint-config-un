@@ -1,3 +1,4 @@
+import {satisfies} from 'verkit';
 import {ERROR, OFF, WARNING} from '../constants';
 import type {SetRequired} from '../types';
 import {allUnionMembers, getKeysOfTruthyValues} from '../utils';
@@ -20,6 +21,8 @@ const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType>()([
   'strictObject',
 ]);
 
+type ZodSchemaCompiler = 'zodCompilerPackage' | 'zodCompileBuiltIn';
+
 interface MiniSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
   'zod-mini'
@@ -41,6 +44,17 @@ interface MiniSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * @default inherited from the respective option of the parent config
    */
   enforceConsistentImport?: boolean | GetRuleOptions<'zod-mini', 'consistent-import'>['syntax'];
+
+  /**
+   * Same as the respective option of the parent config.
+   * `true` is the same as not specifying the option.
+   *
+   * Affected rules:
+   * - [`zod-mini/no-dynamic-schema-value`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-dynamic-schema-value.md)
+   * - [`zod-mini/no-function-scoped-schema`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-function-scoped-schema.md)
+   * @default // inherited from the respective option of the parent config
+   */
+  schemaCompiler?: ZodSchemaCompiler | boolean;
 
   /**
    * Same as the respective option of the parent config.
@@ -112,7 +126,7 @@ export interface ZodEslintConfigOptions<
    * 🧩 Main plugin: [`eslint-plugin-zod-core`](https://npmx.dev/eslint-plugin-zod-core)
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/README.md))
    *
-   * Inherits `enforceNamespaceImport` from the parent config; pass an object to override.
+   * Inherits `enforceConsistentImport` from the parent config; pass an object to override.
    * @default true
    */
   configCore?: boolean | CoreSubConfigOptions<ExtraPlugins>;
@@ -126,8 +140,8 @@ export interface ZodEslintConfigOptions<
    * 🧩 Main plugin: [`eslint-plugin-zod-mini`](https://npmx.dev/eslint-plugin-zod-mini)
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/README.md))
    *
-   * Inherits `allowedObjectSchemaTypes`, `enforceNamespaceImport` and `schemaVariableName` from the
-   * parent config; pass an object to override.
+   * Inherits `allowedObjectSchemaTypes`, `enforceConsistentImport`, `schemaCompiler` and
+   * `schemaVariableName` from the parent config; pass an object to override.
    * @default true
    */
   configMini?: boolean | MiniSubConfigOptions<ExtraPlugins>;
@@ -146,6 +160,25 @@ export interface ZodEslintConfigOptions<
    * @default true
    */
   enforceConsistentImport?: boolean | GetRuleOptions<'zod', 'consistent-import'>['syntax'];
+
+  /**
+   * Zod schema compiler used in the project, enabling the rules that help it compile more schemas:
+   * - `'zodCompilerPackage'`: [`zod-compiler`](https://npmx.dev/zod-compiler) package, enables
+   * `zod/no-dynamic-schema-value`;
+   * - `'zodCompileBuiltIn'`: Zod's own [compiler](https://zod.dev/compile) used via
+   * `import 'zod/compile'` or `z.compile()`, enables `zod/no-function-scoped-schema`;
+   * - `true`: same as not specifying the option;
+   * - `false`: none of the rules are enabled.
+   *
+   * ⚠️ The option value will propagate to the option of the same name in `mini` sub-config, unless
+   * explicitly overridden there.
+   *
+   * Affected rules:
+   * - [`zod/no-dynamic-schema-value`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-dynamic-schema-value.md)
+   * - [`zod/no-function-scoped-schema`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-function-scoped-schema.md)
+   * @default // 'zodCompilerPackage' if `zod-compiler` package is installed, `false` otherwise
+   */
+  schemaCompiler?: ZodSchemaCompiler | boolean;
 
   /**
    * Enforces a consistent naming convention for Zod schema variables by requiring them to start
@@ -210,6 +243,11 @@ const resolveConsistentObjectSchemaTypeOptions = (
   return [severity, options] as const;
 };
 
+const resolveSchemaCompiler = (
+  schemaCompiler: ZodSchemaCompiler | boolean | undefined,
+  schemaCompilerDefault: ZodSchemaCompiler | false,
+) => (schemaCompiler == null || schemaCompiler === true ? schemaCompilerDefault : schemaCompiler);
+
 const DEFAULT_SCHEMA_VARIABLE_NAME = 'Zod';
 
 const resolveConsistentSchemaVarNameOptions = (
@@ -250,8 +288,16 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
 
   const {arrayStyle, configCore, configMini} = optionsResolved;
 
-  const zodMajorVersion = context.packagesInfo.zod?.versions.major ?? 4;
-  const severityForRulesOnlyForV4 = zodMajorVersion >= 4 ? ERROR : OFF;
+  const zodPackageVersions = context.packagesInfo.zod?.versions;
+  const severityForRulesOnlyForV4 = (zodPackageVersions?.major ?? 4) >= 4 ? ERROR : OFF;
+  // `.validate()` added in v4.6
+  const severityForPreferValidate =
+    zodPackageVersions == null || satisfies(zodPackageVersions.full, '>=4.6') ? ERROR : OFF;
+
+  const schemaCompiler = resolveSchemaCompiler(
+    optionsResolved.schemaCompiler,
+    context.packagesInfo['zod-compiler'] ? 'zodCompilerPackage' : false,
+  );
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
 
@@ -283,7 +329,15 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('no-coerce-boolean', ERROR) /** @since 4.7.0 */ // 🟢
     .addRule('no-conflicting-checks', ERROR) /** @since 4.8.0 */
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 4.6.0 */ // 🟢
+    .addRule(
+      'no-dynamic-schema-value',
+      schemaCompiler === 'zodCompilerPackage' ? ERROR : OFF,
+    ) /** @since 4.13.0 */
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule(
+      'no-function-scoped-schema',
+      schemaCompiler === 'zodCompileBuiltIn' ? ERROR : OFF,
+    ) /** @since 4.13.0 */
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 4.2.0 */ // 🟢
     // `.int()` added in v4
     .addRule('no-number-schema-with-finite', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
@@ -314,6 +368,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🟢
     // Note: not considered stylistic because may change types
     .addRule('prefer-tuple-over-array-length', ERROR) /** @since 4.8.0 */
+    .addRule('prefer-validate', severityForPreferValidate) /** @since 4.13.0 */
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('schema-error-property-style', OFF) /** @since 1.8.0 */
@@ -326,6 +381,10 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
   optionsMiniResolved.allowedObjectSchemaTypes ??= optionsResolved.allowedObjectSchemaTypes;
   const miniSchemaVariableName =
     optionsMiniResolved.schemaVariableName ?? optionsResolved.schemaVariableName;
+  const miniSchemaCompiler = resolveSchemaCompiler(
+    optionsMiniResolved.schemaCompiler,
+    schemaCompiler,
+  );
 
   const configBuilderMini = context.createConfigBuilder(configMini, 'zod-mini');
 
@@ -354,7 +413,15 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('no-coerce-boolean', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-conflicting-checks', ERROR) /** @since 1.5.0 */
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 1.3.0 */ // 🟢
+    .addRule(
+      'no-dynamic-schema-value',
+      miniSchemaCompiler === 'zodCompilerPackage' ? ERROR : OFF,
+    ) /** @since 1.10.0 */
     .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule(
+      'no-function-scoped-schema',
+      miniSchemaCompiler === 'zodCompileBuiltIn' ? ERROR : OFF,
+    ) /** @since 1.10.0 */
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
@@ -368,6 +435,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('prefer-string-length-over-min-max', ERROR) /** @since 1.7.0 */
     // Note: not considered stylistic because may change types
     .addRule('prefer-tuple-over-array-length', ERROR) /** @since 1.5.0 */
+    .addRule('prefer-validate', severityForPreferValidate) /** @since 1.10.0 */
     .addRule('require-brand-type-parameter', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('schema-error-property-style', OFF) /** @since 0.1.0 */
@@ -392,6 +460,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
       ...resolveConsistentImportOptions(optionsCoreResolved),
     ) /** @since 1.0.0 */ // 🟢
     .addRule('consistent-schema-output-type-style', ERROR) /** @since 1.0.0 */
+    .addRule('prefer-validate', severityForPreferValidate) /** @since 1.1.0 */
     .enableConfigTesterForPlugin('zod-core')
     .addOverrides();
 });

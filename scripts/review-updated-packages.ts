@@ -206,7 +206,11 @@ const readUnreleasedChangesets = async () => {
       const {data, content} = matter(
         await fs.readFile(path.join(CHANGESETS_DIR_PATH, `${id}.md`), 'utf8'),
       );
-      return ChangesetFrontmatterZod.safeParse(data).success ? {id, summary: content.trim()} : null;
+      return ChangesetFrontmatterZod.validate(
+        data, // eslint-disable-line ts/no-unnecessary-condition
+      )
+        ? {id, summary: content.trim()}
+        : null;
     }),
   );
 

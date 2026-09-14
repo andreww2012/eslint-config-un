@@ -44,6 +44,10 @@ minimumReleaseAgeExclude: # []
   - puppeteer@25.11.0
   - release-it@21.0.3
   - zod@4.6.5
+  - '@eslint-zod/utils@5.0.0'
+  - eslint-plugin-zod-core@1.1.0
+  - eslint-plugin-zod-mini@1.10.0
+  - eslint-plugin-zod@4.13.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

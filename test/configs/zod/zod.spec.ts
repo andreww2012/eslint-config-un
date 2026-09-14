@@ -128,6 +128,21 @@ describe('rules', async () => {
 
     expect(configResult.getRuleEntrySeverity('zod', 'zod/no-number-schema-with-int')).toBe(2);
     expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-meta')).toBe(2);
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-validate')).toBe(2);
+  });
+
+  it('disables `zod/prefer-validate` rule when zod <4.6 is installed', async () => {
+    const configResult = await computeEslintConfig('zod');
+
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-validate')).toBe(0);
+  });
+
+  it('enables `zod/prefer-validate` rule when zod >=4.6 is installed', async () => {
+    addInstalledPackages({zod: '4.10.0'});
+
+    const configResult = await computeEslintConfig('zod');
+
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-validate')).toBe(2);
   });
 
   it('`zod/consistent-schema-var-name` rule fires when schema variable lacks configured suffix', async () => {
@@ -242,6 +257,70 @@ describe('options', () => {
       expect(configResult.getRuleEntry('zod', 'zod/consistent-import')).toMatchInlineSnapshot(
         '[2, {"syntax": "namespace"}]',
       );
+    });
+  });
+
+  describe('option: `schemaCompiler`', () => {
+    it('disables `zod/no-dynamic-schema-value` and `zod/no-function-scoped-schema` rules by default', async () => {
+      const configResult = await computeEslintConfig('zod');
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 0,
+        'zod/no-function-scoped-schema': 0,
+      });
+    });
+
+    it('enables only `zod/no-dynamic-schema-value` rule by default when `zod-compiler` package is installed', async () => {
+      addInstalledPackages({'zod-compiler': '2.0.4'});
+
+      const configResult = await computeEslintConfig('zod');
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 2,
+        'zod/no-function-scoped-schema': 0,
+      });
+    });
+
+    it('enables only `zod/no-dynamic-schema-value` rule when option is `true` and `zod-compiler` package is installed', async () => {
+      addInstalledPackages({'zod-compiler': '2.0.4'});
+
+      const configResult = await computeEslintConfig({zod: {schemaCompiler: true}});
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 2,
+        'zod/no-function-scoped-schema': 0,
+      });
+    });
+
+    it("enables only `zod/no-dynamic-schema-value` rule when option is `'zodCompilerPackage'`", async () => {
+      const configResult = await computeEslintConfig({zod: {schemaCompiler: 'zodCompilerPackage'}});
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 2,
+        'zod/no-function-scoped-schema': 0,
+      });
+    });
+
+    it("enables only `zod/no-function-scoped-schema` rule when option is `'zodCompileBuiltIn'`", async () => {
+      addInstalledPackages({'zod-compiler': '2.0.4'});
+
+      const configResult = await computeEslintConfig({zod: {schemaCompiler: 'zodCompileBuiltIn'}});
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 0,
+        'zod/no-function-scoped-schema': 2,
+      });
+    });
+
+    it('disables `zod/no-dynamic-schema-value` and `zod/no-function-scoped-schema` rules when option is `false`', async () => {
+      addInstalledPackages({'zod-compiler': '2.0.4'});
+
+      const configResult = await computeEslintConfig({zod: {schemaCompiler: false}});
+
+      expect(configResult.getRuleSeverities('zod')).toMatchObject({
+        'zod/no-dynamic-schema-value': 0,
+        'zod/no-function-scoped-schema': 0,
+      });
     });
   });
 

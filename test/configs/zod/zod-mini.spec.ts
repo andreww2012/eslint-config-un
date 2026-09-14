@@ -219,6 +219,76 @@ describe('zod: sub config `mini`', () => {
       });
     });
 
+    describe('option: `schemaCompiler`', () => {
+      it('inherits parent default value when `zod-compiler` package is installed', async () => {
+        addInstalledPackages({'zod-compiler': '2.0.4'});
+
+        const configResult = await computeEslintConfig('zod');
+
+        expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
+          'zod-mini/no-dynamic-schema-value': 2,
+          'zod-mini/no-function-scoped-schema': 0,
+        });
+      });
+
+      it("inherits parent `'zodCompileBuiltIn'` value", async () => {
+        const configResult = await computeEslintConfig({
+          zod: {schemaCompiler: 'zodCompileBuiltIn'},
+        });
+
+        expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
+          'zod-mini/no-dynamic-schema-value': 0,
+          'zod-mini/no-function-scoped-schema': 2,
+        });
+      });
+
+      it('inherits parent value when set to `true` in sub-config', async () => {
+        const configResult = await computeEslintConfig({
+          zod: {
+            schemaCompiler: 'zodCompileBuiltIn',
+            configMini: {schemaCompiler: true},
+          },
+        });
+
+        expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
+          'zod-mini/no-dynamic-schema-value': 0,
+          'zod-mini/no-function-scoped-schema': 2,
+        });
+      });
+
+      it("overrides parent value when set to `'zodCompilerPackage'` in sub-config", async () => {
+        const configResult = await computeEslintConfig({
+          zod: {
+            schemaCompiler: 'zodCompileBuiltIn',
+            configMini: {schemaCompiler: 'zodCompilerPackage'},
+          },
+        });
+
+        expect(configResult.getRuleSeverities('zod')).toMatchObject({
+          'zod/no-dynamic-schema-value': 0,
+          'zod/no-function-scoped-schema': 2,
+        });
+        expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
+          'zod-mini/no-dynamic-schema-value': 2,
+          'zod-mini/no-function-scoped-schema': 0,
+        });
+      });
+
+      it('overrides parent default value when set to `false` in sub-config', async () => {
+        addInstalledPackages({'zod-compiler': '2.0.4'});
+
+        const configResult = await computeEslintConfig({
+          zod: {configMini: {schemaCompiler: false}},
+        });
+
+        expect(configResult.getRuleEntrySeverity('zod', 'zod/no-dynamic-schema-value')).toBe(2);
+        expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
+          'zod-mini/no-dynamic-schema-value': 0,
+          'zod-mini/no-function-scoped-schema': 0,
+        });
+      });
+    });
+
     describe('option: `schemaVariableName`', () => {
       it('inherits parent `false` value, disabling `zod-mini/consistent-schema-var-name`', async () => {
         const configResult = await computeEslintConfig({zod: {schemaVariableName: false}});
