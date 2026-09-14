@@ -7,10 +7,7 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - '@eslint-zod/utils@4.0.0'
-  - eslint-plugin-zod-core@1.0.14
-  - eslint-plugin-zod-mini@1.9.1
-  - eslint-plugin-zod@4.12.1
+  - eslint-plugin-jsdoc@64.4.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
