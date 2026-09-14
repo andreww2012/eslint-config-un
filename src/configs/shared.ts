@@ -253,6 +253,7 @@ export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
 export const CORE_RULES_HANDLED_BY_TS_COMPILER = [
   'constructor-super',
   'getter-return',
+  'no-class-assign',
   'no-const-assign',
   'no-dupe-args',
   'no-dupe-class-members',
@@ -272,6 +273,7 @@ export const CORE_RULES_HANDLED_BY_TS_COMPILER = [
   // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
   // 'no-unreachable',
   'no-unsafe-negation',
+  'no-with',
   // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
   'no-duplicate-imports',
 ] satisfies GetRuleNamesInPlugin<''>[];

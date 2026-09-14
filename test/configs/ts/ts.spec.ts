@@ -98,6 +98,18 @@ describe('rules', () => {
     });
   });
 
+  it('turns off the core rules the TypeScript compiler already checks', async () => {
+    const configResult = await computeEslintConfig('ts');
+
+    expect(configResult.getRuleSeverities('ts/disable-handled-by-ts-compiler-rules')).toMatchObject(
+      {
+        'no-class-assign': 0,
+        'no-undef': 0,
+        'no-with': 0,
+      },
+    );
+  });
+
   it('`ts/no-explicit-any` rule fires on a file with `any`', async () => {
     const results = await testEslintConfig('ts', FIXTURES.explicitAny, import.meta.dirname);
 

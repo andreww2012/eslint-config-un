@@ -833,7 +833,6 @@ export default defineUnConfig<
   // ❄️ = Feature-frozen in ts-eslint
   // 👍 = Auto-checked and there's barely any need to use this rule
 
-  // TODO add rules
   configBuilderNONTypeAware
     ?.addConfig(['ts/non-type-aware/rules', {parseWith: 'ts'}])
     // Unlike in the `js` config, also turned off in the framework files this config lints
@@ -1196,7 +1195,6 @@ export default defineUnConfig<
     ...filesTypeAware,
   ]);
 
-  // TODO add rules
   configBuilderNONTypeAware
     ?.addConfig(['ts/disable-handled-by-ts-compiler-rules', {applyUserFilesAndIgnores: false}], {
       files: allTypescriptFiles,
