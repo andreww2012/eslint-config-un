@@ -80,6 +80,8 @@ strictPeerDependencies: false
 overrides:
   brace-expansion@>=5.0.0 <5.0.9: 5.0.9
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
+  # 2.0.7 dropped the `.js` files the plugin imports
+  eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   smol-toml@<=1.7.0: ^1.7.1
 
 patchedDependencies:
