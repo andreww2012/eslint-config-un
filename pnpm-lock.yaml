@@ -212,7 +212,7 @@ overrides:
 patchedDependencies:
   '@eslint/compat': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
-  eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
+  eslint-plugin-prettier@5.5.6: db6dd8b3e0bee49566664829f18213af5b7728840827fb74e8b2e59bcf0f1191
   eslint-typegen: 4d8c32b04694af309caffb5c8be4c9c4db4fbd35ec57dc9959d7b5c57530e110
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
   npm-check-updates: 3da5b2c3d914ea3e6f5fd839fd1feccbc8d1e8028d587a6e89f7d2f36fca3f86
@@ -230,9 +230,6 @@ importers:
       '@e18e/eslint-plugin':
         specifier: 0.8.0
         version: 0.8.0(eslint@10.10.0)
-      '@eslint-community/eslint-plugin-eslint-comments':
-        specifier: 4.8.0
-        version: 4.8.0(eslint@10.10.0)
       '@eslint-community/eslint-utils':
         specifier: 4.10.1
         version: 4.10.1(eslint@10.10.0)
@@ -266,6 +263,9 @@ importers:
       '@typescript-eslint/types':
         specifier: 8.70.0
         version: 8.70.0
+      '@typescript-eslint/utils':
+        specifier: 8.70.0
+        version: 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       ci-info:
         specifier: 4.4.0
         version: 4.4.0
@@ -453,6 +453,9 @@ importers:
       '@effect/platform-node':
         specifier: 4.0.0-rc.112
         version: 4.0.0-rc.112(effect@4.0.0-rc.112)(redis@6.2.1)
+      '@eslint-community/eslint-plugin-eslint-comments':
+        specifier: 4.8.0
+        version: 4.8.0(eslint@10.10.0)
       '@eslint-react/eslint-plugin':
         specifier: 5.19.0
         version: 5.19.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -740,7 +743,7 @@ importers:
         version: 3.10.2(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       eslint-plugin-prettier:
         specifier: 5.5.6
-        version: 5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@10.10.0)(prettier@3.9.6)
+        version: 5.5.6(patch_hash=db6dd8b3e0bee49566664829f18213af5b7728840827fb74e8b2e59bcf0f1191)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@10.10.0)(prettier@3.9.6)
       eslint-plugin-qunit:
         specifier: 8.2.6
         version: 8.2.6(eslint@10.10.0)
@@ -21443,7 +21446,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-prettier@5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@10.10.0)(prettier@3.9.6):
+  eslint-plugin-prettier@5.5.6(patch_hash=db6dd8b3e0bee49566664829f18213af5b7728840827fb74e8b2e59bcf0f1191)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@10.10.0)(prettier@3.9.6):
     dependencies:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       prettier: 3.9.6

@@ -169,19 +169,9 @@ export const pluginsLoaders = {
   e18e: genModuleLoader('e18e', '@e18e/eslint-plugin', () =>
     interopDefault(import('@e18e/eslint-plugin')),
   ),
-  ember: genModuleLoader('ember', 'eslint-plugin-ember', async () => {
-    // Pre-load `ember-eslint-parser` fully before loading `eslint-plugin-ember` (CJS)
-    // to avoid a race condition:
-    // - both packages share ESM dependencies (`noop.js`,
-    // `eslint-scope`, `mathml-tag-names`, `html-tags`, `svg-tags`, etc.).
-    // - `eslint-plugin-ember`'s CJS code uses `require()` on these ESM deps
-    // - Node 22's `require(esm)` fails if those deps are concurrently being loaded via `import()`
-    // (e.g. via the `ember-eslint-parser` parser loader).
-    // Pre-loading `ember-eslint-parser` ensures all shared ESM deps are cached first.
-    /* v8 ignore next - The parser is installed, so the rejection never happens */
-    await import('ember-eslint-parser').catch(() => null);
-    return await interopDefault(import('eslint-plugin-ember'));
-  }),
+  ember: genModuleLoader('ember', 'eslint-plugin-ember', () =>
+    interopDefault(import('eslint-plugin-ember')),
+  ),
   'erasable-syntax-only': genModuleLoader(
     'erasable-syntax-only',
     'eslint-plugin-erasable-syntax-only',
@@ -656,24 +646,16 @@ export const pluginsLoaders = {
   vue: genModuleLoader('vue', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')),
   ),
-  'vue-i18n': genModuleLoader('vue-i18n', '@intlify/eslint-plugin-vue-i18n', async () => {
-    // Pre-load `{jsonc,yaml}-eslint-parser` (ESM) before loading
-    // `@intlify/eslint-plugin-vue-i18n` (CJS).
-    // The CJS plugin uses `require()` on `jsonc-eslint-parser`;
-    // on Node 24, `require(esm)` fails if that module is concurrently being loaded
-    // via `import()` elsewhere (race condition).
-    /* eslint-disable import/no-extraneous-dependencies */
-    /* v8 ignore next - The parser is installed, so the rejection never happens */
-    await import('jsonc-eslint-parser').catch(() => null);
-    /* v8 ignore next - The parser is installed, so the rejection never happens */
-    await import('yaml-eslint-parser').catch(() => null);
-    /* eslint-enable import/no-extraneous-dependencies */
-    // @ts-expect-error types mismatch
-    return await (interopDefault(
-      import('@intlify/eslint-plugin-vue-i18n'),
+  'vue-i18n': genModuleLoader(
+    'vue-i18n',
+    '@intlify/eslint-plugin-vue-i18n',
+    () =>
       // @ts-expect-error types mismatch
-    ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>);
-  }),
+      interopDefault(
+        import('@intlify/eslint-plugin-vue-i18n'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   'vue-scoped-css': genModuleLoader(
     'vue-scoped-css',
     'eslint-plugin-vue-scoped-css',

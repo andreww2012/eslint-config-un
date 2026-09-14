@@ -1,5 +1,7 @@
+// cspell:ignore pnpapi
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
 import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
@@ -31,6 +33,7 @@ export {
   type MaybeFn,
   maybeCall,
   memoize,
+  Mutex,
   objectKeysUnsafe as objectKeysUnsafe2,
   omit,
   pick,
@@ -165,6 +168,28 @@ export const readAndParseJson = async <T>(filePath: string | URL | undefined): P
       )
     : null;
 
+// Yarn PnP has no `node_modules` for `import-meta-resolve` to traverse
+// eslint-disable-next-line ts/no-unsafe-assignment -- `pnpapi` has no bundled types
+const pnpApi: {resolveToUnqualified: (request: string, issuer: string) => string | null} | null =
+  process.versions['pnp'] ? createRequire(import.meta.url)('pnpapi') : null;
+
+const resolvePackageJsonPath = (packageName: string) => {
+  try {
+    if (pnpApi) {
+      // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
+      return pnpApi.resolveToUnqualified(`${packageName}/package.json`, import.meta.filename);
+    }
+
+    // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
+    // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
+    resolvePackage(packageName, import.meta.url);
+    return getLastResolvedPackageJsonUrl();
+  } catch {
+    // If module is not resolved, the error is thrown
+    return null;
+  }
+};
+
 export const fetchPackageInfo = async (
   packageName: string,
 ): Promise<{
@@ -175,16 +200,9 @@ export const fetchPackageInfo = async (
     majorAndMinor: number | null;
   };
 } | null> => {
-  // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
-  // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
-  try {
-    resolvePackage(packageName, import.meta.url);
-  } catch {
-    // If module is not resolved, the error is thrown
-  }
-  const packageJsonUrl = getLastResolvedPackageJsonUrl();
+  const packageJsonPath = resolvePackageJsonPath(packageName);
 
-  const packageInfo = packageJsonUrl ? await readAndParseJson<PackageJson>(packageJsonUrl) : null;
+  const packageInfo = packageJsonPath ? await readAndParseJson<PackageJson>(packageJsonPath) : null;
   if (!packageInfo) {
     return null;
   }

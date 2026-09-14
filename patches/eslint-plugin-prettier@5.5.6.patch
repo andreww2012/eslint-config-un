@@ -1,5 +1,5 @@
 diff --git a/eslint-plugin-prettier.js b/eslint-plugin-prettier.js
-index 7a6ecedaf60013f14308f636dfc031e0647fe099..5a0c3c110645da1258fce1e3c4462e4b0ab3d0c7 100644
+index 7a6ecedaf60013f14308f636dfc031e0647fe099..904c97ec952594923a6a62751c3658ffdced16c5 100644
 --- a/eslint-plugin-prettier.js
 +++ b/eslint-plugin-prettier.js
 @@ -18,6 +18,7 @@
@@ -17,7 +17,7 @@ index 7a6ecedaf60013f14308f636dfc031e0647fe099..5a0c3c110645da1258fce1e3c4462e4b
 + *   eslintTakeoverMode: boolean,
   * ) => string} PrettierFormat
   */
- 
+
 @@ -167,6 +169,7 @@ const eslintPluginPrettier = {
                  properties: {},
                  additionalProperties: true,
@@ -31,9 +31,18 @@ index 7a6ecedaf60013f14308f636dfc031e0647fe099..5a0c3c110645da1258fce1e3c4462e4b
          /** @type {FileInfoOptions} */
          const fileInfoOptions = options?.fileInfoOptions || {};
 +        const eslintTakeoverMode = options?.eslintTakeoverMode ?? false;
- 
+
          // `context.getSourceCode()` was deprecated in ESLint v8.40.0 and replaced
          // with the `sourceCode` property.
+@@ -212,7 +216,7 @@ const eslintPluginPrettier = {
+             if (!prettierFormat) {
+               // Prettier is expensive to load, so only load it if needed.
+               prettierFormat = /** @type {PrettierFormat} */ (
+-                require('synckit').createSyncFn(require.resolve('./worker.mjs'))
++                require('synckit').createSyncFn(require('node:path').join(__dirname, 'worker.mjs'))
+               );
+             }
+
 @@ -250,6 +254,7 @@ const eslintPluginPrettier = {
                    usePrettierrc,
                  },
@@ -57,7 +66,7 @@ index 1451209f44b626ef3e6f0b8c3e719db99fb791f8..ceb3b4bb8049ecdb8714a358126e91fc
 @@ -39,6 +40,9 @@ runAsWorker(
          })
        : null;
- 
+
 +    const initialOptions = {};
 +
 +    if(!eslintTakeoverMode) {
@@ -67,10 +76,10 @@ index 1451209f44b626ef3e6f0b8c3e719db99fb791f8..ceb3b4bb8049ecdb8714a358126e91fc
 @@ -55,7 +59,7 @@ runAsWorker(
        return;
      }
- 
+
 -    const initialOptions = { parser: inferredParser ?? 'babel' };
 +    initialOptions.parser = inferredParser ?? 'babel';
- 
+
      // ESLint supports processors that let you extract and lint JS
      // fragments within a non-JS language. In the cases where prettier
 @@ -173,6 +177,7 @@ runAsWorker(
@@ -78,6 +87,6 @@ index 1451209f44b626ef3e6f0b8c3e719db99fb791f8..ceb3b4bb8049ecdb8714a358126e91fc
        }
      }
 +    }
- 
+
      /** @type {PrettierOptions} */
      const prettierOptions = {

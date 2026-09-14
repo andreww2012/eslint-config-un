@@ -1,3 +1,4 @@
+import {createRequire} from 'node:module';
 import path from 'node:path';
 import url from 'node:url';
 import {
@@ -21,6 +22,8 @@ const fixturePath = (fixtureName: string) =>
   path.join(import.meta.dirname, 'fixtures', fixtureName);
 
 const MISSING_FILE_PATH = fixturePath('this-file-does-not-exist.json');
+
+const UTILS_SOURCE_FILE_REGEXP = /utils\.ts$/;
 
 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
@@ -187,6 +190,49 @@ describe('fetchPackageInfo', () => {
 
   it('resolves a scoped package', async () => {
     expect((await fetchPackageInfo('@antfu/utils'))?.info.name).toBe('@antfu/utils');
+  });
+
+  describe('under Yarn PnP', () => {
+    const resolveToUnqualified = vi.fn<(request: string, issuer: string) => string | null>();
+    // Borrows the rest of `require`'s shape from the real one to satisfy its type
+    const requirePnpApi = Object.assign(
+      () => ({resolveToUnqualified}),
+      createRequire(import.meta.url),
+    );
+
+    const importUtilsUnderPnp = async () => {
+      process.versions['pnp'] = '3';
+      vi.resetModules();
+      vi.doMock(import('node:module'), () => ({createRequire: () => requirePnpApi}));
+      return await vi.importActual<typeof import('../src/utils')>('../src/utils');
+    };
+
+    afterEach(() => {
+      delete process.versions['pnp'];
+      resolveToUnqualified.mockReset();
+      vi.doUnmock(import('node:module'));
+      vi.resetModules();
+    });
+
+    it('reads `package.json` located by the PnP API', async () => {
+      resolveToUnqualified.mockReturnValue(fixturePath(FIXTURES.plainObjectJson));
+      const utils = await importUtilsUnderPnp();
+
+      expect((await utils.fetchPackageInfo('typescript'))?.info).toStrictEqual({greeting: 'hello'});
+      expect(resolveToUnqualified).toHaveBeenCalledExactlyOnceWith(
+        'typescript/package.json',
+        expect.stringMatching(UTILS_SOURCE_FILE_REGEXP),
+      );
+    });
+
+    it('returns `null` when the PnP API cannot resolve the package', async () => {
+      resolveToUnqualified.mockImplementation(() => {
+        throw new Error('not declared in its dependencies');
+      });
+      const utils = await importUtilsUnderPnp();
+
+      await expect(utils.fetchPackageInfo('typescript')).resolves.toBeNull();
+    });
   });
 });
 

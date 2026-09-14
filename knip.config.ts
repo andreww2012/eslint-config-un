@@ -18,6 +18,9 @@ const config: KnipConfig = {
     'src/plugins/*.ts',
   ],
   ignoreDependencies: ['lychee-config-nick2bad4u'],
+  vitest: {
+    config: ['vitest.config.ts', 'vitest.e2e.config.ts'],
+  },
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
   cycles: {

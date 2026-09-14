@@ -2,7 +2,7 @@ import type * as Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
-import {type MaybeArray, arrayify, interopDefault, isKeyIn, maybeCall} from '../utils';
+import {type MaybeArray, Mutex, arrayify, interopDefault, isKeyIn, maybeCall} from '../utils';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
 export type EslintParser = Eslint.Linter.Parser;
@@ -29,6 +29,9 @@ const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find (?:module|package) '
 // Path starting with a dot or a Windows drive letter are not a package name
 const PATH_SPECIFIER_REGEXP = /^(?:[./\\]|[a-z]:)/i;
 
+// Every Node version fails when a CommonJS module `require()`s a module an `import()` is still loading: https://nodejs.org/api/errors.html#err_require_esm_race_condition
+const moduleLoadingMutex = new Mutex();
+
 function createModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
@@ -37,6 +40,7 @@ function createModuleLoader<T, N extends string>(
 ): ModuleLoader<T, N> {
   const result: ModuleLoader<T, N> = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
+    await moduleLoadingMutex.acquire();
     try {
       const {plugins} = context.rootOptions;
       const providedPlugin = plugins && isKeyIn(property, plugins) && plugins[property]?.plugin;
@@ -92,6 +96,8 @@ function createModuleLoader<T, N extends string>(
       }
 
       return {module: null, packageName};
+    } finally {
+      moduleLoadingMutex.release();
     }
   };
   result.packageName = packageName;

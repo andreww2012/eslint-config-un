@@ -1,6 +1,11 @@
 import {configDefaults, defineConfig} from 'vitest/config';
 
-const exclude = [...configDefaults.exclude, 'test/**/fixtures/**', '.claude/**'];
+const exclude = [
+  ...configDefaults.exclude,
+  'test/**/fixtures/**',
+  '.claude/**',
+  'test/e2e/**', // Run separately through `vitest.e2e.config.ts`
+];
 
 export default defineConfig({
   test: {

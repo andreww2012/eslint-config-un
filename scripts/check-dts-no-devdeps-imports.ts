@@ -146,7 +146,7 @@ if (leaks.size > 0) {
     }
   }
   console.error(
-    `\nAdd these to the ${styleText('cyan', 'dts.resolve')} array in ${styleText('cyan', 'tsdown.config.ts')}.`,
+    `\nRemove them from ${styleText('cyan', 'deps.dts.neverBundle')} in ${styleText('cyan', 'tsdown.config.ts')} to inline their types, or declare them as optional peer dependencies if their types can't be inlined.`,
   );
   process.exit(1);
 }

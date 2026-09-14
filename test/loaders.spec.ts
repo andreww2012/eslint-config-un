@@ -1,8 +1,11 @@
+import {setImmediate} from 'node:timers/promises';
 import {MODULE_NOT_FOUND_ERROR_CODES, genModuleLoader} from '../src/loaders/shared';
 
 const LOADED_PACKAGE = 'eslint-config-un-loaded-package';
 const MISSING_PACKAGE = 'eslint-config-un-definitely-not-installed';
 const MISSING_RELATIVE_PATH = './definitely-not-a-file.mjs';
+
+const createLoaderContext = () => ({rootOptions: {}, missingPackages: new Map()});
 
 describe('module loaders', () => {
   describe('missing packages reporting', () => {
@@ -95,6 +98,42 @@ describe('module loaders', () => {
         module: null,
       });
       expect([...missingPackages]).toBeEmpty();
+    });
+  });
+
+  describe('concurrency', () => {
+    it('does not start loading a module until the previous one is loaded', async () => {
+      const {promise: firstModule, resolve: resolveFirstModule} = Promise.withResolvers<object>();
+      const loadSecondModule = vi.fn<() => object>(() => ({}));
+
+      const firstLoad = genModuleLoader(
+        'first',
+        LOADED_PACKAGE,
+        () => firstModule,
+      )(createLoaderContext());
+      const secondLoad = genModuleLoader(
+        'second',
+        LOADED_PACKAGE,
+        loadSecondModule,
+      )(createLoaderContext());
+      await setImmediate();
+
+      expect(loadSecondModule).not.toHaveBeenCalled();
+
+      resolveFirstModule({});
+      await Promise.all([firstLoad, secondLoad]);
+
+      expect(loadSecondModule).toHaveBeenCalledOnce();
+    });
+
+    it('keeps loading modules after one fails to load', async () => {
+      const failingLoad = genModuleLoader('failing', LOADED_PACKAGE, () => {
+        throw new Error('Unexpected error');
+      })(createLoaderContext());
+      const nextLoad = genModuleLoader('next', LOADED_PACKAGE, () => ({}))(createLoaderContext());
+
+      await expect(failingLoad).rejects.toThrow('Unexpected error');
+      await expect(nextLoad).resolves.toMatchObject({module: {}});
     });
   });
 });
