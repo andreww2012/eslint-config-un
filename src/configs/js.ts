@@ -1,7 +1,12 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TS_X, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
-import {resolveFilesOption, resolveIgnoresOption} from './shared';
+import {
+  CORE_RULES_HANDLED_BY_TS_COMPILER,
+  CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
+  resolveFilesOption,
+  resolveIgnoresOption,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -340,6 +345,15 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
     .addRule('unicode-bom', ERROR) /** @since 2.11.0 */
     .enableConfigTesterForPlugin('')
     .addOverrides();
+
+  configBuilder
+    ?.addConfig(['js/disable-in-ts-files', {applyUserFilesAndIgnores: false}], {
+      files: [GLOB_TS_X],
+    })
+    .disableBulkRules([
+      ...CORE_RULES_HANDLED_BY_TS_COMPILER,
+      ...CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
+    ]);
 
   // TODO possible to do anything with this?
   // Note: do not exclude YAML or HTML files from ignore-list. This rule is triggered

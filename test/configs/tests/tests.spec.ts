@@ -1,6 +1,6 @@
 const FIXTURES = {
-  emptyFunctionInTestFile: 'empty-function.spec.ts',
-  emptyFunction: 'empty-function.ts',
+  emptyFunctionInTestFile: 'empty-function.spec.js',
+  emptyFunction: 'empty-function.js',
 } as const;
 
 /** Every rule the config turns off in test files. */

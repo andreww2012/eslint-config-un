@@ -1,11 +1,12 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML, GLOB_YML_YAML} from '../../../src/constants';
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML, GLOB_TS_X, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
+  typescriptSyntax: 'typescript-syntax.ts',
   usedConsoleLog: 'used-console-log.js',
 } as const;
 
 describe('basic tests', () => {
-  it('creates `js` and `js/stylistic_spaced-comment` eslint configs if set to `true`', async () => {
+  it('creates `js`, `js/stylistic_spaced-comment` and `js/disable-in-ts-files` eslint configs if set to `true`', async () => {
     const configResult = await computeEslintConfig('js');
 
     const config = configResult.getConfigByUnPostfix('js');
@@ -13,6 +14,9 @@ describe('basic tests', () => {
     expect(config).toBeDefined();
     expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeDefined();
     expect(config?.files).toBeUndefined();
+    expect(
+      configResult.getConfigByUnPostfix('js/disable-in-ts-files')?.files,
+    ).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
 
     const ignores = config?.ignores;
 
@@ -24,11 +28,12 @@ describe('basic tests', () => {
     ).toIncludeAllMembers([...(ignores || []), GLOB_YML_YAML, GLOB_HTM_HTML]);
   });
 
-  it('does not create `js` and `js/stylistic_spaced-comment` eslint configs if set to `false`', async () => {
+  it('does not create `js`, `js/stylistic_spaced-comment` and `js/disable-in-ts-files` eslint configs if set to `false`', async () => {
     const configResult = await computeEslintConfig({js: false});
 
     expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
     expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('js/disable-in-ts-files')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -90,6 +95,35 @@ describe('rules', async () => {
       '"Unexpected console statement. Only these console methods are allowed: warn, error."',
     );
   });
+
+  describe('in TypeScript files', () => {
+    it('turns off the rules misfiring on TypeScript syntax, but not the ones working there', () => {
+      const severities = configResult.getRuleSeverities('js/disable-in-ts-files');
+
+      expect(severities).toMatchObject({
+        'no-undef': 0,
+        'no-unused-vars': 0,
+      });
+      expect(severities).not.toHaveProperty('require-await');
+    });
+
+    it('turns off the rules regardless of whether `ts` config is enabled', async () => {
+      const configResultWithTs = await computeEslintConfig({js: true, ts: true});
+
+      expect(configResult.getConfigByUnPostfix('js/disable-in-ts-files')).toBeDefined();
+      expect(configResultWithTs.getConfigByUnPostfix('js/disable-in-ts-files')).toBeDefined();
+    });
+
+    it('does not report TypeScript syntax the `ts` config does not lint', async () => {
+      const results = await testEslintConfig(
+        {js: true, ts: {files: []}},
+        FIXTURES.typescriptSyntax,
+        import.meta.dirname,
+      );
+
+      expect(results[0]?.messages.map(({ruleId}) => ruleId)).toStrictEqual([]);
+    });
+  });
 });
 
 describe('un options', () => {
@@ -110,6 +144,19 @@ describe('un options', () => {
 
       expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
     });
+  });
+
+  it('does not apply user-provided `files` and `ignores` to `js/disable-in-ts-files` eslint config', async () => {
+    const IGNORES = ['**/fixtures/**'];
+
+    const configResult = await computeEslintConfig({
+      js: {files: ['src/**/*.js'], ignores: IGNORES},
+    });
+
+    const config = configResult.getConfigByUnPostfix('js/disable-in-ts-files');
+
+    expect(config?.files).toStrictEqual([GLOB_TS_X]);
+    expect(config?.ignores || []).not.toIncludeAnyMembers(IGNORES);
   });
 
   describe('option: `ignores`', () => {

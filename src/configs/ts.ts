@@ -12,7 +12,13 @@ import type {GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, allUnionMembers, arrayUnique, isKeyIn, maybeCall, omit} from '../utils';
-import {resolveFilesOption, resolveIgnoresOption, withAllowDefaultProject} from './shared';
+import {
+  CORE_RULES_HANDLED_BY_TS_COMPILER,
+  CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
+  resolveFilesOption,
+  resolveIgnoresOption,
+  withAllowDefaultProject,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -830,28 +836,8 @@ export default defineUnConfig<
   // TODO add rules
   configBuilderNONTypeAware
     ?.addConfig(['ts/non-type-aware/rules', {parseWith: 'ts'}])
-    .disableAnyRule('', 'class-methods-use-this')
-    .disableAnyRule('', 'default-param-last')
-    .disableAnyRule('', 'init-declarations')
-    .disableAnyRule('', 'max-params')
-    .disableAnyRule('', 'no-array-constructor') // 🟣
-    .disableAnyRule('', 'no-dupe-class-members') // 🟣
-    .disableAnyRule('', 'no-empty-function') // 💅
-    .disableAnyRule('', 'no-invalid-this')
-    .disableAnyRule('', 'no-magic-numbers')
-    .disableAnyRule('', 'no-redeclare')
-    .disableAnyRule('', 'no-shadow')
-    .disableAnyRule('', 'no-unused-expressions') // 🟣
-    .disableAnyRule('', 'no-unused-vars') // 🟣
-    .disableAnyRule('', 'no-use-before-define')
-    .disableAnyRule('', 'no-useless-constructor') // 🟣
-    .disableAnyRule('', 'consistent-return')
-    .disableAnyRule('', 'dot-notation') // 💅
-    .disableAnyRule('', 'no-implied-eval') // 🟣
-    .disableAnyRule('', 'no-throw-literal') // Note: has different name
-    .disableAnyRule('', 'prefer-destructuring')
-    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
-    .disableAnyRule('', 'require-await') // 🟣
+    // Unlike in the `js` config, also turned off in the framework files this config lints
+    .disableBulkRules(CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES)
     .markCategory('Strict')
     .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
     .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
@@ -1152,7 +1138,10 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.1.0 */
+    // The base rules of these extension rules work in TypeScript files, so they're turned off only where replaced
+    .disableAnyRule('', 'consistent-return')
     .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) /** @since 2.30.0 */ // 💅
+    .disableAnyRule('', 'dot-notation')
     .addRule(
       'no-implied-eval',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -1160,6 +1149,7 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 2.15.0 */ // 🟣
+    .disableAnyRule('', 'no-implied-eval')
     .addRule(
       'only-throw-error',
       getRuleUnSeverityAndOptionsFromEntry(
@@ -1168,6 +1158,7 @@ export default defineUnConfig<
       )[0],
       [{allowRethrowing: true}], // the base rule has no options
     ) /** @since 7.4.0 */ // 🟣
+    .disableAnyRule('', 'no-throw-literal') // Note: has different name
     .addRule(
       'prefer-destructuring',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -1175,6 +1166,7 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 6.8.0 */
+    .disableAnyRule('', 'prefer-destructuring')
     .disableAnyRule('unicorn', 'prefer-array-find') // TODO why it's here?
     .addRule(
       'prefer-promise-reject-errors',
@@ -1183,6 +1175,7 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 6.19.0 */ // 🟣
+    .disableAnyRule('', 'prefer-promise-reject-errors')
     .addRule(
       'require-await',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -1190,6 +1183,7 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 1.13.0 */ // 🟣
+    .disableAnyRule('', 'require-await')
     .enableConfigTesterForPlugin('ts', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
@@ -1207,29 +1201,7 @@ export default defineUnConfig<
     ?.addConfig(['ts/disable-handled-by-ts-compiler-rules', {applyUserFilesAndIgnores: false}], {
       files: allTypescriptFiles,
     })
-    .disableAnyRule('', 'constructor-super')
-    .disableAnyRule('', 'getter-return')
-    .disableAnyRule('', 'no-const-assign')
-    .disableAnyRule('', 'no-dupe-args')
-    .disableAnyRule('', 'no-dupe-class-members')
-    .disableAnyRule('', 'no-dupe-keys')
-    .disableAnyRule('', 'no-func-assign')
-    // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
-    // .disableAnyRule('', 'no-import-assign')
-    // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
-    // .disableAnyRule('', 'no-invalid-this')
-    .disableAnyRule('', 'no-new-native-nonconstructor') // successor of no-new-symbol
-    .disableAnyRule('', 'no-obj-calls')
-    // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
-    // .disableAnyRule('', 'no-redeclare')
-    .disableAnyRule('', 'no-setter-return')
-    .disableAnyRule('', 'no-this-before-super')
-    .disableAnyRule('', 'no-undef')
-    // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
-    // .disableAnyRule('', 'no-unreachable')
-    .disableAnyRule('', 'no-unsafe-negation')
-    // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
-    .disableAnyRule('', 'no-duplicate-imports');
+    .disableBulkRules(CORE_RULES_HANDLED_BY_TS_COMPILER);
 
   const noImplicitCoercionBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
     vanillaFinalFlatConfigRules['no-implicit-coercion'] ?? ERROR,

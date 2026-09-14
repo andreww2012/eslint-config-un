@@ -1,4 +1,5 @@
 const FIXTURES = {
+  asyncFunctionWithoutAwait: 'async-function-without-await.ts',
   floatingPromise: 'floating-promise.ts',
 } as const;
 
@@ -19,6 +20,24 @@ describe('ts: sub config `typeAware`', () => {
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')).toBeDefined();
     });
+
+    it('keeps `require-await` rule firing on an async function without `await` when set to `false`', async () => {
+      const results = await testEslintConfig(
+        {js: true, ts: {configTypeAware: false}},
+        FIXTURES.asyncFunctionWithoutAwait,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.asyncFunctionWithoutAwait,
+        'require-await',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Async arrow function has no 'await' expression."`,
+      );
+    });
   });
 
   describe('rules', () => {
@@ -30,6 +49,18 @@ describe('ts: sub config `typeAware`', () => {
         'ts/no-deprecated': 1,
         'ts/prefer-nullish-coalescing': 0,
       });
+    });
+
+    it('turns off the base rules of type-aware extension rules only in `ts/type-aware/rules` eslint config', async () => {
+      const configResult = await computeEslintConfig('ts');
+
+      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject({
+        'dot-notation': 0,
+        'require-await': 0,
+      });
+      expect(configResult.getRuleSeverities('ts/non-type-aware/rules')).not.toHaveProperty(
+        'require-await',
+      );
     });
 
     it('`ts/no-floating-promises` rule fires on an unawaited async call', async () => {

@@ -78,6 +78,7 @@ describe('cascade order', () => {
       eslint-config-un/jest/extended
       eslint-config-un/jest-dom
       eslint-config-un/js
+      eslint-config-un/js/disable-in-ts-files
       eslint-config-un/js/stylistic_spaced-comment
       eslint-config-un/jsdoc
       eslint-config-un/jsdoc/@type-information

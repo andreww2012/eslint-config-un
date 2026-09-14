@@ -12,7 +12,7 @@ import {
   GLOB_TOML,
   GLOB_YML_YAML,
 } from '../constants';
-import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import type {GetRuleNamesInPlugin, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from '../plugins.gen';
 import type {Prettify} from '../types';
 import {
@@ -249,6 +249,50 @@ export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
 export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
+
+export const CORE_RULES_HANDLED_BY_TS_COMPILER = [
+  'constructor-super',
+  'getter-return',
+  'no-const-assign',
+  'no-dupe-args',
+  'no-dupe-class-members',
+  'no-dupe-keys',
+  'no-func-assign',
+  // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
+  // 'no-import-assign',
+  // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
+  // 'no-invalid-this',
+  'no-new-native-nonconstructor', // successor of no-new-symbol
+  'no-obj-calls',
+  // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
+  // 'no-redeclare',
+  'no-setter-return',
+  'no-this-before-super',
+  'no-undef',
+  // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
+  // 'no-unreachable',
+  'no-unsafe-negation',
+  // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
+  'no-duplicate-imports',
+] satisfies GetRuleNamesInPlugin<''>[];
+
+export const CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES = [
+  'class-methods-use-this',
+  'default-param-last',
+  'init-declarations',
+  'max-params',
+  'no-array-constructor',
+  'no-dupe-class-members',
+  'no-empty-function',
+  'no-invalid-this',
+  'no-magic-numbers',
+  'no-redeclare',
+  'no-shadow',
+  'no-unused-expressions',
+  'no-unused-vars',
+  'no-use-before-define',
+  'no-useless-constructor',
+] satisfies GetRuleNamesInPlugin<''>[];
 
 export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigContext) =>
   [
