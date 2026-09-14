@@ -10,6 +10,11 @@ export default definePluginMetadata('eslint-comments', {
     'more concise and convenient to use; `@` feels redundant',
   ],
   rules: {
-    'no-unlimited-disable': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'no-unlimited-disable': {
+      disableInCodeBlocks: [
+        false,
+        'a snippet can skip linting with an `eslint-skip` comment, which stays out of the rendered code',
+      ],
+    },
   },
 });

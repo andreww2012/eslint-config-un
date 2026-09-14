@@ -22,13 +22,19 @@ export default definePluginMetadata('ts', {
     'consistent-type-exports': {stylistic: true},
     'consistent-type-imports': {
       stylistic: true,
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [false, 'only reads how the snippet itself uses each import'],
     },
     'dot-notation': {stylistic: true},
     'explicit-function-return-type': {disableInCodeBlocks: 'tooStrict'},
     'max-params': {stylistic: true},
     'member-ordering': {stylistic: true},
-    'method-signature-style': {autofixDisabled: true, disableInCodeBlocks: 'tooStrict'},
+    'method-signature-style': {
+      autofixDisabled: [
+        true,
+        'a property signature checks its parameters more strictly than a method one, so the fix can break existing assignments',
+      ],
+      disableInCodeBlocks: 'tooStrict',
+    },
     'naming-convention': {
       requiresTypeInfo: [
         'optional',
@@ -52,7 +58,12 @@ export default definePluginMetadata('ts', {
       stylistic: true,
       autofixDisabled: [true, 'could remove type aliases'],
     },
-    'no-unnecessary-type-assertion': {stylistic: [false, 'TODO: reason was not recorded']},
+    'no-unnecessary-type-assertion': {
+      stylistic: [
+        false,
+        'removing an assertion it reports can still break type checking, for example when a variable in a loop ends up inferring its type from itself',
+      ],
+    },
     'no-unsafe-function-type': {disableInCodeBlocks: 'tooStrict'},
     'no-unused-expressions': {disableInCodeBlocks: 'unused'},
     'no-unused-vars': {disableInCodeBlocks: 'unused'},
@@ -61,7 +72,12 @@ export default definePluginMetadata('ts', {
     'non-nullable-type-assertion-style': {stylistic: true},
     'prefer-as-const': {stylistic: true},
     'prefer-destructuring': {stylistic: true},
-    'prefer-find': {stylistic: [false, 'TODO: reason was not recorded']},
+    'prefer-find': {
+      stylistic: [
+        false,
+        'the dedicated method stops calling the predicate at the first match, which a predicate with side effects observes',
+      ],
+    },
     'prefer-for-of': {stylistic: true},
     'prefer-function-type': {stylistic: true},
     'prefer-includes': {stylistic: true},

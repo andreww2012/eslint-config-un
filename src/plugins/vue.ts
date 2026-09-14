@@ -60,7 +60,10 @@ export default definePluginMetadata('vue', {
     'no-negated-condition': {stylistic: true},
     'no-negated-v-if-condition': {stylistic: true},
     'no-setup-props-reactivity-loss': {
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [
+        false,
+        'the lost reactivity is a real bug that readers would copy along with the snippet',
+      ],
     },
     'no-spaces-around-equal-signs-in-attribute': {prettierIncompatible: true},
     'no-undef-components': {disableInCodeBlocks: 'runtimeOnly'},
@@ -88,10 +91,15 @@ export default definePluginMetadata('vue', {
     'require-explicit-slots': {stylistic: true},
     'require-macro-variable-name': {
       stylistic: true,
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [false, 'only reads the macro calls of the snippet itself'],
     },
     'require-prop-types': {disableInCodeBlocks: 'tooStrict'},
-    'require-v-for-key': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'require-v-for-key': {
+      disableInCodeBlocks: [
+        false,
+        'a missing key causes real rendering bugs that readers would copy along with the snippet',
+      ],
+    },
     'script-indent': {prettierIncompatible: true},
     'singleline-html-element-content-newline': {prettierIncompatible: true},
     'slot-name-casing': {stylistic: true},

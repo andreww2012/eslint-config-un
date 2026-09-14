@@ -18,14 +18,24 @@ export default definePluginMetadata('import', {
     'group-exports': {stylistic: true},
     'max-dependencies': {disableInCodeBlocks: 'imports'},
     'newline-after-import': {stylistic: true},
-    'no-absolute-path': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'no-absolute-path': {
+      disableInCodeBlocks: [
+        false,
+        'only reads the path text, and an absolute path breaks for whoever copies the snippet',
+      ],
+    },
     'no-default-export': {disableInCodeBlocks: 'imports'},
     'no-duplicates': {stylistic: true, disableInCodeBlocks: 'imports'},
     'no-extraneous-dependencies': {disableInCodeBlocks: 'imports', cliFiles: 'off'},
     'no-mutable-exports': {disableInCodeBlocks: 'imports'},
     'no-unresolved': {disableInCodeBlocks: 'imports'},
     'no-useless-path-segments': {stylistic: true},
-    'no-webpack-loader-syntax': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'no-webpack-loader-syntax': {
+      disableInCodeBlocks: [
+        false,
+        'only reads the path text, and the loader syntax ties the copied snippet to webpack',
+      ],
+    },
     order: {stylistic: true},
   },
 });

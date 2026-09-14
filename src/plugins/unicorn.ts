@@ -9,7 +9,13 @@ export default definePluginMetadata('unicorn', {
   rules: {
     'better-dom-traversing': {stylistic: true},
     'better-regex': {stylistic: true},
-    'catch-error-name': {stylistic: true, autofixDisabled: true},
+    'catch-error-name': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'when `error` is already taken, the fix picks a name like `error_` instead of a descriptive one',
+      ],
+    },
     'consistent-arrow-return-style': {stylistic: true},
     'consistent-assert': {stylistic: true},
     'consistent-boolean-name': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
@@ -17,7 +23,14 @@ export default definePluginMetadata('unicorn', {
     'consistent-conditional-object-spread': {stylistic: true},
     'consistent-date-clone': {stylistic: true},
     'consistent-destructuring': {stylistic: true},
-    'consistent-existence-index-check': {stylistic: true, autofixDisabled: true},
+    'consistent-existence-index-check': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        // TODO should report to upstream?
+        'the fix swaps the operator without adding parentheses, so `expected === index < 0` turns into a different comparison',
+      ],
+    },
     'consistent-export-decorator-position': {stylistic: true},
     'consistent-function-scoping': {disableInCodeBlocks: 'performance'},
     'consistent-template-literal-escape': {stylistic: true},
@@ -33,7 +46,12 @@ export default definePluginMetadata('unicorn', {
     'filename-case': {stylistic: true},
     'import-style': {stylistic: true},
     'iteration-fallback-style': {stylistic: true},
-    'no-abusive-eslint-disable': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'no-abusive-eslint-disable': {
+      disableInCodeBlocks: [
+        false,
+        'a snippet can skip linting with an `eslint-skip` comment, which stays out of the rendered code',
+      ],
+    },
     'no-array-callback-reference': {requiresTypeInfo: 'optional'},
     'no-array-fill-with-reference-type': {requiresTypeInfo: ['optional', 'indirect']},
     'no-array-front-mutation': {requiresTypeInfo: ['optional', 'indirect']},
@@ -52,7 +70,12 @@ export default definePluginMetadata('unicorn', {
     'no-computed-property-existence-check': {requiresTypeInfo: ['optional', 'indirect']},
     'no-confusing-array-splice': {requiresTypeInfo: ['optional', 'indirect']},
     'no-confusing-array-with': {requiresTypeInfo: ['optional', 'indirect']},
-    'no-console-spaces': {stylistic: [false, 'TODO: reason was not recorded']},
+    'no-console-spaces': {
+      stylistic: [
+        false,
+        'the console already puts a space between arguments, so removing the extra one changes the printed output',
+      ],
+    },
     'no-duplicate-loops': {requiresTypeInfo: ['optional', 'indirect']},
     'no-for-each': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-for-loop': {requiresTypeInfo: 'optional', stylistic: true},
@@ -154,7 +177,12 @@ export default definePluginMetadata('unicorn', {
     'no-useless-recursion': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-spread': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-template-literals': {requiresTypeInfo: 'optional', stylistic: true},
-    'no-useless-undefined': {autofixDisabled: true},
+    'no-useless-undefined': {
+      autofixDisabled: [
+        true,
+        'dropping a returned `undefined` turns the inferred return type into `void`, and dropping a parameter default changes the function `length`',
+      ],
+    },
     'no-zero-fractions': {stylistic: true},
     'number-literal-case': {stylistic: true, prettierIncompatible: true},
     'numeric-separators-style': {stylistic: true},
@@ -164,7 +192,10 @@ export default definePluginMetadata('unicorn', {
     'prefer-aggregate-error': {requiresTypeInfo: 'optional'},
     'prefer-array-find': {
       requiresTypeInfo: ['optional', 'indirect'],
-      stylistic: [false, 'TODO: reason was not recorded'],
+      stylistic: [
+        false,
+        'the dedicated methods stop calling the predicate at the first match and `findLast` walks from the end, which a predicate with side effects observes',
+      ],
     },
     'prefer-array-flat': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-array-flat-map': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
@@ -196,7 +227,10 @@ export default definePluginMetadata('unicorn', {
     'prefer-classlist-toggle': {stylistic: true},
     'prefer-code-point': {
       stylistic: true,
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [
+        false,
+        'only needs the call it reports, and a snippet should show the Unicode-aware method too',
+      ],
     },
     'prefer-continue': {stylistic: true},
     'prefer-date-now': {stylistic: true},
@@ -281,7 +315,14 @@ export default definePluginMetadata('unicorn', {
     'prefer-single-call': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-single-replace': {stylistic: true},
     'prefer-split-limit': {stylistic: true},
-    'prefer-spread': {requiresTypeInfo: 'optional', stylistic: true, autofixDisabled: true},
+    'prefer-spread': {
+      requiresTypeInfo: 'optional',
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'spreading throws on an array-like that is not iterable, and turns a copied string into an array of characters',
+      ],
+    },
     'prefer-string-pad-start-end': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-string-raw': {
       stylistic: true,
@@ -294,13 +335,22 @@ export default definePluginMetadata('unicorn', {
     'prefer-string-replace-all': {
       requiresTypeInfo: ['optional', 'indirect'],
       stylistic: true,
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [
+        false,
+        'only needs the call it reports, and a snippet should show the modern method too',
+      ],
     },
     'prefer-string-slice': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-string-starts-ends-with': {
       requiresTypeInfo: ['optional', 'indirect'],
-      stylistic: [false, 'TODO: reason was not recorded'],
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      stylistic: [
+        false,
+        'a regex test turns a non-string argument into a string, while calling the string method on it throws',
+      ],
+      disableInCodeBlocks: [
+        false,
+        'only needs the expression it reports, and a snippet should show the dedicated method too',
+      ],
     },
     'prefer-string-trim-start-end': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-structured-clone': {stylistic: true},
@@ -322,7 +372,10 @@ export default definePluginMetadata('unicorn', {
     'prevent-abbreviations': {stylistic: true},
     'relative-url-style': {
       stylistic: true,
-      disableInCodeBlocks: [false, 'TODO: reason was not recorded'],
+      disableInCodeBlocks: [
+        false,
+        'only needs the URL it reports, which reads the same in a snippet',
+      ],
     },
     'require-array-join-separator': {requiresTypeInfo: ['optional', 'indirect']},
     'require-array-sort-compare': {requiresTypeInfo: ['optional', 'indirect']},

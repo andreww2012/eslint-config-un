@@ -63,7 +63,12 @@ export default definePluginMetadata('sonar', {
     'no-hardcoded-ip': {disableInTestFiles: true},
     'no-hardcoded-passwords': {disableInTestFiles: true},
     'no-hardcoded-secrets': {disableInTestFiles: true},
-    'no-identical-functions': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'no-identical-functions': {
+      disableInCodeBlocks: [
+        false,
+        'the duplicated functions it reports both live in the snippet itself',
+      ],
+    },
     'no-ignored-exceptions': {disableInCodeBlocks: 'tooStrict'},
     'no-ignored-return': {requiresTypeInfo: 'optional'},
     'no-implicit-dependencies': {

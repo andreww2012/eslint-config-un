@@ -10,7 +10,9 @@ export default definePluginMetadata('node', {
     'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
-    'exports-style': {disableInCodeBlocks: [false, 'TODO: reason was not recorded']},
+    'exports-style': {
+      disableInCodeBlocks: [false, 'only reads how the snippet itself writes its exports'],
+    },
     hashbang: {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
     'no-extraneous-require': {disableInCodeBlocks: 'imports'},
     'no-missing-import': {disableInCodeBlocks: 'imports'},
