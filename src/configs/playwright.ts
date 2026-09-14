@@ -115,6 +115,7 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
       ERROR,
       customAsyncExpectMatches?.length ? [{customMatchers: customAsyncExpectMatches}] : [],
     ) /** @since 0.3.3 */ // 🟢
+    .addRule('no-action-timeout', ERROR) /** @since 2.12.0 */
     .addRule('no-commented-out-tests', WARNING) /** @since 1.2.0 */
     .addRule('no-conditional-expect', ERROR) /** @since 1.2.0 */ // 🟡
     .addRule('no-conditional-in-test', OFF) /** @since 0.10.0 */ // 🟡
@@ -122,10 +123,13 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     .addRule('no-duplicate-slow', ERROR) /** @since 2.6.0 */ // 🟢
     .addRule('no-element-handle', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-eval', WARNING) /** @since 0.9.0 */ // 🟡
+    .addRule('no-export', ERROR) /** @since 2.12.0 */ // 🟢
     .addRule('no-focused-test', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('no-force-option', WARNING) /** @since 0.9.0 */ // 🟡
     .addRule('no-get-by-title', WARNING) /** @since 1.0.0 */
     .addRule('no-hooks', OFF) /** @since 1.3.0 */
+    .addRule('no-identical-title', ERROR) /** @since 2.12.0 */ // 🟢
+    .addRule('no-magic-timeouts', WARNING) /** @since 2.12.0 */
     .addRule('no-nested-step', OFF) /** @since 0.15.0 */ // 🟡
     .addRule('no-networkidle', ERROR) /** @since 0.14.0 */ // 🟢
     .addRule('no-nth-methods', OFF) /** @since 0.15.0 */
@@ -137,6 +141,8 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     .addRule('no-skipped-test', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-slowed-test', OFF) /** @since 2.2.0 */
     .addRule('no-standalone-expect', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-template-literal-title', ERROR) /** @since 2.12.0 */
+    .addRule('no-test-return-statement', ERROR) /** @since 2.12.0 */
     .addRule('no-unnecessary-assertions', ERROR) /** @since 2.11.0 */ // 🟢
     .addRule('no-unsafe-references', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-unused-locators', ERROR) /** @since 2.3.0 */ // 🟢
@@ -146,6 +152,7 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     .addRule('no-wait-for-selector', OFF) /** @since 0.22.0 */ // 🟡
     .addRule('no-wait-for-timeout', OFF) /** @since 0.9.0 */ // 🟡
     .addRule('prefer-comparison-matcher', ERROR) /** @since 1.3.0 */
+    .addRule('prefer-ending-with-an-expect', OFF) /** @since 2.12.0 */
     .addRule('prefer-equality-matcher', ERROR) /** @since 1.3.0 */
     .addRule('prefer-hooks-in-order', ERROR) /** @since 1.2.0 */
     .addRule('prefer-hooks-on-top', ERROR) /** @since 1.2.0 */
@@ -158,6 +165,7 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
     .addRule('prefer-to-have-count', ERROR) /** @since 0.17.0 */
     .addRule('prefer-to-have-length', ERROR) /** @since 0.11.1 */
     .addRule('prefer-web-first-assertions', ERROR) /** @since 0.13.0 */ // 🟢
+    .addRule('require-annotation-reason', ERROR) /** @since 2.12.0 */
     .addRule('require-hook', WARNING) /** @since 1.3.0 */
     .addRule('require-soft-assertions', OFF) /** @since 0.12.0 */
     .addRule('require-tags', OFF) /** @since 2.6.0 */

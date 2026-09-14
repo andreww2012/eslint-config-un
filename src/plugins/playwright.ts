@@ -7,6 +7,15 @@ export default definePluginMetadata('playwright', {
     `https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
     'consistent-spacing-between-blocks': {stylistic: true},
+    'no-identical-title': {
+      stylistic: [false, 'Playwright refuses to run a file with duplicate test titles'],
+    },
+    'no-magic-timeouts': {
+      stylistic: [false, 'moving a timeout to the global config changes what it applies to'],
+    },
+    'no-template-literal-title': {
+      stylistic: [false, 'dropping an interpolation makes titles static, possibly duplicate'],
+    },
     'no-useless-not': {stylistic: true},
     'prefer-comparison-matcher': {stylistic: true},
     'prefer-equality-matcher': {stylistic: true},
