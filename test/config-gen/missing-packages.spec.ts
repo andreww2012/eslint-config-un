@@ -58,7 +58,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
 
     expect(output).toContain(DE_MORGAN_PACKAGE);
     expect(output).toContain('not installed');
-    expect(output).toContain('Plugin that listed in optional peer dependencies was used');
+    expect(output).toContain('Plugin listed in optional peer dependencies was used');
   });
 
   it('names the config that asked for the package', async () => {
@@ -130,7 +130,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     const output = stderrOutput();
 
     expect(output).toContain(MISSING_DEPENDENCY);
-    expect(output).toContain('Package that listed in optional peer dependencies was used');
+    expect(output).toContain('Package listed in optional peer dependencies was used');
     expect(output).toContain('Unknown');
     expect(output).toContain(`${MISSING_DEPENDENCY}@latest`);
     expect(output).toContain(`a dependency of ${SVELTE_PLUGIN_PACKAGE}`);
@@ -148,7 +148,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain(DE_MORGAN_PACKAGE);
     expect(output).toContain(MISSING_DEPENDENCY);
     // The two entries are of different kinds: one is a plugin, the other a plain package
-    expect(output).toContain('Plugin and package that listed in optional peer dependencies were');
+    expect(output).toContain('Plugin and package listed in optional peer dependencies were');
   });
 
   it('reports a package a config loads on its own besides the plugin', async () => {
@@ -170,8 +170,8 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
 
     expect(output).toContain(DE_MORGAN_PACKAGE);
     expect(output).toContain(CASE_POLICE_PACKAGE);
-    expect(output).toContain('Plugins that listed in optional peer dependencies were used');
-    expect(output).toContain('disable corresponding configs');
+    expect(output).toContain('Plugins listed in optional peer dependencies were used');
+    expect(output).toContain('disable the corresponding configs');
   });
 
   it('falls back to a generic installation command when no package manager is detected', async () => {

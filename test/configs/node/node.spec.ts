@@ -111,7 +111,7 @@ describe('rules', () => {
       vi.doUnmock(import('empathic/package'));
     });
 
-    it('leaves the rule untouched if supports `import.meta`', async () => {
+    it('leaves the rule untouched if it supports `import.meta`', async () => {
       mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
 
       const configResult = await computeEslintConfig('node');
@@ -121,7 +121,7 @@ describe('rules', () => {
       ).toBeUndefined();
     });
 
-    it('disables the rule if does not support `import.meta`', async () => {
+    it('disables the rule if it does not support `import.meta`', async () => {
       mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom14);
 
       const configResult = await computeEslintConfig('node');
@@ -147,7 +147,7 @@ describe('rules', () => {
       vi.doUnmock(import('empathic/package'));
     });
 
-    it('leaves the rule untouched if supports explicit resource management', async () => {
+    it('leaves the rule untouched if it supports explicit resource management', async () => {
       mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom24);
 
       const configResult = await computeEslintConfig('node');
@@ -155,7 +155,7 @@ describe('rules', () => {
       expect(configResult.getRuleEntry('node', 'unicorn/prefer-dispose')).toBeUndefined();
     });
 
-    it('disables the rule if does not support explicit resource management', async () => {
+    it('disables the rule if it does not support explicit resource management', async () => {
       mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
 
       const configResult = await computeEslintConfig('node');

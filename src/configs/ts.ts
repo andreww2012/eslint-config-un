@@ -381,7 +381,7 @@ interface SortTsconfigKeysSubConfigOptions<
         type: 'order-groups';
 
         /**
-         * Unless overridden, order from `antfu` present will be used *within* groups.
+         * Unless overridden, order from `antfu` preset will be used *within* groups.
          */
         order: (TsconfigCompilerOptionsGroups | (string & {}))[];
 
@@ -515,7 +515,7 @@ export interface TsEslintConfigOptions<
    *
    * Note that if you only need to set
    * [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject),
-   * we recommend you using a separate `allowDefaultProject` option instead.
+   * we recommend using the separate `allowDefaultProject` option instead.
    * @see https://typescript-eslint.io/packages/parser#configuration
    */
   parserOptions?: MaybeFn<TsEslintParserOptions, [isForTypeAwareConfig: boolean]>;

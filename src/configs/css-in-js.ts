@@ -21,7 +21,7 @@ export interface CssInJsPluginSettings {
   attributes?: string[];
 
   /**
-   * Specifies the function paths that uses the style object.
+   * Specifies the function paths that use the style object.
    * Keys are module names, values are the lists of the call paths within that module, where each
    * path is either a single name or an array of the path segments.
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions

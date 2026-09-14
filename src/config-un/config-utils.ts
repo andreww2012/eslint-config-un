@@ -110,7 +110,7 @@ function getIsConfigEnabled(
     });
     reason ??=
       packagesList.length > 1
-        ? `neither of these packages are installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
+        ? `none of these packages is installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
         : `package ${stylePackageName(/* v8 ignore next - The list is never empty here */ packagesList[0]?.packageName || '')} is not installed`;
   }
 

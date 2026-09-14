@@ -138,7 +138,7 @@ export interface UnicornEslintConfigOptions<
    *
    * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning in `configCss`.
    *
-   * 📁 Default `files`: <code>**&#47;*.htm(l)</code>
+   * 📁 Default `files`: <code>**&#47;*.htm?(l)</code>
    * @default true // if `html` config is enabled
    */
   configHtml?: LanguageSubConfig<ExtraPlugins, 'html'>;
@@ -170,13 +170,13 @@ export interface UnicornEslintConfigOptions<
    * Current and extended class references in class static methods can be either accessed with
    * `this` and `super` respectively, or using direct class references.
    *
-   * This option enforce the accessing style:
+   * This option enforces the accessing style:
    * - `thisAndSuper`: enforce `this` and `super`;
-   * - `identifiers`: enforce identifies in both cases;
+   * - `identifiers`: enforce identifiers in both cases;
    * - `true`: use the default style;
    * - `false`: do not enforce any style;
-   * - object: configure rule options directly (allows to configure different styles for current and
-   *   extended classes).
+   * - object: configure rule options directly (allows you to configure different styles for
+   *   current and extended classes).
    *
    * Affected rule:
    * - [`unicorn/class-reference-in-static-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/class-reference-in-static-methods.md)
@@ -200,11 +200,11 @@ export interface UnicornEslintConfigOptions<
    *   - *Empty string* instructing to ignore this spelling at all.
    *     This might be used to override
    *     [the default replacements list](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/de64ab65b513dbdfe45b8f09d3b12f63f96fb0a3/rules/consistent-compound-words.js#L27).
-   *   - `false`: treats the key as a full identifier name and ignores the corresponding identified
+   *   - `false`: treats the key as a full identifier name and ignores the corresponding identifier
    *     completely.
    *     Corresponds to the
    *     [`allowList` rule option](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-compound-words.md#allowlist).
-   * - `array`: ESLint-like format of the options, allowing to specify rule options directly.
+   * - `array`: ESLint-like format of the options, allowing you to specify rule options directly.
    *   Is an array to distinguish from the object form.
    *
    * Affected rule:
@@ -266,7 +266,7 @@ export interface UnicornEslintConfigOptions<
    * Enforce or disallow explicit `setTimeout`/`setInterval` delay (the second parameter), even if
    * it would be redundant (`0`).
    *
-   * Setting to `true` is equivalent of the default value.
+   * Setting to `true` is equivalent to the default value.
    *
    * Set to `false` to not enforce.
    *
@@ -318,7 +318,7 @@ export interface UnicornEslintConfigOptions<
 
   /**
    * Whether multiple consecutive whitespace characters should be reported and autofixed to
-   * `'<character'.repeat(<times>)`:
+   * `'<character>'.repeat(<times>)`:
    * - `const indentation = ' ';` -> `const indentation = ' '.repeat(4);`.
    *
    * Specifying values below 2 *disables* the affected rule.
@@ -334,7 +334,7 @@ export interface UnicornEslintConfigOptions<
    * object.
    *
    * This option enforces the single style of usage for all of them.
-   * The following table contains all such pairs, what style is enforced for any of them by default:
+   * The following table contains all such pairs and the style enforced for each of them by default:
    * | Global | `Number` property | Behavior different? | Default style |
    * | - | - | - | - |
    * | `NaN` | `NaN` | 🟢 No | `namespace` |
@@ -345,15 +345,15 @@ export interface UnicornEslintConfigOptions<
    * | `isNaN` | `isNaN` | 🔴 Yes, the namespace version is stricter | `namespace` |
    * | `isFinite` | `isFinite` | 🔴 Yes, the namespace version is stricter | `namespace` |
    *
-   * Any custom value except `boolean` override the defaults.
+   * Any custom value except `boolean` overrides the defaults.
    * `true` is the same as not setting the option at all.
    * `false` stops any enforcements.
    *
-   * ⚠️ Note there are limitation of how the affected rules can be configured:
+   * ⚠️ Note there are limitations on how the affected rules can be configured:
    * - It is possible to enforce the `global` style only for `NaN` and both of the infinities;
    * - It is not possible to enforce the namespace style for `NaN` and the infinities:
    *    - Without also enforcing the same style for methods (though the opposite of the latter is
-   *      unlikely what you want);
+   *      unlikely to be what you want);
    *    - Giving up the ability to enforce the `global` style for other constants if you only
    *      enforced the `namespace` style for some.
    *
@@ -927,7 +927,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-module', OFF) /** @since 31.0.0 */
     .addRule('prefer-native-coercion-functions', ERROR) /** @since 42.0.0 */
     .addRule('prefer-negative-index', ERROR) /** @since 14.0.0 */
-    .addRule('prefer-node-protocol', OFF) /** @since 31.0.0 */ // `n/prefer-node-protocol` seem to be better as it checks supported node versions
+    .addRule('prefer-node-protocol', OFF) /** @since 31.0.0 */ // `n/prefer-node-protocol` seems to be better as it checks supported node versions
     .addRule('prefer-number-coercion', OFF) /** @since 66.0.0 */
     .addRule('prefer-number-is-safe-integer', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule(

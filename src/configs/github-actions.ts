@@ -30,7 +30,7 @@ export interface GithubActionsEslintConfigOptions<
 
   /**
    * Enforces `<job>.steps.uses` style.
-   * @default 'commit'
+   * @default {commit: true, allowRepository: true}
    */
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
 }

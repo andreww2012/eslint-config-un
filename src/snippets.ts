@@ -43,7 +43,7 @@ const UTILITY_PACKAGES = {
  * packages, optionally renaming them if desired or changing implementation in some way.
  *
  * You can provide an optional `packageNames` object that will be merged with the default value,
- * which allows to re-allow some or disallow more packages.
+ * which allows you to re-allow some or disallow more packages.
  *
  * Note that importing from sub-paths (`/something`) will be disallowed too.
  *

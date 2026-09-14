@@ -114,7 +114,7 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
  * [Testing Library](https://testing-library.com) specific rules.
  *
  * 📁 Default `files`:
- * - <code>**&#47;*.{spec,test}.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
  * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
  */
 export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>

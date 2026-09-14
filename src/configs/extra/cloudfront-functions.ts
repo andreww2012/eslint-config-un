@@ -17,8 +17,8 @@ import {
  * [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
  * use `configV1` sub-config.
  *
- * Note that if neither `files` or `ignores` are specified or is an empty array in the main or a
- * sub-config, the config won't be generated.
+ * Note that if neither `files` nor `ignores` is specified as a non-empty array in the main or a
+ * sub-config, that config won't be generated.
  */
 export interface CloudfrontFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,

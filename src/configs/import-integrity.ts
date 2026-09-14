@@ -83,7 +83,7 @@ interface ImportIntegrityPackagePluginSettings {
   ignoreOverridePatterns?: string[];
 
   /**
-   * Allows to remove certain entries from the default ignore list.
+   * Allows you to remove certain entries from the default ignore list.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#defaultignoreoverrides
    */
   defaultIgnoreOverrides?: string[];

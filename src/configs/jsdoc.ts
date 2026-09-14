@@ -28,16 +28,16 @@ export interface JsdocPluginSettings {
   ignoreInternal?: boolean;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before
-   * the given code block.
+   * The minimum number of line breaks checked to find a JSDoc comment block before the given code
+   * block.
    * @default 0
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */
   minLines?: number;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before
-   * the given code block.
+   * The maximum number of line breaks checked to find a JSDoc comment block before the given code
+   * block.
    * @default 1
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */

@@ -284,7 +284,7 @@ const fetchPackageInfo = (packageName: string) =>
             Effect.catch(() =>
               Effect.fail(
                 new Error(
-                  `An expected error occurred while executing ${packageName} package as an ESLint plugin`,
+                  `An unexpected error occurred while executing ${packageName} package as an ESLint plugin`,
                 ),
               ),
             ),

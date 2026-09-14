@@ -135,7 +135,7 @@ export const fetchPackageStats = (packageName: string) =>
 
       if (Object.keys(result).length === 0) {
         logger.warn(
-          `Package ${styledName} stats is empty, request URL was ${statsUrl}, response was:`,
+          `Package ${styledName} stats are empty, request URL was ${statsUrl}, response was:`,
           responseJson,
         );
       }
@@ -197,7 +197,7 @@ export const executePackageAsEslintPlugin = (packageName: string) =>
 
             if (message && 'error' in message) {
               logger.warn(
-                `Error during executing package ${styledName}:`,
+                `Error while executing package ${styledName}:`,
                 styleText('gray', JSON.stringify(message.error)),
               );
             } else {

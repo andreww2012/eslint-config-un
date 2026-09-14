@@ -500,7 +500,7 @@ describe('options', () => {
       );
     });
 
-    it('adds/removes tags to the disallowed list when set', async () => {
+    it('adds tags to or removes them from the disallowed list when set', async () => {
       const configResult = await computeEslintConfig({
         vue: {disallowedHtmlTags: {pre: true, center: true, marquee: false}},
       });

@@ -424,7 +424,7 @@ globalThis.require = createRequire(import.meta.url);
 
 const toStdout = process.stdout.write.bind(process.stdout);
 
-/** @ts-expect-error - pick ups the wrong overload */
+/** @ts-expect-error - picks up the wrong overload */
 process.stdout.write = (chunk, encodingOrCallback, callback) => {
   typeof encodingOrCallback === 'function' /** @ts-expect-error - same reason as above */
     ? encodingOrCallback()

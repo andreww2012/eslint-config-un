@@ -35,7 +35,7 @@ export interface SonarPluginSettings {
 }
 
 /**
- * An ESLint plugin with multitude of different rules from
+ * An ESLint plugin with a multitude of different rules from
  * [SonarSource](https://www.sonarsource.com).
  *
  * 📁 Default `files`: all files

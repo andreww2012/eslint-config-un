@@ -288,7 +288,7 @@ export const resolveConfigAsyncData = async (
         `${context.meta.usedPackageManager?.name || '<your package manager>'} i --save-dev${isExactly ? ' --save-exact' : ''} ${names.join(' ')}`;
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
-        `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
+        `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'} to make this error disappear:
 ${renderTable(
   packages
     .toSorted((a, b) => collator.compare(a.name, b.name))

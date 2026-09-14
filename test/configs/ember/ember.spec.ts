@@ -197,7 +197,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('ember', 'ember/computed-property-getters')).toBe(0);
     });
 
-    it('enables `ember/computed-property-getters` rule with options when set to provided', async () => {
+    it('enables `ember/computed-property-getters` rule with options when provided', async () => {
       const configResult = await computeEslintConfig({
         ember: {enforceGettersInComputedProperties: 'always-with-setter'},
       });

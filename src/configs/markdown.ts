@@ -69,18 +69,18 @@ export interface MarkdownEslintConfigOptions<
     | Prettify<
         UnFlatConfigEntryBase<ExtraPlugins> & {
           /**
-           * Note that these languages will be ignored disregarding of the specified `files` and
+           * Note that these languages will be ignored regardless of the specified `files` and
            * `ignores`, i.e. this option will create a config ignoring by
            * <code>\*\*&#47;*.md/\*\*&#47;\*.{extensions}</code> pattern.
            *
            * [Markdown only] Since some language codes
            * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`),
-           * so specifying `javascript` instead of `js` won't have any effect.
+           * specifying `javascript` instead of `js` won't have any effect.
            */
           ignoredLanguages?: CodeBlockLanguage[];
 
           /**
-           * Lint fenced code blocks as if its code assumed to be running in JavaScript's
+           * Lint fenced code blocks as if their code is assumed to be running in JavaScript's
            * [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
            *
            * Likely you don't want to change this.
@@ -162,13 +162,13 @@ export interface MarkdownEslintConfigOptions<
   allowHtmlTags?: boolean | string[];
 
   /**
-   * Only these languages codes are allowed in fenced code blocks (\```lang ... ```).
+   * Only these language codes are allowed in fenced code blocks (\```lang ... ```).
    * By default, all languages, including no language, are allowed.
    * To require any language to be explicitly specified, specify `any-lang-required`.
    *
    * Since some language codes
    * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244)
-   * (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
+   * (`javascript` -> `js`), specifying `javascript` instead of `js` won't have any effect.
    *
    * There is no option to "allow only this set of languages or not specifying a language".
    * @default all languages are allowed, including no language

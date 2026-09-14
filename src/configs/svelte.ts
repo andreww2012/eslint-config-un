@@ -107,11 +107,11 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Used by some rules like
    * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
-   * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified (but only if
+   * Will be assigned to `languageOptions.parserOptions.svelteConfig` if specified (but only if
    * TypeScript config, `ts`, is enabled).
    *
-   * The plugins docs
-   * [recommends that you specify this](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#type-script-project).
+   * The plugin docs
+   * [recommend that you specify this](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#type-script-project).
    */
   svelteKitConfig?: SvelteKitConfig;
 

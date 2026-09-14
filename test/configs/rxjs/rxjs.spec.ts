@@ -249,14 +249,14 @@ describe('options', () => {
   });
 
   describe('option: `enforceFinnishNotation`', () => {
-    it('disables `rxjs/finnish` and `rxjs/no-finnish` rules by default and `@angular/core` is not installed', async () => {
+    it('disables `rxjs/finnish` and `rxjs/no-finnish` rules by default when `@angular/core` is not installed', async () => {
       const configResult = await computeEslintConfig('rxjs');
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/finnish')).toBe(0);
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-finnish')).toBe(0);
     });
 
-    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` by default and `@angular/core` is installed', async () => {
+    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` by default when `@angular/core` is installed', async () => {
       addInstalledPackages({'@angular/core': '15.2.0'});
 
       const configResult = await computeEslintConfig('rxjs');

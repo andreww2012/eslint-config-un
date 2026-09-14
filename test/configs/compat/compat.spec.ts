@@ -168,7 +168,7 @@ describe('options', () => {
       expect(configResult.getConfigByUnPostfix('compat')?.settings).toBeUndefined();
     });
 
-    it('sets compat settings when set to provided', async () => {
+    it('sets compat settings when provided', async () => {
       const SETTINGS = {targets: ['ie 11'], polyfills: ['fetch']};
 
       const configResult = await computeEslintConfig('compat', {

@@ -72,7 +72,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
    * Enforce the max number of top-level suites in a single file.
    *
    * Affected rule:
-   * - [`vitest/max-top-level-suites`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/max-top-level-suites.md)
+   * - [`mocha/max-top-level-suites`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/max-top-level-suites.md)
    * @default 1
    */
   maxTopLevelSuites?: number;

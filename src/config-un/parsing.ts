@@ -50,7 +50,7 @@ import {
 
 /**
  * These file types are implicitly added to `ignores` array of every Config
- * unless the config set ups the parser for this language or opts out.
+ * unless the config sets up the parser for this language or opts out.
  */
 export type ImplicitlyIgnoredFileTypeUnlessParsed =
   | 'css'
@@ -412,7 +412,7 @@ export interface ParsingRequest {
 
   /**
    * Emits an entry of its own instead of merging in.
-   * For handling only part of the parsed files can take, like the TypeScript project service
+   * For settings only part of the parsed files can take, like the TypeScript project service
    */
   nameSuffix?: string;
 

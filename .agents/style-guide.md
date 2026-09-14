@@ -14,7 +14,7 @@ Avoid terms and phrases like "load-bearing", "byte-identical", "it's not x; it's
 Reduce use of metaphors, jargonisms and complex and rarely used words.
 Don't be verbose in general.
 Sound human.
-In general, your should do your best so that your output/prose reads easily, without sactificing any information you'd like to express.
+In general, you should do your best so that your output/prose reads easily, without sacrificing any information you'd like to express.
 All above is not a hard ban - you can use whatever if it actually fits and makes sense.
 
 ## Code
@@ -35,9 +35,9 @@ All above is not a hard ban - you can use whatever if it actually fits and makes
   - Having both explicit return type and the unsafe case of the return value in the same function.
 - Do not `export` symbols not used outside the current file and not provided publicly.
 - Hoist symbols and literals (like regexes, functions, constants) as high as possible.
-- Sort symbols in `export {...}` expressions alphabetically, unless is makes sense to do something else (likely group exports, but they must be exported within each group too).
+- Sort symbols in `export {...}` expressions alphabetically, unless it makes sense to do something else (likely group exports, but they must be exported within each group too).
   Always sort symbols in `import {...}` expressions and sort import statements themselves in [`sort-imports`](https://eslint.org/docs/latest/rules/sort-imports) and [`import/order`](https://raw.githubusercontent.com/un-ts/eslint-plugin-import-x/refs/tags/v4.17.1/docs/rules/order.md) orders respectively.
-  Assume default options for `import/order` are `{groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'], alphabetize: {order: 'asc'}}`, but them might be overridden in ESLint config file.
+  Assume default options for `import/order` are `{groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'], alphabetize: {order: 'asc'}}`, but they might be overridden in ESLint config file.
 - In general, in *large* lists prefer keeping things alphabetical, if makes sense and not instructed otherwise.
 - If you encounter an ESLint error that has multiple ways of fixing, always weigh all options INCLUDING disabling the rule for this line (or, much more rarely, for the entire file) before fixing.
 - Do your best to avoid `any` and type casting (`as ...`) in favor of `unknown` or other clever workarounds.
@@ -84,7 +84,7 @@ Always run them on the *all **changed*** files (not only source files!) unless n
 Ignore the pre-existing unrelated issues.
 If there are specific package.json scripts to invoke them, prefer them instead over calling directly:
 
-- TypeScript as type checker (usually `tsc --noEmit` or `vue-tsc --notEmit` for Vue projects)
+- TypeScript as type checker (usually `tsc --noEmit` or `vue-tsc --noEmit` for Vue projects)
 - ESLint (`eslint list.ext1 of.ext2 changed.ext3 files.ext4`)
 - Prettier (`prettier --write --log-level warn changed.ts files.js`)
 - Vitest (usually `vitest run changed.spec.ts files.spec.js`)

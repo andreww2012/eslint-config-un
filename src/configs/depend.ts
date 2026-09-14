@@ -9,7 +9,7 @@ import {
 
 /**
  * Enables rules from a plugin to help suggest alternatives to various dependencies.
- * [The list of replacements](https://e18e.dev/docs/replacements) is maintained by e18e community.
+ * [The list of replacements](https://e18e.dev/docs/replacements) is maintained by the e18e community.
  *
  * ⚠️ You should probably use `e18e` config, which provides functionally the same
  * `moduleReplacements` sub-config, as well as other useful rules.

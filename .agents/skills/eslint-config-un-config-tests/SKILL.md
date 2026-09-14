@@ -11,7 +11,7 @@ Tests must live in the `/test` directory and have `.spec.ts` extension.
   - Corresponds to a single file in `src/configs/`.
   - Each Config generates one or more ESLint flat configs.
   - The common interface is `UnFlatConfigEntryBase` from `src/eslint/eslint-types.ts`.
-  - All Configs are listed in `src/configs/index.ts`.
+  - All Configs are listed in the generated `src/configs/index.gen.d.ts` (run `nr prep` if it is missing).
   - A Config may have custom options and special `configSomeConfig` options, which are ALWAYS related to Sub-configs.
 - **Sub-config** — same as Config, but defined *within* a Config file.
   Everything said about Configs applies to Sub-configs.
@@ -43,9 +43,9 @@ The main Config test file must **not** test Sub-config rules or options.
 
 You can use, for example, the following test files as a reference for structure and style:
 
-- `ts/*.spec.ts` or `drizzle/drizzle.spec.ts` - the most up-to-date structure (not all specs have been up-to-date with it), **USE AS A PRIMARY REFERENCE**
+- `ts/*.spec.ts` or `drizzle/drizzle.spec.ts` - the most up-to-date structure (not all specs are up to date with it), **USE AS A PRIMARY REFERENCE**
 - `jsdoc/jsdoc.spec.ts` - testing `jsdoc`, a config that is enabled by default and has sub-configs
-- `test/angular/*.spec.ts` - for `angular`, config enabled <=> `@angular/core` package is installed and has sub-configs
+- `angular/*.spec.ts` - for `angular`, config enabled <=> `@angular/core` package is installed and has sub-configs
 - `lockfile/lockfile.spec.ts` - for `lockfile`, config from `misc-enabled` group
 - `prefer-arrow-functions/prefer-arrow-functions.spec.ts` - for `preferArrowFunctions`, config disabled by default
 
@@ -54,20 +54,20 @@ You can use, for example, the following test files as a reference for structure 
 ##### `basic test` describe block
 
 There should be exactly two tests for everything the Config produces for one set of options — ESLint configs & plugins, `files`, `ignores`, `languageOptions`, `processor` and so on - a positive one (Config enabled) and a negative one (Config disabled).
-The test name should list what is created and ends with the condition: ``'creates `drizzle` eslint config and loads `drizzle` plugin if set to `true`'``.
+The test name should list what is created and end with the condition: ``'creates `drizzle` eslint config and loads `drizzle` plugin if set to `true`'``.
 
-Determine the default-enable condition from `src/configs/index.ts` and/or `src/config-un/config.ts`.
-If it has one, make sure this condition is true by default for the *whole test suite* (the most common example: treating package(s) as installed)
+Determine the default-enable condition from the `enabledBy` property of the Config manifest (the second argument of `defineUnConfig`).
+If it has one, make sure this condition is true by default for the *whole test suite* (the most common example: treating package(s) as installed).
 Then create sub-describe blocks:
 
-- `mode: all configs are disabled` — corresponds to `defaultConfigStatus: 'all-disabled'`:
+- `mode: all configs are disabled` — corresponds to `defaultConfigsStatus: 'all-disabled'`:
   - config is not explicitly enabled
   - config is explicitly enabled
-- `mode: all configs are not explicitly enabled or disabled` — the actual default (`defaultConfigStatus: undefined`):
+- `mode: all configs are not explicitly enabled or disabled` — the actual default (`defaultConfigsStatus: undefined`):
   - config is not explicitly enabled/disabled
   - config explicitly {enabled,disabled} (2 tests)
   - (if has condition) condition is explicitly {enabled,disabled} and that condition is {true,false} (4 tests)
-- `mode: misc configs are enabled` — corresponds to `defaultConfigStatus: 'misc-enabled'`:
+- `mode: misc configs are enabled` — corresponds to `defaultConfigsStatus: 'misc-enabled'`:
   - config is not explicitly enabled/disabled
   - config explicitly {enabled,disabled}
 
@@ -157,5 +157,5 @@ Implement tests in this order:
    Each step should be done in a sub-agent.
 3. Once all Config tests are done, repeat for every Sub-config (options starting with `config`).
 
-Just before finishing, ensure there are no TypeScript, Prettier and ESLint errors in the created test files.
+Just before finishing, ensure there are no TypeScript, oxfmt and ESLint errors in the created test files.
 When fixing TypeScript errors, do your best to avoid type casts (`as`) and suggest more clever workarounds (for example, you can use `toMatchObject` instead of `toStrictEqual`)

@@ -15,7 +15,7 @@ describe('jest: sub config `jestExtended`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+        '["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
       expect(config?.ignores?.length).toBeGreaterThan(0);
       expect(config?.files).toStrictEqual(configResult.getConfigByUnPostfix('jest')?.files);

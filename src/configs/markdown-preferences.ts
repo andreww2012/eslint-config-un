@@ -73,7 +73,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
           | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
 
         /**
-         * Choose the style of emphasized for strikethrough.
+         * Choose the delimiter style for strikethrough text.
          * Set `false` to not enforce.
          *
          * Affected rule:
@@ -96,7 +96,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
    * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
-   * @default 'Sentence case';
+   * @default 'Sentence case'
    */
   enforceCasing?:
     | EnforceableCasing
@@ -142,8 +142,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * [default patterns list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99).
    *
    * You can use the array or the object syntax.
-   * The difference is that the object syntax allows to exclude some words from the default list by
-   * setting the value to `false`.
+   * The difference is that the object syntax allows you to exclude some words from the default list
+   * by setting the value to `false`.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
@@ -175,7 +175,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
         numbering?: false | 'sequential' | 'fixed';
 
         /**
-         * Enforces that ordered lists in start with a specific number (1 or 0).
+         * Enforces that ordered lists start with a specific number (1 or 0).
          *
          * Affected rule:
          * - [`markdown-preferences/ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
@@ -190,7 +190,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          *
          * Affected rule:
          * - [`markdown-preferences/ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
-         * @default 'n.''
+         * @default 'n.'
          */
         style?:
           | false
@@ -206,8 +206,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/src/resources/preserve-words.ts).
    *
    * You can use the array or the object syntax.
-   * The difference is that the object syntax allows to exclude some words from the default list by
-   * setting the value to `false`.
+   * The difference is that the object syntax allows you to exclude some words from the default list
+   * by setting the value to `false`.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)

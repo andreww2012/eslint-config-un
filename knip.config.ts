@@ -5,7 +5,7 @@ import type {KnipConfig} from 'knip';
 const config: KnipConfig = {
   ignore: [
     'test/**/fixtures/**',
-    // Since v6.30.0, it started to report unresolved imports in the `dist` directory for some reason
+    // Since v6.30.0, it reports unresolved imports in the `dist` directory for some reason
     ...(fs.existsSync(path.join(import.meta.dirname, 'dist')) ? ['dist/**'] : []),
   ],
   entry: [

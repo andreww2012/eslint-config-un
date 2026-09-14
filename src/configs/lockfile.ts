@@ -115,8 +115,8 @@ export interface LockfileEslintConfigOptions<
    * Detected automatically with
    * [`package-manager-detector`](https://npmx.dev/package-manager-detector).
    *
-   * If PM(s) neither specified here nor detected, the affected rules are disabled, since they would
-   * otherwise assume `npm` and may report incorrectly.
+   * If PM(s) are neither specified here nor detected, the affected rules are disabled, since they
+   * would otherwise assume `npm` and may report incorrectly.
    *
    * Affected rule:
    * - [`lockfile/tracked`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/tracked.md)

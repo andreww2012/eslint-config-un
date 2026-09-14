@@ -208,7 +208,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
         ).toMatchObject({order: ORDER});
       });
 
-      it('uses custom group order and options order from `antfu` present within groups when `type` is `order-groups`', async () => {
+      it('uses custom group order and options order from `antfu` preset within groups when `type` is `order-groups`', async () => {
         const configResult = await computeEslintConfig({
           ts: {
             configSortTsconfigKeys: {

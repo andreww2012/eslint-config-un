@@ -52,7 +52,7 @@ trustPolicyExclude: []
 
 audit:
   ignore: # []
-    - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major verion number change
+    - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
   ignorePrune: true # eslint-disable-line json-schema-validator/no-invalid
 
 allowBuilds:
@@ -62,16 +62,16 @@ allowBuilds:
   '@parcel/watcher@2.6.0': false
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
-  # Runs an optional build-form-source compilation step using `node-gyp-build-optional-packages`
+  # Runs an optional build-from-source compilation step using `node-gyp-build-optional-packages`
   # (uses the prebuilt `.node` instead)
   msgpackr-extract@3.0.4: false
   # Dev only script to enforce a package manager
   multiline-ts@4.0.1: false
   # Not relevant for us - present transitively via `@nx/eslint-plugin`
   nx@23.2.1: false
-  # The Chrome is only downloaded upon launching script(s) that actually use them to saving disk space
+  # Chrome is only downloaded upon launching the script(s) that actually use it, to save disk space
   puppeteer@25.11.0: false
-  # Runs `napi-postinstall`, which is optional deps checker for legacy npm versions
+  # Runs `napi-postinstall`, which is an optional deps checker for legacy npm versions
   unrs-resolver@1.12.2: false
 
 dedupePeers: true

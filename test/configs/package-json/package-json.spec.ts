@@ -227,7 +227,7 @@ describe('options', () => {
   });
 
   describe('option: `propertiesAllowedToBeEmpty`', () => {
-    it('ignores `browserslist` property by default in `package-json/no-empty-fields` rule by default', async () => {
+    it('ignores `browserslist` property in `package-json/no-empty-fields` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(

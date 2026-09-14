@@ -45,7 +45,7 @@ const GIT_URL_PROTOCOL_PREFIX_REGEXP = /^git\+/;
 const GIT_URL_SUFFIX_REGEXP = /\.git$/;
 
 // `fetchPackageInfo` locates package.json by resolving the package as a module, which fails for
-// bin-only like `@eslint/config-inspector`
+// bin-only packages like `@eslint/config-inspector`
 const readDependencyPackageJson = async (dependency: string) => {
   const info = await fetchPackageInfo(dependency);
   return (
@@ -92,7 +92,7 @@ const getDependencyRepoUrl = async (dependency: string) => {
       }
     }
 
-    // Might not always starts with `/`: https://npmx.dev/package-code/eslint-plugin-react-refresh/v/0.5.0/package.json#L8
+    // Might not always start with `/`: https://npmx.dev/package-code/eslint-plugin-react-refresh/v/0.5.0/package.json#L8
     if (repoUrlParsed.pathname.startsWith('/')) {
       gitHubRepoPath = repoUrlParsed.pathname.slice(1);
     }
@@ -485,7 +485,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - ❓ enabled conditionally ${ruleDocsUrlForMd} rule in the ⚙️ \`\` sub-config
 - 🔴 not enabled ${ruleDocsUrlForMd} rule
 - ❌ \`${sampleRuleNameWithPrefix}\` rule was removed
-- ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
+- ⚠️ ${ruleDocsUrlForMd} rule was disabled because it got deprecated
 - 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`;
 
   console.log(styleText('underline', 'For changelog:'));

@@ -39,17 +39,17 @@ type ReactRootPluginSettingName =
 
 export interface ReactPluginSettings {
   /**
-   * Regex for Component Factory to use, default to `createReactClass`
+   * Regex for Component Factory to use, defaults to `createReactClass`
    */
   createClass?: string;
 
   /**
-   * Pragma to use, default to `React`
+   * Pragma to use, defaults to `React`
    */
   pragma?: string;
 
   /**
-   * Fragment to use (may be a property of `pragma`), default to `Fragment`
+   * Fragment to use (may be a property of `pragma`), defaults to `Fragment`
    */
   fragment?: string;
 
@@ -116,7 +116,7 @@ export interface ReactPluginSettings {
   )[];
 
   /**
-   * Components used as alternatives to `<form>` for forms, eg. `<Form endpoint={ url } />`
+   * Components used as alternatives to `<form>` for forms, e.g. `<Form endpoint={ url } />`
    */
   formComponents?: (
     | string
@@ -134,7 +134,7 @@ export interface ReactPluginSettings {
   )[];
 
   /**
-   * Components used as alternatives to `<a>` for linking, eg. `<Link to={ url } />`
+   * Components used as alternatives to `<a>` for linking, e.g. `<Link to={ url } />`
    */
   linkComponents?: (
     | string
@@ -309,15 +309,15 @@ interface RefreshSubConfigOptions<
    *
    * Note that we detect some frameworks and add their exports to this list automatically.
    * Names specified here will be added to the final list, not overwrite it.
-   * - **Remix** and **React router**: the route module exports which their Vite plugins either
+   * - **Remix** and **React Router**: the route module exports which their Vite plugins either
    *   strip from the client bundle or accept on refresh.
    *   Note that the "supported exports" sections of the
    *   [Remix](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports) and
-   *   [React router](https://reactrouter.com/explanation/hot-module-replacement#supported-exports)
+   *   [React Router](https://reactrouter.com/explanation/hot-module-replacement#supported-exports)
    *   docs only list a subset of them.
    *   A single combined list is added if *any* of the following packages is installed:
    *   `@remix-run/{react,node,serve,dev}`, `@react-router/{react,node,serve,dev}`.
-   * - **NextJS**: adds various user exported functions and variables if `next` package is
+   * - **Next.js**: adds various user-exported functions and variables if `next` package is
    *   installed.
    */
   allowExportNames?: string[];
@@ -347,15 +347,16 @@ interface RefreshSubConfigOptions<
  * option to control which rules from which plugins, if any, will be used.
  * Refer to `pluginX` option JSDoc for more details.
  *
- * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
- * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from
+ * - `configAllowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
+ * - `configReactX`: runtime agnostic ("X") and "Naming Convention" rules from
  *   `@eslint-react/eslint-plugin`.
- * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from
- *   `@eslint-react/eslint-plugin`.
- * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
- * - `refresh`: rules from `eslint-plugin-react-refresh`.
- * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
- * - `html`: rules from `@html-eslint/eslint-plugin-react`.
+ * - `configHooks`: rules from `eslint-plugin-react-hooks`.
+ * - `configDom`: DOM specific rules from both `@eslint-react/eslint-plugin` and
+ *   `eslint-plugin-react`.
+ * - `configRefresh`: rules from `eslint-plugin-react-refresh`.
+ * - `configYouMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
+ * - `configHtml`: rules from `@html-eslint/eslint-plugin-react`.
+ * - `configTypeAwareRules`: rules requiring type information.
  */
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -380,9 +381,7 @@ export interface ReactEslintConfigOptions<
   configReactX?: boolean | ReactXSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enables or specifies the configuration for the React Hooks rules, as well as
-   * `eslint-react/no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
-   * (unless `pluginX` option is set to `never` on `react` config).
+   * Enables or specifies the configuration for the React Hooks rules.
    *
    * 📁 Default `files` and `ignores`: inherited from the parent config
    *
@@ -397,7 +396,7 @@ export interface ReactEslintConfigOptions<
    * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugins.
    *
    * To avoid including the rules from any of these plugins, set `pluginX` option to `never` or
-   * `avoid` to completely ignore `@eslint-react/eslint-plugin` or `eslint-plugin-react` rules
+   * `only` to completely ignore `@eslint-react/eslint-plugin` or `eslint-plugin-react` rules
    * respectively.
    *
    * 📁 Default `files` and `ignores`: inherited from the parent config
@@ -562,7 +561,7 @@ export interface ReactEslintConfigOptions<
    *
    * Affected rule:
    * - [`react/jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
-   * @default true
+   * @default 'prefer'
    */
   shorthandFragment?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';
 }

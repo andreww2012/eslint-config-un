@@ -130,7 +130,7 @@ describe('options', () => {
       expect(configResult.getRuleEntryOptions('cspell', 'cspell/spellchecker')).toStrictEqual([]);
     });
 
-    it('sets rule options when set to provided', async () => {
+    it('sets rule options when provided', async () => {
       const OPTIONS = {autoFix: false, numSuggestions: 5, checkComments: false} as const;
 
       const configResult = await computeEslintConfig({

@@ -33,7 +33,7 @@ type PackageJsonCollection =
 
 type PackageJsonCollectionsToSort = Partial<Record<PackageJsonCollection, boolean>>;
 
-// Note: unlike the rule's default, we don't sort `scripts`, `configs` and `exports` sections
+// Note: unlike the rule's default, we don't sort `scripts`, `config` and `exports` sections
 const DEFAULT_COLLECTIONS_TO_SORT = {
   devDependencies: true,
   dependencies: true,
@@ -135,8 +135,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * Sort lexically the properties of the specified package.json collections.
    *
    * NOTE: "our" default value is not the same as the actual default value of the rule.
-   * Namely, we don't sort `scripts` and `configs` sections, but do sort `peerDependenciesMeta` and
-   * `optionalDependencies`.
+   * Namely, we don't sort `scripts`, `config` and `exports` sections, but do sort `resolutions`,
+   * `dependenciesMeta` and some of the `pnpm.*` ones.
    *
    * The provided value will be **MERGED** with the default list.
    * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}

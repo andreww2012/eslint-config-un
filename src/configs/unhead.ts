@@ -7,7 +7,7 @@ import {
 } from './index';
 
 /**
- * [[Unhead](https://unhead.unjs.io) specific rules, catching library misuse, type-narrowing issues
+ * [Unhead](https://unhead.unjs.io) specific rules, catching library misuse, type-narrowing issues
  * and v2-to-v3 migration problems.
  *
  * 📁 Default `files`: all files

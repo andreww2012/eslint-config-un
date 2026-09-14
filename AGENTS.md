@@ -5,7 +5,7 @@ CRITICAL: always strictly follow [the project style guide](./.agents/style-guide
 ## About
 
 `eslint-config-un` is an ESLint configuration generator, wrapping 100+ ESLint plugins.
-For usage examples, understanding concepts and API documentation [`README.md`](./README.md).
+For usage examples, concepts and API documentation, see [`README.md`](./README.md).
 
 ## Instructions
 

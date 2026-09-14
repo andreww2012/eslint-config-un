@@ -21,7 +21,7 @@ describe('basic tests', () => {
       eslintPluginJest.default.environments.globals.globals,
     );
     expect(config?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      '["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
     );
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
@@ -217,7 +217,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('jest', 'jest/max-expects')).toBe(0);
     });
 
-    it('enables `jest/max-expects` with option is set to number', async () => {
+    it('enables `jest/max-expects` when option is set to number', async () => {
       const configResult = await computeEslintConfig({jest: {maxAssertionCalls: 3}});
 
       expect(configResult.getRuleEntry('jest', 'jest/max-expects')).toMatchInlineSnapshot(

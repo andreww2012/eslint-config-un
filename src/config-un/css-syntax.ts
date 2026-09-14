@@ -10,7 +10,7 @@ export type CssCustomSyntaxOption = MaybeFn<
   [
     {
       /**
-       * Default CSS syntax provided by `@eslint/css`, which in turn coming from
+       * Default CSS syntax provided by `@eslint/css`, which in turn comes from
        * `@eslint/css-tree/definition-syntax-data`.
        */
       defaultSyntax: CssCustomSyntax;
@@ -59,7 +59,7 @@ export const generateTailwindCssSyntaxProperty = (
         ) {
           const tailwindSyntaxFn = tailwindCsstree[`tailwind${this.tailwindMajorVersion}`];
           const tailwindSyntax = tailwindSyntaxFn(
-            // @ts-expect-error This is fine - the type is too strict. In real code, only `types` property is expected to exists which already does (see `tailwindX.js` files at https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
+            // @ts-expect-error This is fine - the type is too strict. In real code, only `types` property is expected to exist, which it already does (see `tailwindX.js` files at https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
             defaultSyntax,
           );
           return utils.maybeCall(this.customSyntax || tailwindSyntax, {

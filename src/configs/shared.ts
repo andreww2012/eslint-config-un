@@ -119,7 +119,7 @@ export const generateDefaultTestFiles = <T extends string>(
     ? [
         // Popularity of separators (using GitHub global code source https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts as of 2026-05-30):
         // `.`: 4.9M, `-`: 221k, `_`: 42.7k
-        `**/*[.-_]spec.${extensions}` as const,
+        `**/*[._-]spec.${extensions}` as const,
         `**/*.test.${extensions}` as const, // 6.3M
         `**/__test?(s)__/**/*.${extensions}` as const, // tests: 513k, test: 26.6k
       ]

@@ -38,7 +38,7 @@ describe('e18e: sub config `modernization`', () => {
       });
     });
 
-    it('`e18e/prefer-object-has-own` rule fires on a `Object.prototype.hasOwnProperty` call', async () => {
+    it('`e18e/prefer-object-has-own` rule fires on an `Object.prototype.hasOwnProperty` call', async () => {
       const results = await testEslintConfig(
         {e18e: true, ts: true},
         FIXTURES.hasOwnPropertyCall,

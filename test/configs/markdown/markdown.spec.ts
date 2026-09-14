@@ -294,7 +294,7 @@ describe('options', () => {
       ).toBe('yaml');
     });
 
-    it('sets frontmatter to `toml` in `markdown/markdown` eslint config when set to provided', async () => {
+    it('sets frontmatter to `toml` in `markdown/markdown` eslint config when provided', async () => {
       const configResult = await computeEslintConfig({
         markdown: {parseFrontmatter: 'toml'},
       });

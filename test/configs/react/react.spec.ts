@@ -363,7 +363,7 @@ describe('options', () => {
   });
 
   describe('option: `shorthandBoolean`', () => {
-    it('uses `never` value and warning severity for `react/jsx-boolean-value` by default and `pluginX` is `never`', async () => {
+    it('uses `never` value and warning severity for `react/jsx-boolean-value` by default when `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
 
       expect(
@@ -413,7 +413,7 @@ describe('options', () => {
   });
 
   describe('option: `shorthandFragment`', () => {
-    it('uses `syntax` value and warning severity for `react/jsx-fragments` by default and `pluginX` is `never`', async () => {
+    it('uses `syntax` value and warning severity for `react/jsx-fragments` by default when `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
 
       expect(

@@ -25,7 +25,7 @@ export const resolveGitignore = async (
       // file could not be found at cwd. However, there are other sources of ignored patterns, such
       // as `.gitmodules` or `.git/info/exclude`. Unfortunately, it still does not begin to read
       // the exclude file if `.gitignore` is missing, but it does at least read the `.gitmodules`,
-      // which it wouldn't if the `strict` was not set to `false`
+      // which it wouldn't if `strict` was not set to `false`
       // TODO should report that?
       strict: false,
       ...options,

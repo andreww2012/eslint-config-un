@@ -37,9 +37,9 @@ export interface UnFilesAndIgnoresPatterns {
 
 interface UnFlatConfigEntryFilesOnly {
   /**
-   * If the config has "sub-configs", most of the time they WON'T disabled unless otherwise stated
-   * in the config docs.
-   * The good example of the config which doesn't follow this rule is `ts`, which disables
+   * If the config has "sub-configs", most of the time they WON'T be disabled unless otherwise
+   * stated in the config docs.
+   * A good example of the config which doesn't follow this rule is `ts`, which disables
    * type-aware sub-config too if `files` is empty array and no files are passed explicitly to the
    * sub-config.
    *
@@ -65,7 +65,7 @@ export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFiles
    * the config is not meant to lint (`ignoresImplicit`). The returned patterns completely replace
    * both, unless `undefined` is returned.
    *
-   * Called for every eslint config this config generates, as well as whenever the patterns are
+   * Called for every ESLint config this config generates, as well as whenever the patterns are
    * resolved earlier (e.g. when they are passed to another config), in which case `ignoresImplicit`
    * is empty.
    */
@@ -156,7 +156,7 @@ export type UnRulesConfigPartial<
     : never;
 
 /**
- * An interface that must implement any Un Config
+ * An interface that any Un Config must implement
  */
 export interface UnFlatConfigEntryBase<
   ExtraPlugins extends ExtraPluginsType = never,

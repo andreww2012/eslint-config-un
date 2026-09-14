@@ -107,7 +107,7 @@ describe('rules', async () => {
     );
   });
 
-  it('language set by `markdownPreferences` config take precedence of language set by `markdownLinks`', async () => {
+  it('language set by `markdownPreferences` config takes precedence over language set by `markdownLinks`', async () => {
     const results = await testEslintConfig(
       {markdownLinks: true, markdownPreferences: {extendedMarkdownSyntax: true}},
       FIXTURES.vitepressCustomContainerWithoutSpaceInHeader,

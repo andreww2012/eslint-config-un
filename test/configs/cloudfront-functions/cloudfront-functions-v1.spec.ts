@@ -22,7 +22,7 @@ describe('cloudfront functions: sub config `v1`', () => {
       expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
-    it('does not create `cloudfront-functions/v1` eslint config when neither `files` or `ignores` are provided', async () => {
+    it('does not create `cloudfront-functions/v1` eslint config when neither `files` nor `ignores` is provided', async () => {
       const configResult = await computeEslintConfig({
         cloudfrontFunctions: {configV1: {}},
       });

@@ -111,7 +111,7 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('merges default settings with user-provided ones and assignes to `file-progress` settings property', async () => {
+    it('merges default settings with user-provided ones and assigns them to `file-progress` settings property', async () => {
       const SETTINGS = {hideFileName: true};
 
       const configResult = await computeEslintConfig('fileProgress', {

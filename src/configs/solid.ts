@@ -133,7 +133,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('jsx-no-script-url', ERROR) /** @since 0.7.0 */ // 🟢
     .addRule('jsx-no-undef', ERROR, [
       {
-        // I haven't testing this, but in general this could be disruptive
+        // I haven't tested this, but in general this could be disruptive
         autoImport: false,
         typescriptEnabled: context.configsMeta.ts.enabled,
       },

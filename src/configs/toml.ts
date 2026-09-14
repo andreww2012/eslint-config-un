@@ -19,8 +19,8 @@ const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
  *
  * 📁 Default `files`: <code>**&#47;*.toml</code>
  *
- * If `ignores` is explicitly specified, it still be merged with the default ignore list, excluding
- * items specified in `ignoresAdditional`.
+ * If `ignores` is explicitly specified, it will still be merged with the default ignore list,
+ * excluding items specified in `ignoresAdditional`.
  *
  * The default ignore list: <code>**&#47;Cargo.lock</code>
  */

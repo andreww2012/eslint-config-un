@@ -216,7 +216,7 @@ export class ConfigEntryBuilder<
 
             /**
              * Will be merged with the internal `ignores`, and, if
-             * `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
+             * `ignoresDefaultMergedWithUserIgnores` is set to `true`, with the user-provided ones.
              */
             ignoresDefault?: string[];
             ignoresDefaultMergedWithUserIgnores?: boolean;
@@ -225,7 +225,7 @@ export class ConfigEntryBuilder<
 
             /**
              * Some rules crash or behave unexpectedly when linting foreign file types.
-             * This usually happens on unexpected for the rule file types when `files` are not
+             * This usually happens on file types the rule does not expect when `files` are not
              * restricted.
              * For example:
              * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
@@ -254,8 +254,8 @@ export class ConfigEntryBuilder<
              * That's why globs corresponding to such files are implicitly/internally added to the
              * final `ignores` array.
              *
-             * Use this option if you don't want implicitly ignore certain file types (set the file
-             * type you wish not to be ignored to `false`).
+             * Use this option if you don't want to implicitly ignore certain file types (set the
+             * file type you wish not to be ignored to `false`).
              * You can also set the whole option to `false` to not add anything to `ignores`.
              * @default true
              */
@@ -391,7 +391,7 @@ export class ConfigEntryBuilder<
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
-    // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores)
+    // - to avoid (most likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores)
     const configFinal: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
@@ -691,7 +691,7 @@ export class ConfigEntryBuilder<
 
             if (includeDeprecated === 'allow' && deprecatedPluginRules.size === 0) {
               errorMessages.push({
-                message: 'Deprecated rules were allowed, but there are no any in the plugin',
+                message: 'Deprecated rules were allowed, but there are none in the plugin',
                 severity: 'warn',
               });
             }

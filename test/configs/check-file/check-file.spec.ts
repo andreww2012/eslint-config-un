@@ -181,7 +181,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `check-file/filename-naming-convention` rule when set to provided as object', async () => {
+    it('enables `check-file/filename-naming-convention` rule when provided as object', async () => {
       const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
 
       const configResult = await computeEslintConfig({
@@ -193,7 +193,7 @@ describe('options', () => {
       ).toStrictEqual([CONVENTIONS]);
     });
 
-    it('enables `check-file/filename-naming-convention` rule when set to provided as array', async () => {
+    it('enables `check-file/filename-naming-convention` rule when provided as array', async () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {ignoreMiddleExtensions: true},
@@ -218,7 +218,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `check-file/folder-naming-convention` rule when set to provided as object', async () => {
+    it('enables `check-file/folder-naming-convention` rule when provided as object', async () => {
       const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
 
       const configResult = await computeEslintConfig({
@@ -230,7 +230,7 @@ describe('options', () => {
       ).toStrictEqual([CONVENTIONS]);
     });
 
-    it('enables `check-file/folder-naming-convention` rule when set to provided as array', async () => {
+    it('enables `check-file/folder-naming-convention` rule when provided as array', async () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {errorMessage: 'use kebab-case folders'},

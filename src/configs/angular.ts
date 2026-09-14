@@ -105,7 +105,7 @@ interface ConfigTemplateSubConfigOptions<
 
 /**
  * [Angular](https://angular.dev) specific rules.
- * Supported versions: 13 to 20 (inclusive).
+ * Supported versions: 13 to 22 (inclusive).
  *
  * You are expected to install `@angular-eslint/eslint-plugin` and
  * `@angular-eslint/eslint-plugin-template` packages of the same major version as your Angular
@@ -133,13 +133,11 @@ export interface AngularEslintConfigOptions<
    * Detected automatically from a major version of the installed version of `@angular/core`
    * package, but can also be specified manually here.
    *
-   * Used to determine which rules will be available based on its availability in the same major
+   * Used to determine which rules will be available based on their availability in the same major
    * version of [`@angular-eslint/eslint-plugin`](https://npmx.dev/@angular-eslint/eslint-plugin)
    * and
    * [`@angular-eslint/eslint-plugin-template`](https://npmx.dev/@angular-eslint/eslint-plugin-template)
    * packages.
-   *
-   * Unavailable rules can be ported by specifying them in `portRules` option.
    */
   angularVersion?: SupportedAngularVersion;
 
@@ -189,7 +187,7 @@ export interface AngularEslintConfigOptions<
    *
    * Affected rule:
    * - [`angular/directive-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-class-suffix.md)
-   * @default ['Component']
+   * @default ['Directive']
    */
   directiveClassSuffixes?: string[];
 
@@ -212,10 +210,10 @@ export interface AngularEslintConfigOptions<
    *
    * Affected rules:
    * - [`angular/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md)
+   *   (available until Angular 18, deprecated in Angular 18)
    * - [`angular/no-inputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-inputs-metadata-property.md)
    * - [`angular/no-outputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-outputs-metadata-property.md)
    * - [`angular/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)
-   *   (available until Angular 18, deprecated in Angular 18)
    * @default {inputs: true, outputs: true, queries: true}
    */
   forbiddenMetadataProperties?: Partial<Record<'host' | 'inputs' | 'outputs' | 'queries', boolean>>;

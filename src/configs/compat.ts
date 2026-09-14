@@ -11,7 +11,7 @@ import {
 /**
  * [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned directly to the `settings` flat config option. /
+ * that will be assigned directly to the `settings` flat config option.
  */
 export interface CompatPluginSettings {
   /**

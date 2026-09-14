@@ -14,7 +14,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      '["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
     );
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
@@ -220,7 +220,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"allowContainerFirstChild": true}]');
     });
 
-    it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when set to `false', async () => {
+    it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {allowContainerFirstChild: false},
       });

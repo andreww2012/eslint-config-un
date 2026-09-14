@@ -180,7 +180,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
     });
 
-    it('disables `svelte/prefer-style-directive` rule by default and installed `svelte` version is < 3.46', async () => {
+    it('disables `svelte/prefer-style-directive` rule by default when installed `svelte` version is < 3.46', async () => {
       setInstalledPackages({svelte: '3'});
 
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 3}});
@@ -188,13 +188,13 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
     });
 
-    it('enables `svelte/require-event-prefix` rule by default and installed `svelte` version is >= 5', async () => {
+    it('enables `svelte/require-event-prefix` rule by default when installed `svelte` version is >= 5', async () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/require-event-prefix')).toBe(2);
     });
 
-    it('disables `svelte/require-event-prefix` rule by default and installed `svelte` version is < 5', async () => {
+    it('disables `svelte/require-event-prefix` rule by default when installed `svelte` version is < 5', async () => {
       setInstalledPackages({svelte: '4'});
 
       const configResult = await computeEslintConfig('svelte');

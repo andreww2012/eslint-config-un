@@ -58,7 +58,7 @@ export type BetterTailwindPluginSettings = RequireExactlyOne<{
   attributes?: AnyRuleOptions['attributes'];
 
   /**
-   * List of function names which arguments should also get linted.
+   * List of function names whose arguments should also get linted.
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#callees
    */
   callees?: AnyRuleOptions['callees'];

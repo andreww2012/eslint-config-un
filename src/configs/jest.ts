@@ -58,8 +58,8 @@ interface JestExtendedSubConfigOptions<
 /**
  * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to `jest` property and applied to the resolved `files` and `ignores` of
- * this config, as well as for `ts` and `jestExtended` sub-configs.
+ * that will be assigned to the `jest` property and applied to the resolved `files` and `ignores` of
+ * this config, as well as to the `ts` and `jestExtended` sub-configs.
  */
 export interface JestPluginSettings {
   /**
@@ -219,7 +219,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * By default, this has a list of all the async matchers provided by jest-extended (namely,
    * toResolve and toReject).
    *
-   * *(from Jest docs)*
+   * *(from `eslint-plugin-jest` docs)*
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#asyncmatchers
    */
   asyncMatchers?: string[];
@@ -231,7 +231,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * This is useful when you're using libraries that increase the number of arguments supported by
    * expect, such as [jest-expect-message](https://npmx.dev/jest-expect-message).
    *
-   * *(from Jest docs)*
+   * *(from `eslint-plugin-jest` docs)*
    *
    * Values less than 0 will be ignored.
    * @default [1, 1]

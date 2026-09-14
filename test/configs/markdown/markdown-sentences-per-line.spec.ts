@@ -2,7 +2,7 @@ const FIXTURES = {
   twoSentencesPerLine: 'two-sentences-per-line.md',
 } as const;
 
-describe('markdown: sub config `fentencesPerLine`', () => {
+describe('markdown: sub config `sentencesPerLine`', () => {
   describe('basic tests', () => {
     it('does not create `markdown/sentences-per-line` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');

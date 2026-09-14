@@ -31,11 +31,11 @@ export interface JsEslintConfigOptions<
 
   /**
    * Enforces a consistent style of braces around arrow function bodies:
-   * - `as-needed` (default) enforces no braces where they can be omitted;
+   * - `as-needed` (the rule's default) enforces no braces where they can be omitted;
    * - `always` enforces braces around the function body;
    * - `never` enforces no braces around the function body.
    *
-   * Setting to `true` is equivalent of the default value.
+   * Setting to `true` is equivalent to `as-needed`.
    *
    * Use the array form to also pass the rule's second option, for example
    * `['as-needed', {requireReturnForObjectLiteral: true}]`.

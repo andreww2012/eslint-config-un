@@ -32,8 +32,8 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
 /**
  * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to `vitest` property and applied to the resolved `files` and `ignores` of
- * this config, as well as for `ts` sub-config.
+ * that will be assigned to the `vitest` property and applied to the resolved `files` and `ignores`
+ * of this config, as well as to the `ts` sub-config.
  */
 export interface VitestPluginSettings {
   /**
@@ -62,8 +62,9 @@ export interface VitestPluginSettings {
  * [Vitest](https://vitest.dev) specific rules.
  *
  * 📁 Default `files`:
- * - <code>**&#47;*.{test,spec}.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
  * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*.{bench,benchmark}.?([cm])[jt]s?(x)</code>
  */
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
@@ -113,8 +114,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * - `each` or `for`: prefer the specified method in all cases.
    * - object: configure which method to prefer for different test function types (`test`, `it`,
    *   `describe`, `suite`).
-   *   You may also set the `default` property to specify the preferred by default method, otherwise
-   *   if not explicitly specified, both will be allowed.
+   *   You may also set the `default` property to specify the method preferred by default,
+   *   otherwise both will be allowed.
    * - `false`: no enforcement.
    *
    * Affected rule:

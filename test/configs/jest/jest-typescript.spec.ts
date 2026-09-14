@@ -7,7 +7,7 @@ describe('jest: sub config `typescript`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
+        '["**/*[._-]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
       );
       expect(config?.ignores?.length).toBeGreaterThan(0);
     });
@@ -30,7 +30,7 @@ describe('jest: sub config `typescript`', () => {
       const configResult = await computeEslintConfig({jest: {files: FILES}, ts: true});
 
       expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
+        '["**/*[._-]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
       );
     });
   });

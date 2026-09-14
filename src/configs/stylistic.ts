@@ -16,7 +16,7 @@ import {
 
 /**
  * Stylistic/formatting only rules for JS/TS(X).
- * Only small number of rules are enabled by default.
+ * Only a small number of rules is enabled by default.
  *
  * 📁 Default `files`: all files
  */

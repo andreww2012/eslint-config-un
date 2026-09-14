@@ -7,7 +7,7 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin enforcing best practices for promises handling.
+ * An ESLint plugin enforcing best practices for promise handling.
  *
  * 📁 Default `files`: all files
  */

@@ -9,7 +9,7 @@ import {
 /**
  * [NestJS](https://nestjs.com) specific rules.
  *
- * 📁 Default `files`: <code>**&#47*.?([cm])ts</code>
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts</code>
  */
 export interface NestJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,

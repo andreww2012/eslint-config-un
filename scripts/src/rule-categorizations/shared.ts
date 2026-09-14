@@ -28,7 +28,7 @@ export interface RuleCategorization<CategoryId extends string> {
 
   /**
    * Creates the rule categorizer, first possibly collecting whatever the categorizer function
-   * depends onto, if it does not come from the rule itself
+   * depends on, if it does not come from the rule itself
    */
   createRuleCategorizer: (
     plugin: EslintPlugin,

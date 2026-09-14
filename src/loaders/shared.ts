@@ -26,7 +26,7 @@ export type ModuleLoader<T, N extends string = string, PackageNullable extends b
 // ESM says "package" for bare specifiers and "module" for paths, CJS always says "module"
 const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find (?:module|package) '([^']+)'/;
 
-// Path starting with a dot or a Windows drive letter are not a package name
+// Specifiers starting with a dot, a slash or a Windows drive letter are paths, not package names
 const PATH_SPECIFIER_REGEXP = /^(?:[./\\]|[a-z]:)/i;
 
 // Every Node version fails when a CommonJS module `require()`s a module an `import()` is still loading: https://nodejs.org/api/errors.html#err_require_esm_race_condition
@@ -71,7 +71,7 @@ function createModuleLoader<T, N extends string>(
       }
 
       // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load,
-      // might be not
+      // might not be
       /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
       if (
         MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&

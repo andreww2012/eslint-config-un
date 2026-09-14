@@ -18,8 +18,8 @@ If not, you need to decide whether it should be strongly associated with:
 
 - A new Config like most of the existing plugins do.
   Example: `eslint-plugin-jsdoc` is associated with the `jsdoc` Config;
-- An existing Config, usually in the form of Sub-Config.
-  Example: `@intlify/eslint-plugin-vue-i18n` is associated with the `vue` Config as the `vue-i18n` Sub-Config;
+- An existing Config, usually in the form of a Sub-config.
+  Example: `@intlify/eslint-plugin-vue-i18n` is associated with the `vue` Config as the `vue-i18n` Sub-config;
 - Something else entirely (rare and should be discussed further).
 
 The plugin likely needs to be added to `peerDependencies`, `peerDependenciesMeta` and `devDependencies` of `package.json` like most of the existing plugins.
@@ -42,7 +42,7 @@ ONLY IF the plugin type does not satisfy the expected plugin type (check TS erro
 
 ### Step 1*: Adding other loaders
 
-Sometimes the plugin requires parser/processor/etc. for its' rules to work.
+Sometimes the plugin requires parser/processor/etc. for its rules to work.
 If you installed new packages for that, make sure to add them to `src/loaders/{parsers,packages}.ts`, following the same algorithm.
 
 ### Step 2: Updating generated artifacts
@@ -76,12 +76,12 @@ The general file structure can be inferred from the `eslint-config-un new config
 
 #### Step 4.1: Config options
 
-This file should export `<ConfigName>EslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>` interface extending `UnFlatConfigEntryBase<ExtraPlugins, '<configName>'>`.
+This file should export `<ConfigName>EslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>` interface extending `UnFlatConfigEntryBase<ExtraPlugins, '<plugin prefix>'>`.
 This type includes all the Config's custom options.
 The order of the options is as follows (all are optional):
 
 - `configXxx`: sub-configs.
-  Should have the type of `boolean | UnFlatConfigEntryBase<ExtraPlugins, '<configName>'> & { /* optional custom options */}`.
+  Should have the type of `boolean | UnFlatConfigEntryBase<ExtraPlugins, '<plugin prefix>'> & { /* optional custom options */}`.
 - All the other custom options.
 
 You may only *suggest* implementing some custom options at the end.
@@ -100,8 +100,8 @@ It should only include:
 #### Step 4.2: Config manifest
 
 The second argument of `defineUnConfig` describes everything the generator needs.
-The one most important required property is `enabledBy`, defining the optional conditions under which this Config is enabled by default, or declaring the enablement unconditionally using a boolean literal.
-All of its properties are optional except `enabledBy`.
+The most important property is `enabledBy`, defining the conditions under which this Config is enabled by default, or declaring the enablement unconditionally using a boolean literal (`true` if omitted).
+All of its properties are optional, and a manifest that would only set `enabledBy` to a boolean must be replaced with that boolean.
 Every package named in `enabledBy` must be listed in `PACKAGES_TO_GET_INFO_FOR` in `src/constants.ts`, otherwise it will not type check.
 
 #### Step 4.3: Rules
@@ -113,10 +113,10 @@ If different rules should be applied to different file types, you likely need to
 After every `addRule` statement, we annotate the rule with:
 
 - `@since` custom JSDoc tag.
-  It signifies the first version of the plugin in which this rule first appeared.
+  It signifies the first version of the plugin in which this rule appeared.
   You can find this out by inspecting the results of `nr rules-finder <full plugin package name>` script output.
 - Emojis like `🟢`, `🟡`, etc.
-  They signify if the rule is included in one of the main rule pre-sets, usually named "recommended", "strict", "stylistic", etc.
+  They signify if the rule is included in one of the main rule presets, usually named "recommended", "strict", "stylistic", etc.
   You can find more information on presets in the plugin docs and/or by directly inspecting the plugin object, specifically `configs` property.
   There should be no spaces between consecutive emojis.
   Most often used emojis:
@@ -149,7 +149,7 @@ Two judgement calls the contract cannot spell out:
 ### Step 5: Documentation
 
 Document the addition of a new Config and plugin in `README.md`.
-Do NOT add a config logo if it doesn't exists.
+Do NOT add a config logo if it doesn't exist.
 
 ### Step 6: Testing
 
@@ -161,7 +161,7 @@ IMPORTANT: ignore errors in files you haven't modified!
 
 Write tests for the new Config following [`eslint-config-un-config-tests`](../eslint-config-un-config-tests/SKILL.md) instructions.
 Ensure the coverage of the new Config satisfies the numbers outlined in the aforementioned skill.
-IMPORTANT: code without `enableConfigTesterForPlugin` options should be skipped for coverage using `v8 ignore` comments; see `src/configs/svelte.ts` and `src/configs/react.ts` for examples.
+IMPORTANT: code within `enableConfigTesterForPlugin` options should be skipped for coverage using `v8 ignore` comments; see `src/configs/svelte.ts` and `src/configs/react.ts` for examples.
 
 Adding a Config changes the resolved cascade order, so `test/config-gen/cascade-order.spec.ts` will fail.
 Confirm the new entries appear where you expect, then update the snapshot with `nr t run test/config-gen/cascade-order.spec.ts -u`.

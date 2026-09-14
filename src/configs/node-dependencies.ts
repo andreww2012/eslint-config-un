@@ -18,9 +18,9 @@ export interface NodeDependenciesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node-dependencies'> {
   /**
-   * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
-   * - `'always'`: enforces to use the absolute version on every dependency type, `peerDependencies` and `optionalDependencies` included.
-   * - `'never'`: same scope as `'always'`, but enforces not to use the absolute version.
+   * - `true`: enforces using the absolute version only in `dependencies` and `devDependencies`.
+   * - `'always'`: enforces using the absolute version in every dependency type, `peerDependencies` and `optionalDependencies` included.
+   * - `'never'`: same scope as `'always'`, but enforces not using the absolute version.
    * - `false`: do not enforce anything.
    *
    * Affected rule:

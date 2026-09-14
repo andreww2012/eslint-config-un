@@ -19,7 +19,7 @@ describe('basic tests', () => {
     expect(config?.ignores?.length).toBeGreaterThan(0);
   });
 
-  it('does not create `cloudfront-functions/v2` eslint config when neither `files` or `ignores` are provided', async () => {
+  it('does not create `cloudfront-functions/v2` eslint config when neither `files` nor `ignores` is provided', async () => {
     const configResult = await computeEslintConfig('cloudfrontFunctions');
 
     expect(configResult.getConfigByUnPostfix('cloudfront-functions/v2')).toBeUndefined();

@@ -197,7 +197,7 @@ interface PiniaSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'pinia'> {
   /**
-   * Enforces pinia stores to be defined with the specified suffix.
+   * Enforces Pinia stores to be defined with the specified suffix.
    * Set to an empty string to not require any suffix.
    *
    * Affected rule:
@@ -292,7 +292,7 @@ export interface VueEslintConfigOptions<
    *   [layout files](https://nuxt.com/docs/4.x/directory-structure/app/layouts) will be exempted
    *   from being checked by
    *   [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html);
-   * - Layout files will also not be subject of
+   * - Layout files will also not be subject to
    *   [`vue/require-explicit-slots`](https://eslint.vuejs.org/rules/require-explicit-slots.html)
    *   check;
    * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
@@ -409,7 +409,7 @@ export interface VueEslintConfigOptions<
   reportUnusedDisableDirectives?: boolean;
 
   /**
-   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones if `nuxt`
+   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones if `configNuxt`
    * sub-config is enabled
    */
   knownComponentNames?: string[];
@@ -449,7 +449,9 @@ export interface VueEslintConfigOptions<
   enforcePropsDestructuring?: boolean | 'never' | 'always' | 'onlyWhenAssigned';
 
   /**
-   * Enforce <script> SFC section to go before <template> (<style> will still be the last)
+   * Enforces the order of SFC sections: `template-first` puts `<template>` before `<script>`,
+   * `script-first` does the opposite (`<style>` goes last in both cases), and an array sets the
+   * order explicitly.
    *
    * Affected rule:
    * - [`vue/block-order`](https://eslint.vuejs.org/rules/block-order.html)
@@ -503,7 +505,7 @@ export interface VueEslintConfigOptions<
 
   /**
    * A relative path to your Vue or Nuxt project, i.e. where the app's entry point (`app.vue`),
-   * `pages` and nuxt's `layouts` directories are located.
+   * `pages` and Nuxt's `layouts` directories are located.
    * For Nuxt projects it defaults to the `srcDir` your Nuxt config resolves to, and otherwise to
    * the current directory `''`.
    */
@@ -800,7 +802,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       [
         {
           html: {
-            // TODO change to `never` once prettier does not `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
+            // TODO change to `never` once Prettier does not add `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
             void: context.packagesInfo.prettier ? 'any' : 'never',
             normal: 'never',
             component: 'never',

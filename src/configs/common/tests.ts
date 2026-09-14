@@ -14,12 +14,12 @@ import {TESTS_CONFIG_DEFAULT_FILES} from '../shared';
  * the user still has the final say.
  *
  * 📁 Default `files`:
- * - <code>**&#47*[.-_]spec.?([cm])[jt]s?(x)</code>
- * - <code>**&#47*.test.?([cm])[jt]s?(x)</code>
- * - <code>\*\*&#47__test?(s)__&#47**&#47*.?([cm])[jt]s?(x)</code>
- * - <code>**&#47*.{bench,benchmark}.?([cm])[jt]s?(x)</code>
- * - <code>**&#47*.cy.?([cm])[jt]s?(x)</code>
- * - <code>**&#47*.{stories,story}.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*[._-]spec.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*.test.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;__test?(s)__&#47;**&#47;*.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*.{bench,benchmark}.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*.cy.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47;*.{stories,story}.?([cm])[jt]s?(x)</code>
  *
  * Disabled rules:
  * - `no-empty-function`

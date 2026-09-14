@@ -140,7 +140,7 @@ export interface ImportEslintConfigOptions<
    *
    * When enabled, creates a
    * [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript)
-   * resolver, which settings can be overridden using `tsResolverOptions` option.
+   * resolver, whose settings can be overridden using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;
 

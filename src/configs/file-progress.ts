@@ -33,7 +33,7 @@ export interface FileProgressPluginSettings {
 }
 
 /**
- * An ESlint plugin to print file progress.
+ * An ESLint plugin to print file progress.
  *
  * Even if enabled, it will be disabled by default unless the resolved `environment`
  * root option is `default`.

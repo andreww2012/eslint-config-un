@@ -164,7 +164,7 @@ describe('options', () => {
       ).toStrictEqual([]);
     });
 
-    it('sets rule options when set to provided', async () => {
+    it('sets rule options when provided', async () => {
       const OPTIONS = {allowSameFolder: true, prefix: '~'} as const;
 
       const configResult = await computeEslintConfig({

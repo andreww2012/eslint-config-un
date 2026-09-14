@@ -202,7 +202,7 @@ describe('options', () => {
       ).toStrictEqual(USER_CUSTOM_SYNTAX);
     });
 
-    it('uses user-provided `customSyntax` object directly when `tailwindcss@3` is installed)', async () => {
+    it('uses user-provided `customSyntax` object directly when `tailwindcss@3` is installed', async () => {
       addInstalledPackages({tailwindcss: '3.4.17'});
 
       const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
@@ -321,7 +321,7 @@ describe('options', () => {
   });
 
   describe('option: `allowedFontUnits`', () => {
-    it('allows `rem` and `em` font units when set to provided', async () => {
+    it('allows `rem` and `em` font units when provided', async () => {
       const configResult = await computeEslintConfig('css');
 
       expect(configResult.getRuleEntry('css', 'css/relative-font-units')).toMatchInlineSnapshot(

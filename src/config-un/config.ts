@@ -139,7 +139,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     },
   });
   // TODO come up with better solution
-  // Prevents logging the same messages when eslint is ran in the concurrent mode
+  // Prevents logging the same messages when ESLint is run in the concurrent mode
   /* v8 ignore next -- tests never run the generator off the main thread */
   if (!isMainThread) {
     logger.pauseLogs();
@@ -401,7 +401,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     )
   ) {
     logger.fatal(
-      'Invalid extra plugin prefixes: using of built-in plugin prefixes or prefixes set via the `plugins` option is forbidden',
+      'Invalid extra plugin prefixes: using built-in plugin prefixes or prefixes set via the `plugins` option is forbidden',
     );
   }
 

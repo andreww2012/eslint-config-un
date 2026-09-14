@@ -20,7 +20,7 @@ export interface LitA11yPluginSettings {
    * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html) tagged template
    * literals are linted.
    *
-   * If you're importing `lit-html` from a package that re-exports `lit-html`, like for example
+   * If you're importing `lit-html` from a package that re-exports `lit-html`, for example
    * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
    */
   litHtmlSources?: boolean | string[];

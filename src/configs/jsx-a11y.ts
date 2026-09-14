@@ -114,7 +114,7 @@ export interface JsxA11yPluginSettings {
  * Provides accessibility rules for JSX.
  * Applied to all JSX files by default.
  *
- * Note: you may want to disable this config if you're not using JSX for performance reasons.
+ * Note: if you're not using JSX, you may want to disable this config for performance reasons.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
  */
@@ -122,7 +122,7 @@ export interface JsxA11yEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsx-a11y'> {
   /**
-   * Elements to check for `alt` attribute on by
+   * Elements checked for the `alt` attribute by the
    * [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
    * rule.
    *
@@ -162,7 +162,7 @@ export interface JsxA11yEslintConfigOptions<
   >;
 
   /**
-   * List of handlers that must be accompanied with `onFocus` handler.
+   * List of handlers that must be accompanied by an `onFocus` handler.
    *
    * The default list is `['onMouseOver', 'onMouseEnter', 'onPointerOver', 'onPointerEnter']`.
    *
@@ -172,7 +172,7 @@ export interface JsxA11yEslintConfigOptions<
   hoverInHandlersRequiringOnFocus?: Record<`on${string}`, boolean>;
 
   /**
-   * List of handlers that must be accompanied with `onBlur` handler.
+   * List of handlers that must be accompanied by an `onBlur` handler.
    *
    * The default list is `['onMouseOut', 'onMouseLeave', 'onPointerOut', 'onPointerLeave']`.
    *
@@ -184,7 +184,7 @@ export interface JsxA11yEslintConfigOptions<
   /**
    * List of words like "image", "picture" or "photo" that will be flagged by
    * [`jsx-a11y/img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md)
-   * rule. if contained in the image alt text.
+   * rule if contained in the image alt text.
    *
    * Will be merged with the default words listed in the rule docs, and this behavior cannot be
    * changed.

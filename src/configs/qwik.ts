@@ -7,7 +7,7 @@ import {
 } from './index';
 
 /**
- * [qwik](https://qwik.dev) specific rules.
+ * [Qwik](https://qwik.dev) specific rules.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
  */

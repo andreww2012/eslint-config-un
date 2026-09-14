@@ -177,7 +177,7 @@ export interface EslintConfigUnOptions<
   };
 
   /**
-   * The single place every non-JS files are taught how to be parsed.
+   * The single place where every non-JS file type is taught how to be parsed.
    *
    * Every key produces one flat config entry per dialect the enabled Configs asked for,
    * plus one per element when the array form is used.
@@ -228,11 +228,11 @@ export interface EslintConfigUnOptions<
   files?: EslintFlatConfigEntry['files'];
 
   /**
-   * Allows to provide additional ESLint plugins.
+   * Allows you to provide additional ESLint plugins.
    * Their prefixes and possibly rule names will appear in configs' `rules` property type.
    * They will be lazy-loaded only if used.
    *
-   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or
+   * Note that their prefixes must not match the built-in/known ones (like `ts` or `unicorn`) or
    * even prefixes you've set via `plugins.<pluginName>.prefix`.
    */
   extraPlugins?: ExtraPlugins;
@@ -259,7 +259,7 @@ export interface EslintConfigUnOptions<
    *
    * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `off` *for
    * the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
-   * `{files: [...], value: 'off}`.
+   * `{files: [...], value: 'off'}`.
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
@@ -273,7 +273,7 @@ export interface EslintConfigUnOptions<
    *
    * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `off` *for
    * the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
-   * `{files: [...], value: 'off}`.
+   * `{files: [...], value: 'off'}`.
    */
   linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<
     EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>
@@ -355,7 +355,7 @@ export interface EslintConfigUnOptions<
     [Plugin in Exclude<PluginPrefix, ''>]?: Prettify<
       {
         /**
-         * Allows to change the prefix the plugin is registered under.
+         * Allows you to change the prefix the plugin is registered under.
          * Cannot be an empty string (or it will be ignored anyway).
          *
          * You have to still use the **canonical** prefix in `overrides`, and the rules will be
@@ -364,7 +364,7 @@ export interface EslintConfigUnOptions<
         prefix?: string;
 
         /**
-         * Allows to override the plugin implementation.
+         * Allows you to override the plugin implementation.
          * This can be useful when this config is used to lint a repository of one of the built-in
          * plugins to provide development version of that plugin.
          */
@@ -401,7 +401,7 @@ export interface EslintConfigUnOptions<
     | {
         /**
          * These plugins will always be loaded.
-         * This can be useful if you enable certain plugin rules only be using
+         * This can be useful if you enable certain plugin rules only by using
          * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
          */
         alwaysLoad: LoadablePluginPrefix[];
@@ -415,17 +415,30 @@ export interface EslintConfigUnOptions<
    * Defines for which rules and/or plugins autofix will be disabled globally.
    *
    * If you set `plugins.<pluginName>: false` (default), all the fixable plugin's rules will remain
-   * being autofixable, expect for the ones set to `true` in `rules`.
+   * autofixable, except for the ones set to `true` in `rules`.
    *
    * If you set `plugins.<pluginName>: true`, all the fixable plugin's rules will stop being
-   * autofixable, expect for the ones set to `false` in `rules`.
+   * autofixable, except for the ones set to `false` in `rules`.
    *
    * `rules` object will be merged with the following default value:
    * ```ts
    * {
    *   'case-police/string-check': true,
+   *   'github-actions/action-name-casing': true,
+   *   'jest/prefer-lowercase-title': true,
+   *   'jest/valid-title': true,
    *   'markdown-preferences/heading-casing': true,
    *   'markdown-preferences/table-header-casing': true,
+   *   'math/abs': true,
+   *   'math/prefer-math-cbrt': true,
+   *   'math/prefer-math-hypot': true,
+   *   'math/prefer-math-log10': true,
+   *   'math/prefer-math-log10e': true,
+   *   'math/prefer-math-log2': true,
+   *   'math/prefer-math-sqrt': true,
+   *   'math/prefer-math-sqrt1-2': true,
+   *   'math/prefer-math-sum-precise': true,
+   *   'math/prefer-number-is-integer': true,
    *   'ts/method-signature-style': true,
    *   'ts/no-unnecessary-type-arguments': true,
    *   'unicorn/catch-error-name': true,
@@ -435,9 +448,8 @@ export interface EslintConfigUnOptions<
    *   'unicorn/prefer-private-class-fields': true,
    *   'unicorn/prefer-spread': true,
    *   'unicorn/prefer-string-raw': true,
-   *   'vitest/require-import-vi-mock': true,
    *   'vitest/prefer-lowercase-title': true,
-   *   'zod/require-schema-suffix': true,
+   *   'vitest/valid-title': true,
    * }
    * ```
    *
@@ -493,9 +505,9 @@ export interface EslintConfigUnOptions<
    * [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
    *
    * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
-   * It'll be made by us that they will be silently ignored.
+   * We make sure they are silently ignored.
    *
-   * The replaced rules' list (their name will actually be preserved):
+   * The list of replaced rules (their names are actually preserved):
    * - `import/no-cycle`
    * - `import/no-named-as-default`
    * - `import/no-unresolved` (replaced with `import-integrity/no-unresolved-imports`)
@@ -648,7 +660,7 @@ export interface EslintConfigUnOptions<
    * Automatically add gitignore'd files to the global `ignores` array.
    *
    * Nested `.gitignore` files are respected as well, i.e. the `recursive` option of the underlying
-   * package defaults to `true` by default.
+   * package defaults to `true`.
    *
    * Passed options will be merged with the defaults.
    *
@@ -695,7 +707,7 @@ export interface EslintConfigUnOptions<
    * - Ignore patterns derived from every file the {@link gitignore} option respects
    * - `package.json`, lockfile contents or package manager
    * - ESLint config file contents
-   * - Node.JS version
+   * - Node.js version
    * - Resolved {@link environment}
    * @default true <=> the resolved {@link environment} is `editor`
    */

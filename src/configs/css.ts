@@ -33,7 +33,7 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       {
         /**
          * Default CSS syntax provided by [`@eslint/css`](https://npmx.dev/@eslint/css), which in
-         * turn coming from the `/definition-syntax-data` entrypoint of this package.
+         * turn comes from the `/definition-syntax-data` entrypoint of this package.
          */
         defaultSyntax: CssCustomSyntax;
 

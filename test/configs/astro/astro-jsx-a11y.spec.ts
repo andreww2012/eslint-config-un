@@ -164,7 +164,7 @@ describe('astro: sub config `jsxA11y`', () => {
         ).toBe(0);
       });
 
-      it('sets `astro/jsx-a11y/anchor-ambiguous-text` severity to error when set to configured', async () => {
+      it('sets `astro/jsx-a11y/anchor-ambiguous-text` severity to error when configured', async () => {
         const configResult = await computeEslintConfig({
           astro: {
             configJsxA11y: {

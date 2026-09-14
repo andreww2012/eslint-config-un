@@ -76,7 +76,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `css-tree-v${version}`,
     ruleDocsUrl: null,
   },
-  // Additional packages that are not eslint plugins but are tracked as dependencies
+  // Additional packages that are not ESLint plugins but are tracked as dependencies
   '@html-eslint/parser': {
     configs: ['html'],
     ruleDocsUrl: null,

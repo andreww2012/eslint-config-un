@@ -219,7 +219,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('still disables a stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` eslint config even it is provided in `additionalRules` as `true`', async () => {
+    it('still disables a stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` eslint config even if it is provided in `additionalRules` as `true`', async () => {
       const configResult = await computeEslintConfig({
         noStylisticRules: {
           enableRules: {rules: false, disableAllOtherRules: true},

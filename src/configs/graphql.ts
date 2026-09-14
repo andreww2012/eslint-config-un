@@ -84,7 +84,7 @@ export interface GraphqlEslintConfigOptions<
 
   /**
    * Provides [GraphQL Config](https://npmx.dev/graphql-config).
-   * Normally is not required as it should be automatically found by the plugin.
+   * Normally it is not required as it should be automatically found by the plugin.
    *
    * Will be assigned to `languageOptions.parserOptions.graphQLConfig`.
    */

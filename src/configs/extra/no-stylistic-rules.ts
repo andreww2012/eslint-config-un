@@ -19,7 +19,7 @@ const STYLISTIC_RULES_PER_PLUGIN: Partial<Record<string, Partial<Record<string, 
 /**
  * If you integrate eslint-config-un into an existing project, you might encounter a lot of reports
  * from rules that are merely about stylistic and other choices, not the ones that can potentially
- * find bugs and other kind of problems in your code.
+ * find bugs and other kinds of problems in your code.
  * Use this config to globally disable all such rules, or conversely enable only them, or some of
  * them.
  *
@@ -37,7 +37,7 @@ export interface NoStylisticRulesEslintConfigOptions<
      * `true` enables all rules.
      * In combination with `enableRules.disableAllOtherRules` set to `true`, all the other rules
      * will be disabled.
-     * This allows to enable stylistic rules exclusively.
+     * This allows you to enable stylistic rules exclusively.
      * @default false
      */
     rules: boolean | Partial<Record<AllStylisticRules, boolean>>;

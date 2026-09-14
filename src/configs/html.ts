@@ -20,15 +20,10 @@ export interface HtmlPluginSettings {
 
   /**
    * This plugin allows you to lint not only HTML files but also HTML written in JavaScript
-   * Template Literal.
-   * You can set the `html` rules in your settings to lint JavaScript code without any additional
-   * configuration.
+   * template literals.
    *
-   * Not all template literals are recognized as HTML.
-   * There are two ways to make the plugin recognize them as HTML.
-   *
-   * If you want to use keywords other than html for linting, you can configure the settings
-   * option.
+   * Not all template literals are recognized as HTML: only the ones whose tag or leading comment
+   * matches one of the specified regular expressions.
    * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
    */
   templateLiterals?: {

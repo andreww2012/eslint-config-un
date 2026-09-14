@@ -128,7 +128,7 @@ describe('un options', () => {
 
       expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual(FILES);
       expect(configResult.getConfigByUnPostfix('vitest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)", "**/*.{bench,benchmark}.?([cm])ts?(x)"]',
+        '["**/*[._-]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)", "**/*.{bench,benchmark}.?([cm])ts?(x)"]',
       );
     });
 
