@@ -49,6 +49,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-zod-mini@1.10.0
   - eslint-plugin-zod@4.13.0
   - eslint-plugin-react-refresh@0.5.7
+  - eslint-plugin-turbo@2.10.13
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
