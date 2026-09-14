@@ -30,10 +30,16 @@ const FIXTURE_EXAMPLE_LINES = (
   await fs.readFile(path.join(FIXTURE_PROJECT_DIR, 'src', 'example.ts'), 'utf8')
 ).split('\n');
 
-// The same version CI installs globally, while locally a different one may be installed
-const PNPM = `pnpm@${packageJson.devEngines.packageManager.version}`;
-const YARN_CLASSIC = 'yarn@1.22.22';
-const YARN_BERRY = 'yarn@4.18.0';
+const PACKAGE_MANAGERS_INSTALL_DIR = path.join(
+  import.meta.dirname,
+  '..',
+  '..',
+  'node_modules',
+  '.cache',
+  'e2e-package-managers',
+);
+
+const YARN_BERRY = '@yarnpkg/cli-dist@4.18.0';
 
 const FIXTURE_DEPENDENCIES = {
   // Its `exports` don't expose `package.json`
@@ -54,7 +60,6 @@ const CHILD_PROCESS_ENV = {
       .filter((name) => NPM_ENV_VARIABLE_REGEXP.test(name))
       .map((name) => [name, undefined]),
   ),
-  COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
 };
 
 const getYarnBerryFiles = (registryUrl: string, nodeLinker: 'node-modules' | 'pnp') => ({
@@ -74,19 +79,23 @@ const getYarnBerryFiles = (registryUrl: string, nodeLinker: 'node-modules' | 'pn
 // Release age gates are turned off, as our dependencies are often updated the day they're published
 const PACKAGE_MANAGERS: {
   id: string;
+  // Installed on first use, so local runs get the same version as CI
+  npmPackage?: `${string}@${string}`;
   install: CommandLine;
   eslint: CommandLine;
   getFiles?: (registryUrl: string) => Record<string, string>;
 }[] = [
   {
     id: 'npm',
-    install: ['npm', 'install', '--no-audit', '--no-fund'],
+    // npm 11 rejects the `eslint-plugin-es-x` version `eslint-plugin-n` depends on, as it doesn't satisfy our peer range
+    install: ['npm', 'install', '--no-audit', '--no-fund', '--legacy-peer-deps'],
     eslint: ['npx', '--no-install', 'eslint'],
   },
   {
     id: 'pnpm',
-    install: ['corepack', PNPM, 'install', '--no-frozen-lockfile'],
-    eslint: ['corepack', PNPM, 'exec', 'eslint'],
+    npmPackage: `pnpm@${packageJson.devEngines.packageManager.version}`,
+    install: ['pnpm', 'install', '--no-frozen-lockfile'],
+    eslint: ['pnpm', 'exec', 'eslint'],
     getFiles: () => ({
       'pnpm-workspace.yaml': [
         'minimumReleaseAge: 0',
@@ -97,38 +106,45 @@ const PACKAGE_MANAGERS: {
   },
   {
     id: 'yarn-classic',
-    install: ['corepack', YARN_CLASSIC, 'install', '--non-interactive'],
-    eslint: ['corepack', YARN_CLASSIC, '--silent', 'eslint'],
+    npmPackage: 'yarn@1.22.22',
+    install: ['yarn', 'install', '--non-interactive'],
+    eslint: ['yarn', '--silent', 'eslint'],
   },
   {
     id: 'yarn-berry-pnp',
-    install: ['corepack', YARN_BERRY, 'install'],
-    eslint: ['corepack', YARN_BERRY, 'eslint'],
+    npmPackage: YARN_BERRY,
+    install: ['yarn', 'install'],
+    eslint: ['yarn', 'eslint'],
     getFiles: (registryUrl) => getYarnBerryFiles(registryUrl, 'pnp'),
   },
   {
     id: 'yarn-berry-node-modules',
-    install: ['corepack', YARN_BERRY, 'install'],
-    eslint: ['corepack', YARN_BERRY, 'eslint'],
+    npmPackage: YARN_BERRY,
+    install: ['yarn', 'install'],
+    eslint: ['yarn', 'eslint'],
     getFiles: (registryUrl) => getYarnBerryFiles(registryUrl, 'node-modules'),
   },
   {
     id: 'bun',
+    npmPackage: 'bun@1.4.2',
     install: ['bun', 'install'],
     eslint: ['bun', 'run', '--silent', 'eslint'],
   },
   {
     id: 'aube',
+    npmPackage: '@endevco/aube@2.2.4',
     install: ['aube', 'install', '--no-frozen-lockfile'],
     eslint: ['aube', 'exec', 'eslint'],
   },
   {
     id: 'nub',
+    npmPackage: '@nubjs/nub@0.9.1',
     install: ['nub', 'install', '--no-frozen-lockfile', '--minimum-release-age=0'],
     eslint: ['nubx', 'eslint'],
   },
   {
     id: 'deno',
+    npmPackage: 'deno@2.9.6',
     install: ['deno', 'install', '--minimum-dependency-age=0'],
     eslint: ['deno', 'run', '--allow-all', 'node_modules/eslint/bin/eslint.js'],
   },
@@ -137,12 +153,28 @@ const PACKAGE_MANAGERS: {
 // Set in CI to run a single package manager per job
 const SELECTED_PACKAGE_MANAGER_ID = process.env['E2E_PACKAGE_MANAGER'];
 
-const isCommandAvailable = async (command: string) => {
-  try {
-    return (await exec(command, ['--version'])).exitCode === 0;
-  } catch {
-    return false;
+const installPackageManager = async (npmPackage: string) => {
+  const installDir = path.join(PACKAGE_MANAGERS_INSTALL_DIR, npmPackage.replaceAll('/', '+'));
+  const binDir = path.join(installDir, 'node_modules', '.bin');
+  if (await fs.stat(installDir).catch(() => null)) {
+    return binDir;
   }
+
+  await fs.mkdir(PACKAGE_MANAGERS_INSTALL_DIR, {recursive: true});
+  // Moved into place once complete, so an interrupted install is never reused
+  const temporaryDir = await fs.mkdtemp(`${installDir}-`);
+  // Otherwise npm would install into the closest parent project, which is this repository
+  await fs.writeFile(path.join(temporaryDir, 'package.json'), '{}');
+
+  const result = await exec('npm', ['install', '--no-audit', '--no-fund', npmPackage], {
+    nodeOptions: {cwd: temporaryDir, env: CHILD_PROCESS_ENV},
+  });
+  if (result.exitCode !== 0) {
+    throw new Error(`Failed to install \`${npmPackage}\`:\n${result.stderr}`);
+  }
+
+  await fs.rename(temporaryDir, installDir);
+  return binDir;
 };
 
 const getEnabledRuleNames = (printConfigOutput: string) =>
@@ -170,16 +202,19 @@ beforeAll(() => {
   }
 });
 
-describe.each(PACKAGE_MANAGERS)('$id', ({id, install, eslint, getFiles}) => {
+describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFiles}) => {
   it('installs from the registry and lints the project', async ({skip}) => {
-    if (SELECTED_PACKAGE_MANAGER_ID == null) {
-      const [command] = install;
-      if (!(await isCommandAvailable(command))) {
-        skip(`\`${command}\` is not installed`);
-      }
-    } else if (SELECTED_PACKAGE_MANAGER_ID !== id) {
+    if (SELECTED_PACKAGE_MANAGER_ID != null && SELECTED_PACKAGE_MANAGER_ID !== id) {
       skip();
     }
+
+    const packageManagerBinDir = npmPackage && (await installPackageManager(npmPackage));
+    const env = {
+      ...CHILD_PROCESS_ENV,
+      PATH: [packageManagerBinDir, path.dirname(process.execPath), process.env['PATH']]
+        .filter(Boolean)
+        .join(path.delimiter),
+    };
 
     const registryUrl = inject('registryUrl');
     const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), `un-e2e-${id}-`));
@@ -212,7 +247,9 @@ describe.each(PACKAGE_MANAGERS)('$id', ({id, install, eslint, getFiles}) => {
     const run = async (commandLine: CommandLine) => {
       const [command, ...args] = commandLine;
       const result = await exec(command, args, {
-        nodeOptions: {cwd: projectDir, env: CHILD_PROCESS_ENV},
+        // Otherwise the Node directory, which may have Corepack's shims, would precede the package manager
+        nodePath: false,
+        nodeOptions: {cwd: projectDir, env},
       });
       commandReports.push(
         [
