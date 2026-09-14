@@ -243,14 +243,14 @@ importers:
         specifier: 8.0.3
         version: 8.0.3(supports-color@7.2.0)
       '@html-eslint/eslint-plugin':
-        specifier: 0.65.0
-        version: 0.65.0(eslint@10.10.0)
+        specifier: 0.66.0
+        version: 0.66.0(eslint@10.10.0)
       '@html-eslint/eslint-plugin-react':
-        specifier: 0.65.0
-        version: 0.65.0(eslint@10.10.0)
+        specifier: 0.66.0
+        version: 0.66.0(eslint@10.10.0)
       '@html-eslint/parser':
-        specifier: 0.65.0
-        version: 0.65.0
+        specifier: 0.66.0
+        version: 0.66.0
       '@stylistic/eslint-plugin':
         specifier: 5.10.0
         version: 5.10.0(eslint@10.10.0)
@@ -475,11 +475,11 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(@types/node@22.20.2)(@typescript/typescript6@6.0.2)(crossws@0.4.12)(eslint@10.10.0)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(supports-color@7.2.0)
       '@html-eslint/eslint-plugin-angular-template':
-        specifier: 0.65.0
-        version: 0.65.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)
+        specifier: 0.66.0
+        version: 0.66.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)
       '@html-eslint/eslint-plugin-svelte':
-        specifier: 0.65.0
-        version: 0.65.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)
+        specifier: 0.66.0
+        version: 0.66.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)
       '@humanwhocodes/scsstree':
         specifier: 0.1.1
         version: 0.1.1(@eslint/css-tree@4.1.0)(@eslint/css@2.0.0)
@@ -2815,47 +2815,47 @@ packages:
     resolution: {integrity: sha512-n/SZW+12rwikx/f8YcSv9JCi5p9vn1Bnts9ZtVvfErG4h0gbjHI1H1ZMhVUnaOC7yzFc6PtsCKIK8XeTnL90Gw==}
     engines: {node: ^18 || ^20 || ^22 || >=24}
 
-  '@html-eslint/core@0.65.0':
-    resolution: {integrity: sha512-UJUf0dDI6xq6iitksPXrfLwu2Gc143LGFHMlVnRPZxkoLz1xIzKbkQVxrqxqNmandsSmhWfkGw//U2BsBH/QRw==}
+  '@html-eslint/core@0.66.0':
+    resolution: {integrity: sha512-7zO32H2x91leamTOnslX2T6hGyeTLtXQeQF89QVw5Na1iqJul39fEVX/MCpwEC6195G30tzhSJuqjDU5HIM6VA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@html-eslint/eslint-plugin-angular-template@0.65.0':
-    resolution: {integrity: sha512-OZn7uv0xy8BnU6Z6k8uoOfxcdjmL40XaGjV0HJiRRjL/H3Y1u9PGmzpM/pkdJIYeewhLkElpUeAG1E2okx525w==}
+  '@html-eslint/eslint-plugin-angular-template@0.66.0':
+    resolution: {integrity: sha512-JtKjbEQsnngmzfso365nTyF72QXzewMf7pMvDC9OSHNc7tQf/+FKpJxn22yAY6MlBakquveIg9aOdp3JDHU1Xw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       '@angular-eslint/template-parser': '>=18.0.0'
       eslint: '>=8.0.0 || ^10.0.0-0'
 
-  '@html-eslint/eslint-plugin-react@0.65.0':
-    resolution: {integrity: sha512-EAWPTD9/CTgTTLX3eWGhPlITt4tcQPmFdKoZ3RF/Jr/WWO6h3yP5efwjQI7KUZJjFFGt1cTrkwvkkZyklkgamA==}
+  '@html-eslint/eslint-plugin-react@0.66.0':
+    resolution: {integrity: sha512-l+vWXgXEAo3DFSSbS9fCxbqoOTAo/TMNB0R6pMaYdnd1xumMX4UlXIt49ZnUfoJbXhADVubCP3/ezjKPKFYL3g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.0.0 || ^10.0.0-0'
 
-  '@html-eslint/eslint-plugin-svelte@0.65.0':
-    resolution: {integrity: sha512-gkqZHDWL+MOPKv4ddQT5R0zHpYqRbfJLiXQhKLkXVXE0A6j0IY8OleJhwQRgyK/7FUZAbQcWhg2A9OjiaaPbnQ==}
+  '@html-eslint/eslint-plugin-svelte@0.66.0':
+    resolution: {integrity: sha512-HFbXhxjS8v7bJsBEgzJ69YWtH4UO3B2Sf0p8ytcq6TPPuyHPofUb3WnobCe4GVWDkKMCBkLltBxsTbQURItXHA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.0.0 || ^10.0.0-0'
       svelte-eslint-parser: ^1.0.0
 
-  '@html-eslint/eslint-plugin@0.65.0':
-    resolution: {integrity: sha512-zYa4ARNbkp/GPlIY+1NFV5v6H3EDs+jby4/rFnZDaS/S3mFEvBail4+dPqugHljrBmAZ0UkxMATR696ypRvPCQ==}
+  '@html-eslint/eslint-plugin@0.66.0':
+    resolution: {integrity: sha512-Oha7l7nENQHw5aCLzWaHyyF5bqrA1ODEbowEifMejMHM6Vauj6jJh8M/msIdnKwUBglPTkvFDH9vGaZVmGggfw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.0.0 || ^10.0.0-0'
 
-  '@html-eslint/parser@0.65.0':
-    resolution: {integrity: sha512-sMZ8D60uQ/yLKViiqkzX3vnpBwcBNE8x/Ax8roAdrLiErkJ4wLMdXq+kmRm0rqfTuC0mqPJ+7uRTAgUB6wXg2w==}
+  '@html-eslint/parser@0.66.0':
+    resolution: {integrity: sha512-/KE6i8DIO1TAL0YvAgqaXWKduvlnnj1Sy2PXM3UKJZsk0798sLrKMKOl6sXH8QuNxXsPsW1hlxIHsho9UfZI1A==}
 
-  '@html-eslint/template-parser@0.65.0':
-    resolution: {integrity: sha512-gUc9D4PaV5uvQjR21Q1wumbe2Qyf6decJjCZCpM77kZ7mMprIDvnF4LgCJBkTldidc4j1GzJvqkJ5e+r+skFyw==}
+  '@html-eslint/template-parser@0.66.0':
+    resolution: {integrity: sha512-eGo6mfWFahcVQE3+CGAK12QaYIURG8/xwb8ITw+5lrn0Mo1yUXFgdBODjx7E0Sd9sZ2FVw8JzMjMgxo4ntFdzA==}
 
-  '@html-eslint/template-syntax-parser@0.65.0':
-    resolution: {integrity: sha512-Kh7TFOM4cYcutzGZdWKxnZJpWpuZwu4hcSxbn/PHVBgDOytKOwpuPvCKn1+B11fSFxLhrrR3RHvsBVknntpcbA==}
+  '@html-eslint/template-syntax-parser@0.66.0':
+    resolution: {integrity: sha512-HLHSaH0e4udBFqE+GDexZnXBSyaB4Mo42UfYQo+/hyFXMnY8QBWaFFqsKL/vwWccX1hAaC5nKDdKldoVPDgugw==}
 
-  '@html-eslint/types@0.65.0':
-    resolution: {integrity: sha512-bWMTSRwFXwvturEYvA5ng43+jpFh9FTpAgC2HE3O0ijsde40VcoO6DtcjFl7QY8AW5O/PeisDDl1Hbe5q89wsg==}
+  '@html-eslint/types@0.66.0':
+    resolution: {integrity: sha512-QrUudu/EA47xIE0nN5Wf0LlMkz1vGB/rks/3D/+9KtlmUzpGOn562AShyz1fYE1OBFjjEk86pJmCkHhIm4WO7g==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -15781,58 +15781,58 @@ snapshots:
 
   '@handlebars/parser@2.2.2': {}
 
-  '@html-eslint/core@0.65.0':
+  '@html-eslint/core@0.66.0':
     dependencies:
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/types': 0.66.0
       html-standard: 0.0.13
 
-  '@html-eslint/eslint-plugin-angular-template@0.65.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)':
+  '@html-eslint/eslint-plugin-angular-template@0.66.0(@angular-eslint/template-parser@22.5.0)(eslint@10.10.0)':
     dependencies:
       '@angular-eslint/template-parser': 22.5.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)
-      '@html-eslint/core': 0.65.0
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/core': 0.66.0
+      '@html-eslint/types': 0.66.0
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  '@html-eslint/eslint-plugin-react@0.65.0(eslint@10.10.0)':
+  '@html-eslint/eslint-plugin-react@0.66.0(eslint@10.10.0)':
     dependencies:
-      '@html-eslint/core': 0.65.0
+      '@html-eslint/core': 0.66.0
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  '@html-eslint/eslint-plugin-svelte@0.65.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)':
+  '@html-eslint/eslint-plugin-svelte@0.66.0(eslint@10.10.0)(svelte-eslint-parser@1.8.1)':
     dependencies:
-      '@html-eslint/core': 0.65.0
+      '@html-eslint/core': 0.66.0
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       svelte-eslint-parser: 1.8.1(svelte@5.55.9)
 
-  '@html-eslint/eslint-plugin@0.65.0(eslint@10.10.0)':
+  '@html-eslint/eslint-plugin@0.66.0(eslint@10.10.0)':
     dependencies:
       '@eslint/plugin-kit': 0.4.1
-      '@html-eslint/core': 0.65.0
-      '@html-eslint/parser': 0.65.0
-      '@html-eslint/template-parser': 0.65.0
-      '@html-eslint/template-syntax-parser': 0.65.0
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/core': 0.66.0
+      '@html-eslint/parser': 0.66.0
+      '@html-eslint/template-parser': 0.66.0
+      '@html-eslint/template-syntax-parser': 0.66.0
+      '@html-eslint/types': 0.66.0
       '@rviscomi/capo.js': 2.3.0
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       html-standard: 0.0.13
 
-  '@html-eslint/parser@0.65.0':
+  '@html-eslint/parser@0.66.0':
     dependencies:
-      '@html-eslint/template-syntax-parser': 0.65.0
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/template-syntax-parser': 0.66.0
+      '@html-eslint/types': 0.66.0
       css-tree: 3.2.1
       es-html-parser: 0.3.1
 
-  '@html-eslint/template-parser@0.65.0':
+  '@html-eslint/template-parser@0.66.0':
     dependencies:
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/types': 0.66.0
       es-html-parser: 0.3.1
 
-  '@html-eslint/template-syntax-parser@0.65.0':
+  '@html-eslint/template-syntax-parser@0.66.0':
     dependencies:
-      '@html-eslint/types': 0.65.0
+      '@html-eslint/types': 0.66.0
 
-  '@html-eslint/types@0.65.0':
+  '@html-eslint/types@0.66.0':
     dependencies:
       '@types/css-tree': 2.3.11
       '@types/estree': 1.0.9

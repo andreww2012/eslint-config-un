@@ -1465,6 +1465,9 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-obsolete-attrs', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-obsolete-tags', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('no-restricted-attr-values', OFF) /** @since 0.66.0 */
+    .addRule('no-restricted-attrs', OFF) /** @since 0.66.0 */
+    .addRule('require-attrs', OFF) /** @since 0.66.0 */
     .addRule('use-baseline', WARNING, [
       generateUseBaselineRuleOptions(context),
     ]) /** @since 0.56.0 */ // 🟡
