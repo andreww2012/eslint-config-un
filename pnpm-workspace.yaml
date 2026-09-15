@@ -29,6 +29,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-rsc@5.19.1
   - eslint-plugin-react-web-api@5.19.1
   - eslint-plugin-react-x@5.19.1
+  - '@unhead/eslint-plugin@3.4.1'
+  - unhead@3.4.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
