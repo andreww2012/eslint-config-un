@@ -62,12 +62,12 @@ You can change any of that without rewriting the defaults by hand.
 Minimum supported versions:
 
 - Node.js: `^22.23.1 || ^24.18.0 || >=26.4.0`
-- ESLint: ^10 (peer dependency)
+- ESLint (peer dependency): `^10`
 
 ```sh
 npm i -D eslint-config-un eslint@latest
 pnpm i -D eslint-config-un eslint@latest
-yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
+yarn add -D eslint-config-un eslint@latest
 ```
 
 Commonly used plugins are direct dependencies of this package, so you don't need to install them separately.
