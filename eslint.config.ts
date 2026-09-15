@@ -106,6 +106,7 @@ export default eslintConfig({
     },
     markdownPreferences: {
       ignores: ['LICENSE.md'],
+      enforceCasing: true,
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind', 'JSDoc'],
       casingEnforcementIgnorePatterns: ['/changes/i'] /* Added by changeset CLI to CHANGELOG.md */,
     },

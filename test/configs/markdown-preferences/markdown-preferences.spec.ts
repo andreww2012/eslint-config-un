@@ -180,7 +180,7 @@ describe('options', () => {
 
     it('`markdown-preferences/heading-casing` rule fires on a markdown heading that violates sentence case when `extendedMarkdownSyntax` is `false`', async () => {
       const results = await testEslintConfig(
-        {markdownPreferences: {extendedMarkdownSyntax: false}},
+        {markdownPreferences: {extendedMarkdownSyntax: false, enforceCasing: true}},
         FIXTURES.headingWithNonSentenceCase,
         import.meta.dirname,
       );
@@ -351,8 +351,27 @@ describe('options', () => {
   });
 
   describe('option: `enforceCasing`', () => {
-    it('enforces sentence case in headings and table headers by default', async () => {
+    it('disables both `markdown-preferences/heading-casing` and `markdown-preferences/table-header-casing` rules by default', async () => {
       const configResult = await computeEslintConfig('markdownPreferences');
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'markdown-preferences',
+          'markdown-preferences/heading-casing',
+        ),
+      ).toBe(0);
+      expect(
+        configResult.getRuleEntrySeverity(
+          'markdown-preferences',
+          'markdown-preferences/table-header-casing',
+        ),
+      ).toBe(0);
+    });
+
+    it('enforces sentence case in headings and table headers when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        markdownPreferences: {enforceCasing: true},
+      });
 
       expect(
         configResult.getRuleEntry('markdown-preferences', 'markdown-preferences/heading-casing'),
@@ -391,7 +410,7 @@ describe('options', () => {
       ).toMatchObject({severity: 2, options: [{style: CASING_STYLE}]});
     });
 
-    it('disables both heading-casing and table-header-casing rules when set to `false`', async () => {
+    it('disables both `markdown-preferences/heading-casing` and `markdown-preferences/table-header-casing` rules when option is `false`', async () => {
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: false},
       });
@@ -458,7 +477,7 @@ describe('options', () => {
       const PATTERNS = ['/myPatternApi/u' as const];
 
       const configResult = await computeEslintConfig({
-        markdownPreferences: {casingEnforcementIgnorePatterns: [...PATTERNS]},
+        markdownPreferences: {enforceCasing: true, casingEnforcementIgnorePatterns: [...PATTERNS]},
       });
 
       expect(
@@ -488,6 +507,7 @@ describe('options', () => {
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {
+          enforceCasing: true,
           casingEnforcementIgnorePatterns: {[ADDED_PATTERN]: true, [REMOVED_PATTERN]: false},
         },
       });
@@ -671,7 +691,7 @@ describe('options', () => {
       const WORDS = ['GitHub', 'ESLint'];
 
       const configResult = await computeEslintConfig({
-        markdownPreferences: {wordsToPreserveCasingOf: [...WORDS]},
+        markdownPreferences: {enforceCasing: true, wordsToPreserveCasingOf: [...WORDS]},
       });
 
       expect(
@@ -699,7 +719,10 @@ describe('options', () => {
       const REMOVED_WORD = 'JavaScript';
 
       const configResult = await computeEslintConfig({
-        markdownPreferences: {wordsToPreserveCasingOf: {[ADDED_WORD]: true, [REMOVED_WORD]: false}},
+        markdownPreferences: {
+          enforceCasing: true,
+          wordsToPreserveCasingOf: {[ADDED_WORD]: true, [REMOVED_WORD]: false},
+        },
       });
 
       const headingCasingRuleEntry = configResult.getRuleEntryParsed(

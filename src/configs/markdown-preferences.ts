@@ -88,19 +88,22 @@ export interface MarkdownPreferencesEslintConfigOptions<
   /**
    * Enforces casing of heading and table headers.
    * - If casing is specified, it will be enforced.
+   * - If `true` is specified, `'Sentence case'` will be enforced.
    * - If `false` is specified, casing will not be enforced.
    * - If a literal value is used, it will apply to both headings and table headers.
-   * - When an object syntax is used and some preferences are not specified, they will be set to the
-   *   default value.
+   * - When an object syntax is used and some preferences are not specified, casing will not be
+   *   enforced for them.
+   *
+   * Not enforced by default because these rules tend to report false positives in real projects.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
    * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
-   * @default 'Sentence case'
+   * @default false
    */
   enforceCasing?:
+    | boolean
     | EnforceableCasing
-    | false
     | Partial<Record<CasingEnforcementPlace, EnforceableCasing>>;
 
   /**
@@ -233,12 +236,13 @@ export default defineUnConfig<
   );
 
   const optionsResolved = assignDefaults(optionsRaw, {
+    enforceCasing: false,
     extendedMarkdownSyntax: false,
   });
 
   const {
     delimitersStyle,
-    enforceCasing = 'Sentence case',
+    enforceCasing,
     extendedMarkdownSyntax,
     casingEnforcementIgnorePatterns,
     orderedLists: orderedListsRaw,
@@ -269,7 +273,11 @@ export default defineUnConfig<
   const getEnforcedCasing = (
     place: CasingEnforcementPlace,
   ): EnforceableCasing | null | undefined =>
-    typeof enforceCasing === 'string' ? enforceCasing : enforceCasing ? enforceCasing[place] : null;
+    typeof enforceCasing === 'object'
+      ? enforceCasing[place]
+      : enforceCasing === true
+        ? 'Sentence case'
+        : enforceCasing || null;
   const enforcedCasingForHeadings = getEnforcedCasing('headings');
   const enforcedCasingForTableHeaders = getEnforcedCasing('tableHeaders');
 
