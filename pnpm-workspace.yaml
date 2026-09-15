@@ -35,6 +35,7 @@ minimumReleaseAgeExclude: # []
   - '@unocss/core@66.10.3'
   - '@unocss/eslint-plugin@66.10.3'
   - '@unocss/rule-utils@66.10.3'
+  - eslint-plugin-sonarjs@4.2.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

@@ -20,6 +20,7 @@ export interface SonarPluginSettings {
    * - `sonar/no-debug-commands-in-ui-tests`
    * - `sonar/no-empty-test-file`
    * - `sonar/no-fixed-wait-in-tests`
+   * - `sonar/prefer-cypress-should`
    * @default ['.js', '.mjs', '.cjs', '.jsx', '.vue', '.ts', '.mts', '.cts', '.tsx']
    */
   testFileExtensions?: string[];
@@ -59,16 +60,35 @@ export interface SonarEslintConfigOptions<
    * Enables rules that are specific to test or assertion libraries
    *
    * Affected rules:
+   * - `sonar/assertions-in-test-cases`
    * - `sonar/assertions-in-tests`
    * - `sonar/async-test-assertions`
    * - `sonar/chai-determinate-assertion`
+   * - `sonar/composite-assertions`
    * - `sonar/disabled-timeout`
+   * - `sonar/explicit-test-skip`
    * - `sonar/hooks-before-test-cases`
    * - `sonar/inverted-assertion-arguments`
    * - `sonar/no-code-after-done`
+   * - `sonar/no-debug-commands-in-ui-tests`
+   * - `sonar/no-duplicate-parameterized-test-case`
+   * - `sonar/no-duplicate-test-title`
+   * - `sonar/no-empty-parameterized-test-dataset`
+   * - `sonar/no-empty-test-title`
+   * - `sonar/no-fixed-wait-in-tests`
+   * - `sonar/no-forced-browser-interaction`
+   * - `sonar/no-incompatible-assertion-types`
    * - `sonar/no-incomplete-assertions`
+   * - `sonar/no-interpolation-in-inline-snapshots`
+   * - `sonar/no-mixed-completion-style`
    * - `sonar/no-same-argument-assert`
+   * - `sonar/no-trivial-assertions`
+   * - `sonar/parameterized-tests`
+   * - `sonar/prefer-cypress-should`
+   * - `sonar/prefer-specific-assertions`
    * - `sonar/stable-tests`
+   * - `sonar/synchronous-exception-assertions`
+   * - `sonar/synchronous-suite-callback`
    * @default false
    */
   testsRules?: boolean;
@@ -88,6 +108,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
   const awsRulesSeverity = enableAwsRules ? ERROR : OFF;
   const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testRulesSeverity = testsRules ? ERROR : OFF;
+
+  const isVueInstalled = context.packagesInfo.vue != null;
 
   const pluginSettings = context.getPluginSettings('sonar');
 
@@ -129,6 +151,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('assertions-in-tests', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S2699] 🟢🧪 📦 `chai`, `sinon`, `supertest`, `vitest`
     // Packages list: https://github.com/SonarSource/SonarJS/blob/9c68f4924a8054fbaded7bec02cc9be4a40a7e50/packages/analysis/src/jsts/rules/S8780/rule.ts#L31
     .addRule('async-test-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S8780] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`, `@playwright/test`
+    .addRule('avoid-mutating-nested-properties-of-shallow-clones', ERROR) /** @since 4.2.1 */ // [S9135] 🟢 📦 `lodash`, `lodash-es`, `underscore`
     .addRule('aws-apigateway-public-api', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6333] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-ec2-rds-dms-public', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6329] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-ec2-unencrypted-ebs-volume', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6275] 🟢 📦 `aws-cdk-lib`
@@ -162,6 +185,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('cognitive-complexity', OFF) /** @since 0.1.0-0 */ // [S3776] 🟢
     .addRule('comma-or-logical-or-case', ERROR) /** @since 1.0.4-alpha.0 */ // [S3616] 🟢
     .addRule('comment-regex', OFF) /** @since 1.0.4-alpha.0 */ // [S124]
+    .addRule('composite-assertions', testRulesSeverity) /** @since 4.2.1 */ // [S9073] 🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`, `node:assert`
     // ⚠️ `regexp/prefer-w`, `regexp/prefer-plus-quantifier`
     .addRule('concise-regex', OFF) /** @since 1.0.4-alpha.0 */ // [S6353] 🟢🔤
     // ⚠️ `no-new`
@@ -260,11 +284,13 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-control-regex', OFF) /** @since 3.0.0 */ // [S6324] 🟢🔤
     // ⚠️ `no-useless-assignment`
     .addRule('no-dead-store', OFF) /** @since 1.0.4-alpha.0 */ // [S1854] 🟢
+    .addRule('no-debounce-throttle-in-render', ERROR) /** @since 4.2.1 */ // [S9114] 🟢 📦 `lodash`, `lodash-es`, `underscore`, `react`
     .addRule('no-debug-commands-in-ui-tests', testRulesSeverity) /** @since 4.2.0 */ // [S8959] 🟢🧪 📦 `cypress`, `@playwright/test` (only `cy`/`page` patterns are checked, not package imports)
     .addRule('no-default-utility-imports', ERROR) /** @since 4.2.0 */ // [S8927] 🟢 📦 `lodash`, `lodash-es`, `rxjs`, `rambda`, `validator`
     .addRule('no-delete-var', ERROR) /** @since 1.0.4-alpha.0 */ // [S3001] 🟢
     // ⚠️ ts/no-duplicate-type-constituents`
     .addRule('no-duplicate-in-composite', OFF) /** @since 1.0.4-alpha.0 */ // [S4621] 🟢
+    .addRule('no-duplicate-parameterized-test-case', testRulesSeverity) /** @since 4.2.1 */ // [S9078] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`
     .addRule('no-duplicate-string', OFF) /** @since 0.2.0 */ // [S1192]
     .addRule('no-duplicate-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8754] 🟢 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
     .addRule('no-duplicated-branches', ERROR) /** @since 0.1.0-0 */ // [S1871] 🟢
@@ -278,6 +304,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-empty-collection', ERROR) /** @since 0.9.1 */ // [S4158] 🟢
     // ⚠️ `regexp/no-empty-group`
     .addRule('no-empty-group', OFF) /** @since 1.0.4-alpha.0 */ // [S6331] 🟢🔤
+    .addRule('no-empty-parameterized-test-dataset', testRulesSeverity) /** @since 4.2.1 */ // [S8998] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`
     // ⚠️ It seems fragile to me that this rule does not give the control over which files to consider as test files: "This rule flags any file that has .test or .spec as part of its suffix but does not contain any test cases defined using the different forms of the it and test functions from Jasmine, Jest, Mocha, or Node.js testing API."
     .addRule('no-empty-test-file', OFF) /** @since 1.0.4-alpha.0 */ // [S2187] 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only assertions patterns are checked, not package imports: https://github.com/SonarSource/SonarJS/blob/b8ba1ad28ef481a6f9bae2f9c42ea18a14668adb/packages/jsts/src/rules/S2187/rule.ts#L24)
     .addRule('no-empty-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8781] 🟢 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
@@ -334,6 +361,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `regexp/no-misleading-unicode-character`
     .addRule('no-misleading-character-class', OFF) /** @since 3.0.0 */ // [S5868] 🟢🔤
     .addRule('no-mixed-completion-style', testRulesSeverity) /** @since 4.2.0 */ // [S8960] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`
+    .addRule('no-mutate-reactive-state-in-updated-hook', ERROR) /** @since 4.2.1 */ // [S9163] 🟢 📦 `vue`
     // ⚠️ Too noisy in practice
     .addRule('no-nested-assignment', OFF) /** @since 1.0.4-alpha.0 */ // [S1121] 🟢
     // ⚠️ Too noisy in practice
@@ -344,6 +372,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-nested-switch', OFF) /** @since 0.9.1 */ // [S1821]
     // ⚠️ Seems too restrictive for me
     .addRule('no-nested-template-literals', OFF) /** @since 0.9.1 */ // [S4624] 🟢
+    // ⚠️ `playwright/no-networkidle`
+    .addRule('no-networkidle-wait', OFF) /** @since 4.2.1 */ // [S9332] 🟢🧪 📦 `@playwright/test`
     .addRule('no-os-command-from-path', ERROR) /** @since 1.0.4-alpha.0 */ // [S4036] 🟢 📦 `node:child_process`
     .addRule('no-parameter-reassignment', ERROR) /** @since 1.0.4-alpha.0 */ // [S1226] 🟢
     // ⚠️ `no-new-wrappers`
@@ -393,6 +423,9 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-useless-react-setstate', ERROR) /** @since 1.0.4-alpha.0 */ // [S6443] 🟢 📦 `react`
     // ⚠️ `no-use-before-define`, `block-scoped-var`, `vars-on-top`
     .addRule('no-variable-usage-before-declaration', OFF) /** @since 1.0.4-alpha.0 */ // [S1526]
+    .addRule('no-vue-class-component', ERROR) /** @since 4.2.1 */ // [S9145] 🟢 📦 `vue-class-component`, `vue-property-decorator`
+    // Enabled only if `vue` is installed because the rule reports any object literal with a `mixins` array
+    .addRule('no-vue-mixins', isVueInstalled ? ERROR : OFF) /** @since 4.2.1 */ // [S9150] 🟢 📦 `vue`
     .addRule('no-weak-cipher', ERROR) /** @since 1.0.4-alpha.0 */ // [S5547] 🟢 📦 `node:crypto`
     .addRule('no-weak-keys', ERROR) /** @since 1.0.4-alpha.0 */ // [S4426] 🟢 📦 `node:crypto`
     .addRule('no-wildcard-import', OFF) /** @since 1.0.4-alpha.0 */ // [S2208]
@@ -406,9 +439,12 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('operation-returning-nan', OFF) /** @since 1.0.4-alpha.0 */ // [S3757]
     .addRule('parameterized-tests', testRulesSeverity) /** @since 4.2.0 */ // [S5976] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `@playwright/test`
     .addRule('post-message', ERROR) /** @since 1.0.4-alpha.0 */ // [S2819] 🟢
+    .addRule('prefer-cypress-should', testRulesSeverity) /** @since 4.2.1 */ // [S9162] 🟢🧪 📦 `cypress` (only `cy` patterns are checked, not package imports)
     // ⚠️ `default-case-last`
     .addRule('prefer-default-last', OFF) /** @since 1.0.4-alpha.0 */ // [S4524] 🟢
     .addRule('prefer-immediate-return', OFF) /** @since 0.1.0-0 */ // [S1488]
+    .addRule('prefer-native-axios-alternative', ERROR) /** @since 4.2.1 */ // [S9339] 🟢 📦 `axios`
+    .addRule('prefer-native-jquery-alternative', ERROR) /** @since 4.2.1 */ // [S9144] 🟢 📦 `jquery`
     .addRule('prefer-native-lodash-alternative', ERROR) /** @since 4.2.0 */ // [S8907] 🟢 📦 `lodash`, `lodash-es`, `underscore`
     .addRule('prefer-object-literal', ERROR) /** @since 0.2.0 */ // [S2428]
     .addRule('prefer-promise-shorthand', ERROR) /** @since 1.0.4-alpha.0 */ // [S4634] 🟢
@@ -444,10 +480,15 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('strict-transport-security', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) /** @since 1.0.4-alpha.0 */ // [S3003]
     .addRule('super-linear-regex', ERROR) /** @since 4.1.0 */ // [S8786] 🟢
+    .addRule('synchronous-exception-assertions', testRulesSeverity) /** @since 4.2.1 */ // [S9072] 🟢🧪 📦 `@jest/globals`, `vitest`, `bun:test`
     .addRule('synchronous-suite-callback', testRulesSeverity) /** @since 4.2.0 */ // [S8785] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `cypress`
     .addRule('table-header', WARNING) /** @since 1.0.4-alpha.0 */ // [S5256] 🟢🔵
     .addRule('table-header-reference', WARNING) /** @since 1.0.4-alpha.0 */ // [S5260] 🟢🔵
     .addRule('test-check-exception', ERROR) /** @since 1.0.4-alpha.0 */ // [S5958] 🟢🧪 (only patterns are checked, not package imports)
+    // ⚠️ `testing-library/prefer-query-by-disappearance`
+    .addRule('testing-library-prefer-query-by-disappearance', OFF) /** @since 4.2.1 */ // [S9153] 🟢🧪 📦 `@testing-library/*`
+    // ⚠️ `testing-library/prefer-presence-queries`
+    .addRule('testing-library-query-assertion', OFF) /** @since 4.2.1 */ // [S9027] 🟢🧪 📦 `@testing-library/*`
     // Reason for disabling: completely forbids TODO comments and has false positives
     .addRule('todo-tag', OFF) /** @since 1.0.4-alpha.0 */ // [S1135] 🟢
     .addRule('too-many-break-or-continue-in-loop', OFF) /** @since 1.0.4-alpha.0 */ // [S135]
@@ -465,6 +506,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ TypeScript
     .addRule('values-not-convertible-to-numbers', OFF) /** @since 1.0.4-alpha.0 */ // [S3758]
     .addRule('variable-name', OFF) /** @since 1.0.4-alpha.0 */ // [S117]
+    // ⚠️ `vitest/hoisted-apis-on-top`
+    .addRule('vitest-mock-at-module-scope', OFF) /** @since 4.2.1 */ // [S9169] 🟢🧪 📦 `vitest`
     // ⚠️ `no-void`
     .addRule('void-use', OFF) /** @since 1.0.4-alpha.0 */ // [S3735] 🟢
     .addRule('weak-ssl', ERROR) /** @since 1.0.4-alpha.0 */ // [S4423] 🟢 📦 `node:https`, `node:tls`

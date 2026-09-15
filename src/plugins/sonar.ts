@@ -118,6 +118,7 @@ export default definePluginMetadata('sonar', {
     'sql-queries': {requiresTypeInfo: 'optional'},
     'strings-comparison': {requiresTypeInfo: 'optional'},
     'super-linear-regex': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'synchronous-exception-assertions': {requiresTypeInfo: 'optional'},
     'unicode-aware-regex': {requiresTypeInfo: 'optional'},
     'unused-import': {requiresTypeInfo: 'optional'},
     'unused-named-groups': {requiresTypeInfo: 'optional'},

@@ -114,6 +114,18 @@ describe('rules', async () => {
       '"Review this usage of "strings" as it can only be empty here."',
     );
   });
+
+  it('enables `sonar/no-vue-mixins` rule if `vue` package is detected as installed', async () => {
+    addInstalledPackages({vue: '3.5.0'});
+
+    const vueConfigResult = await computeEslintConfig('sonar');
+
+    expect(vueConfigResult.getRuleEntrySeverity('sonar', 'sonar/no-vue-mixins')).toBe(2);
+  });
+
+  it('does not enable `sonar/no-vue-mixins` rule if `vue` package is not detected as installed', () => {
+    expect(configResult.getRuleEntrySeverity('sonar', 'sonar/no-vue-mixins')).toBe(0);
+  });
 });
 
 describe('un options', () => {
