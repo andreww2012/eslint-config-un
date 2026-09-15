@@ -33,6 +33,15 @@ export interface SonarPluginSettings {
    * - `sonar/declarations-in-global-scope`
    */
   predefinedGlobals?: string[];
+
+  /**
+   * The module type of every linted file.
+   * Setting it treats files as modules even if they contain no `import` or `export`.
+   *
+   * Affected rule:
+   * - `sonar/declarations-in-global-scope`
+   */
+  detectedModuleType?: 'module' | 'commonjs';
 }
 
 /**
@@ -89,6 +98,7 @@ export interface SonarEslintConfigOptions<
    * - `sonar/stable-tests`
    * - `sonar/synchronous-exception-assertions`
    * - `sonar/synchronous-suite-callback`
+   * - `sonar/test-check-exception`
    * @default false
    */
   testsRules?: boolean;
@@ -118,7 +128,6 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
   // Legend:
   // [S1234] - Sonar rule code
   // 🟢 - in recommended
-  // 🔴 - deprecated
   // 🔤 - rule for regular expressions
   // 🧪 - rule for testing frameworks
   // 📦 - rule for specific package(s) or node module(s)
@@ -170,7 +179,6 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('aws-sagemaker-unencrypted-notebook', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6319] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-sns-unencrypted-topics', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6327] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-sqs-unencrypted-queue', awsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6330] 🟢 📦 `aws-cdk-lib`
-    // Note: doesn't seem to work in TypeScript code
     .addRule('bitwise-operators', ERROR) /** @since 1.0.4-alpha.0 */ // [S1529] 🟢
     // ⚠️ `block-scoped-var`, `vars-on-top`
     .addRule('block-scoped-var', OFF) /** @since 3.0.0 */ // [S2392] 🟢
@@ -181,6 +189,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `camelcase`
     .addRule('class-name', OFF) /** @since 1.0.4-alpha.0 */ // [S101] 🟢
     .addRule('class-prototype', OFF) /** @since 1.0.4-alpha.0 */ // [S3525]
+    // ⚠️ `no-eval`, `no-new-func`, `no-script-url`; also, the changelog says it was removed in v4.0.0, but it is still shipped
+    .addRule('code-eval', OFF) /** @since 1.0.4-alpha.0 */ // [S1523] 🟢
     // ⚠️ Unreliable metric and cannot be universally applied to all projects
     .addRule('cognitive-complexity', OFF) /** @since 0.1.0-0 */ // [S3776] 🟢
     .addRule('comma-or-logical-or-case', ERROR) /** @since 1.0.4-alpha.0 */ // [S3616] 🟢
@@ -197,7 +207,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('csrf', ERROR) /** @since 1.0.4-alpha.0 */ // [S4502] 🟢 📦 `csurf`
     .addRule('cyclomatic-complexity', OFF) /** @since 1.0.4-alpha.0 */ // [S1541]
     .addRule('declarations-in-global-scope', OFF) /** @since 1.0.4-alpha.0 */ // [S3798]
-    // ⚠️ `import/no-deprecated`, ts/no-deprecated` which also likely do the job better
+    // ⚠️ `import/no-deprecated`, `ts/no-deprecated` which also likely do the job better
     .addRule('deprecation', OFF) /** @since 1.0.4-alpha.0 */ // [S1874] 🟢
     .addRule('destructuring-assignment-syntax', OFF) /** @since 1.0.4-alpha.0 */ // [S3514]
     // ⚠️ Other rules & TypeScript itself; has false positives
@@ -237,7 +247,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('generator-without-yield', OFF) /** @since 1.0.4-alpha.0 */ // [S3531] 🟢
     .addRule('hardcoded-secret-signatures', ERROR) /** @since 3.0.6 */ // [S6437] 🟢 📦 `cookie-parser`, `node:crypto`, `jose`, `jsonwebtoken`, `node-jose`, `superagent`, `express-session`
     .addRule('hashing', ERROR) /** @since 1.0.4-alpha.0 */ // [S4790] 🟢 📦 `node:crypto`
-    .addRule('hooks-before-test-cases', testRulesSeverity) /** @since 4.1.0 */ // [S8782] 🟢
+    .addRule('hooks-before-test-cases', testRulesSeverity) /** @since 4.1.0 */ // [S8782] 🟢🧪
     // ⚠️ Handled by TypeScript
     .addRule('in-operator-type-error', OFF) /** @since 1.0.4-alpha.0 */ // [S3785] 🟢
     .addRule('inconsistent-function-call', ERROR) /** @since 1.0.4-alpha.0 */ // [S3686] 🟢
@@ -248,7 +258,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('jsx-no-leaked-render', ERROR) /** @since 3.0.0 */ // [S6439] 🟢🔵
     // ⚠️ `no-labels`
     .addRule('label-position', OFF) /** @since 1.0.4-alpha.0 */ // [S1439] 🟢
-    // TODO not sure if this is needed now
+    // Note: only checks `window.open` calls, for which browsers do not imply `noopener` like they do for links
     .addRule('link-with-target-blank', ERROR) /** @since 1.0.4-alpha.0 */ // [S5148] 🟢
     .addRule('max-lines', OFF) /** @since 3.0.0 */ // [S104]
     .addRule('max-lines-per-function', OFF) /** @since 3.0.0 */ // [S138]
@@ -264,7 +274,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ Seems too restrictive for me, alphabetical sorting is not a very rare requirement
     .addRule('no-alphabetical-sort', OFF) /** @since 1.0.4-alpha.0 */ // [S2871] 🟢
     .addRule('no-angular-bypass-sanitization', ERROR) /** @since 1.0.4-alpha.0 */ // [S6268] 🟢 📦 `@angular/*`
-    // ⚠️ ts/no-array-delete`; works on TS code only anyway
+    // ⚠️ `ts/no-array-delete`; works on TS code only anyway
     .addRule('no-array-delete', OFF) /** @since 1.0.4-alpha.0 */ // [S2870] 🟢
     // ⚠️ Handled by TypeScript
     .addRule('no-associative-arrays', OFF) /** @since 1.0.4-alpha.0 */ // [S3579] 🟢
@@ -279,7 +289,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // TODO disable autofix?
     .addRule('no-collection-size-mischeck', ERROR) /** @since 0.5.0 */ // [S3981] 🟢
     // ⚠️ Seems too restrictive
-    .addRule('no-commented-code', OFF) /** @since 1.0.4-alpha.0 */ // [S125] 🟢
+    .addRule('no-commented-code', OFF) /** @since 1.0.4-alpha.0 */ // [S125]
     // ⚠️ `regexp/no-control-character`
     .addRule('no-control-regex', OFF) /** @since 3.0.0 */ // [S6324] 🟢🔤
     // ⚠️ `no-useless-assignment`
@@ -288,11 +298,11 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-debug-commands-in-ui-tests', testRulesSeverity) /** @since 4.2.0 */ // [S8959] 🟢🧪 📦 `cypress`, `@playwright/test` (only `cy`/`page` patterns are checked, not package imports)
     .addRule('no-default-utility-imports', ERROR) /** @since 4.2.0 */ // [S8927] 🟢 📦 `lodash`, `lodash-es`, `rxjs`, `rambda`, `validator`
     .addRule('no-delete-var', ERROR) /** @since 1.0.4-alpha.0 */ // [S3001] 🟢
-    // ⚠️ ts/no-duplicate-type-constituents`
+    // ⚠️ `ts/no-duplicate-type-constituents`
     .addRule('no-duplicate-in-composite', OFF) /** @since 1.0.4-alpha.0 */ // [S4621] 🟢
     .addRule('no-duplicate-parameterized-test-case', testRulesSeverity) /** @since 4.2.1 */ // [S9078] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`
     .addRule('no-duplicate-string', OFF) /** @since 0.2.0 */ // [S1192]
-    .addRule('no-duplicate-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8754] 🟢 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
+    .addRule('no-duplicate-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8754] 🟢🧪 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
     .addRule('no-duplicated-branches', ERROR) /** @since 0.1.0-0 */ // [S1871] 🟢
     .addRule('no-element-overwrite', ERROR) /** @since 0.1.0-0 */ // [S4143] 🟢
     // Reason for keeping enabled: not caught by eslint-plugin-regexp
@@ -305,9 +315,9 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `regexp/no-empty-group`
     .addRule('no-empty-group', OFF) /** @since 1.0.4-alpha.0 */ // [S6331] 🟢🔤
     .addRule('no-empty-parameterized-test-dataset', testRulesSeverity) /** @since 4.2.1 */ // [S8998] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`
-    // ⚠️ It seems fragile to me that this rule does not give the control over which files to consider as test files: "This rule flags any file that has .test or .spec as part of its suffix but does not contain any test cases defined using the different forms of the it and test functions from Jasmine, Jest, Mocha, or Node.js testing API."
-    .addRule('no-empty-test-file', OFF) /** @since 1.0.4-alpha.0 */ // [S2187] 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only assertions patterns are checked, not package imports: https://github.com/SonarSource/SonarJS/blob/b8ba1ad28ef481a6f9bae2f9c42ea18a14668adb/packages/jsts/src/rules/S2187/rule.ts#L24)
-    .addRule('no-empty-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8781] 🟢 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
+    // ⚠️ Only `.test`, `.spec` and `.cy` files are considered test files, and these name markers are not configurable
+    .addRule('no-empty-test-file', OFF) /** @since 1.0.4-alpha.0 */ // [S2187] 🟢🧪 `jasmine`, `jest`, `mocha`, `cypress`, `vitest`, `@playwright/test`, `node:test`, Deno (only test API patterns are checked, not package imports: https://github.com/SonarSource/SonarJS/blob/6b11c6ee96a415548f9e754f6764a0b3c30aa45f/packages/analysis/src/jsts/rules/S2187/rule.ts#L26)
+    .addRule('no-empty-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8781] 🟢🧪 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
     .addRule('no-equals-in-for-termination', ERROR) /** @since 1.0.4-alpha.0 */ // [S888] 🟢
     // ⚠️ `jest/no-focused-tests`, `vitest/no-focused-tests`. For other testing frameworks, one can enable this rule manually
     .addRule('no-exclusive-tests', OFF) /** @since 1.0.4-alpha.0 */ // [S6426] 🟢🧪 (only patterns are checked, not package imports)
@@ -315,9 +325,9 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `no-fallthrough`
     .addRule('no-fallthrough', OFF) /** @since 3.0.0 */ // [S128] 🟢
     .addRule('no-fixed-wait-in-tests', testRulesSeverity) /** @since 4.2.0 */ // [S2925] 🟢🧪 📦 `cypress` (only `cy` patterns are checked, not package imports)
-    .addRule('no-floating-point-equality', ERROR) /** @since 4.1.0 */ // [S1244]
+    .addRule('no-floating-point-equality', ERROR) /** @since 4.1.0 */ // [S1244] 🟢
     .addRule('no-for-in-iterable', ERROR) /** @since 1.0.4-alpha.0 */ // [S4139]
-    .addRule('no-forced-browser-interaction', testRulesSeverity) /** @since 4.1.0 */ // [S8783] 📦 `@playwright/test`, `cypress`
+    .addRule('no-forced-browser-interaction', testRulesSeverity) /** @since 4.1.0 */ // [S8783] 🟢🧪 📦 `@playwright/test`, `cypress`
     .addRule('no-function-declaration-in-block', OFF) /** @since 1.0.4-alpha.0 */ // [S1530]
     .addRule('no-global-this', ERROR) /** @since 1.0.4-alpha.0 */ // [S2990] 🟢
     // Note: with cases noncompliant with this rule, ESLint fails on parsing stage anyway due to the assuming of being in a strict mode
@@ -340,11 +350,11 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-implicit-dependencies', OFF) /** @since 1.0.4-alpha.0 */ // [S4328]
     .addRule('no-implicit-global', ERROR) /** @since 1.0.4-alpha.0 */ // [S2703] 🟢
     .addRule('no-in-misuse', ERROR) /** @since 1.0.4-alpha.0 */ // [S4619] 🟢
-    .addRule('no-incompatible-assertion-types', testRulesSeverity) /** @since 4.1.0 */ // [S5845] 🟢 📦 jest, jasmine, playwright, chai-like, `node:assert`
+    .addRule('no-incompatible-assertion-types', testRulesSeverity) /** @since 4.1.0 */ // [S5845] 🟢🧪 📦 jest, jasmine, playwright, chai-like, `node:assert`
     .addRule('no-incomplete-assertions', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S2970] 🟢🧪 (only patterns are checked, not package imports)
     // ⚠️ `consistent-return`
     .addRule('no-inconsistent-returns', OFF) /** @since 1.0.4-alpha.0 */ // [S3801]
-    // ⚠️ ts/restrict-plus-operands`
+    // ⚠️ `ts/restrict-plus-operands`
     .addRule('no-incorrect-string-concat', OFF) /** @since 1.0.4-alpha.0 */ // [S3402]
     .addRule('no-internal-api-use', ERROR) /** @since 2.0.3 */ // [S6627] 🟢
     .addRule('no-interpolation-in-inline-snapshots', testRulesSeverity) /** @since 4.2.0 */ // [S8967] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`
@@ -354,13 +364,13 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-inverted-boolean-check', ERROR) /** @since 0.2.0 */ // [S1940] 🟢
     // ⚠️ `no-labels`
     .addRule('no-labels', OFF) /** @since 1.0.4-alpha.0 */ // [S1119] 🟢
-    // Note: seems usable in .js files only
+    // Note: in TypeScript code, calling a literal is already a type error
     .addRule('no-literal-call', ERROR) /** @since 1.0.4-alpha.0 */ // [S6958] 🟢
     .addRule('no-mime-sniff', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5734] 🟢 📦 `helmet`
     .addRule('no-misleading-array-reverse', ERROR) /** @since 1.0.4-alpha.0 */ // [S4043] 🟢
     // ⚠️ `regexp/no-misleading-unicode-character`
     .addRule('no-misleading-character-class', OFF) /** @since 3.0.0 */ // [S5868] 🟢🔤
-    .addRule('no-mixed-completion-style', testRulesSeverity) /** @since 4.2.0 */ // [S8960] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`
+    .addRule('no-mixed-completion-style', testRulesSeverity) /** @since 4.2.0 */ // [S8960] 🧪 📦 `jest`, `@jest/globals`, `mocha`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`
     .addRule('no-mutate-reactive-state-in-updated-hook', ERROR) /** @since 4.2.1 */ // [S9163] 🟢 📦 `vue`
     // ⚠️ Too noisy in practice
     .addRule('no-nested-assignment', OFF) /** @since 1.0.4-alpha.0 */ // [S1121] 🟢
@@ -399,7 +409,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-small-switch', ERROR) /** @since 0.1.0-0 */ // [S1301] 🟢
     .addRule('no-sonar-comments', OFF) /** @since 3.0.0 */ // [S1291]
     .addRule('no-table-as-layout', ERROR) /** @since 1.0.4-alpha.0 */ // [S5257] 🟢🔵
-    .addRule('no-trivial-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5914] 🟢 📦 jest, jasmine, playwright, chai-like, `node:assert`
+    .addRule('no-trivial-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5914] 🟢🧪 📦 jest, jasmine, playwright, chai-like, `node:assert`
     // ⚠️ Reports on promise-returning functions marked with `void `
     .addRule('no-try-promise', OFF) /** @since 1.0.4-alpha.0 */ // [S4822] 🟢
     .addRule('no-undefined-argument', ERROR) /** @since 1.0.4-alpha.0 */ // [S4623] 🟢
@@ -453,7 +463,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `RegExp.prototype.exec` mutates the state of the regexp: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#return_value
     .addRule('prefer-regexp-exec', OFF) /** @since 3.0.0 */ // [S6594] 🟢🔤
     .addRule('prefer-single-boolean-return', WARNING) /** @since 0.1.0-0 */ // [S1126] 🟢
-    .addRule('prefer-specific-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5906] 🟢 📦 jest, jasmine, playwright, chai-like, `node:assert`
+    .addRule('prefer-specific-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5906] 🟢🧪 📦 jest, jasmine, playwright, chai-like, `node:assert`
     .addRule('prefer-type-guard', ERROR) /** @since 1.0.4-alpha.0 */ // [S4322] 🟢
     .addRule('prefer-while', ERROR) /** @since 0.1.0-0 */ // [S1264] 🟢
     .addRule('production-debug', ERROR) /** @since 1.0.4-alpha.0 */ // [S4507] 🟢 📦 `errorhandler`
@@ -475,7 +485,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `regexp/no-super-linear-backtracking`
     .addRule('slow-regex', OFF) /** @since 1.0.4-alpha.0 */ // [S5852] 🟢🔤
     .addRule('sql-queries', ERROR) /** @since 1.0.4-alpha.0 */ // [S2077] 🟢 📦 `mysql`, `pg`
-    .addRule('stable-tests', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5973] 🟢
+    .addRule('stable-tests', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5973] 🟢🧪
     .addRule('stateful-regex', ERROR) /** @since 1.0.4-alpha.0 */ // [S6351] 🟢🔤
     .addRule('strict-transport-security', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) /** @since 1.0.4-alpha.0 */ // [S3003]
@@ -484,7 +494,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('synchronous-suite-callback', testRulesSeverity) /** @since 4.2.0 */ // [S8785] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `cypress`
     .addRule('table-header', WARNING) /** @since 1.0.4-alpha.0 */ // [S5256] 🟢🔵
     .addRule('table-header-reference', WARNING) /** @since 1.0.4-alpha.0 */ // [S5260] 🟢🔵
-    .addRule('test-check-exception', ERROR) /** @since 1.0.4-alpha.0 */ // [S5958] 🟢🧪 (only patterns are checked, not package imports)
+    .addRule('test-check-exception', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5958] 🟢🧪 (only patterns are checked, not package imports)
     // ⚠️ `testing-library/prefer-query-by-disappearance`
     .addRule('testing-library-prefer-query-by-disappearance', OFF) /** @since 4.2.1 */ // [S9153] 🟢🧪 📦 `@testing-library/*`
     // ⚠️ `testing-library/prefer-presence-queries`
@@ -494,7 +504,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('too-many-break-or-continue-in-loop', OFF) /** @since 1.0.4-alpha.0 */ // [S135]
     // ⚠️ TypeScript
     .addRule('unicode-aware-regex', OFF) /** @since 1.0.4-alpha.0 */ // [S5867] 🔤
-    // `unused-imports/no-unused-imports`, ts/no-unused-vars`, `no-unused-vars`
+    // ⚠️ `unused-imports/no-unused-imports`, `ts/no-unused-vars`, `no-unused-vars`
     .addRule('unused-import', OFF) /** @since 1.0.4-alpha.0 */ // [S1128] 🟢
     .addRule('unused-named-groups', ERROR) /** @since 1.0.4-alpha.0 */ // [S5860] 🟢🔤
     .addRule('unverified-certificate', ERROR) /** @since 1.0.4-alpha.0 */ // [S4830] 🟢 📦 `node:https`, `node:tls`
@@ -513,10 +523,6 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('weak-ssl', ERROR) /** @since 1.0.4-alpha.0 */ // [S4423] 🟢 📦 `node:https`, `node:tls`
     .addRule('x-powered-by', ERROR) /** @since 1.0.4-alpha.0 */ // [S5689] 🟢 📦 `express`, `helmet`
     .addRule('xml-parser-xxe', ERROR) /** @since 1.0.4-alpha.0 */ // [S2755] 🟢 📦 `libxmljs`
-    .enableConfigTesterForPlugin('sonar', {
-      // It looks like `code-eval` was accidentally re-introduced in v4.0.1 after removing in v4.0.0
-      /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => ruleName === 'code-eval',
-    })
+    .enableConfigTesterForPlugin('sonar')
     .addOverrides();
 });

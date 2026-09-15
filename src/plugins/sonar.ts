@@ -21,6 +21,7 @@ export default definePluginMetadata('sonar', {
     'call-argument-line': {stylistic: true},
     'class-name': {stylistic: true},
     'class-prototype': {requiresTypeInfo: 'optional'},
+    'code-eval': {disableInCodeBlocks: 'eval'},
     'concise-regex': {requiresTypeInfo: 'optional'},
     'conditional-indentation': {stylistic: true},
     'content-length': {disableInCodeBlocks: 'runtimeOnly'},
