@@ -78,7 +78,7 @@
     "check:config": "node --import tsx/esm scripts/config-checker.ts",
     "check:type-info": "nr type-info-rules --strict",
     "check:dts:no-devdeps-imports": "node --import tsx/esm scripts/check-dts-no-devdeps-imports.ts",
-    "check:public-types": "attw --pack . --profile esm-only",
+    "check:public-types": "pnpm pack --out temp/package.tgz && attw temp/package.tgz --profile esm-only",
     "check:fix": "nr format && nr eslint:fix && nr format",
     "build:code": "tsdown --clean",
     "build:code:test": "tsdown --out-dir temp/dist",

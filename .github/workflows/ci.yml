@@ -134,12 +134,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: |
-          # `pnpm check:public-types` uses `attw --pack` which internally calls `npm pack`.
-          # The runner's bundled npm may have broken internal deps, causing `npm pack` to fail.
-          # Pack via pnpm instead and pass the tarball directly to attw.
-          pnpm pack --pack-destination /tmp
-          pnpm exec attw /tmp/eslint-config-un-*.tgz --profile esm-only
+      - run: pnpm check:public-types
 
   release-main:
     name: Create release PR _OR_ Publish on merge
