@@ -47,10 +47,11 @@ remap = [
   # Extra trailing slash + www
   '^https://jsboundaries\.dev/(.*)/?(#[^/]*)?$ https://www.jsboundaries.dev/$1/$2',
 ]
-# Merged into the baseline's `exclude` list.
 exclude = [
   # TODO temporary - actually missing fragments for deprecated plugin settings, should remove links to them in future
   '^https://github\.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#\w+$',
+  # TODO temp - site unavailable
+  '^https://safeql\.dev/?',
 
   # These rule pages exist but the site wrongly answers with 404
   '^https://eslint-plugin-github-action\.ntnyq\.com/rules/[\w-]+/?$',
