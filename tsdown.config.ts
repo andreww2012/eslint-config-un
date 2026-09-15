@@ -41,6 +41,9 @@ export default defineConfig([
         neverBundle: ['typescript'],
       },
     },
+    checks: {
+      pluginTimings: false,
+    },
   },
   // Built one by one, so each worker is a single file with its dependencies inlined
   ...INLINED_PLUGIN_WORKERS.map((workerPath): UserConfig => ({
