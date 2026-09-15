@@ -10,5 +10,6 @@ export default definePluginMetadata('node-dependencies', {
     'no-deprecated': {requiresNetwork: true},
     'no-restricted-deps': {requiresNetwork: true},
     'require-provenance-deps': {requiresNetwork: true},
+    'valid-engines': {requiresNetwork: true},
   },
 });

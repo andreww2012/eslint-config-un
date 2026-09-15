@@ -10,5 +10,6 @@ export default definePluginMetadata('lockfile', {
     'binary-conflicts': {requiresNetwork: true},
     integrity: {requiresNetwork: true},
     'minimum-release-age': {requiresNetwork: true},
+    shrinkwrap: {requiresNetwork: true},
   },
 });

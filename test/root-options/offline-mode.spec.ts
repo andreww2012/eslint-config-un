@@ -24,6 +24,7 @@ describe('option: `offlineMode`', () => {
         'json-schema-validator/no-invalid',
         'node-dependencies/no-deprecated',
         'lockfile/integrity',
+        'lockfile/shrinkwrap',
       ]),
     );
   });
