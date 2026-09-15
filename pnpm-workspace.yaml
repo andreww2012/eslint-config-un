@@ -47,6 +47,17 @@ minimumReleaseAgeExclude: # []
   - '@formatjs/icu-skeleton-parser@2.1.12'
   - '@formatjs/ts-transformer@4.4.21'
   - eslint-plugin-formatjs@7.0.0
+  - '@cspell/cspell-json-reporter@10.3.2'
+  - '@cspell/cspell-worker@10.3.2'
+  - '@vitest/coverage-v8@5.0.1'
+  - '@vitest/mocker@5.0.1'
+  - '@vitest/pretty-format@5.0.1'
+  - '@vitest/spy@5.0.1'
+  - '@vitest/ui@5.0.1'
+  - '@vitest/utils@5.0.1'
+  - cspell-gitignore@10.3.2
+  - cspell@10.3.2
+  - vitest@5.0.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -56,7 +67,7 @@ trustPolicyExclude: []
 audit:
   ignore: # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
-  ignorePrune: true # eslint-disable-line json-schema-validator/no-invalid
+  ignorePrune: true
 
 allowBuilds:
   lefthook@2.1.14: true
