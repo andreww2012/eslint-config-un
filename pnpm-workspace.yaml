@@ -31,6 +31,10 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-x@5.19.1
   - '@unhead/eslint-plugin@3.4.1'
   - unhead@3.4.1
+  - '@unocss/config@66.10.3'
+  - '@unocss/core@66.10.3'
+  - '@unocss/eslint-plugin@66.10.3'
+  - '@unocss/rule-utils@66.10.3'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
