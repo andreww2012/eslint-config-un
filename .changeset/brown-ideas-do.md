@@ -1,5 +1,5 @@
 ---
-'eslint-config-un': patch
+'eslint-config-un': minor
 ---
 
 ember: updated [`eslint-plugin-ember` from v13.4.1 to v13.5.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.4.1...v13.5.0):

@@ -35,7 +35,7 @@ markdown, mdx: the following rules are now disabled in embedded code blocks:
 - [`ts/no-useless-empty-export`](https://typescript-eslint.io/rules/no-useless-empty-export)
 - [`unicorn/consistent-function-scoping`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-function-scoping.md)
 - [`unicorn/no-optional-chaining-on-undeclared-variable`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-optional-chaining-on-undeclared-variable.md)
-- [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md)
+- [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v74.0.0/docs/rules/no-unused-array-method-return.md)
 - [`unicorn/no-unsafe-string-replacement`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-string-replacement.md)
 - [`unicorn/prefer-optional-catch-binding`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-optional-catch-binding.md)
 - [`unicorn/prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-response-static-json.md)

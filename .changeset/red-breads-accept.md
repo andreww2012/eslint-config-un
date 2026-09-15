@@ -1,5 +1,5 @@
 ---
-"eslint-config-un": patch
+"eslint-config-un": minor
 ---
 
 vue: updated [`eslint-plugin-vue` from v10.10.0 to v10.11.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.10.0...v10.11.0):

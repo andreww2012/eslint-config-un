@@ -21,7 +21,7 @@ unicorn: updated [`eslint-plugin-unicorn` from v64.0.0 to v65.0.0](https://githu
 - 🔴 not enabled [`unicorn/no-manually-wrapped-comments`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-manually-wrapped-comments.md) rule
 - 🔴 not enabled [`unicorn/no-this-outside-of-class`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-this-outside-of-class.md) rule
 - 🟢 enabled [`unicorn/no-unnecessary-nested-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-nested-ternary.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md) rule
+- 🟢 enabled [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v74.0.0/docs/rules/no-unused-array-method-return.md) rule
 - 🟢 enabled [`unicorn/prefer-array-last-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-last-methods.md) rule
 - 🟢 enabled [`unicorn/prefer-get-or-insert-computed`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-get-or-insert-computed.md) rule
 - 🔴 not enabled [`unicorn/prefer-https`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-https.md) rule
