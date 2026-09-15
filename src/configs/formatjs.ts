@@ -156,6 +156,7 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
     ) /** @since 1.1.0 */ // 🟢
     // Default options in `recommended`: {idInterpolationPattern: '[sha512:contenthash:base64:10]'}
     .addRule('enforce-id', enforceId === 'always' ? ERROR : OFF) /** @since 2.6.0 */ // 🟣
+    .addRule('enforce-message-types', OFF) /** @since 7.0.0 */
     .addRule('enforce-placeholders', ERROR) /** @since 1.3.0 */ // 🟢
     // Default options in `recommended`: {one: true, other: true}
     .addRule('enforce-plural-rules', ERROR, [

@@ -43,6 +43,10 @@ minimumReleaseAgeExclude: # []
   - cspell-io@10.3.2
   - cspell-lib@10.3.2
   - cspell-trie-lib@10.3.2
+  - '@formatjs/icu-messageformat-parser@3.5.19'
+  - '@formatjs/icu-skeleton-parser@2.1.12'
+  - '@formatjs/ts-transformer@4.4.21'
+  - eslint-plugin-formatjs@7.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
