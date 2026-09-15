@@ -7,49 +7,14 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-jsdoc@64.4.0
-  - eslint-plugin-playwright@2.12.0
-  - '@oxfmt/binding-android-arm-eabi@0.68.0'
-  - '@oxfmt/binding-android-arm64@0.68.0'
-  - '@oxfmt/binding-darwin-arm64@0.68.0'
-  - '@oxfmt/binding-darwin-x64@0.68.0'
-  - '@oxfmt/binding-freebsd-x64@0.68.0'
-  - '@oxfmt/binding-linux-arm-gnueabihf@0.68.0'
-  - '@oxfmt/binding-linux-arm-musleabihf@0.68.0'
-  - '@oxfmt/binding-linux-arm64-gnu@0.68.0'
-  - '@oxfmt/binding-linux-arm64-musl@0.68.0'
-  - '@oxfmt/binding-linux-ppc64-gnu@0.68.0'
-  - '@oxfmt/binding-linux-riscv64-gnu@0.68.0'
-  - '@oxfmt/binding-linux-riscv64-musl@0.68.0'
-  - '@oxfmt/binding-linux-s390x-gnu@0.68.0'
-  - '@oxfmt/binding-linux-x64-gnu@0.68.0'
-  - '@oxfmt/binding-linux-x64-musl@0.68.0'
-  - '@oxfmt/binding-openharmony-arm64@0.68.0'
-  - '@oxfmt/binding-win32-arm64-msvc@0.68.0'
-  - '@oxfmt/binding-win32-ia32-msvc@0.68.0'
-  - '@oxfmt/binding-win32-x64-msvc@0.68.0'
-  - lefthook-darwin-arm64@2.1.14
-  - lefthook-darwin-x64@2.1.14
-  - lefthook-freebsd-arm64@2.1.14
-  - lefthook-freebsd-x64@2.1.14
-  - lefthook-linux-arm64@2.1.14
-  - lefthook-linux-x64@2.1.14
-  - lefthook-openbsd-arm64@2.1.14
-  - lefthook-openbsd-x64@2.1.14
-  - lefthook-windows-arm64@2.1.14
-  - lefthook-windows-x64@2.1.14
-  - lefthook@2.1.14
-  - oxfmt@0.68.0
-  - puppeteer-core@25.11.0
-  - puppeteer@25.11.0
-  - release-it@21.0.3
-  - zod@4.6.5
+  - '@tsrx/core@0.2.0'
+  - '@tsrx/eslint-parser@0.4.1'
+  - '@tsrx/eslint-plugin@0.4.1'
+  - '@tsrx/runtime@0.2.0'
   - '@eslint-zod/utils@5.0.1'
   - eslint-plugin-zod-core@1.1.1
   - eslint-plugin-zod-mini@1.10.1
   - eslint-plugin-zod@4.13.1
-  - eslint-plugin-react-refresh@0.5.7
-  - eslint-plugin-turbo@2.10.13
   - '@eslint-react/ast@5.19.1'
   - '@eslint-react/core@5.19.1'
   - '@eslint-react/eslint-plugin@5.19.1'
