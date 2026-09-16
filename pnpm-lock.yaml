@@ -683,8 +683,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(eslint@10.10.0)
       eslint-plugin-formatjs:
-        specifier: 7.0.0
-        version: 7.0.0(eslint@10.10.0)
+        specifier: 8.0.3
+        version: 8.0.3(eslint@10.10.0)
       eslint-plugin-functional:
         specifier: 10.0.0
         version: 10.0.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -7980,8 +7980,8 @@ packages:
     peerDependencies:
       eslint: ^8.40.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-formatjs@7.0.0:
-    resolution: {integrity: sha512-uryK+iBCfjyOh/FDBjVMnIJPGZzrp40o/p67aBsyhBK4dUdbXjZ2bo1jsCEkj2f9/5kpdPtrF+zk07QSvTikRQ==}
+  eslint-plugin-formatjs@8.0.3:
+    resolution: {integrity: sha512-wtYWlUrt5TUN4mOd26hlUAtAY7K9lzaTqUjBtkVkq5o+ZPykqUPThiL0Weqf3Y/IxMcx/gfiubgmOEmMBlo+Ew==}
     peerDependencies:
       eslint: 9 || 10
 
@@ -20986,7 +20986,7 @@ snapshots:
       prettier: 3.9.6
       synckit: 0.11.13
 
-  eslint-plugin-formatjs@7.0.0(eslint@10.10.0):
+  eslint-plugin-formatjs@8.0.3(eslint@10.10.0):
     dependencies:
       '@formatjs/icu-messageformat-parser': 3.5.19
       '@formatjs/ts-transformer': 4.4.21
