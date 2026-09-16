@@ -310,8 +310,8 @@ importers:
         specifier: 4.17.1
         version: 4.17.1(@typescript-eslint/utils@8.70.0)(eslint-import-resolver-node@0.3.9)(eslint@10.10.0)(supports-color@7.2.0)
       eslint-plugin-jsdoc:
-        specifier: 64.5.0
-        version: 64.5.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+        specifier: 64.5.2
+        version: 64.5.2(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       eslint-plugin-json-schema-validator:
         specifier: 6.3.1
         version: 6.3.1(@eslint/json@2.1.0)(eslint@10.10.0)(supports-color@7.2.0)
@@ -8068,11 +8068,15 @@ packages:
       typescript:
         optional: true
 
-  eslint-plugin-jsdoc@64.5.0:
-    resolution: {integrity: sha512-At1L7de/11zGlecxnoXw81hy/xfcnzzXCJX71HTpXt7FPa8bK+nAYRB73pvTfoR3DkTToToQsI6iyX4EbVfGcg==}
+  eslint-plugin-jsdoc@64.5.2:
+    resolution: {integrity: sha512-GirLf/jpVQ/HSLVT98ztIrJ8GUlWWrrwExkofqzeIjjOxlqFtyqnpkRs30FLwEKh0xHEpgy35CU0qFn0I/Mh9w==}
     engines: {node: ^22.22.2 || >=24.15.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   eslint-plugin-json-schema-validator@6.3.1:
     resolution: {integrity: sha512-bAhCCMI00K9hTeAwMUIlWbFOEFeqXk7aDC2OTCueZOAnBg0Ga19tM21PNKxSW9puCH9aoa/BsOjd7QKIhScZTQ==}
@@ -21080,7 +21084,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-jsdoc@64.5.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0):
+  eslint-plugin-jsdoc@64.5.2(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0):
     dependencies:
       '@es-joy/jsdoccomment': 0.97.0
       '@es-joy/resolve.exports': 1.2.0
@@ -21098,9 +21102,10 @@ snapshots:
       semver: 7.8.5
       spdx-expression-parse: 5.0.0
       to-valid-identifier: 1.0.0
+    optionalDependencies:
+      typescript: '@typescript/typescript6@6.0.2'
     transitivePeerDependencies:
       - supports-color
-      - typescript
 
   eslint-plugin-json-schema-validator@6.3.1(@eslint/json@2.1.0)(eslint@10.10.0)(supports-color@7.2.0):
     dependencies:
