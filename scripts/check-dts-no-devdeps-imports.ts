@@ -126,14 +126,12 @@ const leaks = new Map<string, Set<string>>(); // file → leaked specifiers
 
 for (const file of walkDeclarations(DIST_DIR, inlinedDir)) {
   const content = fs.readFileSync(file, 'utf8');
-  for (const spec of extractBareImports(file, content)) {
-    const pkgName = toPkgName(spec);
-    if (!allowed.has(pkgName) && !inlined.has(pkgName)) {
-      const key = path.relative(ROOT, file);
-      const existing = leaks.get(key) ?? new Set();
-      existing.add(spec);
-      leaks.set(key, existing);
-    }
+  const leakedSpecifiers = extractBareImports(file, content).filter((specifier) => {
+    const packageName = toPkgName(specifier);
+    return !allowed.has(packageName) && !inlined.has(packageName);
+  });
+  if (leakedSpecifiers.length > 0) {
+    leaks.set(path.relative(ROOT, file), new Set(leakedSpecifiers));
   }
 }
 

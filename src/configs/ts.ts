@@ -550,6 +550,7 @@ const mergeParserOptions = (
 ): TsEslintParserOptions => {
   const merged: TsEslintParserOptions = {...lower, ...higher};
 
+  // eslint-disable-next-line unicorn/no-immediate-mutation -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3700
   if (typeof lower.projectService === 'object' && typeof higher.projectService === 'object') {
     merged.projectService = {...lower.projectService, ...higher.projectService};
   }

@@ -24,8 +24,7 @@ export function findLintMessageFromLintResults(
   const fileResult = lintResult.find(
     (r) => fileName && pathe.normalize(r.filePath).split('/').at(-1) === fileName,
   );
-  if (options?.all) {
-    return fileResult?.messages.filter((m) => m.ruleId === ruleId) || [];
-  }
-  return fileResult?.messages.find((m) => m.ruleId === ruleId || (m.ruleId == null && m.fatal));
+  return options?.all
+    ? fileResult?.messages.filter((m) => m.ruleId === ruleId) || []
+    : fileResult?.messages.find((m) => m.ruleId === ruleId || (m.ruleId == null && m.fatal));
 }

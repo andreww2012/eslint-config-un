@@ -58,6 +58,7 @@ minimumReleaseAgeExclude: # []
   - cspell-gitignore@10.3.2
   - cspell@10.3.2
   - vitest@5.0.1
+  - eslint-plugin-unicorn@75.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

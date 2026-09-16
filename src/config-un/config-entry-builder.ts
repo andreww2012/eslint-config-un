@@ -617,6 +617,7 @@ export class ConfigEntryBuilder<
               const {pluginPrefixCanonical, ruleNameUnprefixed} =
                 getRuleNameAndPluginPrefixByFullName(this.context, ruleName);
               const entries: [string, typeof OFF][] = [[ruleName, OFF]];
+              // eslint-disable-next-line unicorn/no-immediate-mutation -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3700
               if (this.context.fixableRulesPerPlugin[pluginPrefixCanonical]?.[ruleNameUnprefixed]) {
                 entries.push([`${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`, OFF]);
               }

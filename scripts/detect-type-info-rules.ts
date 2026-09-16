@@ -315,12 +315,14 @@ const main = async () => {
     console.log(`\n${styleText('dim', CAVEAT)}`);
   }
 
-  if (argv.flags.strict && undeclared.length > 0) {
-    logger.error(
-      `${undeclared.length} rule(s) consume type information without saying so. Declare each one in its plugin metadata file, or record why it does not count with \`requiresTypeInfo: [false, 'reason']\``,
-    );
-    process.exitCode = 1;
+  if (!argv.flags.strict || undeclared.length === 0) {
+    return;
   }
+
+  logger.error(
+    `${undeclared.length} rule(s) consume type information without saying so. Declare each one in its plugin metadata file, or record why it does not count with \`requiresTypeInfo: [false, 'reason']\``,
+  );
+  process.exitCode = 1;
 };
 
 await main();

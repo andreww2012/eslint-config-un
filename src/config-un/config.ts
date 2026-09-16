@@ -241,6 +241,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     // `mode` is finalized later, after the `ts` config is loaded (see below)
     mode: typeInfoRulesUserMode ?? 'standalone',
   };
+  // eslint-disable-next-line unicorn/no-immediate-mutation -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3700
   if (typeInfoRulesObject?.ignores?.length) {
     typeInfoRulesResolved.ignores = typeInfoRulesObject.ignores;
   }
@@ -758,13 +759,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     const duplicateConfigNames: string[] = [];
     const uniqueConfigNames = new Set<string>();
     configsResolved.forEach(({name: configName}) => {
-      if (!configName) {
-        return;
-      }
-      if (uniqueConfigNames.has(configName)) {
-        duplicateConfigNames.push(configName);
-      } else {
-        uniqueConfigNames.add(configName);
+      if (configName) {
+        if (uniqueConfigNames.has(configName)) {
+          duplicateConfigNames.push(configName);
+        } else {
+          uniqueConfigNames.add(configName);
+        }
       }
     });
 

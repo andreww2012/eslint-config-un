@@ -272,8 +272,5 @@ export function getKeysOfTruthyValues<
     return undefined;
   }
   // eslint-disable-next-line un/no-typeof-like-comparisons
-  if (mode === 'object') {
-    return Object.fromEntries(result);
-  }
-  return result.map(([key]) => key);
+  return mode === 'object' ? Object.fromEntries(result) : result.map(([key]) => key);
 }

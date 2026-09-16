@@ -689,6 +689,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-array-sort-for-min-max', ERROR) /** @since 68.0.0 */
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣
     .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('no-async-iterator-callback', ERROR) /** @since 75.0.0 */
     .addRule('no-async-promise-finally', ERROR) /** @since 70.0.0 */
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
     .addRule('no-await-in-promise-methods', ERROR) /** @since 52.0.0 */
@@ -808,7 +809,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unsafe-property-key', ERROR) /** @since 66.0.0 */ // 🟣🟡
     .addRule('no-unsafe-sqlite-interpolation', ERROR) /** @since 73.0.0 */
     .addRule('no-unsafe-string-replacement', ERROR) /** @since 66.0.0 */ // 🟣
-    .addRule('no-unused-array-method-return', ERROR) /** @since 65.0.0 */
+    .addRule('no-unused-builtin-method-return', ERROR) /** @since 75.0.0 */
+    .addRule('no-unused-iterator-helper', ERROR) /** @since 75.0.0 */
     .addRule('no-unused-properties', OFF) /** @since 7.0.0 */ // 🔴
     .addRule('no-useless-boolean-cast', ERROR) /** @since 66.0.0 */
     .addRule('no-useless-coercion', ERROR) /** @since 67.0.0 */
@@ -827,12 +829,14 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-useless-promise-resolve-reject', ERROR) /** @since 40.0.0 */
     .addRule('no-useless-re-export', ERROR) /** @since 72.0.0 */
     .addRule('no-useless-recursion', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-useless-set-construction', ERROR) /** @since 75.0.0 */
     .addRule('no-useless-spread', ERROR) /** @since 35.0.0 */
     .addRule('no-useless-switch-case', ERROR) /** @since 42.0.0 */
     .addRule('no-useless-template-literals', ERROR) /** @since 66.0.0 */
     .addRule('no-useless-undefined', ERROR, [
       {checkArguments: false, checkArrowFunctionBody: false},
     ]) /** @since 20.0.0 */
+    .addRule('no-using-resource-escape', ERROR) /** @since 75.0.0 */
     .addRule('no-xor-as-exponentiation', ERROR) /** @since 68.0.0 */
     .addRule('no-zero-fractions', ERROR) /** @since 8.0.0 */
     .addRule('number-literal-case', OFF) /** @since 2.0.0 */
@@ -865,6 +869,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-class-fields', ERROR) /** @since 60.0.0 */
     .addRule('prefer-classlist-toggle', ERROR) /** @since 61.0.0 */
     .addRule('prefer-code-point', ERROR) /** @since 39.0.0 */
+    // TODO enable when the `checkCompoundConditions` option, off by default, is released: https://github.com/sindresorhus/eslint-plugin-unicorn/commit/a0fdbeff0d2fd8b4dd843c452d0b4929633792ec
+    .addRule('prefer-combined-guards', OFF) /** @since 75.0.0 */ // 🟣
     .addRule('prefer-continue', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */
@@ -878,7 +884,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       'prefer-dom-node-text-content',
       OFF,
     ) /** @since 8.0.0 */ /** @aka prefer-text-content */
-    .addRule('prefer-early-return', ERROR) /** @since 66.0.0 */
+    .addRule('prefer-early-return', ERROR, [
+      {checkShortBodies: true /* Default: false */},
+    ]) /** @since 66.0.0 */
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣
     // TODO should consider enabling by default when `Error.isError` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
@@ -913,6 +921,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
     .addRule('prefer-iterator-to-array', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-iterator-to-array-at-end', ERROR) /** @since 65.0.0 */
+    // TODO should consider enabling by default when `Iterator.zip` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/zip
+    .addRule('prefer-iterator-zip', OFF) /** @since 75.0.0 */ // 🟣
+    .addRule('prefer-json-import', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-keyboard-event-key', ERROR) /** @since 9.0.0 */ /** @aka prefer-event-key */
     .addRule('prefer-location-assign', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-logical-operator-over-ternary', ERROR) /** @since 43.0.0 */
@@ -1021,13 +1032,18 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       {minimumCases: 4, emptyDefaultCase: 'do-nothing-comment'},
     ]) /** @since 30.0.0 */
     .addRule('prefer-temporal', OFF) /** @since 66.0.0 */ // 🔴
-    .addRule('prefer-ternary', ERROR) /** @since 23.0.0 */
+    .addRule('prefer-temporal-conversion', ERROR) /** @since 75.0.0 */
+    .addRule('prefer-ternary', ERROR, [
+      'only-single-line', // A multi-line ternary replacing an early return guard reads worse than the guard
+    ]) /** @since 23.0.0 */
     .addRule('prefer-then-catch', ERROR) /** @since 72.0.0 */ // 🟣
     .addRule('prefer-toggle-attribute', OFF) /** @since 69.0.0 */
     .addRule('prefer-top-level-await', OFF) /** @since 34.0.0 */
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
     .addRule('prefer-type-literal-last', OFF) /** @since 66.0.0 */
     .addRule('prefer-uint8array-base64', ERROR) /** @since 66.0.0 */
+    // TODO should consider enabling by default when `Uint8Array#toHex` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toHex
+    .addRule('prefer-uint8array-hex', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-unary-minus', ERROR) /** @since 68.0.0 */
     .addRule('prefer-unicode-code-point-escapes', ERROR) /** @since 66.0.0 */
     .addRule('prefer-url-can-parse', ERROR) /** @since 68.0.0 */
@@ -1102,11 +1118,21 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       },
     ])
     .addRule('expiring-todo-comments', ERROR)
+    .addRule('no-deprecated-css-features', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-duplicate-css-selectors', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-duplicate-font-family-names', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule('no-empty-file', ERROR)
+    .addRule('no-invalid-media-features', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule('no-missing-local-resource', OFF)
+    .addRule('no-nesting-with-mixed-specificity', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-redundant-nested-style-rules', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule('no-shorthand-property-overrides', ERROR)
     .addRule('no-transition-all', ERROR)
+    .addRule('no-unknown-css-annotations', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-unknown-pseudo-selectors', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-unscoped-css-nesting-selector', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-explicit-viewport-units', OFF) /** @since 72.0.0 */ // 🔴
+    .addRule('prefer-media-feature-range-syntax', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule(
       'text-encoding-identifier-case',
       textEncodingSeverity,

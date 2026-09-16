@@ -53,10 +53,9 @@ const deriveEnabledByCondition = (enabledBy: ConfigEnabledBy): string | null => 
   if ('packageManager' in enabledBy) {
     return `${enabledBy.packageManager} is detected as a used package manager by ${npmxLink('package-manager-detector')}`;
   }
-  if ('configDisabled' in enabledBy) {
-    return `\`${enabledBy.configDisabled}\` config is **disabled**`;
-  }
-  return '`defaultConfigsStatus` is set to `misc-enabled`';
+  return 'configDisabled' in enabledBy
+    ? `\`${enabledBy.configDisabled}\` config is **disabled**`
+    : '`defaultConfigsStatus` is set to `misc-enabled`';
 };
 
 const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {

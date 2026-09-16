@@ -69,11 +69,7 @@ const getCodePoint = (token: string) => {
     return Number.parseInt(escapedCodePoint, 16);
   }
 
-  if (token === String.raw`\t`) {
-    return TAB_CODE_POINT;
-  }
-
-  return token.codePointAt(0);
+  return token === String.raw`\t` ? TAB_CODE_POINT : token.codePointAt(0);
 };
 
 const getSpaceKind = (token: string): SpaceKind | undefined => {
@@ -86,11 +82,9 @@ const getSpaceKind = (token: string): SpaceKind | undefined => {
     return 'tab';
   }
 
-  if (codePoint != null && UNICODE_SPACE_REGEXP.test(String.fromCodePoint(codePoint))) {
-    return 'unicodeSpaces';
-  }
-
-  return undefined;
+  return codePoint != null && UNICODE_SPACE_REGEXP.test(String.fromCodePoint(codePoint))
+    ? 'unicodeSpaces'
+    : undefined;
 };
 
 interface SpaceRun {
@@ -148,17 +142,10 @@ const isEdgeAllowed = (
   option: EdgeSpacesOption | undefined,
   isStringEdge: boolean,
   isLineEdge: boolean,
-) => {
-  if (isStringEdge) {
-    return option === 'always' || option === 'stringOnly';
-  }
-
-  if (isLineEdge) {
-    return option === 'always' || option === 'linesOnly';
-  }
-
-  return false;
-};
+) =>
+  isStringEdge
+    ? option === 'always' || option === 'stringOnly'
+    : isLineEdge && (option === 'always' || option === 'linesOnly');
 
 const rule: Eslint.Rule.RuleModule = {
   meta: {
@@ -273,15 +260,13 @@ const rule: Eslint.Rule.RuleModule = {
 
     return {
       Literal: (node) => {
-        if (typeof node.value !== 'string' || isIgnored(node)) {
-          return;
+        if (typeof node.value === 'string' && !isIgnored(node)) {
+          checkText(node, getTextInsideDelimiters(node), (node.range?.[0] || 0) + 1, {
+            isFirst: true,
+            isLast: true,
+            lineBreaks: ESCAPED_LINE_BREAKS,
+          });
         }
-
-        checkText(node, getTextInsideDelimiters(node), (node.range?.[0] || 0) + 1, {
-          isFirst: true,
-          isLast: true,
-          lineBreaks: ESCAPED_LINE_BREAKS,
-        });
       },
 
       TemplateLiteral: (node) => {

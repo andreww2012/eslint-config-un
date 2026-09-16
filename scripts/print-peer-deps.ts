@@ -51,26 +51,26 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
   }
 
   const {peerDependencies} = packageInfo.info;
-  if (Object.keys(peerDependencies || {}).length > 0) {
+  if (Object.keys(peerDependencies || {}).length === 0) {
+    continue;
+  }
+
+  console.log(
+    styleText('blue', packageName),
+    styleText('bgGray', packageInfo.info.version || '[version unknown]'),
+    isDev ? styleText('bgGreenBright', ' DEV ') : '',
+  );
+  for (const [peerDependencyName, peerDependencyRange] of Object.entries(peerDependencies || {})) {
+    const isOptional = packageInfo.info.peerDependenciesMeta?.[peerDependencyName]?.optional;
     console.log(
-      styleText('blue', packageName),
-      styleText('bgGray', packageInfo.info.version || '[version unknown]'),
-      isDev ? styleText('bgGreenBright', ' DEV ') : '',
+      '\t',
+      WELL_KNOWN_PEER_DEPENDENCIES.has(peerDependencyName)
+        ? styleText('gray', peerDependencyName)
+        : isOptional
+          ? peerDependencyName
+          : styleText(isDev ? 'yellow' : 'red', peerDependencyName),
+      styleText('gray', peerDependencyRange || ''),
+      styleText('greenBright', isOptional ? '[optional]' : ''),
     );
-    for (const [peerDependencyName, peerDependencyRange] of Object.entries(
-      peerDependencies || {},
-    )) {
-      const isOptional = packageInfo.info.peerDependenciesMeta?.[peerDependencyName]?.optional;
-      console.log(
-        '\t',
-        WELL_KNOWN_PEER_DEPENDENCIES.has(peerDependencyName)
-          ? styleText('gray', peerDependencyName)
-          : isOptional
-            ? peerDependencyName
-            : styleText(isDev ? 'yellow' : 'red', peerDependencyName),
-        styleText('gray', peerDependencyRange || ''),
-        styleText('greenBright', isOptional ? '[optional]' : ''),
-      );
-    }
   }
 }

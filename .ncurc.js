@@ -151,10 +151,9 @@ export default defineConfig({
     }
 
     if (knownGroup) {
-      if (knownGroup.nonEslint) {
-        return `✨ ${knownGroup.groupName}`;
-      }
-      return `3. ${knownGroup.groupName} (🟡 ESLint related)`;
+      return knownGroup.nonEslint
+        ? `✨ ${knownGroup.groupName}`
+        : `3. ${knownGroup.groupName} (🟡 ESLint related)`;
     }
 
     const isPlugin =

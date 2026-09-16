@@ -266,12 +266,14 @@ const fetchPackageInfo = (packageName: string) =>
       // eslint-disable-next-line ts/no-use-before-define
       yield* queueFetchPackageInfo(dependencyPackageName, depPriority);
 
-      if (isEslintPlugin) {
-        const newCount = yield* Ref.updateAndGet(newEslintPluginsCountRef, (n) => n + 1);
-        logger.info(
-          `👀 Potentially new ESLint plugin found: https://npmx.dev/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${newCount})`,
-        );
+      if (!isEslintPlugin) {
+        continue;
       }
+
+      const newCount = yield* Ref.updateAndGet(newEslintPluginsCountRef, (n) => n + 1);
+      logger.info(
+        `👀 Potentially new ESLint plugin found: https://npmx.dev/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${newCount})`,
+      );
     }
 
     const isPackageLikelyEslintPlugin = isLikelyEslintPlugin(packageName, db);
@@ -339,14 +341,13 @@ const fetchPackageInfo = (packageName: string) =>
       (isPackageLikelyEslintPlugin && newPackagesToCheck.has(packageName)) ||
       db[packageName] === null
     ) {
-      yield* updateEslintPluginsDbSafe(
-        packageName,
-        packageMetadata.deprecated
-          ? {status: 'deprecated'}
+      yield* updateEslintPluginsDbSafe(packageName, {
+        status: packageMetadata.deprecated
+          ? 'deprecated'
           : isInOurDependencies(packageName)
-            ? {status: 'added'}
-            : {status: 'fetched'},
-      );
+            ? 'added'
+            : 'fetched',
+      });
     }
 
     const packageInfo: PackageInfo = {

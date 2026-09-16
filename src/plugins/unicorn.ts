@@ -62,6 +62,7 @@ export default definePluginMetadata('unicorn', {
     'no-array-sort-for-min-max': {requiresTypeInfo: ['optional', 'indirect']},
     'no-array-splice': {requiresTypeInfo: 'optional'},
     'no-asterisk-prefix-in-documentation-comments': {stylistic: true},
+    'no-async-iterator-callback': {requiresTypeInfo: 'optional'},
     'no-async-promise-finally': {requiresTypeInfo: 'optional'},
     'no-await-expression-member': {stylistic: true},
     'no-boolean-sort-comparator': {requiresTypeInfo: ['optional', 'indirect']},
@@ -76,11 +77,23 @@ export default definePluginMetadata('unicorn', {
         'the console already puts a space between arguments, so removing the extra one changes the printed output',
       ],
     },
+    'no-duplicate-font-family-names': {
+      stylistic: [
+        false,
+        'a duplicate is often a copy-pasted name in place of the intended fallback, and removing the second `monospace` of the `monospace, monospace` hack changes the font size',
+      ],
+    },
     'no-duplicate-loops': {requiresTypeInfo: ['optional', 'indirect']},
     'no-for-each': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-for-loop': {requiresTypeInfo: 'optional', stylistic: true},
     'no-hex-escape': {stylistic: true},
-    'no-immediate-mutation': {stylistic: true},
+    'no-immediate-mutation': {
+      requiresTypeInfo: [
+        false,
+        'only checks whether the file is parsed as TypeScript, and the node maps it reads for that exist without type information too',
+      ],
+      stylistic: true,
+    },
     'no-invalid-character-comparison': {requiresTypeInfo: ['optional', 'indirect']},
     'no-invalid-well-known-symbol-methods': {requiresTypeInfo: 'optional'},
     'no-keyword-prefix': {stylistic: true},
@@ -108,6 +121,7 @@ export default definePluginMetadata('unicorn', {
     'no-optional-chaining-on-undeclared-variable': {disableInCodeBlocks: 'runtimeOnly'},
     'no-process-exit': {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
     'no-redundant-comparison': {stylistic: true},
+    'no-redundant-nested-style-rules': {stylistic: true},
     'no-return-array-push': {requiresTypeInfo: ['optional', 'indirect']},
     'no-static-only-class': {disableInCodeBlocks: 'tooStrict'},
     'no-subtraction-comparison': {
@@ -154,7 +168,11 @@ export default definePluginMetadata('unicorn', {
       requiresTypeInfo: ['optional', 'indirect'],
       disableInCodeBlocks: 'tooStrict',
     },
-    'no-unused-array-method-return': {
+    'no-unused-builtin-method-return': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-unused-iterator-helper': {
       requiresTypeInfo: ['optional', 'indirect'],
       disableInCodeBlocks: 'runtimeOnly',
     },
@@ -175,6 +193,7 @@ export default definePluginMetadata('unicorn', {
     'no-useless-logical-operand': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-useless-override': {requiresTypeInfo: 'optional'},
     'no-useless-recursion': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-useless-set-construction': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-useless-spread': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-template-literals': {requiresTypeInfo: 'optional', stylistic: true},
     'no-useless-undefined': {
@@ -199,7 +218,7 @@ export default definePluginMetadata('unicorn', {
     },
     'prefer-array-flat': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-array-flat-map': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
-    'prefer-array-from-async': {stylistic: true},
+    'prefer-array-from-async': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-array-from-map': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-array-from-range': {stylistic: true},
     'prefer-array-index-of': {
@@ -232,6 +251,13 @@ export default definePluginMetadata('unicorn', {
         'only needs the call it reports, and a snippet should show the Unicode-aware method too',
       ],
     },
+    'prefer-combined-guards': {
+      requiresTypeInfo: [
+        false,
+        'only checks whether the file is parsed as TypeScript, and the node maps it reads for that exist without type information too',
+      ],
+      stylistic: true,
+    },
     'prefer-continue': {stylistic: true},
     'prefer-date-now': {stylistic: true},
     'prefer-default-parameters': {
@@ -263,11 +289,19 @@ export default definePluginMetadata('unicorn', {
     'prefer-iterator-concat': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-iterator-helpers': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-iterator-to-array': {stylistic: true},
+    'prefer-iterator-zip': {
+      requiresTypeInfo: ['optional', 'indirect'],
+      stylistic: [
+        false,
+        '`Iterator.zip` reads each row before the loop body runs, which a body mutating the inputs observes',
+      ],
+    },
     'prefer-keyboard-event-key': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-location-assign': {stylistic: true},
     'prefer-logical-operator-over-ternary': {stylistic: true},
     'prefer-math-min-max': {stylistic: true},
     'prefer-math-trunc': {stylistic: [false, 'the bitwise forms it reports wrap above 2**31']},
+    'prefer-media-feature-range-syntax': {stylistic: true},
     'prefer-minimal-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-modern-dom-apis': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-modern-math-apis': {
@@ -356,6 +390,13 @@ export default definePluginMetadata('unicorn', {
     'prefer-structured-clone': {stylistic: true},
     'prefer-switch': {stylistic: true},
     'prefer-temporal': {requiresTypeInfo: 'optional'},
+    'prefer-temporal-conversion': {
+      requiresTypeInfo: 'optional',
+      stylistic: [
+        false,
+        'the direct methods keep the precision below a millisecond and the calendar that some of the reported reconstructions drop',
+      ],
+    },
     'prefer-ternary': {stylistic: true},
     'prefer-then-catch': {requiresTypeInfo: 'optional'},
     'prefer-toggle-attribute': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
@@ -363,6 +404,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-type-error': {stylistic: true},
     'prefer-type-literal-last': {stylistic: true},
     'prefer-uint8array-base64': {requiresTypeInfo: 'optional'},
+    'prefer-uint8array-hex': {requiresTypeInfo: 'optional'},
     'prefer-unary-minus': {stylistic: true},
     'prefer-unicode-code-point-escapes': {stylistic: true},
     'prefer-url-can-parse': {stylistic: true},

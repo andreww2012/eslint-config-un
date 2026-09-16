@@ -45,66 +45,65 @@ const rule: Eslint.Rule.RuleModule = {
     return {
       'Program > JSONExpressionStatement > JSONObjectExpression > JSONProperty[key.value=peerDependencies]':
         (node: JsonAST.JSONProperty) => {
-          if (node.value.type !== 'JSONObjectExpression') {
-            return;
-          }
+          if (node.value.type === 'JSONObjectExpression') {
+            node.value.properties.forEach((peerDependencyNode) => {
+              if (peerDependencyNode.key.type !== 'JSONLiteral') {
+                return;
+              }
 
-          node.value.properties.forEach((peerDependencyNode) => {
-            if (peerDependencyNode.key.type !== 'JSONLiteral') {
-              return;
-            }
+              const peerDependencyName = peerDependencyNode.key.value;
+              if (typeof peerDependencyName !== 'string') {
+                return;
+              }
 
-            const peerDependencyName = peerDependencyNode.key.value;
-            if (typeof peerDependencyName !== 'string') {
-              return;
-            }
+              if (options?.ignore?.includes(peerDependencyName)) {
+                return;
+              }
 
-            if (options?.ignore?.includes(peerDependencyName)) {
-              return;
-            }
+              if (!packageJson.peerDependenciesMeta?.[peerDependencyName]?.optional) {
+                return;
+              }
 
-            if (!packageJson.peerDependenciesMeta?.[peerDependencyName]?.optional) {
-              return;
-            }
+              const installedDevDependencyVersion =
+                packageJson.devDependencies?.[peerDependencyName];
+              if (!installedDevDependencyVersion) {
+                return;
+              }
 
-            const installedDevDependencyVersion = packageJson.devDependencies?.[peerDependencyName];
-            if (!installedDevDependencyVersion) {
-              return;
-            }
+              const {value} = peerDependencyNode;
+              if (value.type !== 'JSONLiteral') {
+                return;
+              }
 
-            const {value} = peerDependencyNode;
-            if (value.type !== 'JSONLiteral') {
-              return;
-            }
+              const peerDependencyMaybeRange = value.value;
+              if (typeof peerDependencyMaybeRange !== 'string') {
+                return;
+              }
 
-            const peerDependencyMaybeRange = value.value;
-            if (typeof peerDependencyMaybeRange !== 'string') {
-              return;
-            }
+              const minVersionSatisfyingRange = minSemverVersion(peerDependencyMaybeRange);
+              if (!minVersionSatisfyingRange) {
+                return;
+              }
 
-            const minVersionSatisfyingRange = minSemverVersion(peerDependencyMaybeRange);
-            if (!minVersionSatisfyingRange) {
-              return;
-            }
+              if (semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)) {
+                return;
+              }
 
-            if (semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)) {
-              return;
-            }
-
-            context.report({
-              node: peerDependencyNode.value,
-              messageId: 'peerDependencyRangeDoNotMatchDevDependencyVersion',
-              data: {
-                name: peerDependencyName,
-                installedVersion: installedDevDependencyVersion,
-              },
-              fix: (fixer) =>
-                fixer.replaceText(
-                  peerDependencyNode.value,
-                  JSON.stringify(`^${installedDevDependencyVersion}`),
-                ),
+              context.report({
+                node: peerDependencyNode.value,
+                messageId: 'peerDependencyRangeDoNotMatchDevDependencyVersion',
+                data: {
+                  name: peerDependencyName,
+                  installedVersion: installedDevDependencyVersion,
+                },
+                fix: (fixer) =>
+                  fixer.replaceText(
+                    peerDependencyNode.value,
+                    JSON.stringify(`^${installedDevDependencyVersion}`),
+                  ),
+              });
             });
-          });
+          }
         },
       // ESLint types have no way of expressing a node type for a selector unknown to them
     } as unknown as Eslint.Rule.RuleListener;

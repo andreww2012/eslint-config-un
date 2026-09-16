@@ -296,9 +296,7 @@ export const restoreCacheFromMemory = async (context: UnConfigContext) => {
 
   const configInMemory = globalThis.eslintConfigUnResolvedConfig;
 
-  if (configInMemory?.key === cacheKey.hash && isCacheFresh(configInMemory)) {
-    return configInMemory;
-  }
-
-  return null;
+  return configInMemory?.key === cacheKey.hash && isCacheFresh(configInMemory)
+    ? configInMemory
+    : null;
 };

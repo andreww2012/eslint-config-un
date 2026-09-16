@@ -139,15 +139,17 @@ export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {packag
     .enableConfigTesterForPlugin('lit')
     .addOverrides();
 
-  if (configA11y !== false) {
-    const {buildJsxA11yConfigs} = await import('./jsx-a11y');
-    buildJsxA11yConfigs(context, undefined, {
-      prefix: 'lit',
-      options: {
-        files: parentConfigFiles,
-        ignores: parentConfigIgnores,
-        ...(typeof configA11y === 'object' && configA11y),
-      },
-    });
+  if (configA11y === false) {
+    return;
   }
+
+  const {buildJsxA11yConfigs} = await import('./jsx-a11y');
+  buildJsxA11yConfigs(context, undefined, {
+    prefix: 'lit',
+    options: {
+      files: parentConfigFiles,
+      ignores: parentConfigIgnores,
+      ...(typeof configA11y === 'object' && configA11y),
+    },
+  });
 });

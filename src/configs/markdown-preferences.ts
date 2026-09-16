@@ -345,9 +345,11 @@ export default defineUnConfig<
       emphasisStyle === false ? OFF : ERROR,
       emphasisStyle === false
         ? []
-        : typeof emphasisStyle === 'string'
-          ? [{emphasis: emphasisStyle, strong: emphasisStyle === '*' ? '**' : '__'}]
-          : [emphasisStyle],
+        : [
+            typeof emphasisStyle === 'string'
+              ? {emphasis: emphasisStyle, strong: emphasisStyle === '*' ? '**' : '__'}
+              : emphasisStyle,
+          ],
     ) /** @since 0.19.0 */ // 💅
     .addRule('hard-linebreak-style', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('level1-heading-style', ERROR) /** @since 0.18.0 */ // 💅
@@ -363,9 +365,11 @@ export default defineUnConfig<
       orderedLists.style === false ? OFF : ERROR,
       orderedLists.style === false
         ? []
-        : typeof orderedLists.style === 'string'
-          ? [{prefer: orderedLists.style}]
-          : [orderedLists.style],
+        : [
+            typeof orderedLists.style === 'string'
+              ? {prefer: orderedLists.style}
+              : orderedLists.style,
+          ],
     ) /** @since 0.18.0 */ // 💅
     .addRule('prefer-autolinks', ERROR) /** @since 0.11.0 */ // 🟢
     .addRule('prefer-fenced-code-blocks', ERROR) /** @since 0.11.0 */ // 🟢

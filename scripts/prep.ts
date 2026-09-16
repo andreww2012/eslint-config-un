@@ -349,10 +349,7 @@ function getDiffAsPatch(a: string, b: string) {
       if (line.startsWith('-') && !line.startsWith('---')) {
         return styleText('red', line);
       }
-      if (line.startsWith('@@')) {
-        return styleText('cyan', line);
-      }
-      return line;
+      return line.startsWith('@@') ? styleText('cyan', line) : line;
     });
   return patchDiff;
 }

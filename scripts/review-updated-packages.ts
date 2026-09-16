@@ -504,53 +504,55 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     console.log(ruleDocsUrl);
   }
 
-  if (packageMeta) {
-    const changesetCandidates = unreleasedChangesets.filter(({summary}) =>
-      isDependencyMentionedIn(summary, dependency),
+  if (!packageMeta) {
+    continue;
+  }
+
+  const changesetCandidates = unreleasedChangesets.filter(({summary}) =>
+    isDependencyMentionedIn(summary, dependency),
+  );
+
+  if (changesetCandidates.length > 0) {
+    console.log(
+      styleText(
+        'black',
+        styleText(
+          'bgYellowBright',
+          ` ⚠ Possible changeset candidates mentioning ${dependency} - consider updating one of them instead of creating a new one: `,
+        ),
+      ),
+    );
+    for (const {id, summary} of changesetCandidates) {
+      console.log(`  ${styleText('yellow', `.changeset/${id}.md`)}`);
+      console.log(
+        summary
+          .split('\n')
+          .map((line) => `    ${line}`)
+          .join('\n'),
+      );
+    }
+  } else if (shouldWriteChangesets) {
+    const changesetSummary = `${changelogEntry}\n${changelogEntryOptions}`;
+    const changesetId = await writeChangeset(
+      {summary: changesetSummary, releases: [{name: ourPackageJson.name, type: 'patch'}]},
+      REPO_ROOT_PATH,
     );
 
-    if (changesetCandidates.length > 0) {
-      console.log(
+    const changesetPath = path.join(CHANGESETS_DIR_PATH, `${changesetId}.md`);
+    await fs.writeFile(changesetPath, (await fs.readFile(changesetPath, 'utf8')).trimEnd());
+
+    unreleasedChangesets.push({id: changesetId, summary: changesetSummary});
+    console.log(
+      styleText(
+        'black',
         styleText(
-          'black',
-          styleText(
-            'bgYellowBright',
-            ` ⚠ Possible changeset candidates mentioning ${dependency} - consider updating one of them instead of creating a new one: `,
-          ),
+          'bgGreenBright',
+          ` ✔ Created a new patch changeset: .changeset/${changesetId}.md `,
         ),
-      );
-      for (const {id, summary} of changesetCandidates) {
-        console.log(`  ${styleText('yellow', `.changeset/${id}.md`)}`);
-        console.log(
-          summary
-            .split('\n')
-            .map((line) => `    ${line}`)
-            .join('\n'),
-        );
-      }
-    } else if (shouldWriteChangesets) {
-      const changesetSummary = `${changelogEntry}\n${changelogEntryOptions}`;
-      const changesetId = await writeChangeset(
-        {summary: changesetSummary, releases: [{name: ourPackageJson.name, type: 'patch'}]},
-        REPO_ROOT_PATH,
-      );
+      ),
+    );
 
-      const changesetPath = path.join(CHANGESETS_DIR_PATH, `${changesetId}.md`);
-      await fs.writeFile(changesetPath, (await fs.readFile(changesetPath, 'utf8')).trimEnd());
-
-      unreleasedChangesets.push({id: changesetId, summary: changesetSummary});
-      console.log(
-        styleText(
-          'black',
-          styleText(
-            'bgGreenBright',
-            ` ✔ Created a new patch changeset: .changeset/${changesetId}.md `,
-          ),
-        ),
-      );
-
-      await checkLinksWithLychee(changesetPath);
-    }
+    await checkLinksWithLychee(changesetPath);
   }
 }
 

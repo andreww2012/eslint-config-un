@@ -137,15 +137,15 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
       });
 
       const autofixDisabled = readTrait(traits, 'autofixDisabled');
-      if (autofixDisabled?.value === true) {
-        if (!FIXABLE_RULES_PER_PLUGIN[prefix]?.[ruleName]) {
-          errors.push(
-            `${styleRuleName(fullRuleName)} disables autofix, but the rule is not fixable`,
-          );
-        }
-        if (!autofixDisabled.reason) {
-          warnings.push(`${styleRuleName(fullRuleName)} disables autofix without saying why`);
-        }
+      if (autofixDisabled?.value !== true) {
+        return;
+      }
+
+      if (!FIXABLE_RULES_PER_PLUGIN[prefix]?.[ruleName]) {
+        errors.push(`${styleRuleName(fullRuleName)} disables autofix, but the rule is not fixable`);
+      }
+      if (!autofixDisabled.reason) {
+        warnings.push(`${styleRuleName(fullRuleName)} disables autofix without saying why`);
       }
     });
   });
