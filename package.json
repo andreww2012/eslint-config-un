@@ -316,7 +316,7 @@
     "json-schema-to-typescript": "16.0.0",
     "json-stringify-pretty-compact": "4.0.0",
     "jsonc-eslint-parser": "3.3.0",
-    "knip": "6.35.1",
+    "knip": "6.36.0",
     "lefthook": "2.1.14",
     "lychee-config-nick2bad4u": "3.0.2",
     "npm-check-updates": "23.1.0",
