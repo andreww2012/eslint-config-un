@@ -167,7 +167,7 @@
     "@angular-eslint/eslint-plugin": "22.5.0",
     "@angular-eslint/eslint-plugin-template": "22.5.0",
     "@angular-eslint/template-parser": "22.5.0",
-    "@antfu/ni": "30.5.0",
+    "@antfu/ni": "30.6.0",
     "@arethetypeswrong/cli": "0.18.5",
     "@changesets/cli": "3.0.3",
     "@changesets/write": "1.0.1",
