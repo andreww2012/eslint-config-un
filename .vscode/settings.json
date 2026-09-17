@@ -24,10 +24,7 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "oxc.oxc-vscode",
   },
-
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
-  // TODO enable later - currently it might suddenly start consuming a lot of memory (dozens of GBs)
-  "js/ts.experimental.useTsgo": false,
+  "js/ts.experimental.useTsgo": true,
   "cSpell.enabled": true,
   "chat.tools.terminal.autoApprove": {
     "nr t": true,
