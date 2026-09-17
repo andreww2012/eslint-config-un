@@ -9,6 +9,7 @@ minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-unicorn@75.0.0
   - eslint-plugin-jsdoc@64.5.2
+  - eslint-plugin-astro@3.2.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

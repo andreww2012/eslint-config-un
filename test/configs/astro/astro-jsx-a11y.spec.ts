@@ -20,6 +20,46 @@ describe('astro: sub config `jsxA11y`', () => {
       expect(disabledConfigResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeUndefined();
     });
 
+    describe('`eslint-plugin-astro` has not loaded `eslint-plugin-jsx-a11y(-x)`', async () => {
+      const {default: eslintPluginAstro} = await import('eslint-plugin-astro');
+      const unOptions = {
+        un: {
+          plugins: {
+            astro: {
+              plugin: {
+                ...eslintPluginAstro,
+                rules: {
+                  ...eslintPluginAstro.rules,
+                  // A wrapper rule has no options when its wrapped plugin has not been loaded
+                  'jsx-a11y/alt-text': {meta: {schema: []}, create: () => ({})},
+                },
+              },
+            },
+          },
+        },
+      };
+
+      it('does not create `jsx-a11y/astro` eslint config and does not warn by default', async () => {
+        using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+        const configResult = await computeEslintConfig('astro', unOptions);
+
+        expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeUndefined();
+        expect(stderrSpy.mock.calls).toBeEmpty();
+      });
+
+      it('does not create `jsx-a11y/astro` eslint config and prints a warning if explicitly enabled', async () => {
+        using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+        const configResult = await computeEslintConfig({astro: {configJsxA11y: true}}, unOptions);
+
+        expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeUndefined();
+        expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+          '[astro/jsxA11y] `eslint-plugin-astro` could not load',
+        );
+      });
+    });
+
     it('inherits `files` from parent `astro` config when `configJsxA11y` is enabled', async () => {
       const FILES = ['src/**/*.astro'];
 
@@ -54,7 +94,7 @@ describe('astro: sub config `jsxA11y`', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        '"If you want to use astro/jsx-a11y/alt-text rule, you need to install eslint-plugin-jsx-a11y."',
+        '"img elements must have an alt prop, either with meaningful text, or an empty string for decorative images."',
       );
     });
   });
@@ -115,15 +155,15 @@ describe('astro: sub config `jsxA11y`', () => {
 
   describe('options', () => {
     describe('option: `settings`', () => {
-      it('does not set `jsx-a11y-x` settings by default', async () => {
+      it('does not set `jsx-a11y-x` and `jsx-a11y` settings by default', async () => {
         const configResult = await computeEslintConfig('astro');
+        const settings = configResult.getConfigByUnPostfix('jsx-a11y/astro')?.settings;
 
-        expect(
-          configResult.getConfigByUnPostfix('jsx-a11y/astro')?.settings?.['jsx-a11y-x'],
-        ).toBeUndefined();
+        expect(settings?.['jsx-a11y-x']).toBeUndefined();
+        expect(settings?.['jsx-a11y']).toBeUndefined();
       });
 
-      it('sets `jsx-a11y-x` settings when set', async () => {
+      it('sets both `jsx-a11y-x` and `jsx-a11y` settings when set', async () => {
         const SETTINGS = {components: {CardLink: 'a'}};
 
         const configResult = await computeEslintConfig(
@@ -132,10 +172,10 @@ describe('astro: sub config `jsxA11y`', () => {
           },
           {un: {plugins: {'jsx-a11y': {settings: SETTINGS}}}},
         );
+        const settings = configResult.getConfigByUnPostfix('jsx-a11y/astro')?.settings;
 
-        expect(
-          configResult.getConfigByUnPostfix('jsx-a11y/astro')?.settings?.['jsx-a11y-x'],
-        ).toStrictEqual(SETTINGS);
+        expect(settings?.['jsx-a11y-x']).toStrictEqual(SETTINGS);
+        expect(settings?.['jsx-a11y']).toStrictEqual(SETTINGS);
       });
     });
 
@@ -202,6 +242,16 @@ describe('astro: sub config `jsxA11y`', () => {
         expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
           0,
         );
+      });
+
+      it('removes a default element from `astro/jsx-a11y/alt-text` rule when disabled', async () => {
+        const configResult = await computeEslintConfig({
+          astro: {configJsxA11y: {altTextCheckForElements: {object: false}}},
+        });
+
+        expect(
+          configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/alt-text'),
+        ).toMatchInlineSnapshot('[2, {"elements": ["img", "area", "input[type="image"]"]}]');
       });
     });
   });

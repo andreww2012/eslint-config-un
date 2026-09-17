@@ -26,11 +26,18 @@ export interface AstroEslintConfigOptions<
   /**
    * A11Y (accessibility) specific rules for Astro components.
    *
-   * Since it uses [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y) under the
-   * hood, this config also accepts the same options as `jsxA11y` config.
+   * These rules wrap the rules of
+   * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y) (tried first) or
+   * [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x), whichever
+   * `eslint-plugin-astro` loads from the project root, so this config also accepts the same options
+   * as `jsxA11y` config.
+   * If neither can be loaded, this config is always disabled.
+   * `eslint-plugin-jsx-a11y-x` is already installed as a dependency, but some package managers
+   * (like pnpm by default) don't make it loadable from the project root, so you may need to install
+   * it yourself.
    *
    * 📁 Default `files` and `ignores`: inherited from the parent config
-   * @default true
+   * @default true // <=> `eslint-plugin-jsx-a11y` or `eslint-plugin-jsx-a11y-x` can be loaded
    */
   configJsxA11y?:
     | boolean
@@ -55,6 +62,11 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
   after: ['ts'],
 })(async (context, optionsRaw) => {
   const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
+
+  // The A11Y rules expose the schemas of the rules they wrap only if the wrapped plugin was loaded
+  const testJsxA11yRuleSchema = eslintPluginAstro?.rules['jsx-a11y/alt-text']?.meta?.schema;
+  const isJsxA11yPluginLoaded =
+    Array.isArray(testJsxA11yRuleSchema) && testJsxA11yRuleSchema.length > 0;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsxA11y: true,
@@ -123,7 +135,7 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
     })
     .addOverrides();
 
-  if (configJsxA11y !== false) {
+  if (configJsxA11y !== false && isJsxA11yPluginLoaded) {
     const {buildJsxA11yConfigs} = await import('./jsx-a11y');
     buildJsxA11yConfigs(context, undefined, {
       prefix: 'astro',
@@ -133,6 +145,10 @@ export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('
         ...(typeof configJsxA11y === 'object' && configJsxA11y),
       },
     });
+  } else if (typeof optionsRaw === 'object' && optionsRaw.configJsxA11y) {
+    context.logger.warn(
+      '[astro/jsxA11y] `eslint-plugin-astro` could not load `eslint-plugin-jsx-a11y` or `eslint-plugin-jsx-a11y-x` from the project root, so A11Y rules for Astro components are disabled. To enable them, add `eslint-plugin-jsx-a11y-x` to the dev dependencies of your project',
+    );
   }
 
   return {
