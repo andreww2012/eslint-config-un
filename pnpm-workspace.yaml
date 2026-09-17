@@ -12,6 +12,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-astro@3.2.1
   - '@tsrx/eslint-parser@0.4.4'
   - '@tsrx/eslint-plugin@0.4.4'
+  - eslint-plugin-no-relative-import-paths@1.7.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
