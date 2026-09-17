@@ -524,11 +524,11 @@ importers:
         specifier: 5.4.1
         version: 5.4.1(@typescript-eslint/utils@8.70.0)(@typescript/typescript6@6.0.2)(eslint@10.10.0)(libpg-query@17.7.4)
       '@tsrx/eslint-parser':
-        specifier: 0.4.1
-        version: 0.4.1(@typescript-eslint/types@8.70.0)(eslint@10.10.0)
+        specifier: 0.4.4
+        version: 0.4.4(@typescript-eslint/types@8.70.0)(eslint@10.10.0)
       '@tsrx/eslint-plugin':
-        specifier: 0.4.1
-        version: 0.4.1(@tsrx/eslint-parser@0.4.1)(@typescript-eslint/parser@8.70.0)(eslint@10.10.0)
+        specifier: 0.4.4
+        version: 0.4.4(@tsrx/eslint-parser@0.4.4)(@typescript-eslint/parser@8.70.0)(eslint@10.10.0)
       '@types/eslint-plugin-mobx':
         specifier: 0.0.0
         version: 0.0.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -5133,25 +5133,25 @@ packages:
       typescript:
         optional: true
 
-  '@tsrx/core@0.2.0':
-    resolution: {integrity: sha512-IuzVAVOtGNxJnI1nnExyUoLErUpVjtHd0Hlaf4wlfVU2ENUNzrWnyrKBz2ogvV3vbgeNSdjSnJPhCRYTaayKAw==}
+  '@tsrx/core@0.2.2':
+    resolution: {integrity: sha512-9UaTWl+NzUW91EVhf+AkKZolTo7GYVeaqahllaJAqL2zsW0O04GB0hIrhgx/8aR3hTHMuVrHSm274WMAp6vGrw==}
 
-  '@tsrx/eslint-parser@0.4.1':
-    resolution: {integrity: sha512-xFYyNj313gnwQtpRcsEN9cNKaCY4zySR99ri1VFY5yPuELGhkqWC5j7AqAczGBTyGLWMGxMaUCZIays+nM7IQw==}
+  '@tsrx/eslint-parser@0.4.4':
+    resolution: {integrity: sha512-deoICaGzFToxS3IcTats4LytAywR7AGMpktXJUV5KibWNabjgPn+frw5BmR5eVdfvOmeU7sPIpvklkU/gmBbkA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
 
-  '@tsrx/eslint-plugin@0.4.1':
-    resolution: {integrity: sha512-wTZw1HXf17nBG7NkjnTbRT4W+0seFSN5jNdC2b/8evzlKZc6b3GRBgT2nv3zjKJjVaHgyOGsdysJLPH7I5RJ/A==}
+  '@tsrx/eslint-plugin@0.4.4':
+    resolution: {integrity: sha512-fvFdz6wJDUFGgvOXaPWcEUIeydAPQ05onHvNopcn7kEhQG1DtHFFPHVNXpYk4kjbzq14ZNJ6wnKJgQHfsY3rBw==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.4.1
+      '@tsrx/eslint-parser': 0.4.4
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
-  '@tsrx/runtime@0.2.0':
-    resolution: {integrity: sha512-eMsHoysp2AO5Q2Aa178V+qSDNnYgiEPih0fQkMdaE3gWCWiKVoskrQEWIkK6WaXwJ6fTyo6Fw4bCfGksvproAA==}
+  '@tsrx/runtime@0.2.1':
+    resolution: {integrity: sha512-kwPNfX0MXoWqrs/exy4pZN5wuO09NHwK+XnZNDNh3Ai8CFnijwEU1Ba0736NZDX/lRqEvpLmZ3FLlnW8HTKL2w==}
 
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
@@ -18104,12 +18104,12 @@ snapshots:
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
 
-  '@tsrx/core@0.2.0(@typescript-eslint/types@8.70.0)':
+  '@tsrx/core@0.2.2(@typescript-eslint/types@8.70.0)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
       '@noble/hashes': 2.4.0
       '@sveltejs/acorn-typescript': 1.0.13(acorn@8.18.0)
-      '@tsrx/runtime': 0.2.0
+      '@tsrx/runtime': 0.2.1
       '@types/estree': 1.0.9
       '@types/estree-jsx': 1.0.5
       acorn: 8.18.0
@@ -18120,20 +18120,20 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-parser@0.4.1(@typescript-eslint/types@8.70.0)(eslint@10.10.0)':
+  '@tsrx/eslint-parser@0.4.4(@typescript-eslint/types@8.70.0)(eslint@10.10.0)':
     dependencies:
-      '@tsrx/core': 0.2.0(@typescript-eslint/types@8.70.0)
+      '@tsrx/core': 0.2.2(@typescript-eslint/types@8.70.0)
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.4.1(@tsrx/eslint-parser@0.4.1)(@typescript-eslint/parser@8.70.0)(eslint@10.10.0)':
+  '@tsrx/eslint-plugin@0.4.4(@tsrx/eslint-parser@0.4.4)(@typescript-eslint/parser@8.70.0)(eslint@10.10.0)':
     dependencies:
-      '@tsrx/eslint-parser': 0.4.1(@typescript-eslint/types@8.70.0)(eslint@10.10.0)
+      '@tsrx/eslint-parser': 0.4.4(@typescript-eslint/types@8.70.0)(eslint@10.10.0)
       '@typescript-eslint/parser': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  '@tsrx/runtime@0.2.0': {}
+  '@tsrx/runtime@0.2.1': {}
 
   '@tufjs/canonical-json@2.0.0': {}
 
