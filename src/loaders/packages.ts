@@ -1,7 +1,21 @@
+import path from 'node:path';
 import type {EslintPlugin} from '../eslint/eslint-types';
 import type {OmitStrict, Prettify} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
 import {type EslintParser, type EslintProcessor, genInferredModuleLoader} from './shared';
+
+const loadCivetProcessor = (outputExtension: '.jsx' | '.tsx') =>
+  import('eslint-plugin-civet').then(({civet}): EslintProcessor => {
+    const processor = civet({js: outputExtension === '.jsx', outputExtension}).processors.civet;
+    return {
+      ...processor,
+      // The plugin names the compiled file after the absolute source path, so an ignored parent directory would exclude it
+      preprocess: (text, filename) =>
+        processor
+          .preprocess(text, filename)
+          .map((file) => ({...file, filename: path.basename(file.filename)})),
+    };
+  });
 
 export const packagesLoaders = {
   _utils: genInferredModuleLoader('_utils', '_utils', () => interopDefault(import('../utils'))),
@@ -33,6 +47,12 @@ export const packagesLoaders = {
       interopDefault(import('eslint-plugin-check-file')).then(
         (m) => m.processors['eslint-processor-check-file'],
       ),
+  ),
+  civetJsProcessor: genInferredModuleLoader('civetJsProcessor', 'eslint-plugin-civet', () =>
+    loadCivetProcessor('.jsx'),
+  ),
+  civetTsProcessor: genInferredModuleLoader('civetTsProcessor', 'eslint-plugin-civet', () =>
+    loadCivetProcessor('.tsx'),
   ),
   eslintCssTreeSyntax: genInferredModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
     interopDefault(import('@eslint/css-tree/definition-syntax-data')),

@@ -134,6 +134,11 @@ export const GLOB_TSRX = '**/*.tsrx' as const;
 
 export const GLOB_RIPPLE = '**/*.ripple' as const;
 
+export const GLOB_CIVET = '**/*.civet' as const;
+
+/** The virtual files a `.civet` file is compiled to before being linted */
+export const GLOB_CIVET_COMPILED = `${GLOB_CIVET}/**/*.*` as const;
+
 /* Globs - misc */
 
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
@@ -287,6 +292,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@nestjs/core',
   '@tsrx/core',
   'ripple',
+  '@danielx/civet',
 
   // Used in various configs to determine the default values of their options
   'eslint',

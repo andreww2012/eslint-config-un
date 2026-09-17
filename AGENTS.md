@@ -21,6 +21,8 @@ Wrap type intersections in `Prettify`, but only where it actually flattens in th
 If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.
 Declare the corresponding array using `allUnionMembers` helper.
 
+Don't leave a trailing empty line in .md changeset files.
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
 

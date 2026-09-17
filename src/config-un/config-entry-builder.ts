@@ -1,6 +1,7 @@
 import {
   DISABLE_AUTOFIX_WITH_SLASH,
   ERROR,
+  GLOB_CIVET_COMPILED,
   GLOB_CSS,
   GLOB_HTM_HTML,
   GLOB_JSON,
@@ -862,7 +863,12 @@ export class ConfigEntryBuilder<
           files: config.files?.length
             ? intersectParentConfigFilesWithProvidedFiles(config.files, [...possibleFiles])
             : [...possibleFiles],
-          ignores: [...(config.ignores || []), GLOB_MD_X_CODE_BLOCKS, ...(typeInfoIgnores || [])],
+          ignores: [
+            ...(config.ignores || []),
+            GLOB_MD_X_CODE_BLOCKS,
+            GLOB_CIVET_COMPILED,
+            ...(typeInfoIgnores || []),
+          ],
           languageOptions: {
             ...config.languageOptions,
             parserOptions: {

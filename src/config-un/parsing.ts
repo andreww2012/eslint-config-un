@@ -3,6 +3,7 @@ import type {MarkdownLanguageOptions} from '@eslint/markdown';
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {
   GLOB_ASTRO,
+  GLOB_CIVET,
   GLOB_CSS,
   GLOB_EMBER_GLIMMER,
   GLOB_GRAPHQL,
@@ -76,6 +77,12 @@ type ParsingMechanism =
        * A parser that ships inside a package we already load for other reasons
        */
       parserPackage: LoadablePackagePrefix;
+    }
+  | {
+      /**
+       * Compiles the files to code that the other languages then parse
+       */
+      processorPackage: LoadablePackagePrefix;
     };
 
 interface ParsingDialectDefinition {
@@ -309,6 +316,20 @@ export const PARSING_LANGUAGES = (
       },
     },
     dialectDefault: 'tsrx',
+  },
+
+  civet: {
+    dialects: {
+      ts: {
+        mechanism: {processorPackage: 'civetTsProcessor'},
+        filesDefault: [GLOB_CIVET],
+      },
+      js: {
+        mechanism: {processorPackage: 'civetJsProcessor'},
+        filesDefault: [GLOB_CIVET],
+      },
+    },
+    dialectDefault: 'ts',
   },
 
   angularTemplate: {
@@ -685,6 +706,8 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         ...('language' in mechanism && {
           language: `${resolvePluginPrefix(context, mechanism.language[0])}/${mechanism.language[1]}`,
         }),
+        ...('processorPackage' in mechanism &&
+          generatePackageToLoadProperty('processor', mechanism.processorPackage)),
         ...entry.entryProperties,
         ...(Reflect.ownKeys(languageOptions).length > 0 && {languageOptions}),
       };

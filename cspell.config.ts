@@ -70,6 +70,7 @@ export default {
     'scsstree',
     'safeql',
     'solidjs',
+    'danielx', // `@danielx/civet`
 
     // Technical words/terms
     'arrayify',

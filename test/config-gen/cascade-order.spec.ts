@@ -231,6 +231,8 @@ describe('cascade order', () => {
       eslint-config-un/vue/a11y
       eslint-config-un/vue/scoped-css
       eslint-config-un/check-file
+      eslint-config-un/civet
+      eslint-config-un/civet/compiled
       eslint-config-un/formatjs
       eslint-config-un/markdown/markdown
       eslint-config-un/markdown/code-blocks-processor
@@ -261,6 +263,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/graphql
       eslint-config-un/parsing/ember
       eslint-config-un/parsing/tsrx
+      eslint-config-un/parsing/civet/ts
       eslint-config-un/parsing/angularTemplate
       eslint-config-un/config-files
       eslint-config-un/cli

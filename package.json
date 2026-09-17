@@ -241,6 +241,7 @@
     "eslint-plugin-boundaries": "7.2.0",
     "eslint-plugin-case-police": "2.2.1",
     "eslint-plugin-check-file": "3.3.2",
+    "eslint-plugin-civet": "0.1.0",
     "eslint-plugin-clsx": "0.1.0",
     "eslint-plugin-command": "4.0.0",
     "eslint-plugin-compat": "7.0.2",
@@ -388,6 +389,7 @@
     "eslint-plugin-boundaries": "^7.2.0",
     "eslint-plugin-case-police": "^2.2.1",
     "eslint-plugin-check-file": "^3.3.2",
+    "eslint-plugin-civet": "^0.1.0",
     "eslint-plugin-clsx": "^0.1.0",
     "eslint-plugin-command": "^4.0.0",
     "eslint-plugin-compat": "^7.0.2",
@@ -581,6 +583,9 @@
       "optional": true
     },
     "eslint-plugin-check-file": {
+      "optional": true
+    },
+    "eslint-plugin-civet": {
       "optional": true
     },
     "eslint-plugin-clsx": {

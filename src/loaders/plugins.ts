@@ -116,6 +116,9 @@ export const pluginsLoaders = {
   'check-file': genModuleLoader('check-file', 'eslint-plugin-check-file', () =>
     interopDefault(import('eslint-plugin-check-file')),
   ),
+  civet: genModuleLoader('civet', 'eslint-plugin-civet', () =>
+    interopDefault(import('eslint-plugin-civet')),
+  ),
   clsx: genModuleLoader(
     'clsx',
     'eslint-plugin-clsx',

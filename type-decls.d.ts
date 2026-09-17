@@ -129,3 +129,24 @@ declare module 'eslint-plugin-expo' {
   const value: EslintPlugin;
   export = value;
 }
+
+declare module 'eslint-plugin-civet' {
+  import type {
+    Plugin as EslintPlugin,
+    Processor as EslintProcessor,
+    ProcessorFile,
+  } from '@eslint/core';
+
+  interface CivetProcessor extends EslintProcessor<ProcessorFile> {
+    preprocess: NonNullable<EslintProcessor<ProcessorFile>['preprocess']>;
+  }
+
+  interface CivetPlugin extends EslintPlugin {
+    processors: {civet: CivetProcessor};
+  }
+
+  export const civet: (options?: {js?: boolean; outputExtension?: string}) => CivetPlugin;
+
+  const value: CivetPlugin;
+  export default value;
+}

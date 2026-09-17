@@ -640,6 +640,9 @@ importers:
       eslint-plugin-check-file:
         specifier: 3.3.2
         version: 3.3.2(eslint@10.10.0)
+      eslint-plugin-civet:
+        specifier: 0.1.0
+        version: 0.1.0(@danielx/civet@0.11.16)(@eslint/js@9.39.5)(eslint@10.10.0)(typescript-eslint@8.70.0)
       eslint-plugin-clsx:
         specifier: 0.1.0
         version: 0.1.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -2198,6 +2201,26 @@ packages:
     resolution: {integrity: sha512-ZhsdSzfwXA/TuyqDb0nl+A9Kfd0W+rBIDdPxeXLvVsKFCtxVDa0zUYyhWhrtT9RtsPZQfRqPTkr+DsfWOzu4EA==}
     engines: {node: '>=22.18.0'}
 
+  '@cspotcode/source-map-support@0.8.1':
+    resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
+    engines: {node: '>=12'}
+
+  '@danielx/civet@0.11.16':
+    resolution: {integrity: sha512-VF1ELK37EJmf5OLQ5TIiSfJWTnfB/dVxW/DCH3CqJWTLTD+KYZ1MxxUqT9i0xtxg/CxPNid6AUPsBkP1SEMCXw==}
+    engines: {node: '>=19 || ^18.6.0 || ^16.17.0'}
+    hasBin: true
+    peerDependencies:
+      '@danielx/hera': ^0.9.8
+      typescript: '>=4.5'
+      yaml: ^2.4.5
+    peerDependenciesMeta:
+      '@danielx/hera':
+        optional: true
+      typescript:
+        optional: true
+      yaml:
+        optional: true
+
   '@darraghor/eslint-plugin-nestjs-typed@7.5.3':
     resolution: {integrity: sha512-82o1pOBgU1Sbtyu+Vn0i5P20QUGyzV9XXZoN5ib8UXbbV3NYejqX83JsTztaZQmzlVLXRPvuChWH4hl7/idYQQ==}
     engines: {node: '>=24.0.0'}
@@ -3166,6 +3189,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@jridgewell/trace-mapping@0.3.9':
+    resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
   '@jsdevtools/ono@7.1.3':
     resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
@@ -7880,6 +7906,19 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=9.0.0'
+
+  eslint-plugin-civet@0.1.0:
+    resolution: {integrity: sha512-eXrddm66MrUpkWp5VRBoYFflpe5h53RaYBpNHFl4H4+cIhnv+j5ezM98r3TNqs6kIWVAl2o41pjm1NnLxMBIRQ==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@danielx/civet': '>=0.6.0'
+      '@eslint/js': '>=8.57.0'
+      eslint: '>=8.57.0'
+      typescript-eslint: '>=7.0.0'
+    peerDependenciesMeta:
+      typescript-eslint:
+        optional: true
 
   eslint-plugin-clsx@0.1.0:
     resolution: {integrity: sha512-g4Q3ybgXqFbyculk7OlkpSlP4ODSCwrZtEogWN49MMC3HcMYubl9b7L2Q3w3++43tMZAkQvQMzGkONDu1haJJg==}
@@ -14983,6 +15022,18 @@ snapshots:
 
   '@cspell/url@10.3.3': {}
 
+  '@cspotcode/source-map-support@0.8.1':
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.9
+
+  '@danielx/civet@0.11.16(@typescript/typescript6@6.0.2)(yaml@2.9.1)':
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      unplugin: 2.3.11
+    optionalDependencies:
+      typescript: '@typescript/typescript6@6.0.2'
+      yaml: 2.9.1
+
   '@darraghor/eslint-plugin-nestjs-typed@7.5.3(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@10.10.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/parser': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -16164,6 +16215,11 @@ snapshots:
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
   '@jridgewell/trace-mapping@0.3.31':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.6.0
+
+  '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -20889,6 +20945,14 @@ snapshots:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       is-glob: 4.0.3
       micromatch: 4.0.8
+
+  eslint-plugin-civet@0.1.0(@danielx/civet@0.11.16)(@eslint/js@9.39.5)(eslint@10.10.0)(typescript-eslint@8.70.0):
+    dependencies:
+      '@danielx/civet': 0.11.16(@typescript/typescript6@6.0.2)(yaml@2.9.1)
+      '@eslint/js': 9.39.5
+      eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
+    optionalDependencies:
+      typescript-eslint: 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
 
   eslint-plugin-clsx@0.1.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0):
     dependencies:

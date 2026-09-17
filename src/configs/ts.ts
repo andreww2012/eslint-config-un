@@ -2,6 +2,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import {
   ERROR,
+  GLOB_CIVET_COMPILED,
   GLOB_MD_X_CODE_BLOCKS,
   GLOB_TS_X,
   GLOB_TS_X_EXTENSION,
@@ -542,7 +543,7 @@ export interface TsEslintConfigOptions<
 }
 
 const TS_FILES_DEFAULT = [GLOB_TS_X];
-const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS];
+const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED];
 
 const mergeParserOptions = (
   lower: TsEslintParserOptions,
@@ -733,7 +734,7 @@ export default defineUnConfig<
     kind: 'setUpOnly',
     languageOptions: {parserOptions: buildParsingParserOptions()},
   });
-  // No program covers the code blocks, nor the framework files opted out of type-aware rules
+  // No program covers code blocks, compiled Civet or framework files opted out of type-aware rules
   context.requestParsing('ts', {
     kind: 'setUpOnly',
     nameSuffix: 'type-aware',
