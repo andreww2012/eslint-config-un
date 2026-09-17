@@ -194,10 +194,9 @@ const NpmPackageInfoZod = z.union([
 
 const getNpmPackageInfo = async (packageName: string) => {
   const response = await fetch(`https://registry.npmjs.org/${packageName}`);
-  if (!response.ok) {
-    return {error: `${response.status} ${response.statusText}`};
-  }
-  return NpmPackageInfoZod.parse(await response.json());
+  return response.ok
+    ? NpmPackageInfoZod.parse(await response.json())
+    : {error: `${response.status} ${response.statusText}`};
 };
 
 const doesFileExist = async (fullPath: string) =>
