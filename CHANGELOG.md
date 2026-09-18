@@ -1,5 +1,65 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.1
+
+### Minor Changes
+
+- 8ae3753: Added a new config `civet` which uses [`eslint-plugin-civet`](https://npmx.dev/eslint-plugin-civet), ❓ enabled if `@danielx/civet` package is installed
+- 02c7562: astro: updated [`eslint-plugin-astro` from v3.1.0 to v3.2.1](https://github.com/ota-meshi/eslint-plugin-astro/compare/v3.1.0...v3.2.1), so `astro/jsx-a11y/*` rules now also work with `eslint-plugin-jsx-a11y-x` and respect `configJsxA11y` options and `jsx-a11y` plugin settings with either plugin. If neither it nor `eslint-plugin-jsx-a11y` can be loaded from the project root (pnpm prevents it by default), the `astro/jsxA11y` config is now disabled instead of reporting errors in every `.astro` file
+- 57a5632: vue: added a new `knownDirectiveNames` option to exempt directives from [`vue/no-undef-directives`](https://eslint.vuejs.org/rules/no-undef-directives.html). Both it and `knownComponentNames` now also accept the object notation, which lets you drop any of the names added behind the scenes, including the Nuxt auto-imported ones, by setting the value to `false`
+- 2d6af3b: unicorn: updated [`eslint-plugin-unicorn` from v74.0.0 to v75.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v74.0.0...v75.0.0):
+  
+  - The following rules were 🟢 enabled:
+    - [`unicorn/no-async-iterator-callback`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-async-iterator-callback.md)
+    - [`unicorn/no-unused-builtin-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-builtin-method-return.md)
+    - [`unicorn/no-unused-iterator-helper`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-iterator-helper.md)
+    - [`unicorn/no-using-resource-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-using-resource-escape.md)
+    - [`unicorn/prefer-temporal-conversion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-temporal-conversion.md)
+  - 🟢 enabled [`unicorn/no-useless-set-construction`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-set-construction.md) rule and added it to the `noStylisticRules` config
+  - The following rules were 🟢 enabled in ⚙️ `css` sub-config:
+    - [`unicorn/no-deprecated-css-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-deprecated-css-features.md)
+    - [`unicorn/no-duplicate-css-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-css-selectors.md)
+    - [`unicorn/no-duplicate-font-family-names`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-font-family-names.md)
+    - [`unicorn/no-invalid-media-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-media-features.md)
+    - [`unicorn/no-nesting-with-mixed-specificity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-nesting-with-mixed-specificity.md)
+    - [`unicorn/no-unknown-css-annotations`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unknown-css-annotations.md)
+    - [`unicorn/no-unknown-pseudo-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unknown-pseudo-selectors.md)
+    - [`unicorn/no-unscoped-css-nesting-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unscoped-css-nesting-selector.md)
+  - The following rules were 🟢 enabled in ⚙️ `css` sub-config and added to the `noStylisticRules` config:
+    - [`unicorn/no-redundant-nested-style-rules`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-redundant-nested-style-rules.md)
+    - [`unicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-media-feature-range-syntax.md)
+  - The following rules were 🔴 not enabled:
+    - [`unicorn/prefer-iterator-zip`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-zip.md)
+    - [`unicorn/prefer-json-import`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-import.md)
+    - [`unicorn/prefer-uint8array-hex`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-uint8array-hex.md)
+  - 🔴 not enabled [`unicorn/prefer-combined-guards`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-combined-guards.md) rule, but added it to the `noStylisticRules` config
+  - ⚠️ [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v74.0.0/docs/rules/no-unused-array-method-return.md) rule was disabled because it got deprecated
+  - [`unicorn/prefer-early-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-early-return.md) rule now uses the `checkShortBodies` option, so it also reports a bare `return;` guard followed by a single statement
+  - [`unicorn/prefer-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-ternary.md) rule now uses the `only-single-line` option, so it no longer reports `if` statements that would become a multi-line ternary
+- a92566e: [**BREAKING**] vue, svelte: `reportUnusedDisableDirectives` option now takes a severity instead of a boolean, and `svelte` config got the same option. Unless set, both inherit the severity of the `linterOptionsReportUnusedDisableDirectives` root option, so [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html) and [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive) now report unused disable directives as warnings by default instead of errors
+
+### Patch Changes
+
+- 642c484: [**BREAKING**] markdownPreferences: `enforceCasing` option now defaults to `false` because [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html) and [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html) rules usually produce many false positives. Set it to `true` to enforce sentence case like before
+- 6fe2955: Marked the following rules as requiring network access:
+  
+  - [`lockfile/shrinkwrap`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/shrinkwrap.md)
+  - [`node-dependencies/valid-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/valid-engines.html)
+- 084a06a: formatJs: updated [`eslint-plugin-formatjs` from v7.0.0 to v8.0.3](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@7.0.0...eslint-plugin-formatjs@8.0.3)
+- aafe009: unocss: updated [`@unocss/eslint-plugin` from v66.10.3 to v66.10.5](https://github.com/unocss/unocss/compare/v66.10.3...v66.10.5)
+- 4c149bc: noRelativeImportPaths: updated [`eslint-plugin-no-relative-import-paths` from v1.6.1 to v1.7.3](https://github.com/MelvinVermeer/eslint-plugin-no-relative-import-paths/compare/v1.6.1...68f59689604cf7d6706342b2aea244d7f1b44e2e)
+- 97e08a2: tsdoc: updated [`eslint-plugin-tsdoc` from v0.5.2 to v0.5.3](https://github.com/microsoft/tsdoc/compare/eslint-plugin-tsdoc_v0.5.2...32d0e6d3dfddba03d864d7c6a3986f3505e885cf)
+- 682880a: e18e: updated [`@e18e/eslint-plugin` from v0.8.0 to v0.8.1](https://github.com/e18e/eslint-plugin/compare/0.8.0...0.8.1)
+- 34698b4: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.102.8 to v5.103.1](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.102.8...@tanstack/eslint-plugin-query@5.103.1)
+- d47f95b: cspell: updated [`@cspell/eslint-plugin` from v10.3.2 to v10.3.3](https://github.com/streetsidesoftware/cspell/compare/v10.3.2...v10.3.3)
+- 3356749: compat: updated [`browserslist` from v4.28.9 to v4.29.0](https://github.com/browserslist/browserslist/compare/4.28.9...4.29.0)
+- 609f2c4: tsrx: updated [`@tsrx/eslint-{plugin,parser}` from v0.4.1 to v0.4.5](https://github.com/tsrx-org/tsrx/compare/@tsrx/eslint-plugin@0.4.1...@tsrx/eslint-plugin@0.4.5)
+- 24923be: jsdoc: updated [`eslint-plugin-jsdoc` from v64.5.0 to v64.5.2](https://github.com/gajus/eslint-plugin-jsdoc/compare/v64.5.0...v64.5.2)
+- b34ebbf: html, angular, react, svelte: updated [`@html-eslint/*` from v0.66.0 to v0.66.1](https://github.com/yeonjuan/html-eslint/compare/v0.66.0...v0.66.1)
+- c12b7f6: zod: updated [`eslint-plugin-zod` from v4.13.1 to v4.14.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.13.1...eslint-plugin-zod@4.14.0), [`eslint-plugin-zod-mini` from v1.10.1 to v1.11.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.10.1...eslint-plugin-zod-mini@1.11.0) and [`eslint-plugin-zod-core` from v1.1.1 to v1.1.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.1.1...eslint-plugin-zod-core@1.1.2)
+- c002c8c: css: updated [`@eslint/css-tree` from v4.1.0 to v4.1.1](https://github.com/eslint/csstree/compare/css-tree-v4.1.0...css-tree-v4.1.1)
+- dbd7e08: functional: updated [`eslint-plugin-functional` from v10.0.0 to v10.0.1](https://github.com/eslint-functional/eslint-plugin-functional/compare/v10.0.0...v10.0.1)
+
 ## 1.0.0-rc.0
 
 ### Minor Changes
