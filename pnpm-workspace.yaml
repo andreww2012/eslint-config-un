@@ -7,13 +7,9 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-unicorn@75.0.0
-  - eslint-plugin-jsdoc@64.5.2
-  - eslint-plugin-astro@3.2.1
-  - '@tsrx/eslint-parser@0.4.4'
-  - '@tsrx/eslint-plugin@0.4.4'
-  - eslint-plugin-no-relative-import-paths@1.7.3
-  - '@e18e/eslint-plugin@0.8.1'
+  - '@tsrx/eslint-parser@0.4.5'
+  - '@tsrx/eslint-plugin@0.4.5'
+  - '@tsrx/core@0.2.3'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
