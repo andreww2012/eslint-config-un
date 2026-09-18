@@ -25,6 +25,8 @@ Declare the corresponding array using `allUnionMembers` helper.
 
 Don't leave a trailing empty line in .md changeset files.
 
+When referencing rule names in the docs, always wrap it in a link to the rule's docs page if it's available.
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
 
