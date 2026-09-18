@@ -59,5 +59,8 @@ export default defineConfig([
       // Formatting uses the user's Prettier
       neverBundle: ['prettier'],
     },
+    checks: {
+      pluginTimings: false,
+    },
   })),
 ]);
