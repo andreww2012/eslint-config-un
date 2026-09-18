@@ -2,6 +2,7 @@ import {GLOB_VUE} from '../../../src/constants';
 
 const FIXTURES = {
   stringLiteralInTemplateMustache: 'string-literal-in-template-mustache.vue',
+  templateWithUnneededDisableComment: 'template-with-unneeded-disable-comment.vue',
 } as const;
 
 beforeEach(() => {
@@ -368,28 +369,125 @@ describe('options', () => {
   });
 
   describe('option: `reportUnusedDisableDirectives`', () => {
-    it('reports unused disable directives by default', async () => {
+    it('reports unused disable directives with the ESLint default severity when option is not set', async () => {
       const configResult = await computeEslintConfig('vue');
 
       expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
-        '[2, {"reportUnusedDisableDirectives": true}]',
+        '[1, {"reportUnusedDisableDirectives": true}]',
       );
     });
 
-    it('reports unused disable directives when set to `true`', async () => {
-      const configResult = await computeEslintConfig({vue: {reportUnusedDisableDirectives: true}});
+    it.each([
+      ['error', 2],
+      [2, 2],
+      ['warn', 1],
+      [1, 1],
+    ] as const)('reports with the `%s` severity when option is `%s`', async (value, severity) => {
+      const configResult = await computeEslintConfig({
+        vue: {reportUnusedDisableDirectives: value},
+      });
+
+      expect(configResult.getRuleEntrySeverity('vue', 'vue/comment-directive')).toBe(severity);
+      expect(configResult.getRuleEntryOptions('vue', 'vue/comment-directive')).toStrictEqual([
+        {reportUnusedDisableDirectives: true},
+      ]);
+    });
+
+    it.each(['off', 0] as const)(
+      'keeps the rule on but does not report when option is `%s`',
+      async (value) => {
+        const configResult = await computeEslintConfig({
+          vue: {reportUnusedDisableDirectives: value},
+        });
+
+        expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
+          '[2, {"reportUnusedDisableDirectives": false}]',
+        );
+      },
+    );
+
+    it('takes precedence over `linterOptionsReportUnusedDisableDirectives`', async () => {
+      const configResult = await computeEslintConfig(
+        {vue: {reportUnusedDisableDirectives: 'error'}},
+        {un: {linterOptionsReportUnusedDisableDirectives: 'off'}},
+      );
 
       expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
         '[2, {"reportUnusedDisableDirectives": true}]',
       );
     });
 
-    it('does not report unused disable directives when set to `false`', async () => {
-      const configResult = await computeEslintConfig({vue: {reportUnusedDisableDirectives: false}});
+    describe('inherits the severity of `linterOptionsReportUnusedDisableDirectives`', () => {
+      it.each([
+        ['error', 2],
+        [2, 2],
+        ['warn', 1],
+        [1, 1],
+      ] as const)('when set to `%s`', async (value, severity) => {
+        const configResult = await computeEslintConfig('vue', {
+          un: {linterOptionsReportUnusedDisableDirectives: value},
+        });
 
-      expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
-        '[2, {"reportUnusedDisableDirectives": false}]',
-      );
+        expect(configResult.getRuleEntrySeverity('vue', 'vue/comment-directive')).toBe(severity);
+      });
+
+      it('keeps the rule on but stops reporting when set to `off`', async () => {
+        const configResult = await computeEslintConfig('vue', {
+          un: {linterOptionsReportUnusedDisableDirectives: 'off'},
+        });
+
+        expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
+          '[2, {"reportUnusedDisableDirectives": false}]',
+        );
+      });
+
+      it('only considers the entries applying to every file', async () => {
+        const configResult = await computeEslintConfig('vue', {
+          un: {
+            linterOptionsReportUnusedDisableDirectives: [
+              {value: 'off', files: ['**/*.ts']},
+              {value: 'error'},
+            ],
+          },
+        });
+
+        expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
+          '[2, {"reportUnusedDisableDirectives": true}]',
+        );
+      });
+
+      it('falls back to the ESLint default when no entry applies to every file', async () => {
+        const configResult = await computeEslintConfig('vue', {
+          un: {linterOptionsReportUnusedDisableDirectives: {value: 'off', files: ['**/*.vue']}},
+        });
+
+        expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
+          '[1, {"reportUnusedDisableDirectives": true}]',
+        );
+      });
+
+      it('reports at the inherited severity when linting', async () => {
+        const results = await testEslintConfig('vue', FIXTURES.templateWithUnneededDisableComment, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {linterOptionsReportUnusedDisableDirectives: 'warn'},
+        });
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.templateWithUnneededDisableComment,
+            'vue/comment-directive',
+          )?.severity,
+        ).toBe(1);
+      });
+
+      it('reports with `error` when `noWarnings` is enabled', async () => {
+        const configResult = await computeEslintConfig('vue', {un: {noWarnings: true}});
+
+        expect(configResult.getRuleEntry('vue', 'vue/comment-directive')).toMatchInlineSnapshot(
+          '[2, {"reportUnusedDisableDirectives": true}]',
+        );
+      });
     });
   });
 

@@ -13,6 +13,8 @@ describe('option: `noWarnings` (type level)', () => {
             overrides: {'ts/array-type': ['warn']},
             configTypeAware: {forceSeverity: 'warn'},
           },
+          vue: {reportUnusedDisableDirectives: 'warn'},
+          svelte: {reportUnusedDisableDirectives: 1},
         },
       });
     });
@@ -31,6 +33,8 @@ describe('option: `noWarnings` (type level)', () => {
             overrides: {'ts/array-type': ['error']},
             configTypeAware: {forceSeverity: 'error'},
           },
+          vue: {reportUnusedDisableDirectives: 'error'},
+          svelte: {reportUnusedDisableDirectives: 'off'},
         },
       });
     });
@@ -74,6 +78,18 @@ describe('option: `noWarnings` (type level)', () => {
           ts: {
             // @ts-expect-error `warn` is forbidden by `noWarnings`
             forceSeverity: 'warn',
+          },
+        },
+      });
+    });
+
+    it('forbids `warn` for a per-config `reportUnusedDisableDirectives`', () => {
+      void eslintConfig({
+        noWarnings: true,
+        configs: {
+          vue: {
+            // @ts-expect-error `warn` is forbidden by `noWarnings`
+            reportUnusedDisableDirectives: 'warn',
           },
         },
       });

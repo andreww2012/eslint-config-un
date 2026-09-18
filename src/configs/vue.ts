@@ -10,6 +10,7 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
+import type {EslintSeverity} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {
@@ -26,6 +27,7 @@ import {
   noRestrictedHtmlElementsDefault,
   resolveFilesOption,
   resolveIgnoresOption,
+  resolveUnusedDisableDirectivesReporting,
 } from './shared';
 import {
   type ArrayOrBooleanRecord,
@@ -403,12 +405,17 @@ export interface VueEslintConfigOptions<
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
 
   /**
-   * Reports the `eslint-disable` comments inside `<template>` that turn off nothing
+   * Severity to report the `eslint-disable` comments inside `<template>` that turn off nothing
+   * with, `off` meaning not to report them at all.
+   * Note that `off` leaves the rule itself enabled, as it is also what makes the directives inside
+   * `<template>` work, so it will still be listed with a non-zero severity.
    *
    * Affected rule:
    * - [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html)
+   * @default the severity the `linterOptionsReportUnusedDisableDirectives` root option sets for
+   * every file
    */
-  reportUnusedDisableDirectives?: boolean;
+  reportUnusedDisableDirectives?: EslintSeverity;
 
   /**
    * Regular expression patterns of the components allowed to be used without being defined.
@@ -585,7 +592,6 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     configPinia: isPiniaPackageInstalled,
     configScopedCss: true,
     processSfcBlocks: true,
-    reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
     enforcePropsDestructuring: 'never',
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
@@ -735,6 +741,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   const vue2Severity = (severity: RuleSeverity) => (isVue2 ? severity : OFF);
   const vue3Severity = (severity: RuleSeverity) => (isVue3 ? severity : OFF);
 
+  const commentDirective = resolveUnusedDisableDirectivesReporting(
+    context,
+    reportUnusedDisableDirectives,
+  );
+
   // Legend:
   // 3️⃣ = in recommended/vue-3
   // 2️⃣ = in recommended/vue-2
@@ -742,9 +753,9 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   configBuilder
     ?.addConfig(['vue', {parseWith: 'vue'}])
     .markCategory('Base')
-    .addRule('comment-directive', ERROR, [
+    .addRule('comment-directive', commentDirective.severity, [
       // false by default
-      {reportUnusedDisableDirectives},
+      {reportUnusedDisableDirectives: commentDirective.shouldReport},
     ]) /** @since 4.1.0 */ // 3️⃣2️⃣
     .addRule('jsx-uses-vars', ERROR) /** @since 2.0.0 */ // 3️⃣2️⃣
     .markCategory('Priority A: Essential')

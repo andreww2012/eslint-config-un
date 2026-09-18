@@ -326,6 +326,78 @@ describe('options', () => {
       ).toBe(SVELTE_KIT_CONFIG);
     });
   });
+
+  describe('option: `reportUnusedDisableDirectives`', () => {
+    it('reports unused disable directives with the ESLint default severity when option is not set', async () => {
+      const configResult = await computeEslintConfig('svelte');
+
+      expect(
+        configResult.getRuleEntry('svelte/system', 'svelte/comment-directive'),
+      ).toMatchInlineSnapshot('[1, {"reportUnusedDisableDirectives": true}]');
+    });
+
+    it.each([
+      ['error', 2],
+      [2, 2],
+      ['warn', 1],
+      [1, 1],
+    ] as const)('reports with the `%s` severity when option is `%s`', async (value, severity) => {
+      const configResult = await computeEslintConfig({
+        svelte: {reportUnusedDisableDirectives: value},
+      });
+
+      expect(configResult.getRuleEntrySeverity('svelte/system', 'svelte/comment-directive')).toBe(
+        severity,
+      );
+      expect(
+        configResult.getRuleEntryOptions('svelte/system', 'svelte/comment-directive'),
+      ).toStrictEqual([{reportUnusedDisableDirectives: true}]);
+    });
+
+    it.each(['off', 0] as const)(
+      'keeps the rule on but does not report when option is `%s`',
+      async (value) => {
+        const configResult = await computeEslintConfig({
+          svelte: {reportUnusedDisableDirectives: value},
+        });
+
+        expect(
+          configResult.getRuleEntry('svelte/system', 'svelte/comment-directive'),
+        ).toMatchInlineSnapshot('[2, {"reportUnusedDisableDirectives": false}]');
+      },
+    );
+
+    it('takes precedence over `linterOptionsReportUnusedDisableDirectives`', async () => {
+      const configResult = await computeEslintConfig(
+        {svelte: {reportUnusedDisableDirectives: 'error'}},
+        {un: {linterOptionsReportUnusedDisableDirectives: 'off'}},
+      );
+
+      expect(
+        configResult.getRuleEntry('svelte/system', 'svelte/comment-directive'),
+      ).toMatchInlineSnapshot('[2, {"reportUnusedDisableDirectives": true}]');
+    });
+
+    it('inherits the severity of `linterOptionsReportUnusedDisableDirectives`', async () => {
+      const configResult = await computeEslintConfig('svelte', {
+        un: {linterOptionsReportUnusedDisableDirectives: 'error'},
+      });
+
+      expect(
+        configResult.getRuleEntry('svelte/system', 'svelte/comment-directive'),
+      ).toMatchInlineSnapshot('[2, {"reportUnusedDisableDirectives": true}]');
+    });
+
+    it('keeps the rule on but stops reporting when that option is set to `off`', async () => {
+      const configResult = await computeEslintConfig('svelte', {
+        un: {linterOptionsReportUnusedDisableDirectives: 'off'},
+      });
+
+      expect(
+        configResult.getRuleEntry('svelte/system', 'svelte/comment-directive'),
+      ).toMatchInlineSnapshot('[2, {"reportUnusedDisableDirectives": false}]');
+    });
+  });
 });
 
 describe('`svelte` and `ts` configs relationship', () => {

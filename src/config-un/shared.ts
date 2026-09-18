@@ -59,11 +59,12 @@ interface TypeAffectingOptionsType {
 }
 
 // `StripWarnFromConfig` removes the `warning` (`1`/`'warn'`) severity from every severity-typed
-// surface of a config option object: `forceSeverity`, `overrides`/`overridesAny` entries and the
-// `rules` of raw flat configs (`extraConfigs`). Severity surfaces only live at the top level of a
-// config and inside nested sub-configs (which all follow the `config*` key naming convention), so
-// recursion is restricted to those keys — descending into every property (huge rule-option/settings
-// objects) would be prohibitively expensive for the type checker.
+// surface of a config option object: `forceSeverity`, `reportUnusedDisableDirectives`,
+// `overrides`/`overridesAny` entries and the `rules` of raw flat configs (`extraConfigs`).
+// Severity surfaces only live at the top level of a config and inside nested sub-configs (which all
+// follow the `config*` key naming convention), so recursion is restricted to those keys —
+// descending into every property (huge rule-option/settings objects) would be prohibitively
+// expensive for the type checker.
 type EslintSeverityNoWarn = Exclude<EslintSeverity, 1 | 'warn'>;
 
 type StripWarnSeverity<Severity> = Exclude<Severity, 1 | 'warn'>;
@@ -92,7 +93,7 @@ type StripWarnFromConfig<Config, Depth extends number = 4> = Config extends (
   ? Config
   : Config extends object
     ? {
-        [Key in keyof Config]: Key extends 'forceSeverity'
+        [Key in keyof Config]: Key extends 'forceSeverity' | 'reportUnusedDisableDirectives'
           ? StripWarnSeverity<Config[Key]>
           : Key extends 'overrides' | 'overridesAny' | 'rules'
             ? StripWarnRulesRecord<Config[Key]>
@@ -260,6 +261,13 @@ export interface EslintConfigUnOptions<
    * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `off` *for
    * the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
    * `{files: [...], value: 'off'}`.
+   *
+   * The rules reporting the same for the code ESLint does not see the directives in
+   * ([`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html),
+   * [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive))
+   * inherit this severity, but only from the entries applying to every file, since a rule severity
+   * cannot vary per file.
+   * Both Configs have a `reportUnusedDisableDirectives` option of their own to override it.
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
@@ -328,8 +336,8 @@ export interface EslintConfigUnOptions<
    * "Zero warnings tolerance" mode.
    * When enabled:
    * - the `warning` (`1`/`'warn'`) severity becomes unexpressible at the type level across all
-   *   severity-typed options (`forceSeverity`, `overrides`/`overridesAny`, `extraConfigs` rules and
-   *   the `linterOptions*` options);
+   *   severity-typed options (`forceSeverity`, `reportUnusedDisableDirectives`,
+   *   `overrides`/`overridesAny`, `extraConfigs` rules and the `linterOptions*` options);
    * - every `warning` severity `eslint-config-un` would otherwise set by default is rewritten to
    *   `error` at runtime (including the implicit `linterOptions.reportUnusedDisableDirectives`
    *   default).

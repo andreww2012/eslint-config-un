@@ -11,12 +11,20 @@ import {
   GLOB_JS_TS_X_EXTENSION,
   GLOB_TOML,
   GLOB_YML_YAML,
+  OFF,
+  WARNING,
 } from '../constants';
-import type {GetRuleNamesInPlugin, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import type {
+  EslintSeverity,
+  GetRuleNamesInPlugin,
+  UnFlatConfigEntryFilesAndIgnores,
+} from '../eslint/eslint-types';
+import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from '../plugins.gen';
 import type {Prettify} from '../types';
 import {
   type AllUnionMembers,
+  arrayify,
   describeError,
   objectEntriesUnsafe,
   pick,
@@ -242,6 +250,42 @@ export const noRestrictedHtmlElementsDefault = Object.fromEntries(
 export const generateUseBaselineRuleOptions = (context: UnConfigContext) => {
   const {baselineAvailability} = context.rootOptions;
   return baselineAvailability == null ? {} : {available: baselineAvailability};
+};
+
+/**
+ * How the rules replicating ESLint's unused `eslint-disable` directives reporting for the code it
+ * does not see the directives in, such as the contents of a Vue `<template>`, should be set up.
+ * Unless the Config says otherwise, they take the severity from the root option setting the same
+ * for the directives ESLint itself handles, which in turn defaults to what ESLint defaults to.
+ *
+ * A rule severity cannot vary per file the way that option can, so only its entries applying to
+ * every file are taken into account.
+ *
+ * `off` is the one value that does not map to the rule severity.
+ * The rules are also what makes the directives work in the first place, so turning them off would
+ * silently stop every `eslint-disable` in that code from being honored.
+ * They are instead left on, with their own `reportUnusedDisableDirectives` option set to `false`,
+ * which is what actually silences them; the severity they carry is then a filler nothing is ever
+ * reported at
+ */
+export const resolveUnusedDisableDirectivesReporting = (
+  context: UnConfigContext,
+  severityFromConfig?: EslintSeverity,
+) => {
+  const rootOption = context.rootOptions.linterOptionsReportUnusedDisableDirectives;
+  const severityFromRootOption =
+    typeof rootOption === 'object'
+      ? arrayify(rootOption).findLast(
+          ({files, ignores, value}) => value != null && !files?.length && !ignores?.length,
+        )?.value
+      : rootOption;
+  const severity = eslintToUnRuleSeverity(severityFromConfig ?? severityFromRootOption, WARNING);
+  const shouldReport = severity !== OFF;
+
+  return {
+    shouldReport,
+    severity: shouldReport ? severity : ERROR,
+  };
 };
 
 export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];

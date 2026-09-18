@@ -1,5 +1,6 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
+import type {EslintSeverity} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
@@ -8,6 +9,7 @@ import {
   noRestrictedHtmlElementsDefault,
   resolveFilesOption,
   resolveIgnoresOption,
+  resolveUnusedDisableDirectivesReporting,
 } from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
@@ -129,6 +131,19 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * @default detected automatically
    */
   isPrettierPluginSvelteUsed?: boolean;
+
+  /**
+   * Severity to report the `eslint-disable` comments inside the markup that turn off nothing with,
+   * `off` meaning not to report them at all.
+   * Note that `off` leaves the rule itself enabled, as it is also what makes the directives inside
+   * the markup work, so it will still be listed with a non-zero severity.
+   *
+   * Affected rule:
+   * - [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive)
+   * @default the severity the `linterOptionsReportUnusedDisableDirectives` root option sets for
+   * every file
+   */
+  reportUnusedDisableDirectives?: EslintSeverity;
 }
 
 const LATEST_SVELTE_MAJOR_VERSION = 5;
@@ -171,6 +186,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
+    reportUnusedDisableDirectives,
   } = optionsResolved;
 
   const pluginSettings = context.getPluginSettings('svelte');
@@ -190,6 +206,11 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
 
   const configBuilderSystem = context.createConfigBuilder({}, 'svelte');
 
+  const commentDirective = resolveUnusedDisableDirectivesReporting(
+    context,
+    reportUnusedDisableDirectives,
+  );
+
   configBuilderSystem
     ?.addConfig([
       'svelte/system',
@@ -203,8 +224,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
         },
       },
     ])
-    .addRule('comment-directive', ERROR, [
-      {reportUnusedDisableDirectives: true},
+    .addRule('comment-directive', commentDirective.severity, [
+      {reportUnusedDisableDirectives: commentDirective.shouldReport},
     ]) /** @since 0.0.13 */ // 🟢
     // "This rule is a system rule for working the this plugin. This rule does not report any errors, but make sure the rule is enabled for the this plugin to work properly"
     .addRule('system', ERROR) /** @since 0.0.13 */ // 🟢

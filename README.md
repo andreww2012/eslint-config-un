@@ -972,6 +972,10 @@ Sets [`linterOptions.{noInlineConfig,reportUnusedDisableDirectives,reportUnusedI
 
 An entry with `ignores` and no `value` reads as "turn this option off for these paths", so `{ignores: ['**/*.md']}` is enough to silence the option in Markdown files.
 
+`reportUnusedDisableDirectives` is also inherited by the rules doing the same job where ESLint does not see the directives itself: [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html) and [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive).
+They can only take a single severity, so only the entries applying to every file are taken into account; `off` makes them stop reporting unused directives without turning the rules themselves off, as they are what makes the directives work in the first place.
+The `vue` and `svelte` configs each have a `reportUnusedDisableDirectives` option taking the same severities, which wins over the inherited one.
+
 ### `defaultConfigsStatus`
 
 **Type**: `'all-disabled' | 'misc-enabled'`
@@ -1004,7 +1008,7 @@ The same option is available per config.
 Disabled by default.
 When enabled:
 
-- the `warning` severity (`1`/`'warn'`) is **removed from the types** of every option that takes a severity: [`forceSeverity`](#forceseverity) (both root and per-config), `overrides`/`overridesAny`, `extraConfigs` rules and the `linterOptions*` options.
+- the `warning` severity (`1`/`'warn'`) is **removed from the types** of every option that takes a severity: [`forceSeverity`](#forceseverity) (both root and per-config), the `vue` and `svelte` configs' `reportUnusedDisableDirectives`, `overrides`/`overridesAny`, `extraConfigs` rules and the `linterOptions*` options.
   Using it there is a type error;
 - every `warning` severity eslint-config-un would otherwise set by default is **rewritten to `error` at runtime**, including the implicit [`linterOptions.reportUnusedDisableDirectives`](#linteroptionsnoinlineconfigreportunuseddisabledirectivesreportunusedinlineconfigs) default (which ESLint sets to `'warn'`).
 
