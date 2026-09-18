@@ -454,7 +454,7 @@ describe('options', () => {
       );
     });
 
-    it("adds specified components to `vue/no-undef-components`'s `ignorePatterns`", async () => {
+    it("adds specified components to `vue/no-undef-components`'s `ignorePatterns` when array syntax is used", async () => {
       const KNOWN_COMPONENTS = ['^MyComponent$'];
 
       const configResult = await computeEslintConfig({
@@ -463,6 +463,56 @@ describe('options', () => {
 
       expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-components')).toMatchObject([
         {ignorePatterns: expect.arrayContaining(KNOWN_COMPONENTS) as unknown},
+      ]);
+    });
+
+    it('adds patterns with a truthy value and drops the default ones with a falsy value when object syntax is used', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {knownComponentNames: {'^MyComponent$': true, '^router-link$': false}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('vue', 'vue/no-undef-components'),
+      ).toMatchInlineSnapshot('[{"ignorePatterns": ["^router-view$", "^MyComponent$"]}]');
+    });
+
+    it('passes no options to `vue/no-undef-components` when every default pattern is dropped', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {knownComponentNames: {'^router-link$': false, '^router-view$': false}},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-components')).toStrictEqual([]);
+    });
+  });
+
+  describe('option: `knownDirectiveNames`', () => {
+    it('passes no options to `vue/no-undef-directives` by default', async () => {
+      const configResult = await computeEslintConfig('vue');
+
+      expect(configResult.getRuleEntry('vue', 'vue/no-undef-directives')).toMatchInlineSnapshot(
+        '2',
+      );
+    });
+
+    it("adds specified directives to `vue/no-undef-directives`'s `ignore` when array syntax is used", async () => {
+      const KNOWN_DIRECTIVES = ['my-directive'];
+
+      const configResult = await computeEslintConfig({
+        vue: {knownDirectiveNames: KNOWN_DIRECTIVES},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([
+        {ignore: KNOWN_DIRECTIVES},
+      ]);
+    });
+
+    it('only adds directives with a truthy value when object syntax is used', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {knownDirectiveNames: {'my-directive': true, 'other-directive': false}},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([
+        {ignore: ['my-directive']},
       ]);
     });
   });

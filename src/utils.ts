@@ -62,6 +62,10 @@ export const styleRuleName = generateStyleFn('green');
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value != null && !Array.isArray(value);
 
+export {
+  type ArrayOrBooleanRecord,
+  mergeArrayOrBooleanRecords,
+} from './utils/array-or-boolean-record';
 export {assignDefaults} from './utils/assign-defaults';
 
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>

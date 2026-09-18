@@ -1,7 +1,7 @@
 // cspell:ignore blockquotes autolinks setext
 import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
 import {pluginsLoaders} from '../loaders';
-import {getKeysOfTruthyValues} from '../utils';
+import {mergeArrayOrBooleanRecords} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -249,26 +249,15 @@ export default defineUnConfig<
     wordsToPreserveCasingOf,
   } = optionsResolved;
 
-  const defaultPreserveWords = getKeysOfTruthyValues({
-    ...Object.fromEntries(
-      markdownPreferencesPlugin.resources.defaultPreserveWords.map((defaultWord) => [
-        defaultWord,
-        true,
-      ]),
-    ),
-    ...(!Array.isArray(wordsToPreserveCasingOf) && wordsToPreserveCasingOf),
-  });
-  if (Array.isArray(wordsToPreserveCasingOf)) {
-    defaultPreserveWords.push(...wordsToPreserveCasingOf);
-  }
+  const defaultPreserveWords = mergeArrayOrBooleanRecords(
+    markdownPreferencesPlugin.resources.defaultPreserveWords,
+    wordsToPreserveCasingOf,
+  );
 
-  const defaultIgnorePatterns = getKeysOfTruthyValues<Record<string, boolean>>({
-    ...Object.fromEntries(DEFAULT_IGNORE_PATTERNS.map((defaultWord) => [defaultWord, true])),
-    ...(!Array.isArray(casingEnforcementIgnorePatterns) && casingEnforcementIgnorePatterns),
-  });
-  if (Array.isArray(casingEnforcementIgnorePatterns)) {
-    defaultIgnorePatterns.push(...casingEnforcementIgnorePatterns);
-  }
+  const defaultIgnorePatterns = mergeArrayOrBooleanRecords(
+    DEFAULT_IGNORE_PATTERNS,
+    casingEnforcementIgnorePatterns,
+  );
 
   const getEnforcedCasing = (
     place: CasingEnforcementPlace,

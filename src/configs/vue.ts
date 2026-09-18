@@ -17,6 +17,7 @@ import {
   allUnionMembers,
   getKeysOfTruthyValues,
   joinPaths,
+  mergeArrayOrBooleanRecords,
   regexEscape,
 } from '../utils';
 import {
@@ -27,6 +28,7 @@ import {
   resolveIgnoresOption,
 } from './shared';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnFlatConfigEntryBase,
@@ -409,10 +411,38 @@ export interface VueEslintConfigOptions<
   reportUnusedDisableDirectives?: boolean;
 
   /**
-   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones if `configNuxt`
-   * sub-config is enabled
+   * Regular expression patterns of the components allowed to be used without being defined.
+   *
+   * Will be merged with `['^router-link$', '^router-view$']` and, if `nuxt` sub-config is enabled,
+   * with `^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)` for the built-in components and with `^Name$`
+   * for every auto-imported one, where the name is regex-escaped.
+   *
+   * You can use the array or the object syntax.
+   * The difference is that the object syntax allows you to exclude any of the patterns added behind
+   * the scenes by setting the value to `false`, spelling the pattern exactly as above.
+   *
+   * Affected rule:
+   * - [`vue/no-undef-components`](https://eslint.vuejs.org/rules/no-undef-components.html)
    */
-  knownComponentNames?: string[];
+  knownComponentNames?: ArrayOrBooleanRecord;
+
+  /**
+   * Names of the directives allowed to be used without being defined, written without the `v-`
+   * prefix.
+   * A `/pattern/flags` string is treated as a regular expression, any other string as an exact
+   * name.
+   *
+   * Will be merged with the directives auto-imported by Nuxt if `nuxt` sub-config is enabled, each
+   * of which is added both under the name as written and under its kebab-cased form.
+   *
+   * You can use the array or the object syntax.
+   * The difference is that the object syntax allows you to exclude any of the names added behind
+   * the scenes by setting the value to `false`, which takes both spellings to fully take effect.
+   *
+   * Affected rule:
+   * - [`vue/no-undef-directives`](https://eslint.vuejs.org/rules/no-undef-directives.html)
+   */
+  knownDirectiveNames?: ArrayOrBooleanRecord;
 
   /**
    * Enforce either Composition (`setup`) or Options (`options`) API.
@@ -513,6 +543,9 @@ export interface VueEslintConfigOptions<
 }
 
 const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
+
+const VUE_KNOWN_COMPONENT_NAME_PATTERNS = ['^router-link$', '^router-view$'];
+const NUXT_KNOWN_COMPONENT_NAME_PATTERNS = ['^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)'];
 
 const NUXT_CONFIG_RULES = new Set<string>(
   allUnionMembers<
@@ -685,6 +718,17 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       : enforcePropsDestructuring === 'onlyWhenAssigned'
         ? 'only-when-assigned'
         : enforcePropsDestructuring;
+
+  const knownComponentNames = mergeArrayOrBooleanRecords(
+    VUE_KNOWN_COMPONENT_NAME_PATTERNS,
+    configNuxt && NUXT_KNOWN_COMPONENT_NAME_PATTERNS,
+    nuxtAutoImports?.componentNames.map((name) => `^${regexEscape(name)}$`),
+    optionsResolved.knownComponentNames,
+  );
+  const knownDirectiveNames = mergeArrayOrBooleanRecords(
+    nuxtAutoImports?.directiveNames,
+    optionsResolved.knownDirectiveNames,
+  );
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'vue');
 
@@ -947,19 +991,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addRule('no-static-inline-styles', OFF) /** @since 7.0.0 */
     .addRule('no-template-target-blank', OFF) /** @since 7.0.0 */
     .addRule('no-this-in-before-route-enter', ERROR) /** @since 7.11.0 */
-    .addRule('no-undef-components', ERROR, [
-      {
-        ignorePatterns: [
-          '^router-link$',
-          '^router-view$',
-          configNuxt && '^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)',
-          nuxtAutoImports?.componentNames.map((name) => `^${regexEscape(name)}$`) || [],
-          ...(optionsResolved.knownComponentNames || []),
-        ]
-          .flat()
-          .filter((v) => typeof v === 'string'),
-      },
-    ]) /** @since 8.4.0 */
+    .addRule(
+      'no-undef-components',
+      ERROR,
+      knownComponentNames.length > 0 ? [{ignorePatterns: knownComponentNames}] : [],
+    ) /** @since 8.4.0 */
     // TODO enable if script setup is enforced and only in JS?
     .addRule('no-undef-properties', OFF) /** @since 7.20.0 */
     .addRule('no-unsupported-features', ERROR, [
@@ -1114,7 +1150,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addRule(
       'no-undef-directives',
       ERROR,
-      nuxtAutoImports?.directiveNames.length ? [{ignore: nuxtAutoImports.directiveNames}] : [],
+      knownDirectiveNames.length > 0 ? [{ignore: knownDirectiveNames}] : [],
     ) /** @since 10.7.0 */
     .addRule(
       'no-useless-concat',

@@ -316,6 +316,35 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
       expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([]);
     });
+
+    it('lets `knownComponentNames` drop an auto-imported component', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {configNuxt: true, knownComponentNames: {'^MyButton$': false}},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-components')[0]).toHaveProperty(
+        'ignorePatterns',
+        expect.not.arrayContaining(['^MyButton$']),
+      );
+    });
+
+    it('merges `knownDirectiveNames` with the auto-imported directives', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {configNuxt: true, knownDirectiveNames: ['my-other-directive']},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([
+        {ignore: ['my-directive', 'my-other-directive']},
+      ]);
+    });
+
+    it('lets `knownDirectiveNames` drop an auto-imported directive', async () => {
+      const configResult = await computeEslintConfig({
+        vue: {configNuxt: true, knownDirectiveNames: {'my-directive': false}},
+      });
+
+      expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([]);
+    });
   });
 });
 
