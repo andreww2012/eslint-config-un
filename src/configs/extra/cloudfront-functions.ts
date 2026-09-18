@@ -15,7 +15,7 @@ import {
  * is assumed by default.
  * For functions written for
  * [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
- * use `configV1` sub-config.
+ * use `v1` sub-config.
  *
  * Note that if neither `files` nor `ignores` is specified as a non-empty array in the main or a
  * sub-config, that config won't be generated.

@@ -665,7 +665,7 @@ Set it to `disabled` to opt out of typed linting, or use its `ignores`/`allowDef
 Two things that are easy to miss:
 
 - turning these rules off does not make linting faster on its own: as long as the `ts` config is enabled, the project service is still set up, and that is what takes the time (`ts: {parserOptions: {projectService: false}}` turns it off);
-- the `ts` config's `configTypeAware` option only covers *its own* type-aware rules; the rules from the other plugins follow `typeInfoRules`.
+- the `ts` config's `typeAware` sub-config only covers *its own* type-aware rules; the rules from the other plugins follow `typeInfoRules`.
 
 ### Node.js
 
@@ -750,7 +750,7 @@ See the JSDoc of each config for the details.
 
 #### Vue
 
-TypeScript rules are enabled in `.vue` files when the `vue` config's `configEnforceTypescriptInScriptSection` sub-config is on, which happens *automatically* when the `ts` config is enabled.
+TypeScript rules are enabled in `.vue` files when the `vue` config's `enforceTypescriptInScriptSection` sub-config is on, which happens *automatically* when the `ts` config is enabled.
 If some of your `.vue` files are written in TypeScript and others in JavaScript, use that sub-config's `files` and `ignores` to say which are which.
 It is not currently possible to pick rules based on the `lang` attribute of the `<script>` block itself.
 
@@ -777,7 +777,7 @@ Not every rule makes sense there: some are too strict for code that is never exe
 That is why a number of rules are disabled in code blocks by default; the full list shows up as autocompletion for the [`markdownCodeBlocksRules.doNotDisable`](#markdowncodeblocksrulesdonotdisable) option.
 Use the [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option to decide which rules are disabled and which are not.
 
-Linting of code blocks lives in a sub-config of the `markdown`/`mdx` configs, `configCodeBlocks`.
+Linting of code blocks lives in a sub-config of the `markdown`/`mdx` configs, `codeBlocks`.
 Set it to `false` to stop linting code blocks entirely, narrow its `files`/`ignores` to pick which *Markdown*/*MDX* files have their blocks linted, or use its `overrides`/`overridesAny` to change the rules for code blocks only.
 
 #### Disabling a rule in a code block
@@ -804,7 +804,7 @@ What works instead:
   `eslint-disable-next-line` points at the first line of the block, because the comment is inserted above the code.
 - **An ordinary comment inside the block**: works as in any other file, but your readers see it too.
 - **`<!-- eslint-skip -->` right before the block** (`{/* eslint-skip */}` in MDX): the whole next block is not linted at all.
-- **The config file**, if the rule should be off in many blocks: [`markdownCodeBlocksRules.additionalDisabledRules`](#markdowncodeblocksrulesadditionaldisabledrules) for every block of every file, `overrides` of the `configCodeBlocks` sub-config for every block of the files that config is applied to, or an [`extraConfigs`][extraConfigs option] entry with `files` matching the virtual paths, like `['**/*.md/**/*.ts']` or `['docs/**/*.md/**']`.
+- **The config file**, if the rule should be off in many blocks: [`markdownCodeBlocksRules.additionalDisabledRules`](#markdowncodeblocksrulesadditionaldisabledrules) for every block of every file, `overrides` of the `codeBlocks` sub-config for every block of the files that config is applied to, or an [`extraConfigs`][extraConfigs option] entry with `files` matching the virtual paths, like `['**/*.md/**/*.ts']` or `['docs/**/*.md/**']`.
 
 Block numbers change as soon as you add or remove a block, so avoid matching them.
 Name the block instead: both `@eslint/markdown` and `eslint-mdx` read the name from the opening fence.

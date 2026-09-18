@@ -16,6 +16,8 @@ Avoid mentioning this package's name in internal comments.
 
 Never statically import at runtime any Config file matching `src/configs/**/*.ts` or the plugin metadata files (`src/plugins/*.ts` except `shared.ts`).
 
+Never reference Sub-configs with the `config` prefix: use `scss` in docs, not `configScss`.
+
 Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, it won't if any operand is a union).
 
 If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.

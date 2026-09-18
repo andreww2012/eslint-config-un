@@ -266,7 +266,7 @@ interface ReactXSubConfigOptions<
   /**
    * Applies the rules requiring type information.
    *
-   * 📁 Default `files`: same files as the `ts` config's `configTypeAware` sub-config
+   * 📁 Default `files`: same files as the `ts` config's `typeAware` sub-config
    * @default true <=> `ts` config is enabled
    */
   configTypeAwareRules?:
@@ -347,16 +347,16 @@ interface RefreshSubConfigOptions<
  * option to control which rules from which plugins, if any, will be used.
  * Refer to `pluginX` option JSDoc for more details.
  *
- * - `configAllowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
- * - `configReactX`: runtime agnostic ("X") and "Naming Convention" rules from
+ * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
+ * - `reactX`: runtime agnostic ("X") and "Naming Convention" rules from
  *   `@eslint-react/eslint-plugin`.
- * - `configHooks`: rules from `eslint-plugin-react-hooks`.
- * - `configDom`: DOM specific rules from both `@eslint-react/eslint-plugin` and
+ * - `hooks`: rules from `eslint-plugin-react-hooks`.
+ * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and
  *   `eslint-plugin-react`.
- * - `configRefresh`: rules from `eslint-plugin-react-refresh`.
- * - `configYouMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
- * - `configHtml`: rules from `@html-eslint/eslint-plugin-react`.
- * - `configTypeAwareRules`: rules requiring type information.
+ * - `refresh`: rules from `eslint-plugin-react-refresh`.
+ * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
+ * - `html`: rules from `@html-eslint/eslint-plugin-react`.
+ * - `typeAwareRules`: rules requiring type information.
  */
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -1102,7 +1102,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
   // Legend:
   // 🟢 - in recommended, severity is `error`
   // 🟡 - in recommended, severity is `warn`
-  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `configReactX` is enabled (name is also same if it is not specified)
+  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `reactX` sub-config is enabled (name is also same if it is not specified)
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
   configBuilderReactX

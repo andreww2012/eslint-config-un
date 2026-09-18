@@ -92,7 +92,7 @@ export interface CssEslintConfigOptions<
    * > Setting `tolerant` to `true` is necessary if you are using custom syntax, such as PostCSS
    * > plugins, that aren't part of the standard CSS syntax.
    *
-   * Also applied to the `configScss` sub-config.
+   * Also applied to the `scss` sub-config.
    * @default false
    */
   tolerantMode?: CSSLanguageOptions['tolerant'];
@@ -118,7 +118,7 @@ export interface CssEslintConfigOptions<
    * We don't support the latter because it is not cacheable, but that `defaultSyntax` parameter is
    * coming from `@eslint/css-tree/definition-syntax-data`, which you can use manually.
    *
-   * NOTE: not applied to the `configScss` sub-config, which has an option of the same name.
+   * NOTE: not applied to the `scss` sub-config, which has an option of the same name.
    */
   customSyntax?: CssCustomSyntaxOption;
 

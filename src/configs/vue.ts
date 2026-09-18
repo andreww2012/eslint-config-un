@@ -307,7 +307,7 @@ export interface VueEslintConfigOptions<
    *   [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
    *   will be applied to the specified `files` and `ignores`, defaulting to all files inside
    *   `vueOrNuxtProjectDir` directory;
-   * - Another sub-config, `configNuxtConfig`, will control whether
+   * - Another sub-config, `nuxtConfig`, will control whether
    *   [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
    *   rule will be applied to Nuxt config file (`true` by default);
    * - [Auto-imports](https://nuxt.com/docs/4.x/guide/concepts/auto-imports) will be read from the

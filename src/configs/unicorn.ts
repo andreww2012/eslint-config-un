@@ -136,7 +136,8 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for HTML to HTML files.
    *
-   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning in `configCss`.
+   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning in the `css`
+   * sub-config.
    *
    * 📁 Default `files`: <code>**&#47;*.htm?(l)</code>
    * @default true // if `html` config is enabled
@@ -147,7 +148,7 @@ export interface UnicornEslintConfigOptions<
    * Applies the rules declaring support for JSON to JSON files.
    *
    * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled — see the warning in
-   * `configCss`.
+   * the `css` sub-config.
    *
    * 📁 Default `files`: <code>**&#47;*.json</code>, <code>**&#47;*.jsonc</code>,
    * <code>**&#47;*.json5</code>
@@ -159,7 +160,7 @@ export interface UnicornEslintConfigOptions<
    * Applies the rules declaring support for Markdown to Markdown files.
    *
    * ⚠️ Enabled by default only if the `markdown`, `markdownLinks` or `markdownPreferences` Config
-   * is enabled — see the warning in `configCss`.
+   * is enabled — see the warning in the `css` sub-config.
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>, <code>**&#47;*.mdx</code>
    * @default true // if any of the following configs are enabled: `markdown`, `markdownLinks`, `markdownPreferences`
