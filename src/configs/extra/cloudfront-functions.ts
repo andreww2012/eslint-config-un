@@ -169,11 +169,12 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
         },
       ])
       .addRule('no-var', isV2 ? null : OFF)
-      .addRule('prefer-destructuring', OFF)
-      .addRule('prefer-object-has-own', OFF)
+      .disableAnyRule('', 'prefer-destructuring')
+      .disableAnyRule('', 'prefer-object-has-own')
+      .disableAnyRule('e18e', 'prefer-object-has-own')
       .addRule('vars-on-top', isV2 ? null : OFF)
-      .addAnyRule('unicorn', 'prefer-logical-operator-over-ternary', OFF)
-      .addAnyRule('node', 'prefer-node-protocol', OFF)
+      .disableAnyRule('unicorn', 'prefer-logical-operator-over-ternary')
+      .disableAnyRule('node', 'prefer-node-protocol')
       .addRule('no-restricted-syntax', ERROR, [
         {
           selector: 'ExportNamedDeclaration',
