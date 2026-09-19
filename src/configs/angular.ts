@@ -728,7 +728,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addOverrides();
 
   const configBuilderTemplateHtml = context.createConfigBuilder(
-    configTemplate === false ? false : configHtml,
+    configTemplate !== false && configHtml,
     'html-angular',
   );
 

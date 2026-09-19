@@ -221,7 +221,7 @@ const main = async () => {
         addDetection(
           fullRuleName,
           `probe: read ${[...keys].toSorted().join(', ')}`,
-          doesThrowWithoutTypeInfo ? true : doesDegradeGracefully ? 'optional' : undefined,
+          doesThrowWithoutTypeInfo || (doesDegradeGracefully ? 'optional' : undefined),
         );
       }
     }

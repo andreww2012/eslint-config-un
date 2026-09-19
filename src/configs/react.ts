@@ -1275,7 +1275,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addOverrides();
 
   const configBuilderReactXTypeAware = context.createConfigBuilder(
-    tsFilesTypeAware.length === 0 ? false : configReactXTypeAwareRules,
+    tsFilesTypeAware.length > 0 && configReactXTypeAwareRules,
     'eslint-react',
   );
   configBuilderReactXTypeAware

@@ -386,9 +386,8 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
 
   generateConfigsForModule(
     'dom',
-    isAnyFrameworkConfigEnabled && disableRootConfigIfFrameworkConfigIsEnabled
-      ? false
-      : optionsResolved,
+    !(isAnyFrameworkConfigEnabled && disableRootConfigIfFrameworkConfigIsEnabled) &&
+      optionsResolved,
   );
 
   objectEntriesUnsafe({

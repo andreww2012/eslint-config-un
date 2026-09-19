@@ -298,7 +298,10 @@ export default definePluginMetadata('unicorn', {
     },
     'prefer-keyboard-event-key': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-location-assign': {stylistic: true},
-    'prefer-logical-operator-over-ternary': {stylistic: true},
+    'prefer-logical-operator-over-ternary': {
+      requiresTypeInfo: ['optional', 'indirect'],
+      stylistic: true,
+    },
     'prefer-math-min-max': {stylistic: true},
     'prefer-math-trunc': {stylistic: [false, 'the bitwise forms it reports wrap above 2**31']},
     'prefer-media-feature-range-syntax': {stylistic: true},

@@ -72,18 +72,15 @@ export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
   const deadUrls = optionsResolved.check?.deadUrls;
   const check: MarkdownLinksEslintConfigOptions['check'] & {} = {
     ...optionsResolved.check,
-    deadUrls:
-      deadUrls === false
-        ? false
-        : {
-            severityWarn: true, // Sites these days are sensitive to making tons of requests quickly
-            ...(typeof deadUrls === 'object' && deadUrls),
-            options: {
-              // High number of false positives
-              checkAnchor: false,
-              ...(typeof deadUrls === 'object' && deadUrls.options),
-            },
-          },
+    deadUrls: deadUrls !== false && {
+      severityWarn: true, // Sites these days are sensitive to making tons of requests quickly
+      ...(typeof deadUrls === 'object' && deadUrls),
+      options: {
+        // High number of false positives
+        checkAnchor: false,
+        ...(typeof deadUrls === 'object' && deadUrls.options),
+      },
+    },
   };
 
   const getCheckSeverity = <

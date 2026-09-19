@@ -59,12 +59,9 @@ const deriveEnabledByCondition = (enabledBy: ConfigEnabledBy): string | null => 
 };
 
 const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {
+  // A conditional Config without an explicit default is enabled when its condition holds
   const isEnabledByDefault =
-    typeof enabledBy === 'boolean'
-      ? enabledBy
-      : 'default' in enabledBy
-        ? enabledBy.default
-        : /* a conditional Config is enabled when its condition holds */ true;
+    typeof enabledBy === 'boolean' ? enabledBy : !('default' in enabledBy) || enabledBy.default;
   const overrides = typeof enabledBy === 'boolean' ? null : enabledBy;
   const condition = [
     overrides?.text || deriveEnabledByCondition(enabledBy),

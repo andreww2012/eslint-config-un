@@ -278,9 +278,9 @@ export default defineUnConfig<
   const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-preferences');
 
   const orderedLists: Required<MarkdownPreferencesEslintConfigOptions['orderedLists'] & object> = {
-    numbering: orderedListsRaw === false ? false : (orderedListsRaw?.numbering ?? 'sequential'),
-    start: orderedListsRaw === false ? false : (orderedListsRaw?.start ?? 1),
-    style: orderedListsRaw === false ? false : (orderedListsRaw?.style ?? 'n.'),
+    numbering: orderedListsRaw !== false && (orderedListsRaw?.numbering ?? 'sequential'),
+    start: orderedListsRaw !== false && (orderedListsRaw?.start ?? 1),
+    style: orderedListsRaw !== false && (orderedListsRaw?.style ?? 'n.'),
   };
 
   // Legend:

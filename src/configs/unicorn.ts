@@ -870,8 +870,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-class-fields', ERROR) /** @since 60.0.0 */
     .addRule('prefer-classlist-toggle', ERROR) /** @since 61.0.0 */
     .addRule('prefer-code-point', ERROR) /** @since 39.0.0 */
-    // TODO enable when the `checkCompoundConditions` option, off by default, is released: https://github.com/sindresorhus/eslint-plugin-unicorn/commit/a0fdbeff0d2fd8b4dd843c452d0b4929633792ec
-    .addRule('prefer-combined-guards', OFF) /** @since 75.0.0 */ // 🟣
+    .addRule('prefer-combined-guards', ERROR) /** @since 75.0.0 */ // 🟣
     .addRule('prefer-continue', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */

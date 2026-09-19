@@ -551,7 +551,6 @@ const mergeParserOptions = (
 ): TsEslintParserOptions => {
   const merged: TsEslintParserOptions = {...lower, ...higher};
 
-  // eslint-disable-next-line unicorn/no-immediate-mutation -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3700
   if (typeof lower.projectService === 'object' && typeof higher.projectService === 'object') {
     merged.projectService = {...lower.projectService, ...higher.projectService};
   }
@@ -1026,7 +1025,7 @@ export default defineUnConfig<
 
   const configBuilderTypeAware = context.createConfigBuilder(
     // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
-    userFiles.length === 0 ? false : configTypeAware,
+    userFiles.length > 0 && configTypeAware,
     'ts',
   );
 

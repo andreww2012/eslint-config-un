@@ -78,22 +78,21 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
       },
     ])
     .disableBulkRules(
-      enabledRules === true
-        ? false
-        : [
-            ...Object.entries(ALL_STYLISTIC_RULES).flatMap(([pluginName, rules]) =>
-              Object.keys(rules).map((ruleName) => {
-                const ruleNameWithPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
-                return enabledRules && enabledRules[ruleNameWithPrefix as keyof typeof enabledRules]
-                  ? null
-                  : ruleNameWithPrefix;
-              }),
-            ),
-            ...objectEntriesUnsafe(
-              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- added to preserve the type
-              additionalRules! || {},
-            ).map(([ruleName, isStylistic]) => (isStylistic ? ruleName : null)),
-          ].filter((v) => v != null),
+      enabledRules !== true &&
+        [
+          ...Object.entries(ALL_STYLISTIC_RULES).flatMap(([pluginName, rules]) =>
+            Object.keys(rules).map((ruleName) => {
+              const ruleNameWithPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
+              return enabledRules && enabledRules[ruleNameWithPrefix as keyof typeof enabledRules]
+                ? null
+                : ruleNameWithPrefix;
+            }),
+          ),
+          ...objectEntriesUnsafe(
+            // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- added to preserve the type
+            additionalRules! || {},
+          ).map(([ruleName, isStylistic]) => (isStylistic ? ruleName : null)),
+        ].filter((v) => v != null),
     )
     .addOverrides();
 

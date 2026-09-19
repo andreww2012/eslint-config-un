@@ -241,7 +241,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     // `mode` is finalized later, after the `ts` config is loaded (see below)
     mode: typeInfoRulesUserMode ?? 'standalone',
   };
-  // eslint-disable-next-line unicorn/no-immediate-mutation -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3700
   if (typeInfoRulesObject?.ignores?.length) {
     typeInfoRulesResolved.ignores = typeInfoRulesObject.ignores;
   }
@@ -578,10 +577,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           const shouldDisableForIgnoredPaths = !hasFiles && hasIgnores && valueInitial == null;
 
           const valueFinal = (() => {
-            let result = valueInitial;
-            if (shouldDisableForIgnoredPaths) {
-              result = linterOptionName === 'noInlineConfig' ? false : 'off';
-            }
+            let result = shouldDisableForIgnoredPaths
+              ? linterOptionName !== 'noInlineConfig' && 'off'
+              : valueInitial;
             if (noWarnings && (result === 'warn' || result === WARNING)) {
               result = result === 'warn' ? 'error' : ERROR;
             }

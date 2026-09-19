@@ -210,11 +210,10 @@ const rule: Eslint.Rule.RuleModule = {
                 data: {value: literalValue.replaceAll('"', String.raw`\"`)},
               }
             : null;
-        if (!reportDescriptor) {
-          return;
-        }
-
-        if (isTypeofResultExpression(otherNode, context.sourceCode.getScope(node))) {
+        if (
+          !reportDescriptor ||
+          isTypeofResultExpression(otherNode, context.sourceCode.getScope(node))
+        ) {
           return;
         }
 

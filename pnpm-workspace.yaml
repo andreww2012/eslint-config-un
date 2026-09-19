@@ -7,10 +7,7 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - '@tsrx/eslint-parser@0.4.5'
-  - '@tsrx/eslint-plugin@0.4.5'
-  - '@tsrx/core@0.2.3'
-  - '@eslint/css-tree@4.1.1'
+  - eslint-plugin-unicorn@76.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

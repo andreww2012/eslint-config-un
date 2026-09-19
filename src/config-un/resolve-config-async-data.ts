@@ -377,17 +377,16 @@ ${styleText(
   }
 
   const autofixDisabledGloballyFor: EslintConfigUnOptions['autofixDisabledGloballyFor'] =
-    autofixDisabledGloballyForRaw === true
-      ? true
-      : autofixDisabledGloballyForRaw === false
-        ? {}
-        : {
-            ...autofixDisabledGloballyForRaw,
-            rules: {
-              ...RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
-              ...autofixDisabledGloballyForRaw?.rules,
-            },
-          };
+    autofixDisabledGloballyForRaw === true ||
+    (autofixDisabledGloballyForRaw === false
+      ? {}
+      : {
+          ...autofixDisabledGloballyForRaw,
+          rules: {
+            ...RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
+            ...autofixDisabledGloballyForRaw?.rules,
+          },
+        });
 
   const disableAutofixPluginsWithUnprefixedMethod = Object.groupBy(
     Object.entries(
