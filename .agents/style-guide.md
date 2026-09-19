@@ -4,18 +4,23 @@
 
 # Style Guide
 
-Source: <https://github.com/andreww2012/agents/blob/548a319fe22260b364e7619c103e0a8a647f6a14/.agents/style-guide.md>
+Source: <https://github.com/andreww2012/agents/blob/c942d06431eb21af4509fece9db135713c94405f/.agents/style-guide.md>
 
 ## Communication
 
-**CRITICAL:** Use plain English for the output, while still respecting language and prose style used in the current project for generated code.
-Avoid long dashes.
-Avoid terms and phrases like "load-bearing", "byte-identical", "it's not x; it's y" and similar.
-Reduce use of metaphors, jargonisms and complex and rarely used words.
-Don't be verbose in general.
+**CRITICAL:** Use plain/simple English for your output, while still respecting language and prose style used in the current project for generated code.
+Most likely you'll be read by people who are not native or C2-level speakers, so adapt accordingly.
+Strictly avoid:
+  - long dashes;
+  - terms and phrases like "load-bearing", "byte-identical", "it's not x; it's y", "earn sth place" and similar;
+  - complex metaphors and jargonisms;
+  - mannered prose;
+  - advanced, fancy or rarely used words.
+In general, don't be verbose.
+If something can be said more concisely and simply without losing meaning, say it more concisely and simply: people shouldn't waste their energy just to understand you.
 Sound human.
-In general, you should do your best so that your output/prose reads easily, without sacrificing any information you'd like to express.
 All above is not a hard ban - you can use whatever if it actually fits and makes sense.
+This applies to all languages, not only English.
 
 ## Code
 
@@ -35,9 +40,9 @@ All above is not a hard ban - you can use whatever if it actually fits and makes
   - Having both explicit return type and the unsafe case of the return value in the same function.
 - Do not `export` symbols not used outside the current file and not provided publicly.
 - Hoist symbols and literals (like regexes, functions, constants) as high as possible.
-- Sort symbols in `export {...}` expressions alphabetically, unless it makes sense to do something else (likely group exports, but they must be exported within each group too).
+- Sort symbols in `export {...}` expressions alphabetically, unless is makes sense to do something else (likely group exports, but they must be exported within each group too).
   Always sort symbols in `import {...}` expressions and sort import statements themselves in [`sort-imports`](https://eslint.org/docs/latest/rules/sort-imports) and [`import/order`](https://raw.githubusercontent.com/un-ts/eslint-plugin-import-x/refs/tags/v4.17.1/docs/rules/order.md) orders respectively.
-  Assume default options for `import/order` are `{groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'], alphabetize: {order: 'asc'}}`, but they might be overridden in ESLint config file.
+  Assume default options for `import/order` are `{groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'], alphabetize: {order: 'asc'}}`, but them might be overridden in ESLint config file.
 - In general, in *large* lists prefer keeping things alphabetical, if makes sense and not instructed otherwise.
 - If you encounter an ESLint error that has multiple ways of fixing, always weigh all options INCLUDING disabling the rule for this line (or, much more rarely, for the entire file) before fixing.
 - Do your best to avoid `any` and type casting (`as ...`) in favor of `unknown` or other clever workarounds.
@@ -47,7 +52,7 @@ All above is not a hard ban - you can use whatever if it actually fits and makes
   - Good: `a ? b : c`, `if (a) { ... } else { ... }`
   - Bad: `!a ? c : b`, `if (!a) { ... } else { ... }`
 - If you need a map that is initially empty and will be mutated, use `Map` instead of a plain object whenever possible: adding or removing object properties is usually *very* bad for performance.
-- Prefer `||` over `??` unless the latter actually changes the logic in a positive way.
+- If `||` and `??` operators work identical, prefer using `||`.
 - For constants, use CONSTANT_CASE <=> value is statically constructed:
   - Good: `const FOO = 'bar'`;
   - Good: `const FOO = ['bar', 1 + 2])`;
@@ -58,6 +63,7 @@ All above is not a hard ban - you can use whatever if it actually fits and makes
 - Keep each sentence in Markdown or JSDoc on a separate line, exactly like in this document.
   Exception: don't do that in `.changeset/*.md` files as they would be rendered differently in the changelog file that [changesets](https://github.com/changesets/changesets) are rendering.
 - Minimize referencing symbol names in comments: if they ever get renamed in the codebase, there's a real risk of your reference becoming stale.
+- Don't use `satisfies T` if the regular type annotation (`: T`) would work the same.
 
 ## General
 
@@ -84,13 +90,15 @@ Always run them on the *all **changed*** files (not only source files!) unless n
 Ignore the pre-existing unrelated issues.
 If there are specific package.json scripts to invoke them, prefer them instead over calling directly:
 
-- TypeScript as type checker (usually `tsc --noEmit` or `vue-tsc --noEmit` for Vue projects)
+- TypeScript as type checker (usually `tsc --noEmit` or `vue-tsc --notEmit` for Vue projects)
 - ESLint (`eslint list.ext1 of.ext2 changed.ext3 files.ext4`)
-- Prettier (`prettier --write --log-level warn changed.ts files.js`)
+- Prettier/oxlint (`prettier --write --log-level warn changed.ts files.js`)
 - Vitest (usually `vitest run changed.spec.ts files.spec.js`)
 - Knip (`knip`)
 - CSpell (`cspell --no-progress --no-summary changed.ext1 files.ext2`)
 - Dependency vulnerability checker (if the lockfile was modified), for example `pnpm audit --audit-level high` (usually high+ vulnerabilities are only important to fix)
+
+Don't report how extensively you've verified your work - if you need to say that, say very briefly.
 
 ### CSpell
 
