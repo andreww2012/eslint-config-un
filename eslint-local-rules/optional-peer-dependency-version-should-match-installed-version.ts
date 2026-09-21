@@ -52,15 +52,11 @@ const rule: Eslint.Rule.RuleModule = {
               }
 
               const peerDependencyName = peerDependencyNode.key.value;
-              if (typeof peerDependencyName !== 'string') {
-                return;
-              }
-
-              if (options?.ignore?.includes(peerDependencyName)) {
-                return;
-              }
-
-              if (!packageJson.peerDependenciesMeta?.[peerDependencyName]?.optional) {
+              if (
+                typeof peerDependencyName !== 'string' ||
+                options?.ignore?.includes(peerDependencyName) ||
+                !packageJson.peerDependenciesMeta?.[peerDependencyName]?.optional
+              ) {
                 return;
               }
 
@@ -81,11 +77,10 @@ const rule: Eslint.Rule.RuleModule = {
               }
 
               const minVersionSatisfyingRange = minSemverVersion(peerDependencyMaybeRange);
-              if (!minVersionSatisfyingRange) {
-                return;
-              }
-
-              if (semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)) {
+              if (
+                !minVersionSatisfyingRange ||
+                semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)
+              ) {
                 return;
               }
 
