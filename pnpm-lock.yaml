@@ -443,8 +443,8 @@ importers:
         specifier: 10.3.3
         version: 10.3.3(eslint@10.10.0)
       '@darraghor/eslint-plugin-nestjs-typed':
-        specifier: 7.5.3
-        version: 7.5.3(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@10.10.0)(supports-color@7.2.0)
+        specifier: 7.5.5
+        version: 7.5.5(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@10.10.0)(supports-color@7.2.0)
       '@docusaurus/eslint-plugin':
         specifier: 3.10.2
         version: 3.10.2(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -2218,8 +2218,8 @@ packages:
       yaml:
         optional: true
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.5.3':
-    resolution: {integrity: sha512-82o1pOBgU1Sbtyu+Vn0i5P20QUGyzV9XXZoN5ib8UXbbV3NYejqX83JsTztaZQmzlVLXRPvuChWH4hl7/idYQQ==}
+  '@darraghor/eslint-plugin-nestjs-typed@7.5.5':
+    resolution: {integrity: sha512-F7CM7x1GBwFmZf1yw8BW0PZdapaAWPw9r3UNAHGK4U9EAeqMS1eiiy3uGa7pAL1dmuo9yxPB8THBcjYHQqMvlQ==}
     engines: {node: '>=24.0.0'}
     peerDependencies:
       '@typescript-eslint/parser': ^7.0.0 || ^8.0.0
@@ -14984,7 +14984,7 @@ snapshots:
       typescript: '@typescript/typescript6@6.0.2'
       yaml: 2.9.1
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.5.3(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@10.10.0)(supports-color@7.2.0)':
+  '@darraghor/eslint-plugin-nestjs-typed@7.5.5(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@10.10.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/parser': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       '@typescript-eslint/scope-manager': 8.70.0
