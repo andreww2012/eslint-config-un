@@ -6,6 +6,7 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
+minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
   - eslint-plugin-de-morgan@2.2.0
   - eslint-plugin-sentences-per-line@0.1.6
@@ -48,6 +49,17 @@ minimumReleaseAgeExclude: # []
   - '@oxfmt/binding-win32-x64-msvc@0.69.0'
   - effect@4.0.0-rc.117
   - oxfmt@0.69.0
+  - '@typescript-eslint/eslint-plugin@8.70.1'
+  - '@typescript-eslint/parser@8.70.1'
+  - '@typescript-eslint/project-service@8.70.1'
+  - '@typescript-eslint/scope-manager@8.70.1'
+  - '@typescript-eslint/tsconfig-utils@8.70.1'
+  - '@typescript-eslint/type-utils@8.70.1'
+  - '@typescript-eslint/types@8.70.1'
+  - '@typescript-eslint/typescript-estree@8.70.1'
+  - '@typescript-eslint/utils@8.70.1'
+  - '@typescript-eslint/visitor-keys@8.70.1'
+  - typescript-eslint@8.70.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
