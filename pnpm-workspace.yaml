@@ -8,8 +8,8 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-de-morgan@2.2.0
-  - eslint-plugin-sentences-per-line@0.1.5
-  - sentences-per-line@0.5.5
+  - eslint-plugin-sentences-per-line@0.1.6
+  - sentences-per-line@0.5.6
   - '@eslint-react/ast@5.20.5'
   - '@eslint-react/core@5.20.5'
   - '@eslint-react/eslint-plugin@5.20.5'
