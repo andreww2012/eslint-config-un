@@ -1,5 +1,7 @@
 const FIXTURES = {
   cloudfrontImport: 'cloudfront-import.js',
+  runtimeV1Features: 'runtime-v1-features.js',
+  runtimeV2Features: 'runtime-v2-features.js',
 } as const;
 
 const V1_FILES = ['**/cloudfront-v1/**/*.js'];
@@ -38,9 +40,62 @@ describe('cloudfront functions: sub config `v1`', () => {
 
     it('correctly sets severities by default', () => {
       expect(configResult.getRuleSeverities('cloudfront-functions/v1')).toMatchObject({
-        'no-restricted-globals': 2,
+        'no-undef': 2,
         'no-var': 0,
       });
+    });
+
+    it('turns off globals only available in v2 and defines v1-only ones', () => {
+      expect(configResult.getConfigByUnPostfix('cloudfront-functions/v1')).toMatchObject({
+        languageOptions: {
+          globals: {
+            Buffer: 'off',
+            btoa: 'off',
+            console: 'readonly',
+            MemoryError: 'readonly',
+          },
+        },
+      });
+    });
+
+    it('`no-undef` rule fires when globals only available in v2 are used', async () => {
+      const results = await testEslintConfig(
+        {cloudfrontFunctions: {configV1: {files: ['**/*.js']}}},
+        FIXTURES.runtimeV2Features,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.runtimeV2Features, 'no-undef', {
+          all: true,
+        }).map(({message}) => message),
+      ).toMatchInlineSnapshot(
+        `["'Buffer' is not defined.", "'TextEncoder' is not defined.", "'btoa' is not defined."]`,
+      );
+    });
+
+    it('does not report anything in code using v1 runtime features when commonly used configs are enabled', async () => {
+      const results = await testEslintConfig(
+        {
+          e18e: true,
+          import: true,
+          js: true,
+          math: true,
+          node: true,
+          promise: true,
+          regexp: true,
+          unicorn: true,
+          cloudfrontFunctions: {configV1: {files: ['**/*.js']}},
+        },
+        FIXTURES.runtimeV1Features,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          // Otherwise type-aware rules would run on `.js` files and crash
+          internalOptions: {},
+        },
+      );
+
+      expect(results[0]?.messages.map(({ruleId}) => ruleId)).toStrictEqual([]);
     });
 
     it("`no-restricted-syntax` rule fires when `require('cloudfront')` is used (not allowed in v1)", async () => {
@@ -115,15 +170,13 @@ describe('cloudfront functions: sub config `v1`', () => {
         cloudfrontFunctions: {
           configV1: {
             files: ['**/*.js'],
-            overrides: {'no-restricted-globals': 0},
+            overrides: {'no-undef': 0},
             overridesAny: {'no-console': 0},
           },
         },
       });
 
-      expect(
-        configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-restricted-globals'),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-undef')).toBe(0);
       expect(configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-console')).toBe(0);
     });
   });

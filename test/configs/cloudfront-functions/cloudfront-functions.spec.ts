@@ -1,5 +1,8 @@
 const FIXTURES = {
+  kvsLookup: 'kvs-lookup.js',
+  runtimeV2Features: 'runtime-v2-features.js',
   setTimeout: 'set-timeout.js',
+  unsupportedApis: 'unsupported-apis.js',
 } as const;
 
 const V2_FILES = ['**/cloudfront-v2/**/*.js'];
@@ -99,8 +102,8 @@ describe('rules', async () => {
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('cloudfront-functions/v2')).toMatchObject({
-      'no-restricted-globals': 2,
-      'prefer-object-has-own': 0,
+      'no-undef': 2,
+      'import/no-unresolved': 0,
     });
   });
 
@@ -108,23 +111,75 @@ describe('rules', async () => {
     expect(configResult.getRuleEntry('cloudfront-functions/v2', 'no-var')).toBeUndefined();
   });
 
-  it('`no-restricted-globals` rule fires when `setTimeout` is used', async () => {
+  it('turns off Node.js globals missing in CloudFront and defines the available ones', () => {
+    expect(configResult.getConfigByUnPostfix('cloudfront-functions/v2')).toMatchObject({
+      languageOptions: {
+        globals: {
+          Buffer: 'readonly',
+          console: 'readonly',
+          fetch: 'off',
+          process: 'off',
+          require: 'readonly',
+          setTimeout: 'off',
+        },
+      },
+    });
+  });
+
+  it('`no-undef` rule fires when `setTimeout` is used', async () => {
     const results = await testEslintConfig(
       {cloudfrontFunctions: {files: ['**/*.js']}},
       FIXTURES.setTimeout,
       import.meta.dirname,
     );
 
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.setTimeout,
-      'no-restricted-globals',
+    const error = findLintMessageFromLintResults(results, FIXTURES.setTimeout, 'no-undef');
+
+    expect(error?.message).toMatchInlineSnapshot(`"'setTimeout' is not defined."`);
+  });
+
+  it('`no-restricted-syntax` rule fires on `console.log` with multiple arguments, `Object.create` with property descriptors and async function arguments', async () => {
+    const results = await testEslintConfig(
+      {cloudfrontFunctions: {files: ['**/*.js']}},
+      FIXTURES.unsupportedApis,
+      import.meta.dirname,
     );
 
-    expect(error?.message).toMatchInlineSnapshot(
-      `"Unexpected use of 'setTimeout'. \`setTimeout\` is not allowed in CloudFront functions"`,
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.unsupportedApis, 'no-restricted-syntax', {
+        all: true,
+      }).map(({message}) => message),
+    ).toMatchInlineSnapshot(
+      '["Passing multiple arguments to `console.log` is not allowed in CloudFront functions", "Passing property descriptors to `Object.create` is not allowed in CloudFront functions", "Nested async functions and async function arguments are not allowed in CloudFront functions"]',
     );
   });
+
+  it.each([FIXTURES.kvsLookup, FIXTURES.runtimeV2Features])(
+    'does not report anything in `%s` when commonly used configs are enabled',
+    async (fixture) => {
+      const results = await testEslintConfig(
+        {
+          e18e: true,
+          import: true,
+          js: true,
+          math: true,
+          node: true,
+          promise: true,
+          regexp: true,
+          unicorn: true,
+          cloudfrontFunctions: {files: ['**/*.js']},
+        },
+        fixture,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          // Otherwise type-aware rules would run on `.js` files and crash
+          internalOptions: {},
+        },
+      );
+
+      expect(results[0]?.messages.map(({ruleId}) => ruleId)).toStrictEqual([]);
+    },
+  );
 });
 
 describe('un options', () => {
@@ -168,14 +223,12 @@ describe('un options', () => {
     const configResult = await computeEslintConfig({
       cloudfrontFunctions: {
         files: ['**/*.js'],
-        overrides: {'no-restricted-globals': 0},
+        overrides: {'no-undef': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
-    expect(
-      configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-restricted-globals'),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-undef')).toBe(0);
     expect(configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-console')).toBe(0);
   });
 });
