@@ -674,8 +674,8 @@ importers:
         specifier: 7.6.2
         version: 7.6.2(eslint@10.10.0)
       eslint-plugin-expect-type:
-        specifier: 0.6.2
-        version: 0.6.2(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+        specifier: 0.7.0
+        version: 0.7.0(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       eslint-plugin-expo:
         specifier: 1.1.0
         version: 1.1.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -7985,9 +7985,9 @@ packages:
     peerDependencies:
       eslint: '>=9.0.0'
 
-  eslint-plugin-expect-type@0.6.2:
-    resolution: {integrity: sha512-XWgtpplzr6GlpPUFG9ZApnSTv7QJXAPNN6hNmrlleVVCkAK23f/3E2BiCoA3Xtb0rIKfVKh7TLe+D1tcGt8/1w==}
-    engines: {node: '>=18'}
+  eslint-plugin-expect-type@0.7.0:
+    resolution: {integrity: sha512-oeI4oaG/1holaqSqBMXAD58SlMDTvWTc+BTIT1c2AoN7GR6c3rDlS7dIoqfKrBe9uovboR7FMhW9dIxAIOtyCQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@typescript-eslint/parser': '>=6'
       eslint: '>=7'
@@ -20996,10 +20996,11 @@ snapshots:
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       estraverse: 5.3.0
 
-  eslint-plugin-expect-type@0.6.2(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0):
+  eslint-plugin-expect-type@0.7.0(@typescript-eslint/parser@8.70.0)(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/parser': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       '@typescript-eslint/utils': 8.70.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
+      cached-factory: 0.3.0
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
       fs-extra: 11.4.0
       get-tsconfig: 4.14.3
