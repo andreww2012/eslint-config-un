@@ -28,24 +28,6 @@ declare module 'eslint-plugin-qwik' {
   export = value;
 }
 
-declare module '@next/eslint-plugin-next' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
-declare module 'eslint-plugin-es-x' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
-declare module 'eslint-plugin-ava' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
 declare module 'eslint-plugin-ember' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   const value: EslintPlugin;
@@ -107,12 +89,6 @@ declare module 'eslint-plugin-headers' {
 }
 
 declare module 'eslint-plugin-unnecessary-abstractions' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
-declare module 'eslint-plugin-jsx-a11y-x' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   const value: EslintPlugin;
   export = value;
