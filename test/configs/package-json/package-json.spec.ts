@@ -1,4 +1,5 @@
 const FIXTURES = {
+  distTagDependency: 'dist-tag-dependency/package.json',
   redundantFiles: 'redundant-files/package.json',
 } as const;
 
@@ -485,6 +486,74 @@ describe('options', () => {
           'package-json/restrict-top-level-properties',
         ),
       ).toBe(0);
+    });
+  });
+
+  describe('option: `allowedDistTags`', () => {
+    it('enables `package-json/restrict-dist-tags` rule with no allowed dist-tags by default', async () => {
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/restrict-dist-tags'),
+      ).toMatchInlineSnapshot('[2, {"allowed": []}]');
+    });
+
+    it('enables `package-json/restrict-dist-tags` rule with no allowed dist-tags when option is `true`', async () => {
+      const configResult = await computeEslintConfig({packageJson: {allowedDistTags: true}});
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/restrict-dist-tags'),
+      ).toMatchInlineSnapshot('[2, {"allowed": []}]');
+    });
+
+    it('disables `package-json/restrict-dist-tags` rule when option is `false`', async () => {
+      const configResult = await computeEslintConfig({packageJson: {allowedDistTags: false}});
+
+      expect(
+        configResult.getRuleEntrySeverity('package-json', 'package-json/restrict-dist-tags'),
+      ).toBe(0);
+    });
+
+    it('enables `package-json/restrict-dist-tags` rule with custom allowed dist-tags when set to a string array', async () => {
+      const DIST_TAGS = ['next', 'beta'];
+
+      const configResult = await computeEslintConfig({
+        packageJson: {allowedDistTags: DIST_TAGS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('package-json', 'package-json/restrict-dist-tags'),
+      ).toStrictEqual([{allowed: DIST_TAGS}]);
+    });
+
+    it('passes rule options as-is when set to an object', async () => {
+      const RULE_OPTIONS = {allowedFor: ['devDependencies' as const]};
+
+      const configResult = await computeEslintConfig({
+        packageJson: {allowedDistTags: RULE_OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('package-json', 'package-json/restrict-dist-tags'),
+      ).toStrictEqual([RULE_OPTIONS]);
+    });
+
+    it('reports a dependency with a dist-tag version by default', async () => {
+      const results = await testEslintConfig(
+        'packageJson',
+        FIXTURES.distTagDependency,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.distTagDependency,
+        'package-json/restrict-dist-tags',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"The "latest" dist-tag is not allowed for dependencies."',
+      );
     });
   });
 });

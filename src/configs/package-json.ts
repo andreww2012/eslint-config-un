@@ -197,6 +197,22 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * - [`package-json/restrict-top-level-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
    */
   banTopLevelProperties?: ArrayOrBooleanRecord<string, 'booleanOrMessage'> | 'popularTools';
+
+  /**
+   * The list of "dist-tags" (like `latest` or `next`) allowed to be used as dependency versions.
+   *
+   * Possible values:
+   * - `true`: disallow all dist-tags.
+   * - `false`: allow all dist-tags (disables the rule).
+   * - `string[]`: allow only the specified dist-tags.
+   * - `object`: raw rule options passed as-is.
+   *   Note that if `allowed` is not specified, the rule's own default list is used.
+   *
+   * Affected rule:
+   * - [`package-json/restrict-dist-tags`](https://eslint-plugin-package-json.dev/rules/restrict-dist-tags)
+   * @default true
+   */
+  allowedDistTags?: boolean | string[] | GetRuleOptions<'package-json', 'restrict-dist-tags'>;
 }
 
 export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
@@ -206,6 +222,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     order: 'sort-package-json',
     repositoryShorthand: 'object',
     publishable: false,
+    allowedDistTags: true,
   });
 
   const {
@@ -215,6 +232,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     disallowUnnecessaryPropertiesInPrivatePackages,
     publishable,
     banTopLevelProperties: banTopLevelPropertiesRaw,
+    allowedDistTags,
     requireFields,
   } = optionsResolved;
 
@@ -323,6 +341,13 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('require-types', OFF) /** @since 0.29.0 */
     .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢
     .addRule('restrict-dependency-ranges', OFF) /** @since 0.30.0 */
+    .addRule('restrict-dist-tags', allowedDistTags ? ERROR : OFF, [
+      Array.isArray(allowedDistTags)
+        ? {allowed: allowedDistTags}
+        : typeof allowedDistTags === 'object'
+          ? allowedDistTags
+          : {allowed: []},
+    ]) /** @since 1.9.0 */
     .addRule(
       'restrict-private-properties',
       disallowUnnecessaryPropertiesInPrivatePackages ? ERROR : OFF,
