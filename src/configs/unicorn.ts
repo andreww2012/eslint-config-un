@@ -61,7 +61,7 @@ type ConsistentBooleanNameOptions = MergeObjects<
      * Boolean name prefixes to allow (`true`) or disallow (`false`).
      * - *object*: merged with the default prefixes;
      * - *array*: completely replaces the default prefixes.
-     * @default {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}
+     * @default {is: true, are: true, was: true, were: true, has: true, have: true, had: true, can: true, cannot: true, should: true, must: true, may: true, does: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}
      */
     prefixes?: ArrayOrBooleanRecord;
 
@@ -243,7 +243,7 @@ export interface UnicornEslintConfigOptions<
    *
    * Affected rule:
    * - [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md)
-   * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true, has: true, had: true, can: true, should: true, must: true, may: true, does: true, do: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}}
+   * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true, has: true, have: true, had: true, can: true, cannot: true, should: true, must: true, may: true, does: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}}
    */
   enforcePrefixForBooleanNames?:
     | boolean
@@ -388,13 +388,15 @@ const DEFAULT_ALLOWED_BOOLEAN_PREFIXES = {
   was: true,
   were: true,
   has: true,
+  have: true,
   had: true,
   can: true,
+  cannot: true,
   should: true,
   must: true,
   may: true,
   does: true,
-  do: true,
+  // No `do`: names like `doWork()` are mostly actions, and would be reported as non-booleans
   did: true,
   will: true,
   needs: true,

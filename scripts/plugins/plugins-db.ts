@@ -93,7 +93,11 @@ export const readEslintPluginsDb = Effect.gen(function* () {
   return parsed;
 });
 
-export const updateEslintPluginsDb = (data: EslintPluginsDb, doNotAppendCurrentDb = false) =>
+export const updateEslintPluginsDb = (
+  data: EslintPluginsDb,
+  // eslint-disable-next-line unicorn/consistent-boolean-name
+  doNotAppendCurrentDb = false,
+) =>
   Effect.gen(function* () {
     const currentDb = doNotAppendCurrentDb ? {} : yield* readEslintPluginsDb;
 

@@ -484,7 +484,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('unicorn', 'unicorn/consistent-boolean-name'),
       ).toMatchInlineSnapshot(
-        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
+        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "cannot": true, "contains": true, "did": true, "does": true, "had": true, "has": true, "have": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
       );
     });
 
@@ -496,7 +496,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('unicorn', 'unicorn/consistent-boolean-name'),
       ).toMatchInlineSnapshot(
-        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
+        '[2, {"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "cannot": true, "contains": true, "did": true, "does": true, "had": true, "has": true, "have": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}}]',
       );
     });
 
@@ -574,7 +574,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name')[0],
       ).toMatchInlineSnapshot(
-        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"BehaviorSubject": "value", "ComputedRef": "value", "IObservableValue": "get", "ModelRef": "value", "ReadonlySignal": "value", "Ref": "value", "ShallowRef": "value", "Signal": "value", "WritableComputedRef": "value"}}',
+        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "cannot": true, "contains": true, "did": true, "does": true, "had": true, "has": true, "have": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"BehaviorSubject": "value", "ComputedRef": "value", "IObservableValue": "get", "ModelRef": "value", "ReadonlySignal": "value", "Ref": "value", "ShallowRef": "value", "Signal": "value", "WritableComputedRef": "value"}}',
       );
     });
 
@@ -587,7 +587,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-boolean-name')[0],
       ).toMatchInlineSnapshot(
-        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "contains": true, "did": true, "do": true, "does": true, "had": true, "has": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"Box": "unwrap", "ComputedRef": "value", "ModelRef": "value", "Ref": "value", "WritableComputedRef": "value"}}',
+        '{"checkFunctions": "prohibit", "prefixes": {"allows": true, "are": true, "can": true, "cannot": true, "contains": true, "did": true, "does": true, "had": true, "has": true, "have": true, "includes": true, "is": true, "may": true, "must": true, "needs": true, "requires": true, "should": true, "supports": true, "was": true, "were": true, "will": true}, "wrappers": {"Box": "unwrap", "ComputedRef": "value", "ModelRef": "value", "Ref": "value", "WritableComputedRef": "value"}}',
       );
     });
 
@@ -624,7 +624,7 @@ describe('options', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        '"Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `must`, `may`, `does`, `do`, `needs`, `allows`, `supports`, `contains`, `includes`."',
+        '"Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."',
       );
     });
 
@@ -659,7 +659,7 @@ describe('options', () => {
           {all: true},
         ).map(({message}) => message),
       ).toMatchInlineSnapshot(
-        '["Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `must`, `may`, `does`, `do`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+        '["Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
       );
     });
 
@@ -678,7 +678,7 @@ describe('options', () => {
           {all: true},
         ).map(({message}) => message),
       ).toMatchInlineSnapshot(
-        '["`isVisible` starts with `is`, so it should be boolean.", "Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `must`, `may`, `does`, `do`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+        '["`isVisible` starts with `is`, so it should be boolean.", "Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
       );
     });
   });
