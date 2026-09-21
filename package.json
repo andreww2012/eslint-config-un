@@ -204,7 +204,6 @@
     "@ts-safeql/eslint-plugin": "5.4.1",
     "@tsrx/eslint-parser": "0.4.5",
     "@tsrx/eslint-plugin": "0.4.5",
-    "@types/eslint-plugin-mobx": "0.0.0",
     "@types/eslint-plugin-security": "3.0.1",
     "@types/estree": "1.0.9",
     "@types/node": "22.20.3",
