@@ -8,6 +8,8 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-de-morgan@2.2.0
+  - eslint-plugin-sentences-per-line@0.1.5
+  - sentences-per-line@0.5.5
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

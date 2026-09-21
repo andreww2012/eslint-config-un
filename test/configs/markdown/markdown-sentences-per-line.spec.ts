@@ -1,4 +1,5 @@
 const FIXTURES = {
+  lineWithAbbreviation: 'line-with-abbreviation.md',
   twoSentencesPerLine: 'two-sentences-per-line.md',
 } as const;
 
@@ -157,6 +158,60 @@ describe('markdown: sub config `sentencesPerLine`', () => {
         expect(
           configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
         ).toIncludeAllMembers(['LICENSE.md']);
+      });
+    });
+
+    describe('option: `options`', () => {
+      const OPTIONS = {additionalAbbreviations: ['Mme.']};
+
+      it('does not pass options to `sentences-per-line/one` rule by default', async () => {
+        const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});
+
+        expect(
+          configResult.getRuleEntryOptions('markdown/sentences-per-line', 'sentences-per-line/one'),
+        ).toStrictEqual([]);
+      });
+
+      it('passes custom `options` to `sentences-per-line/one` rule when provided', async () => {
+        const configResult = await computeEslintConfig({
+          markdown: {configSentencesPerLine: {options: OPTIONS}},
+        });
+
+        expect(
+          configResult.getRuleEntryOptions('markdown/sentences-per-line', 'sentences-per-line/one'),
+        ).toStrictEqual([OPTIONS]);
+      });
+
+      it('`sentences-per-line/one` rule fires on an unknown abbreviation by default', async () => {
+        const results = await testEslintConfig(
+          {markdown: {configSentencesPerLine: true}},
+          FIXTURES.lineWithAbbreviation,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.lineWithAbbreviation,
+            'sentences-per-line/one',
+          ),
+        ).toBeDefined();
+      });
+
+      it('`sentences-per-line/one` rule does not fire on an abbreviation listed in `additionalAbbreviations`', async () => {
+        const results = await testEslintConfig(
+          {markdown: {configSentencesPerLine: {options: OPTIONS}}},
+          FIXTURES.lineWithAbbreviation,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.lineWithAbbreviation,
+            'sentences-per-line/one',
+          ),
+        ).toBeUndefined();
       });
     });
   });

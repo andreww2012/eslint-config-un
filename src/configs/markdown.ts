@@ -122,7 +122,13 @@ export interface MarkdownEslintConfigOptions<
     | boolean
     | Prettify<
         UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> &
-          IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES>
+          IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES> & {
+            /**
+             * Options of
+             * [the only rule in this sub-config, `sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md).
+             */
+            options?: GetRuleOptions<'sentences-per-line', 'one'>;
+          }
       >;
 
   /**
@@ -400,6 +406,9 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     configSentencesPerLine,
     'sentences-per-line',
   );
+
+  const {options: oneRuleOptions} = assignDefaults(configSentencesPerLine, {});
+
   if (configSentencesPerLine) {
     configBuilderSentencesPerLine
       ?.addConfig(
@@ -419,7 +428,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
           )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
         },
       )
-      .addRule('one', ERROR) /** @since 0.0.0 */ // 🟢
+      .addRule('one', ERROR, oneRuleOptions ? [oneRuleOptions] : []) /** @since 0.0.0 */ // 🟢
       .enableConfigTesterForPlugin('sentences-per-line')
       .addOverrides();
   }

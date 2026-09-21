@@ -773,8 +773,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
       eslint-plugin-sentences-per-line:
-        specifier: 0.1.3
-        version: 0.1.3(jiti@2.7.0)(supports-color@7.2.0)
+        specifier: 0.1.5
+        version: 0.1.5(jiti@2.7.0)(supports-color@7.2.0)
       eslint-plugin-solid:
         specifier: 0.18.0
         version: 0.18.0(@typescript/typescript6@6.0.2)(eslint@10.10.0)(supports-color@7.2.0)
@@ -8413,8 +8413,8 @@ packages:
     resolution: {integrity: sha512-/lZCkOxPOWaf1jXAqgICrS8St3BMBccIPvhOSUYuV6VCr1o5nFVG998FnTLt6w2Nxb8Uo0nM8fzmnhp+GY/aEg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  eslint-plugin-sentences-per-line@0.1.3:
-    resolution: {integrity: sha512-VjCDI8+r2WBLgVUeHp/3YQBFgreLTFij6V+ZoOHX9uuPAT00knDt/oX4fDw+cXfsPYloGqJW7jnZ0PUUQ3k0Tw==}
+  eslint-plugin-sentences-per-line@0.1.5:
+    resolution: {integrity: sha512-v6Mey6dAxJocZiqlR34J3JWOcGQqL3+wH6Qg77bpIrqZcdj+Y6gFTgQPxM85mkUd8LaaNtTDyWmB9Aa/X2Z5zQ==}
 
   eslint-plugin-solid@0.18.0:
     resolution: {integrity: sha512-Q3tSfb5EqU1nt8raRR8u7uMCLmB1779atKFxZ48TLor0rX+S0Bxt1gcTgYQTK+FK0T/iwFZJf13sSQncjFOBPg==}
@@ -11951,8 +11951,8 @@ packages:
     resolution: {integrity: sha512-1gnZf7DFcoIcajTjTwjwuDjzuz4PPcY2StKPlsGAQ1+YH20IRVrBaXSWmdjowTJ6u8Rc01PoYOGHXfP1mYcZNQ==}
     engines: {node: '>= 18'}
 
-  sentences-per-line@0.5.3:
-    resolution: {integrity: sha512-pXuRJ4bKjxEaRVi7ZbwJBF2THPShuLHvWjw9yCtyn5qNqgAfZ/sqPHJu9HS72TffLQwIFX+aSP61HuGGz+7Aww==}
+  sentences-per-line@0.5.5:
+    resolution: {integrity: sha512-QFLWAjwv0kND5mhYvbdy9fknyHiab/EfudRDiDWU6JiT0RvbcQ5Yvzsin926dA/VrEOBgKjk2m2apZcY/YXBCg==}
     engines: {node: '>=22.14.0'}
 
   serialize-javascript@7.1.1:
@@ -21693,11 +21693,11 @@ snapshots:
     dependencies:
       safe-regex: 2.1.1
 
-  eslint-plugin-sentences-per-line@0.1.3(jiti@2.7.0)(supports-color@7.2.0):
+  eslint-plugin-sentences-per-line@0.1.5(jiti@2.7.0)(supports-color@7.2.0):
     dependencies:
       '@eslint/markdown': 8.0.3(supports-color@7.2.0)
       eslint: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
-      sentences-per-line: 0.5.3
+      sentences-per-line: 0.5.5
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -26262,7 +26262,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  sentences-per-line@0.5.3: {}
+  sentences-per-line@0.5.5: {}
 
   serialize-javascript@7.1.1: {}
 
