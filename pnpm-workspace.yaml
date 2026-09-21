@@ -7,7 +7,7 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-unicorn@76.0.0
+  - eslint-plugin-de-morgan@2.2.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
