@@ -3,6 +3,7 @@ import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
   withEval: 'with-eval.html',
+  functionCalledFromAnotherScript: 'function-called-from-another-script.html',
 } as const;
 
 describe('basic tests', () => {
@@ -295,6 +296,47 @@ describe('options', () => {
       expect(configResult.getConfigByUnPostfix('js-inline')?.languageOptions?.['sourceType']).toBe(
         'module',
       );
+    });
+
+    it('gives every `<script>` tag its own top-level scope by default', async () => {
+      const results = await testEslintConfig(
+        {jsInline: true, js: true},
+        FIXTURES.functionCalledFromAnotherScript,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.functionCalledFromAnotherScript,
+        'no-undef',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(`"'greet' is not defined."`);
+    });
+
+    it('shares the top-level scope between `<script>` tags when `sourceType` is `script`', async () => {
+      const results = await testEslintConfig(
+        {jsInline: {languageOptions: {sourceType: 'script'}}, js: true},
+        FIXTURES.functionCalledFromAnotherScript,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.functionCalledFromAnotherScript,
+          'no-undef',
+          {all: true},
+        ),
+      ).toBeEmpty();
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.functionCalledFromAnotherScript,
+          'no-unused-vars',
+          {all: true},
+        ),
+      ).toBeEmpty();
     });
   });
 });

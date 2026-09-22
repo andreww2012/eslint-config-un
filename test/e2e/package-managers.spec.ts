@@ -275,7 +275,14 @@ describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFil
     // `clsx` is detected and its optional peer plugin is loaded
     expect(enabledRuleNames.filter((ruleName) => ruleName.startsWith('clsx/'))).not.toHaveLength(0);
 
-    const lintResult = await run([...eslint, '--format', 'json', 'src/example.ts', 'README.md']);
+    const lintResult = await run([
+      ...eslint,
+      '--format',
+      'json',
+      'src/example.ts',
+      'src/index.html',
+      'README.md',
+    ]);
 
     // The fixture has lint errors on purpose, while a crash exits with 2
     expect(lintResult.exitCode).toBe(1);
@@ -301,6 +308,8 @@ describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFil
     expect(messagesByFileName.get('README.md')?.map(({ruleId}) => ruleId)).toContain(
       'prettier/prettier',
     );
+    // The inlined `eslint-plugin-html` has to find and patch the project's own ESLint
+    expect(messagesByFileName.get('index.html')?.map(({ruleId}) => ruleId)).toContain('no-eval');
     // Fatal errors, like parsing ones, have no rule
     expect([...messagesByFileName.values()].flat().map(({ruleId}) => ruleId)).not.toContain(null);
   });
