@@ -1,5 +1,37 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.2
+
+### Minor Changes
+
+- c614ed3: unicorn: `enforcePrefixForBooleanNames` option now allows the `cannot` prefix and no longer allows `do` by default, so functions like `doWork()` are not reported by [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md) rule as non-booleans
+- 276c9c8: unicorn: updated [`eslint-plugin-unicorn` from v75.0.0 to v76.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v75.0.0...v76.0.0):
+  
+  - 🟢 enabled [`unicorn/prefer-combined-guards`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-combined-guards.md) rule
+- b23f871: markdown: updated [`eslint-plugin-sentences-per-line` from v0.1.3 to v0.1.6](https://github.com/JoshuaKGoldberg/sentences-per-line/compare/eslint-plugin-sentences-per-line@v0.1.3...eslint-plugin-sentences-per-line@v0.1.6) and added a new option `options` to the `sentencesPerLine` sub-config, controlling the options of its only rule, [`sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md)
+- 30320a2: packageJson: updated [`eslint-plugin-package-json` from v1.8.1 to v1.9.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.8.1...v1.9.0):
+  
+  - Added a new option `allowedDistTags` controlling 🟢 enabled by default [`package-json/restrict-dist-tags`](https://eslint-plugin-package-json.dev/rules/restrict-dist-tags) rule, with no dist-tags allowed by default
+
+### Patch Changes
+
+- ae25393: cloudfrontFunctions: stopped reporting `cloudfront` imports and documented runtime features like `**` and `globalThis`, and disabled rules suggesting syntax CloudFront doesn't support. Node.js globals missing in CloudFront are now reported by [`no-undef`](https://eslint.org/docs/latest/rules/no-undef)
+- 30c709c: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.103.1 to v5.103.2](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.103.1...@tanstack/eslint-plugin-query@5.103.2)
+- b741651: jsdoc: updated [`eslint-plugin-jsdoc` from v64.5.2 to v64.5.4](https://github.com/gajus/eslint-plugin-jsdoc/compare/v64.5.2...v64.5.4)
+- 11d2b89: zod: updated [`eslint-plugin-zod` from v4.14.0 to v4.14.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.14.0...eslint-plugin-zod@4.14.2), [`eslint-plugin-zod-mini` from v1.11.0 to v1.11.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.11.0...eslint-plugin-zod-mini@1.11.2) and [`eslint-plugin-zod-core` from v1.1.2 to v1.1.4](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.1.2...eslint-plugin-zod-core@1.1.4)
+- 61245a6: turbo: updated [`eslint-plugin-turbo` from v2.10.13 to v2.11.2](https://github.com/vercel/turborepo/compare/v2.10.13...v2.11.2)
+- 874d77c: expectType: updated [`eslint-plugin-expect-type` from v0.6.2 to v0.7.0](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/compare/v0.6.2...v0.7.0)
+- 9d6e1cb: formatJs: updated [`eslint-plugin-formatjs` from v8.0.3 to v8.0.5](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@8.0.3...eslint-plugin-formatjs@8.0.5)
+- 522d208: ts: updated [`typescript-eslint` from v8.70.0 to v8.70.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.70.0...v8.70.1)
+- de9a084: tsrx: updated [`@tsrx/eslint-{plugin,parser}` from v0.4.5 to v0.4.7](https://github.com/tsrx-org/tsrx/compare/@tsrx/eslint-plugin@0.4.5...@tsrx/eslint-plugin@0.4.7)
+- ce69c0d: es: updated [`eslint-plugin-es-x` from v10.0.0 to v10.0.1](https://github.com/eslint-community/eslint-plugin-es-x/compare/v10.0.0...v10.0.1)
+- 3bcc5d8: regexp: updated [`eslint-plugin-regexp` from v3.3.0 to v3.3.1](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v3.3.0...v3.3.1)
+- ea8dc20: deMorgan: updated [`eslint-plugin-de-morgan` from v2.1.3 to v2.2.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v2.1.3...v2.2.0)
+- d56fac8: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.5.3 to v7.5.5](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.5.3...v7.5.5)
+- 6fad4bd: erasableSyntaxOnly: updated [`eslint-plugin-erasable-syntax-only` from v0.7.1 to v0.7.2](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/compare/0.7.1...0.7.2)
+- 65ad61d: jsInline: fixed linting HTML files crashing with `TypeError: Cannot read private member #ruleDefinitions` on ESLint v10.11.0+. `eslint-plugin-html` is now inlined into the package with a patch until [it is fixed upstream](https://github.com/BenoitZugmeyer/eslint-plugin-html/issues/342)
+- b3ecbcb: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.19.1 to v5.20.5](https://github.com/Rel1cx/eslint-react/compare/v5.19.1...v5.20.5)
+
 ## 1.0.0-rc.1
 
 ### Minor Changes
