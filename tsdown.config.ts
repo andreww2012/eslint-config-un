@@ -9,6 +9,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
   '@eslint/compat', // Patched
   'eslint-plugin-prettier', // Patched
   'eslint-plugin-html', // Patched
+  'eslint-plugin-file-progress', // Patched
   'eslint-plugin-arrow-return-style-x', // Its `@typescript-eslint/utils` dependency is overridden to work with ESLint 10 by the one we declare, so it's not loaded twice with typescript-eslint's
   '@eslint-community/eslint-plugin-eslint-comments', // Inlined code gets a `require` with `cache`, which Yarn PnP doesn't provide: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322
 ];

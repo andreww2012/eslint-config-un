@@ -1,0 +1,54 @@
+diff --git a/rules/progress.js b/rules/progress.js
+index 936406da9ea33b2cbff394e4c8ad44ab6e31aad1..b104be804a4584c8e48b8bcf548d9d06013d2ba4 100644
+--- a/rules/progress.js
++++ b/rules/progress.js
+@@ -2,13 +2,30 @@ import path from 'node:path';
+ import nanospinner from 'nanospinner';
+ import pc from 'picocolors';
+ 
++const HIDE_CURSOR_SEQUENCE = '\x1b[?25l';
++
+ const spinner = nanospinner.createSpinner('', {
+   frames: ['|', '/', '-', '\\'],
+   color: 'cyan',
++  // A hidden cursor would stay hidden after lint errors, crashes or Ctrl+C
++  stream: {
++    write: (text) => {
++      if (text !== HIDE_CURSOR_SEQUENCE) {
++        process.stderr.write(text);
++      }
++    },
++    get columns() {
++      return process.stderr.columns;
++    },
++  },
+ });
+ 
+ let bindExit = false;
+ let initialReportDone = false;
++let outputSizeAfterLastFrame = 0;
++
++const getOutputSize = () =>
++  (process.stdout.bytesWritten || 0) + (process.stderr.bytesWritten || 0);
+ 
+ const defaultSettings = {
+   hide: false,
+@@ -18,6 +35,10 @@ const defaultSettings = {
+ 
+ const exitCallback = (exitCode, settings) => {
+   if (exitCode === 0 && settings.hide !== true) {
++    // Clearing the last frame would erase the last lines printed after it instead
++    if (getOutputSize() !== outputSizeAfterLastFrame) {
++      spinner.reset();
++    }
+     spinner.success({ text: settings.successMessage });
+   }
+ };
+@@ -45,6 +66,7 @@ const create = (context) => {
+   }
+ 
+   spinner.spin();
++  outputSizeAfterLastFrame = getOutputSize();
+   return {};
+ };
+ 

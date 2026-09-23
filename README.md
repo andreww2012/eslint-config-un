@@ -437,7 +437,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![CSpell](./assets/vscode-icons-file-type-cspell.svg) `cspell`  | ❌                                          | [@cspell/eslint-plugin](https://npmx.dev/@cspell/eslint-plugin) (`cspell`)                                                     | Since v1.0.0                                                                                                         |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin`           | ❌                                          | [eslint-plugin-eslint-plugin](https://npmx.dev/eslint-plugin-eslint-plugin) (`eslint-plugin`)                                  | Since v1.0.0<br>For linting ESLint plugins                                                                           |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin/ruleTests` | ❌                                          | ^                                                                                                                              | Since v1.0.0<br>Rules for ESLint rule test files                                                                     |
-| `fileProgress`                                                  | ❌                                          | [eslint-plugin-file-progress](https://npmx.dev/eslint-plugin-file-progress) (`file-progress`)                                  | Since v1.0.0<br>An ESLint plugin that prints file progress                                                           |
+| `fileProgress`                                                  | ❌                                          | [eslint-plugin-file-progress] (`file-progress`)                                                                                | Since v1.0.0<br>An ESLint plugin that prints file progress                                                           |
 | `compat`                                                        | ❌                                          | [eslint-plugin-compat](https://npmx.dev/eslint-plugin-compat) (`compat`)                                                       | Since v1.0.0                                                                                                         |
 | `webComponents`                                                 | ❌                                          | [eslint-plugin-wc](https://npmx.dev/eslint-plugin-wc) (`wc`)                                                                   | Since v1.0.0                                                                                                         |
 | `header`                                                        | ❌                                          | [eslint-plugin-header](https://npmx.dev/eslint-plugin-header) (`header`)                                                       | Since v1.0.0                                                                                                         |
@@ -1450,12 +1450,13 @@ Install the `globals` package as a dev dependency.
 
 ### Some dependencies are inlined into the package code
 
-If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these four, whose code is inlined into the published package:
+If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these five, whose code is inlined into the published package:
 
 | Package name                                                                                         | Reason                                                                                                                   |
 | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [`eslint-plugin-prettier`][eslint-plugin-prettier]                                                   | Patched by us so that it can format fenced code blocks inside Markdown files                                             |
 | [`eslint-plugin-html`][eslint-plugin-html]                                                           | Patched by us so that it [works with ESLint 10.11+](https://github.com/BenoitZugmeyer/eslint-plugin-html/issues/342)     |
+| [`eslint-plugin-file-progress`][eslint-plugin-file-progress]                                         | Patched by us so that it doesn't leave the terminal cursor hidden or erase the end of ESLint's output                    |
 | [`eslint-plugin-arrow-return-style-x`][eslint-plugin-arrow-return-style-x]                           | Its `@typescript-eslint/utils` dependency is overridden to a version that works with ESLint 10                           |
 | [`@eslint-community/eslint-plugin-eslint-comments`][@eslint-community/eslint-plugin-eslint-comments] | [Crashes](https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322) under Yarn Plug'n'Play otherwise |
 
@@ -1553,6 +1554,7 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
 [ignores option]: #ignores
 [eslint-plugin-prettier]: https://npmx.dev/eslint-plugin-prettier
 [eslint-plugin-html]: https://npmx.dev/eslint-plugin-html
+[eslint-plugin-file-progress]: https://npmx.dev/eslint-plugin-file-progress
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
 [Zod]: ./assets/logos-zod.svg

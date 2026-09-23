@@ -310,6 +310,8 @@ describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFil
     );
     // The inlined `eslint-plugin-html` has to find and patch the project's own ESLint
     expect(messagesByFileName.get('index.html')?.map(({ruleId}) => ruleId)).toContain('no-eval');
+    // The inlined `eslint-plugin-file-progress` prints through its inlined dependencies
+    expect(lintResult.stderr).toContain('Processing:');
     // Fatal errors, like parsing ones, have no rule
     expect([...messagesByFileName.values()].flat().map(({ruleId}) => ruleId)).not.toContain(null);
   });

@@ -212,6 +212,7 @@ overrides:
 
 patchedDependencies:
   '@eslint/compat': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
+  eslint-plugin-file-progress@4.0.0: 5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05
   eslint-plugin-html@8.2.0: 56abacb89eea101d2117970ded04100cf25c817e460163d07e0080c85386a5c0
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier@5.5.6: db6dd8b3e0bee49566664829f18213af5b7728840827fb74e8b2e59bcf0f1191
@@ -301,9 +302,6 @@ importers:
       eslint-plugin-css:
         specifier: 0.12.0
         version: 0.12.0(eslint@10.11.0)
-      eslint-plugin-file-progress:
-        specifier: 4.0.0
-        version: 4.0.0(eslint@10.11.0)
       eslint-plugin-import-x:
         specifier: 4.17.1
         version: 4.17.1(@typescript-eslint/utils@8.70.1)(eslint-import-resolver-node@0.3.9)(eslint@10.11.0)(supports-color@7.2.0)
@@ -677,6 +675,9 @@ importers:
       eslint-plugin-expo:
         specifier: 1.1.0
         version: 1.1.0(@typescript/typescript6@6.0.2)(eslint@10.11.0)(supports-color@7.2.0)
+      eslint-plugin-file-progress:
+        specifier: 4.0.0
+        version: 4.0.0(patch_hash=5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05)(eslint@10.11.0)
       eslint-plugin-format:
         specifier: 2.0.1
         version: 2.0.1(eslint@10.11.0)
@@ -21107,7 +21108,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-file-progress@4.0.0(eslint@10.11.0):
+  eslint-plugin-file-progress@4.0.0(patch_hash=5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05)(eslint@10.11.0):
     dependencies:
       eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
       nanospinner: 1.2.2

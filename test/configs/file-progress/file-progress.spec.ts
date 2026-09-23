@@ -1,3 +1,49 @@
+import path from 'node:path';
+import {exec} from 'tinyexec';
+
+const FIXTURES = {
+  withVar: 'with-var.js',
+} as const;
+
+// The plugin only moves the cursor and erases lines when it's printing to a terminal
+const FAKE_TERMINAL_MODULE_URL = `data:text/javascript,${encodeURIComponent("import tty from 'node:tty'; tty.isatty = () => true;")}`;
+
+const lintFixtureInTerminal = async (noVarSeverity: 0 | 1 | 2) => {
+  const {stderr} = await exec(
+    'eslint',
+    [
+      '--no-config-lookup',
+      '--plugin',
+      'file-progress',
+      '--rule',
+      'file-progress/activate: 2',
+      '--rule',
+      `no-var: ${noVarSeverity}`,
+      path.join('fixtures', FIXTURES.withVar),
+    ],
+    {
+      nodeOptions: {
+        cwd: import.meta.dirname,
+        env: {
+          // The spinner falls back to plain lines if it detects CI or a dumb terminal
+          CI: undefined,
+          TERM: 'xterm-256color',
+          NO_COLOR: '1',
+          NODE_OPTIONS: `--import=${FAKE_TERMINAL_MODULE_URL}`,
+        },
+      },
+    },
+  );
+
+  return (
+    stderr
+      .replaceAll(path.sep, '/')
+      // Control pictures keep snapshots free of control characters and trailing spaces
+      .replaceAll('\u{1B}', '␛')
+      .replaceAll('\n', '↵')
+  );
+};
+
 describe('basic tests', () => {
   it('creates `file-progress` eslint config and loads `file-progress` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('fileProgress');
@@ -132,6 +178,26 @@ describe('options', () => {
           configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
         ).toStrictEqual({hide: true});
       },
+    );
+  });
+});
+
+describe('terminal output', () => {
+  it('never hides the cursor', async () => {
+    await expect(lintFixtureInTerminal(2)).resolves.toMatchInlineSnapshot(
+      '"␛[1G| Processing: fixtures/with-var.js ↵"',
+    );
+  });
+
+  it('does not erase the ESLint output printed after the last progress line', async () => {
+    await expect(lintFixtureInTerminal(1)).resolves.toMatchInlineSnapshot(
+      '"␛[1G| Processing: fixtures/with-var.js ↵␛[1G✔ Lint done.↵␛[?25h"',
+    );
+  });
+
+  it('replaces the last progress line with the success message if nothing was printed after it', async () => {
+    await expect(lintFixtureInTerminal(0)).resolves.toMatchInlineSnapshot(
+      '"␛[1G| Processing: fixtures/with-var.js ↵␛[1G␛[2K␛[1G␛[1A␛[2K␛[1G✔ Lint done.↵␛[?25h"',
     );
   });
 });
