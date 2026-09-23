@@ -329,6 +329,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-os', OFF) /** @since 0.89.4 */
+    .addRule('require-package-json-export', ERROR) /** @since 1.10.0 */
     .addRule('require-packageManager', OFF) /** @since 0.89.3 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-peerDependenciesMeta', OFF) /** @since 1.1.0 */

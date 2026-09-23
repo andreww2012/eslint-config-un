@@ -348,8 +348,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.1.0)(eslint@10.11.0)
       eslint-plugin-package-json:
-        specifier: 1.9.0
-        version: 1.9.0(@eslint/json@2.1.0)(eslint@10.11.0)
+        specifier: 1.10.0
+        version: 1.10.0(@eslint/json@2.1.0)(eslint@10.11.0)
       eslint-plugin-pnpm:
         specifier: 1.9.1
         version: 1.9.1(@eslint/json@2.1.0)(eslint@10.11.0)
@@ -8269,8 +8269,8 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
-  eslint-plugin-package-json@1.9.0:
-    resolution: {integrity: sha512-Q18c0/YIAYhtlLoBzqA6qNO2dJmNHARlIARPROH9MZ/l0B1u/JafEtc0XNcuTXgYdvFUrhv649Z3sd5T4mO9ww==}
+  eslint-plugin-package-json@1.10.0:
+    resolution: {integrity: sha512-AlpAWxrBXLJsvHc8dHPIo579Cih4UZR8jmR9qhLSGDZfYvBBhRJ39p8zuEsdDGh3fS1OEg9HuFcEqFFEIi5baw==}
     engines: {node: ^22.22.2 || >=24.15.0}
     peerDependencies:
       '@eslint/json': '>=1.0.0'
@@ -21445,7 +21445,7 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/json'
 
-  eslint-plugin-package-json@1.9.0(@eslint/json@2.1.0)(eslint@10.11.0):
+  eslint-plugin-package-json@1.10.0(@eslint/json@2.1.0)(eslint@10.11.0):
     dependencies:
       '@altano/repository-tools': 2.1.1
       '@types/estree': 1.0.9
