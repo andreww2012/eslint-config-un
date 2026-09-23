@@ -7,61 +7,9 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-de-morgan@2.2.0
-  - eslint-plugin-sentences-per-line@0.1.6
-  - sentences-per-line@0.5.6
-  - '@eslint-react/ast@5.20.5'
-  - '@eslint-react/core@5.20.5'
-  - '@eslint-react/eslint-plugin@5.20.5'
-  - '@eslint-react/eslint@5.20.5'
-  - '@eslint-react/jsx@5.20.5'
-  - '@eslint-react/shared@5.20.5'
-  - '@eslint-react/var@5.20.5'
-  - eslint-plugin-react-debug@5.20.5
-  - eslint-plugin-react-dom@5.20.5
-  - eslint-plugin-react-jsx@5.20.5
-  - eslint-plugin-react-naming-convention@5.20.5
-  - eslint-plugin-react-rsc@5.20.5
-  - eslint-plugin-react-web-api@5.20.5
-  - eslint-plugin-react-x@5.20.5
-  - '@tanstack/eslint-plugin-query@5.103.2'
-  - '@effect/platform-node-shared@4.0.0-rc.117'
-  - '@effect/platform-node@4.0.0-rc.117'
-  - '@oxfmt/binding-android-arm-eabi@0.69.0'
-  - '@oxfmt/binding-android-arm64@0.69.0'
-  - '@oxfmt/binding-darwin-arm64@0.69.0'
-  - '@oxfmt/binding-darwin-x64@0.69.0'
-  - '@oxfmt/binding-freebsd-x64@0.69.0'
-  - '@oxfmt/binding-linux-arm-gnueabihf@0.69.0'
-  - '@oxfmt/binding-linux-arm-musleabihf@0.69.0'
-  - '@oxfmt/binding-linux-arm64-gnu@0.69.0'
-  - '@oxfmt/binding-linux-arm64-musl@0.69.0'
-  - '@oxfmt/binding-linux-ppc64-gnu@0.69.0'
-  - '@oxfmt/binding-linux-riscv64-gnu@0.69.0'
-  - '@oxfmt/binding-linux-riscv64-musl@0.69.0'
-  - '@oxfmt/binding-linux-s390x-gnu@0.69.0'
-  - '@oxfmt/binding-linux-x64-gnu@0.69.0'
-  - '@oxfmt/binding-linux-x64-musl@0.69.0'
-  - '@oxfmt/binding-openharmony-arm64@0.69.0'
-  - '@oxfmt/binding-win32-arm64-msvc@0.69.0'
-  - '@oxfmt/binding-win32-ia32-msvc@0.69.0'
-  - '@oxfmt/binding-win32-x64-msvc@0.69.0'
-  - effect@4.0.0-rc.117
-  - oxfmt@0.69.0
-  - '@typescript-eslint/eslint-plugin@8.70.1'
-  - '@typescript-eslint/parser@8.70.1'
-  - '@typescript-eslint/project-service@8.70.1'
-  - '@typescript-eslint/scope-manager@8.70.1'
-  - '@typescript-eslint/tsconfig-utils@8.70.1'
-  - '@typescript-eslint/type-utils@8.70.1'
-  - '@typescript-eslint/types@8.70.1'
-  - '@typescript-eslint/typescript-estree@8.70.1'
-  - '@typescript-eslint/utils@8.70.1'
-  - '@typescript-eslint/visitor-keys@8.70.1'
-  - typescript-eslint@8.70.1
+minimumReleaseAgeExclude: # []
   - eslint-plugin-qwik@1.20.1
+  - eslint-plugin-turbo@2.11.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -69,8 +17,7 @@ trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
 audit:
-  ignore:
-    # []
+  ignore: # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
   ignorePrune: true
 
