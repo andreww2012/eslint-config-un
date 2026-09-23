@@ -7,9 +7,11 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: # []
+minimumReleaseAgeExclude:
+  # []
   - eslint-plugin-qwik@1.20.1
   - eslint-plugin-turbo@2.11.3
+  - knip@6.38.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -17,7 +19,8 @@ trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
 audit:
-  ignore: # []
+  ignore:
+    # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
   ignorePrune: true
 
