@@ -46,12 +46,6 @@ declare module 'eslint-plugin-no-unsanitized' {
   export = value;
 }
 
-declare module 'eslint-plugin-mobx' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
 declare module 'eslint-plugin-you-dont-need-lodash-underscore' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   const value: EslintPlugin;

@@ -721,8 +721,8 @@ importers:
         specifier: 0.9.1
         version: 0.9.1(@eslint/markdown@8.0.3)(eslint@10.11.0)
       eslint-plugin-mobx:
-        specifier: 0.0.14
-        version: 0.0.14(eslint@10.11.0)
+        specifier: 0.1.0
+        version: 0.1.0(eslint@10.11.0)
       eslint-plugin-mocha:
         specifier: 12.0.2
         version: 12.0.2(eslint@10.11.0)
@@ -8209,8 +8209,8 @@ packages:
     peerDependencies:
       eslint: '>=8.0.0'
 
-  eslint-plugin-mobx@0.0.14:
-    resolution: {integrity: sha512-zAGGBly8rESDiS9EnGZhwURwnIYG4c2HO88+K+v7T/jBgRMYA+ZoRdUu6eRgEp/WeM1p3laCfECW8fGe3sK9xA==}
+  eslint-plugin-mobx@0.1.0:
+    resolution: {integrity: sha512-Ag3epjytp4jQqmfKLsKhGke9fiY9pYFtqQ4VSgWdkqoFmp5el8miVczB7TvvWz9HDs74+mExK2sGOAcwqcnu4g==}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
@@ -21378,8 +21378,10 @@ snapshots:
       - remark-lint-file-extension
       - supports-color
 
-  eslint-plugin-mobx@0.0.14(eslint@10.11.0):
+  eslint-plugin-mobx@0.1.0(eslint@10.11.0):
     dependencies:
+      '@types/eslint': 9.6.1
+      '@types/estree': 1.0.9
       eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
 
   eslint-plugin-mocha@12.0.2(eslint@10.11.0):
