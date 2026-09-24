@@ -110,6 +110,7 @@ jobs:
           - pnpm-gvs
           - yarn-classic
           - yarn-berry-pnp
+          - yarn-berry-pnp-workspace
           - yarn-berry-node-modules
           - bun
           - aube

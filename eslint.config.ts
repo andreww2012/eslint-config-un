@@ -206,6 +206,8 @@ export default eslintConfig({
               '@angular-eslint/template-parser',
               // Inlined plugins format with the user's Prettier, which can be any 3.x version
               'prettier',
+              // Must stay a peer: under Yarn PnP, `typescript-eslint` can only get the `typescript` it requires through us, and it checks the version itself
+              'typescript',
             ],
           },
         ],

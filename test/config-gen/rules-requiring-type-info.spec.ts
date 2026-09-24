@@ -1,7 +1,11 @@
 import {GLOB_SVELTE, GLOB_TS_X} from '../../src/constants';
 
 describe('rules requiring type information', () => {
-  describe('`ts/typeAware/setup` config is disabled', () => {
+  describe('`ts/typeAware/setup` config is disabled, but `typescript` is installed', () => {
+    beforeEach(() => {
+      addInstalledPackages({typescript: '5.9.0'});
+    });
+
     it('moves rules requiring type info to a separate config and enables a parser', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {internalOptions: {}});
 
@@ -220,6 +224,24 @@ describe('rules requiring type information', () => {
         'functional/prefer-immutable-types': 0,
         'disable-autofix/functional/prefer-immutable-types': 2,
       });
+    });
+  });
+
+  describe('`typescript` is not installed', () => {
+    // Otherwise projects without TypeScript would crash on loading the parser
+    it('creates a separate config with "typed" rules, but sets up no parser', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {internalOptions: {}});
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.rules,
+      ).toStrictEqual({'eslint-plugin/no-property-in-node': 2});
+      expect(
+        configResult.config.map(({languageOptions}) => languageOptions?.['parser']),
+      ).not.toContainEqual(
+        expect.objectContaining({
+          meta: expect.objectContaining({name: 'typescript-eslint/parser'}) as unknown,
+        }) as unknown,
+      );
     });
   });
 

@@ -110,6 +110,9 @@ describe('rules', () => {
   });
 
   it('`awscdk/no-mutable-property-of-props-interface` rule fires on a mutable property of a props interface', async () => {
+    // The TypeScript parser is only set up for the split off typed rules when it can load
+    addInstalledPackages({typescript: '5.9.0'});
+
     const results = await testEslintConfig('awsCdk', FIXTURES.propsInterfaceWithMutableProperty, {
       searchFixturesRelativeToPath: import.meta.dirname,
       internalOptions: {skipTypeInfoSplit: false},

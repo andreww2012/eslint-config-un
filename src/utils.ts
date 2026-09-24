@@ -189,20 +189,29 @@ const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   }
 };
 
+const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
+  try {
+    // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
+    return pnpApi?.resolveToUnqualified(`${packageName}/package.json`, issuer) || null;
+  } catch {
+    return null;
+  }
+};
+
 const resolvePackageJsonPath = (packageName: string) => {
+  // With pnpm's global virtual store or in Yarn PnP workspaces, we only reach our own dependencies
+  const projectDir = `${process.cwd()}${path.sep}`;
+
   if (pnpApi) {
-    try {
-      // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
-      return pnpApi.resolveToUnqualified(`${packageName}/package.json`, import.meta.filename);
-    } catch {
-      return null;
-    }
+    return (
+      resolvePackageJsonPathWithPnp(packageName, import.meta.filename) ||
+      resolvePackageJsonPathWithPnp(packageName, projectDir)
+    );
   }
 
   return (
     resolvePackageJsonUrl(packageName, import.meta.url) ||
-    // pnpm's global virtual store keeps us outside the project, where only our own dependencies are reachable
-    resolvePackageJsonUrl(packageName, url.pathToFileURL(`${process.cwd()}${path.sep}`).href)
+    resolvePackageJsonUrl(packageName, url.pathToFileURL(projectDir).href)
   );
 };
 

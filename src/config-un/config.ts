@@ -515,7 +515,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   await loadManifestConfig('ts');
 
   if (typeInfoRulesUserMode == null) {
-    context.typeInfoRulesResolved.mode = configResults.ts ? 'splitOnly' : 'standalone';
+    context.typeInfoRulesResolved.mode =
+      // The parser that `standalone` mode sets up can't load without TypeScript
+      configResults.ts || context.packagesInfo.typescript == null ? 'splitOnly' : 'standalone';
   }
 
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =

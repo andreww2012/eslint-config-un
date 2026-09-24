@@ -598,7 +598,8 @@ export interface EslintConfigUnOptions<
    * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` config is enabled
    * (and in `disabled` mode that combination is contradictory, since it both turns off throwing
    * rules and configures type information).
-   * @default 'splitOnly' if the `ts` config is enabled, otherwise 'standalone'
+   * @default 'standalone' if the `ts` config is disabled and `typescript` is installed, otherwise
+   * 'splitOnly'
    */
   typeInfoRules?:
     | TypeInfoMode

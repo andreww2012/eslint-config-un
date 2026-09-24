@@ -26,6 +26,10 @@ const COMMAND_REPORT_STDOUT_MAX_LENGTH = 2000;
 
 const FIXTURE_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', 'project');
 
+const FIXTURE_JS_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', 'project-js');
+
+const WORKSPACE_PACKAGE_DIR = 'packages/app';
+
 const FIXTURE_EXAMPLE_LINES = (
   await fs.readFile(path.join(FIXTURE_PROJECT_DIR, 'src', 'example.ts'), 'utf8')
 ).split('\n');
@@ -97,6 +101,8 @@ const PACKAGE_MANAGERS: {
   install: CommandLine;
   eslint: CommandLine;
   getFiles?: (registryUrl: string) => Record<string, string>;
+  // Installs the project as a workspace package, leaving the monorepo root without dependencies
+  isWorkspacePackage?: boolean;
 }[] = [
   {
     id: 'npm',
@@ -131,6 +137,15 @@ const PACKAGE_MANAGERS: {
     install: ['yarn', 'install'],
     eslint: ['yarn', 'eslint'],
     getFiles: (registryUrl) => getYarnBerryFiles(registryUrl, 'pnp'),
+  },
+  {
+    id: 'yarn-berry-pnp-workspace',
+    npmPackage: YARN_BERRY,
+    install: ['yarn', 'install'],
+    eslint: ['yarn', 'eslint'],
+    getFiles: (registryUrl) => getYarnBerryFiles(registryUrl, 'pnp'),
+    // PnP only falls back to the root's dependencies, so a workspace's ones reach ours only as our peers
+    isWorkspacePackage: true,
   },
   {
     id: 'yarn-berry-node-modules',
@@ -208,6 +223,74 @@ const getMessagesByFileName = (lintOutput: string) =>
 const getFixtureExampleLine = (lineStart: string) =>
   FIXTURE_EXAMPLE_LINES.findIndex((line) => line.startsWith(lineStart)) + 1;
 
+const setUpProject = async (
+  {id, npmPackage, install, getFiles, isWorkspacePackage}: (typeof PACKAGE_MANAGERS)[number],
+  fixtureDir: string,
+  devDependencies: Record<string, string | undefined>,
+) => {
+  const packageManagerBinDir = npmPackage && (await installPackageManager(npmPackage));
+  const env = {
+    ...CHILD_PROCESS_ENV,
+    PATH: [packageManagerBinDir, path.dirname(process.execPath), process.env['PATH']]
+      .filter(Boolean)
+      .join(path.delimiter),
+  };
+
+  const registryUrl = inject('registryUrl');
+  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), `un-e2e-${id}-`));
+  onTestFinished(() => fs.rm(rootDir, {recursive: true, force: true}));
+
+  const projectDir = isWorkspacePackage ? path.join(rootDir, WORKSPACE_PACKAGE_DIR) : rootDir;
+  await fs.cp(fixtureDir, projectDir, {recursive: true});
+
+  const projectManifest = JSON.stringify({
+    private: true,
+    type: 'module',
+    devDependencies: {...devDependencies, [packageJson.name]: inject('packageVersion')},
+  });
+  const files = {
+    ...(isWorkspacePackage
+      ? {
+          'package.json': JSON.stringify({private: true, workspaces: [WORKSPACE_PACKAGE_DIR]}),
+          [path.join(WORKSPACE_PACKAGE_DIR, 'package.json')]: projectManifest,
+        }
+      : {'package.json': projectManifest}),
+    '.npmrc': `registry=${registryUrl}\n`,
+    ...getFiles?.(registryUrl),
+  };
+  await Promise.all(
+    Object.entries(files).map(([fileName, contents]) =>
+      fs.writeFile(path.join(rootDir, fileName), contents),
+    ),
+  );
+
+  const commandReports: string[] = [];
+  onTestFailed(() => {
+    console.error(commandReports.join('\n\n'));
+  });
+
+  const run = async (commandLine: CommandLine, cwd = projectDir) => {
+    const [command, ...args] = commandLine;
+    const result = await exec(command, args, {
+      // Otherwise the Node directory, which may have Corepack's shims, would precede the package manager
+      nodePath: false,
+      nodeOptions: {cwd, env},
+    });
+    commandReports.push(
+      [
+        `$ ${commandLine.join(' ')} (exit code ${result.exitCode})`,
+        result.stderr,
+        result.stdout.slice(-COMMAND_REPORT_STDOUT_MAX_LENGTH),
+      ].join('\n'),
+    );
+    return result;
+  };
+
+  await expect(run(install, rootDir)).resolves.toHaveProperty('exitCode', 0);
+
+  return run;
+};
+
 beforeAll(() => {
   if (
     SELECTED_PACKAGE_MANAGER_ID != null &&
@@ -217,66 +300,17 @@ beforeAll(() => {
   }
 });
 
-describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFiles}) => {
-  it('installs from the registry and lints the project', async ({skip}) => {
+describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
+  const {id, eslint} = packageManager;
+
+  beforeEach(({skip}) => {
     if (SELECTED_PACKAGE_MANAGER_ID != null && SELECTED_PACKAGE_MANAGER_ID !== id) {
       skip();
     }
+  });
 
-    const packageManagerBinDir = npmPackage && (await installPackageManager(npmPackage));
-    const env = {
-      ...CHILD_PROCESS_ENV,
-      PATH: [packageManagerBinDir, path.dirname(process.execPath), process.env['PATH']]
-        .filter(Boolean)
-        .join(path.delimiter),
-    };
-
-    const registryUrl = inject('registryUrl');
-    const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), `un-e2e-${id}-`));
-    onTestFinished(() => fs.rm(projectDir, {recursive: true, force: true}));
-
-    await fs.cp(FIXTURE_PROJECT_DIR, projectDir, {recursive: true});
-    const files = {
-      'package.json': JSON.stringify({
-        private: true,
-        type: 'module',
-        devDependencies: {
-          ...FIXTURE_DEPENDENCIES,
-          [packageJson.name]: inject('packageVersion'),
-        },
-      }),
-      '.npmrc': `registry=${registryUrl}\n`,
-      ...getFiles?.(registryUrl),
-    };
-    await Promise.all(
-      Object.entries(files).map(([fileName, contents]) =>
-        fs.writeFile(path.join(projectDir, fileName), contents),
-      ),
-    );
-
-    const commandReports: string[] = [];
-    onTestFailed(() => {
-      console.error(commandReports.join('\n\n'));
-    });
-
-    const run = async (commandLine: CommandLine) => {
-      const [command, ...args] = commandLine;
-      const result = await exec(command, args, {
-        // Otherwise the Node directory, which may have Corepack's shims, would precede the package manager
-        nodePath: false,
-        nodeOptions: {cwd: projectDir, env},
-      });
-      commandReports.push(
-        [
-          `$ ${commandLine.join(' ')} (exit code ${result.exitCode})`,
-          result.stderr,
-          result.stdout.slice(-COMMAND_REPORT_STDOUT_MAX_LENGTH),
-        ].join('\n'),
-      );
-      return result;
-    };
-
-    await expect(run(install)).resolves.toHaveProperty('exitCode', 0);
+  it('installs from the registry and lints the project', async () => {
+    const run = await setUpProject(packageManager, FIXTURE_PROJECT_DIR, FIXTURE_DEPENDENCIES);
 
     const printConfigResult = await run([...eslint, '--print-config', 'src/example.ts']);
 
@@ -329,5 +363,22 @@ describe.each(PACKAGE_MANAGERS)('$id', ({id, npmPackage, install, eslint, getFil
     expect(lintResult.stderr).toContain('Processing:');
     // Fatal errors, like parsing ones, have no rule
     expect([...messagesByFileName.values()].flat().map(({ruleId}) => ruleId)).not.toContain(null);
+  });
+
+  // Only some package managers install `typescript` on their own, as a peer of `typescript-eslint`
+  it('lints a project without TypeScript', async () => {
+    const run = await setUpProject(packageManager, FIXTURE_JS_PROJECT_DIR, {
+      eslint: packageJson.devDependencies.eslint,
+    });
+
+    const lintResult = await run([...eslint, '--format', 'json', 'src/example.js']);
+
+    // The fixture has lint errors on purpose, while a crash exits with 2
+    expect(lintResult.exitCode).toBe(1);
+    expect(
+      getMessagesByFileName(lintResult.stdout)
+        .get('example.js')
+        ?.map(({ruleId}) => ruleId),
+    ).toContain('no-eval');
   });
 });

@@ -260,6 +260,22 @@ describe('fetchPackageInfo', () => {
       );
     });
 
+    it('falls back to resolving from the current working directory', async () => {
+      resolveToUnqualified.mockImplementation((_request, issuer) => {
+        if (issuer.endsWith('utils.ts')) {
+          throw new Error('not declared in its dependencies');
+        }
+        return fixturePath(FIXTURES.plainObjectJson);
+      });
+      const utils = await importUtilsUnderPnp();
+
+      expect((await utils.fetchPackageInfo('clsx'))?.info).toStrictEqual({greeting: 'hello'});
+      expect(resolveToUnqualified).toHaveBeenLastCalledWith(
+        'clsx/package.json',
+        `${process.cwd()}${path.sep}`,
+      );
+    });
+
     it('returns `null` when the PnP API cannot resolve the package', async () => {
       resolveToUnqualified.mockImplementation(() => {
         throw new Error('not declared in its dependencies');

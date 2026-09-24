@@ -460,6 +460,7 @@
     "prettier": "^3",
     "svelte-eslint-parser": "^1.8.1",
     "tailwind-csstree": "^0.4.0",
+    "typescript": "*",
     "vue-eslint-parser": "^10.4.1"
   },
   "peerDependenciesMeta": {
@@ -794,6 +795,9 @@
       "optional": true
     },
     "tailwind-csstree": {
+      "optional": true
+    },
+    "typescript": {
       "optional": true
     },
     "vue-eslint-parser": {

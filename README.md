@@ -1086,9 +1086,9 @@ By default, every such rule is *automatically **moved*** into a separate ESLint 
 The mode (the string value, or the `mode` property) chooses the strategy:
 
 - `standalone`: the split happens, and the parser, including [`projectService`](https://typescript-eslint.io/packages/parser/#projectservice), is configured in the generated config.
-  This is the default when the `ts` config is **disabled**.
+  This is the default when the `ts` config is **disabled** but `typescript` is installed.
 - `splitOnly`: the split happens, but no parser is configured: the project service is expected to come from the `parsing` root option, which the `ts` config sets up.
-  This is the default when that config is **enabled**, which is the most common case.
+  This is the default when that config is **enabled**, which is the most common case, or when `typescript` is not installed, since the parser cannot load without it.
 - `asIs`: no split happens, and the rules stay in their original configs.
   Making type information available to them is up to you.
 - `disabled`: no split happens, and every rule that *throws* without type information is turned off everywhere.
