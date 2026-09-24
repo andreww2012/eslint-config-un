@@ -224,6 +224,15 @@ const resolveOwnPackageJsonUrl = (packageName: string) => {
 export const isOwnCopyImportable = (packageName: string) =>
   !isInstalledInSharedStore || resolveOwnPackageJsonUrl(packageName) != null;
 
+/** Resolves the module the way the project itself would, which importing it from our own code may not */
+export const resolveFromProject = (specifier: string, projectDir: string) => {
+  try {
+    return resolvePackage(specifier, url.pathToFileURL(`${projectDir}${path.sep}`).href);
+  } catch {
+    return null;
+  }
+};
+
 const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
   try {
     // Unqualified resolution skips `exports`, so `package.json` is found even if not exported

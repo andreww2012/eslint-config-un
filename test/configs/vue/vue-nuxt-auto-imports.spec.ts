@@ -48,6 +48,37 @@ const resolveFromFixture = async (options?: {cwd?: string; buildDir?: string}) =
   return result && 'globals' in result ? result : null;
 };
 
+// Outside the repository, so its own `nuxt` isn't reachable from there
+const createNuxtProject = async (nuxtKitSource?: string) => {
+  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-project-'));
+  onTestFinished(() => fs.rm(projectDir, {recursive: true, force: true}));
+
+  await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {};\n');
+  if (nuxtKitSource != null) {
+    const nuxtDir = path.join(projectDir, 'node_modules', 'nuxt');
+    await fs.mkdir(nuxtDir, {recursive: true});
+    await Promise.all([
+      fs.writeFile(
+        path.join(nuxtDir, 'package.json'),
+        JSON.stringify({name: 'nuxt', type: 'module', exports: {'./kit': './kit.js'}}),
+      ),
+      fs.writeFile(path.join(nuxtDir, 'kit.js'), nuxtKitSource),
+    ]);
+  }
+
+  return projectDir;
+};
+
+// Nothing is linked next to it, so whatever the code finds from its real location is not its own
+const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
+  os.tmpdir(),
+  'shared-store',
+  'eslint-config-un@1.0.0',
+  'node_modules',
+  'eslint-config-un',
+  'package.json',
+);
+
 const createAutoImports = (overrides?: Partial<NuxtAutoImports>): NuxtAutoImports => ({
   buildDir: '/project/.nuxt',
   dirs: {app: 'app', server: 'server', shared: 'shared'},
@@ -484,5 +515,55 @@ describe('vue: `resolveNuxtAutoImports`', () => {
       'MyDirective',
       'my-directive',
     ]);
+  });
+
+  describe('loading the Nuxt config', () => {
+    afterEach(() => {
+      vi.doUnmock(import('empathic/package'));
+      vi.resetModules();
+    });
+
+    // Our own location may be in a store shared between projects, where it reaches another project's Nuxt or none at all
+    it("uses the project's own Nuxt", async () => {
+      const {resolveNuxtAutoImports} = await importActualShared();
+      const projectDir = await createNuxtProject(
+        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, serverDir: cwd, dir: {}});\n",
+      );
+
+      const result = await resolveNuxtAutoImports({cwd: projectDir});
+
+      expect(result && 'buildDir' in result ? result.buildDir : null).toBe(
+        path.join(projectDir, 'own-nuxt-build'),
+      );
+    });
+
+    // Like under Yarn PnP, where there is no `node_modules` to resolve from
+    it('falls back to the Nuxt reachable from its own location when the project has none to resolve', async () => {
+      const {resolveNuxtAutoImports} = await importActualShared();
+      const projectDir = await createNuxtProject();
+
+      const result = await resolveNuxtAutoImports({cwd: projectDir});
+
+      expect(result).not.toHaveProperty('error');
+      expect(result && 'buildDir' in result ? result.buildDir : null).toBe(
+        path.join(projectDir, '.nuxt'),
+      );
+    });
+
+    it('does not fall back to the Nuxt of another project when installed in a store shared between projects', async () => {
+      // The mock from the setup file would keep serving the utilities evaluated outside the store
+      vi.doUnmock(import('../../../src/utils'));
+      vi.resetModules();
+      vi.doMock(import('empathic/package'), async (importOriginal) => ({
+        ...(await importOriginal()),
+        up: () => SHARED_STORE_PACKAGE_JSON_PATH,
+      }));
+      const {resolveNuxtAutoImports} = await importActualShared();
+      const projectDir = await createNuxtProject();
+
+      await expect(resolveNuxtAutoImports({cwd: projectDir})).resolves.toMatchObject({
+        error: "Cannot find package 'nuxt'",
+      });
+    });
   });
 });

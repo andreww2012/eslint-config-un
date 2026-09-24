@@ -26,9 +26,11 @@ import {
   type AllUnionMembers,
   arrayify,
   describeError,
+  isOwnCopyImportable,
   objectEntriesUnsafe,
   pick,
   readFileSafe,
+  resolveFromProject,
   sha256,
   toKebabCase,
 } from '../utils';
@@ -454,10 +456,25 @@ export interface NuxtAutoImportsFailure {
 
 export type NuxtAutoImportsResult = NuxtAutoImports | NuxtAutoImportsFailure;
 
+const importNuxtKit = async (cwd: string) => {
+  const nuxtKitUrl = resolveFromProject('nuxt/kit', cwd);
+  if (nuxtKitUrl) {
+    // eslint-disable-next-line no-unsanitized/method -- resolved from a fixed specifier
+    return (await import(nuxtKitUrl)) as typeof import('nuxt/kit');
+  }
+
+  // Yarn PnP has no `node_modules` to resolve from, while a store shared between projects may hold another project's Nuxt
+  if (isOwnCopyImportable('nuxt')) {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    return await import('nuxt/kit');
+  }
+
+  throw new Error("Cannot find package 'nuxt'");
+};
+
 const loadNuxtOptions = async (cwd: string) => {
   try {
-    // eslint-disable-next-line import/no-extraneous-dependencies
-    const {loadNuxtConfig} = await import('nuxt/kit');
+    const {loadNuxtConfig} = await importNuxtKit(cwd);
     // `dev` because Nuxt otherwise moves the build directory under `node_modules`, while the
     // development one is where `nuxt prepare` generates the type artifacts.
     // `dotenv` because loading a config otherwise injects the linted project's `.env` into
