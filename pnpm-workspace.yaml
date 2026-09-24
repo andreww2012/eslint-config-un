@@ -11,6 +11,10 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-html@8.2.1
   - eslint-plugin-perfectionist@5.12.1
   - eslint-plugin-vue@10.11.1
+  - '@tsrx/core@0.3.3'
+  - '@tsrx/eslint-parser@0.4.11'
+  - '@tsrx/eslint-plugin@0.4.11'
+  - '@tsrx/runtime@0.2.3'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
