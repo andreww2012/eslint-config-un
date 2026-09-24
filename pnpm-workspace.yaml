@@ -15,6 +15,20 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/eslint-parser@0.4.11'
   - '@tsrx/eslint-plugin@0.4.11'
   - '@tsrx/runtime@0.2.3'
+  - '@eslint-react/ast@5.20.8'
+  - '@eslint-react/core@5.20.8'
+  - '@eslint-react/eslint-plugin@5.20.8'
+  - '@eslint-react/eslint@5.20.8'
+  - '@eslint-react/jsx@5.20.8'
+  - '@eslint-react/shared@5.20.8'
+  - '@eslint-react/var@5.20.8'
+  - eslint-plugin-react-debug@5.20.8
+  - eslint-plugin-react-dom@5.20.8
+  - eslint-plugin-react-jsx@5.20.8
+  - eslint-plugin-react-naming-convention@5.20.8
+  - eslint-plugin-react-rsc@5.20.8
+  - eslint-plugin-react-web-api@5.20.8
+  - eslint-plugin-react-x@5.20.8
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
