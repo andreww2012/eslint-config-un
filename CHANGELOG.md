@@ -1,5 +1,29 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.3
+
+### Minor Changes
+
+- 46e71a8: packageJson: updated [`eslint-plugin-package-json` from v1.9.0 to v1.10.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.9.0...v1.10.0):
+  
+  - 🟢 enabled [`package-json/require-package-json-export`](https://eslint-plugin-package-json.dev/rules/require-package-json-export) rule
+
+### Patch Changes
+
+- f0b7136: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.5.5 to v7.5.6](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.5.5...v7.5.6)
+- 8792bf8: perfectionist: updated [`eslint-plugin-perfectionist` from v5.11.1 to v5.12.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.11.1...v5.12.1)
+- 4eb624f: formatJs: updated [`eslint-plugin-formatjs` from v8.0.5 to v8.1.0](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@8.0.5...eslint-plugin-formatjs@8.1.0)
+- 3992d68: vue: updated [`eslint-plugin-vue` from v10.11.0 to v10.11.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.11.0...v10.11.1)
+- eb268c1: turbo: updated [`eslint-plugin-turbo` from v2.11.2 to v2.11.3](https://github.com/vercel/turborepo/compare/v2.11.2...v2.11.3)
+- 3a2941e: nextJs: updated [`@next/eslint-plugin-next` from v16.3.5 to v16.3.6](https://github.com/vercel/next.js/compare/v16.3.5...v16.3.6)
+- 688d3c6: mobx: updated [`eslint-plugin-mobx` from v0.0.14 to v0.1.0](https://github.com/mobxjs/mobx/compare/eslint-plugin-mobx@0.0.13...eslint-plugin-mobx@0.1.0)
+- bd34596: astro: updated [`astro-eslint-parser` from v3.1.0 to v3.2.0](https://github.com/ota-meshi/astro-eslint-parser/compare/v3.1.0...v3.2.0)
+- 7157ba0: jsInline: updated [`eslint-plugin-html` from v8.2.0 to v8.2.1](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.2.0...v8.2.1), which fixes ESLint v10.11.0+ compatibility, so our patch is dropped. It stays inlined, as otherwise it silently skips `<script>` tags under Yarn Plug'n'Play
+- 986c283: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.20.5 to v5.20.8](https://github.com/Rel1cx/eslint-react/compare/v5.20.5...v5.20.8)
+- 421edd2: fileProgress: `eslint-plugin-file-progress` is now inlined into the package with a patch that fixes the terminal cursor staying hidden after lint errors, crashes or Ctrl+C. Additionally, the end of ESLint output is no longer erased on success
+- f6ce4e3: qwik: updated [`eslint-plugin-qwik` from v1.20.0 to v1.20.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik@1.20.0...eslint-plugin-qwik@1.20.1)
+- 9dd5a5e: tsrx: updated [`@tsrx/eslint-{plugin,parser}` from v0.4.7 to v0.4.11](https://github.com/tsrx-org/tsrx/compare/@tsrx/eslint-plugin@0.4.7...@tsrx/eslint-plugin@0.4.11)
+
 ## 1.0.0-rc.2
 
 ### Minor Changes
