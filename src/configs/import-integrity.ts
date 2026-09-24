@@ -108,6 +108,7 @@ export type ImportIntegrityPluginSettings =
         ImportIntegrityPackagePluginSettings & {
           /**
            * Directory path in which the plugin scans for files in the current package.
+           * @default the current working directory
            * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#packagerootdir
            */
           packageRootDir?: string;
@@ -179,7 +180,6 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
         settings: {
           'import-integrity': withDefaultPackageRootDir(
             modeFromEnvironment ? {mode: modeFromEnvironment, ...pluginSettings} : pluginSettings,
-            import.meta.dirname,
           ),
         },
       },

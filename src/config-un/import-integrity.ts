@@ -11,9 +11,10 @@ import type {UnConfigContext} from './shared';
  */
 export const withDefaultPackageRootDir = (
   settings: ImportIntegrityPluginSettings | undefined,
-  packageRootDir: string,
 ): ImportIntegrityPluginSettings =>
-  settings && 'monorepoRootDir' in settings ? settings : {packageRootDir, ...settings};
+  settings && 'monorepoRootDir' in settings
+    ? settings
+    : {packageRootDir: process.cwd(), ...settings};
 
 // TODO: move to configs/import-integrity
 

@@ -204,6 +204,8 @@ export default eslintConfig({
               '@angular-eslint/eslint-plugin',
               '@angular-eslint/eslint-plugin-template',
               '@angular-eslint/template-parser',
+              // Inlined plugins format with the user's Prettier, which can be any 3.x version
+              'prettier',
             ],
           },
         ],

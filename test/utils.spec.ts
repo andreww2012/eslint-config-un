@@ -1,4 +1,6 @@
+import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
+import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import {
@@ -26,6 +28,26 @@ const MISSING_FILE_PATH = fixturePath('this-file-does-not-exist.json');
 const UTILS_SOURCE_FILE_REGEXP = /utils\.ts$/;
 
 const compareStrings = (a: string, b: string) => a.localeCompare(b);
+
+/** Makes the package available only from the current working directory */
+const stubProjectWithPackage = async (packageName: string, version: string) => {
+  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-utils-spec-'));
+  onTestFinished(() => fs.rm(projectDir, {recursive: true, force: true}));
+
+  const packageDir = path.join(projectDir, 'node_modules', packageName);
+  await fs.mkdir(packageDir, {recursive: true});
+  await Promise.all([
+    fs.writeFile(
+      path.join(packageDir, 'package.json'),
+      JSON.stringify({name: packageName, version}),
+    ),
+    // Resolution fails without the entry point
+    fs.writeFile(path.join(packageDir, 'index.js'), ''),
+  ]);
+
+  const cwd = vi.spyOn(process, 'cwd').mockReturnValue(projectDir);
+  onTestFinished(() => cwd.mockRestore());
+};
 
 // Please note: the pairs are harvested from whatever comparisons `Array#sort` happens to make,
 // and those may differ between V8 versions, so only engine-independent invariants are asserted
@@ -190,6 +212,19 @@ describe('fetchPackageInfo', () => {
 
   it('resolves a scoped package', async () => {
     expect((await fetchPackageInfo('@antfu/utils'))?.info.name).toBe('@antfu/utils');
+  });
+
+  it('falls back to resolving from the current working directory', async () => {
+    const packageName = 'this-package-is-only-in-the-project';
+    await stubProjectWithPackage(packageName, '1.2.3');
+
+    expect((await fetchPackageInfo(packageName))?.versions.full).toBe('1.2.3');
+  });
+
+  it('prefers the package resolved from its own location over the working directory one', async () => {
+    await stubProjectWithPackage('verkit', '0.0.0');
+
+    expect((await fetchPackageInfo('verkit'))?.versions.full).not.toBe('0.0.0');
   });
 
   describe('under Yarn PnP', () => {

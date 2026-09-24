@@ -632,7 +632,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         settings: {
           'import-integrity': withDefaultPackageRootDir(
             pluginsOptions['import-integrity']?.settings,
-            import.meta.dirname,
           ),
         },
       },

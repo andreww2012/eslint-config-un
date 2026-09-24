@@ -107,6 +107,7 @@ jobs:
         package-manager:
           - npm
           - pnpm
+          - pnpm-gvs
           - yarn-classic
           - yarn-berry-pnp
           - yarn-berry-node-modules

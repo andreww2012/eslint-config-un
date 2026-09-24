@@ -896,6 +896,9 @@ importers:
       pathe:
         specifier: 2.0.3
         version: 2.0.3
+      prettier:
+        specifier: 3.9.8
+        version: 3.9.8
       puppeteer:
         specifier: 25.11.0
         version: 25.11.0(proxy-agent@8.0.2)

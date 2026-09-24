@@ -150,15 +150,13 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('sets default `packageRootDir` by default', async () => {
+    it('sets `packageRootDir` to the current working directory by default', async () => {
       const configResult = await computeEslintConfig('importIntegrity');
 
       const settings =
         configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'];
 
-      expect(settings).toMatchObject({
-        packageRootDir: expect.stringMatching(/[/\\]configs$/) as unknown,
-      });
+      expect(settings).toMatchObject({packageRootDir: process.cwd()});
     });
 
     it('does not set `mode` when the resolved environment is `default`', async () => {

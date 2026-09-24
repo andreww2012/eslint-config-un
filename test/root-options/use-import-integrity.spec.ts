@@ -77,12 +77,12 @@ describe('option: `useImportIntegrity`', () => {
     ]);
   });
 
-  it('creates a settings config pointing the plugin at the package root directory', async () => {
+  it('creates a settings config pointing the plugin at the current working directory', async () => {
     const configResult = await computeImportConfig(true);
 
     expect(
       configResult.getConfigByUnPostfix(SETTINGS_CONFIG_NAME)?.settings?.['import-integrity'],
-    ).toStrictEqual({packageRootDir: expect.any(String) as unknown});
+    ).toStrictEqual({packageRootDir: process.cwd()});
   });
 
   it('merges the plugin settings into the settings config', async () => {
@@ -98,7 +98,7 @@ describe('option: `useImportIntegrity`', () => {
     expect(
       configResult.getConfigByUnPostfix(SETTINGS_CONFIG_NAME)?.settings?.['import-integrity'],
     ).toStrictEqual({
-      packageRootDir: expect.any(String) as unknown,
+      packageRootDir: process.cwd(),
       alias: ALIAS,
     });
   });

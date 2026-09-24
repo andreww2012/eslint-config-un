@@ -177,21 +177,33 @@ export const readAndParseJson = async <T>(filePath: string | URL | undefined): P
 const pnpApi: {resolveToUnqualified: (request: string, issuer: string) => string | null} | null =
   process.versions['pnp'] ? createRequire(import.meta.url)('pnpapi') : null;
 
-const resolvePackageJsonPath = (packageName: string) => {
+const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   try {
-    if (pnpApi) {
-      // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
-      return pnpApi.resolveToUnqualified(`${packageName}/package.json`, import.meta.filename);
-    }
-
     // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
     // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
-    resolvePackage(packageName, import.meta.url);
+    resolvePackage(packageName, parentUrl);
     return getLastResolvedPackageJsonUrl();
   } catch {
     // If module is not resolved, the error is thrown
     return null;
   }
+};
+
+const resolvePackageJsonPath = (packageName: string) => {
+  if (pnpApi) {
+    try {
+      // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
+      return pnpApi.resolveToUnqualified(`${packageName}/package.json`, import.meta.filename);
+    } catch {
+      return null;
+    }
+  }
+
+  return (
+    resolvePackageJsonUrl(packageName, import.meta.url) ||
+    // pnpm's global virtual store keeps us outside the project, where only our own dependencies are reachable
+    resolvePackageJsonUrl(packageName, url.pathToFileURL(`${process.cwd()}${path.sep}`).href)
+  );
 };
 
 export const fetchPackageInfo = async (

@@ -39,6 +39,8 @@ const PACKAGE_MANAGERS_INSTALL_DIR = path.join(
   'e2e-package-managers',
 );
 
+const PNPM = `pnpm@${packageJson.devEngines.packageManager.version}` as const;
+
 const YARN_BERRY = '@yarnpkg/cli-dist@4.18.0';
 
 const FIXTURE_DEPENDENCIES = {
@@ -47,7 +49,7 @@ const FIXTURE_DEPENDENCIES = {
   eslint: packageJson.devDependencies.eslint,
   'eslint-plugin-clsx': packageJson.devDependencies['eslint-plugin-clsx'],
   // Makes the inlined plugins spawn their Prettier workers
-  prettier: '3.9.6',
+  prettier: packageJson.devDependencies.prettier,
   // Our own `typescript` dev dependency is an npm alias, so only its version is reusable
   typescript: packageJson.devDependencies.typescript.split('@').at(-1),
 };
@@ -61,6 +63,17 @@ const CHILD_PROCESS_ENV = {
       .map((name) => [name, undefined]),
   ),
 };
+
+const getPnpmFiles = (extraSettings: string[] = []) => ({
+  'pnpm-workspace.yaml': [
+    'minimumReleaseAge: 0',
+    // Dependencies' build scripts aren't needed, and an empty store reports them as an error
+    'strictDepBuilds: false',
+    // Install adds the ignored build scripts to this file, so `exec` would install again and print into stdout
+    'verifyDepsBeforeRun: false',
+    ...extraSettings,
+  ].join('\n'),
+});
 
 const getYarnBerryFiles = (registryUrl: string, nodeLinker: 'node-modules' | 'pnp') => ({
   '.yarnrc.yml': [
@@ -93,16 +106,18 @@ const PACKAGE_MANAGERS: {
   },
   {
     id: 'pnpm',
-    npmPackage: `pnpm@${packageJson.devEngines.packageManager.version}`,
+    npmPackage: PNPM,
     install: ['pnpm', 'install', '--no-frozen-lockfile'],
     eslint: ['pnpm', 'exec', 'eslint'],
-    getFiles: () => ({
-      'pnpm-workspace.yaml': [
-        'minimumReleaseAge: 0',
-        // Dependencies' build scripts aren't needed, and an empty store reports them as an error
-        'strictDepBuilds: false',
-      ].join('\n'),
-    }),
+    getFiles: () => getPnpmFiles(),
+  },
+  {
+    id: 'pnpm-gvs',
+    npmPackage: PNPM,
+    install: ['pnpm', 'install', '--no-frozen-lockfile'],
+    // Unlike `pnpm exec`, adds no resolve hooks for the project's dependencies, just like editors
+    eslint: ['node', 'node_modules/eslint/bin/eslint.js'],
+    getFiles: () => getPnpmFiles(['virtualStoreType: global']),
   },
   {
     id: 'yarn-classic',
