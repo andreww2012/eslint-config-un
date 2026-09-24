@@ -47,6 +47,8 @@ const PNPM = `pnpm@${packageJson.devEngines.packageManager.version}` as const;
 
 const YARN_BERRY = '@yarnpkg/cli-dist@4.18.0';
 
+const AUBE = '@endevco/aube@2.2.4';
+
 const FIXTURE_DEPENDENCIES = {
   // Its `exports` don't expose `package.json`
   clsx: '2.1.1',
@@ -162,8 +164,16 @@ const PACKAGE_MANAGERS: {
   },
   {
     id: 'aube',
-    npmPackage: '@endevco/aube@2.2.4',
-    install: ['aube', 'install', '--no-frozen-lockfile'],
+    npmPackage: AUBE,
+    // Its global virtual store is only enabled outside CI by default
+    install: ['aube', 'install', '--no-frozen-lockfile', '--disable-global-virtual-store'],
+    eslint: ['aube', 'exec', 'eslint'],
+  },
+  {
+    id: 'aube-gvs',
+    npmPackage: AUBE,
+    // Unlike the one of pnpm, it hoists the packages of every project into one shared `node_modules`
+    install: ['aube', 'install', '--no-frozen-lockfile', '--enable-global-virtual-store'],
     eslint: ['aube', 'exec', 'eslint'],
   },
   {

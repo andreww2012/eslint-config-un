@@ -2,7 +2,15 @@ import type * as Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
-import {type MaybeArray, Mutex, arrayify, interopDefault, isKeyIn, maybeCall} from '../utils';
+import {
+  type MaybeArray,
+  Mutex,
+  arrayify,
+  interopDefault,
+  isKeyIn,
+  isOwnCopyImportable,
+  maybeCall,
+} from '../utils';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
 export type EslintParser = Eslint.Linter.Parser;
@@ -47,6 +55,17 @@ function createModuleLoader<T, N extends string>(
       const overriddenPluginModule = providedPlugin
         ? await interopDefault(maybeCall(providedPlugin) as T)
         : null;
+
+      // Otherwise the import could load another project's copy, which is not installed for us
+      if (
+        !overriddenPluginModule &&
+        isPluginOptionalPeerDependency &&
+        !isOwnCopyImportable(packageName)
+      ) {
+        throw Object.assign(new Error(`Cannot find package '${packageName}'`), {
+          code: 'ERR_MODULE_NOT_FOUND',
+        });
+      }
 
       return {
         module: overriddenPluginModule || (await interopDefault(module())),

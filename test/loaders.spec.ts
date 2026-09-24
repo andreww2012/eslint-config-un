@@ -1,3 +1,5 @@
+import os from 'node:os';
+import path from 'node:path';
 import {setImmediate} from 'node:timers/promises';
 import {MODULE_NOT_FOUND_ERROR_CODES, genModuleLoader} from '../src/loaders/shared';
 
@@ -6,6 +8,16 @@ const MISSING_PACKAGE = 'eslint-config-un-definitely-not-installed';
 const MISSING_RELATIVE_PATH = './definitely-not-a-file.mjs';
 
 const createLoaderContext = () => ({rootOptions: {}, missingPackages: new Map()});
+
+// Nothing is linked next to it, so whatever the code finds from its real location is not its own
+const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
+  os.tmpdir(),
+  'shared-store',
+  'eslint-config-un@1.0.0',
+  'node_modules',
+  'eslint-config-un',
+  'package.json',
+);
 
 describe('module loaders', () => {
   describe('missing packages reporting', () => {
@@ -134,6 +146,36 @@ describe('module loaders', () => {
 
       await expect(failingLoad).rejects.toThrow('Unexpected error');
       await expect(nextLoad).resolves.toMatchObject({module: {}});
+    });
+  });
+
+  describe('when installed in a store shared between projects', () => {
+    afterEach(() => {
+      vi.doUnmock(import('empathic/package'));
+      vi.resetModules();
+    });
+
+    // aube's global virtual store may hoist another project's copy where the import would find it
+    it('does not import an optional peer dependency that is not linked next to it', async () => {
+      // The mock from the setup file would keep serving the utilities evaluated outside the store
+      vi.doUnmock(import('../src/utils'));
+      vi.resetModules();
+      vi.doMock(import('empathic/package'), async (importOriginal) => ({
+        ...(await importOriginal()),
+        up: () => SHARED_STORE_PACKAGE_JSON_PATH,
+      }));
+      const {genModuleLoader: genModuleLoaderFromStore} = await import('../src/loaders/shared');
+      const importModule = vi.fn<() => Record<string, unknown>>(() => ({}));
+      const missingPackages = new Map<string, Set<string>>();
+
+      const loader = genModuleLoaderFromStore('clsx', 'eslint-plugin-clsx', importModule);
+
+      await expect(loader({rootOptions: {}, missingPackages})).resolves.toStrictEqual({
+        module: null,
+        packageName: 'eslint-plugin-clsx',
+      });
+      expect(importModule).not.toHaveBeenCalled();
+      expect(missingPackages.size).toBe(0);
     });
   });
 });

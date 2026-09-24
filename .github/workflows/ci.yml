@@ -114,6 +114,7 @@ jobs:
           - yarn-berry-node-modules
           - bun
           - aube
+          - aube-gvs
           - nub
         node-version: *node-versions
         # Deno lints with its own runtime, so the Node version doesn't matter

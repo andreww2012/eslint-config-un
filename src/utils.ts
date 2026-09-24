@@ -1,5 +1,6 @@
 // cspell:ignore pnpapi
 import crypto from 'node:crypto';
+import {existsSync} from 'node:fs';
 import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
@@ -7,6 +8,7 @@ import url from 'node:url';
 import {styleText} from 'node:util';
 import {arrayHasMinElements, arrayify, jsonParseSafe} from '@andreww2012/unutils';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
+import * as packageUtils from 'empathic/package';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {isInEditor as isInEditorOriginal} from 'is-in-editor';
@@ -177,6 +179,26 @@ export const readAndParseJson = async <T>(filePath: string | URL | undefined): P
 const pnpApi: {resolveToUnqualified: (request: string, issuer: string) => string | null} | null =
   process.versions['pnp'] ? createRequire(import.meta.url)('pnpapi') : null;
 
+const ownPackageDir = path.dirname(
+  packageUtils.up({cwd: import.meta.dirname}) || import.meta.dirname,
+);
+
+// Where our own dependencies and peers are linked for us
+const ownDependenciesDir = `${path.dirname(ownPackageDir)}${path.sep}`;
+
+// A project's `node_modules` sits next to its `package.json`, unlike the one of a store shared between projects
+const isInstalledInSharedStore = (() => {
+  const pathSegments = ownPackageDir.split(path.sep);
+  const nodeModulesIndex = pathSegments.indexOf('node_modules');
+  return (
+    !pnpApi &&
+    nodeModulesIndex !== -1 &&
+    !existsSync(
+      path.join(pathSegments.slice(0, nodeModulesIndex).join(path.sep) || path.sep, 'package.json'),
+    )
+  );
+})();
+
 const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   try {
     // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
@@ -189,6 +211,19 @@ const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   }
 };
 
+// aube's global virtual store hoists the packages of every project above ours, so only what is linked next to us is ours
+const resolveOwnPackageJsonUrl = (packageName: string) => {
+  const packageJsonUrl = resolvePackageJsonUrl(packageName, import.meta.url);
+  return packageJsonUrl &&
+    (!isInstalledInSharedStore || url.fileURLToPath(packageJsonUrl).startsWith(ownDependenciesDir))
+    ? packageJsonUrl
+    : null;
+};
+
+/** Whether importing the package from our own code loads the copy installed for us */
+export const isOwnCopyImportable = (packageName: string) =>
+  !isInstalledInSharedStore || resolveOwnPackageJsonUrl(packageName) != null;
+
 const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
   try {
     // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
@@ -199,7 +234,7 @@ const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
 };
 
 const resolvePackageJsonPath = (packageName: string) => {
-  // With pnpm's global virtual store or in Yarn PnP workspaces, we only reach our own dependencies
+  // In stores shared between projects or in Yarn PnP workspaces, we only reach our own dependencies
   const projectDir = `${process.cwd()}${path.sep}`;
 
   if (pnpApi) {
@@ -210,7 +245,7 @@ const resolvePackageJsonPath = (packageName: string) => {
   }
 
   return (
-    resolvePackageJsonUrl(packageName, import.meta.url) ||
+    resolveOwnPackageJsonUrl(packageName) ||
     resolvePackageJsonUrl(packageName, url.pathToFileURL(projectDir).href)
   );
 };

@@ -27,6 +27,25 @@ const MISSING_FILE_PATH = fixturePath('this-file-does-not-exist.json');
 
 const UTILS_SOURCE_FILE_REGEXP = /utils\.ts$/;
 
+// Nothing is linked next to it, so whatever the code finds from its real location is not its own
+const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
+  os.tmpdir(),
+  'shared-store',
+  'eslint-config-un@1.0.0',
+  'node_modules',
+  'eslint-config-un',
+  'package.json',
+);
+
+const importUtilsFromStore = async () => {
+  vi.resetModules();
+  vi.doMock(import('empathic/package'), async (importOriginal) => ({
+    ...(await importOriginal()),
+    up: () => SHARED_STORE_PACKAGE_JSON_PATH,
+  }));
+  return await vi.importActual<typeof import('../src/utils')>('../src/utils');
+};
+
 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
 /** Makes the package available only from the current working directory */
@@ -283,6 +302,25 @@ describe('fetchPackageInfo', () => {
       const utils = await importUtilsUnderPnp();
 
       await expect(utils.fetchPackageInfo('typescript')).resolves.toBeNull();
+    });
+  });
+
+  describe('when installed in a store shared between projects', () => {
+    afterEach(() => {
+      vi.doUnmock(import('empathic/package'));
+      vi.resetModules();
+    });
+
+    // Like the packages aube's global virtual store hoists from other projects
+    it('ignores packages reachable from its own location but not linked next to it', async () => {
+      const utils = await importUtilsFromStore();
+      await stubProjectWithPackage('this-package-is-only-in-the-project', '1.2.3');
+
+      expect(utils.isOwnCopyImportable('verkit')).toBe(false);
+      await expect(utils.fetchPackageInfo('verkit')).resolves.toBeNull();
+      expect(
+        (await utils.fetchPackageInfo('this-package-is-only-in-the-project'))?.versions.full,
+      ).toBe('1.2.3');
     });
   });
 });
