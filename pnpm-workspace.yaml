@@ -31,6 +31,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-x@5.20.8
   - actions-up@1.21.0
   - eslint-plugin-formatjs@8.1.0
+  - astro-eslint-parser@3.2.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
