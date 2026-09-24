@@ -7,11 +7,8 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-qwik@1.20.1
-  - eslint-plugin-turbo@2.11.3
-  - knip@6.38.0
+minimumReleaseAgeExclude: # []
+  - eslint-plugin-html@8.2.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -19,8 +16,7 @@ trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
 audit:
-  ignore:
-    # []
+  ignore: # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
   ignorePrune: true
 
@@ -57,7 +53,6 @@ overrides:
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
-  eslint-plugin-html@8.2.0: patches/eslint-plugin-html@8.2.0.patch
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
   eslint-plugin-prettier@5.5.6: patches/eslint-plugin-prettier@5.5.6.patch
   eslint-typegen: patches/eslint-typegen.patch
