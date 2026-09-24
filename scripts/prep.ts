@@ -222,12 +222,12 @@ ${perPluginCodeRaw
       .map(([ruleName, ruleDefinition]) => {
         const {
           deprecated,
+          docs,
           fixable,
           hasSuggestions,
           schema,
-          language,
+          languages,
           type: ruleType,
-          dialects,
         } = ruleDefinition.meta || {};
         const comment = [
           [
@@ -235,8 +235,8 @@ ${perPluginCodeRaw
             ruleType === 'suggestion' && '🤔',
             ruleType === 'layout' && '💅',
           ],
-          [language],
-          [dialects?.join(',')],
+          [languages?.join(',')],
+          [docs?.dialects?.join(',')],
           [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
           [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
         ]
