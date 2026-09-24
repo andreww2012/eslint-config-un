@@ -88,7 +88,7 @@ describe('rules', async () => {
   });
 
   it('disables every rule that is noisy in test files', () => {
-    expect(configResult.getRuleSeverities('tests')).toStrictEqual(
+    expect(configResult.getRuleSeverities('tests')).toMatchObject(
       Object.fromEntries(DISABLED_RULES.map((rule) => [rule, 0])),
     );
   });

@@ -69,6 +69,8 @@ describe('cascade order', () => {
       eslint-config-un/header
       eslint-config-un/headers
       eslint-config-un/html
+      eslint-config-un/i18next
+      eslint-config-un/i18next/vue
       eslint-config-un/import
       eslint-config-un/import/allow-default-export
       eslint-config-un/import-integrity

@@ -264,6 +264,9 @@ export const pluginsLoaders = {
   'html-svelte': genModuleLoader('html-svelte', '@html-eslint/eslint-plugin-svelte', () =>
     interopDefault(import('@html-eslint/eslint-plugin-svelte')),
   ),
+  i18next: genModuleLoader('i18next', 'eslint-plugin-i18next', () =>
+    interopDefault(import('eslint-plugin-i18next')),
+  ),
   import: genModuleLoader('import', 'eslint-plugin-import-x', () =>
     interopDefault(import('eslint-plugin-import-x')),
   ),
