@@ -35,8 +35,7 @@ export interface FileProgressPluginSettings {
 /**
  * An ESLint plugin to print file progress.
  *
- * Even if enabled, it will be disabled by default unless the resolved `environment`
- * root option is `default`.
+ * The progress is hidden unless the resolved `environment` root option is `default`.
  *
  * 📁 Default `files`: all files
  */
@@ -46,7 +45,7 @@ export interface FileProgressEslintConfigOptions<
 
 export default defineUnConfig<FileProgressEslintConfigOptions>(
   'fileProgress',
-  false,
+  true,
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 

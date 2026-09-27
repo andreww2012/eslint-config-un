@@ -69,7 +69,6 @@ export default eslintConfig({
       files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
     },
     expectType: true,
-    fileProgress: true,
     format: {
       files: [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS],
       formatter: [

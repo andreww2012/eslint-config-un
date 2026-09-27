@@ -75,25 +75,25 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('does not create `file-progress` eslint config', async () => {
-      await expectConfigState({}, 'file-progress', false, 'default');
+    it('creates `file-progress` eslint config by default', async () => {
+      await expectConfigState({}, 'file-progress', true, 'default');
     });
 
-    it('creates `file-progress` eslint config if explicitly enabled', async () => {
+    it('creates `file-progress` eslint config if explicitly enabled, without printing a warning', async () => {
       await expectConfigState('fileProgress', 'file-progress', true, 'default');
     });
 
-    it('does not create `file-progress` eslint config if explicitly disabled, without printing a warning', async () => {
+    it('does not create `file-progress` eslint config if explicitly disabled', async () => {
       await expectConfigState({fileProgress: false}, 'file-progress', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('does not create `file-progress` eslint config (not in misc group)', async () => {
-      await expectConfigState({}, 'file-progress', false, 'misc-enabled');
+    it('creates `file-progress` eslint config', async () => {
+      await expectConfigState({}, 'file-progress', true, 'misc-enabled');
     });
 
-    it('creates `file-progress` eslint config if explicitly enabled', async () => {
+    it('creates `file-progress` eslint config if explicitly enabled, without printing a warning', async () => {
       await expectConfigState('fileProgress', 'file-progress', true, 'misc-enabled');
     });
 
