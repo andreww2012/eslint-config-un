@@ -38,6 +38,7 @@ export default defineUnConfig<SecurityEslintConfigOptions>('security', {
     .addRule('detect-child-process', WARNING) /** @since 1.0.0 */ // 🟡
     .addRule('detect-disable-mustache-escape', ERROR) /** @since 1.0.0 */ // 🟡
     .addRule('detect-eval-with-expression', ERROR) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-invisible-characters', ERROR) /** @since 4.1.0 */ // 🟡
     .addRule('detect-new-buffer', ERROR) /** @since 1.1.0 */ // 🟡
     .addRule('detect-no-csrf-before-method-override', WARNING) /** @since 1.0.0 */ // 🟡
     .addRule('detect-non-literal-fs-filename', OFF) /** @since 1.0.0 */ // 🟡

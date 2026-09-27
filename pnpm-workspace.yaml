@@ -8,30 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-html@8.2.1
-  - eslint-plugin-perfectionist@5.12.1
-  - eslint-plugin-vue@10.11.1
-  - '@tsrx/core@0.3.3'
-  - '@tsrx/eslint-parser@0.4.11'
-  - '@tsrx/eslint-plugin@0.4.11'
-  - '@tsrx/runtime@0.2.3'
-  - '@eslint-react/ast@5.20.8'
-  - '@eslint-react/core@5.20.8'
-  - '@eslint-react/eslint-plugin@5.20.8'
-  - '@eslint-react/eslint@5.20.8'
-  - '@eslint-react/jsx@5.20.8'
-  - '@eslint-react/shared@5.20.8'
-  - '@eslint-react/var@5.20.8'
-  - eslint-plugin-react-debug@5.20.8
-  - eslint-plugin-react-dom@5.20.8
-  - eslint-plugin-react-jsx@5.20.8
-  - eslint-plugin-react-naming-convention@5.20.8
-  - eslint-plugin-react-rsc@5.20.8
-  - eslint-plugin-react-web-api@5.20.8
-  - eslint-plugin-react-x@5.20.8
-  - actions-up@1.21.0
-  - eslint-plugin-formatjs@8.1.0
-  - astro-eslint-parser@3.2.0
+  - eslint-plugin-security@4.1.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
