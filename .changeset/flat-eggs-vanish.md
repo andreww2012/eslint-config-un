@@ -2,4 +2,4 @@
 "eslint-config-un": patch
 ---
 
-react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.20.8 to v5.21.1](https://github.com/Rel1cx/eslint-react/compare/v5.20.8...v5.21.1)
+react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.20.8 to v5.21.2](https://github.com/Rel1cx/eslint-react/compare/v5.20.8...v5.21.2)
