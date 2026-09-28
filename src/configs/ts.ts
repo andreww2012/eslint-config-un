@@ -1089,6 +1089,7 @@ export default defineUnConfig<
     .addRule('no-unsafe-argument', WARNING) /** @since 4.21.0 */ // 🟣
     .addRule('no-unsafe-assignment', WARNING) /** @since 2.28.0 */ // 🟣
     .addRule('no-unsafe-call', WARNING) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-enum-assignment', ERROR) /** @since 8.71.0 */ // 🟣
     .addRule('no-unsafe-enum-comparison', WARNING) /** @since 5.58.0 */ // 🟣
     .addRule('no-unsafe-member-access', WARNING) /** @since 2.23.0 */ // 🟣
     .addRule('no-unsafe-return', WARNING) /** @since 2.23.0 */ // 🟣
