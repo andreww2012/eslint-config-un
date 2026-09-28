@@ -765,9 +765,10 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   // 3️⃣ = in recommended/vue-3
   // 2️⃣ = in recommended/vue-2
 
-  configBuilder
-    ?.addConfig(['vue', {parseWith: 'vue'}])
-    .markCategory('Base')
+  const mainConfig = configBuilder?.addConfig(['vue', {parseWith: 'vue'}]);
+
+  mainConfig
+    ?.markCategory('Base')
     .addRule('comment-directive', commentDirective.severity, [
       // false by default
       {reportUnusedDisableDirectives: commentDirective.shouldReport},
@@ -907,8 +908,10 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addRule('no-multiple-slot-args', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('no-v-html', ERROR) /** @since 4.7.0 */ // 3️⃣2️⃣
     .addRule('order-in-components', ERROR) /** @since 3.2.0 */ // 3️⃣2️⃣
-    .addRule('this-in-template', ERROR) /** @since 3.13.0 */ // 3️⃣2️⃣
-    .markCategory('Uncategorized')
+    .addRule('this-in-template', ERROR); /** @since 3.13.0 */ // 3️⃣2️⃣
+
+  mainConfig
+    ?.markCategory('Uncategorized')
     .addRule('block-lang', OFF) /** @since 7.15.0 */
     .addRule('block-order', ERROR, [
       {

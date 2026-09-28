@@ -157,17 +157,18 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
   // ⚠️ - rule is disabled (or kept disabled) because it overlaps with other rule(s) or by other reason(s) listed hereinafter
   // 🔵 - JSX/HTML rule
 
-  configBuilder
-    ?.addConfig([
-      'sonar',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-        settings: {
-          '': pluginSettings,
-        },
+  const mainConfig = configBuilder?.addConfig([
+    'sonar',
+    {
+      ignoresInternal: KEEP_LINTING_INLINE_JS,
+      settings: {
+        '': pluginSettings,
       },
-    ])
-    .addRule('anchor-precedence', ERROR) /** @since 1.0.4-alpha.0 */ // [S5850] 🟢🔤
+    },
+  ]);
+
+  mainConfig
+    ?.addRule('anchor-precedence', ERROR) /** @since 1.0.4-alpha.0 */ // [S5850] 🟢🔤
     // ⚠️ Handled by TypeScript
     .addRule('argument-type', OFF) /** @since 1.0.4-alpha.0 */ // [S3782] 🟢
     .addRule('arguments-order', ERROR) /** @since 1.0.4-alpha.0 */ // [S2234] 🟢
@@ -292,8 +293,10 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('misplaced-loop-counter', ERROR) /** @since 1.0.4-alpha.0 */ // [S1994] 🟢
     .addRule('nested-control-flow', OFF) /** @since 1.0.4-alpha.0 */ // [S134]
     // ⚠️ Handled by TypeScript
-    .addRule('new-operator-misuse', OFF) /** @since 1.0.4-alpha.0 */ // [S2999] 🟢
-    .addRule('no-all-duplicated-branches', ERROR) /** @since 0.1.0-0 */ // [S3923] 🟢
+    .addRule('new-operator-misuse', OFF); /** @since 1.0.4-alpha.0 */ // [S2999] 🟢
+
+  mainConfig
+    ?.addRule('no-all-duplicated-branches', ERROR) /** @since 0.1.0-0 */ // [S3923] 🟢
     // ⚠️ Seems too restrictive for me, alphabetical sorting is not a very rare requirement
     .addRule('no-alphabetical-sort', OFF) /** @since 1.0.4-alpha.0 */ // [S2871] 🟢
     .addRule('no-angular-bypass-sanitization', ERROR) /** @since 1.0.4-alpha.0 */ // [S6268] 🟢 📦 `@angular/*`

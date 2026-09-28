@@ -576,14 +576,15 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
   // 🟣 - NOT in unopinionated
   // 🟡 - only making sense for plain JS (functionality ~fully covered by TS)
 
-  configBuilder
-    ?.addConfig([
-      'unicorn',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
-    .addRule('better-dom-traversing', ERROR) /** @since 65.0.0 */
+  const mainConfig = configBuilder?.addConfig([
+    'unicorn',
+    {
+      ignoresInternal: KEEP_LINTING_INLINE_JS,
+    },
+  ]);
+
+  mainConfig
+    ?.addRule('better-dom-traversing', ERROR) /** @since 65.0.0 */
     .addRule('catch-error-name', WARNING) /** @since 0.4.0 */ // 🟣
     .addRule(
       'class-reference-in-static-methods',
@@ -848,8 +849,10 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('numeric-separators-style', ERROR, [
       {onlyIfContainsSeparator: true},
     ]) /** @since 23.0.0 */
-    .addRule('operator-assignment', OFF) /** @since 67.0.0 */ // 🟣
-    .addRule('prefer-abort-signal-any', ERROR) /** @since 70.0.0 */ // 🟣
+    .addRule('operator-assignment', OFF); /** @since 67.0.0 */ // 🟣
+
+  mainConfig
+    ?.addRule('prefer-abort-signal-any', ERROR) /** @since 70.0.0 */ // 🟣
     .addRule('prefer-abort-signal-timeout', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-add-event-listener', ERROR) /** @since 4.0.0 */
     .addRule('prefer-add-event-listener-options', ERROR) /** @since 66.0.0 */

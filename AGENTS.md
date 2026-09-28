@@ -16,6 +16,8 @@ Avoid mentioning this package's name in internal comments.
 
 Never statically import at runtime any Config file matching `src/configs/**/*.ts` or the plugin metadata files (`src/plugins/*.ts` except `shared.ts`).
 
+Keep each call chain on a Config builder (`.addRule(...)`, `.markCategory(...)` and so on) under 250 calls: a longer one overflows the parser's call stack when the file is linted on its own (for example, that crashes ESLint).
+
 Never reference Sub-configs with the `config` prefix: use `scss` in docs, not `configScss`.
 
 Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, it won't if any operand is a union).
