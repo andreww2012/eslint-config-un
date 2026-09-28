@@ -144,8 +144,6 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
   const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testRulesSeverity = testsRules ? ERROR : OFF;
 
-  const isVueInstalled = context.packagesInfo.vue != null;
-
   const pluginSettings = context.getPluginSettings('sonar');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'sonar');
@@ -408,7 +406,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ Seems too restrictive for me
     .addRule('no-nested-template-literals', OFF) /** @since 0.9.1 */ // [S4624] 🟢
     // ⚠️ `playwright/no-networkidle`
-    .addRule('no-networkidle-wait', OFF) /** @since 4.2.1 */ // [S9332] 🟢🧪 📦 `@playwright/test`
+    .addRule('no-networkidle-wait', OFF) /** @since 4.2.1 */ // [S9332] 🧪 📦 `@playwright/test`
     .addRule('no-os-command-from-path', ERROR) /** @since 1.0.4-alpha.0 */ // [S4036] 🟢 📦 `node:child_process`
     .addRule('no-parameter-reassignment', ERROR) /** @since 1.0.4-alpha.0 */ // [S1226] 🟢
     // ⚠️ `no-new-wrappers`
@@ -459,8 +457,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `no-use-before-define`, `block-scoped-var`, `vars-on-top`
     .addRule('no-variable-usage-before-declaration', OFF) /** @since 1.0.4-alpha.0 */ // [S1526]
     .addRule('no-vue-class-component', ERROR) /** @since 4.2.1 */ // [S9145] 🟢 📦 `vue-class-component`, `vue-property-decorator`
-    // Enabled only if `vue` is installed because the rule reports any object literal with a `mixins` array
-    .addRule('no-vue-mixins', isVueInstalled ? ERROR : OFF) /** @since 4.2.1 */ // [S9150] 🟢 📦 `vue`
+    .addRule('no-vue-mixins', ERROR) /** @since 4.2.1 */ // [S9150] 🟢 📦 `vue`
     .addRule('no-weak-cipher', ERROR) /** @since 1.0.4-alpha.0 */ // [S5547] 🟢 📦 `node:crypto`
     .addRule('no-weak-keys', ERROR) /** @since 1.0.4-alpha.0 */ // [S4426] 🟢 📦 `node:crypto`
     .addRule('no-wildcard-import', OFF) /** @since 1.0.4-alpha.0 */ // [S2208]
