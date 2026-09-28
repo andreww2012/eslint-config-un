@@ -16,6 +16,9 @@ export interface TurboEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'turbo'> {
   /**
+   * Options of the rule reporting the environment variables not declared in any `turbo.json`,
+   * for example `allowList` of the variables that are always allowed
+   *
    * Affected rule:
    * - [`turbo/no-undeclared-env-vars`](https://github.com/vercel/turborepo/blob/HEAD/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md)
    */

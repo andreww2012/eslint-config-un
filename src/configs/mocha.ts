@@ -63,6 +63,9 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
     UnFlatConfigEntryBase<ExtraPlugins, 'mocha'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
+   * Enforces the use of a single Mocha interface for the test suites.
+   * Not enforced by default.
+   *
    * Affected rule:
    * - [`mocha/consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/consistent-interface.md)
    */

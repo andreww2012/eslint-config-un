@@ -54,8 +54,10 @@ type ConsistentBooleanNameRawOptions = GetRuleOptions<
 type ConsistentBooleanNameOptions = MergeObjects<
   OmitIndexSignature<GetRuleOptions<'unicorn', 'consistent-boolean-name'>>,
   {
-    // Vanilla property, but strictly typed
-    ignore?: (string | RegExp)[];
+    /**
+     * Patterns of the names that are not checked; strings are treated as regular expressions
+     */
+    ignore?: (string | RegExp)[]; // Vanilla property, but strictly typed
 
     /**
      * Boolean name prefixes to allow (`true`) or disallow (`false`).

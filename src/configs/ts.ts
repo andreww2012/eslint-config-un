@@ -360,7 +360,12 @@ interface SortTsconfigKeysSubConfigOptions<
   orderTopLevel?: boolean | (TsconfigTopLevelKeys | (string & {}))[];
 
   /**
-   * By default `antfu` preset will be used.
+   * The order of the `compilerOptions` keys:
+   * - `true`: the order from the `antfu` preset;
+   * - `false`: no order is enforced;
+   * - `{preset}`: the order from the specified preset;
+   * - `{type: 'order-groups'}`: the order of the option groups;
+   * - `{type: 'order-keys'}`: the order of the options themselves.
    * @default true
    */
   orderCompilerOptions?:

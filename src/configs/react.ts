@@ -68,7 +68,9 @@ export interface ReactPluginSettings {
   defaultVersion?: string;
 
   /**
-   * Flow version
+   * [Flow](https://flow.org) version, for example `0.53`.
+   * `detect` reads it from the installed `flow-bin` package.
+   * Used to correctly read the props of Flow-typed components
    */
   flowVersion?: string;
 

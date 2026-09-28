@@ -44,7 +44,9 @@ export interface JsdocPluginSettings {
   maxLines?: number;
 
   /**
-   * Impacts the behavior of certain rules.
+   * The JSDoc flavor the comments are written in.
+   * Determines which tags are valid, which of them may have types and how the types are parsed.
+   * `permissive` tries to accept all the flavors, which the plugin does not recommend.
    * @default 'typescript'
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#mode
    */

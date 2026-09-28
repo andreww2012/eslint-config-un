@@ -140,6 +140,10 @@ export interface ImportIntegrityEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import-integrity'> {
   /**
+   * Restricts which files can import specific first-party files, third-party packages or built-in
+   * modules.
+   * Not enforced by default.
+   *
    * Affected rule:
    * - [`import-integrity/no-restricted-imports`](https://nebrius.github.io/import-integrity-lint/rules/no-restricted-imports)
    */

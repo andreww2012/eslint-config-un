@@ -368,9 +368,26 @@ export type ParsingLanguagesWithDialects = ObjectValues<{
 
 interface ParsingLanguageCustomOptions {
   css: CSSLanguageOptions;
-  html: {parserOptions?: HtmlEslintParserOptions};
+  html: {
+    /**
+     * [`@html-eslint/parser`](https://npmx.dev/@html-eslint/parser) parser options
+     */
+    parserOptions?: HtmlEslintParserOptions;
+  };
   markdown: MarkdownLanguageOptions;
-  yaml: {parserOptions?: {defaultYAMLVersion?: '1.1' | '1.2'}};
+  yaml: {
+    /**
+     * [`yaml-eslint-parser`](https://npmx.dev/yaml-eslint-parser) parser options
+     * @see https://ota-meshi.github.io/eslint-plugin-yml/user-guide/#parser-options
+     */
+    parserOptions?: {
+      /**
+       * The YAML version the parser assumes when the document does not declare one
+       * @see https://github.com/ota-meshi/yaml-eslint-parser#advanced-configuration
+       */
+      defaultYAMLVersion?: '1.1' | '1.2';
+    };
+  };
 }
 
 interface ParsingEntry<Key extends ParsingLanguages = ParsingLanguages> {

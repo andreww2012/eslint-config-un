@@ -65,6 +65,8 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   customAssertFunctionNames?: string[];
 
   /**
+   * Names of the custom `expect` matchers which return a promise and so must be awaited
+   *
    * Affected rule:
    * - [`playwright/missing-playwright-await`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/missing-playwright-await.md)
    */

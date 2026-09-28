@@ -17,6 +17,12 @@ export interface RxjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'rxjs'> {
   /**
+   * Observable creation functions that are not allowed to be used, like `fromEvent`.
+   * Using the object notation, you can specify a string instead of `true` to explain why the
+   * function is banned.
+   *
+   * Nothing is banned by default, in which case the rule is disabled.
+   *
    * Affected rule:
    * - [`rxjs/ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)
    */

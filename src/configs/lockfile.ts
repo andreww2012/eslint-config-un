@@ -88,6 +88,7 @@ export interface LockfileEslintConfigOptions<
 
   /**
    * Enforces that lockfiles from package manager(s) not specified here are not permitted.
+   * Not enforced by default.
    *
    * Affected rule:
    * - [`lockfile/flavor`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/flavor.md)

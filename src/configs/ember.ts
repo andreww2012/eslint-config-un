@@ -41,6 +41,13 @@ export interface EmberEslintConfigOptions<
       >;
 
   /**
+   * Enforces a consistent use of getters in computed properties:
+   * - `always-with-setter`: getters are required when a setter is present;
+   * - `always`: getters are always required;
+   * - `never`: getters are not allowed.
+   *
+   * Not enforced by default.
+   *
    * Affected rule:
    * - [`ember/computed-property-getters`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/computed-property-getters.md)
    */

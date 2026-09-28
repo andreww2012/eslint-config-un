@@ -337,6 +337,7 @@ export interface EsEslintConfigOptions<
           {
             /**
              * Whether the features of this version that are not listed explicitly are supported
+             * @default true <=> this version is not newer than `ecmaVersion`
              */
             default?: boolean;
           } & Partial<Record<EcmaFeatures[Version], boolean>>

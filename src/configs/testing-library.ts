@@ -68,6 +68,9 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   allowContainerFirstChild?: boolean;
 
   /**
+   * The setup hook (`beforeEach` or `beforeAll`) that is allowed to call `render`.
+   * By default, `render` is not allowed in any setup hook.
+   *
    * Affected rule:
    * - [`testing-library/no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
    */
@@ -89,6 +92,11 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   preferAssertStyle?: 'explicit' | 'implicit';
 
   /**
+   * Pairs of a query variant (`get` or `query`) and a matcher which must be used with it, for
+   * example `{query: 'get', matcher: 'toBeVisible'}` requires `getBy*` queries for `toBeVisible`.
+   *
+   * Nothing is enforced by default, in which case the rule is disabled.
+   *
    * Affected rule:
    * - [`testing-library/prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
    */
@@ -107,6 +115,11 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
 interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends SharedConfigOptions<ExtraPlugins>, NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
+   * Enforces the naming of test IDs: `testIdPattern` is required, `{fileName}` in it is replaced
+   * with the name of the linted file.
+   *
+   * Not enforced by default.
+   *
    * Affected rule:
    * - [`testing-library/consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
    */
