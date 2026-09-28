@@ -18,7 +18,7 @@ export interface TreeShakingEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tree-shaking'> {
   /**
    * Options of
-   * [the only rule, `no-side-effects-in-initialization`](https://github.com/lukastaegert/eslint-plugin-tree-shaking#installation-and-setup).
+   * [the only rule, `tree-shaking/no-side-effects-in-initialization`](https://github.com/lukastaegert/eslint-plugin-tree-shaking#installation-and-setup).
    */
   options?: GetRuleOptions<'tree-shaking', 'no-side-effects-in-initialization'>;
 }

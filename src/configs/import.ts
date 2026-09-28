@@ -162,6 +162,9 @@ export interface ImportEslintConfigOptions<
    * - `true` - require extensions for JS/TS-like files
    * - `object` - granular settings for specific packages, use `*` key for setting the default for
    *   all extensions
+   *
+   * Affected rule:
+   * - [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/extensions.md)
    * @default false
    */
   requireModuleExtensions?: boolean | Record<string, 'always' | 'never' | 'ignorePackages'>;

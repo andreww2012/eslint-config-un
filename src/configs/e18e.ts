@@ -50,7 +50,8 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | Prettify<
         SubConfigOptions<ExtraPlugins, 'moduleReplacements'> & {
           /**
-           * Options of the only rule in this sub-config, `e18e/ban-dependencies`
+           * Options of
+           * [the only rule in this sub-config, `e18e/ban-dependencies`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md#module-replacements)
            */
           options?: GetRuleOptions<'e18e', 'ban-dependencies'>;
         }

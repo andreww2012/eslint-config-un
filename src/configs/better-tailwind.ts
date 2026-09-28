@@ -116,7 +116,10 @@ export interface BetterTailwindEslintConfigOptions<
   tailwindVersion?: SupportedTailwindVersion;
 
   /**
-   * Not enforced by default
+   * Not enforced by default.
+   *
+   * Affected rule:
+   * - [`better-tailwindcss/enforce-consistent-line-wrapping`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-line-wrapping.md)
    */
   breakUpClassesIntoMultipleLines?: GetRuleOptions<
     'better-tailwindcss',

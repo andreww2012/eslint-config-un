@@ -55,12 +55,37 @@ export interface SonarEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'sonar'> {
   /**
    * Enables rules that are specific to [aws-cdk-lib](https://npmx.dev/aws-cdk-lib)
+   *
+   * Affected rules:
+   * - [`sonar/aws-apigateway-public-api`](https://sonarsource.github.io/rspec/#/rspec/S6333/javascript)
+   * - [`sonar/aws-ec2-rds-dms-public`](https://sonarsource.github.io/rspec/#/rspec/S6329/javascript)
+   * - [`sonar/aws-ec2-unencrypted-ebs-volume`](https://sonarsource.github.io/rspec/#/rspec/S6275/javascript)
+   * - [`sonar/aws-efs-unencrypted`](https://sonarsource.github.io/rspec/#/rspec/S6332/javascript)
+   * - [`sonar/aws-iam-all-privileges`](https://sonarsource.github.io/rspec/#/rspec/S6302/javascript)
+   * - [`sonar/aws-iam-privilege-escalation`](https://sonarsource.github.io/rspec/#/rspec/S6317/javascript)
+   * - [`sonar/aws-iam-public-access`](https://sonarsource.github.io/rspec/#/rspec/S6270/javascript)
+   * - [`sonar/aws-opensearchservice-domain`](https://sonarsource.github.io/rspec/#/rspec/S6308/javascript)
+   * - [`sonar/aws-rds-unencrypted-databases`](https://sonarsource.github.io/rspec/#/rspec/S6303/javascript)
+   * - [`sonar/aws-restricted-ip-admin-access`](https://sonarsource.github.io/rspec/#/rspec/S6321/javascript)
+   * - [`sonar/aws-s3-bucket-granted-access`](https://sonarsource.github.io/rspec/#/rspec/S6265/javascript)
+   * - [`sonar/aws-s3-bucket-insecure-http`](https://sonarsource.github.io/rspec/#/rspec/S6249/javascript)
+   * - [`sonar/aws-s3-bucket-public-access`](https://sonarsource.github.io/rspec/#/rspec/S6281/javascript)
+   * - [`sonar/aws-s3-bucket-versioning`](https://sonarsource.github.io/rspec/#/rspec/S6252/javascript)
+   * - [`sonar/aws-sagemaker-unencrypted-notebook`](https://sonarsource.github.io/rspec/#/rspec/S6319/javascript)
+   * - [`sonar/aws-sns-unencrypted-topics`](https://sonarsource.github.io/rspec/#/rspec/S6327/javascript)
+   * - [`sonar/aws-sqs-unencrypted-queue`](https://sonarsource.github.io/rspec/#/rspec/S6330/javascript)
    * @default true <=> `aws-cdk-lib` package is installed
    */
   enableAwsRules?: boolean;
 
   /**
    * Enables rules that are specific to [helmet](https://npmx.dev/helmet)
+   *
+   * Affected rules:
+   * - [`sonar/content-security-policy`](https://sonarsource.github.io/rspec/#/rspec/S5728/javascript)
+   * - [`sonar/no-mime-sniff`](https://sonarsource.github.io/rspec/#/rspec/S5734/javascript)
+   * - [`sonar/no-referrer-policy`](https://sonarsource.github.io/rspec/#/rspec/S5736/javascript)
+   * - [`sonar/strict-transport-security`](https://sonarsource.github.io/rspec/#/rspec/S5739/javascript)
    * @default true <=> `helmet` package is installed
    */
   enableHelmetRules?: boolean;

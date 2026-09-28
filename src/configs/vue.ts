@@ -217,6 +217,9 @@ interface ScopedCssEslintConfigOptions<
   /**
    * Will be merged with the default value.
    * `true` does not restrict the style type.
+   *
+   * Affected rule:
+   * - [`vue-scoped-css/enforce-style-type`](https://future-architect.github.io/eslint-plugin-vue-scoped-css/rules/enforce-style-type.html)
    * @default {plain: true, scoped: true}
    */
   allowedStyleType?:
@@ -454,6 +457,9 @@ export interface VueEslintConfigOptions<
   /**
    * Enforce either Composition (`setup`) or Options (`options`) API.
    * Not enforced by default.
+   *
+   * Affected rule:
+   * - [`vue/component-api-style`](https://eslint.vuejs.org/rules/component-api-style.html)
    */
   enforceApiStyle?: 'setup' | 'options';
 
@@ -518,6 +524,12 @@ export interface VueEslintConfigOptions<
   /**
    * By default, all deprecated or non-standard HTML tags are disallowed.
    * Using the object syntax, you can re-allow any of them, or disallow other tags.
+   *
+   * Affected rules:
+   * - [`vue/no-restricted-html-elements`](https://eslint.vuejs.org/rules/no-restricted-html-elements.html)
+   *   (`vue` config)
+   * - [`svelte/no-restricted-html-elements`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-restricted-html-elements)
+   *   (`svelte` config)
    * @example {marquee: false, pre: true}
    */
   disallowedHtmlTags?: Partial<Record<ValidAndInvalidHtmlTags | (string & {}), boolean>>;
@@ -526,6 +538,9 @@ export interface VueEslintConfigOptions<
    * Whether to prefer Vue 3.5
    * [`useTemplateRef`](https://vuejs.org/api/composition-api-helpers.html#usetemplateref) instead
    * of `ref` to obtain a template ref.
+   *
+   * Affected rule:
+   * - [`vue/prefer-use-template-ref`](https://eslint.vuejs.org/rules/prefer-use-template-ref.html)
    * @default true <=> vue>=3.5 is installed
    */
   preferUseTemplateRef?: boolean;

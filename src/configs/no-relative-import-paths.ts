@@ -19,7 +19,8 @@ export interface NoRelativeImportPathsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-relative-import-paths'> {
   /**
-   * The single rule (`no-relative-import-paths`) options.
+   * Options of
+   * [the only rule, `no-relative-import-paths/no-relative-import-paths`](https://github.com/MelvinVermeer/eslint-plugin-no-relative-import-paths/blob/HEAD/README.md#rule-options).
    */
   options?: GetRuleOptions<'no-relative-import-paths', 'no-relative-import-paths'>;
 }

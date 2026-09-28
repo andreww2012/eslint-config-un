@@ -30,6 +30,16 @@ export interface MarkdownLinksEslintConfigOptions<
    *
    * You can also use this option to more conveniently control the options of the corresponding
    * rules.
+   *
+   * Affected rules:
+   * - `deadUrls`:
+   *   [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html)
+   * - `missingFragments`:
+   *   [`markdown-links/no-missing-fragments`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-fragments.html)
+   * - `missingLocalPath`:
+   *   [`markdown-links/no-missing-path`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-path.html)
+   * - `selfDestinationLinks`:
+   *   [`markdown-links/no-self-destination`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-self-destination.html)
    * @default
    * ```ts
    * {deadUrls: {options: {checkAnchor: false}, severityWarn: true}, missingFragments: true, missingLocalPath: true, selfDestinationLinks: true}

@@ -39,7 +39,10 @@ export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css-in-js'> {
   /**
-   * `long` is `#RRGGBB(AA)`, short is `#RGB(A)`
+   * `long` is `#RRGGBB(AA)`, short is `#RGB(A)`.
+   *
+   * Affected rule:
+   * - [`css-in-js/color-hex-style`](https://ota-meshi.github.io/eslint-plugin-css/rules/color-hex-style.html)
    * @default 'long'
    */
   hexColorsStyle?: 'long' | 'short';
@@ -48,6 +51,9 @@ export interface CssInJsEslintConfigOptions<
    * Whether to prefer named colors over their hex equivalents (`red` over `#ff0000`) or vice versa.
    *
    * You can also specify property patterns (regexp) that won't be checked.
+   *
+   * Affected rule:
+   * - [`css-in-js/named-color`](https://ota-meshi.github.io/eslint-plugin-css/rules/named-color.html)
    * @default false
    */
   preferNamedColors?:
@@ -65,13 +71,19 @@ export interface CssInJsEslintConfigOptions<
       };
 
   /**
-   * Prefer `.5` over `0.5`
+   * Prefer `.5` over `0.5`.
+   *
+   * Affected rule:
+   * - [`css-in-js/number-leading-zero`](https://ota-meshi.github.io/eslint-plugin-css/rules/number-leading-zero.html)
    * @default false
    */
   avoidLeadingZero?: boolean;
 
   /**
-   * Enforce `backgroundColor` or `background-color`
+   * Enforce `backgroundColor` or `background-color`.
+   *
+   * Affected rule:
+   * - [`css-in-js/property-casing`](https://ota-meshi.github.io/eslint-plugin-css/rules/property-casing.html)
    * @default 'camelCase'
    */
   propertyCasing?: GetRuleOptions<'css-in-js', 'property-casing'>;

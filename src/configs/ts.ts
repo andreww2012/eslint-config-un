@@ -528,10 +528,12 @@ export interface TsEslintConfigOptions<
   extraFileExtensions?: string[];
 
   /**
-   * Which special variable types should be subject to removal by
-   * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) (if unused).
+   * Which special variable types should be removed by the autofix if unused.
    *
    * Will be merged with the default value.
+   *
+   * Affected rule:
+   * - [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars)
    * @default {imports: true}
    */
   extraVariableTypesToRemove?: Partial<

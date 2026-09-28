@@ -33,6 +33,9 @@ export interface MathEslintConfigOptions<
   /**
    * Enforces the method of conversion to absolute values.
    * Set to `false` not enforce it.
+   *
+   * Affected rule:
+   * - [`math/abs`](https://ota-meshi.github.io/eslint-plugin-math/rules/abs.html)
    * @default 'Math.abs'
    */
   absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];

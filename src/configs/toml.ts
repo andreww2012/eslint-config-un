@@ -30,12 +30,18 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
+   *
+   * Affected rule:
+   * - [`toml/no-mixed-type-in-array`](https://ota-meshi.github.io/eslint-plugin-toml/rules/no-mixed-type-in-array.html)
    * @default false
    */
   noMixedTypeInArray?: boolean;
 
   /**
-   * Will be merged with the default value
+   * Will be merged with the default value.
+   *
+   * Affected rule:
+   * - [`toml/no-non-decimal-integer`](https://ota-meshi.github.io/eslint-plugin-toml/rules/no-non-decimal-integer.html)
    * @default {allowHexadecimal: true}
    */
   noNonDecimalIntegerExceptions?: GetRuleOptions<'toml', 'no-non-decimal-integer'>;
@@ -43,13 +49,19 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * "Millisecond precision is required.
    * Further precision of fractional seconds is implementation-specific."
+   *
+   * Affected rule:
+   * - [`toml/precision-of-fractional-seconds`](https://ota-meshi.github.io/eslint-plugin-toml/rules/precision-of-fractional-seconds.html)
    * @default 3
    * @see https://toml.io/en/v1.0.0#local-time
    */
   maxPrecisionOfFractionalSeconds?: number;
 
   /**
-   * The maximum number of bits an integer value may require
+   * The maximum number of bits an integer value may require.
+   *
+   * Affected rule:
+   * - [`toml/precision-of-integer`](https://ota-meshi.github.io/eslint-plugin-toml/rules/precision-of-integer.html)
    * @default 64
    * @see https://toml.io/en/v1.0.0#integer
    */

@@ -21,7 +21,8 @@ export interface HeaderEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'header'> {
   /**
-   * The single rule (`header`) options.
+   * Options of
+   * [the only rule, `header/header`](https://github.com/Stuk/eslint-plugin-header/blob/HEAD/README.md#usage).
    */
   options?:
     | {

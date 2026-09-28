@@ -18,7 +18,7 @@ export interface ExpectTypeEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'expect-type'> {
   /**
    * Options of
-   * [the only rule, `expect`](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/blob/HEAD/docs/rules/expect.md).
+   * [the only rule, `expect-type/expect`](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/blob/HEAD/docs/rules/expect.md).
    */
   options?: GetRuleOptions<'expect-type', 'expect'>;
 }

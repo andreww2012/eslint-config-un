@@ -142,10 +142,12 @@ export interface MarkdownEslintConfigOptions<
    * For each array item, a separate config entry will be created.
    * `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
    *
-   * If `gfm` syntax is used,
-   * [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md)
-   * rule will be enabled and have `allowLabels` option set to
+   * If `gfm` syntax is used, the affected rule will be enabled and have its `allowLabels` option
+   * set to
    * [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
+   *
+   * Affected rule:
+   * - [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md)
    * @default 'gfm'
    */
   language?:
@@ -162,7 +164,10 @@ export interface MarkdownEslintConfigOptions<
   /**
    * If array, only those tags will be allowed.
    * If `false`, no tags are allowed.
-   * If `true`, all tags are allowed (default)
+   * If `true`, all tags are allowed (default).
+   *
+   * Affected rule:
+   * - [`markdown/no-html`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-html.md)
    * @default true
    */
   allowHtmlTags?: boolean | string[];
@@ -177,6 +182,9 @@ export interface MarkdownEslintConfigOptions<
    * (`javascript` -> `js`), specifying `javascript` instead of `js` won't have any effect.
    *
    * There is no option to "allow only this set of languages or not specifying a language".
+   *
+   * Affected rule:
+   * - [`markdown/fenced-code-language`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/fenced-code-language.md)
    * @default all languages are allowed, including no language
    * @example ['js', 'ts', 'vue']
    */

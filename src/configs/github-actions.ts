@@ -19,17 +19,33 @@ export interface GithubActionsEslintConfigOptions<
    * Maximum number of jobs that should be present in an action file.
    *
    * Not enforced by default.
+   *
+   * Affected rule:
+   * - [`github-actions/max-jobs-per-action`](https://eslint-plugin-github-action.ntnyq.com/rules/max-jobs-per-action)
    */
   maxJobsPerAction?: number;
 
   /**
    * Will be merged with the default value.
+   *
+   * Affected rules:
+   * - `actionName`:
+   *   [`github-actions/require-action-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-name)
+   * - `actionRunName`:
+   *   [`github-actions/require-action-run-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-run-name)
+   * - `jobName`:
+   *   [`github-actions/require-job-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-name)
+   * - `jobStepName`:
+   *   [`github-actions/require-job-step-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-step-name)
    * @default {actionName: true, jobName: true}
    */
   require?: Partial<Record<'actionName' | 'actionRunName' | 'jobName' | 'jobStepName', boolean>>;
 
   /**
    * Enforces `<job>.steps.uses` style.
+   *
+   * Affected rule:
+   * - [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style)
    * @default {commit: true, allowRepository: true}
    */
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;

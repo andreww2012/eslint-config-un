@@ -18,7 +18,8 @@ export interface HeadersEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'headers'> {
   /**
-   * The single rule (`header-format`) options.
+   * Options of
+   * [the only rule, `headers/header-format`](https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/docs/rules/header-format.md).
    */
   options?: (
     | {

@@ -26,10 +26,18 @@ export interface ErasableSyntaxOnlyEslintConfigOptions<
   /**
    * By default, all syntaxes are disallowed.
    * You can enable specific syntaxes by setting their keys to `true` in this object.
-   * - `enums`: allow using TypeScript's enums.
-   * - `importAliases`: allow using TypeScript's import aliases.
-   * - `namespaces`: allow using TypeScript's namespaces.
-   * - `parameterProperties`: allow using TypeScript's class parameter properties.
+   *
+   * Affected rules:
+   * - `enums`:
+   *   [`erasable-syntax-only/enums`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/enums.md)
+   * - `exportAliases`:
+   *   [`erasable-syntax-only/export-aliases`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/export-aliases.md)
+   * - `importAliases`:
+   *   [`erasable-syntax-only/import-aliases`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/import-aliases.md)
+   * - `namespaces`:
+   *   [`erasable-syntax-only/namespaces`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/namespaces.md)
+   * - `parameterProperties`:
+   *   [`erasable-syntax-only/parameter-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/parameter-properties.md)
    */
   allowedSyntax?: Partial<Record<CheckedSyntax, boolean>>;
 }

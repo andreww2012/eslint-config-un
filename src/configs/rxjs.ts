@@ -36,6 +36,10 @@ export interface RxjsEslintConfigOptions<
    * - `true` enforces the use of Finnish notation - i.e. the `$` suffix.
    * - `'forbid'` forbids it.
    * - `false` neither enforces nor forbids it.
+   *
+   * Affected rules:
+   * - [`rxjs/finnish`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/finnish.md)
+   * - [`rxjs/no-finnish`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/no-finnish.md)
    * @default true <=> `@angular/core` package is installed
    */
   enforceFinnishNotation?: boolean | 'forbid';

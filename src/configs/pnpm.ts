@@ -47,10 +47,12 @@ interface PnpmYamlSubConfigOptions<
   PickKeysStartingWith<UnRulesConfigPartial<'pnpm'>, 'pnpm/yaml-'>
 > {
   /**
-   * Configure
-   * [`pnpm/yaml-enforce-settings` rule options](https://github.com/antfu/pnpm-workspace-utils/blob/7d608b8aa8f1c9a2b76ca4a2cc75d96e914268ae/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-enforce-settings.ts#L30).
+   * Options of the rule enforcing `pnpm-workspace.yaml` settings.
    *
    * Note that you must specify either non-empty `requiredFields`, `settings` or `forbiddenFields`.
+   *
+   * Affected rule:
+   * - [`pnpm/yaml-enforce-settings`](https://github.com/antfu/pnpm-workspace-utils/blob/7d608b8aa8f1c9a2b76ca4a2cc75d96e914268ae/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-enforce-settings.ts#L30)
    */
   enforcePnpmWorkspaceSettings?: GetRuleOptions<'pnpm', 'yaml-enforce-settings'>;
 }

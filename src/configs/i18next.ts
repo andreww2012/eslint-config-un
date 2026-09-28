@@ -36,7 +36,7 @@ export interface I18nextEslintConfigOptions<
         UnFlatConfigEntryBase<ExtraPlugins, 'i18next'> & {
           /**
            * Options of
-           * [the only rule, `no-literal-string`](https://github.com/edvardchen/eslint-plugin-i18next/blob/HEAD/docs/rules/no-literal-string.md).
+           * [the only rule, `i18next/no-literal-string`](https://github.com/edvardchen/eslint-plugin-i18next/blob/HEAD/docs/rules/no-literal-string.md).
            * Merged with the `options` of the parent config.
            * `framework`, `mode` and `jsx-attributes` default to the ones for Vue templates instead
            * of being inherited.
@@ -47,7 +47,7 @@ export interface I18nextEslintConfigOptions<
 
   /**
    * Options of
-   * [the only rule, `no-literal-string`](https://github.com/edvardchen/eslint-plugin-i18next/blob/HEAD/docs/rules/no-literal-string.md).
+   * [the only rule, `i18next/no-literal-string`](https://github.com/edvardchen/eslint-plugin-i18next/blob/HEAD/docs/rules/no-literal-string.md).
    * Also inherited by the `vue` sub-config, except `framework`, `mode` and `jsx-attributes`.
    */
   options?: GetRuleOptions<'i18next', 'no-literal-string'>;

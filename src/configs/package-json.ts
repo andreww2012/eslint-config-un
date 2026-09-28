@@ -118,16 +118,20 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
    * The sorting order of package properties
+   *
+   * Affected rule:
+   * - [`package-json/order-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md)
    * @default 'sort-package-json'
-   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
    */
   order?: GetRuleOptions<'package-json', 'order-properties'>['order'];
 
   /**
    * Enforces that repository entries in a package.json use either object or shorthand notation to
    * refer to GitHub repositories when possible.
+   *
+   * Affected rule:
+   * - [`package-json/repository-shorthand`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md)
    * @default 'object'
-   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    */
   repositoryShorthand?: GetRuleOptions<'package-json', 'repository-shorthand'>['form'];
 
@@ -139,8 +143,10 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * `dependenciesMeta` and some of the `pnpm.*` ones.
    *
    * The provided value will be **MERGED** with the default list.
+   *
+   * Affected rule:
+   * - [`package-json/sort-collections`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md)
    * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
-   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md
    * @see https://docs.npmjs.com/cli/v12/configuring-npm/package-json/
    */
   collectionsToSort?: PackageJsonCollectionsToSort;

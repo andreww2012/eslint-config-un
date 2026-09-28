@@ -33,9 +33,12 @@ export interface NoSecretsEslintConfigOptions<
   configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'>;
 
   /**
-   * Convenient way of configuring `no-secrets/no-secrets` rule for both JS/TS and JSON files.
+   * Convenient way of configuring the rule for both JS/TS and JSON files.
    *
    * Will be merged with the default options.
+   *
+   * Affected rule:
+   * - [`no-secrets/no-secrets`](https://github.com/nickdeis/eslint-plugin-no-secrets/blob/HEAD/README.md#no-secrets)
    * @default {tolerance: 4.5}
    */
   noSecretsOptions?: Partial<

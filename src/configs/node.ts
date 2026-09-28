@@ -113,16 +113,25 @@ export interface NodeEslintConfigOptions<
   noUnsupportedFeaturesIgnores?: Prettify<{
     /**
      * ECMAScript built-ins to never report
+     *
+     * Affected rule:
+     * - [`node/no-unsupported-features/es-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-builtins.md)
      */
     esBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/es-builtins'>['ignores'];
 
     /**
      * ECMAScript syntax to never report
+     *
+     * Affected rule:
+     * - [`node/no-unsupported-features/es-syntax`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-syntax.md)
      */
     esSyntax?: GetRuleOptions<'node', 'no-unsupported-features/es-syntax'>['ignores'];
 
     /**
      * Node.js built-ins to never report
+     *
+     * Affected rule:
+     * - [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
      */
     nodeBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/node-builtins'>['ignores'];
   }>;

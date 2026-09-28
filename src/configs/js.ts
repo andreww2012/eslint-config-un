@@ -24,7 +24,10 @@ export interface JsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, BuiltinEslintRules> {
   /**
-   * Will be merged with the default value
+   * Will be merged with the default value.
+   *
+   * Affected rule:
+   * - [`no-console`](https://eslint.org/docs/latest/rules/no-console)
    * @default {warn: true, error: true}
    */
   allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;

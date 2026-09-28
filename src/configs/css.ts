@@ -124,6 +124,9 @@ export interface CssEslintConfigOptions<
 
   /**
    * Will be merged with the default value.
+   *
+   * Affected rule:
+   * - [`css/relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
    * @default {rem: true, em: true}
    */
   allowedFontUnits?: Partial<
@@ -131,9 +134,11 @@ export interface CssEslintConfigOptions<
   >;
 
   /**
-   * CSS features that will be ignored by
-   * [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md).
+   * CSS features that will not be reported.
    * Must be unique.
+   *
+   * Affected rule:
+   * - [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md)
    */
   allowedFeatures?: {
     [

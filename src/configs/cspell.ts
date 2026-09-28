@@ -16,7 +16,8 @@ export interface CspellEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'cspell'> {
   /**
-   * The single rule (`spellchecker`) options.
+   * Options of
+   * [the only rule, `cspell/spellchecker`](https://github.com/streetsidesoftware/cspell/blob/HEAD/packages/cspell-eslint-plugin/README.md#options).
    */
   options?: GetRuleOptions<'cspell', 'spellchecker'>;
 }

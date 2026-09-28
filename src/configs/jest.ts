@@ -219,8 +219,11 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * By default, this has a list of all the async matchers provided by jest-extended (namely,
    * toResolve and toReject).
    *
-   * *(from `eslint-plugin-jest` docs)*
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#asyncmatchers
+   * *(from
+   * [`eslint-plugin-jest` docs](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#asyncmatchers))*
+   *
+   * Affected rule:
+   * - [`jest/valid-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md)
    */
   asyncMatchers?: string[];
 
@@ -231,11 +234,14 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * This is useful when you're using libraries that increase the number of arguments supported by
    * expect, such as [jest-expect-message](https://npmx.dev/jest-expect-message).
    *
-   * *(from `eslint-plugin-jest` docs)*
+   * *(from
+   * [`eslint-plugin-jest` docs](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#minargs--maxargs))*
    *
    * Values less than 0 will be ignored.
+   *
+   * Affected rule:
+   * - [`jest/valid-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md)
    * @default [1, 1]
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#minargs--maxargs
    */
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }

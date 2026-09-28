@@ -57,11 +57,12 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   'testing-library'
 > {
   /**
-   * By default,
-   * [`testing-library/no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md)
-   * is enabled, which disallows DOM traversal using native HTML methods and properties.
+   * By default, DOM traversal using native HTML methods and properties is disallowed.
    * This option allows the use of `firstChild` property
    * [to get the root element of the rendered element](https://testing-library.com/docs/react-testing-library/api/#container-1).
+   *
+   * Affected rule:
+   * - [`testing-library/no-node-access`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md)
    * @default true
    */
   allowContainerFirstChild?: boolean;
@@ -76,12 +77,14 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   >['allowTestingFrameworkSetupHook'];
 
   /**
-   * - `explicit`: enables
-   *   [`testing-library/prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
-   * - `implicit`: enables
-   *   [`testing-library/prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
-   *
+   * Enforces either the explicit or the implicit assert style.
    * By default, assert style is not enforced.
+   *
+   * Affected rules:
+   * - `explicit`:
+   *   [`testing-library/prefer-explicit-assert`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md)
+   * - `implicit`:
+   *   [`testing-library/prefer-implicit-assert`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md)
    */
   preferAssertStyle?: 'explicit' | 'implicit';
 
