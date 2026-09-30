@@ -918,8 +918,8 @@ importers:
         specifier: 1.8.1
         version: 1.8.1(svelte@5.55.9)
       tailwind-csstree:
-        specifier: 0.4.0
-        version: 0.4.0(@eslint/css@2.0.0)
+        specifier: 0.4.1
+        version: 0.4.1(@eslint/css@2.0.0)
       tsdown:
         specifier: 0.23.0
         version: 0.23.0(@arethetypeswrong/core@0.18.5)(@typescript/typescript6@6.0.2)(oxc-resolver@11.24.2)(tsx@4.23.15)
@@ -12432,8 +12432,8 @@ packages:
       '@eslint/css':
         optional: true
 
-  tailwind-csstree@0.4.0:
-    resolution: {integrity: sha512-EBQfcsJBrRhGLsV/dBc7qIeLzCkOtSb31wNlU6//DUlHO74dcbvyl5sugoI/FeuxtENH5exS+6F5nffe1deDog==}
+  tailwind-csstree@0.4.1:
+    resolution: {integrity: sha512-GOgf0lQhk13norDMdHbW6aK7wd5gFPrArzTkDgJH88w9AVtQQrROUqLVu3sgXqzPBUXIhd+tLASpKqba7+I68g==}
     engines: {node: '>=18.18'}
     peerDependencies:
       '@eslint/css': '>=1.0.0'
@@ -26823,7 +26823,7 @@ snapshots:
     optionalDependencies:
       '@eslint/css': 2.0.0
 
-  tailwind-csstree@0.4.0(@eslint/css@2.0.0):
+  tailwind-csstree@0.4.1(@eslint/css@2.0.0):
     optionalDependencies:
       '@eslint/css': 2.0.0
 
