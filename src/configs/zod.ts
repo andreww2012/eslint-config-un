@@ -302,7 +302,9 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
 
   // Legend:
-  // 🟢 - in recommended
+  // 🟢 - in `recommended` and `strict`
+  // 🔵 - in `strict` only
+  // 🎨 - in `stylistic`
 
   configBuilder
     ?.addConfig('zod')
@@ -310,34 +312,34 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
       'array-style',
       arrayStyle === false ? OFF : ERROR,
       arrayStyle === false ? [] : [{style: arrayStyle}],
-    ) /** @since 0.0.1 */ // 🟢
+    ) /** @since 0.0.1 */ // 🎨
     .addRule(
       'consistent-import',
       ...resolveConsistentImportOptions(optionsResolved),
     ) /** @since 3.1.0 */ // 🟢
-    .addRule('consistent-import-source', OFF) /** @since 1.2.0 */
+    .addRule('consistent-import-source', OFF) /** @since 1.2.0 */ // 🎨
     .addRule(
       'consistent-object-schema-type',
       ...resolveConsistentObjectSchemaTypeOptions(optionsResolved),
-    ) /** @since 1.11.0 */
-    .addRule('consistent-schema-output-type-style', ERROR) /** @since 3.8.0 */
+    ) /** @since 1.11.0 */ // 🎨
+    .addRule('consistent-schema-output-type-style', ERROR) /** @since 3.8.0 */ // 🎨
     .addRule(
       'consistent-schema-var-name',
       ...resolveConsistentSchemaVarNameOptions(optionsResolved),
     ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
     .addRule('no-coerce-boolean', ERROR) /** @since 4.7.0 */ // 🟢
-    .addRule('no-conflicting-checks', ERROR) /** @since 4.8.0 */
+    .addRule('no-conflicting-checks', ERROR) /** @since 4.8.0 */ // 🟢
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 4.6.0 */ // 🟢
     .addRule(
       'no-dynamic-schema-value',
       schemaCompiler === 'zodCompilerPackage' ? ERROR : OFF,
-    ) /** @since 4.13.0 */
+    ) /** @since 4.13.0 */ // 🔵
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule(
       'no-function-scoped-schema',
       schemaCompiler === 'zodCompileBuiltIn' ? ERROR : OFF,
-    ) /** @since 4.13.0 */
+    ) /** @since 4.13.0 */ // 🔵
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 4.2.0 */ // 🟢
     // `.int()` added in v4
     .addRule('no-number-schema-with-finite', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
@@ -351,27 +353,27 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('no-schema-with-is-nullable', severityForRulesOnlyForV4) /** @since 4.4.0 */ // 🟢
     .addRule('no-schema-with-is-optional', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
-    .addRule('no-transform-in-record-key', ERROR) /** @since 3.6.0 */
-    .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
-    .addRule('no-unnecessary-readonly', ERROR) /** @since 4.8.0 */
-    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
-    .addRule('prefer-loose-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
-    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 4.11.0 */
+    .addRule('no-transform-in-record-key', ERROR) /** @since 3.6.0 */ // 🟢
+    .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */ // 🔵
+    .addRule('no-unnecessary-readonly', ERROR) /** @since 4.8.0 */ // 🔵
+    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🎨
+    .addRule('prefer-loose-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🎨
+    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 4.11.0 */ // 🎨
     // `.meta()` added in v4
-    .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
-    .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
-    .addRule('prefer-nullish', ERROR) /** @since 4.9.0 */ // 🟢
-    .addRule('prefer-strict-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
-    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 4.10.0 */
-    .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
+    .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🎨
+    .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🎨
+    .addRule('prefer-nullish', ERROR) /** @since 4.9.0 */ // 🎨
+    .addRule('prefer-strict-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🎨
+    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 4.10.0 */ // 🎨
+    .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🎨
     .addRule('prefer-top-level-string-formats', severityForRulesOnlyForV4) /** @since 4.1.0 */ // 🟢
-    .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🟢
+    .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🔵
     // Note: not considered stylistic because may change types
-    .addRule('prefer-tuple-over-array-length', ERROR) /** @since 4.8.0 */
-    .addRule('prefer-validate', severityForPreferValidate) /** @since 4.13.0 */
+    .addRule('prefer-tuple-over-array-length', ERROR) /** @since 4.8.0 */ // 🎨
+    .addRule('prefer-validate', severityForPreferValidate) /** @since 4.13.0 */ // 🎨
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
-    .addRule('schema-error-property-style', OFF) /** @since 1.8.0 */
+    .addRule('schema-error-property-style', OFF) /** @since 1.8.0 */ // 🎨
     .enableConfigTesterForPlugin('zod')
     .addOverrides();
 
@@ -399,46 +401,46 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
       'consistent-import',
       ...resolveConsistentImportOptions(optionsMiniResolved),
     ) /** @since 0.1.0 */ // 🟢
-    .addRule('consistent-import-source', OFF) /** @since 0.1.0 */
+    .addRule('consistent-import-source', OFF) /** @since 0.1.0 */ // 🎨
     .addRule(
       'consistent-object-schema-type',
       ...resolveConsistentObjectSchemaTypeOptions(optionsMiniResolved),
-    ) /** @since 0.1.0 */
-    .addRule('consistent-schema-output-type-style', ERROR) /** @since 0.1.0 */
+    ) /** @since 0.1.0 */ // 🎨
+    .addRule('consistent-schema-output-type-style', ERROR) /** @since 0.1.0 */ // 🎨
     .addRule(
       'consistent-schema-var-name',
       ...resolveConsistentSchemaVarNameOptions({schemaVariableName: miniSchemaVariableName}),
     ) /** @since 0.1.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.1.0 */ // 🟢
     .addRule('no-coerce-boolean', ERROR) /** @since 1.4.0 */ // 🟢
-    .addRule('no-conflicting-checks', ERROR) /** @since 1.5.0 */
+    .addRule('no-conflicting-checks', ERROR) /** @since 1.5.0 */ // 🟢
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 1.3.0 */ // 🟢
     .addRule(
       'no-dynamic-schema-value',
       miniSchemaCompiler === 'zodCompilerPackage' ? ERROR : OFF,
-    ) /** @since 1.10.0 */
+    ) /** @since 1.10.0 */ // 🔵
     .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule(
       'no-function-scoped-schema',
       miniSchemaCompiler === 'zodCompileBuiltIn' ? ERROR : OFF,
-    ) /** @since 1.10.0 */
+    ) /** @since 1.10.0 */ // 🔵
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
-    .addRule('no-transform-in-record-key', ERROR) /** @since 1.2.0 */
-    .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */
-    .addRule('no-unnecessary-readonly', ERROR) /** @since 1.5.0 */
-    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🟢
-    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 1.8.0 */
-    .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🟢
-    .addRule('prefer-nullish', ERROR) /** @since 1.6.0 */ // 🟢
-    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 1.7.0 */
+    .addRule('no-transform-in-record-key', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */ // 🔵
+    .addRule('no-unnecessary-readonly', ERROR) /** @since 1.5.0 */ // 🔵
+    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🎨
+    .addRule('prefer-map-set-size-over-min-max', ERROR) /** @since 1.8.0 */ // 🎨
+    .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🎨
+    .addRule('prefer-nullish', ERROR) /** @since 1.6.0 */ // 🎨
+    .addRule('prefer-string-length-over-min-max', ERROR) /** @since 1.7.0 */ // 🎨
     // Note: not considered stylistic because may change types
-    .addRule('prefer-tuple-over-array-length', ERROR) /** @since 1.5.0 */
-    .addRule('prefer-validate', severityForPreferValidate) /** @since 1.10.0 */
+    .addRule('prefer-tuple-over-array-length', ERROR) /** @since 1.5.0 */ // 🎨
+    .addRule('prefer-validate', severityForPreferValidate) /** @since 1.10.0 */ // 🎨
     .addRule('require-brand-type-parameter', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 0.1.0 */ // 🟢
-    .addRule('schema-error-property-style', OFF) /** @since 0.1.0 */
+    .addRule('schema-error-property-style', OFF) /** @since 0.1.0 */ // 🎨
     .enableConfigTesterForPlugin('zod-mini')
     .addOverrides();
 
