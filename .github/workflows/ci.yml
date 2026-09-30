@@ -155,6 +155,8 @@ jobs:
         run: pnpm changeset pre enter rc || true
       # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
       - name: Capture new release version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Exits with 1 if there are no unreleased changesets, in which case the version stays the same
           pnpm changeset version || true
