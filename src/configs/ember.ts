@@ -134,6 +134,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('template-require-valid-form-groups', ERROR) /** @since 13.0.0 */
     .addRule('template-table-groups', ERROR) /** @since 13.0.0 */
     .markCategory('Best Practices')
+    .addRule('no-modifier-without-element-usage', ERROR) /** @since 13.6.0 */
     .addRule('template-builtin-component-arguments', ERROR) /** @since 13.0.0 */ // 🟢
     .addRule('template-no-action-modifiers', ERROR) /** @since 13.0.0 */
     .addRule('template-no-action-on-submit-button', OFF) /** @since 13.0.0 */
