@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import * as findUp from 'empathic/find';
+import type {NuxtOptions} from 'nuxt/schema';
 import type {UnConfigContext} from '../config-un/shared';
 import {
   ERROR,
@@ -383,21 +384,126 @@ const relativeDirectoryWithin = (from: string, to: string) => {
     : relativePath.replaceAll(path.sep, '/');
 };
 
-const resolveNuxtDirs = (
-  cwd: string,
+type NuxtComponentsOption =
+  | boolean
+  | string
+  | {path?: string; dirs?: (string | {path?: string})[]}
+  | NuxtComponentsOption[]
+  | null
+  | undefined;
+
+/** Mirrors how Nuxt collects the component directories of a layer */
+const collectNuxtComponentDirs = (option: NuxtComponentsOption): string[] => {
+  if (Array.isArray(option)) {
+    return option.flatMap((item) => collectNuxtComponentDirs(item));
+  }
+  if (option === true || option === undefined) {
+    // Holds the `global` and `islands` ones too
+    return ['components'];
+  }
+  if (typeof option === 'string') {
+    return [option];
+  }
+  if (!option) {
+    return [];
+  }
+
+  return ('dirs' in option ? option.dirs || [] : [option]).flatMap((dir) =>
+    typeof dir === 'string' ? [dir] : dir.path ? [dir.path] : [],
+  );
+};
+
+/**
+ * The directories of a layer, taking Nuxt's defaults for whatever the config leaves out.
+ * `resolveIn` joins a directory onto another one, which lets the paths be absolute or relative
+ */
+export const resolveNuxtLayerDirs = (
   {
-    rootDir,
     srcDir,
+    rootDir,
     serverDir,
     dir,
-  }: {rootDir: string; srcDir: string; serverDir: string; dir: {shared?: string}},
+    components,
+  }: {
+    srcDir: string;
+    rootDir: string;
+    serverDir?: string;
+    dir?: Partial<
+      Record<'app' | 'layouts' | 'middleware' | 'modules' | 'pages' | 'plugins' | 'shared', string>
+    >;
+    components?: NuxtComponentsOption;
+  },
+  resolveIn: (base: string, directory: string) => string,
 ) => {
-  const sharedDir = path.resolve(rootDir, dir.shared || 'shared');
-  const app = relativeDirectoryWithin(cwd, srcDir);
-  const server = relativeDirectoryWithin(cwd, serverDir);
-  const shared = relativeDirectoryWithin(cwd, sharedDir);
-  return app != null && server != null && shared != null ? {app, server, shared} : null;
+  const relativeToSrcDir = (directory: string) =>
+    path.relative(srcDir, resolveIn(srcDir, directory)).replaceAll(path.sep, '/');
+
+  return {
+    app: srcDir,
+    modules: resolveIn(rootDir, dir?.modules || 'modules'),
+    server: resolveIn(rootDir, serverDir || 'server'),
+    shared: resolveIn(rootDir, dir?.shared || 'shared'),
+    components: collectNuxtComponentDirs(components).map(relativeToSrcDir),
+    layouts: relativeToSrcDir(dir?.layouts || 'layouts'),
+    middleware: relativeToSrcDir(dir?.middleware || 'middleware'),
+    pages: relativeToSrcDir(dir?.pages || 'pages'),
+    plugins: relativeToSrcDir(dir?.plugins || 'plugins'),
+    routerOptions: relativeToSrcDir(dir?.app || (srcDir === rootDir ? 'app' : '.')),
+  };
 };
+
+const resolveNuxtLayers = (
+  cwd: string,
+  {alias, _layers: layers}: NuxtOptions,
+  resolveAlias: (path: string, alias: Record<string, string>) => string,
+) => {
+  const resolveIn = (base: string, directory: string) =>
+    path.resolve(base, resolveAlias(directory, alias));
+
+  const [projectLayer, ...otherLayers] = layers.map(({config}) => {
+    const {
+      app: srcDir,
+      modules: modulesDir,
+      server: serverDir,
+      shared: sharedDir,
+      ...dirsInApp
+    } = resolveNuxtLayerDirs(config, resolveIn);
+    const app = relativeDirectoryWithin(cwd, srcDir);
+    const modules = relativeDirectoryWithin(cwd, modulesDir);
+    const server = relativeDirectoryWithin(cwd, serverDir);
+    const shared = relativeDirectoryWithin(cwd, sharedDir);
+    // A layer installed as a package is none of the project's code
+    return app == null ||
+      modules == null ||
+      server == null ||
+      shared == null ||
+      app.split('/').includes('node_modules')
+      ? null
+      : {app, modules, server, shared, ...dirsInApp};
+  });
+
+  return projectLayer
+    ? ([projectLayer, ...otherLayers.filter((layer) => layer != null)] as const)
+    : null;
+};
+
+/** Relative to the ESLint working directory */
+export interface NuxtLayerDirs {
+  /** `srcDir` */
+  app: string;
+  modules: string;
+  server: string;
+  shared: string;
+
+  // Relative to `app` instead, so that the ones of the project move along with `vueOrNuxtProjectDir`
+  components: string[];
+  layouts: string;
+  middleware: string;
+  pages: string;
+  plugins: string;
+  /** Where `router.options` sits */
+  routerOptions: string;
+}
 
 export interface NuxtAutoImports {
   /** Absolute path the artifacts were read from */
@@ -410,11 +516,12 @@ export interface NuxtAutoImports {
   error?: string;
 
   /**
-   * Where each auto-import context lives, relative to the ESLint working directory.
+   * The directories of the project, followed by the ones of every layer it extends that sits inside
+   * the ESLint working directory.
    * `null` when the Nuxt project root sits above that directory, leaving nothing an ESLint pattern
    * can express
    */
-  dirs: Record<'app' | 'server' | 'shared', string> | null;
+  layers: readonly [NuxtLayerDirs, ...NuxtLayerDirs[]] | null;
 
   /**
    * Whether the app lives in a directory of its own rather than at the project root.
@@ -474,12 +581,13 @@ const importNuxtKit = async (cwd: string) => {
 
 const loadNuxtOptions = async (cwd: string) => {
   try {
-    const {loadNuxtConfig} = await importNuxtKit(cwd);
+    const {loadNuxtConfig, resolveAlias} = await importNuxtKit(cwd);
     // `dev` because Nuxt otherwise moves the build directory under `node_modules`, while the
     // development one is where `nuxt prepare` generates the type artifacts.
     // `dotenv` because loading a config otherwise injects the linted project's `.env` into
     // `process.env`, which nothing downstream of a config generator should have to expect
-    return {options: await loadNuxtConfig({cwd, dotenv: false, overrides: {dev: true}})};
+    const options = await loadNuxtConfig({cwd, dotenv: false, overrides: {dev: true}});
+    return {options, layers: resolveNuxtLayers(cwd, options, resolveAlias)};
   } catch (error) {
     return {error: describeError(error)};
   }
@@ -536,7 +644,7 @@ export const resolveNuxtAutoImports = async ({
     return {error, cacheKey: sha256(error)};
   }
 
-  const dirs = nuxtOptions && resolveNuxtDirs(cwd, nuxtOptions);
+  const layers = loadResult?.layers || null;
   const isV4DirectoryStructure = nuxtOptions
     ? nuxtOptions.srcDir !== nuxtOptions.rootDir
     : undefined;
@@ -560,7 +668,7 @@ export const resolveNuxtAutoImports = async ({
   return {
     buildDir,
     ...(loadResult?.error != null && {error: loadResult.error}),
-    dirs,
+    layers,
     isV4DirectoryStructure,
     isBuildDirGenerated: sources.some((source) => source != null),
     globals: {
@@ -584,7 +692,7 @@ export const resolveNuxtAutoImports = async ({
     ],
     cacheKey: sha256(
       JSON.stringify([
-        {buildDir, dirs, isV4DirectoryStructure, error: loadResult?.error},
+        {buildDir, layers, isV4DirectoryStructure, error: loadResult?.error},
         ...sources,
       ]),
     ),

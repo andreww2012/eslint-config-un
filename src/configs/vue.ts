@@ -27,6 +27,7 @@ import {
   noRestrictedHtmlElementsDefault,
   resolveFilesOption,
   resolveIgnoresOption,
+  resolveNuxtLayerDirs,
   resolveUnusedDisableDirectivesReporting,
 } from './shared';
 import {
@@ -302,16 +303,22 @@ export interface VueEslintConfigOptions<
    * - Layout files will also not be subject to
    *   [`vue/require-explicit-slots`](https://eslint.vuejs.org/rules/require-explicit-slots.html)
    *   check;
-   * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
-   *   [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed to do
-   *   `export default`
+   * - [Components](https://nuxt.com/docs/4.x/directory-structure/app/components),
+   *   [layouts](https://nuxt.com/docs/4.x/directory-structure/app/layouts),
+   *   [middleware](https://nuxt.com/docs/4.x/directory-structure/app/middleware),
+   *   [pages](https://nuxt.com/docs/4.x/directory-structure/app/pages),
+   *   [plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins),
+   *   [local modules](https://nuxt.com/docs/4.x/directory-structure/modules),
+   *   [server](https://nuxt.com/docs/4.x/directory-structure/server) files and
+   *   [router options](https://nuxt.com/docs/4.x/guide/recipes/custom-routing#router-options)
+   *   will be allowed to do `export default`
    *   ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
    *   will be turned off);
    * - [`nuxt/no-page-meta-runtime-values`](https://github.com/nuxt/eslint/blob/89618070025b4373e90b227eb478b33a13b34c8f/packages/eslint-plugin/src/rules/no-page-meta-runtime-values/no-page-meta-runtime-values.ts#L66)
    *   and
    *   [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
    *   will be applied to the specified `files` and `ignores`, defaulting to all files inside
-   *   `vueOrNuxtProjectDir` directory;
+   *   `vueOrNuxtProjectDir` directory and the app directories of the layers;
    * - Another sub-config, `nuxtConfig`, will control whether
    *   [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
    *   rule will be applied to Nuxt config file (`true` by default);
@@ -327,9 +334,15 @@ export interface VueEslintConfigOptions<
    *   A bare `nuxt build` may not be enough: unless your Nuxt config sets `buildDir`, Nuxt puts a
    *   production build under `node_modules` instead.
    *   Should your Nuxt config be unreadable, which is reported as a warning, or should it live
-   *   above the directory ESLint runs in, the `buildDir` option reads the auto-imports anyway.
+   *   above the directory ESLint runs in, the `buildDir` option reads the auto-imports anyway;
+   * - All the directories above are taken from your Nuxt config (`srcDir`, `serverDir`, `dir` and
+   *   `components` options), for the project itself and for every
+   *   [layer](https://nuxt.com/docs/4.x/getting-started/layers) it extends, except the ones
+   *   installed as packages or living outside the directory ESLint runs in.
+   *   Should the config be unreadable, Nuxt's default directory structure is assumed.
    *
-   * 📁 Default `files`: <code>**&#47;*.vue</code> inside the `vueOrNuxtProjectDir` directory
+   * 📁 Default `files`: <code>**&#47;*.vue</code> inside the `vueOrNuxtProjectDir` directory and
+   * the app directories of the layers
    *
    * 🧩 Main plugin: [`@nuxt/eslint-plugin`](https://npmx.dev/@nuxt/eslint-plugin)
    * ([docs](https://eslint.nuxt.com/packages/plugin))
@@ -686,7 +699,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     nuxtAutoImports?.isV4DirectoryStructure ?? optionsNuxtResolved.nuxtMajorVersion === 4;
   const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
   optionsResolved.vueOrNuxtProjectDir ??=
-    nuxtAutoImports?.dirs?.app ?? (nuxtV4DirectoryStructure ? 'app' : '');
+    nuxtAutoImports?.layers?.[0].app ?? (nuxtV4DirectoryStructure ? 'app' : '');
 
   context.requestParsing('vue', {
     kind: 'setUpOnly',
@@ -1249,10 +1262,21 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     optionsResolved.vueOrNuxtProjectDir,
   );
 
-  const resolveNuxtRootDir = (directory: string) =>
-    resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}${directory}`);
-  const nuxtServerDir = nuxtAutoImports?.dirs?.server ?? resolveNuxtRootDir('server');
-  const nuxtSharedDir = nuxtAutoImports?.dirs?.shared ?? resolveNuxtRootDir('shared');
+  const [nuxtProjectLayer, ...nuxtOtherLayers] = nuxtAutoImports?.layers || [
+    resolveNuxtLayerDirs(
+      {
+        srcDir: optionsResolved.vueOrNuxtProjectDir,
+        rootDir: nuxtV4DirectoryStructure
+          ? joinPaths(optionsResolved.vueOrNuxtProjectDir, '..')
+          : optionsResolved.vueOrNuxtProjectDir,
+      },
+      joinPaths,
+    ),
+  ];
+  const nuxtLayers = [
+    {...nuxtProjectLayer, app: optionsResolved.vueOrNuxtProjectDir},
+    ...nuxtOtherLayers,
+  ];
 
   const configBuilderNuxt = context.createConfigBuilder(optionsNuxtResolved, 'nuxt');
   if (configNuxt) {
@@ -1260,7 +1284,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       ?.addConfig([
         'vue/nuxt',
         {
-          filesDefault: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
+          filesDefault: nuxtLayers.map((layer) => joinPaths(layer.app, '**/*.vue')),
           parseWith: 'vue',
         },
       ])
@@ -1294,27 +1318,32 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   }
 
   if (nuxtAutoImports) {
-    const codeFilesIn = (directory: string) => [
-      joinPaths(directory, `**/*.${GLOB_JS_TS_X_EXTENSION}`),
-      joinPaths(directory, '**/*.vue'),
-    ];
-    const appDir = optionsResolved.vueOrNuxtProjectDir;
+    const codeFilesIn = (directories: string[]) =>
+      directories.flatMap((directory) => [
+        joinPaths(directory, `**/*.${GLOB_JS_TS_X_EXTENSION}`),
+        joinPaths(directory, '**/*.vue'),
+      ]);
+    const appDirs = nuxtLayers.map((layer) => layer.app);
+    const serverDirs = nuxtLayers.map((layer) => layer.server);
+    const sharedDirs = nuxtLayers.map((layer) => layer.shared);
     const isInsideAppDir = (directory: string) =>
-      appDir === '' || appDir === '.' || directory.startsWith(`${appDir}/`);
+      appDirs.some(
+        (appDir) => appDir === '' || appDir === '.' || directory.startsWith(`${appDir}/`),
+      );
 
     (
       [
         [
           'app',
-          codeFilesIn(appDir),
-          // Whichever of the two sits inside the app directory is matched by the globs above as
-          // well, despite each context being given a different set of auto-imports
-          [nuxtServerDir, nuxtSharedDir]
+          codeFilesIn(appDirs),
+          // Whichever of these sits inside an app directory is matched by the globs above as well,
+          // despite each context being given a different set of auto-imports
+          [...serverDirs, ...sharedDirs]
             .filter((directory) => isInsideAppDir(directory))
             .map((directory) => `${directory}/**`),
         ],
-        ['server', codeFilesIn(nuxtServerDir)],
-        ['shared', codeFilesIn(nuxtSharedDir)],
+        ['server', codeFilesIn(serverDirs)],
+        ['shared', codeFilesIn(sharedDirs)],
       ] satisfies [
         globalsContext: keyof NuxtAutoImports['globals'],
         files: string[],
@@ -1339,8 +1368,6 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     });
   }
 
-  const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
-
   configBuilder
     ?.addConfig(
       [
@@ -1349,26 +1376,31 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       ],
       {
         files: [
-          resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
-          resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
-          configNuxt && [
-            nuxtLayoutsFilesGlob,
-            ...['app.vue', 'error.vue'].map((fileName) =>
-              resolvePathInVueOrNuxtProjectDir(fileName),
-            ),
-          ],
+          ...new Set(
+            [
+              resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
+              resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
+              configNuxt &&
+                nuxtLayers.flatMap((layer) => [
+                  joinPaths(layer.app, layer.pages, '**/*.vue'),
+                  joinPaths(layer.app, layer.layouts, '**/*.vue'),
+                  joinPaths(layer.app, 'app.vue'),
+                  joinPaths(layer.app, 'error.vue'),
+                ]),
 
-          optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
-        ]
-          .flat()
-          .filter((v) => typeof v === 'string'),
+              optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
+            ]
+              .flat()
+              .filter((v) => typeof v === 'string'),
+          ),
+        ],
       },
     )
     .addRule('multi-word-component-names', OFF);
 
   configBuilder
     ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
-      files: [nuxtLayoutsFilesGlob],
+      files: nuxtLayers.map((layer) => joinPaths(layer.app, layer.layouts, '**/*.vue')),
     })
     .addRule('require-explicit-slots', configNuxt ? OFF : null);
 
@@ -1376,13 +1408,19 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
       files: [
         ...DEFAULT_VUE_FILES,
-        configNuxt && [
-          resolvePathInVueOrNuxtProjectDir('plugins/**/*'),
-          `${nuxtServerDir}/**/*`,
-          resolvePathInVueOrNuxtProjectDir(
-            `${nuxtV4DirectoryStructure ? '' : 'app/'}router.options.${GLOB_JS_TS_EXTENSION}`,
-          ),
-        ],
+        configNuxt &&
+          nuxtLayers.flatMap((layer) => [
+            ...[
+              ...layer.components,
+              layer.layouts,
+              layer.middleware,
+              layer.pages,
+              layer.plugins,
+            ].map((directory) => joinPaths(layer.app, directory, '**/*')),
+            joinPaths(layer.app, layer.routerOptions, `router.options.${GLOB_JS_TS_EXTENSION}`),
+            joinPaths(layer.modules, '**/*'),
+            joinPaths(layer.server, '**/*'),
+          ]),
       ]
         .flat()
         .filter((v) => typeof v === 'string'),

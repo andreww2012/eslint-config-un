@@ -4,12 +4,14 @@ import path from 'node:path';
 import type {
   NuxtAutoImports,
   NuxtAutoImportsResult,
+  NuxtLayerDirs,
   resolveNuxtAutoImports,
 } from '../../../src/configs/shared';
 
 const FIXTURES = {
   nuxtProject: 'nuxt-auto-imports-project',
   brokenNuxtProject: 'nuxt-broken-config-project',
+  nuxtCustomDirsProject: 'nuxt-custom-dirs-project',
 } as const;
 
 const NUXT_BUILD_DIR = 'nuxt-build';
@@ -18,6 +20,11 @@ const BROKEN_NUXT_PROJECT_DIR = path.join(
   import.meta.dirname,
   'fixtures',
   FIXTURES.brokenNuxtProject,
+);
+const NUXT_CUSTOM_DIRS_PROJECT_DIR = path.join(
+  import.meta.dirname,
+  'fixtures',
+  FIXTURES.nuxtCustomDirsProject,
 );
 
 const {autoImports, resolveNuxtAutoImportsMock} = vi.hoisted(() => {
@@ -79,9 +86,23 @@ const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
   'package.json',
 );
 
+const createLayerDirs = (overrides?: Partial<NuxtLayerDirs>): NuxtLayerDirs => ({
+  app: 'app',
+  modules: 'modules',
+  server: 'server',
+  shared: 'shared',
+  components: ['components'],
+  layouts: 'layouts',
+  middleware: 'middleware',
+  pages: 'pages',
+  plugins: 'plugins',
+  routerOptions: '',
+  ...overrides,
+});
+
 const createAutoImports = (overrides?: Partial<NuxtAutoImports>): NuxtAutoImports => ({
   buildDir: '/project/.nuxt',
-  dirs: {app: 'app', server: 'server', shared: 'shared'},
+  layers: [createLayerDirs()],
   isV4DirectoryStructure: true,
   isBuildDirGenerated: true,
   globals: {
@@ -173,7 +194,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
     });
 
     it('warns that the layout was guessed when `buildDir` rescued an unloadable config', async () => {
-      autoImports.current = createAutoImports({error: 'Cannot find module `x`', dirs: null});
+      autoImports.current = createAutoImports({error: 'Cannot find module `x`', layers: null});
       const processOutput = spyOnProcessOutput();
 
       await computeEslintConfig({vue: {configNuxt: true}});
@@ -251,7 +272,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('excludes `server` and `shared` from the app config when the app sits at the project root', async () => {
       autoImports.current = createAutoImports({
-        dirs: {app: '', server: 'server', shared: 'shared'},
+        layers: [createLayerDirs({app: ''})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -264,7 +285,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('excludes `server` and `shared` from the app config when they are nested inside it', async () => {
       autoImports.current = createAutoImports({
-        dirs: {app: 'src', server: 'src/server', shared: 'shared'},
+        layers: [createLayerDirs({app: 'src', server: 'src/server'})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -276,7 +297,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('takes the context directories from the resolved Nuxt config', async () => {
       autoImports.current = createAutoImports({
-        dirs: {app: 'source', server: 'api', shared: 'common'},
+        layers: [createLayerDirs({app: 'source', server: 'api', shared: 'common'})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -308,6 +329,123 @@ describe('vue: sub config `nuxt` auto-imports', () => {
       expect(
         configResult.getConfigByUnPostfix('vue/nuxt/auto-imports/server')?.files,
       ).toStrictEqual(['server/**/*.?([cm])[jt]s?(x)', 'server/**/*.vue']);
+    });
+
+    it('declares the auto-imports of a context in every layer', async () => {
+      autoImports.current = createAutoImports({
+        layers: [
+          createLayerDirs(),
+          createLayerDirs({
+            app: 'layers/base',
+            server: 'layers/base/server',
+            shared: 'layers/base/shared',
+          }),
+        ],
+      });
+
+      const configResult = await computeEslintConfig({vue: {configNuxt: true}});
+
+      const appConfig = configResult.getConfigByUnPostfix('vue/nuxt/auto-imports/app');
+
+      expect(appConfig?.files).toMatchInlineSnapshot(
+        '["app/**/*.?([cm])[jt]s?(x)", "app/**/*.vue", "layers/base/**/*.?([cm])[jt]s?(x)", "layers/base/**/*.vue"]',
+      );
+      expect(appConfig?.ignores).toStrictEqual(['layers/base/server/**', 'layers/base/shared/**']);
+      expect(
+        configResult.getConfigByUnPostfix('vue/nuxt/auto-imports/server')?.files,
+      ).toMatchInlineSnapshot(
+        '["server/**/*.?([cm])[jt]s?(x)", "server/**/*.vue", "layers/base/server/**/*.?([cm])[jt]s?(x)", "layers/base/server/**/*.vue"]',
+      );
+      expect(
+        configResult.getConfigByUnPostfix('vue/nuxt/auto-imports/shared')?.files,
+      ).toMatchInlineSnapshot(
+        '["shared/**/*.?([cm])[jt]s?(x)", "shared/**/*.vue", "layers/base/shared/**/*.?([cm])[jt]s?(x)", "layers/base/shared/**/*.vue"]',
+      );
+    });
+  });
+
+  describe('directories', () => {
+    it('takes the directories of the project from the resolved Nuxt config', async () => {
+      autoImports.current = createAutoImports({
+        layers: [
+          createLayerDirs({
+            modules: 'local-modules',
+            server: 'api',
+            components: ['widgets', '../ui'],
+            layouts: 'page-layouts',
+            middleware: 'route-middleware',
+            pages: 'views',
+            plugins: 'nuxt-plugins',
+          }),
+        ],
+      });
+
+      const configResult = await computeEslintConfig({vue: {configNuxt: true}});
+
+      expect(
+        configResult.getConfigByUnPostfix('vue/allow-default-export')?.files,
+      ).toMatchInlineSnapshot(
+        '["**/*.vue", "app/widgets/**/*", "ui/**/*", "app/page-layouts/**/*", "app/route-middleware/**/*", "app/views/**/*", "app/nuxt-plugins/**/*", "app/router.options.?([cm])[jt]s", "local-modules/**/*", "api/**/*"]',
+      );
+      expect(
+        configResult.getConfigByUnPostfix('vue/allow-single-word-component-names')?.files,
+      ).toMatchInlineSnapshot(
+        '["app/pages/**/*.vue", "app/views/**/*.vue", "app/page-layouts/**/*.vue", "app/app.vue", "app/error.vue"]',
+      );
+      expect(configResult.getConfigByUnPostfix('vue/allow-implicit-slots')?.files).toStrictEqual([
+        'app/page-layouts/**/*.vue',
+      ]);
+    });
+
+    it('covers the directories of every layer', async () => {
+      autoImports.current = createAutoImports({
+        layers: [
+          createLayerDirs(),
+          createLayerDirs({
+            app: 'layers/base',
+            modules: 'layers/base/modules',
+            server: 'layers/base/server',
+            shared: 'layers/base/shared',
+            routerOptions: 'app',
+          }),
+        ],
+      });
+
+      const configResult = await computeEslintConfig({vue: {configNuxt: true}});
+
+      expect(configResult.getConfigByUnPostfix('vue/nuxt')?.files).toStrictEqual([
+        'app/**/*.vue',
+        'layers/base/**/*.vue',
+      ]);
+      expect(
+        configResult.getConfigByUnPostfix('vue/allow-default-export')?.files,
+      ).toMatchInlineSnapshot(
+        '["**/*.vue", "app/components/**/*", "app/layouts/**/*", "app/middleware/**/*", "app/pages/**/*", "app/plugins/**/*", "app/router.options.?([cm])[jt]s", "modules/**/*", "server/**/*", "layers/base/components/**/*", "layers/base/layouts/**/*", "layers/base/middleware/**/*", "layers/base/pages/**/*", "layers/base/plugins/**/*", "layers/base/app/router.options.?([cm])[jt]s", "layers/base/modules/**/*", "layers/base/server/**/*"]',
+      );
+      expect(
+        configResult.getConfigByUnPostfix('vue/allow-single-word-component-names')?.files,
+      ).toMatchInlineSnapshot(
+        '["app/pages/**/*.vue", "app/views/**/*.vue", "app/layouts/**/*.vue", "app/app.vue", "app/error.vue", "layers/base/pages/**/*.vue", "layers/base/layouts/**/*.vue", "layers/base/app.vue", "layers/base/error.vue"]',
+      );
+      expect(configResult.getConfigByUnPostfix('vue/allow-implicit-slots')?.files).toStrictEqual([
+        'app/layouts/**/*.vue',
+        'layers/base/layouts/**/*.vue',
+      ]);
+    });
+
+    it('moves the directories of the project, but not of its layers, along with `vueOrNuxtProjectDir`', async () => {
+      autoImports.current = createAutoImports({
+        layers: [createLayerDirs({layouts: 'page-layouts'}), createLayerDirs({app: 'layers/base'})],
+      });
+
+      const configResult = await computeEslintConfig({
+        vue: {configNuxt: true, vueOrNuxtProjectDir: 'source'},
+      });
+
+      expect(configResult.getConfigByUnPostfix('vue/allow-implicit-slots')?.files).toStrictEqual([
+        'source/page-layouts/**/*.vue',
+        'layers/base/layouts/**/*.vue',
+      ]);
     });
   });
 
@@ -402,12 +540,68 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     );
   });
 
-  it('resolves the directory of every context relative to the working directory', async () => {
-    expect((await resolveFromFixture())?.dirs).toStrictEqual({
-      app: 'app',
-      server: 'server',
-      shared: 'shared',
-    });
+  it('resolves the directories relative to the working directory', async () => {
+    expect((await resolveFromFixture())?.layers).toStrictEqual([createLayerDirs()]);
+  });
+
+  it('reads the directories of the project and of its layers from the Nuxt config', async () => {
+    expect((await resolveFromFixture({cwd: NUXT_CUSTOM_DIRS_PROJECT_DIR}))?.layers).toStrictEqual([
+      createLayerDirs({
+        modules: 'local-modules',
+        components: ['widgets', '../ui'],
+        layouts: 'page-layouts',
+        middleware: 'route-middleware',
+        pages: 'views',
+        plugins: 'nuxt-plugins',
+      }),
+      createLayerDirs({
+        app: 'layers/base',
+        modules: 'layers/base/modules',
+        server: 'layers/base/server',
+        shared: 'layers/base/shared',
+        pages: 'screens',
+        routerOptions: 'app',
+      }),
+    ]);
+  });
+
+  it('leaves out the layers installed as packages or living outside the working directory', async () => {
+    const temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-layers-'));
+    onTestFinished(() => fs.rm(temporaryDir, {recursive: true, force: true}));
+
+    const projectDir = path.join(temporaryDir, 'project');
+    await Promise.all(
+      [
+        path.join(projectDir, 'node_modules', 'package-layer'),
+        path.join(temporaryDir, 'outside-layer'),
+      ].map(async (layerDir) => {
+        await fs.mkdir(layerDir, {recursive: true});
+        await fs.writeFile(path.join(layerDir, 'nuxt.config.ts'), 'export default {};\n');
+      }),
+    );
+    await fs.writeFile(
+      path.join(projectDir, 'nuxt.config.ts'),
+      "export default {extends: ['../outside-layer', './node_modules/package-layer']};\n",
+    );
+
+    const result = await resolveFromFixture({cwd: projectDir});
+
+    expect(result?.layers?.map((layer) => layer.app)).toStrictEqual(['']);
+  });
+
+  it('collects the component directories the way Nuxt does', async () => {
+    const projectDir = await createNuxtProject();
+    await fs.writeFile(
+      path.join(projectDir, 'nuxt.config.ts'),
+      "export default {components: [true, false, 'bits', {path: 'icons'}, {prefix: 'No'}, {dirs: ['widgets', {global: true}]}]};\n",
+    );
+
+    expect((await resolveFromFixture({cwd: projectDir}))?.layers?.[0].components).toStrictEqual([
+      'components',
+      'bits',
+      'icons',
+      'widgets',
+    ]);
   });
 
   it('reports the directory structure Nuxt resolved', async () => {
@@ -454,7 +648,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
       'vMyDirective',
     ]);
     // Nothing was loaded, so the layout stays unknown and the Config falls back to its own defaults
-    expect(result?.dirs).toBeNull();
+    expect(result?.layers).toBeNull();
     expect(result?.isV4DirectoryStructure).toBeUndefined();
   });
 
@@ -463,7 +657,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     expect(result?.buildDir).toBe(path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR));
     // The config still loaded, so the layout it reports is kept
-    expect(result?.dirs).toStrictEqual({app: 'app', server: 'server', shared: 'shared'});
+    expect(result?.layers).toStrictEqual([createLayerDirs()]);
   });
 
   it('reports a build directory that cannot be read rather than throwing', async () => {
@@ -492,7 +686,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     expect(autoImportsRead?.error).toContain('Intentionally broken');
     expect(autoImportsRead?.globals.app).toContain('useMyComposable');
     // Nothing was loaded, so the layout is left for the Config to guess
-    expect(autoImportsRead?.dirs).toBeNull();
+    expect(autoImportsRead?.layers).toBeNull();
   });
 
   it('changes the cache key when the artifacts change, and only then', async () => {
@@ -527,7 +721,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     it("uses the project's own Nuxt", async () => {
       const {resolveNuxtAutoImports} = await importActualShared();
       const projectDir = await createNuxtProject(
-        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, serverDir: cwd, dir: {}});\n",
+        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, _layers: []});\n",
       );
 
       const result = await resolveNuxtAutoImports({cwd: projectDir});
@@ -535,6 +729,20 @@ describe('vue: `resolveNuxtAutoImports`', () => {
       expect(result && 'buildDir' in result ? result.buildDir : null).toBe(
         path.join(projectDir, 'own-nuxt-build'),
       );
+    });
+
+    // What `loadNuxtConfig` makes up when it finds no layer at all
+    it('assumes the default directories of a layer its config says nothing about', async () => {
+      const {resolveNuxtAutoImports} = await importActualShared();
+      const projectDir = await createNuxtProject(
+        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: '.nuxt', rootDir: cwd, srcDir: cwd, alias: {}, _layers: [{cwd, config: {rootDir: cwd, srcDir: cwd}}]});\nexport const resolveAlias = (path) => path;\n",
+      );
+
+      const result = await resolveNuxtAutoImports({cwd: projectDir});
+
+      expect(result && 'layers' in result ? result.layers : null).toStrictEqual([
+        createLayerDirs({app: '', routerOptions: 'app'}),
+      ]);
     });
 
     // Like under Yarn PnP, where there is no `node_modules` to resolve from

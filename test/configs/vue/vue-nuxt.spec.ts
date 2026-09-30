@@ -129,6 +129,11 @@ describe('vue: sub config `nuxt`', () => {
         ).toMatchInlineSnapshot(
           '["pages/**/*.vue", "views/**/*.vue", "layouts/**/*.vue", "app.vue", "error.vue"]',
         );
+        expect(
+          configResult.getConfigByUnPostfix('vue/allow-default-export')?.files,
+        ).toMatchInlineSnapshot(
+          '["**/*.vue", "components/**/*", "layouts/**/*", "middleware/**/*", "pages/**/*", "plugins/**/*", "app/router.options.?([cm])[jt]s", "modules/**/*", "server/**/*"]',
+        );
       });
 
       it('uses nuxt 4 paths when nuxt 4 is installed', async () => {
@@ -140,6 +145,11 @@ describe('vue: sub config `nuxt`', () => {
           configResult.getConfigByUnPostfix('vue/allow-single-word-component-names')?.files,
         ).toMatchInlineSnapshot(
           '["app/pages/**/*.vue", "app/views/**/*.vue", "app/layouts/**/*.vue", "app/app.vue", "app/error.vue"]',
+        );
+        expect(
+          configResult.getConfigByUnPostfix('vue/allow-default-export')?.files,
+        ).toMatchInlineSnapshot(
+          '["**/*.vue", "app/components/**/*", "app/layouts/**/*", "app/middleware/**/*", "app/pages/**/*", "app/plugins/**/*", "app/router.options.?([cm])[jt]s", "modules/**/*", "server/**/*"]',
         );
       });
 
@@ -207,11 +217,14 @@ describe('vue: sub config `nuxt`', () => {
     });
   });
 
-  it('does not add nuxt-specific paths to `vue/allow-single-word-component-names` eslint config when sub config is disabled', async () => {
+  it('does not add nuxt-specific paths to `vue/{allow-single-word-component-names,allow-default-export}` eslint configs when sub config is disabled', async () => {
     const configResult = await computeEslintConfig({vue: {configNuxt: false}});
 
     expect(
       configResult.getConfigByUnPostfix('vue/allow-single-word-component-names')?.files,
     ).not.toIncludeAnyMembers(['layouts/**/*.vue', 'app.vue', 'error.vue']);
+    expect(configResult.getConfigByUnPostfix('vue/allow-default-export')?.files).toStrictEqual([
+      '**/*.vue',
+    ]);
   });
 });
