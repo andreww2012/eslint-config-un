@@ -5,7 +5,6 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
-import type {NuxtAutoImportsResult} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
   EslintFlatConfigEntry,
@@ -43,6 +42,7 @@ import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from './config-utils';
 import type {ResolvedGitignore} from './gitignore';
 import type {ImportPluginReplaceableRules} from './import-integrity';
+import type {NuxtAutoImportsResult} from './nuxt';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
 

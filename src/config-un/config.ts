@@ -6,7 +6,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ManifestConfigKey, UnConfigResults} from '../configs/index.gen';
 import {CONFIG_MANIFESTS, CONFIG_ORDER} from '../configs/manifests.gen';
-import {resolveNuxtAutoImports, withAllowDefaultProject} from '../configs/shared';
+import {withAllowDefaultProject} from '../configs/shared';
 import {
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
@@ -68,6 +68,7 @@ import {
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import {resolveGitignore} from './gitignore';
 import {withDefaultPackageRootDir} from './import-integrity';
+import {resolveNuxtAutoImports} from './nuxt';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {

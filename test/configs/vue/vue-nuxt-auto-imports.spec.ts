@@ -6,7 +6,7 @@ import type {
   NuxtAutoImportsResult,
   NuxtLayerDirs,
   resolveNuxtAutoImports,
-} from '../../../src/configs/shared';
+} from '../../../src/config-un/nuxt';
 
 const FIXTURES = {
   nuxtProject: 'nuxt-auto-imports-project',
@@ -38,19 +38,19 @@ const {autoImports, resolveNuxtAutoImportsMock} = vi.hoisted(() => {
   };
 });
 
-vi.mock(import('../../../src/configs/shared'), async (importOriginal) => ({
+vi.mock(import('../../../src/config-un/nuxt'), async (importOriginal) => ({
   ...(await importOriginal()),
   resolveNuxtAutoImports: resolveNuxtAutoImportsMock,
 }));
 
-const importActualShared = async () =>
-  await vi.importActual<typeof import('../../../src/configs/shared')>(
-    '../../../src/configs/shared',
+const importActualNuxt = async () =>
+  await vi.importActual<typeof import('../../../src/config-un/nuxt')>(
+    '../../../src/config-un/nuxt',
   );
 
 /** Narrows away the failure branch, which the successful cases never produce */
 const resolveFromFixture = async (options?: {cwd?: string; buildDir?: string}) => {
-  const {resolveNuxtAutoImports} = await importActualShared();
+  const {resolveNuxtAutoImports} = await importActualNuxt();
   const result = await resolveNuxtAutoImports({cwd: NUXT_PROJECT_DIR, ...options});
   return result && 'globals' in result ? result : null;
 };
@@ -519,7 +519,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
 describe('vue: `resolveNuxtAutoImports`', () => {
   it('returns `null` when no Nuxt config can be found', async () => {
-    const {resolveNuxtAutoImports} = await importActualShared();
+    const {resolveNuxtAutoImports} = await importActualNuxt();
 
     await expect(
       resolveNuxtAutoImports({cwd: path.parse(import.meta.dirname).root}),
@@ -527,7 +527,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('returns `null` from a nested directory that has no Nuxt config of its own', async () => {
-    const {resolveNuxtAutoImports} = await importActualShared();
+    const {resolveNuxtAutoImports} = await importActualNuxt();
 
     await expect(
       resolveNuxtAutoImports({cwd: path.join(NUXT_PROJECT_DIR, 'packages', 'plain-lib')}),
@@ -625,7 +625,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('reports the failure when a Nuxt config is found but cannot be loaded', async () => {
-    const {resolveNuxtAutoImports} = await importActualShared();
+    const {resolveNuxtAutoImports} = await importActualNuxt();
 
     const result = await resolveNuxtAutoImports({cwd: BROKEN_NUXT_PROJECT_DIR});
 
@@ -661,7 +661,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('reports a build directory that cannot be read rather than throwing', async () => {
-    const {resolveNuxtAutoImports} = await importActualShared();
+    const {resolveNuxtAutoImports} = await importActualNuxt();
 
     // A file rather than a directory, which is reported instead of being read as a missing one
     const result = await resolveNuxtAutoImports({
@@ -675,7 +675,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('keeps reading the auto-imports when `buildDir` is set but the config cannot be loaded', async () => {
-    const {resolveNuxtAutoImports} = await importActualShared();
+    const {resolveNuxtAutoImports} = await importActualNuxt();
 
     const result = await resolveNuxtAutoImports({
       cwd: BROKEN_NUXT_PROJECT_DIR,
@@ -719,7 +719,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // Our own location may be in a store shared between projects, where it reaches another project's Nuxt or none at all
     it("uses the project's own Nuxt", async () => {
-      const {resolveNuxtAutoImports} = await importActualShared();
+      const {resolveNuxtAutoImports} = await importActualNuxt();
       const projectDir = await createNuxtProject(
         "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, _layers: []});\n",
       );
@@ -733,7 +733,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // What `loadNuxtConfig` makes up when it finds no layer at all
     it('assumes the default directories of a layer its config says nothing about', async () => {
-      const {resolveNuxtAutoImports} = await importActualShared();
+      const {resolveNuxtAutoImports} = await importActualNuxt();
       const projectDir = await createNuxtProject(
         "export const loadNuxtConfig = async ({cwd}) => ({buildDir: '.nuxt', rootDir: cwd, srcDir: cwd, alias: {}, _layers: [{cwd, config: {rootDir: cwd, srcDir: cwd}}]});\nexport const resolveAlias = (path) => path;\n",
       );
@@ -747,7 +747,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // Like under Yarn PnP, where there is no `node_modules` to resolve from
     it('falls back to the Nuxt reachable from its own location when the project has none to resolve', async () => {
-      const {resolveNuxtAutoImports} = await importActualShared();
+      const {resolveNuxtAutoImports} = await importActualNuxt();
       const projectDir = await createNuxtProject();
 
       const result = await resolveNuxtAutoImports({cwd: projectDir});
@@ -766,7 +766,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
         ...(await importOriginal()),
         up: () => SHARED_STORE_PACKAGE_JSON_PATH,
       }));
-      const {resolveNuxtAutoImports} = await importActualShared();
+      const {resolveNuxtAutoImports} = await importActualNuxt();
       const projectDir = await createNuxtProject();
 
       await expect(resolveNuxtAutoImports({cwd: projectDir})).resolves.toMatchObject({

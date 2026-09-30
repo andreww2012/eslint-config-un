@@ -1,5 +1,6 @@
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
+import {type NuxtAutoImports, resolveNuxtLayerDirs} from '../config-un/nuxt';
 import {
   ERROR,
   GLOB_JS_TS_EXTENSION,
@@ -22,12 +23,10 @@ import {
   regexEscape,
 } from '../utils';
 import {
-  type NuxtAutoImports,
   type ValidAndInvalidHtmlTags,
   noRestrictedHtmlElementsDefault,
   resolveFilesOption,
   resolveIgnoresOption,
-  resolveNuxtLayerDirs,
   resolveUnusedDisableDirectivesReporting,
 } from './shared';
 import {
