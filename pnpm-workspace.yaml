@@ -25,11 +25,30 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-web-api@5.23.3
   - eslint-plugin-react-x@5.23.3
   - '@next/eslint-plugin-next@16.3.8'
+  - '@vitest/coverage-v8@5.0.3'
+  - '@vitest/mocker@5.0.3'
+  - '@vitest/pretty-format@5.0.3'
+  - '@vitest/spy@5.0.3'
+  - '@vitest/ui@5.0.3'
+  - '@vitest/utils@5.0.3'
+  - knip@6.39.0
+  - vitest@5.0.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude: []
+trustPolicyExclude: # []
+  - lefthook@2.1.15
+  - lefthook-darwin-arm64@2.1.15
+  - lefthook-darwin-x64@2.1.15
+  - lefthook-linux-arm64@2.1.15
+  - lefthook-linux-x64@2.1.15
+  - lefthook-freebsd-arm64@2.1.15
+  - lefthook-freebsd-x64@2.1.15
+  - lefthook-openbsd-arm64@2.1.15
+  - lefthook-openbsd-x64@2.1.15
+  - lefthook-windows-arm64@2.1.15
+  - lefthook-windows-x64@2.1.15
 
 audit:
   ignore: # []
@@ -40,7 +59,7 @@ allowBuilds:
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
   # Critical: set ups git hooks
-  lefthook@2.1.14: true
+  lefthook@2.1.15: true
 
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher': false
@@ -60,11 +79,13 @@ dedupePeers: true
 strictPeerDependencies: false
 
 overrides:
-  brace-expansion@>=5.0.0 <5.0.9: 5.0.9
+  axios@>=1.13.0 <1.20.0: 1.20.0
+  brace-expansion@>=5.0.0 <5.0.12: 5.0.12
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   smol-toml@<=1.7.0: ^1.7.1
+  undici@>=7.0.0 <7.29.1: 7.30.0
 
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
