@@ -12,7 +12,8 @@ export default {
     'pnpm-workspace.yaml',
     '**/*.svg',
     'patches/**',
-    '**/temp/**', // TODO why gitignore doesn't work?
+    '**/temp/**', // Gitignored, but cspell applies `.gitignore` only after walking all (possibly a lot) files in there
+    '.claude/worktrees/**', // Ignored via `.git/info/exclude`, which cspell doesn't read
     'data/eslint-plugins-db.json',
     '.all-contributorsrc',
     '.changeset/*.json',
