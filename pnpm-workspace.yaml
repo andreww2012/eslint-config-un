@@ -7,7 +7,8 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: # []
+minimumReleaseAgeExclude:
+  # []
   - eslint-plugin-sonarjs@4.2.2
   - '@typescript-eslint/eslint-plugin@8.71.0'
   - '@typescript-eslint/parser@8.71.0'
@@ -34,6 +35,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-rsc@5.21.2
   - eslint-plugin-react-web-api@5.21.2
   - eslint-plugin-react-x@5.21.2
+  - eslint-plugin-jsdoc@65.0.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -41,7 +43,8 @@ trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
 audit:
-  ignore: # []
+  ignore:
+    # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
   ignorePrune: true
 
