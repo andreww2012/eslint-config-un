@@ -1,7 +1,7 @@
 // cspell:ignore mathml
 import {fixupPluginRules as fixupPluginRulesOriginal} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
-import type {EslintPlugin} from '../eslint/eslint-types';
+import type {EslintPlugin, PluginTypedByEslintCoreOrTsEslint} from '../eslint/eslint-types';
 import type {Prettify} from '../types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
 import {
@@ -36,6 +36,10 @@ const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin =>
   ),
 });
 
+// `typescript-eslint` typings of a plugin don't satisfy `@eslint/core`'s, but describe the same object
+export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslint) =>
+  plugin as EslintPlugin;
+
 /* v8 ignore next - The preset always contains the requested plugin */
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
@@ -45,25 +49,16 @@ const loadEslintReactPlugin = (pluginName: string) =>
   );
 
 export const pluginsLoaders = {
-  angular: genModuleLoader(
-    'angular',
-    '@angular-eslint/eslint-plugin',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@angular-eslint/eslint-plugin'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  angular: genModuleLoader('angular', '@angular-eslint/eslint-plugin', () =>
+    interopDefault(import('@angular-eslint/eslint-plugin')).then(castTsEslintTypedPlugin),
   ),
   'angular-template': genModuleLoader(
     'angular-template',
     '@angular-eslint/eslint-plugin-template',
     () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@angular-eslint/eslint-plugin-template'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+      interopDefault(import('@angular-eslint/eslint-plugin-template')).then(
+        castTsEslintTypedPlugin,
+      ),
   ),
   antfu: genModuleLoader('antfu', 'eslint-plugin-antfu', () =>
     interopDefault(import('eslint-plugin-antfu')),
@@ -72,11 +67,7 @@ export const pluginsLoaders = {
     'arrow-return-style',
     'eslint-plugin-arrow-return-style-x',
     () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-arrow-return-style-x'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+      interopDefault(import('eslint-plugin-arrow-return-style-x')).then(castTsEslintTypedPlugin),
   ),
   astro: genInferredModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
@@ -270,15 +261,8 @@ export const pluginsLoaders = {
   import: genModuleLoader('import', 'eslint-plugin-import-x', () =>
     interopDefault(import('eslint-plugin-import-x')),
   ),
-  'import-integrity': genModuleLoader(
-    'import-integrity',
-    'import-integrity-lint',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('import-integrity-lint'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  'import-integrity': genModuleLoader('import-integrity', 'import-integrity-lint', () =>
+    interopDefault(import('import-integrity-lint')).then(castTsEslintTypedPlugin),
   ),
   'import-zod': genModuleLoader('import-zod', 'eslint-plugin-import-zod', () =>
     interopDefault(import('eslint-plugin-import-zod')),
@@ -353,27 +337,16 @@ export const pluginsLoaders = {
   'module-interop': genModuleLoader('moduleInterop', 'eslint-plugin-module-interop', () =>
     interopDefault(import('eslint-plugin-module-interop')),
   ),
-  nestjs: genModuleLoader(
-    'nestjs',
-    '@darraghor/eslint-plugin-nestjs-typed',
-    () =>
-      interopDefault(import('@darraghor/eslint-plugin-nestjs-typed')).then(
-        (m) => m.plugin,
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  nestjs: genModuleLoader('nestjs', '@darraghor/eslint-plugin-nestjs-typed', () =>
+    interopDefault(import('@darraghor/eslint-plugin-nestjs-typed')).then((m) =>
+      castTsEslintTypedPlugin(m.plugin),
+    ),
   ),
   nextjs: genModuleLoader('nextjs', '@next/eslint-plugin-next', () =>
     interopDefault(import('@next/eslint-plugin-next')),
   ),
-  ngrx: genModuleLoader(
-    'ngrx',
-    '@ngrx/eslint-plugin',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@ngrx/eslint-plugin'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ngrx: genModuleLoader('ngrx', '@ngrx/eslint-plugin', () =>
+    interopDefault(import('@ngrx/eslint-plugin')).then(castTsEslintTypedPlugin),
   ),
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
@@ -483,24 +456,13 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  rxjs: genModuleLoader(
-    'rxjs',
-    '@smarttools/eslint-plugin-rxjs',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@smarttools/eslint-plugin-rxjs'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  rxjs: genModuleLoader('rxjs', '@smarttools/eslint-plugin-rxjs', () =>
+    interopDefault(import('@smarttools/eslint-plugin-rxjs')).then(castTsEslintTypedPlugin),
   ),
-  safeql: genModuleLoader(
-    'safeql',
-    '@ts-safeql/eslint-plugin',
-    () =>
-      import('@ts-safeql/eslint-plugin/config').then(
-        (m) => m.default.configs.useConfigFile.plugins['@ts-safeql'],
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  safeql: genModuleLoader('safeql', '@ts-safeql/eslint-plugin', () =>
+    import('@ts-safeql/eslint-plugin/config').then((m) =>
+      castTsEslintTypedPlugin(m.default.configs.useConfigFile.plugins['@ts-safeql']),
+    ),
   ),
   security: genModuleLoader('security', 'eslint-plugin-security', () =>
     interopDefault(import('eslint-plugin-security')),
@@ -510,28 +472,14 @@ export const pluginsLoaders = {
     'eslint-plugin-sentences-per-line',
     () => interopDefault(import('eslint-plugin-sentences-per-line')),
   ),
-  solid: genModuleLoader(
-    'solid',
-    'eslint-plugin-solid',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-solid'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  solid: genModuleLoader('solid', 'eslint-plugin-solid', () =>
+    interopDefault(import('eslint-plugin-solid')).then(castTsEslintTypedPlugin),
   ),
   sonar: genModuleLoader('sonar', 'eslint-plugin-sonarjs', () =>
     interopDefault(import('eslint-plugin-sonarjs')),
   ),
-  sql: genModuleLoader(
-    'sql',
-    'eslint-plugin-sql',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-sql'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  sql: genModuleLoader('sql', 'eslint-plugin-sql', () =>
+    interopDefault(import('eslint-plugin-sql')).then(castTsEslintTypedPlugin),
   ),
   storybook: genModuleLoader(
     'storybook',
@@ -554,15 +502,8 @@ export const pluginsLoaders = {
     // Hard-depends on `svelte` package, uses it at least in `lib/utils/svelte-context.js`
     MODULE_NOT_FOUND_ERROR_CODES,
   ),
-  tailwindcss: genModuleLoader(
-    'tailwindcss',
-    'eslint-plugin-tailwindcss',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-tailwindcss'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  tailwindcss: genModuleLoader('tailwindcss', 'eslint-plugin-tailwindcss', () =>
+    interopDefault(import('eslint-plugin-tailwindcss')).then(castTsEslintTypedPlugin),
   ),
   'tanstack-query': genModuleLoader(
     'tanstack-query',
@@ -656,15 +597,8 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'vue-scoped-css': genModuleLoader(
-    'vue-scoped-css',
-    'eslint-plugin-vue-scoped-css',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-vue-scoped-css'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  'vue-scoped-css': genModuleLoader('vue-scoped-css', 'eslint-plugin-vue-scoped-css', () =>
+    interopDefault(import('eslint-plugin-vue-scoped-css')).then(castTsEslintTypedPlugin),
   ),
   'vuejs-accessibility': genModuleLoader(
     'vuejs-accessibility',
@@ -689,14 +623,11 @@ export const pluginsLoaders = {
   'zod-mini': genModuleLoader('zod-mini', 'eslint-plugin-zod-mini', () =>
     interopDefault(import('eslint-plugin-zod-mini')),
   ),
-  'zod-openapi': genModuleLoader('zod-openapi', 'eslint-plugin-zod-openapi', async () => {
-    // @ts-expect-error types mismatch
-    const plugin = (await interopDefault(
-      import('eslint-plugin-zod-openapi'),
-      // @ts-expect-error types mismatch
-    )) satisfies EslintPlugin as EslintPlugin;
-    return fixupPluginRules(plugin);
-  }),
+  'zod-openapi': genModuleLoader('zod-openapi', 'eslint-plugin-zod-openapi', () =>
+    interopDefault(import('eslint-plugin-zod-openapi'))
+      .then(castTsEslintTypedPlugin)
+      .then(fixupPluginRules),
+  ),
 } satisfies Record<string, ModuleLoader<EslintPlugin, string, boolean>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;

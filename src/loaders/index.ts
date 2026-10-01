@@ -3,6 +3,7 @@ export {
   PLUGIN_PREFIXES_LIST,
   type LoadablePluginPrefix,
   type PluginPrefix,
+  castTsEslintTypedPlugin,
   pluginsLoaders,
 } from './plugins';
 export {type ParserPrefix, parsersLoaders} from './parsers';

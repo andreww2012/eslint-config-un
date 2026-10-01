@@ -14,6 +14,7 @@ import {
   type PackageToLoadInfo,
   type ParserPrefix,
   type PluginPrefix,
+  castTsEslintTypedPlugin,
   packagesLoaders,
   parsersLoaders,
   pluginsLoaders,
@@ -196,8 +197,7 @@ export const resolveConfigAsyncData = async (
           ? await pluginsLoaders[pluginPrefix](context)
           : extraPlugins[pluginPrefix]
             ? await Promise.resolve(maybeCall(extraPlugins[pluginPrefix])).then((module) => ({
-                // Same runtime shape, but `typescript-eslint` plugin typings don't satisfy `@eslint/core`'s
-                module: module as EslintPlugin,
+                module: castTsEslintTypedPlugin(module),
               }))
             : null;
         if (pluginResult && 'packageName' in pluginResult) {

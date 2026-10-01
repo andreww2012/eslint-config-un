@@ -3,6 +3,7 @@ import type {
   Plugin as EslintPlugin,
   Severity as EslintSeverity,
 } from '@eslint/core';
+import type {TSESLint} from '@typescript-eslint/utils';
 import type * as Eslint from 'eslint';
 import type {ExtraPluginsType} from '../config-un/shared';
 import type {FixableRuleNames as UnFixableRuleNames} from '../eslint-types-fixable-only.gen';
@@ -194,6 +195,8 @@ export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknow
 export type EslintRuleMetaWithLanguages = Prettify<
   NonNullable<NonNullable<EslintPlugin['rules']>[string]['meta']> & {languages?: string[]}
 >;
+
+export type PluginTypedByEslintCoreOrTsEslint = EslintPlugin | TSESLint.FlatConfig.Plugin;
 
 // TODO report false positive
 // eslint-disable-next-line unicorn/prefer-export-from

@@ -1,5 +1,4 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
-import type {TSESLint} from '@typescript-eslint/utils';
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
@@ -12,6 +11,7 @@ import type {
   EslintRuleEntry,
   EslintSeverity,
   GetRuleOptions,
+  PluginTypedByEslintCoreOrTsEslint,
   UnAllRuleNames,
   UnExtraPluginsRules,
   UnExtraPluginsRulesConfig,
@@ -46,8 +46,6 @@ import type {NuxtAutoImportsResult} from './nuxt';
 import type {detectPackageManager} from './package-manager';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
-
-type PluginTypedByEslintCoreOrTsEslint = EslintPlugin | TSESLint.FlatConfig.Plugin;
 
 export type ExtraPluginsType = Record<
   string,
