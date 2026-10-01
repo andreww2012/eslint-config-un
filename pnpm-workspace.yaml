@@ -8,31 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-ember@13.6.0
-  - eslint-plugin-jsdoc@65.0.1
-  - '@eslint-react/ast@5.23.3'
-  - '@eslint-react/core@5.23.3'
-  - '@eslint-react/eslint-plugin@5.23.3'
-  - '@eslint-react/eslint@5.23.3'
-  - '@eslint-react/jsx@5.23.3'
-  - '@eslint-react/shared@5.23.3'
-  - '@eslint-react/var@5.23.3'
-  - eslint-plugin-react-debug@5.23.3
-  - eslint-plugin-react-dom@5.23.3
-  - eslint-plugin-react-jsx@5.23.3
-  - eslint-plugin-react-naming-convention@5.23.3
-  - eslint-plugin-react-rsc@5.23.3
-  - eslint-plugin-react-web-api@5.23.3
-  - eslint-plugin-react-x@5.23.3
-  - '@next/eslint-plugin-next@16.3.8'
-  - '@vitest/coverage-v8@5.0.3'
-  - '@vitest/mocker@5.0.3'
-  - '@vitest/pretty-format@5.0.3'
-  - '@vitest/spy@5.0.3'
-  - '@vitest/ui@5.0.3'
-  - '@vitest/utils@5.0.3'
-  - knip@6.39.0
-  - vitest@5.0.3
+  - eslint-plugin-security@4.2.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
