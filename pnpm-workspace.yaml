@@ -9,6 +9,7 @@ minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
   - eslint-plugin-security@4.2.0
+  - eslint-plugin-turbo@2.11.6
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
