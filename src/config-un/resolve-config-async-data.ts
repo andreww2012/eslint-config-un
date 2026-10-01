@@ -1,5 +1,4 @@
 import {renderTable} from 'console-table-printer';
-import type {AgentName} from 'package-manager-detector';
 import {satisfies} from 'verkit';
 import {type DisableAutofixPrefix, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
@@ -65,7 +64,7 @@ const checkIfModuleCorrectlyLoaded = async (
 const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
 
 const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Record<
-  AgentName,
+  NonNullable<UnConfigContext['meta']['usedPackageManager']>['name'],
   {subcommand?: 'add' | 'i'; dev?: string; exact?: string}
 > = {
   aube: {subcommand: 'add'},
@@ -74,6 +73,7 @@ const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Record<
   npm: {},
   nub: {},
   pnpm: {},
+  upm: {subcommand: 'add', dev: '--dev', exact: '--exact'},
   yarn: {subcommand: 'add', dev: '--dev', exact: '--exact'},
 };
 

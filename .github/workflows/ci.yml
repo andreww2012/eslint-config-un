@@ -116,6 +116,7 @@ jobs:
           - aube
           - aube-gvs
           - nub
+          - upm
         node-version: *node-versions
         # Deno lints with its own runtime, so the Node version doesn't matter
         include:

@@ -183,6 +183,12 @@ const PACKAGE_MANAGERS: {
     eslint: ['nubx', 'eslint'],
   },
   {
+    id: 'upm',
+    npmPackage: 'upm@1.3.1',
+    install: ['upm', 'install', '--min-release-age', '0'],
+    eslint: ['upm', 'exec', 'eslint'],
+  },
+  {
     id: 'deno',
     npmPackage: 'deno@2.9.6',
     install: ['deno', 'install', '--minimum-dependency-age=0'],

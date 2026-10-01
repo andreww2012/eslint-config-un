@@ -1,8 +1,11 @@
-import {detect as detectPackageManager} from 'package-manager-detector/detect';
+import {detectPackageManager} from '../../src/config-un/package-manager';
 
-vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
+vi.mock(import('../../src/config-un/package-manager'), async (importOriginal) => {
   const mod = await importOriginal();
-  return {...mod, detect: vi.fn<typeof mod.detect>(mod.detect)};
+  return {
+    ...mod,
+    detectPackageManager: vi.fn<typeof mod.detectPackageManager>(mod.detectPackageManager),
+  };
 });
 
 const mockedPackageNames: string[] = [];
@@ -140,6 +143,11 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
       packageManager: {name: 'deno', agent: 'deno'},
       command: `deno add --dev npm:${DE_MORGAN_PACKAGE}`,
       exactCommand: `deno add --dev --save-exact npm:${DE_MORGAN_PACKAGE}`,
+    },
+    {
+      packageManager: {name: 'upm', agent: 'upm'},
+      command: `upm add --dev ${DE_MORGAN_PACKAGE}`,
+      exactCommand: `upm add --dev --exact ${DE_MORGAN_PACKAGE}`,
     },
   ] as const)(
     'suggests installation commands supported by $packageManager.name',

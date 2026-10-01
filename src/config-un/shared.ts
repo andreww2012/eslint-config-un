@@ -2,7 +2,6 @@ import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/pa
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
-import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ConfigKey, UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
@@ -43,6 +42,7 @@ import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from
 import type {ResolvedGitignore} from './gitignore';
 import type {ImportPluginReplaceableRules} from './import-integrity';
 import type {NuxtAutoImportsResult} from './nuxt';
+import type {detectPackageManager} from './package-manager';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
 
