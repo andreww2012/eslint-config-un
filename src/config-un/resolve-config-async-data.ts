@@ -196,7 +196,8 @@ export const resolveConfigAsyncData = async (
           ? await pluginsLoaders[pluginPrefix](context)
           : extraPlugins[pluginPrefix]
             ? await Promise.resolve(maybeCall(extraPlugins[pluginPrefix])).then((module) => ({
-                module,
+                // Same runtime shape, but `typescript-eslint` plugin typings don't satisfy `@eslint/core`'s
+                module: module as EslintPlugin,
               }))
             : null;
         if (pluginResult && 'packageName' in pluginResult) {

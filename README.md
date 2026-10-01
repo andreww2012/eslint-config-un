@@ -942,7 +942,7 @@ It is merged with our own ignore patterns (also exported as [`DEFAULT_GLOBAL_IGN
 
 ### `extraPlugins`
 
-**Type**: `Record<string, MaybeFn<MaybePromise<EslintPlugin>>>`
+**Type**: `Record<string, MaybeFn<MaybePromise<EslintPlugin | TSESLint.FlatConfig.Plugin>>>`
 
 Additional ESLint plugins of your own.
 Their prefixes, and where possible their rule names, show up in the `rules` types of the configs.
@@ -1273,7 +1273,9 @@ See the JSDoc of each of them for the details.
 
 #### `createNoRestricted*Rule`
 
-Three helpers re-exported from the [`eslint-no-restricted` package](https://npmx.dev/eslint-no-restricted), which build the options of the `no-restricted-*` rules.
+Three helpers re-exported from the [`eslint-no-restricted` package](https://npmx.dev/eslint-no-restricted), each building an ESLint plugin with a separate rule for every restriction you pass.
+Unlike with the `no-restricted-*` rules, every restriction can then be configured on its own.
+Pass the plugin to the [`extraPlugins` option](#extraplugins) to use it.
 See [the package documentation](https://github.com/bradzacher/eslint-no-restricted/blob/HEAD/README.md) for more.
 
 ### `globs` entrypoint

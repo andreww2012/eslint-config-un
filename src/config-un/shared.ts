@@ -1,4 +1,5 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
+import type {TSESLint} from '@typescript-eslint/utils';
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
@@ -46,7 +47,10 @@ import type {detectPackageManager} from './package-manager';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
 
-export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
+export type ExtraPluginsType = Record<
+  string,
+  MaybeFn<MaybePromise<EslintPlugin | TSESLint.FlatConfig.Plugin>>
+>;
 
 /**
  * A bag of options whose values influence the *types* of other options (currently only
