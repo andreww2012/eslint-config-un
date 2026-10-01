@@ -11,6 +11,14 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-security@4.2.0
   - eslint-plugin-turbo@2.11.6
   - globals@17.13.0
+  - '@shikijs/core@4.5.0'
+  - '@shikijs/engine-javascript@4.5.0'
+  - '@shikijs/engine-oniguruma@4.5.0'
+  - '@shikijs/langs@4.5.0'
+  - '@shikijs/primitive@4.5.0'
+  - '@shikijs/themes@4.5.0'
+  - '@shikijs/types@4.5.0'
+  - shiki@4.5.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
