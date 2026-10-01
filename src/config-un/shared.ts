@@ -47,9 +47,11 @@ import type {detectPackageManager} from './package-manager';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
 
+type PluginTypedByEslintCoreOrTsEslint = EslintPlugin | TSESLint.FlatConfig.Plugin;
+
 export type ExtraPluginsType = Record<
   string,
-  MaybeFn<MaybePromise<EslintPlugin | TSESLint.FlatConfig.Plugin>>
+  MaybeFn<MaybePromise<PluginTypedByEslintCoreOrTsEslint>>
 >;
 
 /**
@@ -383,8 +385,15 @@ export interface EslintConfigUnOptions<
         plugin?: MaybeFn<
           MaybePromise<
             Plugin extends keyof typeof pluginsLoaders
-              ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
-              : EslintPlugin
+              ? Awaited<
+                  ReturnType<(typeof pluginsLoaders)[Plugin]>
+                >['module'] & {} extends infer Module
+                ? // Widen only if the loader has no type more precise than `EslintPlugin`
+                  [EslintPlugin] extends [Module]
+                  ? PluginTypedByEslintCoreOrTsEslint
+                  : Module
+                : never
+              : PluginTypedByEslintCoreOrTsEslint
           >
         >;
       } & (Plugin extends keyof PluginSettingsMap

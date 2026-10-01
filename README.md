@@ -1016,7 +1016,7 @@ When enabled:
 
 ### `plugins`
 
-**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin; settings?: object}>>`
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin | TSESLint.FlatConfig.Plugin; settings?: object}>>`
 
 Per-plugin options, keyed by the "canonical" plugin prefix.
 
