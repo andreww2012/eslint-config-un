@@ -120,11 +120,9 @@ export type UnFlatConfigEntryOverridesType<T> = {
 };
 
 export type UnExtraPluginsRules<ExtraPlugins extends ExtraPluginsType> = ObjectValues<{
-  [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof (Awaited<
-    ExtraPlugins[PluginKey] extends (...args: unknown[]) => EslintPlugin
-      ? ReturnType<ExtraPlugins[PluginKey]>
-      : ExtraPlugins[PluginKey] & EslintPlugin
-  >['rules'] & {}) &
+  [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof ((Awaited<
+    ExtraPlugins[PluginKey] extends () => infer Plugin ? Plugin : ExtraPlugins[PluginKey]
+  > & {rules?: unknown})['rules'] & {}) &
     string}`;
 }>;
 

@@ -62,7 +62,7 @@ describe('option: `extraConfigs`', () => {
               name: 'named',
               rules: {
                 'unicorn/no-null': {severity: 'error', files: ['**/*.foo']},
-                'unicorn/no-array-for-each': 'error',
+                'unicorn/no-for-each': 'error',
               },
             },
           ],
@@ -71,7 +71,7 @@ describe('option: `extraConfigs`', () => {
     );
 
     expect(configResult.getConfigByUnPostfix('extra-config/named')?.rules).toStrictEqual({
-      'unicorn/no-array-for-each': 'error',
+      'unicorn/no-for-each': 'error',
     });
     expect(
       configResult.getConfigByUnPostfix('extra-config/named/@rule/unicorn/no-null'),
