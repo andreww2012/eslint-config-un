@@ -92,6 +92,13 @@ export default eslintConfig({
     jsdoc: {
       customTags: ['knipignore', 'until', 'aka'],
     },
+    lockfile: {
+      overrides: {
+        // TODO fetch full registry metadata of every locked package, which exhausts the heap in CI
+        'lockfile/binary-conflicts': 0,
+        'lockfile/shrinkwrap': 0,
+      },
+    },
     markdown: {
       // Formats fenced code blocks with `prettier`, superseded by the `format` config above
       configFormatFencedCodeBlocks: false,
