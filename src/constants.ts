@@ -300,6 +300,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@danielx/civet',
 
   // Used in various configs to determine the default values of their options
+  '@changesets/cli',
   'eslint',
   '@angular-eslint/eslint-plugin',
   '@angular-eslint/eslint-plugin-template',

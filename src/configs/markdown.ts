@@ -44,7 +44,11 @@ const generateNoMissingLabelRefsOptions = (
   },
 ];
 
-const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md'] as const;
+const CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS = '.changeset/**/*.md';
+const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = [
+  'LICENSE.md',
+  CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS,
+] as const;
 
 /**
  * Markdown related rules.
@@ -112,7 +116,8 @@ export interface MarkdownEslintConfigOptions<
    * If `ignores` is explicitly specified, it will still be merged with the default ignore list,
    * excluding items specified in `ignoresAdditional`.
    *
-   * The default ignore list: `LICENSE.md`.
+   * The default ignore list: `LICENSE.md` and <code>.changeset/**&#47;*.md</code> (only if
+   * `@changesets/cli` package is installed).
    *
    * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line)
    * ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
@@ -433,6 +438,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
           ...generateIgnoresWithAdditional(
             configSentencesPerLine,
             resolveIgnoresOption(parentConfigIgnores, []),
+            {
+              [CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS]:
+                context.packagesInfo['@changesets/cli'] != null,
+            },
           )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
         },
       )

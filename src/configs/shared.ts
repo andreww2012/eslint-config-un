@@ -65,6 +65,9 @@ export const generateIgnoresWithAdditional =
   <Patterns extends string | readonly string[]>(
     config: boolean | Prettify<UnFlatConfigEntryBase & IgnoresAdditionalOptions<Patterns>>,
     extraIgnoresFallback?: string[],
+    ignoresAdditionalDefaults?: Partial<
+      Record<Patterns extends readonly unknown[] ? Patterns[number] : Patterns, boolean>
+    >,
   ) =>
   <
     const ProvidedPatterns extends readonly (Patterns extends readonly unknown[]
@@ -78,15 +81,13 @@ export const generateIgnoresWithAdditional =
   ) => {
     const {ignoresAdditional = true} = typeof config === 'object' ? config : {};
     const ignoresFinal = [
-      ...allAdditionalIgnores
-        .map(
-          (fileToIgnore) =>
-            !(
-              ignoresAdditional === false ||
-              (typeof ignoresAdditional === 'object' && ignoresAdditional[fileToIgnore] === false)
-            ) && fileToIgnore,
-        )
-        .filter((v) => typeof v === 'string'),
+      ...allAdditionalIgnores.filter(
+        (fileToIgnore) =>
+          ignoresAdditional !== false &&
+          ((typeof ignoresAdditional === 'object' ? ignoresAdditional[fileToIgnore] : undefined) ??
+            ignoresAdditionalDefaults?.[fileToIgnore] ??
+            true),
+      ),
       ...resolveIgnoresOption(
         typeof config === 'object' ? config.ignores : undefined,
         extraIgnoresFallback || [],

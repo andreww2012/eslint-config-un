@@ -159,6 +159,67 @@ describe('markdown: sub config `sentencesPerLine`', () => {
           configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
         ).toIncludeAllMembers(['LICENSE.md']);
       });
+
+      describe('changesets', () => {
+        const CHANGESETS_IGNORE = '.changeset/**/*.md';
+
+        it('does not ignore changesets by default when `@changesets/cli` is not installed', async () => {
+          const configResult = await computeEslintConfig({
+            markdown: {configSentencesPerLine: true},
+          });
+
+          expect(
+            configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
+          ).not.toIncludeAnyMembers([CHANGESETS_IGNORE]);
+        });
+
+        it('ignores changesets by default when `@changesets/cli` is installed', async () => {
+          addInstalledPackages({'@changesets/cli': '2.29.0'});
+
+          const configResult = await computeEslintConfig({
+            markdown: {configSentencesPerLine: true},
+          });
+
+          expect(
+            configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
+          ).toIncludeAllMembers([CHANGESETS_IGNORE]);
+        });
+
+        it('does not ignore changesets when `@changesets/cli` is installed and option is `false`', async () => {
+          addInstalledPackages({'@changesets/cli': '2.29.0'});
+
+          const configResult = await computeEslintConfig({
+            markdown: {configSentencesPerLine: {ignoresAdditional: false}},
+          });
+
+          expect(
+            configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
+          ).not.toIncludeAnyMembers([CHANGESETS_IGNORE]);
+        });
+
+        it('does not ignore changesets when `@changesets/cli` is installed and the pattern is set to `false`', async () => {
+          addInstalledPackages({'@changesets/cli': '2.29.0'});
+
+          const configResult = await computeEslintConfig({
+            markdown: {configSentencesPerLine: {ignoresAdditional: {[CHANGESETS_IGNORE]: false}}},
+          });
+
+          const ignores = configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores;
+
+          expect(ignores).not.toIncludeAnyMembers([CHANGESETS_IGNORE]);
+          expect(ignores).toIncludeAllMembers(['LICENSE.md']);
+        });
+
+        it('ignores changesets when `@changesets/cli` is not installed and the pattern is set to `true`', async () => {
+          const configResult = await computeEslintConfig({
+            markdown: {configSentencesPerLine: {ignoresAdditional: {[CHANGESETS_IGNORE]: true}}},
+          });
+
+          expect(
+            configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.ignores,
+          ).toIncludeAllMembers([CHANGESETS_IGNORE]);
+        });
+      });
     });
 
     describe('option: `options`', () => {
