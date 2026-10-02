@@ -22,6 +22,9 @@ max_redirects = 0
 suggest = false
 remap = [
   '^https://npmx\.dev/((?:[\w.-]+|@[\w.-]+/[\w.-]+)(?:\?[^/]*)?)$ https://npmx.dev/package/$1',
+  # GitHub throttles logged-out `blob` page views with 503s, hitting CI runners hardest. The raw
+  # file still has Markdown heading fragments to verify; line anchors (`#L42`) are dropped
+  '^https://github\.com/([\w.-]+/[\w.-]+)/blob/([^?#]+)(?:\?[^#]*)?(?:#L\d+(?:-L\d+)?)?(#.*)?$ https://raw.githubusercontent.com/$1/$2$3',
 
   # One-offs:
   # Link with a redirect inside an inline snapshot
@@ -49,7 +52,8 @@ remap = [
 ]
 exclude = [
   # TODO temporary - actually missing fragments for deprecated plugin settings, should remove links to them in future
-  '^https://github\.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#\w+$',
+  # Matched after `remap`, hence the raw URL
+  '^https://raw\.githubusercontent\.com/schoero/eslint-plugin-better-tailwindcss/HEAD/docs/settings/settings\.md#\w+$',
   # TODO temp - site unavailable
   '^https://safeql\.dev/?',
 
