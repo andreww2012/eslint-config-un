@@ -7,48 +7,24 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: # []
-  - eslint-plugin-security@4.2.0
-  - eslint-plugin-turbo@2.11.6
-  - globals@17.13.0
-  - '@shikijs/core@4.5.0'
-  - '@shikijs/engine-javascript@4.5.0'
-  - '@shikijs/engine-oniguruma@4.5.0'
-  - '@shikijs/langs@4.5.0'
-  - '@shikijs/primitive@4.5.0'
-  - '@shikijs/themes@4.5.0'
-  - '@shikijs/types@4.5.0'
-  - shiki@4.5.0
-  - '@effect/platform-node-shared@4.0.0'
-  - '@effect/platform-node@4.0.0'
-  - effect@4.0.0
+minimumReleaseAgeExclude: []
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude: # []
-  - lefthook@2.1.15
-  - lefthook-darwin-arm64@2.1.15
-  - lefthook-darwin-x64@2.1.15
-  - lefthook-linux-arm64@2.1.15
-  - lefthook-linux-x64@2.1.15
-  - lefthook-freebsd-arm64@2.1.15
-  - lefthook-freebsd-x64@2.1.15
-  - lefthook-openbsd-arm64@2.1.15
-  - lefthook-openbsd-x64@2.1.15
-  - lefthook-windows-arm64@2.1.15
-  - lefthook-windows-x64@2.1.15
+trustPolicyExclude: []
 
 audit:
   ignore: # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
+    - GHSA-86w9-cpqp-85rv # No patched `node-forge` yet; `listhen` only generates certificates with it, never verifies signatures
   ignorePrune: true
 
 allowBuilds:
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
-  # Critical: set ups git hooks
-  lefthook@2.1.15: true
+  # Critical: sets up git hooks
+  lefthook@2.1.16: true
 
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher': false
@@ -69,6 +45,8 @@ strictPeerDependencies: false
 
 overrides:
   axios@>=1.13.0 <1.20.0: 1.20.0
+  # 6.0.0's only breaking change (separate transfer hosts are opt-in) doesn't affect `get-uri`
+  basic-ftp@<6.2.1: 6.2.1
   brace-expansion@>=5.0.0 <5.0.12: 5.0.12
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
   # 2.0.7 dropped the `.js` files the plugin imports
