@@ -197,7 +197,6 @@
     "@nuxt/eslint-plugin": "1.17.0",
     "@nx/eslint-plugin": "23.2.1",
     "@smarttools/eslint-plugin-rxjs": "1.0.22",
-    "@sveltejs/kit": "2.70.3",
     "@tanstack/eslint-plugin-query": "5.104.0",
     "@tanstack/eslint-plugin-router": "1.162.0",
     "@tanstack/eslint-plugin-start": "0.1.0",
@@ -333,6 +332,7 @@
     "release-it": "21.1.0",
     "shiki": "4.5.0",
     "smol-toml": "1.9.0",
+    "svelte": "5.57.1",
     "svelte-eslint-parser": "1.8.1",
     "tailwind-csstree": "0.4.1",
     "tsdown": "0.23.0",
@@ -367,7 +367,6 @@
     "@nuxt/eslint-plugin": "^1.17.0",
     "@nx/eslint-plugin": "^23.2.1",
     "@smarttools/eslint-plugin-rxjs": "^1.0.22",
-    "@sveltejs/kit": "^2.70.3",
     "@tanstack/eslint-plugin-query": "^5.104.0",
     "@tanstack/eslint-plugin-router": "^1.162.0",
     "@tanstack/eslint-plugin-start": "^0.1.0",
@@ -519,9 +518,6 @@
       "optional": true
     },
     "@smarttools/eslint-plugin-rxjs": {
-      "optional": true
-    },
-    "@sveltejs/kit": {
       "optional": true
     },
     "@tanstack/eslint-plugin-query": {

@@ -94,11 +94,6 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['jest'],
     ruleDocsUrl: null,
   },
-  '@sveltejs/kit': {
-    configs: ['svelte'],
-    gitTag: (version) => `@sveltejs/kit@${version}`,
-    ruleDocsUrl: null,
-  },
   '@tsrx/eslint-parser': {
     configs: ['tsrx'],
     gitTag: (version) => `@tsrx/eslint-parser@${version}`,

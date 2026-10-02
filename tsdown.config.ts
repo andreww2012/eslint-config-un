@@ -34,7 +34,7 @@ export default defineConfig([
       alwaysBundle: [
         new RegExp(String.raw`^(?:${ALWAYS_BUNDLED_DEPENDENCIES.join('|')})(?:\/.+)?$`),
       ],
-      // Types of packages we don't declare get inlined, except CommonJS ones, which is why `browserslist` and `@sveltejs/kit` (through `postcss`) are optional peer dependencies
+      // Types of packages we don't declare get inlined, except CommonJS ones, which is why `browserslist` is an optional peer dependency
       dts: {
         // `is-immutable-type` imports `typescript` types, which
         // `rolldown-plugin-dts` cannot bundle as `typescript` ships CJS .d.ts.

@@ -1,4 +1,4 @@
-import type {Config as SvelteKitConfig} from '@sveltejs/kit';
+import type {SvelteConfig} from 'svelte-eslint-parser';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import type {EslintSeverity} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
@@ -66,8 +66,10 @@ export interface SveltePluginSettings {
    * options.
    * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
    * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
+   *
+   * SvelteKit 3 has no `svelte.config.js`, so for it, non-default options must be set explicitly.
    */
-  kit?: SvelteKitConfig['kit'];
+  kit?: SvelteConfig['kit'];
 }
 
 /**
@@ -114,8 +116,12 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    *
    * The plugin docs
    * [recommend that you specify this](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#type-script-project).
+   *
+   * SvelteKit 3 has no `svelte.config.js` for the parser to load, so for it, this is the only way
+   * to pass the config.
+   * Note that it uses the SvelteKit 2 shape: SvelteKit's own options go under `kit`.
    */
-  svelteKitConfig?: SvelteKitConfig;
+  svelteKitConfig?: SvelteConfig;
 
   /**
    * `svelte` package version, possibly including a minor version.
