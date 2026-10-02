@@ -1,5 +1,71 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.4
+
+### Minor Changes
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`793672f`](https://github.com/andreww2012/eslint-config-un/commit/793672f7c430bf2675731361a2f5248210c03cd5) - vue: the `nuxt` sub-config now also allows `export default` in Nuxt components, layouts, middleware, pages and local modules, and takes all Nuxt directories from your Nuxt config automatically, including the ones of the layers it extends
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`fc6c21b`](https://github.com/andreww2012/eslint-config-un/commit/fc6c21b1d0fe6ddd5b082790e6f17664dc29f9df) - fileProgress: the config is now enabled by default. The progress is still hidden unless the resolved `environment` root option is `default`
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`0c9fb1b`](https://github.com/andreww2012/eslint-config-un/commit/0c9fb1bc956a841536be4b23ca6f0244a7ed2829) - ember: updated [`eslint-plugin-ember` from v13.5.0 to v13.6.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.5.0...v13.6.0):
+  
+  - 🟢 enabled [`ember/no-modifier-without-element-usage`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-modifier-without-element-usage.md) rule
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`1593169`](https://github.com/andreww2012/eslint-config-un/commit/15931699708f686f43aae34e5e17f60eb31fc5e9) - ts: updated [`typescript-eslint` from v8.70.1 to v8.71.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.70.1...v8.71.0):
+  
+  - 🟢 enabled [`ts/no-unsafe-enum-assignment`](https://typescript-eslint.io/rules/no-unsafe-enum-assignment) rule
+
+- [`3ee8fd0`](https://github.com/andreww2012/eslint-config-un/commit/3ee8fd0808acbda418722dd978513ea2393ed3f2) - Support the [upm](https://upm.sh) package manager
+
+- [`76d18f0`](https://github.com/andreww2012/eslint-config-un/commit/76d18f0f5bbb5438978a716fea2e6caca17891e4) - markdown: the `sentencesPerLine` sub-config now ignores `.changeset/**/*.md` files by default if `@changesets/cli` package is installed
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`4c9481d`](https://github.com/andreww2012/eslint-config-un/commit/4c9481ddd4661028f512aeb639c64046276cf42c) - sonar: updated [`eslint-plugin-sonarjs` from v4.2.1 to v4.2.2](https://github.com/SonarSource/SonarJS/blob/27cf8a4bb72c7d84042299357fdee4548cd8d0ca/packages/analysis/src/jsts/rules/CHANGELOG.md#2026-09-28-version-422):
+  
+  - 🟢 enabled `sonar/no-vue-mixins` rule regardless of whether `vue` package is installed, since the rule itself now only reports in projects depending on Vue 3+
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`c296e5c`](https://github.com/andreww2012/eslint-config-un/commit/c296e5c965b722a002ad28bfa5ece1f64a17b13e) - security: updated [`eslint-plugin-security` from v4.0.1 to v4.2.0](https://github.com/eslint-community/eslint-plugin-security/compare/eslint-plugin-security-v4.0.1...eslint-plugin-security-v4.2.0):
+  
+  - 🟢 enabled [`security/detect-invisible-characters`](https://github.com/eslint-community/eslint-plugin-security/blob/HEAD/docs/rules/detect-invisible-characters.md) rule
+
+### Patch Changes
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`5f91e2d`](https://github.com/andreww2012/eslint-config-un/commit/5f91e2d7d94c5390553c561628577932eeaaef40) - compat: updated [`browserslist` from v4.29.0 to v4.29.3](https://github.com/browserslist/browserslist/compare/4.29.0...4.29.3)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`f74730c`](https://github.com/andreww2012/eslint-config-un/commit/f74730c9980845aa74e5644037a727b4c515576e) - tsrx: updated [`@tsrx/eslint-{plugin,parser}` from v0.4.11 to v0.5.2](https://github.com/tsrx-org/tsrx/compare/@tsrx/eslint-plugin@0.4.11...@tsrx/eslint-plugin@0.5.2)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`7d67d0d`](https://github.com/andreww2012/eslint-config-un/commit/7d67d0d19ef1b375dc647ac60fe53e025d1c856e) - tsdoc: updated [`eslint-plugin-tsdoc` from v0.5.3 to v0.5.4](https://github.com/microsoft/tsdoc/compare/32d0e6d3dfddba03d864d7c6a3986f3505e885cf...76dcd8ea88e492b21657a22bf8afc4b600e6bfdf)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`c7cb4f2`](https://github.com/andreww2012/eslint-config-un/commit/c7cb4f25b88792245b2c34c151444237535c98b6) - react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.20.8 to v5.23.3](https://github.com/Rel1cx/eslint-react/compare/v5.20.8...v5.23.3)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`aeb7ff5`](https://github.com/andreww2012/eslint-config-un/commit/aeb7ff56c93086457eb28778f73c3d430aa89945) - storybook: updated [`eslint-plugin-storybook` from v10.6.0 to v10.6.1](https://github.com/storybookjs/storybook/compare/v10.6.0...v10.6.1)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`2f9e99e`](https://github.com/andreww2012/eslint-config-un/commit/2f9e99e35b6c4ff9351fb4d47949347a194491a8) - packageJson: updated [`eslint-plugin-package-json` from v1.10.0 to v1.10.1](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.10.0...v1.10.1)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`7b33c14`](https://github.com/andreww2012/eslint-config-un/commit/7b33c14b88d477b71aaf4b6f408da7488cab36fc) - css: updated [`tailwind-csstree` from v0.4.0 to v0.4.1](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.4.0...tailwind-csstree-v0.4.1)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`fad9756`](https://github.com/andreww2012/eslint-config-un/commit/fad975628183be912b209c03aca9da6f1c501f4c) - unhead: updated [`@unhead/eslint-plugin` from v3.4.1 to v3.4.2](https://github.com/unjs/unhead/compare/v3.4.1...v3.4.2)
+
+- [`bb1fe76`](https://github.com/andreww2012/eslint-config-un/commit/bb1fe760ef301799d64f45634994ffc91cc15964) - svelte: `svelteKitConfig` and `plugins.svelte.settings.kit` options are now typed using [`svelte-eslint-parser`](https://npmx.dev/svelte-eslint-parser) types, so [`@sveltejs/kit`](https://npmx.dev/@sveltejs/kit) is no longer an optional peer dependency
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`ba067f6`](https://github.com/andreww2012/eslint-config-un/commit/ba067f6d5e6e39e3b95ab2dffa53f2854666b6d1) - node: updated [`eslint-plugin-n` from v18.3.0 to v18.4.0](https://github.com/eslint-community/eslint-plugin-n/compare/v18.3.0...v18.4.0)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`2886283`](https://github.com/andreww2012/eslint-config-un/commit/28862836b646c3b4a149a64eefcfc70c855c2269) - zod: updated [`eslint-plugin-zod` from v4.14.2 to v5.0.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.14.2...eslint-plugin-zod@5.0.0), [`eslint-plugin-zod-mini` from v1.11.2 to v2.0.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.11.2...eslint-plugin-zod-mini@2.0.0) and [`eslint-plugin-zod-core` from v1.1.4 to v2.0.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.1.4...eslint-plugin-zod-core@2.0.0):
+  
+  - ❌ `zod/no-string-schema-with-uuid` rule was removed
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`bb7511d`](https://github.com/andreww2012/eslint-config-un/commit/bb7511d75c990af6143ae2bf302b090ddf68d3f7) - Export `GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS` and `GLOB_MDX_SUPPORTED_CODE_BLOCKS` constants from the `globs` entrypoint
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`9eb5417`](https://github.com/andreww2012/eslint-config-un/commit/9eb5417507a8e8c13c10ba3806faac19ac912557) - cspell: updated [`@cspell/eslint-plugin` from v10.3.3 to v10.3.6](https://github.com/streetsidesoftware/cspell/compare/v10.3.3...v10.3.6)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`5c622f6`](https://github.com/andreww2012/eslint-config-un/commit/5c622f6c55bd3533f91f595f6c9af5a03902eda2) - tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.103.2 to v5.104.0](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.103.2...@tanstack/eslint-plugin-query@5.104.0)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`f695aea`](https://github.com/andreww2012/eslint-config-un/commit/f695aea15682447fc7ccf77a33899fb4c377be3b) - jsdoc: updated [`eslint-plugin-jsdoc` from v64.5.4 to v65.0.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v64.5.4...v65.0.1)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`c42385d`](https://github.com/andreww2012/eslint-config-un/commit/c42385d5aad55f4afb7a02250fb8674d06b08ba1) - nextJs: updated [`@next/eslint-plugin-next` from v16.3.6 to v16.3.8](https://github.com/vercel/next.js/compare/v16.3.6...v16.3.8)
+
+- [#57](https://github.com/andreww2012/eslint-config-un/pull/57) [`e9d69b3`](https://github.com/andreww2012/eslint-config-un/commit/e9d69b3a74af09a182012286b049cbfe1991f545) - turbo: updated [`eslint-plugin-turbo` from v2.11.4 to v2.11.6](https://github.com/vercel/turborepo/compare/v2.11.4...v2.11.6)
+
 ## 1.0.0-rc.3
 
 ### Minor Changes
