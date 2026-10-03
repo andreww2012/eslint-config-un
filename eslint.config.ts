@@ -16,7 +16,7 @@ const noRestrictedSyntaxPlugin = createNoRestrictedSyntaxRule('local-rules', {
 });
 
 export default eslintConfig({
-  ignores: ['test/**/fixtures/**'],
+  ignores: ['test/**/fixtures/**', '.agents/style-guide.md'],
   mode: 'lib',
   extraPlugins: {
     'local-rules': () => ({

@@ -17,6 +17,7 @@ export default {
     'data/eslint-plugins-db.json',
     '.all-contributorsrc',
     '.changeset/*.json',
+    '.agents/style-guide.md',
   ],
   dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
