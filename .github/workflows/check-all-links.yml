@@ -1,0 +1,44 @@
+# cspell:ignore lycheeverse
+name: Check all links (lychee)
+on:
+  schedule:
+    # Cron can't express a strict 48h interval, so this runs daily and the `gate` job skips every other day
+    - cron: '0 3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Check schedule
+    runs-on: ubuntu-24.04
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          # Even days since the Unix epoch, unlike days of the month, keep alternating across month ends
+          if [ "${EVENT_NAME}" != schedule ] || [ $(( $(date -u +%s) / 86400 % 2 )) -eq 0 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  check-all-links:
+    name: Lychee
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml`
+      - uses: ./.github/actions/prepare
+      # The cache is deliberately not restored, so every link is checked from scratch
+      - name: Check links
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --config node_modules/lychee-config-nick2bad4u/lychee.toml
+            --config lychee.toml
+            .
