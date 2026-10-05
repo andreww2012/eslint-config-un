@@ -1276,13 +1276,13 @@ export default defineUnConfig<
 
   const configBuilderSortTsconfigKeys = context.createConfigBuilder(configSortTsconfigKeys, null);
   if (configSortTsconfigKeys) {
-    const configSortTsconfigKeysOptions = assignDefaults(configSortTsconfigKeys, {
-      orderTopLevel: true,
-      orderCompilerOptions: true,
-    });
-
-    const {orderTopLevel, orderCompilerOptions, extraSortKeysConfigs} =
-      configSortTsconfigKeysOptions;
+    const {orderTopLevel, orderCompilerOptions, extraSortKeysConfigs} = assignDefaults(
+      configSortTsconfigKeys,
+      {
+        orderTopLevel: true,
+        orderCompilerOptions: true,
+      },
+    );
 
     const topLevelOptionsOrder: string[] = Array.isArray(orderTopLevel)
       ? orderTopLevel

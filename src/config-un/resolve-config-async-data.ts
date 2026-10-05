@@ -349,6 +349,7 @@ ${styleText(
   'cyan',
   generateInstallationCommand(
     usedPackageManager,
+    // eslint-disable-next-line unicorn/prefer-default-parameters -- the range may be an empty string
     packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`),
   ),
 )}

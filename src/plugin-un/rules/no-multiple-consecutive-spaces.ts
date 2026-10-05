@@ -275,22 +275,20 @@ const rule: Eslint.Rule.RuleModule = {
         const shouldCheck = isTagged
           ? options?.checkTaggedTemplateLiterals
           : options?.checkTemplateLiterals;
-        if (!shouldCheck || isIgnored(node)) {
-          return;
-        }
-
-        node.quasis // cspell:disable-line
-          .forEach((quasi, index) => {
-            // Not `value.raw`: parsers normalize CRLF in it
-            const quasiText = sourceCode
-              .getText(quasi)
-              .slice(1 /* ` or } */, quasi.tail ? -1 : -2 /* ` or ${ */);
-            checkText(node, quasiText, (quasi.range?.[0] || 0) + 1, {
-              isFirst: index === 0,
-              isLast: quasi.tail,
-              lineBreaks: LITERAL_AND_ESCAPED_LINE_BREAKS,
+        if (shouldCheck && !isIgnored(node)) {
+          node.quasis // cspell:disable-line
+            .forEach((quasi, index) => {
+              // Not `value.raw`: parsers normalize CRLF in it
+              const quasiText = sourceCode
+                .getText(quasi)
+                .slice(1 /* ` or } */, quasi.tail ? -1 : -2 /* ` or ${ */);
+              checkText(node, quasiText, (quasi.range?.[0] || 0) + 1, {
+                isFirst: index === 0,
+                isLast: quasi.tail,
+                lineBreaks: LITERAL_AND_ESCAPED_LINE_BREAKS,
+              });
             });
-          });
+        }
       },
     };
   },

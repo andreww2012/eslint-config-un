@@ -440,7 +440,7 @@ const renderManifests = (configs: readonly DiscoveredConfig[], cascadeOrder: rea
       .flatMap((property) =>
         manifest[property] === undefined
           ? []
-          : [`    ${property}: ${JSON.stringify(manifest[property])},`],
+          : `    ${property}: ${JSON.stringify(manifest[property])},`,
       )
       .join('\n');
 

@@ -56,28 +56,26 @@ export const generateEslintPluginsRulesPresence = (
     }
 
     const {plugin, version} = pluginInfo;
-    if (!plugin.rules || typeof plugin.rules !== 'object') {
-      return;
+    if (plugin.rules && typeof plugin.rules === 'object') {
+      Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
+        const isDeprecated =
+          // eslint-disable-next-line ts/no-unnecessary-condition
+          rule &&
+          typeof rule === 'object' &&
+          'meta' in rule &&
+          rule.meta &&
+          typeof rule.meta === 'object' &&
+          'deprecated' in rule.meta &&
+          Boolean(rule.meta.deprecated);
+        ruleVersions.set(ruleName, [
+          ...(ruleVersions.get(ruleName) || []),
+          {
+            version,
+            ...(isDeprecated && {deprecated: true}),
+          },
+        ]);
+      });
     }
-
-    Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
-      const isDeprecated =
-        // eslint-disable-next-line ts/no-unnecessary-condition
-        rule &&
-        typeof rule === 'object' &&
-        'meta' in rule &&
-        rule.meta &&
-        typeof rule.meta === 'object' &&
-        'deprecated' in rule.meta &&
-        Boolean(rule.meta.deprecated);
-      ruleVersions.set(ruleName, [
-        ...(ruleVersions.get(ruleName) || []),
-        {
-          version,
-          ...(isDeprecated && {deprecated: true}),
-        },
-      ]);
-    });
   });
 
   return {

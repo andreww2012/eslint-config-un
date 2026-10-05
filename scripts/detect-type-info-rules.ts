@@ -33,7 +33,7 @@ const PLUGINS_BREAKING_THE_PROBE = new Set(['file-progress', 'import-integrity']
  */
 const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES = new Set(
   Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
-    'typeAware' in categories ? [prefix] : [],
+    'typeAware' in categories ? prefix : [],
   ),
 );
 
@@ -64,7 +64,7 @@ const loadPlugins = async () => {
   );
 
   return loaded.flatMap(({prefix, packageName, plugin}) =>
-    plugin ? [{prefix, packageName, plugin}] : [],
+    plugin ? {prefix, packageName, plugin} : [],
   );
 };
 
@@ -169,7 +169,7 @@ const main = async () => {
     (await readPluginMetadata()).flatMap(({prefix, metadata}) =>
       Object.entries(metadata.rules).flatMap(([ruleName, traits]) => {
         const entry = traits.requiresTypeInfo;
-        return Array.isArray(entry) && entry[0] === false ? [`${prefix}/${ruleName}`] : [];
+        return Array.isArray(entry) && entry[0] === false ? `${prefix}/${ruleName}` : [];
       }),
     ),
   );
@@ -266,16 +266,14 @@ const main = async () => {
             isOutOfScope && declared == null ? undefined : detections.get(fullRuleName);
           return declared == null && detection == null
             ? []
-            : [
-                {
-                  prefix,
-                  ruleName,
-                  declared,
-                  isDetected: detection != null,
-                  requirement: detection?.requirement || null,
-                  reasons: detection?.reasons || [],
-                } satisfies Finding,
-              ];
+            : ({
+                prefix,
+                ruleName,
+                declared,
+                isDetected: detection != null,
+                requirement: detection?.requirement || null,
+                reasons: detection?.reasons || [],
+              } satisfies Finding);
         }),
     );
 

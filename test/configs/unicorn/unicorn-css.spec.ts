@@ -41,7 +41,7 @@ describe('unicorn: sub config `css`', () => {
 
       expect(configResult.getRuleSeverities('unicorn/css')).toMatchObject({
         'unicorn/no-transition-all': 2,
-        'unicorn/prefer-explicit-viewport-units': 0,
+        'unicorn/indent': 0,
       });
     });
 

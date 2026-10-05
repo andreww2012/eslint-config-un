@@ -78,25 +78,23 @@ const rule: Eslint.Rule.RuleModule = {
 
               const minVersionSatisfyingRange = minSemverVersion(peerDependencyMaybeRange);
               if (
-                !minVersionSatisfyingRange ||
-                semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)
+                minVersionSatisfyingRange &&
+                !semverVersionsEqual(minVersionSatisfyingRange, installedDevDependencyVersion)
               ) {
-                return;
+                context.report({
+                  node: peerDependencyNode.value,
+                  messageId: 'peerDependencyRangeDoNotMatchDevDependencyVersion',
+                  data: {
+                    name: peerDependencyName,
+                    installedVersion: installedDevDependencyVersion,
+                  },
+                  fix: (fixer) =>
+                    fixer.replaceText(
+                      peerDependencyNode.value,
+                      JSON.stringify(`^${installedDevDependencyVersion}`),
+                    ),
+                });
               }
-
-              context.report({
-                node: peerDependencyNode.value,
-                messageId: 'peerDependencyRangeDoNotMatchDevDependencyVersion',
-                data: {
-                  name: peerDependencyName,
-                  installedVersion: installedDevDependencyVersion,
-                },
-                fix: (fixer) =>
-                  fixer.replaceText(
-                    peerDependencyNode.value,
-                    JSON.stringify(`^${installedDevDependencyVersion}`),
-                  ),
-              });
             });
           }
         },

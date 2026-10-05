@@ -549,19 +549,21 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
       deprecatedVersions.includes(latestVersion),
     );
 
-    const dataRows = sortedRules.map(({ruleName, minVersion, maxVersion, deprecatedVersions}) => [
-      ...(hasDeprecated ? [deprecatedVersions.includes(latestVersion) ? '⛔' : '  '] : []),
-      ruleName,
-      minVersion || '',
-      `${
-        maxVersion === latestVersion
-          ? '✅(latest)'
-          : new Date(npmPackageInfo.time[maxVersion || ''] || '').getTime() >=
-              new Date(npmPackageInfo.time[latestVersion] || '').getTime()
-            ? '✅(future)'
-            : '⚠️'
-      } ${maxVersion}`,
-    ]);
+    const dataRows = sortedRules.map(
+      ({ruleName, minVersion = '', maxVersion, deprecatedVersions}) => [
+        ...(hasDeprecated ? [deprecatedVersions.includes(latestVersion) ? '⛔' : '  '] : []),
+        ruleName,
+        minVersion,
+        `${
+          maxVersion === latestVersion
+            ? '✅(latest)'
+            : new Date(npmPackageInfo.time[maxVersion || ''] || '').getTime() >=
+                new Date(npmPackageInfo.time[latestVersion] || '').getTime()
+              ? '✅(future)'
+              : '⚠️'
+        } ${maxVersion}`,
+      ],
+    );
 
     const headerRow = [...(hasDeprecated ? ['  '] : []), 'Rule name', 'Min version', 'Max version'];
 

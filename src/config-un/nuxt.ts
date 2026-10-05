@@ -66,7 +66,7 @@ const collectNuxtComponentDirs = (option: NuxtComponentsOption): string[] => {
   }
 
   return ('dirs' in option ? option.dirs || [] : [option]).flatMap((dir) =>
-    typeof dir === 'string' ? [dir] : dir.path ? [dir.path] : [],
+    typeof dir === 'string' ? dir : dir.path || [],
   );
 };
 
@@ -78,7 +78,7 @@ export const resolveNuxtLayerDirs = (
   {
     srcDir,
     rootDir,
-    serverDir,
+    serverDir = 'server',
     dir,
     components,
   }: {
@@ -98,7 +98,7 @@ export const resolveNuxtLayerDirs = (
   return {
     app: srcDir,
     modules: resolveIn(rootDir, dir?.modules || 'modules'),
-    server: resolveIn(rootDir, serverDir || 'server'),
+    server: resolveIn(rootDir, serverDir),
     shared: resolveIn(rootDir, dir?.shared || 'shared'),
     components: collectNuxtComponentDirs(components).map(relativeToSrcDir),
     layouts: relativeToSrcDir(dir?.layouts || 'layouts'),

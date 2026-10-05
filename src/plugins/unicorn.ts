@@ -16,6 +16,7 @@ export default definePluginMetadata('unicorn', {
         'when `error` is already taken, the fix picks a name like `error_` instead of a descriptive one',
       ],
     },
+    'comma-spacing': {stylistic: true},
     'consistent-arrow-return-style': {stylistic: true},
     'consistent-assert': {stylistic: true},
     'consistent-boolean-name': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
@@ -45,6 +46,7 @@ export default definePluginMetadata('unicorn', {
     },
     'filename-case': {stylistic: true},
     'import-style': {stylistic: true},
+    indent: {stylistic: true},
     'iteration-fallback-style': {stylistic: true},
     'no-abusive-eslint-disable': {
       disableInCodeBlocks: [
@@ -77,12 +79,6 @@ export default definePluginMetadata('unicorn', {
         'the console already puts a space between arguments, so removing the extra one changes the printed output',
       ],
     },
-    'no-duplicate-font-family-names': {
-      stylistic: [
-        false,
-        'a duplicate is often a copy-pasted name in place of the intended fallback, and removing the second `monospace` of the `monospace, monospace` hack changes the font size',
-      ],
-    },
     'no-duplicate-loops': {requiresTypeInfo: ['optional', 'indirect']},
     'no-for-each': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-for-loop': {requiresTypeInfo: 'optional', stylistic: true},
@@ -94,10 +90,18 @@ export default definePluginMetadata('unicorn', {
       ],
       stylistic: true,
     },
+    'no-invalid-boolean-attribute-value': {requiresTypeInfo: 'optional'},
     'no-invalid-character-comparison': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-invalid-dom-token': {requiresTypeInfo: 'optional'},
+    'no-invalid-intl-options': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-invalid-style-set-property': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-invalid-temporal-arithmetic': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-invalid-url-protocol-comparison': {requiresTypeInfo: ['optional', 'indirect']},
     'no-invalid-well-known-symbol-methods': {requiresTypeInfo: 'optional'},
     'no-keyword-prefix': {stylistic: true},
+    'no-late-current-target-access': {requiresTypeInfo: ['optional', 'indirect']},
     'no-late-event-control': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-leading-empty-lines': {stylistic: true},
     'no-lonely-if': {stylistic: true},
     'no-loop-iterable-mutation': {requiresTypeInfo: ['optional', 'indirect']},
     'no-magic-array-flat-depth': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
@@ -108,7 +112,6 @@ export default definePluginMetadata('unicorn', {
     'no-negated-condition': {stylistic: true},
     'no-negation-in-equality-check': {stylistic: true},
     'no-nested-ternary': {stylistic: true, prettierIncompatible: true},
-    'no-new-array': {requiresTypeInfo: ['optional', 'indirect']},
     'no-new-buffer': {
       requiresTypeInfo: [
         false,
@@ -121,7 +124,6 @@ export default definePluginMetadata('unicorn', {
     'no-optional-chaining-on-undeclared-variable': {disableInCodeBlocks: 'runtimeOnly'},
     'no-process-exit': {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
     'no-redundant-comparison': {stylistic: true},
-    'no-redundant-nested-style-rules': {stylistic: true},
     'no-return-array-push': {requiresTypeInfo: ['optional', 'indirect']},
     'no-static-only-class': {disableInCodeBlocks: 'tooStrict'},
     'no-subtraction-comparison': {
@@ -149,6 +151,13 @@ export default definePluginMetadata('unicorn', {
     'no-unnecessary-fetch-options': {requiresTypeInfo: 'optional', stylistic: true},
     'no-unnecessary-global-this': {stylistic: true},
     'no-unnecessary-nested-ternary': {stylistic: true},
+    'no-unnecessary-parameters': {
+      requiresTypeInfo: [
+        false,
+        'only checks whether the file was parsed by a TypeScript parser to skip the autofix',
+      ],
+      stylistic: true,
+    },
     'no-unnecessary-slice-end': {requiresTypeInfo: ['optional', 'indirect']},
     'no-unnecessary-splice': {
       requiresTypeInfo: ['optional', 'indirect'],
@@ -158,10 +167,14 @@ export default definePluginMetadata('unicorn', {
       ],
     },
     'no-unnecessary-string-trim': {requiresTypeInfo: ['optional', 'indirect']},
-    'no-unreadable-array-destructuring': {stylistic: true},
+    'no-unreadable-array-destructuring': {
+      requiresTypeInfo: ['optional', 'indirect'],
+      stylistic: true,
+    },
     'no-unreadable-for-of-expression': {requiresTypeInfo: ['optional', 'indirect']},
     'no-unreadable-iife': {stylistic: true},
     'no-unsafe-buffer-conversion': {requiresTypeInfo: 'optional'},
+    'no-unsafe-json-serialization': {requiresTypeInfo: ['optional', 'indirect']},
     'no-unsafe-promise-all-settled-values': {requiresTypeInfo: 'optional'},
     'no-unsafe-property-key': {requiresTypeInfo: 'optional'},
     'no-unsafe-string-replacement': {
@@ -176,6 +189,7 @@ export default definePluginMetadata('unicorn', {
       requiresTypeInfo: ['optional', 'indirect'],
       disableInCodeBlocks: 'runtimeOnly',
     },
+    'no-url-in-search-params': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-boolean-cast': {requiresTypeInfo: 'optional', stylistic: true},
     'no-useless-coercion': {requiresTypeInfo: 'optional', stylistic: true},
     'no-useless-collection-argument': {stylistic: true},
@@ -275,6 +289,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-dom-node-text-content': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-early-return': {stylistic: true},
     'prefer-else-if': {requiresTypeInfo: ['optional', 'indirect']},
+    'prefer-escaped-irregular-whitespace': {stylistic: true},
     'prefer-export-from': {stylistic: true},
     'prefer-flat-math-min-max': {stylistic: true},
     'prefer-global-number-constants': {stylistic: true},
@@ -289,6 +304,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-iterator-concat': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-iterator-helpers': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-iterator-to-array': {stylistic: true},
+    'prefer-iterator-to-array-at-end': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-iterator-zip': {
       requiresTypeInfo: ['optional', 'indirect'],
       stylistic: [
@@ -297,14 +313,14 @@ export default definePluginMetadata('unicorn', {
       ],
     },
     'prefer-keyboard-event-key': {requiresTypeInfo: ['optional', 'indirect']},
+    'prefer-literal-ascii': {stylistic: true},
     'prefer-location-assign': {stylistic: true},
     'prefer-logical-operator-over-ternary': {
       requiresTypeInfo: ['optional', 'indirect'],
       stylistic: true,
     },
-    'prefer-math-min-max': {stylistic: true},
+    'prefer-math-min-max': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-math-trunc': {stylistic: [false, 'the bitwise forms it reports wrap above 2**31']},
-    'prefer-media-feature-range-syntax': {stylistic: true},
     'prefer-minimal-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-modern-dom-apis': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-modern-math-apis': {
@@ -335,6 +351,12 @@ export default definePluginMetadata('unicorn', {
         'as per the rule description itself, it skips some patterns that could be used to access autofixed non-private fields',
       ],
     },
+    'prefer-promise-static-methods': {
+      stylistic: [
+        false,
+        'the fix moves a read out of the executor, where reading an uninitialized binding throws synchronously instead of rejecting',
+      ],
+    },
     'prefer-promise-with-resolvers': {stylistic: true},
     'prefer-prototype-methods': {stylistic: true},
     'prefer-query-selector': {stylistic: true},
@@ -345,6 +367,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-set-methods': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-set-size': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-short-arrow-method': {stylistic: true},
+    'prefer-short-escape-sequences': {stylistic: true},
     'prefer-simple-condition-first': {stylistic: true},
     'prefer-simple-sort-comparator': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-simplified-conditions': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},

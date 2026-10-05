@@ -176,8 +176,7 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       EslintPluginEslintConfigOptions['metaProperties'] & {},
       'disallow' | 'not-disallow' | undefined
     >,
-    defaultValue?: 'disallow' | 'not-disallow',
-  ) => ((metaProperties[property] ?? defaultValue) === 'disallow' ? ERROR : OFF);
+  ) => (metaProperties[property] === 'disallow' ? ERROR : OFF);
   const getRuleEnforcingMetaPropertySeverity = (
     property: ConditionalKeys<
       EslintPluginEslintConfigOptions['metaProperties'] & {},

@@ -84,6 +84,18 @@ export interface CssEslintConfigOptions<
   configScss?: boolean | ScssSubConfigOptions<ExtraPlugins>;
 
   /**
+   * CSS rules from the author of `eslint-plugin-unicorn`, some of which were part of it before
+   * v77.0.0.
+   *
+   * 📁 Default `files`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-cssicorn`](https://npmx.dev/eslint-cssicorn)
+   * ([docs](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/readme.md))
+   * @default true
+   */
+  configUnicorn?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'cssicorn'>;
+
+  /**
    * From `@eslint/css` plugin docs:
    * > By default, the CSS parser runs in strict mode, which reports all parsing errors.
    * > If you'd like to allow recoverable parsing errors (those that the browser automatically fixes
@@ -167,11 +179,12 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
     configScss: SASS_PACKAGES.some((packageName) => context.packagesInfo[packageName] != null),
+    configUnicorn: true,
   });
   // Must be resolved because other configs (`betterTailwind`) read these patterns
   optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_FILES);
 
-  const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures, configScss} =
+  const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures, configScss, configUnicorn} =
     optionsResolved;
 
   // Only the user's own options: the default syntax comes from the parsing entry
@@ -303,6 +316,46 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
       .enableConfigTesterForPlugin('css')
       .addOverrides();
   });
+
+  // Legend:
+  // 🔴 - NOT in recommended & unopinionated
+  // 🟣 - NOT in unopinionated
+
+  const configBuilderUnicorn = context.createConfigBuilder(configUnicorn, 'cssicorn');
+  configBuilderUnicorn
+    ?.addConfig([
+      'css/unicorn',
+      {
+        filesDefault: optionsResolved.files,
+        parseWith: 'css',
+      },
+    ])
+    .addRule('lowercase', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-declarations-after-nested-rules', ERROR) /** @since 0.1.0 */
+    .addRule('no-deprecated-features', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-descending-specificity', OFF) /** @since 0.1.0 */ // 🔴
+    .addRule('no-duplicate-font-family-names', ERROR) /** @since 0.1.0 */
+    .addRule('no-duplicate-properties', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-duplicate-selectors', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-invalid-media-features', ERROR) /** @since 0.1.0 */
+    .addRule('no-nesting-with-mixed-specificity', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-redundant-longhand-properties', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-redundant-nested-style-rules', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-redundant-shorthand-values', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-self-referencing-custom-properties', ERROR) /** @since 0.1.0 */
+    // Keyframes are often defined in another stylesheet
+    .addRule('no-unknown-animations', OFF) /** @since 0.1.0 */ // 🔴
+    .addRule('no-unknown-annotations', ERROR) /** @since 0.1.0 */
+    .addRule('no-unknown-pseudo-selectors', ERROR) /** @since 0.1.0 */
+    .addRule('no-unscoped-nesting-selector', ERROR) /** @since 0.1.0 */
+    .addRule('no-zero-length-unit', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-explicit-viewport-units', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-media-feature-range-syntax', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-modern-syntax', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-short-hex-color', OFF) /** @since 0.1.0 */ // 🟣
+    .addRule('require-property-descriptors', ERROR) /** @since 0.1.0 */
+    .enableConfigTesterForPlugin('cssicorn')
+    .addOverrides();
 
   return {
     optionsResolved,

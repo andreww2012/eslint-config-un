@@ -96,20 +96,17 @@ export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
   enabledBy: {packageManager: 'pnpm'},
 })((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {
+  const {configPackageJson, configPnpmWorkspace} = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,
   });
 
-  const {configPackageJson, configPnpmWorkspace} = optionsResolved;
-
   const pluginSettings = context.getPluginSettings('pnpm');
 
-  const configPackageJsonOptions = assignDefaults(configPackageJson, {
+  const {enforceCatalog, preferSettingsInPnpmWorkspaceYaml} = assignDefaults(configPackageJson, {
     enforceCatalog: false,
     preferSettingsInPnpmWorkspaceYaml: false,
   });
-  const {enforceCatalog, preferSettingsInPnpmWorkspaceYaml} = configPackageJsonOptions;
 
   const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'pnpm');
   configBuilderPackageJson
@@ -140,8 +137,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
     })
     .addOverrides();
 
-  const configPnpmWorkspaceOptions = assignDefaults(configPnpmWorkspace, {});
-  const {enforcePnpmWorkspaceSettings} = configPnpmWorkspaceOptions;
+  const {enforcePnpmWorkspaceSettings} = assignDefaults(configPnpmWorkspace, {});
 
   const configBuilderPnpmWorkspace = context.createConfigBuilder(configPnpmWorkspace, 'pnpm');
   configBuilderPnpmWorkspace

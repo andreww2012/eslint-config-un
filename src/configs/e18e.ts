@@ -73,14 +73,12 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
   context,
   optionsRaw,
 ) => {
-  const optionsResolved = assignDefaults(optionsRaw, {
-    configModernization: true,
-    configModuleReplacements: true,
-    configPerformanceImprovements: true,
-  });
-
   const {configModernization, configModuleReplacements, configPerformanceImprovements} =
-    optionsResolved;
+    assignDefaults(optionsRaw, {
+      configModernization: true,
+      configModuleReplacements: true,
+      configPerformanceImprovements: true,
+    });
 
   // Legend:
   // 🔴 - NOT in recommended
@@ -120,9 +118,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
   );
 
   if (configModuleReplacements) {
-    const configModuleReplacementsOptions = assignDefaults(configModuleReplacements, {});
-
-    const {options: banDependenciesOptions} = configModuleReplacementsOptions;
+    const {options: banDependenciesOptions} = assignDefaults(configModuleReplacements, {});
 
     configBuilderModuleReplacements
       ?.addConfig([

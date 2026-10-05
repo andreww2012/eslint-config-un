@@ -50,8 +50,8 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
     continue;
   }
 
-  const {peerDependencies} = packageInfo.info;
-  if (Object.keys(peerDependencies || {}).length === 0) {
+  const {peerDependencies = {}} = packageInfo.info;
+  if (Object.keys(peerDependencies).length === 0) {
     continue;
   }
 
@@ -60,7 +60,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
     styleText('bgGray', packageInfo.info.version || '[version unknown]'),
     isDev ? styleText('bgGreenBright', ' DEV ') : '',
   );
-  for (const [peerDependencyName, peerDependencyRange] of Object.entries(peerDependencies || {})) {
+  for (const [peerDependencyName, peerDependencyRange = ''] of Object.entries(peerDependencies)) {
     const isOptional = packageInfo.info.peerDependenciesMeta?.[peerDependencyName]?.optional;
     console.log(
       '\t',
@@ -69,7 +69,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
         : isOptional
           ? peerDependencyName
           : styleText(isDev ? 'yellow' : 'red', peerDependencyName),
-      styleText('gray', peerDependencyRange || ''),
+      styleText('gray', peerDependencyRange),
       styleText('greenBright', isOptional ? '[optional]' : ''),
     );
   }

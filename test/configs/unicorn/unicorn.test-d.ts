@@ -47,8 +47,8 @@ describe('`unicorn` config `overrides` (type level)', () => {
         unicorn: {
           // @ts-expect-error `unicorn/require-frontmatter-fields` is Markdown-only
           configCss: {overrides: {'unicorn/require-frontmatter-fields': 0}},
-          // @ts-expect-error `unicorn/prefer-explicit-viewport-units` is CSS-only
-          configJson: {overrides: {'unicorn/prefer-explicit-viewport-units': 0}},
+          // @ts-expect-error `unicorn/no-transition-all` does not support JSON
+          configJson: {overrides: {'unicorn/no-transition-all': 0}},
         },
       },
     });

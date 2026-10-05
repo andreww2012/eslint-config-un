@@ -125,6 +125,7 @@ export interface UnicornEslintConfigOptions<
 
   /**
    * Applies the rules declaring support for CSS to CSS files.
+   * CSS-only rules of the same author are in the `unicorn` Sub-config of the `css` Config.
    *
    * ⚠️ Enabled by default only if the `css` Config is enabled, because something must teach ESLint
    * how to parse these files.
@@ -569,6 +570,33 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       ? [{withDash: enforceTextEncodingCaseAndNotation === 'dash'}]
       : [];
 
+  const compoundWordsSeverity = compoundWordsSuggestedReplacements ? ERROR : OFF;
+  const compoundWordsOptions: ConsistentCompoundWordsOptions = Array.isArray(
+    compoundWordsSuggestedReplacements,
+  )
+    ? compoundWordsSuggestedReplacements
+    : typeof compoundWordsSuggestedReplacements === 'object'
+      ? (() => {
+          const [replacementsArray, allowListArray] = arrayPartition(
+            Object.entries(compoundWordsSuggestedReplacements),
+            ([, value]) => value !== false,
+          );
+          return [
+            {
+              ...(replacementsArray.length > 0 && {
+                replacements: Object.fromEntries(
+                  // eslint-disable-next-line unicorn/prefer-default-parameters -- an empty string means no replacement
+                  replacementsArray.map(([key, value]) => [key, value || false]),
+                ),
+              }),
+              ...(allowListArray.length > 0 && {
+                allowList: Object.fromEntries(allowListArray.map(([key]) => [key, true])),
+              }),
+            },
+          ];
+        })()
+      : [];
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unicorn');
 
   // Legend:
@@ -610,29 +638,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('consistent-class-member-order', OFF) /** @since 66.0.0 */ // 🟣
     .addRule(
       'consistent-compound-words',
-      compoundWordsSuggestedReplacements ? ERROR : OFF,
-      Array.isArray(compoundWordsSuggestedReplacements)
-        ? compoundWordsSuggestedReplacements
-        : typeof compoundWordsSuggestedReplacements === 'object'
-          ? ((): ConsistentCompoundWordsOptions => {
-              const [replacementsArray, allowListArray] = arrayPartition(
-                Object.entries(compoundWordsSuggestedReplacements),
-                ([, value]) => value !== false,
-              );
-              return [
-                {
-                  ...(replacementsArray.length > 0 && {
-                    replacements: Object.fromEntries(
-                      replacementsArray.map(([key, value]) => [key, value || false]),
-                    ),
-                  }),
-                  ...(allowListArray.length > 0 && {
-                    allowList: Object.fromEntries(allowListArray.map(([key]) => [key, true])),
-                  }),
-                },
-              ];
-            })()
-          : [],
+      compoundWordsSeverity,
+      compoundWordsOptions,
     ) /** @since 65.0.0 */
     .addRule('consistent-conditional-object-spread', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('consistent-date-clone', ERROR) /** @since 57.0.0 */
@@ -694,7 +701,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-array-sort', ERROR) /** @since 61.0.0 */
     .addRule('no-array-sort-for-min-max', ERROR) /** @since 68.0.0 */
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣
-    .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('no-async-iterator-callback', ERROR) /** @since 75.0.0 */
     .addRule('no-async-promise-finally', ERROR) /** @since 70.0.0 */
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
@@ -707,6 +714,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-chained-comparison', ERROR) /** @since 68.0.0 */
     .addRule('no-collection-bracket-access', ERROR) /** @since 68.0.0 */
     .addRule('no-computed-property-existence-check', OFF) /** @since 66.0.0 */ // 🟣
+    .addRule('no-conflicting-constraints', ERROR) /** @since 77.0.0 */
     .addRule('no-confusing-array-splice', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-confusing-array-with', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-console-spaces', ERROR) /** @since 7.0.0 */
@@ -726,14 +734,25 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-global-object-property-assignment', OFF) /** @since 66.0.0 */ // 🟡
     .addRule('no-immediate-mutation', ERROR) /** @since 62.0.0 */
     .addRule('no-impossible-length-comparison', ERROR) /** @since 68.0.0 */
+    .addRule('no-incomplete-accessor-override', ERROR) /** @since 77.0.0 */
     .addRule('no-incorrect-query-selector', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-incorrect-template-string-interpolation', ERROR) /** @since 66.0.0 */
+    .addRule('no-ineffective-csp-directives', ERROR) /** @since 77.0.0 */
     .addRule('no-instanceof-builtins', ERROR) /** @since 57.0.0 */
     .addRule('no-invalid-argument-count', ERROR) /** @since 67.0.0 */
+    .addRule('no-invalid-boolean-attribute-value', ERROR) /** @since 77.0.0 */
     .addRule('no-invalid-character-comparison', ERROR) /** @since 68.0.0 */
+    .addRule('no-invalid-dom-token', ERROR) /** @since 77.0.0 */
     .addRule('no-invalid-fetch-options', ERROR) /** @since 53.0.0 */
     .addRule('no-invalid-file-input-accept', ERROR) /** @since 65.0.0 */
+    .addRule('no-invalid-integrity', ERROR) /** @since 77.0.0 */
+    .addRule('no-invalid-intl-options', ERROR) /** @since 77.0.0 */
+    .addRule('no-invalid-property-descriptor', ERROR) /** @since 77.0.0 */
     .addRule('no-invalid-remove-event-listener', ERROR) /** @since 36.0.0 */
+    .addRule('no-invalid-response-options', ERROR) /** @since 77.0.0 */
+    .addRule('no-invalid-style-set-property', ERROR) /** @since 77.0.0 */
+    .addRule('no-invalid-temporal-arithmetic', ERROR) /** @since 77.0.0 */
+    .addRule('no-invalid-url-protocol-comparison', ERROR) /** @since 77.0.0 */
     .addRule('no-invalid-well-known-symbol-methods', ERROR) /** @since 69.0.0 */
     .addRule('no-keyword-prefix', OFF) /** @since 10.0.0 */ // 🔴
     .addRule('no-late-current-target-access', ERROR) /** @since 65.0.0 */ // 🟣
@@ -772,6 +791,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-object-as-default-parameter', ERROR) /** @since 21.0.0 */
     .addRule('no-object-methods-with-collections', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-optional-chaining-on-undeclared-variable', ERROR) /** @since 66.0.0 */ // 🟣🟡
+    .addRule('no-prevent-default-in-passive-listener', ERROR) /** @since 77.0.0 */
     .addRule('no-process-exit', OFF) /** @since 0.2.0 */ // Used in `node` config
     .addRule('no-redundant-comparison', ERROR) /** @since 66.0.0 */
     .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣
@@ -797,6 +817,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unnecessary-fetch-options', ERROR) /** @since 70.0.0 */
     .addRule('no-unnecessary-global-this', ERROR) /** @since 66.0.0 */
     .addRule('no-unnecessary-nested-ternary', ERROR) /** @since 65.0.0 */
+    .addRule('no-unnecessary-parameters', ERROR) /** @since 77.0.0 */ // 🟣
     .addRule('no-unnecessary-polyfills', ERROR) /** @since 50.0.0 */
     .addRule(
       'no-unnecessary-slice-end',
@@ -811,6 +832,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unreadable-object-destructuring', OFF) /** @since 42.0.0 */
     .addRule('no-unsafe-buffer-conversion', ERROR) /** @since 66.0.0 */
     .addRule('no-unsafe-dom-html', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('no-unsafe-json-serialization', ERROR) /** @since 77.0.0 */ // 🟣
     .addRule('no-unsafe-promise-all-settled-values', ERROR) /** @since 70.0.0 */
     .addRule('no-unsafe-property-key', ERROR) /** @since 66.0.0 */ // 🟣🟡
     .addRule('no-unsafe-sqlite-interpolation', ERROR) /** @since 73.0.0 */
@@ -818,6 +840,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unused-builtin-method-return', ERROR) /** @since 75.0.0 */
     .addRule('no-unused-iterator-helper', ERROR) /** @since 75.0.0 */
     .addRule('no-unused-properties', OFF) /** @since 7.0.0 */ // 🔴
+    .addRule('no-url-in-search-params', ERROR) /** @since 77.0.0 */
     .addRule('no-useless-boolean-cast', ERROR) /** @since 66.0.0 */
     .addRule('no-useless-coercion', ERROR) /** @since 67.0.0 */
     .addRule('no-useless-collection-argument', ERROR) /** @since 62.0.0 */
@@ -845,7 +868,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-using-resource-escape', ERROR) /** @since 75.0.0 */
     .addRule('no-xor-as-exponentiation', ERROR) /** @since 68.0.0 */
     .addRule('no-zero-fractions', ERROR) /** @since 8.0.0 */
-    .addRule('number-literal-case', OFF) /** @since 2.0.0 */
+    .addRule('number-literal-case', OFF) /** @since 2.0.0 */ // 🟣
     .addRule('numeric-separators-style', ERROR, [
       {onlyIfContainsSeparator: true},
     ]) /** @since 23.0.0 */
@@ -897,6 +920,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣
     // TODO should consider enabling by default when `Error.isError` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
+    .addRule('prefer-escaped-irregular-whitespace', ERROR) /** @since 77.0.0 */
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
     .addRule('prefer-export-from', ERROR) /** @since 38.0.0 */ // 🟣
     .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
@@ -932,6 +956,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-iterator-zip', OFF) /** @since 75.0.0 */ // 🟣
     .addRule('prefer-json-import', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-keyboard-event-key', ERROR) /** @since 9.0.0 */ /** @aka prefer-event-key */
+    .addRule('prefer-literal-ascii', ERROR) /** @since 77.0.0 */
     .addRule('prefer-location-assign', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-logical-operator-over-ternary', ERROR) /** @since 43.0.0 */
     .addRule('prefer-map-from-entries', ERROR) /** @since 67.0.0 */
@@ -988,6 +1013,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-optional-catch-binding', ERROR) /** @since 20.0.0 */
     .addRule('prefer-path2d', ERROR) /** @since 66.0.0 */
     .addRule('prefer-private-class-fields', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('prefer-promise-static-methods', ERROR) /** @since 77.0.0 */
     // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try
     .addRule('prefer-promise-try', OFF) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-promise-with-resolvers', ERROR) /** @since 68.0.0 */
@@ -1004,6 +1030,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-set-methods', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-set-size', ERROR) /** @since 45.0.0 */
     .addRule('prefer-short-arrow-method', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('prefer-short-escape-sequences', ERROR) /** @since 77.0.0 */
     .addRule('prefer-simple-condition-first', ERROR) /** @since 64.0.0 */
     .addRule('prefer-simple-sort-comparator', ERROR) /** @since 64.0.0 */
     .addRule('prefer-simplified-conditions', ERROR) /** @since 70.0.0 */
@@ -1068,6 +1095,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('require-passive-events', ERROR) /** @since 65.0.0 */
     .addRule('require-post-message-target-origin', OFF) /** @since 34.0.0 */ // 🔴
     .addRule('require-proxy-trap-boolean-return', ERROR) /** @since 66.0.0 */
+    .addRule('require-text-decoder-streaming', ERROR) /** @since 77.0.0 */
     .addRule('single-line-block-comment-style', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
     .addRule('switch-case-braces', ERROR) /** @since 44.0.0 */ // 🟣
@@ -1103,6 +1131,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('comment-content', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('filename-case', OFF) /** @since 0.3.0 */ // 🟣
     .addRule('no-abusive-eslint-disable', ERROR) /** @since 0.5.0 */
+    .addRule('no-leading-empty-lines', ERROR) /** @since 77.0.0 */ // 🟣
     .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
     .enableConfigTesterForPlugin('unicorn', {
       /* v8 ignore start */
@@ -1124,22 +1153,27 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
         skipTypeInfoSplit: true,
       },
     ])
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
+    .addRule('empty-brace-spaces', OFF)
+    .addRule('escape-case', ERROR)
     .addRule('expiring-todo-comments', ERROR)
-    .addRule('no-deprecated-css-features', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('no-duplicate-css-selectors', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('no-duplicate-font-family-names', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('id-match', OFF)
+    .addRule('indent', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('name-replacements', OFF)
+    .addRule('no-asterisk-prefix-in-documentation-comments', OFF)
+    .addRule('no-conflicting-constraints', ERROR)
     .addRule('no-empty-file', ERROR)
-    .addRule('no-invalid-media-features', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-loss-of-precision', ERROR) /** @since 77.0.0 */ // 🔴
+    .addRule('no-manually-wrapped-comments', OFF)
     .addRule('no-missing-local-resource', OFF)
-    .addRule('no-nesting-with-mixed-specificity', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('no-redundant-nested-style-rules', ERROR) /** @since 75.0.0 */ // 🔴
     .addRule('no-shorthand-property-overrides', ERROR)
     .addRule('no-transition-all', ERROR)
-    .addRule('no-unknown-css-annotations', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('no-unknown-pseudo-selectors', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('no-unscoped-css-nesting-selector', ERROR) /** @since 75.0.0 */ // 🔴
-    .addRule('prefer-explicit-viewport-units', OFF) /** @since 72.0.0 */ // 🔴
-    .addRule('prefer-media-feature-range-syntax', ERROR) /** @since 75.0.0 */ // 🔴
+    .addRule('no-zero-fractions', ERROR)
+    .addRule('number-literal-case', OFF)
+    .addRule('prefer-literal-ascii', ERROR)
+    .addRule('relative-url-style', ERROR, ['always'])
+    .addRule('single-line-block-comment-style', OFF)
+    .addRule('string-content', OFF)
     .addRule(
       'text-encoding-identifier-case',
       textEncodingSeverity,
@@ -1160,10 +1194,17 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
         parseWith: 'html',
       },
     ])
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
     .addRule('expiring-todo-comments', ERROR)
+    .addRule('id-match', OFF)
+    .addRule('name-replacements', OFF)
+    .addRule('no-conflicting-constraints', ERROR)
     .addRule('no-empty-file', ERROR)
+    .addRule('no-ineffective-csp-directives', ERROR)
     .addRule('no-invalid-file-input-accept', ERROR)
+    .addRule('no-invalid-integrity', ERROR)
     .addRule('no-missing-local-resource', OFF)
+    .addRule('relative-url-style', ERROR, ['always'])
     .addRule(
       'text-encoding-identifier-case',
       textEncodingSeverity,
@@ -1186,9 +1227,25 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
         parsingIgnoresInheritedFrom: ['json', 'jsonc'],
       },
     ])
+    .addRule('comma-spacing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
+    .addRule('empty-brace-spaces', OFF)
+    .addRule('escape-case', ERROR)
     .addRule('expiring-todo-comments', ERROR)
+    .addRule('indent', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('key-name-casing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('name-replacements', OFF)
+    .addRule('no-asterisk-prefix-in-documentation-comments', OFF)
     .addRule('no-empty-file', ERROR)
+    .addRule('no-loss-of-precision', ERROR) /** @since 77.0.0 */ // 🔴
     .addRule('no-manually-wrapped-comments', OFF)
+    .addRule('no-zero-fractions', ERROR)
+    .addRule('number-literal-case', OFF)
+    .addRule('prefer-escaped-irregular-whitespace', ERROR)
+    .addRule('prefer-literal-ascii', ERROR)
+    .addRule('prefer-short-escape-sequences', ERROR)
+    .addRule('single-line-block-comment-style', OFF)
+    .addRule('string-content', OFF)
     .enableConfigTesterForPlugin('unicorn', {
       /* v8 ignore start */
       rulesToSkipInConfig: (ruleName) =>
@@ -1207,8 +1264,12 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       },
     ])
     .addRule('expiring-todo-comments', ERROR)
+    .addRule('name-replacements', OFF)
     .addRule('no-empty-file', ERROR)
+    .addRule('no-empty-link-text', ERROR) /** @since 77.0.0 */ // 🔴
+    .addRule('no-javascript-url', ERROR) /** @since 77.0.0 */ // 🔴
     .addRule('no-missing-local-resource', OFF)
+    .addRule('relative-url-style', ERROR, ['always'])
     .addRule('require-frontmatter-fields', ERROR)
     .enableConfigTesterForPlugin('unicorn', {
       /* v8 ignore start */

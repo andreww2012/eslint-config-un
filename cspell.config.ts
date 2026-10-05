@@ -73,6 +73,7 @@ export default {
     'safeql',
     'solidjs',
     'danielx', // `@danielx/civet`
+    'cssicorn',
 
     // Technical words/terms
     'arrayify',

@@ -138,6 +138,9 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  cssicorn: genModuleLoader('cssicorn', 'eslint-cssicorn', () =>
+    interopDefault(import('eslint-cssicorn')),
+  ),
   cypress: genModuleLoader('cypress', 'eslint-plugin-cypress', () =>
     interopDefault(import('eslint-plugin-cypress')),
   ),

@@ -6,7 +6,6 @@ import {satisfies, tryParse} from 'verkit';
 import packageJson from './package.json' with {type: 'json'};
 
 const CACHE_DIRECTORY = path.join(import.meta.dirname, 'node_modules/.cache/npm-check-updates');
-// eslint-disable-next-line unicorn/no-top-level-side-effects
 fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
@@ -33,7 +32,11 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   'eslint-plugin-turbo',
 ]);
 
-const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx', 'import-integrity-lint']);
+const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set([
+  'eslint-cssicorn',
+  'eslint-mdx',
+  'import-integrity-lint',
+]);
 
 const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-csstree']);
 
@@ -121,7 +124,7 @@ export default defineConfig({
     }
 
     const [currentVersionSemver, upgradedVersionSemver] = [currentVersion, upgradedVersion].map(
-      (v) => tryParse(v || ''),
+      (v = '') => tryParse(v),
     );
     return (
       (!PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||

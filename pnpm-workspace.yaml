@@ -11,6 +11,8 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/core@0.5.3'
   - '@tsrx/eslint-parser@0.6.1'
   - '@tsrx/eslint-plugin@0.6.1'
+  - eslint-cssicorn@0.1.0
+  - eslint-plugin-unicorn@77.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

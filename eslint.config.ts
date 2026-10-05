@@ -180,6 +180,12 @@ export default eslintConfig({
       },
     },
     {
+      files: ['src/configs/**/*.ts', 'src/plugins/*.ts'],
+      rules: {
+        'unicorn/no-top-level-side-effects': 0,
+      },
+    },
+    {
       files: ['scripts/**'],
       rules: {
         'max-classes-per-file': 0,

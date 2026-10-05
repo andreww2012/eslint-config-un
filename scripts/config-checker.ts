@@ -87,7 +87,7 @@ const directDependenciesServingOnlyDisabledConfigs = Object.entries(PACKAGES_MET
     );
     return doesServeOnlyDisabledConfigs === (directDependencyReason != null)
       ? []
-      : [{packageName, configs, isReasonNeedless: !doesServeOnlyDisabledConfigs}];
+      : {packageName, configs, isReasonNeedless: !doesServeOnlyDisabledConfigs};
   },
 );
 

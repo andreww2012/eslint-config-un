@@ -183,7 +183,7 @@ const collectTrait = (
       const entry = readTrait(traits, trait);
       return entry == null || (!includeRejections && entry.value === false)
         ? []
-        : [{prefix: plugin.prefix, ruleName, fullRuleName, value: entry.value}];
+        : {prefix: plugin.prefix, ruleName, fullRuleName, value: entry.value};
     }),
   );
 
@@ -223,14 +223,12 @@ const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: Co
       (TYPE_AWARE_CATEGORIES[prefix] || []).flatMap((ruleName) =>
         writtenByHand.has(prefixRuleName(prefix, ruleName))
           ? []
-          : [
-              {
-                prefix,
-                ruleName,
-                fullRuleName: prefixRuleName(prefix, ruleName),
-                value: true as const,
-              },
-            ],
+          : {
+              prefix,
+              ruleName,
+              fullRuleName: prefixRuleName(prefix, ruleName),
+              value: true as const,
+            },
       ),
     ),
   ];
@@ -249,7 +247,7 @@ const renderTypeInfo = (plugins: readonly DiscoveredPlugin[], rules: CollectedRu
           .map(({ruleName, value}) => `      '${ruleName}': ${JSON.stringify(value)},`),
         '    },',
         ...(['extraPatterns', 'extraFileExtensions'] as const).flatMap((key) =>
-          extra?.[key] ? [`    ${key}: ${JSON.stringify(extra[key])},`] : [],
+          extra?.[key] ? `    ${key}: ${JSON.stringify(extra[key])},` : [],
         ),
         '  },',
       ].join('\n');

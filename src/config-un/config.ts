@@ -326,7 +326,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const requiredPluginPrefixes = [
     ...new Set(
       Object.values(CONFIG_MANIFESTS).flatMap(({requires}) =>
-        requires ? [requires.pluginLoadable] : [],
+        requires ? requires.pluginLoadable : [],
       ),
     ),
   ];
@@ -529,7 +529,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ?.addConfig(['config-files', {applyUserFilesAndIgnores: false}], {
       files: GLOB_CONFIG_FILES,
     })
-    .disableAnyRule('node', 'no-unpublished-require');
+    .disableAnyRule('node', 'no-unpublished-require')
+    // Reports the `export default defineConfig(...)` most config files consist of
+    .disableAnyRule('unicorn', 'no-top-level-side-effects');
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores
   const globalIgnores = [

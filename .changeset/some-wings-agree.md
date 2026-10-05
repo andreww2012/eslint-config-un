@@ -1,0 +1,68 @@
+---
+"eslint-config-un": minor
+---
+
+[**BREAKING**] unicorn: updated [`eslint-plugin-unicorn` from v76.0.0 to v77.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v76.0.0...v77.0.0):
+
+- The CSS-only rules were moved from ⚙️ `css` sub-config to [`eslint-cssicorn`](https://npmx.dev/eslint-cssicorn), which is used by the new ⚙️ `unicorn` sub-config of the `css` config, ✅ enabled by default (🔄-> has the replacement of):
+  - `unicorn/no-deprecated-css-features` 🔄->[`cssicorn/no-deprecated-features`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-deprecated-features.md)
+  - `unicorn/no-duplicate-css-selectors` 🔄->[`cssicorn/no-duplicate-selectors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-duplicate-selectors.md)
+  - `unicorn/no-duplicate-font-family-names` 🔄->[`cssicorn/no-duplicate-font-family-names`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-duplicate-font-family-names.md)
+  - `unicorn/no-invalid-media-features` 🔄->[`cssicorn/no-invalid-media-features`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-invalid-media-features.md)
+  - `unicorn/no-nesting-with-mixed-specificity` 🔄->[`cssicorn/no-nesting-with-mixed-specificity`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-nesting-with-mixed-specificity.md)
+  - `unicorn/no-redundant-nested-style-rules` 🔄->[`cssicorn/no-redundant-nested-style-rules`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-redundant-nested-style-rules.md)
+  - `unicorn/no-unknown-css-annotations` 🔄->[`cssicorn/no-unknown-annotations`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-annotations.md)
+  - `unicorn/no-unknown-pseudo-selectors` 🔄->[`cssicorn/no-unknown-pseudo-selectors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-pseudo-selectors.md)
+  - `unicorn/no-unscoped-css-nesting-selector` 🔄->[`cssicorn/no-unscoped-nesting-selector`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unscoped-nesting-selector.md)
+  - `unicorn/prefer-explicit-viewport-units` 🔄->[`cssicorn/prefer-explicit-viewport-units`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-explicit-viewport-units.md), which is now 🟢 enabled
+  - `unicorn/prefer-media-feature-range-syntax` 🔄->[`cssicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-media-feature-range-syntax.md)
+- 🟢 enabled the following new rules in ⚙️ `unicorn` sub-config of the `css` config:
+  - [`cssicorn/lowercase`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/lowercase.md) (added it to the `noStylisticRules` config)
+  - [`cssicorn/no-declarations-after-nested-rules`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-declarations-after-nested-rules.md)
+  - [`cssicorn/no-duplicate-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-duplicate-properties.md)
+  - [`cssicorn/no-redundant-longhand-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-redundant-longhand-properties.md)
+  - [`cssicorn/no-redundant-shorthand-values`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-redundant-shorthand-values.md) (added it to the `noStylisticRules` config)
+  - [`cssicorn/no-self-referencing-custom-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-self-referencing-custom-properties.md)
+  - [`cssicorn/no-zero-length-unit`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-zero-length-unit.md) (added it to the `noStylisticRules` config)
+  - [`cssicorn/prefer-modern-syntax`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-modern-syntax.md) (added it to the `noStylisticRules` config)
+  - [`cssicorn/require-property-descriptors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/require-property-descriptors.md)
+- 🔴 not enabled the following new rules in ⚙️ `unicorn` sub-config of the `css` config:
+  - [`cssicorn/no-descending-specificity`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-descending-specificity.md)
+  - [`cssicorn/no-unknown-animations`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-animations.md)
+  - [`cssicorn/prefer-short-hex-color`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-short-hex-color.md) (added it to the `noStylisticRules` config)
+- 🟢 enabled the following rules:
+  - [`unicorn/no-conflicting-constraints`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-conflicting-constraints.md) (also enabled in ⚙️ `css` and `html` sub-configs)
+  - [`unicorn/no-incomplete-accessor-override`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-incomplete-accessor-override.md)
+  - [`unicorn/no-ineffective-csp-directives`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-ineffective-csp-directives.md) (also enabled in ⚙️ `html` sub-config)
+  - [`unicorn/no-invalid-boolean-attribute-value`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-boolean-attribute-value.md)
+  - [`unicorn/no-invalid-dom-token`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-dom-token.md)
+  - [`unicorn/no-invalid-integrity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-integrity.md) (also enabled in ⚙️ `html` sub-config)
+  - [`unicorn/no-invalid-intl-options`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-intl-options.md)
+  - [`unicorn/no-invalid-property-descriptor`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-property-descriptor.md)
+  - [`unicorn/no-invalid-response-options`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-response-options.md)
+  - [`unicorn/no-invalid-style-set-property`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-style-set-property.md)
+  - [`unicorn/no-invalid-temporal-arithmetic`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-temporal-arithmetic.md)
+  - [`unicorn/no-invalid-url-protocol-comparison`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-url-protocol-comparison.md)
+  - [`unicorn/no-prevent-default-in-passive-listener`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-prevent-default-in-passive-listener.md)
+  - [`unicorn/no-unnecessary-parameters`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-parameters.md) (added it to the `noStylisticRules` config)
+  - [`unicorn/no-unsafe-json-serialization`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-json-serialization.md)
+  - [`unicorn/no-url-in-search-params`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-url-in-search-params.md)
+  - [`unicorn/prefer-escaped-irregular-whitespace`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-escaped-irregular-whitespace.md) (also enabled in ⚙️ `json` sub-config; disabled it in the `cloudfrontFunctions` config; added it to the `noStylisticRules` config)
+  - [`unicorn/prefer-literal-ascii`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-literal-ascii.md) (also enabled in ⚙️ `css` and `json` sub-configs; added it to the `noStylisticRules` config)
+  - [`unicorn/prefer-promise-static-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-promise-static-methods.md)
+  - [`unicorn/prefer-short-escape-sequences`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-short-escape-sequences.md) (also enabled in ⚙️ `json` sub-config; added it to the `noStylisticRules` config)
+  - [`unicorn/require-text-decoder-streaming`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-text-decoder-streaming.md)
+- 🟢 enabled the following rules in the language sub-configs:
+  - [`unicorn/consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md) in ⚙️ `css`, `html` and `json` sub-configs
+  - [`unicorn/escape-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/escape-case.md) in ⚙️ `css` and `json` sub-configs
+  - [`unicorn/no-empty-link-text`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-empty-link-text.md) in ⚙️ `markdown` sub-config
+  - [`unicorn/no-javascript-url`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-javascript-url.md) in ⚙️ `markdown` sub-config
+  - [`unicorn/no-leading-empty-lines`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-leading-empty-lines.md) in ⚙️ `anyLanguage` sub-config (added it to the `noStylisticRules` config)
+  - [`unicorn/no-loss-of-precision`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-loss-of-precision.md) in ⚙️ `css` and `json` sub-configs
+  - [`unicorn/no-zero-fractions`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-zero-fractions.md) in ⚙️ `css` and `json` sub-configs
+  - [`unicorn/relative-url-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/relative-url-style.md) in ⚙️ `css`, `html` and `markdown` sub-configs
+- 🔴 not enabled the following rules:
+  - [`unicorn/comma-spacing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/comma-spacing.md) in ⚙️ `json` sub-config (added it to the `noStylisticRules` config)
+  - [`unicorn/indent`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/indent.md) in ⚙️ `css` and `json` sub-configs (added it to the `noStylisticRules` config)
+  - [`unicorn/key-name-casing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/key-name-casing.md) in ⚙️ `json` sub-config
+- [`unicorn/no-top-level-side-effects`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-top-level-side-effects.md) rule is now disabled in config files (`**/*.config.*` and `**/.*rc.*`), because it now reports `export default defineConfig(...)`

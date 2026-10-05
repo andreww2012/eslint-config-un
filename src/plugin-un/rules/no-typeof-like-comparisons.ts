@@ -165,7 +165,7 @@ const rule: Eslint.Rule.RuleModule = {
     const allowedLiteralValues = options?.allow
       ? new Set(
           Object.entries({undefined: true, ...options.allow}).flatMap(([value, isAllowed]) =>
-            isAllowed ? [value] : [],
+            isAllowed ? value : [],
           ),
         )
       : DEFAULT_ALLOWED_LITERAL_VALUES_SET;
@@ -211,13 +211,11 @@ const rule: Eslint.Rule.RuleModule = {
               }
             : null;
         if (
-          !reportDescriptor ||
-          isTypeofResultExpression(otherNode, context.sourceCode.getScope(node))
+          reportDescriptor &&
+          !isTypeofResultExpression(otherNode, context.sourceCode.getScope(node))
         ) {
-          return;
+          context.report({node, ...reportDescriptor});
         }
-
-        context.report({node, ...reportDescriptor});
       },
     };
   },

@@ -266,6 +266,7 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
       .disableAnyRule('unicorn', 'prefer-array-last-methods')
       .disableAnyRule('unicorn', 'prefer-at')
       .disableAnyRule('unicorn', 'prefer-default-parameters')
+      .disableAnyRule('unicorn', 'prefer-escaped-irregular-whitespace')
       .disableAnyRule('unicorn', 'prefer-logical-operator-over-ternary')
       .disableAnyRule('unicorn', 'prefer-object-from-entries')
       .disableAnyRule('unicorn', 'prefer-optional-catch-binding')

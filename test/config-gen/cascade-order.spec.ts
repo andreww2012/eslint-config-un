@@ -37,6 +37,7 @@ describe('cascade order', () => {
       eslint-config-un/compat
       eslint-config-un/cspell
       eslint-config-un/css
+      eslint-config-un/css/unicorn
       eslint-config-un/css-in-js
       eslint-config-un/cypress
       eslint-config-un/cypress/@type-information

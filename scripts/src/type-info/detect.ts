@@ -296,12 +296,12 @@ const collectJsFiles = async (directory: string, into: string[]) => {
   );
 };
 
-const namesFromClause = (clause: string | undefined) =>
-  (clause || '')
+const namesFromClause = (clause = '') =>
+  clause
     .split(',')
     .map((part) => part.trim().split(IMPORT_ALIAS_REGEX))
     .flatMap(([imported, alias]) =>
-      imported?.trim() ? [{imported: imported.trim(), local: (alias || imported).trim()}] : [],
+      imported?.trim() ? {imported: imported.trim(), local: (alias || imported).trim()} : [],
     );
 
 /**
@@ -369,24 +369,22 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
         return [];
       }
       const {defaultBinding, braced} = splitImportClause(match[1] || '');
-      return [
-        {
-          target,
-          names: [
-            ...namesFromClause(braced),
-            ...(defaultBinding && !defaultBinding.startsWith(NAMESPACE_IMPORT_NAME)
-              ? [{imported: DEFAULT_EXPORT_NAME, local: defaultBinding}]
-              : []),
-          ],
-        },
-      ];
+      return {
+        target,
+        names: [
+          ...namesFromClause(braced),
+          ...(defaultBinding && !defaultBinding.startsWith(NAMESPACE_IMPORT_NAME)
+            ? [{imported: DEFAULT_EXPORT_NAME, local: defaultBinding}]
+            : []),
+        ],
+      };
     });
 
     const requires = [...code.matchAll(RELATIVE_REQUIRE_REGEX)].flatMap((match) => {
       const target = resolveSpecifier(file, match[1] || '');
       return target == null
         ? []
-        : [{target, names: [{imported: NAMESPACE_IMPORT_NAME, local: NAMESPACE_IMPORT_NAME}]}];
+        : {target, names: [{imported: NAMESPACE_IMPORT_NAME, local: NAMESPACE_IMPORT_NAME}]};
     });
 
     return [...imports, ...requires];
@@ -432,6 +430,7 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
     );
   }
 
+  // eslint-disable-next-line unicorn/no-unnecessary-parameters -- the set must be shared across the recursive calls
   const resolveExport = (file: string, name: string, seen = new Set<string>()): string => {
     const key = `${file}\0${name}`;
     if (seen.has(key)) {
@@ -490,7 +489,7 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
                 return [];
               }
               const definingFile = pathe.basename(resolveExport(target, imported));
-              return OPAQUE_MODULE_NAMES.has(definingFile) ? [] : [`${local} <- ${definingFile}`];
+              return OPAQUE_MODULE_NAMES.has(definingFile) ? [] : `${local} <- ${definingFile}`;
             }),
           ),
         ];

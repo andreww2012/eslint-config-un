@@ -289,6 +289,9 @@ importers:
       eslint-config-flat-gitignore:
         specifier: 2.4.0
         version: 2.4.0(eslint@10.11.0)
+      eslint-cssicorn:
+        specifier: 0.1.0
+        version: 0.1.0(@eslint/css@2.0.0)(eslint@10.11.0)
       eslint-import-resolver-typescript:
         specifier: 4.4.5
         version: 4.4.5(eslint-plugin-import-x@4.17.1)(eslint@10.11.0)(supports-color@7.2.0)
@@ -368,8 +371,8 @@ importers:
         specifier: 1.5.0
         version: 1.5.0(eslint@10.11.0)(supports-color@7.2.0)
       eslint-plugin-unicorn:
-        specifier: 76.0.0
-        version: 76.0.0(eslint@10.11.0)
+        specifier: 77.0.0
+        version: 77.0.0(eslint@10.11.0)
       eslint-plugin-unnecessary-abstractions:
         specifier: 1.0.0
         version: 1.0.0
@@ -7700,6 +7703,13 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
+  eslint-cssicorn@0.1.0:
+    resolution: {integrity: sha512-2whStJU5GARrKj+GXU3GlnQ4My8GpjX7x273KTozgVguhg5GzYNHaCGW0YPD99YhvL6VG8sDdFyu4CcvabOIBw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@eslint/css': '>=2'
+      eslint: '>=10.4'
+
   eslint-fix-utils@0.4.4:
     resolution: {integrity: sha512-9reP0fw++eZv0qs0ji8U1G9a+j8yWQW1RT8Wrlw32JlhQJDiweVX98kyDrJq6G7jdOLgKwmj0nPghyMadsOgHQ==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
@@ -8510,8 +8520,8 @@ packages:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
 
-  eslint-plugin-unicorn@76.0.0:
-    resolution: {integrity: sha512-3ywJrCMHKYhcBP5yFzGaOOX3dY7+iR3hvpuoS/0EnhRFgVWLejly+t4fOdJvWQxJdHZl1C+QBW7hybXPDld4Pw==}
+  eslint-plugin-unicorn@77.0.0:
+    resolution: {integrity: sha512-aayznMCKTXlPAsoyUjRok862sz3BJAfxpQX/t79AT/uVQTmWsCx3FXfXo+9hfhL8aR2mMZQYyXoDZo3/ly6lJw==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -20654,6 +20664,12 @@ snapshots:
       eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
     optional: true
 
+  eslint-cssicorn@0.1.0(@eslint/css@2.0.0)(eslint@10.11.0):
+    dependencies:
+      '@eslint/css': 2.0.0
+      '@eslint/css-tree': 4.1.1
+      eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
+
   eslint-fix-utils@0.4.4(@types/estree@1.0.9)(eslint@10.11.0):
     dependencies:
       eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -21759,7 +21775,7 @@ snapshots:
       eslint: 10.11.0(jiti@2.7.0)(supports-color@7.2.0)
       turbo: 2.9.14
 
-  eslint-plugin-unicorn@76.0.0(eslint@10.11.0):
+  eslint-plugin-unicorn@77.0.0(eslint@10.11.0):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.11.0)
       '@eslint/css-tree': 4.1.1

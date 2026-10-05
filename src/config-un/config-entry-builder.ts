@@ -170,22 +170,20 @@ export class ConfigEntryBuilder<
       typeof configNameOrMetadata === 'string'
         ? this.configs.get(configNameOrMetadata)?.[1]
         : configNameOrMetadata;
-    /* v8 ignore next - The metadata of a config being modified is always present */
-    if (!configMetadata) {
-      return;
-    }
-
-    if (severity === OFF) {
-      if (!hasEnabledDisableAutofixCounterpart) {
-        configMetadata.rulesRequiringTypeInfo?.delete(ruleEntryName);
-      }
-    } else {
-      const typeInfoRequirement = RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName];
-      if (typeInfoRequirement != null) {
-        (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, {
-          plugin,
-          ruleName,
-        });
+    /* v8 ignore else - The metadata of a config being modified is always present */
+    if (configMetadata) {
+      if (severity === OFF) {
+        if (!hasEnabledDisableAutofixCounterpart) {
+          configMetadata.rulesRequiringTypeInfo?.delete(ruleEntryName);
+        }
+      } else {
+        const typeInfoRequirement = RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName];
+        if (typeInfoRequirement != null) {
+          (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, {
+            plugin,
+            ruleName,
+          });
+        }
       }
     }
   }

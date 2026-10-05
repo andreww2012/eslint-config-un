@@ -9,6 +9,8 @@ const FIXTURES = {
   textEncodingWithoutDash: 'text-encoding-without-dash.js',
   booleanWithoutPrefix: 'boolean-without-prefix.js',
   booleanRefAndBooleanVariable: 'boolean-ref-and-boolean-variable.ts',
+  defaultExportedCall: 'default-exported-call.js',
+  defaultExportedCallInConfigFile: 'default-exported-call.config.js',
 } as const;
 
 describe('basic tests', () => {
@@ -132,6 +134,40 @@ describe('rules', async () => {
       results,
       FIXTURES.combinedCondition,
       'unicorn/no-lonely-if',
+    );
+
+    expect(error).toBeUndefined();
+  });
+
+  it('triggers `unicorn/no-top-level-side-effects` for a default-exported call', async () => {
+    const results = await testEslintConfig(
+      'unicorn',
+      FIXTURES.defaultExportedCall,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.defaultExportedCall,
+      'unicorn/no-top-level-side-effects',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Do not use top-level side effects in exported modules."',
+    );
+  });
+
+  it('does not trigger `unicorn/no-top-level-side-effects` for a default-exported call in a config file', async () => {
+    const results = await testEslintConfig(
+      'unicorn',
+      FIXTURES.defaultExportedCallInConfigFile,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.defaultExportedCallInConfigFile,
+      'unicorn/no-top-level-side-effects',
     );
 
     expect(error).toBeUndefined();

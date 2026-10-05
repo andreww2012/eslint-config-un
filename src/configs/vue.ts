@@ -1350,20 +1350,18 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       ][]
     ).forEach(([globalsContext, files, ignores]) => {
       const autoImportedNames = nuxtAutoImports.globals[globalsContext];
-      if (autoImportedNames.length === 0) {
-        return;
-      }
-
-      configBuilderNuxt?.addConfig(
-        [`vue/nuxt/auto-imports/${globalsContext}`, {applyUserFilesAndIgnores: false}],
-        {
-          files,
-          ...(ignores?.length && {ignores}),
-          languageOptions: {
-            globals: Object.fromEntries(autoImportedNames.map((name) => [name, 'readonly'])),
+      if (autoImportedNames.length > 0) {
+        configBuilderNuxt?.addConfig(
+          [`vue/nuxt/auto-imports/${globalsContext}`, {applyUserFilesAndIgnores: false}],
+          {
+            files,
+            ...(ignores?.length && {ignores}),
+            languageOptions: {
+              globals: Object.fromEntries(autoImportedNames.map((name) => [name, 'readonly'])),
+            },
           },
-        },
-      );
+        );
+      }
     });
   }
 

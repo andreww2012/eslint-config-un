@@ -217,14 +217,12 @@ export function recordPackageRequester(
 ) {
   const packageName = MODULE_LOADERS[moduleKind][modulePrefix]?.packageName;
   const requestersResolved = arrayify(requesters);
-  if (!packageName || requestersResolved.length === 0) {
-    return;
+  if (packageName && requestersResolved.length > 0) {
+    this.packageRequesters.set(
+      packageName,
+      new Set([...(this.packageRequesters.get(packageName) || []), ...requestersResolved]),
+    );
   }
-
-  this.packageRequesters.set(
-    packageName,
-    new Set([...(this.packageRequesters.get(packageName) || []), ...requestersResolved]),
-  );
 }
 
 export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
