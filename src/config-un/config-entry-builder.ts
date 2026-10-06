@@ -51,6 +51,7 @@ import {
   arrayMap,
   arrayPartition,
   findArrayInversions,
+  mapGetOrInsert,
   objectEntriesUnsafe,
   styleConfigName,
   styleRuleName,
@@ -920,14 +921,11 @@ export class ConfigEntryBuilder<
         });
 
         if (shouldConfigureParser) {
-          this.context.usedPackages.set('typescriptEslintParser', [
-            ...(this.context.usedPackages.get('typescriptEslintParser') || []),
-            {
-              config: configForTypeInformation,
-              path: 'languageOptions',
-              info: {package: 'typescriptEslintParser', property: 'parser'},
-            },
-          ]);
+          mapGetOrInsert(this.context.usedPackages, 'typescriptEslintParser', []).push({
+            config: configForTypeInformation,
+            path: 'languageOptions',
+            info: {package: 'typescriptEslintParser', property: 'parser'},
+          });
 
           this.context.recordPackageRequester('package', 'typescriptEslintParser');
         }

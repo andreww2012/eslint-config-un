@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {jsonParseSafe as jsonParse} from '@andreww2012/unutils';
+import {jsonParseSafe as jsonParse, mapGetOrInsert} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
 import {exec} from 'tinyexec';
@@ -227,10 +227,9 @@ const mergeRulesPresenceResults = (
 
   for (const {rules} of results) {
     for (const {ruleName, versions, deprecatedVersions} of rules) {
-      const existing = ruleMap.get(ruleName) || {versions: [], deprecatedVersions: []};
+      const existing = mapGetOrInsert(ruleMap, ruleName, {versions: [], deprecatedVersions: []});
       existing.versions.push(...versions);
       existing.deprecatedVersions.push(...deprecatedVersions);
-      ruleMap.set(ruleName, existing);
     }
   }
 

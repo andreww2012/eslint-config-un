@@ -101,7 +101,7 @@
     "postpack": "nr readme:pin-assets --unpin"
   },
   "dependencies": {
-    "@andreww2012/unutils": "0.1.0",
+    "@andreww2012/unutils": "0.2.0",
     "@antfu/utils": "9.3.0",
     "@e18e/eslint-plugin": "0.8.1",
     "@eslint-community/eslint-utils": "4.10.1",

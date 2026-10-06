@@ -9,7 +9,6 @@ import {
   getKeysOfTruthyValues,
   isNonEmptyArray,
   readAndParseJson,
-  readFileSafe,
 } from '../src/utils';
 
 // `fetchPackageInfo` is replaced by a mock in `test/setup.ts`, so the real implementation
@@ -165,26 +164,6 @@ describe('isNonEmptyArray', () => {
 
   it('returns `false` for `null`', () => {
     expect(isNonEmptyArray(null)).toBe(false);
-  });
-});
-
-describe('readFileSafe', () => {
-  it('reads the file contents as a string', async () => {
-    await expect(readFileSafe(fixturePath(FIXTURES.plainObjectJson))).resolves.toBeString();
-  });
-
-  it('reads the file contents as a buffer when `asBinary` is set', async () => {
-    expect(Buffer.isBuffer(await readFileSafe(fixturePath(FIXTURES.plainObjectJson), true))).toBe(
-      true,
-    );
-  });
-
-  it('returns `null` when the file does not exist', async () => {
-    await expect(readFileSafe(MISSING_FILE_PATH)).resolves.toBeNull();
-  });
-
-  it('rethrows errors other than the file being absent', async () => {
-    await expect(readFileSafe(path.join(import.meta.dirname, 'fixtures'))).rejects.toThrow();
   });
 });
 

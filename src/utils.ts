@@ -1,12 +1,17 @@
 // cspell:ignore pnpapi
 import crypto from 'node:crypto';
 import {existsSync} from 'node:fs';
-import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
-import {arrayHasMinElements, arrayify, jsonParseSafe} from '@andreww2012/unutils';
+import {
+  arrayHasMinElements,
+  arrayWithoutFalsy,
+  jsonParseSafe,
+  mapGetOrInsert,
+} from '@andreww2012/unutils';
+import {readFileSafe} from '@andreww2012/unutils/server';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import * as packageUtils from 'empathic/package';
 import {resolve as resolvePackage} from 'import-meta-resolve';
@@ -30,13 +35,14 @@ export {
   isKeyIn,
   isPlainObject,
   jsonParseSafe,
+  mapGetOrInsert,
   mapKeys,
   type MaybeArray,
   type MaybeFn,
   maybeCall,
   memoize,
   Mutex,
-  objectKeysUnsafe as objectKeysUnsafe2,
+  objectKeysUnsafe,
   omit,
   pick,
   regexEscape,
@@ -45,7 +51,9 @@ export {
   traverseForEach,
 } from '@andreww2012/unutils';
 
-export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
+export {readFileSafe} from '@andreww2012/unutils/server';
+
+export {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 
 export const isInEditor = () => isInEditorOriginal({mode: 'strict'});
 
@@ -119,7 +127,7 @@ export function findArrayInversions<T>(
   if (group) {
     const resultMap = new Map<T, T[]>();
     result.forEach(([a, b]) => {
-      resultMap.set(a, [...(resultMap.get(a) || []), b]);
+      mapGetOrInsert(resultMap, a, []).push(b);
     });
     return resultMap;
   }
@@ -142,30 +150,7 @@ export const sha256 = (input: string | Buffer) => {
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
 export const joinPaths = (...paths: (string | Falsy)[]) =>
-  path.posix.join(...arrayify(paths).filter((v): v is string => Boolean(v)));
-
-export function readFileSafe(
-  filePath: string,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  asBinary?: false,
-): Promise<string | null>;
-export function readFileSafe(
-  filePath: string,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  asBinary: true,
-): Promise<Buffer | null>;
-export async function readFileSafe(
-  filePath: string,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  asBinary = false,
-): Promise<string | Buffer | null> {
-  return await fs.readFile(filePath, asBinary ? null : 'utf8').catch((error: unknown) => {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-      return null;
-    }
-    throw error;
-  });
-}
+  path.posix.join(...arrayWithoutFalsy(paths));
 
 export const readAndParseJson = async <T>(filePath: string | URL | undefined): Promise<T | null> =>
   filePath

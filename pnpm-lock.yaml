@@ -188,8 +188,8 @@ importers:
   .:
     dependencies:
       '@andreww2012/unutils':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.2.0
+        version: 0.2.0
       '@antfu/utils':
         specifier: 9.3.0
         version: 9.3.0
@@ -936,9 +936,9 @@ packages:
   '@andrewbranch/untar.js@1.0.3':
     resolution: {integrity: sha512-Jh15/qVmrLGhkKJBdXlK1+9tY4lZruYjsgkDFj08ZmDiWVBLJcqkok7Z0/R0In+i1rScBpJlSvrTS2Lm41Pbnw==}
 
-  '@andreww2012/unutils@0.1.0':
-    resolution: {integrity: sha512-Y+hGpGerpRlN11GyyBkFEhZmnuacseJ8O3xFxJg8L2Ps4M5HX5e9gSAta40NElJ2Djwj/atoE+P5weAjzs3XKQ==}
-    engines: {node: ^22.23.1 || >=24}
+  '@andreww2012/unutils@0.2.0':
+    resolution: {integrity: sha512-ZkqhMC8N7yyo9sseFu1SAFamEDxngyTOvJDOxFevmBQohbYyEv2tQ/hsCWmOR/nLr3tX+oqhOyIpSShprVxhXQ==}
+    engines: {node: ^22.23.1 || ^24.18.0 || >=26.4.0}
 
   '@angular-eslint/bundled-angular-compiler@15.2.1':
     resolution: {integrity: sha512-LO7Am8eVCr7oh6a0VmKSL7K03CnQEQhFO7Wt/YtbfYOxVjrbwmYLwJn+wZPOT7A02t/BttOD/WXuDrOWtSMQ/Q==}
@@ -13448,7 +13448,7 @@ snapshots:
 
   '@andrewbranch/untar.js@1.0.3': {}
 
-  '@andreww2012/unutils@0.1.0': {}
+  '@andreww2012/unutils@0.2.0': {}
 
   '@angular-eslint/bundled-angular-compiler@15.2.1': {}
 

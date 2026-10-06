@@ -28,6 +28,7 @@ import {
   fetchPackageInfo,
   getByPath,
   isKeyIn,
+  mapGetOrInsert,
   maybeCall,
   objectEntriesUnsafe,
   objectKeysUnsafe,
@@ -287,18 +288,12 @@ export const resolveConfigAsyncData = async (
   // resolve a dependency of its own. Nothing is cached when missing packages are found
   (cacheData ? new Map<string, Set<string>>() : context.missingPackages).forEach(
     (packagesFailedToLoadIt, missingPackage) => {
-      if (!packagesToManuallyInstallOrUpdate.has(missingPackage)) {
-        packagesToManuallyInstallOrUpdate.set(missingPackage, {
-          versionRange: '',
-        });
-      }
-      packageRequesters.set(
-        missingPackage,
-        new Set([
-          ...(packageRequesters.get(missingPackage) || []),
-          ...Array.from(packagesFailedToLoadIt, (packageName) => `package:${packageName}` as const),
-        ]),
-      );
+      mapGetOrInsert(packagesToManuallyInstallOrUpdate, missingPackage, {versionRange: ''});
+
+      const missingPackageRequesters = mapGetOrInsert(packageRequesters, missingPackage, new Set());
+      packagesFailedToLoadIt.forEach((packageName) => {
+        missingPackageRequesters.add(`package:${packageName}`);
+      });
     },
   );
 

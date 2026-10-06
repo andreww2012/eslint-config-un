@@ -18,7 +18,7 @@ import {
   arrayPartition,
   isNonEmptyArray,
   objectEntriesUnsafe,
-  objectKeysUnsafe2 as objectKeysUnsafe,
+  objectKeysUnsafe,
 } from '../utils';
 import type {ConfigKey} from './index.gen';
 import {

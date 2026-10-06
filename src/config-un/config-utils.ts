@@ -17,6 +17,7 @@ import type {NonEmptyTuple, Prettify} from '../types';
 import {
   type MaybeArray,
   arrayify,
+  mapGetOrInsert,
   styleConfigName,
   stylePackageName,
   styleText,
@@ -217,12 +218,14 @@ export function recordPackageRequester(
 ) {
   const packageName = MODULE_LOADERS[moduleKind][modulePrefix]?.packageName;
   const requestersResolved = arrayify(requesters);
-  if (packageName && requestersResolved.length > 0) {
-    this.packageRequesters.set(
-      packageName,
-      new Set([...(this.packageRequesters.get(packageName) || []), ...requestersResolved]),
-    );
+  if (!packageName || requestersResolved.length === 0) {
+    return;
   }
+
+  const packageRequesters = mapGetOrInsert(this.packageRequesters, packageName, new Set());
+  requestersResolved.forEach((requester) => {
+    packageRequesters.add(requester);
+  });
 }
 
 export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
@@ -265,14 +268,11 @@ export const savePackagesToLoadFromConfig = (
 
       const info = value as PackageToLoadInfo;
       arrayify(info.package).forEach((packageId) => {
-        context.usedPackages.set(packageId, [
-          ...(context.usedPackages.get(packageId) || []),
-          {
-            config,
-            path: traverseContext.path.slice(0, -1).join('.'),
-            info,
-          },
-        ]);
+        mapGetOrInsert(context.usedPackages, packageId, []).push({
+          config,
+          path: traverseContext.path.slice(0, -1).join('.'),
+          info,
+        });
         context.recordPackageRequester('package', packageId, requesters);
       });
     },

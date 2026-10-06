@@ -9,6 +9,7 @@ import {
   interopDefault,
   isKeyIn,
   isOwnCopyImportable,
+  mapGetOrInsert,
   maybeCall,
 } from '../utils';
 
@@ -107,10 +108,7 @@ function createModuleLoader<T, N extends string>(
           // the package is actually needed
           !(missingPackageName === packageName || missingPackageName.startsWith(`${packageName}/`))
         ) {
-          context.missingPackages.set(
-            missingPackageName,
-            new Set([...(context.missingPackages.get(missingPackageName) || []), packageName]),
-          );
+          mapGetOrInsert(context.missingPackages, missingPackageName, new Set()).add(packageName);
         }
       }
 

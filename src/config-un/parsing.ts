@@ -39,6 +39,7 @@ import {
   arrayify,
   identity,
   isObject,
+  mapGetOrInsert,
   objectKeysUnsafe,
 } from '../utils';
 import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
@@ -549,7 +550,7 @@ const resolveEntriesForLanguage = (
   );
   for (const request of requestsRequiringLanguage) {
     const dialect = dialectFromUser || request.dialect || definition.dialectDefault;
-    requestsByDialect.set(dialect, [...(requestsByDialect.get(dialect) || []), request]);
+    mapGetOrInsert(requestsByDialect, dialect, []).push(request);
   }
 
   const layersOfDialect = (dialect: string) =>
@@ -736,10 +737,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         context.registerUsedPlugin(mechanism.language[0], requesters);
       }
       if (!hasParserAlready && 'parser' in mechanism) {
-        context.usedParsers.set(mechanism.parser, [
-          ...(context.usedParsers.get(mechanism.parser) || []),
-          config,
-        ]);
+        mapGetOrInsert(context.usedParsers, mechanism.parser, []).push(config);
         context.recordPackageRequester('parser', mechanism.parser, requesters);
       }
 
@@ -819,8 +817,7 @@ export const createRequestParsing =
     requestedBy?: PackageRequester,
   ): UnConfigContext['requestParsing'] =>
   (language, request) => {
-    parsingRequests.set(language, [
-      ...(parsingRequests.get(language) || []),
+    mapGetOrInsert(parsingRequests, language, []).push(
       requestedBy ? {requestedBy, ...request} : request,
-    ]);
+    );
   };
