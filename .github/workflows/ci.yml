@@ -132,13 +132,13 @@ jobs:
           E2E_PACKAGE_MANAGER: ${{ matrix.package-manager }}
 
   build:
-    name: Build (tsdown) & lint public types (attw)
+    name: Build (tsdown) & lint package (attw, publint)
     needs: install
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
-      - run: pnpm check:public-types
+      - run: pnpm check:package
 
   release-main:
     name: Create release PR _OR_ Publish on merge
@@ -157,9 +157,11 @@ jobs:
       # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
       - name: Capture new release version
         env:
+          # For the changelog generator, the action passes it on its own
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Exits with 1 if there are no unreleased changesets, in which case the version stays the same
+          # Exits with 1 if there are no unreleased changesets,
+          # in which case the version stays the same
           pnpm changeset version || true
           echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
           git restore .

@@ -1,9 +1,12 @@
+# `ncu` only updates catalogs in workspace mode, which needs this
 packages:
   - ./
 
 nodeLinker: hoisted
 packageImportMethod: clone-or-copy
 saveExact: true
+autoDedupe: true
+saveTypes: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
@@ -77,6 +80,10 @@ allowBuilds:
 dedupePeers: true
 strictPeerDependencies: false
 
+catalogs:
+  format:
+    oxfmt: 0.72.0
+
 overrides:
   # 11 and 12 only break executor helpers and subgraph schema printing, neither used by `@graphql-eslint/eslint-plugin`
   '@graphql-tools/utils@<12.0.1': 12.0.3
@@ -85,6 +92,8 @@ overrides:
   basic-ftp@<6.2.1: 6.2.1
   brace-expansion@>=5.0.0 <5.0.12: 5.0.12
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
+  # Format Markdown code blocks with the same oxfmt version as all other files
+  eslint-plugin-format>oxfmt: 'catalog:format'
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   smol-toml@<=1.7.0: ^1.7.1

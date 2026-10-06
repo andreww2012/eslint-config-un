@@ -34,7 +34,7 @@ pre-commit:
   skip: [merge, rebase]
   commands:
     oxfmt:
-      run: pnpm exec oxfmt --write --no-error-on-unmatched-pattern {staged_files}
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
 
 commit-msg:

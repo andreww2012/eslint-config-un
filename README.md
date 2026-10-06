@@ -117,9 +117,7 @@ A Config has the following interface (the real types are simplified here for rea
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
-type RuleOptions = {
-  /* ... pre-generated options of all rules, each being an array */
-};
+type RuleOptions = {/* ... pre-generated options of all rules, each being an array */};
 
 type UnRuleEntry<RuleName extends string> =
   | Severity
@@ -515,9 +513,7 @@ An example:
 import {eslintConfig} from 'eslint-config-un';
 
 export default eslintConfig({
-  configs: {
-    /* ... */
-  },
+  configs: {/* ... */},
 
   extraConfigs: [
     {

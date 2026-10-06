@@ -101,6 +101,11 @@ export default defineConfig({
   cacheExpiration: 30,
   cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
 
+  // Updates pnpm catalogs too
+  workspaces: true,
+  // The root is listed as a workspace package and would be checked twice
+  root: false,
+
   target: (packageName) => {
     if (PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName)) {
       return 'minor';
