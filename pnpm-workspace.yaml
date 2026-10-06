@@ -38,21 +38,25 @@ minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude: []
+trustPolicyExclude: # []
+  - cssnano@9.3.1
 
 audit:
   ignore: # []
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
     - GHSA-86w9-cpqp-85rv # No patched `node-forge` yet; `listhen` only generates certificates with it, never verifies signatures
     - GHSA-vfj7-8cjw-p6xm # No patched `braces` yet; dev-only, and glob patterns come from trusted configs
-    - GHSA-ch52-4w7c-c8xp # No patched `http-cache-semantics` yet; only reachable from a single-user local cache, never a shared one
+    - GHSA-x6jw-m9v5-85vh # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
+    - GHSA-g4wm-2vf7-vfgr # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
+    - GHSA-858h-whjf-mvg5 # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
+    - GHSA-v5rq-49vh-5v5c # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
   ignorePrune: true
 
 allowBuilds:
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
   # Critical: sets up git hooks
-  lefthook@2.1.16: true
+  lefthook@2.1.17: true
 
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher': false
@@ -72,6 +76,8 @@ dedupePeers: true
 strictPeerDependencies: false
 
 overrides:
+  # 11 and 12 only break executor helpers and subgraph schema printing, neither used by `@graphql-eslint/eslint-plugin`
+  '@graphql-tools/utils@<12.0.1': 12.0.3
   axios@>=1.13.0 <1.20.0: 1.20.0
   # 6.0.0's only breaking change (separate transfer hosts are opt-in) doesn't affect `get-uri`
   basic-ftp@<6.2.1: 6.2.1
@@ -80,6 +86,7 @@ overrides:
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   smol-toml@<=1.7.0: ^1.7.1
+  tinypool@<2.1.2: 2.2.0
   undici@>=7.0.0 <7.29.1: 7.30.0
 
 patchedDependencies:
