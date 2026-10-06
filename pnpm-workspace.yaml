@@ -33,6 +33,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-rsc@5.24.6
   - eslint-plugin-react-web-api@5.24.6
   - eslint-plugin-react-x@5.24.6
+  - eslint-plugin-better-tailwindcss@4.9.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
