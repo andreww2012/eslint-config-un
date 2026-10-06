@@ -109,12 +109,13 @@ peerDependencyRules:
     '@angular-eslint/utils@17>eslint': '*'
     '@angular-eslint/utils@18>eslint': '*'
 
-    '@typescript-eslint/project-service@8.38>typescript': '*'
-    '@typescript-eslint/tsconfig-utils@8.38>typescript': '*'
+    '@typescript-eslint/project-service@8.56>typescript': '*'
+    '@typescript-eslint/tsconfig-utils@8.56>typescript': '*'
     '@typescript-eslint/type-utils@7>eslint': '*'
-    '@typescript-eslint/typescript-estree@8.38>typescript': '*'
+    '@typescript-eslint/typescript-estree@8.56>typescript': '*'
+    '@typescript-eslint/utils@5>eslint': '*'
     '@typescript-eslint/utils@7>eslint': '*'
-    '@typescript-eslint/utils@8.38>typescript': '*'
+    '@typescript-eslint/utils@8.56>typescript': '*'
     '@typescript-eslint/parser@8.57.0>typescript': '>=5'
 
     eslint-plugin-no-type-assertion@1.3>eslint: '*'

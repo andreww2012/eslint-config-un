@@ -807,7 +807,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.27.1"
+      "version": "12.9.1"
     }
   }
 }
