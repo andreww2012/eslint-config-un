@@ -40,20 +40,17 @@ describe('cascade order', () => {
       eslint-config-un/css/unicorn
       eslint-config-un/css-in-js
       eslint-config-un/cypress
-      eslint-config-un/cypress/@type-information
       eslint-config-un/cypress/no-only-tests
       eslint-config-un/de-morgan
       eslint-config-un/depend
       eslint-config-un/docusaurus
       eslint-config-un/drizzle
       eslint-config-un/e18e/modernization
-      eslint-config-un/e18e/modernization/@type-information
       eslint-config-un/e18e/module-replacements
       eslint-config-un/e18e/performance-improvements
       eslint-config-un/e18e/performance-improvements/@type-information
       eslint-config-un/ember/glimmer-templates
       eslint-config-un/ember
-      eslint-config-un/ember/@type-information
       eslint-config-un/ember/tests
       eslint-config-un/ember/no-only-tests
       eslint-config-un/erasable-syntax-only
@@ -84,7 +81,6 @@ describe('cascade order', () => {
       eslint-config-un/js/disable-in-ts-files
       eslint-config-un/js/stylistic_spaced-comment
       eslint-config-un/jsdoc
-      eslint-config-un/jsdoc/@type-information
       eslint-config-un/jsdoc/ts
       eslint-config-un/js-inline
       eslint-config-un/js-inline/js-inside-html-inside-markdown
@@ -107,10 +103,8 @@ describe('cascade order', () => {
       eslint-config-un/markdown-links
       eslint-config-un/markdown-preferences
       eslint-config-un/math
-      eslint-config-un/math/@type-information
       eslint-config-un/mobx
       eslint-config-un/mocha
-      eslint-config-un/mocha/@type-information
       eslint-config-un/mocha/no-only-tests
       eslint-config-un/module-interop
       eslint-config-un/nest-js
@@ -119,7 +113,6 @@ describe('cascade order', () => {
       eslint-config-un/ngrx
       eslint-config-un/ngrx/@type-information
       eslint-config-un/unicorn
-      eslint-config-un/unicorn/@type-information
       eslint-config-un/unicorn/any-language
       eslint-config-un/unicorn/css
       eslint-config-un/unicorn/html
@@ -127,7 +120,6 @@ describe('cascade order', () => {
       eslint-config-un/unicorn/markdown
       eslint-config-un/unicorn/inline-js
       eslint-config-un/node
-      eslint-config-un/node/@type-information
       eslint-config-un/node-dependencies
       eslint-config-un/no-only-tests
       eslint-config-un/no-relative-import-paths
@@ -157,7 +149,6 @@ describe('cascade order', () => {
       eslint-config-un/react/you-might-not-need-an-effect
       eslint-config-un/react/html
       eslint-config-un/regexp
-      eslint-config-un/regexp/@type-information
       eslint-config-un/remeda
       eslint-config-un/rxjs
       eslint-config-un/rxjs/@type-information
@@ -165,7 +156,6 @@ describe('cascade order', () => {
       eslint-config-un/security
       eslint-config-un/solid
       eslint-config-un/sonar
-      eslint-config-un/sonar/@type-information
       eslint-config-un/sql
       eslint-config-un/storybook
       eslint-config-un/storybook/main
@@ -173,7 +163,6 @@ describe('cascade order', () => {
       eslint-config-un/stylistic/spaced-comment
       eslint-config-un/tailwind
       eslint-config-un/tanstack-query
-      eslint-config-un/tanstack-query/@type-information
       eslint-config-un/tanstack-router
       eslint-config-un/tanstack-start
       eslint-config-un/tanstack-start/@type-information
@@ -223,7 +212,6 @@ describe('cascade order', () => {
       eslint-config-un/graphql
       eslint-config-un/svelte/system
       eslint-config-un/svelte
-      eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
       eslint-config-un/svelte/html
       eslint-config-un/vue

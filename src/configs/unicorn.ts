@@ -1148,8 +1148,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       {
         filesDefault: [GLOB_CSS],
         parseWith: 'css',
-        // `no-transition-all` optionally uses type information; letting it be split off into a
-        // `**/*.ts` config would defeat the whole point of this Sub-config
+        // `no-transition-all` optionally uses type information, which CSS files never have
         skipTypeInfoSplit: true,
       },
     ])

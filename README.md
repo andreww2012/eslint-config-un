@@ -1082,11 +1082,13 @@ The plugin's settings are set through [`plugins.import-integrity.settings`][plug
 **Type**: `'standalone' | 'splitOnly' | 'asIs' | 'disabled' | { mode?, ignores?: string[] } & ({ allowDefaultProject?: string[] } | { parserOptions? })`
 
 Controls how the rules that we know require type information are handled.
-By default, every such rule is *automatically **moved*** into a separate ESLint config restricted to TypeScript files, where the `typescript-eslint` parser is set up for typed linting.
+By default, every such rule that *throws* without type information is *automatically **moved*** into a separate ESLint config limited to the files that have it: TypeScript files, plus the Astro, Svelte and Vue files the `ts` config sets up type information for.
+The rules that only work partially without type information stay where they are, so they still run on the other files, like plain JavaScript ones.
 
 The mode (the string value, or the `mode` property) chooses the strategy:
 
 - `standalone`: the split happens, and the parser, including [`projectService`](https://typescript-eslint.io/packages/parser/#projectservice), is configured in the generated config.
+  That config only covers TypeScript files, and also gets copies of the rules that only work partially, so that they get type information there.
   This is the default when the `ts` config is **disabled** but `typescript` is installed.
 - `splitOnly`: the split happens, but no parser is configured: the project service is expected to come from the `parsing` root option, which the `ts` config sets up.
   This is the default when that config is **enabled**, which is the most common case, or when `typescript` is not installed, since the parser cannot load without it.
@@ -1099,7 +1101,7 @@ The mode (the string value, or the `mode` property) chooses the strategy:
 > The following configs are never split, so for them every mode except `disabled` behaves like `asIs`:
 >
 > - `ts/type-aware/*`, `vitest/ts` and `jest/ts`, because they set up type-aware linting themselves;
-> - `unicorn/css`, because the split would restrict it to `**/*.ts` files, which are not the files it exists for.
+> - `unicorn/css`, because CSS files never have type information.
 
 The object notation additionally accepts:
 

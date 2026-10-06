@@ -521,6 +521,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       configResults.ts || context.packagesInfo.typescript == null ? 'splitOnly' : 'standalone';
   }
 
+  context.typeInfoRulesResolved.typeAwareParsing = configResults.ts?.typeAwareParsing;
+
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
     configResults.markdownPreferences?.optionsResolved.extendedMarkdownSyntax === true;
 

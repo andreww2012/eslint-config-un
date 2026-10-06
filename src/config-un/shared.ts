@@ -552,20 +552,26 @@ export interface EslintConfigUnOptions<
    * - those that silently do nothing (or only partially work) without it.
    *
    * To minimize the chance of crashes due to missing type information, by default we move every
-   * such rule into a separate ESLint config restricted to TypeScript files, and set up the
-   * `typescript-eslint` parser there for typed linting.
+   * rule of the first group into a separate ESLint config limited to the files that have type
+   * information.
+   * The rules of the second group stay where they are, so they still run, if only partially, on
+   * the other files.
    * The generated config inherits all properties from the original one, except:
    * - `name` gets the `/@type-information` suffix;
-   * - `files` is set to <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   * - `files` is set to the files the `ts` config sets up type information for (by default
+   *   <code>**&#47;*.?([cm])ts?(x)</code> and the Astro, Svelte and Vue files it handles), or to
+   *   <code>**&#47;*.?([cm])ts?(x)</code> alone if that config is disabled or in `standalone` mode,
    *   [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
    *   with the original config's `files`;
-   * - all `.md(x)` code block patterns are appended to `ignores`;
+   * - the files that never have type information, like `.md(x)` code blocks, are appended to
+   *   `ignores`;
    * - [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser/#projectservice)
    *   is set to `true` (only in `standalone` mode, and only if the global parser options set
    *   neither `projectService` nor `project`);
    * - any custom file extensions required by the moved rules (like `.svelte`) are added to
    *   [`extraFileExtensions`](https://typescript-eslint.io/packages/parser/#extrafileextensions);
-   * - `rules` consists solely of the moved entries.
+   * - `rules` consists solely of the moved entries, plus, in `standalone` mode, copies of the rules
+   *   of the second group, so that they get type information there.
    *
    * The string value (or the `mode` property) chooses the strategy:
    * - `standalone`: the split happens and the `typescript-eslint` parser, including
@@ -583,8 +589,7 @@ export interface EslintConfigUnOptions<
    * ⚠️ The following configs are never split, so for them every mode except `disabled` behaves like
    * `asIs`:
    * - `ts/type-aware/*`, `vitest/ts` and `jest/ts`, which manage type-aware linting themselves;
-   * - `unicorn/css`, because the split would restrict it to <code>**&#47;*.ts</code> files, which
-   *   are not the files it exists for.
+   * - `unicorn/css`, because CSS files never have type information.
    *
    * The object notation additionally accepts:
    * - `ignores`: glob patterns excluded from type-aware linting.
@@ -792,6 +797,16 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
      * Used for `standalone` split configs and as the default for the `ts` type-aware config.
      */
     parserOptions?: TsEslintParserOptions;
+
+    /**
+     * Where the `ts` config sets up type information, which `splitOnly` split configs are limited
+     * to.
+     * Set after that config is loaded, and only if it is enabled
+     */
+    typeAwareParsing?: {
+      files: string[];
+      ignores: string[];
+    };
   };
 
   /**

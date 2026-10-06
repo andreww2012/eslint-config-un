@@ -576,6 +576,14 @@ const mergeParserOptions = (
 export interface TsConfigResult {
   filesTypeAware: string[];
   ignoresTypeAware: string[];
+
+  /**
+   * Where the project service is set up, which can be wider than where the type-aware rules run
+   */
+  typeAwareParsing: {
+    files: string[];
+    ignores: string[];
+  };
 }
 
 export default defineUnConfig<
@@ -741,11 +749,14 @@ export default defineUnConfig<
     languageOptions: {parserOptions: buildParsingParserOptions()},
   });
   // No program covers code blocks, compiled Civet or framework files opted out of type-aware rules
+  const typeAwareParsing = {
+    files: [...TS_FILES_DEFAULT, ...extraFilesTypeAware],
+    ignores: extraIgnoresTypeAware,
+  };
   context.requestParsing('ts', {
     kind: 'setUpOnly',
     nameSuffix: 'type-aware',
-    files: [...TS_FILES_DEFAULT, ...extraFilesTypeAware],
-    ignores: extraIgnoresTypeAware,
+    ...typeAwareParsing,
     languageOptions: {parserOptions: buildTypeAwareParserOptions()},
   });
 
@@ -1346,5 +1357,6 @@ export default defineUnConfig<
   return {
     filesTypeAware,
     ignoresTypeAware,
+    typeAwareParsing,
   };
 });

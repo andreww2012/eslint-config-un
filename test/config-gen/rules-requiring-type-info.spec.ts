@@ -1,4 +1,27 @@
-import {GLOB_SVELTE, GLOB_TS_X} from '../../src/constants';
+import {GLOB_ASTRO, GLOB_SVELTE, GLOB_TS_X, GLOB_VUE} from '../../src/constants';
+
+const FIXTURES = {
+  nestedArrayMethods: 'nested-array-methods.js',
+} as const;
+
+const FRAMEWORKS = [
+  ['astro', GLOB_ASTRO],
+  ['svelte', GLOB_SVELTE],
+  ['vue', GLOB_VUE],
+] as const;
+
+const FUNCTIONAL_OPTIONS = {
+  overrides: {
+    // Throws without type information
+    'functional/immutable-data': 2,
+    // Only partially works without type information
+    'functional/functional-parameters': 1,
+  },
+} as const;
+
+beforeEach(() => {
+  addInstalledPackages({astro: '5.0.0', svelte: '5.34.3', vue: '3.5.0'});
+});
 
 describe('rules requiring type information', () => {
   describe('`ts/typeAware/setup` config is disabled, but `typescript` is installed', () => {
@@ -28,6 +51,23 @@ describe('rules requiring type information', () => {
           meta: {name: 'typescript-eslint/parser'},
           parseForESLint: expect.any(Function) as unknown,
         },
+      });
+    });
+
+    it('copies rules that only partially work without type information to a separate config, keeping them in the original one', async () => {
+      const configResult = await computeEslintConfig(
+        {functional: FUNCTIONAL_OPTIONS},
+        {internalOptions: {}},
+      );
+
+      const baseConfigRules = configResult.getRuleSeverities('functional');
+
+      expect(baseConfigRules).toMatchObject({'functional/functional-parameters': 1});
+      expect(baseConfigRules).not.toHaveProperty('functional/immutable-data');
+
+      expect(configResult.getRuleSeverities('functional/@type-information')).toMatchObject({
+        'functional/immutable-data': 2,
+        'functional/functional-parameters': 1,
       });
     });
 
@@ -262,6 +302,149 @@ describe('rules requiring type information', () => {
       expect(configForTypedRules?.languageOptions?.['parser']).toBeUndefined();
       expect(configForTypedRules?.languageOptions?.['parserOptions']).toStrictEqual({});
     });
+
+    it('leaves rules that only partially work without type information in the original config', async () => {
+      const configResult = await computeEslintConfig(
+        {ts: true, functional: FUNCTIONAL_OPTIONS},
+        {internalOptions: {}},
+      );
+
+      expect(configResult.getRuleSeverities('functional')).toMatchObject({
+        'functional/functional-parameters': 1,
+      });
+
+      const configForTypedRulesRules = configResult.getRuleSeverities(
+        'functional/@type-information',
+      );
+
+      expect(configForTypedRulesRules).toMatchObject({'functional/immutable-data': 2});
+      expect(configForTypedRulesRules).not.toHaveProperty('functional/functional-parameters');
+    });
+
+    it('does not create a separate config if all rules requiring type information only partially work without it', async () => {
+      const configResult = await computeEslintConfig(
+        {ts: true, unicorn: true},
+        {internalOptions: {}},
+      );
+
+      expect(
+        configResult.getRuleEntrySeverity('unicorn', 'unicorn/no-negated-array-predicate'),
+      ).toBe(2);
+      expect(configResult.getConfigByUnPostfix('unicorn/@type-information')).toBeUndefined();
+    });
+
+    it.each(FRAMEWORKS)(
+      'adds `%s` files to a separate config if the `ts` config sets up type information for them',
+      async (configName, glob) => {
+        const configResult = await computeEslintConfig(
+          {ts: true, [configName]: true, functional: FUNCTIONAL_OPTIONS},
+          {internalOptions: {}},
+        );
+
+        expect(
+          configResult.getConfigByUnPostfix('functional/@type-information')?.files,
+        ).toStrictEqual([GLOB_TS_X, glob]);
+      },
+    );
+
+    it.each([
+      {configName: 'svelte', configs: {svelte: {configEnforceTypescriptInScriptSection: false}}},
+      {
+        configName: 'vue',
+        configs: {
+          vue: {configEnforceTypescriptInScriptSection: {typescriptRules: 'only-non-type-aware'}},
+        },
+      },
+    ] as const)(
+      'does not add `$configName` files to a separate config if they are opted out of type-aware rules',
+      async ({configs}) => {
+        const configResult = await computeEslintConfig(
+          {ts: true, ...configs, functional: FUNCTIONAL_OPTIONS},
+          {internalOptions: {}},
+        );
+
+        expect(
+          configResult.getConfigByUnPostfix('functional/@type-information')?.files,
+        ).toStrictEqual([GLOB_TS_X]);
+      },
+    );
+
+    it.each(FRAMEWORKS)(
+      'does not add `%s` files to a separate config once their language is turned off',
+      async (configName) => {
+        const configResult = await computeEslintConfig(
+          {ts: true, [configName]: true, functional: FUNCTIONAL_OPTIONS},
+          {un: {parsing: {[configName]: false}}, internalOptions: {}},
+        );
+
+        expect(
+          configResult.getConfigByUnPostfix('functional/@type-information')?.files,
+        ).toStrictEqual([GLOB_TS_X]);
+      },
+    );
+
+    const IGNORES = ['legacy/**'];
+
+    it.each([
+      {configName: 'astro', configs: {astro: {ignores: IGNORES}}},
+      {
+        configName: 'svelte',
+        configs: {svelte: {configEnforceTypescriptInScriptSection: {ignores: IGNORES}}},
+      },
+      {
+        configName: 'vue',
+        configs: {vue: {configEnforceTypescriptInScriptSection: {ignores: IGNORES}}},
+      },
+    ] as const)(
+      'adds the `$configName` files the `ts` config does not set up type information for to `ignores` of a separate config',
+      async ({configs}) => {
+        const configResult = await computeEslintConfig(
+          {ts: true, ...configs, functional: FUNCTIONAL_OPTIONS},
+          {internalOptions: {}},
+        );
+
+        expect(
+          configResult.getConfigByUnPostfix('functional/@type-information')?.ignores,
+        ).toIncludeAllMembers(IGNORES);
+      },
+    );
+
+    it('runs rules that only partially work without type information on JavaScript files', async () => {
+      const results = await testEslintConfig(
+        {ts: true, unicorn: true},
+        FIXTURES.nestedArrayMethods,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          internalOptions: {},
+        },
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.nestedArrayMethods,
+          'unicorn/no-negated-array-predicate',
+        )?.message,
+      ).toMatchInlineSnapshot(
+        '"Prefer `Array#every()` with a negated predicate over negating `Array#some()`."',
+      );
+    });
+
+    it('runs rules that only partially work without type information in configs limited to JavaScript files', async () => {
+      const results = await testEslintConfig(
+        {ts: true, cloudfrontFunctions: {files: ['**/*.js']}},
+        FIXTURES.nestedArrayMethods,
+        {searchFixturesRelativeToPath: import.meta.dirname, internalOptions: {}},
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.nestedArrayMethods,
+          'es/no-array-prototype-flat',
+        )?.message,
+      ).toMatchInlineSnapshot(`"ES2019 'Array.prototype.flat' method is forbidden."`);
+    });
   });
 
   describe('`typeInfoRules` is set to `splitOnly`', () => {
@@ -299,6 +482,20 @@ describe('rules requiring type information', () => {
         projectService: true,
       });
     });
+
+    it.each(FRAMEWORKS)(
+      'limits a separate config to TypeScript files even if the `ts` config sets up type information for `%s` files',
+      async (configName) => {
+        const configResult = await computeEslintConfig(
+          {ts: true, [configName]: true, functional: FUNCTIONAL_OPTIONS},
+          {un: {typeInfoRules: 'standalone'}, internalOptions: {}},
+        );
+
+        expect(
+          configResult.getConfigByUnPostfix('functional/@type-information')?.files,
+        ).toStrictEqual([GLOB_TS_X]);
+      },
+    );
 
     it('applies the global `allowDefaultProject` shortcut to the split config', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {
@@ -419,14 +616,7 @@ describe('rules requiring type information', () => {
 
     it('only disables throwing rules, leaving "optional" ones enabled', async () => {
       const configResult = await computeEslintConfig(
-        {
-          functional: {
-            overrides: {
-              'functional/immutable-data': 2,
-              'functional/functional-parameters': 1,
-            },
-          },
-        },
+        {functional: FUNCTIONAL_OPTIONS},
         {un: {typeInfoRules: 'disabled'}, internalOptions: {}},
       );
 

@@ -93,6 +93,14 @@ type AddRuleInternalOptions = EmptyObject;
 
 const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
 
+const TYPE_AWARE_PARSING_DEFAULT = {
+  files: [GLOB_TS_X],
+  ignores: [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED],
+};
+
+const doesRuleThrowWithoutTypeInfo = (rule: {plugin: PluginPrefix; ruleName: string}) =>
+  RULES_REQUIRING_TYPE_INFORMATION[rule.plugin]?.rules[rule.ruleName] === true;
+
 export const configIndexProperty = Symbol('ConfigIndex');
 
 interface FlatConfigMetadata {
@@ -791,6 +799,7 @@ export class ConfigEntryBuilder<
       mode: typeInfoMode,
       ignores: typeInfoIgnores,
       parserOptions: globalParserOptions,
+      typeAwareParsing,
     } = this.context.typeInfoRulesResolved;
 
     return [...this.configs.values()].flatMap(
@@ -815,10 +824,8 @@ export class ConfigEntryBuilder<
         }
 
         if (typeInfoModeResolved === 'disabled') {
-          rulesRequiringTypeInfo.forEach(({plugin, ruleName}, ruleEntryName) => {
-            const doesThrowWithoutTypeInfo =
-              RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName] === true;
-            if (doesThrowWithoutTypeInfo && config.rules) {
+          rulesRequiringTypeInfo.forEach((rule, ruleEntryName) => {
+            if (doesRuleThrowWithoutTypeInfo(rule) && config.rules) {
               config.rules[ruleEntryName] = OFF;
             }
           });
@@ -828,13 +835,27 @@ export class ConfigEntryBuilder<
 
         const shouldConfigureParser = typeInfoModeResolved === 'standalone';
 
-        const possibleFiles = new Set<string>([GLOB_TS_X]);
-        let extraFileExtensions: Set<string> | undefined;
-        const rulesEntries = Array.from(rulesRequiringTypeInfo, ([ruleEntryName, {plugin}]) => {
-          const entry = config.rules?.[ruleEntryName];
-          Reflect.deleteProperty(config.rules || {}, ruleEntryName);
+        // Rules working without type information are only copied, and only in `standalone` mode,
+        // where the split config is what sets up the parser for them
+        const rulesToSplit = [...rulesRequiringTypeInfo].filter(
+          ([, rule]) => shouldConfigureParser || doesRuleThrowWithoutTypeInfo(rule),
+        );
+        if (rulesToSplit.length === 0) {
+          return config;
+        }
 
-          const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[plugin];
+        // The parser `standalone` mode sets up would replace the one framework files need
+        const typeAwareParsingResolved =
+          (typeInfoModeResolved === 'splitOnly' && typeAwareParsing) || TYPE_AWARE_PARSING_DEFAULT;
+        const possibleFiles = new Set(typeAwareParsingResolved.files);
+        let extraFileExtensions: Set<string> | undefined;
+        const rulesEntries = rulesToSplit.map(([ruleEntryName, rule]) => {
+          const entry = config.rules?.[ruleEntryName];
+          if (doesRuleThrowWithoutTypeInfo(rule)) {
+            Reflect.deleteProperty(config.rules || {}, ruleEntryName);
+          }
+
+          const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[rule.plugin];
           pluginInfo?.extraPatterns?.forEach((pattern) => {
             possibleFiles.add(pattern);
           });
@@ -862,8 +883,7 @@ export class ConfigEntryBuilder<
             : [...possibleFiles],
           ignores: [
             ...(config.ignores || []),
-            GLOB_MD_X_CODE_BLOCKS,
-            GLOB_CIVET_COMPILED,
+            ...typeAwareParsingResolved.ignores,
             ...(typeInfoIgnores || []),
           ],
           languageOptions: {

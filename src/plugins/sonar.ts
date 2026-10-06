@@ -86,7 +86,14 @@ export default definePluginMetadata('sonar', {
     'no-inverted-boolean-check': {stylistic: true},
     'no-misleading-array-reverse': {requiresTypeInfo: 'optional'},
     'no-misleading-character-class': {requiresTypeInfo: 'optional'},
-    'no-redundant-optional': {requiresTypeInfo: 'optional', stylistic: true},
+    'no-redundant-optional': {
+      requiresTypeInfo: 'optional',
+      stylistic: true,
+      disableInCodeBlocks: [
+        'typeAware',
+        'only type information tells whether `exactOptionalPropertyTypes` makes `| undefined` meaningful',
+      ],
+    },
     'no-regex-spaces': {requiresTypeInfo: 'optional'},
     'no-require-or-define': {requiresTypeInfo: 'optional'},
     'no-return-type-any': {requiresTypeInfo: 'optional'},
