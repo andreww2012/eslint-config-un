@@ -17,11 +17,10 @@ import {
   sha256,
   traverseForEach,
 } from '../utils';
-import {UPM_LOCKFILE_NAME} from './package-manager';
 import type {PackageRequester, UnConfigContext} from './shared';
 
 const LOCKFILES_PER_PACKAGE_MANAGER = Object.groupBy(
-  [...Object.entries(packageManagerLockfilesReversed), [UPM_LOCKFILE_NAME, 'upm'] as const],
+  Object.entries(packageManagerLockfilesReversed),
   ([, packageManager]) => packageManager,
 );
 

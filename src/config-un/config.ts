@@ -2,6 +2,7 @@ import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
 import globals from 'globals';
 import {createDebug} from 'obug';
+import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ManifestConfigKey, UnConfigResults} from '../configs/index.gen';
 import {CONFIG_MANIFESTS, CONFIG_ORDER} from '../configs/manifests.gen';
@@ -68,7 +69,6 @@ import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './def
 import {resolveGitignore} from './gitignore';
 import {withDefaultPackageRootDir} from './import-integrity';
 import {resolveNuxtAutoImports} from './nuxt';
-import {detectPackageManager} from './package-manager';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
