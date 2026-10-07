@@ -29,10 +29,6 @@ import type {PackageRequester, UnConfigContext} from './shared';
 
 const MISC_GROUP_CONFIGS_SET = new Set<keyof UnConfigs>(MISC_GROUP_CONFIGS);
 
-const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof UnConfigs>([
-  'fileProgress',
-]);
-
 const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) => {
   const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
   const hasVersionRange = versionDelimiterIndex > 0;
@@ -125,8 +121,7 @@ function getIsConfigEnabled(
   if (
     typeof enabledByUser === 'boolean' &&
     typeof providedConfig === 'boolean' &&
-    enabledByUser === enabledBySystem &&
-    !CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED.has(configName)
+    enabledByUser === enabledBySystem
   ) {
     this.logger.warn(
       `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleConfigName(configName)}\` config because this is the default`,

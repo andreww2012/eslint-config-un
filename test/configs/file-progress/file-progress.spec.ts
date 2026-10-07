@@ -79,8 +79,8 @@ describe('basic tests', () => {
       await expectConfigState({}, 'file-progress', true, 'default');
     });
 
-    it('creates `file-progress` eslint config if explicitly enabled, without printing a warning', async () => {
-      await expectConfigState('fileProgress', 'file-progress', true, 'default');
+    it('creates `file-progress` eslint config if explicitly enabled, printing a warning', async () => {
+      await expectConfigState('fileProgress', 'file-progress', ['fileProgress', true], 'default');
     });
 
     it('does not create `file-progress` eslint config if explicitly disabled', async () => {
@@ -93,8 +93,13 @@ describe('basic tests', () => {
       await expectConfigState({}, 'file-progress', true, 'misc-enabled');
     });
 
-    it('creates `file-progress` eslint config if explicitly enabled, without printing a warning', async () => {
-      await expectConfigState('fileProgress', 'file-progress', true, 'misc-enabled');
+    it('creates `file-progress` eslint config if explicitly enabled, printing a warning', async () => {
+      await expectConfigState(
+        'fileProgress',
+        'file-progress',
+        ['fileProgress', true],
+        'misc-enabled',
+      );
     });
 
     it('does not create `file-progress` eslint config if explicitly disabled', async () => {
