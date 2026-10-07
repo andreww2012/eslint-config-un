@@ -189,7 +189,7 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
 
   /**
    * Whether the app lives in a directory of its own rather than directly at the project root.
-   * The [directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure)
+   * The [directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#migrating-to-nuxt-4-new-directory-structure)
    * Nuxt 4 introduced, and backported to Nuxt 3, is the usual reason for it, but pointing `srcDir`
    * elsewhere in a Nuxt 3 project counts just the same.
    * @default // whether your Nuxt config resolves `srcDir` away from the project root, falling back to `true` <=> Nuxt version is 4
