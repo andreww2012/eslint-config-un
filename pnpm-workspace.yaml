@@ -28,6 +28,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-better-tailwindcss@4.9.0
   - eslint-plugin-ava@18.0.0
   - '@andreww2012/unutils@0.2.0'
+  - '@eslint/json@2.1.1'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
