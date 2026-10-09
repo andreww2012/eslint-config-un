@@ -1,5 +1,31 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.5
+
+### Patch Changes
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`8437beb`](https://github.com/andreww2012/eslint-config-un/commit/8437bebb73f9ed604f8b845b4f40dadd8d7ad1a7) - svelte: updated [`eslint-plugin-svelte` from v3.23.0 to v3.23.1](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.23.0...eslint-plugin-svelte@3.23.1)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`a0a81dd`](https://github.com/andreww2012/eslint-config-un/commit/a0a81ddff1aa1c502754e7fcceb4ad2bf0dc6181) - svelte: updated [`svelte-eslint-parser` from v1.8.1 to v1.9.0](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.8.1...v1.9.0)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`4e0a947`](https://github.com/andreww2012/eslint-config-un/commit/4e0a9474ced0782a3015cc0a06ec33a01e661eb8) - vue: updated [`eslint-plugin-vuejs-accessibility` from v2.6.0 to v2.6.2](https://github.com/vue-a11y/eslint-plugin-vuejs-accessibility/compare/v2.6.0...v2.6.2)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`28c1924`](https://github.com/andreww2012/eslint-config-un/commit/28c1924fa2b4b7e3658cc66cc4321ea68381b98a) - ember:
+  
+  - updated [`eslint-plugin-ember` from v13.6.0 to v13.6.1](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.6.0...v13.6.1):
+    - [`ember/template-no-positive-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positive-tabindex.md) rule now optionally uses type information, so it is marked as such
+  - updated [`ember-eslint-parser` from v0.14.6 to v0.14.7](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.14.6...v0.14.7)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`1f0d434`](https://github.com/andreww2012/eslint-config-un/commit/1f0d434a203009fcd2cf9c95328fc6b51c04e3e2) - react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.24.6 to v5.24.10](https://github.com/Rel1cx/eslint-react/compare/v5.24.6...v5.24.10)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`ca2d2ad`](https://github.com/andreww2012/eslint-config-un/commit/ca2d2adb781ea80455c0d6b214c4fe8f5e3bcee1) - nx: updated [`@nx/eslint-plugin` from v23.2.1 to v23.3.0](https://github.com/nrwl/nx/compare/23.2.1...23.3.0)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`5ccd8fa`](https://github.com/andreww2012/eslint-config-un/commit/5ccd8fae3de7ca97aa1c756478f56b2d4cad84fc) - fileProgress: explicitly enabling the config now prints the "no need to enable" warning, like with any other config enabled by default
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`6380201`](https://github.com/andreww2012/eslint-config-un/commit/6380201cd1d358618f48a1b446620646219a2efa) - jsdoc: updated [`eslint-plugin-jsdoc` from v65.1.0 to v65.2.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v65.1.0...v65.2.1)
+
+- [#58](https://github.com/andreww2012/eslint-config-un/pull/58) [`9de220d`](https://github.com/andreww2012/eslint-config-un/commit/9de220d926ea6cc36050c8e23cee150cb80ad868) - yaml: updated [`eslint-plugin-yml` from v3.8.1 to v3.9.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.8.1...v3.9.0)
+
 ## 1.0.0-rc.4
 
 ### Minor Changes
