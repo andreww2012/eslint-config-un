@@ -16,8 +16,8 @@ interface SupportedFormatters {
 }
 
 /**
- * An ESLint plugin for formatting various languages by [Prettier](https://prettier.io) or
- * [dprint](https://dprint.dev).
+ * An ESLint plugin for formatting various languages by [Prettier](https://prettier.io),
+ * [oxfmt](https://oxc.rs/docs/guide/usage/formatter) or [dprint](https://dprint.dev).
  *
  * 📁 Default `files`: all files
  *
@@ -33,7 +33,7 @@ export interface FormatEslintConfigOptions<
    * ⚠️ `dprint` formatter requires specifying `language` which is a file path or URL to the WASM
    * binary supporting this language.
    * [Read more on this in dprint docs](https://dprint.dev/plugins).
-   * @default 'prettier'
+   * @default 'oxfmt' <=> `oxfmt` package is installed and `prettier` is not, otherwise 'prettier'
    */
   formatter?:
     | keyof OmitStrict<SupportedFormatters, 'dprint'>
@@ -57,7 +57,7 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
   supportsMultipleConfigs: true,
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    formatter: 'prettier',
+    formatter: context.packagesInfo.oxfmt && !context.packagesInfo.prettier ? 'oxfmt' : 'prettier',
   });
 
   // TODO remove after this is fixed: https://github.com/unjs/defu/issues/145

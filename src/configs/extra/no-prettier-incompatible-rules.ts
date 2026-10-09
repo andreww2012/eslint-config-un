@@ -13,10 +13,11 @@ import {
   defineUnConfig,
 } from '../index';
 
-const PRETTIER_PLUGIN_BY_LANGUAGE = {
-  astro: 'prettier-plugin-astro',
-  svelte: 'prettier-plugin-svelte',
-  toml: 'prettier-plugin-toml',
+// oxfmt formats TOML natively, Svelte only with its `svelte` option on, and Astro not at all
+const PACKAGES_ENABLING_LANGUAGE = {
+  astro: ['prettier-plugin-astro'],
+  svelte: ['prettier-plugin-svelte'],
+  toml: ['prettier-plugin-toml', 'oxfmt'],
 } as const;
 
 type PrettierLanguage = keyof typeof PLUGINS_BY_PRETTIER_LANGUAGE;
@@ -24,7 +25,8 @@ type PrettierLanguage = keyof typeof PLUGINS_BY_PRETTIER_LANGUAGE;
 /* eslint-disable perfectionist/sort-objects */
 
 /**
- * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+ * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io) or
+ * [oxfmt](https://oxc.rs/docs/guide/usage/formatter), which follows Prettier's output.
  * Successor to [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier).
  *
  * 📁 Default `files`: all files
@@ -35,22 +37,24 @@ export interface NoPrettierIncompatibleRulesEslintConfigOptions<
   /**
    * Enable or disable entire rule groups, one per language Prettier is able to format.
    *
-   * Groups for languages Prettier only formats via an extra plugin:
-   * - `astro` ([`prettier-plugin-astro`](https://npmx.dev/prettier-plugin-astro))
-   * - `svelte` ([`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte))
-   * - `toml` ([`prettier-plugin-toml`](https://npmx.dev/prettier-plugin-toml))
+   * Groups for languages Prettier only formats via an extra plugin are applied only if one of the
+   * listed packages is detected as installed:
+   * - `astro`: [`prettier-plugin-astro`](https://npmx.dev/prettier-plugin-astro)
+   * - `svelte`: [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte)
+   * - `toml`: [`prettier-plugin-toml`](https://npmx.dev/prettier-plugin-toml) or
+   *   [`oxfmt`](https://npmx.dev/oxfmt)
    *
-   * are applied only if the corresponding plugin is detected as installed.
-   *
-   * Set the corresponding key to `true` to force a group on regardless of the plugin, or to `false`
-   * to turn any group off.
+   * Set the corresponding key to `true` to force a group on regardless of the packages, or to
+   * `false` to turn any group off.
+   * If you format Svelte files with oxfmt (its `svelte` option), set `svelte: true` here: oxfmt's
+   * config cannot be read to detect that.
    */
   languages?: Partial<Record<PrettierLanguage, boolean>>;
 }
 
 export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
   'noPrettierIncompatibleRules',
-  {enabledBy: {package: 'prettier'}, phase: 'terminal'},
+  {enabledBy: {packages: ['prettier', 'oxfmt']}, phase: 'terminal'},
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
@@ -63,8 +67,10 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
     }
 
     return (
-      !isKeyIn(language, PRETTIER_PLUGIN_BY_LANGUAGE) ||
-      context.packagesInfo[PRETTIER_PLUGIN_BY_LANGUAGE[language]] != null
+      !isKeyIn(language, PACKAGES_ENABLING_LANGUAGE) ||
+      PACKAGES_ENABLING_LANGUAGE[language].some(
+        (packageName) => context.packagesInfo[packageName] != null,
+      )
     );
   };
 

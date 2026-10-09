@@ -187,10 +187,28 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `formatter`', () => {
-    it('defaults to `prettier` and creates `format/prettier` eslint config', async () => {
+    it('defaults to `prettier` and creates `format/prettier` eslint config when `oxfmt` is not installed', async () => {
       const configResult = await computeEslintConfig('format');
 
       expect(configResult.getConfigByUnPostfix('format/prettier')).toBeDefined();
+    });
+
+    it('defaults to `oxfmt` and creates `format/oxfmt` eslint config when `oxfmt` is installed and `prettier` is not', async () => {
+      addInstalledPackages({oxfmt: '0.72.0'});
+
+      const configResult = await computeEslintConfig('format');
+
+      expect(configResult.getConfigByUnPostfix('format/oxfmt')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('format/prettier')).toBeUndefined();
+    });
+
+    it('defaults to `prettier` and creates `format/prettier` eslint config when both `prettier` and `oxfmt` are installed', async () => {
+      addInstalledPackages({prettier: '3.0.0', oxfmt: '0.72.0'});
+
+      const configResult = await computeEslintConfig('format');
+
+      expect(configResult.getConfigByUnPostfix('format/prettier')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('format/oxfmt')).toBeUndefined();
     });
 
     it('creates `format/prettier` eslint config when `formatter` is set to `prettier`', async () => {

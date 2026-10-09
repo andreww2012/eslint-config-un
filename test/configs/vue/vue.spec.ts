@@ -716,8 +716,8 @@ describe('options', () => {
   });
 });
 
-describe('`prettier` package integration', () => {
-  it("sets `void: 'never'` in `vue/html-self-closing` rule when `prettier` is not installed", async () => {
+describe('`prettier` and `oxfmt` packages integration', () => {
+  it("sets `void: 'never'` in `vue/html-self-closing` rule when neither `prettier` nor `oxfmt` is installed", async () => {
     const configResult = await computeEslintConfig('vue');
 
     expect(configResult.getRuleEntryOptions('vue', 'vue/html-self-closing')).toMatchObject([
@@ -727,6 +727,16 @@ describe('`prettier` package integration', () => {
 
   it("sets `void: 'any'` in `vue/html-self-closing` rule when `prettier` is installed", async () => {
     addInstalledPackages({prettier: '3.0.0'});
+
+    const configResult = await computeEslintConfig('vue');
+
+    expect(configResult.getRuleEntryOptions('vue', 'vue/html-self-closing')).toMatchObject([
+      {html: {void: 'any'}},
+    ]);
+  });
+
+  it("sets `void: 'any'` in `vue/html-self-closing` rule when `oxfmt` is installed", async () => {
+    addInstalledPackages({oxfmt: '0.72.0'});
 
     const configResult = await computeEslintConfig('vue');
 

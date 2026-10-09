@@ -30,7 +30,7 @@ You can change any of that without rewriting the defaults by hand.
 - **Strictly typed**: every option and every rule name is covered by TypeScript types;
 - **Well documented**: every config and all of its options are documented with JSDoc, available right in your editor;
 - **Respects your `.gitignore`**: files listed in `.gitignore`, including nested ones, are excluded from linting by default;
-- **Works great with Prettier**: conflicting rules are automatically disabled if you use Prettier;
+- **Works great with Prettier and oxfmt**: conflicting rules are automatically disabled if you use any of them;
 - **Rename plugin prefixes** if you want to; many of them are shortened by default;
 - **Bring your own plugins** and their rules will also be typed as much as possible.
 
@@ -431,7 +431,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | Un config name                                                  | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                           | Description/Notes                                                                                                    |
 | --------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `casePolice`                                                    | ❌                                          | [eslint-plugin-case-police](https://npmx.dev/eslint-plugin-case-police) (`case-police`)                                        | Since v0.9.0                                                                                                         |
-| `noPrettierIncompatibleRules`                                   | ✅ (`prettier` package is installed)        | -                                                                                                                              | Since v1.0.0<br>Disables rules that are unnecessary or conflict with Prettier<br>Replaces `eslint-config-prettier`   |
+| `noPrettierIncompatibleRules`                                   | ✅ (`prettier` or `oxfmt` is installed)     | -                                                                                                                              | Since v1.0.0<br>Disables rules that are unnecessary or conflict with Prettier<br>Replaces `eslint-config-prettier`   |
 | `noStylisticRules`                                              | ❌                                          | -                                                                                                                              | Since v1.0.0<br>Disables most of the stylistic rules<br>Useful when adopting eslint-config-un in an existing project |
 | `noRelativeImportPaths`                                         | ❌                                          | [eslint-plugin-no-relative-import-paths](https://npmx.dev/eslint-plugin-no-relative-import-paths) (`no-relative-import-paths`) | Since v1.0.0                                                                                                         |
 | `noUnsanitized`                                                 | ✅                                          | [eslint-plugin-no-unsanitized](https://npmx.dev/eslint-plugin-no-unsanitized) (`no-unsanitized`)                               | Since v1.0.0                                                                                                         |
@@ -851,22 +851,24 @@ perfectionist: {
 },
 ```
 
-### Disabling rules incompatible with Prettier
+### Disabling rules incompatible with Prettier or oxfmt
 
-The `noPrettierIncompatibleRules` config (enabled by default when `prettier` is installed) disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+The `noPrettierIncompatibleRules` config (enabled by default when `prettier` or `oxfmt` is installed) disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+Since [oxfmt](https://oxc.rs/docs/guide/usage/formatter) follows Prettier's output, the same rules conflict with it too.
 It replaces [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier), which we used before: the rule list is kept in this package, checked against what Prettier does today, and it respects [plugin prefix renames].
 
 Rules are grouped by the language Prettier formats.
-Groups for the languages Prettier can only format through an extra plugin are applied **only if that plugin is installed**:
+Groups for the languages Prettier can only format through an extra plugin are applied **only if one of these packages is installed**:
 
-| Group    | Applied when                          |
-| -------- | ------------------------------------- |
-| `svelte` | `prettier-plugin-svelte` is installed |
-| `astro`  | `prettier-plugin-astro` is installed  |
-| `toml`   | `prettier-plugin-toml` is installed   |
+| Group    | Applied when                                   |
+| -------- | ---------------------------------------------- |
+| `svelte` | `prettier-plugin-svelte` is installed          |
+| `astro`  | `prettier-plugin-astro` is installed           |
+| `toml`   | `prettier-plugin-toml` or `oxfmt` is installed |
 
 All other groups (`js`, `vue`, `json`, `yaml`, `markdown`, `html`) are always applied.
 The `languages` option forces any group on or off.
+oxfmt formats Svelte files only when its `svelte` option is on, and its config cannot be read to detect that: if you use it, set `languages.svelte` to `true` (and the `svelte.isPrettierPluginSvelteUsed` option too).
 
 <!-- eslint-skip -->
 

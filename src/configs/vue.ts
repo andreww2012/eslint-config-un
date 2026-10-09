@@ -885,8 +885,8 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       [
         {
           html: {
-            // TODO change to `never` once Prettier does not add `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
-            void: context.packagesInfo.prettier ? 'any' : 'never',
+            // TODO change to `never` once Prettier (and oxfmt following it) does not add `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
+            void: context.packagesInfo.prettier || context.packagesInfo.oxfmt ? 'any' : 'never',
             normal: 'never',
             component: 'never',
           },

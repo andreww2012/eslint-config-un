@@ -47,7 +47,13 @@ describe('basic tests', () => {
       await expectConfigState({}, CONFIG_POSTFIX, true, 'default');
     });
 
-    it('does not create `no-prettier-incompatible-rules` eslint config when `prettier` is not installed', async () => {
+    it('creates `no-prettier-incompatible-rules` eslint config when only `oxfmt` is installed', async () => {
+      setInstalledPackages({oxfmt: '0.72.0'});
+
+      await expectConfigState({}, CONFIG_POSTFIX, true, 'default');
+    });
+
+    it('does not create `no-prettier-incompatible-rules` eslint config when neither `prettier` nor `oxfmt` is installed', async () => {
       setInstalledPackages({});
 
       await expectConfigState({}, CONFIG_POSTFIX, false, 'default');
@@ -62,7 +68,7 @@ describe('basic tests', () => {
       );
     });
 
-    it('creates `no-prettier-incompatible-rules` eslint config without a warning if explicitly enabled when `prettier` is not installed', async () => {
+    it('creates `no-prettier-incompatible-rules` eslint config without a warning if explicitly enabled when neither `prettier` nor `oxfmt` is installed', async () => {
       setInstalledPackages({});
 
       await expectConfigState('noPrettierIncompatibleRules', CONFIG_POSTFIX, true, 'default');
@@ -77,7 +83,7 @@ describe('basic tests', () => {
       );
     });
 
-    it('does not create `no-prettier-incompatible-rules` eslint config and prints a warning if explicitly disabled when `prettier` is not installed', async () => {
+    it('does not create `no-prettier-incompatible-rules` eslint config and prints a warning if explicitly disabled when neither `prettier` nor `oxfmt` is installed', async () => {
       setInstalledPackages({});
 
       await expectConfigState(
@@ -249,6 +255,22 @@ describe('options', () => {
       const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
 
       expect(configResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'toml/indent')).toBe(0);
+    });
+
+    it('applies the `toml` group when `oxfmt` is installed', async () => {
+      addInstalledPackages({oxfmt: '0.72.0'});
+
+      const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
+
+      expect(configResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'toml/indent')).toBe(0);
+    });
+
+    it('does not apply the `svelte` group when only `oxfmt` is installed', async () => {
+      setInstalledPackages({oxfmt: '0.72.0'});
+
+      const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
+
+      expect(configResult.getRuleEntry(CONFIG_POSTFIX, 'svelte/indent')).toBeUndefined();
     });
 
     it('applies the `toml` group when forced on via `languages.toml` even without the plugin', async () => {

@@ -134,6 +134,9 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * Whether [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte) is used.
    * If `true`, will disable
    * [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
+   *
+   * Also set it to `true` if you format Svelte files with oxfmt (its `svelte` option): oxfmt's
+   * config cannot be read to detect that.
    * @default detected automatically
    */
   isPrettierPluginSvelteUsed?: boolean;
