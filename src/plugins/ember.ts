@@ -26,6 +26,7 @@ export default definePluginMetadata('ember', {
     'template-no-deprecated': {requiresTypeInfo: 'optional'},
     'template-no-negated-condition': {stylistic: true},
     'template-no-only-default-slot': {stylistic: true},
+    'template-no-positive-tabindex': {requiresTypeInfo: 'optional'},
     'template-no-unnecessary-concat': {stylistic: true},
     'template-no-unnecessary-curly-parens': {stylistic: true},
     'template-no-unnecessary-curly-strings': {stylistic: true},

@@ -129,6 +129,7 @@ describe('rules requiring type information', () => {
       );
 
       expect(configResult.getConfigByUnPostfix('ember/@type-information')?.rules).toStrictEqual({
+        'ember/template-no-positive-tabindex': 2,
         'ember/template-no-deprecated': 1,
       });
     });
@@ -146,7 +147,14 @@ describe('rules requiring type information', () => {
 
     it('does not create a separate config if all rules requiring type information were disabled', async () => {
       const configResult = await computeEslintConfig(
-        {ember: {overrides: {'ember/template-no-deprecated': 0}}},
+        {
+          ember: {
+            overrides: {
+              'ember/template-no-deprecated': 0,
+              'ember/template-no-positive-tabindex': 0,
+            },
+          },
+        },
         {internalOptions: {}},
       );
 
