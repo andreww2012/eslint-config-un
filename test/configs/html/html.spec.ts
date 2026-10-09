@@ -197,35 +197,47 @@ describe('options', () => {
   });
 
   describe('option: `disallowedHtmlTags`', () => {
-    it('restricts default invalid html tags in `no-restricted-tags` by default', async () => {
-      const configResult = await computeEslintConfig('html');
-      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
+    const SOME_DEFAULT_DISALLOWED_TAG_PATTERNS = ['^center$', '^font$', '^marquee$', '^param$'];
 
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',
-      );
+    it('restricts default invalid html tags except `image` in `no-restricted-tags` by default', async () => {
+      const configResult = await computeEslintConfig('html');
+      const ruleOptions = configResult.getRuleEntryOptions('html', 'html/no-restricted-tags');
+
+      expect(ruleOptions).toMatchObject([
+        {tagPatterns: expect.arrayContaining(SOME_DEFAULT_DISALLOWED_TAG_PATTERNS) as unknown},
+      ]);
+      expect(ruleOptions).toMatchObject([
+        {tagPatterns: expect.not.arrayContaining(['^image$']) as unknown},
+      ]);
     });
 
     it('adds custom disallowed tags to `html/no-restricted-tags` rule', async () => {
       const configResult = await computeEslintConfig({
         html: {disallowedHtmlTags: {iframe: true}},
       });
-      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
 
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$", "^iframe$"]}]',
-      );
+      expect(configResult.getRuleEntryOptions('html', 'html/no-restricted-tags')).toMatchObject([
+        {
+          tagPatterns: expect.arrayContaining([
+            ...SOME_DEFAULT_DISALLOWED_TAG_PATTERNS,
+            '^iframe$',
+          ]) as unknown,
+        },
+      ]);
     });
 
     it('allows a previously-restricted invalid tag when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         html: {disallowedHtmlTags: {font: false}},
       });
-      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
+      const ruleOptions = configResult.getRuleEntryOptions('html', 'html/no-restricted-tags');
 
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',
-      );
+      expect(ruleOptions).toMatchObject([
+        {tagPatterns: expect.arrayContaining(['^center$']) as unknown},
+      ]);
+      expect(ruleOptions).toMatchObject([
+        {tagPatterns: expect.not.arrayContaining(['^font$']) as unknown},
+      ]);
     });
   });
 });

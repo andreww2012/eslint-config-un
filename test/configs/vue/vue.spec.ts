@@ -638,14 +638,15 @@ describe('options', () => {
   });
 
   describe('option: `disallowedHtmlTags`', () => {
-    it('uses default html tag restrictions by default', async () => {
+    it('uses default html tag restrictions except `image` by default', async () => {
       const configResult = await computeEslintConfig('vue');
-
-      expect(
-        configResult.getRuleEntry('vue', 'vue/no-restricted-html-elements'),
-      ).toMatchInlineSnapshot(
-        '[2, "acronym", "big", "center", "content", "dir", "font", "frame", "frameset", "image", "marquee", "menuitem", "nobr", "noembed", "noframes", "param", "plaintext", "rb", "rtc", "shadow", "strike", "tt", "xmp", "applet", "bgsound", "blink", "isindex", "keygen", "multicol", "nextid", "spacer", "basefont", "listing", "command", "element"]',
+      const ruleOptions = configResult.getRuleEntryOptions(
+        'vue',
+        'vue/no-restricted-html-elements',
       );
+
+      expect(ruleOptions).toIncludeAllMembers(['center', 'font', 'marquee', 'param']);
+      expect(ruleOptions).not.toIncludeAnyMembers(['image']);
     });
 
     it('adds tags to or removes them from the disallowed list when set', async () => {

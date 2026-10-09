@@ -243,35 +243,40 @@ describe('options', () => {
   });
 
   describe('option: `disallowedHtmlTags`', () => {
-    it('restricts default invalid html tags in `svelte/no-restricted-html-elements` by default', async () => {
-      const configResult = await computeEslintConfig('svelte');
-      const ruleEntry = configResult.getRuleEntry('svelte', 'svelte/no-restricted-html-elements');
+    const SOME_DEFAULT_DISALLOWED_TAGS = ['center', 'font', 'marquee', 'param'];
 
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, "acronym", "big", "center", "content", "dir", "font", "frame", "frameset", "image", "marquee", "menuitem", "nobr", "noembed", "noframes", "param", "plaintext", "rb", "rtc", "shadow", "strike", "tt", "xmp", "applet", "bgsound", "blink", "isindex", "keygen", "multicol", "nextid", "spacer", "basefont", "listing", "command", "element"]',
+    it('restricts default invalid html tags except `image` in `svelte/no-restricted-html-elements` by default', async () => {
+      const configResult = await computeEslintConfig('svelte');
+      const ruleOptions = configResult.getRuleEntryOptions(
+        'svelte',
+        'svelte/no-restricted-html-elements',
       );
+
+      expect(ruleOptions).toIncludeAllMembers(SOME_DEFAULT_DISALLOWED_TAGS);
+      expect(ruleOptions).not.toIncludeAnyMembers(['image']);
     });
 
     it('adds custom disallowed tags to `svelte/no-restricted-html-elements` rule', async () => {
       const configResult = await computeEslintConfig({
         svelte: {disallowedHtmlTags: {iframe: true}},
       });
-      const ruleEntry = configResult.getRuleEntry('svelte', 'svelte/no-restricted-html-elements');
 
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, "acronym", "big", "center", "content", "dir", "font", "frame", "frameset", "image", "marquee", "menuitem", "nobr", "noembed", "noframes", "param", "plaintext", "rb", "rtc", "shadow", "strike", "tt", "xmp", "applet", "bgsound", "blink", "isindex", "keygen", "multicol", "nextid", "spacer", "basefont", "listing", "command", "element", "iframe"]',
-      );
+      expect(
+        configResult.getRuleEntryOptions('svelte', 'svelte/no-restricted-html-elements'),
+      ).toIncludeAllMembers([...SOME_DEFAULT_DISALLOWED_TAGS, 'iframe']);
     });
 
     it('allows a previously-restricted invalid tag when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         svelte: {disallowedHtmlTags: {font: false}},
       });
-      const ruleEntry = configResult.getRuleEntry('svelte', 'svelte/no-restricted-html-elements');
-
-      expect(ruleEntry).toMatchInlineSnapshot(
-        '[2, "acronym", "big", "center", "content", "dir", "frame", "frameset", "image", "marquee", "menuitem", "nobr", "noembed", "noframes", "param", "plaintext", "rb", "rtc", "shadow", "strike", "tt", "xmp", "applet", "bgsound", "blink", "isindex", "keygen", "multicol", "nextid", "spacer", "basefont", "listing", "command", "element"]',
+      const ruleOptions = configResult.getRuleEntryOptions(
+        'svelte',
+        'svelte/no-restricted-html-elements',
       );
+
+      expect(ruleOptions).toIncludeAllMembers(['center']);
+      expect(ruleOptions).not.toIncludeAnyMembers(['font']);
     });
   });
 

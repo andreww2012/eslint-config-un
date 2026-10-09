@@ -219,7 +219,8 @@ export const generateConsistentTestItOptions = ({
 // prettier-ignore
 const INVALID_HTML_TAGS = [
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements#obsolete_and_deprecated_elements
-  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
+  // `image` is left out: the rules can't tell the obsolete HTML element from the valid SVG one
+  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
   // https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement
   'applet', 'bgsound', 'blink', 'isindex', 'keygen', 'multicol', 'nextid', 'spacer',
   'basefont', 'listing',
