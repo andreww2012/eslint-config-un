@@ -339,7 +339,7 @@
     "shiki": "4.5.0",
     "smol-toml": "1.9.0",
     "svelte": "5.57.1",
-    "svelte-eslint-parser": "1.8.1",
+    "svelte-eslint-parser": "1.9.0",
     "tailwind-csstree": "0.4.1",
     "tsdown": "0.23.0",
     "tsx": "4.23.15",
@@ -463,7 +463,7 @@
     "eslint-processor-vue-blocks": "^2.0.0",
     "import-integrity-lint": "^1.3.0",
     "prettier": "^3",
-    "svelte-eslint-parser": "^1.8.1",
+    "svelte-eslint-parser": "^1.9.0",
     "tailwind-csstree": "^0.4.1",
     "typescript": "*",
     "vue-eslint-parser": "^10.4.1"
