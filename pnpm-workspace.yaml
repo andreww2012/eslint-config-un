@@ -35,12 +35,43 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-yml@3.9.0
   - eslint-plugin-svelte@3.23.1
   - svelte-eslint-parser@1.9.0
+  - knip@6.41.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: # []
+  - chromium-bidi@157.0.8090-0
+  - cssnano-preset-default@9.4.0
+  - cssnano-utils@8.2.1
   - cssnano@9.3.1
+  - postcss-colormin@9.0.7
+  - postcss-convert-values@9.0.8
+  - postcss-discard-comments@9.0.7
+  - postcss-discard-duplicates@9.0.6
+  - postcss-discard-empty@9.0.7
+  - postcss-discard-overridden@9.0.6
+  - postcss-merge-longhand@9.3.0
+  - postcss-merge-rules@9.1.3
+  - postcss-minify-font-values@9.0.8
+  - postcss-minify-gradients@9.0.7
+  - postcss-minify-params@9.0.7
+  - postcss-minify-selectors@9.0.7
+  - postcss-normalize-charset@9.0.6
+  - postcss-normalize-display-values@9.0.6
+  - postcss-normalize-positions@9.0.7
+  - postcss-normalize-repeat-style@9.0.6
+  - postcss-normalize-string@9.0.6
+  - postcss-normalize-timing-functions@9.0.6
+  - postcss-normalize-unicode@9.0.6
+  - postcss-normalize-url@9.0.6
+  - postcss-normalize-whitespace@9.0.6
+  - postcss-ordered-values@9.0.8
+  - postcss-reduce-initial@9.0.7
+  - postcss-reduce-transforms@9.0.5
+  - postcss-svgo@9.0.5
+  - postcss-unique-selectors@9.0.6
+  - stylehacks@9.0.8
 
 audit:
   ignore: # []
@@ -57,7 +88,7 @@ allowBuilds:
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
   # Critical: sets up git hooks
-  lefthook@2.1.17: true
+  lefthook@2.2.1: true
 
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher': false
@@ -92,6 +123,7 @@ overrides:
   eslint-plugin-format>oxfmt: 'catalog:format'
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
+  handlebars@>=4.0.0 <4.7.10: 4.7.10
   smol-toml@<=1.7.0: ^1.7.1
   tinypool@<2.1.2: 2.2.0
   undici@>=7.0.0 <7.29.1: 7.30.0

@@ -157,7 +157,6 @@ export default eslintConfig({
     nx: false,
     rxjs: false,
     svelte: false,
-    testingLibrary: false,
     turbo: false,
     youDontNeedLodashUnderscore: false,
   },
