@@ -752,6 +752,9 @@ TypeScript rules are enabled in `.vue` files when the `vue` config's `enforceTyp
 If some of your `.vue` files are written in TypeScript and others in JavaScript, use that sub-config's `files` and `ignores` to say which are which.
 It is not currently possible to pick rules based on the `lang` attribute of the `<script>` block itself.
 
+Our `un/vue-no-trailing-element-whitespace` and `un/vue-no-leading-text-whitespace` rules check the whitespace at the edges of template elements.
+They are off by default, as Prettier and oxfmt add such whitespace unless `htmlWhitespaceSensitivity` is `strict`: turn them on in `overrides`.
+
 #### Angular
 
 We support Angular versions 13 to 22, all at once.

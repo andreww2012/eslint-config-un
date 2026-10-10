@@ -1,6 +1,7 @@
 import {GLOB_VUE} from '../../../src/constants';
 
 const FIXTURES = {
+  paragraphEndingWithWhitespace: 'paragraph-ending-with-whitespace.vue',
   stringLiteralInTemplateMustache: 'string-literal-in-template-mustache.vue',
   templateWithUnneededDisableComment: 'template-with-unneeded-disable-comment.vue',
 } as const;
@@ -145,6 +146,33 @@ describe('rules', () => {
 
     expect(error?.message).toMatchInlineSnapshot(
       '"Unexpected mustache interpolation with a string literal value."',
+    );
+  });
+
+  it('disables `un/vue-no-leading-text-whitespace` and `un/vue-no-trailing-element-whitespace` rules by default', async () => {
+    const configResult = await computeEslintConfig('vue');
+
+    expect(configResult.getRuleSeverities('vue')).toMatchObject({
+      'un/vue-no-leading-text-whitespace': 0,
+      'un/vue-no-trailing-element-whitespace': 0,
+    });
+  });
+
+  it('`un/vue-no-trailing-element-whitespace` rule fires on whitespace at the end of an element when enabled', async () => {
+    const results = await testEslintConfig(
+      {vue: {overrides: {'un/vue-no-trailing-element-whitespace': 'error'}}},
+      FIXTURES.paragraphEndingWithWhitespace,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.paragraphEndingWithWhitespace,
+      'un/vue-no-trailing-element-whitespace',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Vue keeps this whitespace at the end of the element, and some browsers show it when the text is selected. Remove it."',
     );
   });
 });

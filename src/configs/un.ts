@@ -35,6 +35,9 @@ export default defineUnConfig<UnEslintConfigOptions>(
     .addRule('no-distributive-never-check', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
-    .enableConfigTesterForPlugin('un')
+    .enableConfigTesterForPlugin('un', {
+      // Added in the `vue` config
+      rulesToSkipInConfig: (ruleName) => ruleName.startsWith('vue-'),
+    })
     .addOverrides();
 });

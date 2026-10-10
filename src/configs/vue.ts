@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import type {EslintSeverity} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {OmitStrict} from '../types';
+import type {OmitStrict, PickKeysStartingWith} from '../types';
 import {
   type MaybeArray,
   allUnionMembers,
@@ -248,7 +248,10 @@ const DEFAULT_VUE_MAJOR_VERSION = 3 satisfies SupportedVueMajorVersion;
  */
 export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
+> extends UnFlatConfigEntryBase<
+  ExtraPlugins,
+  'vue' | PickKeysStartingWith<UnRulesConfigPartial<'un'>, 'un/vue-'>
+> {
   /**
    * Enables a11y (accessibility) rules for Vue SFC templates.
    *
@@ -1223,6 +1226,9 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     .addRule('space-infix-ops', OFF) /** @since 5.2.0 */
     .addRule('space-unary-ops', OFF) /** @since 5.2.0 */
     .addRule('template-curly-spacing', OFF) /** @since 7.0.0 */
+    // Prettier and oxfmt add what these report, unless `htmlWhitespaceSensitivity` is `strict`
+    .addAnyRule('un', 'vue-no-leading-text-whitespace', OFF)
+    .addAnyRule('un', 'vue-no-trailing-element-whitespace', OFF)
     // 🔵 Not working great in Vue files
     .disableAnyRule('ts', 'prefer-function-type')
     .disableAnyRule('ts', 'unified-signatures')
