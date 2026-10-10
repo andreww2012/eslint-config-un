@@ -1,7 +1,14 @@
 const FIXTURES = {
   doubleQuotes: 'double-quotes.js',
+  doubleQuotesNextToPrettierConfig: 'prettier-config/double-quotes.js',
   markdownListWithAsterisk: 'markdown-list-with-asterisk.md',
+  unclosedCssBlock: 'unclosed-block.css',
+  xml: 'element.xml',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({prettier: '3.9.9'});
+});
 
 describe('basic tests', () => {
   it('creates only the `format/prettier` eslint config and loads `format` plugin if set to `true`', async () => {
@@ -32,6 +39,8 @@ describe('basic tests', () => {
   });
 
   it('supports array notation to create multiple format eslint configs', async () => {
+    addInstalledPackages({'@dprint/formatter': '0.5.1'});
+
     const configResult = await computeEslintConfig({
       format: [{formatter: 'prettier'}, {formatter: ['dprint', {language: 'typescript'}]}],
     });
@@ -84,16 +93,18 @@ describe('basic tests', () => {
   });
 });
 
-describe('rules', async () => {
-  const configResult = await computeEslintConfig('format');
+describe('rules', () => {
+  it('correctly sets severities by default', async () => {
+    const configResult = await computeEslintConfig('format');
 
-  it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('format/prettier')).toMatchObject({
       'format/prettier': 2,
     });
   });
 
-  it('enables only `format/prettier` rule by default', () => {
+  it('enables only `format/prettier` rule by default', async () => {
+    const configResult = await computeEslintConfig('format');
+
     expect(configResult.getConfigByUnPostfix('format/prettier')?.rules).toMatchInlineSnapshot(
       '{"format/prettier": 2}',
     );
@@ -111,7 +122,42 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
   });
 
+  it('`format/prettier` rule reads the Prettier config applying to the file', async () => {
+    const results = await testEslintConfig(
+      'format',
+      FIXTURES.doubleQuotesNextToPrettierConfig,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.doubleQuotesNextToPrettierConfig,
+      'format/prettier',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
+  });
+
+  it('`format/prettier` rule reports a parsing error of the formatter', async () => {
+    const results = await testEslintConfig(
+      {format: {files: ['**/*.css'], usePlainParser: true}},
+      FIXTURES.unclosedCssBlock,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.unclosedCssBlock,
+      'format/prettier',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Parsing error: CssSyntaxError: Unclosed block"');
+    expect(error?.line).toBe(1);
+  });
+
   it('`format/oxfmt` rule fires on a file with double quotes', async () => {
+    addInstalledPackages({oxfmt: '0.72.0'});
+
     const results = await testEslintConfig(
       {format: {formatter: ['oxfmt', {singleQuote: true, parser: 'babel'}]}},
       FIXTURES.doubleQuotes,
@@ -123,7 +169,21 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
   });
 
+  it('`format/oxfmt` rule ignores a file oxfmt does not support', async () => {
+    addInstalledPackages({oxfmt: '0.72.0'});
+
+    const results = await testEslintConfig(
+      {format: {files: ['**/*.xml'], formatter: 'oxfmt', usePlainParser: true}},
+      FIXTURES.xml,
+      import.meta.dirname,
+    );
+
+    expect(results[0]?.messages).toStrictEqual([]);
+  });
+
   it('`format/dprint` rule fires on a file with unformatted markdown', async () => {
+    addInstalledPackages({'@dprint/formatter': '0.5.1'});
+
     const results = await testEslintConfig(
       {
         format: {
@@ -143,6 +203,30 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Replace `*` with `-`"');
+  });
+
+  it('`format/dprint` rule reports a failure of the formatter', async () => {
+    addInstalledPackages({'@dprint/formatter': '0.5.1'});
+
+    const results = await testEslintConfig(
+      {
+        format: {
+          files: ['**/*.md'],
+          formatter: ['dprint', {language: 'missing-plugin.wasm'}],
+          usePlainParser: true,
+        },
+      },
+      FIXTURES.markdownListWithAsterisk,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.markdownListWithAsterisk,
+      'format/dprint',
+    );
+
+    expect(error?.message).toStartWith('Failed to format the code: ENOENT');
   });
 });
 
@@ -194,7 +278,7 @@ describe('options', () => {
     });
 
     it('defaults to `oxfmt` and creates `format/oxfmt` eslint config when `oxfmt` is installed and `prettier` is not', async () => {
-      addInstalledPackages({oxfmt: '0.72.0'});
+      setInstalledPackages({oxfmt: '0.72.0'});
 
       const configResult = await computeEslintConfig('format');
 
@@ -203,7 +287,7 @@ describe('options', () => {
     });
 
     it('defaults to `prettier` and creates `format/prettier` eslint config when both `prettier` and `oxfmt` are installed', async () => {
-      addInstalledPackages({prettier: '3.0.0', oxfmt: '0.72.0'});
+      addInstalledPackages({oxfmt: '0.72.0'});
 
       const configResult = await computeEslintConfig('format');
 
@@ -218,6 +302,8 @@ describe('options', () => {
     });
 
     it('creates `format/dprint` eslint config when `formatter` is set to `dprint`', async () => {
+      addInstalledPackages({'@dprint/formatter': '0.5.1'});
+
       const configResult = await computeEslintConfig({
         format: {formatter: ['dprint', {language: 'typescript'}]},
       });
@@ -229,6 +315,8 @@ describe('options', () => {
     });
 
     it('creates `format/oxfmt` eslint config when `formatter` is set to `oxfmt`', async () => {
+      addInstalledPackages({oxfmt: '0.72.0'});
+
       const configResult = await computeEslintConfig({format: {formatter: 'oxfmt'}});
 
       expect(configResult.getConfigByUnPostfix('format/oxfmt')).toBeDefined();
@@ -238,6 +326,7 @@ describe('options', () => {
     });
 
     it("passes options to `format/oxfmt` rule when `formatter` is `['oxfmt', options]`", async () => {
+      addInstalledPackages({oxfmt: '0.72.0'});
       const OPTIONS = {printWidth: 100};
 
       const configResult = await computeEslintConfig({
@@ -262,6 +351,7 @@ describe('options', () => {
     });
 
     it("passes options to `format/dprint` rule when `formatter` is `['dprint', options]`", async () => {
+      addInstalledPackages({'@dprint/formatter': '0.5.1'});
       const OPTIONS = {
         plugins: [],
         typescript: 'https://plugins.dprint.dev/typescript-0.93.0.wasm',
@@ -274,6 +364,69 @@ describe('options', () => {
       expect(configResult.getRuleEntryOptions('format/dprint', 'format/dprint')).toStrictEqual([
         OPTIONS,
       ]);
+    });
+
+    it('does not create any `format/*` eslint config and prints a warning when the formatter is not installed', async () => {
+      setInstalledPackages({});
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      const configResult = await computeEslintConfig({format: {formatter: 'oxfmt'}});
+
+      expect(
+        configResult.getConfigsByUnPostfix((configName) => configName.startsWith('format/')),
+      ).toBeEmpty();
+      expect(stderrSpy.mock.calls.flat().join('')).toContain(
+        '[format] `oxfmt` package is not installed',
+      );
+    });
+  });
+
+  describe('option: `readFormatterConfig`', () => {
+    it('lets `format/prettier` rule read the Prettier config by default', async () => {
+      const configResult = await computeEslintConfig('format');
+
+      expect(configResult.getRuleEntryOptions('format/prettier', 'format/prettier')).toStrictEqual(
+        [],
+      );
+    });
+
+    it('stops `format/prettier` rule from reading the Prettier config when set to `false`', async () => {
+      const OPTIONS = {printWidth: 120};
+
+      const configResult = await computeEslintConfig({
+        format: {formatter: ['prettier', OPTIONS], readFormatterConfig: false},
+      });
+
+      expect(configResult.getRuleEntryOptions('format/prettier', 'format/prettier')).toStrictEqual([
+        OPTIONS,
+        {readConfig: false},
+      ]);
+    });
+
+    it('ignores the Prettier config applying to the file when set to `false`', async () => {
+      const results = await testEslintConfig(
+        {format: {readFormatterConfig: false}},
+        FIXTURES.doubleQuotesNextToPrettierConfig,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.doubleQuotesNextToPrettierConfig,
+          'format/prettier',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('does not change `format/oxfmt` rule options when set to `false`', async () => {
+      addInstalledPackages({oxfmt: '0.72.0'});
+
+      const configResult = await computeEslintConfig({
+        format: {formatter: 'oxfmt', readFormatterConfig: false},
+      });
+
+      expect(configResult.getRuleEntryOptions('format/oxfmt', 'format/oxfmt')).toStrictEqual([]);
     });
   });
 

@@ -8,6 +8,8 @@ export default eslintConfig({
         'arrow-return-style/arrow-return-style': [2, {usePrettier: {printWidth: 40}}],
       },
     },
+    // Makes the `format/prettier` rule format the code blocks through its worker
+    format: {files: [], configFencedCodeBlocks: true},
     // Flat layouts hoist `remeda`, a dependency of `eslint-plugin-clsx`, so it's detected as installed
     remeda: false,
   },

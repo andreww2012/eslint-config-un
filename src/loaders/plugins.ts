@@ -209,9 +209,7 @@ export const pluginsLoaders = {
   'file-progress': genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),
-  format: genModuleLoader('format', 'eslint-plugin-format', () =>
-    interopDefault(import('eslint-plugin-format')),
-  ),
+  format: genModuleLoader('format', '', () => interopDefault(import('../plugin-format'))),
   formatjs: genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
     interopDefault(import('eslint-plugin-formatjs')),
   ),
@@ -410,9 +408,6 @@ export const pluginsLoaders = {
     'prefer-arrow-functions',
     'eslint-plugin-prefer-arrow-functions',
     () => interopDefault(import('eslint-plugin-prefer-arrow-functions')),
-  ),
-  prettier: genModuleLoader('prettier', 'eslint-plugin-prettier', () =>
-    interopDefault(import('eslint-plugin-prettier')),
   ),
   promise: genModuleLoader('promise', 'eslint-plugin-promise', () =>
     interopDefault(import('eslint-plugin-promise')),

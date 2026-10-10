@@ -7,7 +7,6 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
   'remeda', // Inlined to avoid always considered installed
   'eslint-plugin-no-type-assertion', // Inlined to avoid installation warnings about incompatibility with ESLint 9/10
   '@eslint/compat', // Patched
-  'eslint-plugin-prettier', // Patched
   'eslint-plugin-html', // Under Yarn PnP, only inlined code finds ESLint in `require.cache` and resolves the undeclared `@html-eslint/parser`
   'eslint-plugin-file-progress', // Patched
   'eslint-plugin-arrow-return-style-x', // Its `@typescript-eslint/utils` dependency is overridden to work with ESLint 10 by the one we declare, so it's not loaded twice with typescript-eslint's
@@ -16,7 +15,6 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
 
 // Inlined plugins spawn these by file path, so they're never part of the main module graph
 const INLINED_PLUGIN_WORKERS = [
-  'eslint-plugin-prettier/worker.mjs',
   'eslint-plugin-arrow-return-style-x/dist/workers/prettier-worker.mjs',
 ];
 
@@ -27,8 +25,6 @@ export default defineConfig([
     entry: ['src/index.ts', 'src/snippets.ts', 'src/globs.ts'],
     format: 'esm',
     unbundle: true,
-    // Inlined `eslint-plugin-prettier` locates its worker through `__dirname`
-    shims: true,
     deps: {
       neverBundle: ['nuxt/kit'],
       alwaysBundle: [
@@ -42,6 +38,19 @@ export default defineConfig([
         // it external drops the warning without leaking the import into our output
         neverBundle: ['typescript'],
       },
+    },
+    checks: {
+      pluginTimings: false,
+    },
+  },
+  // Spawned by file path, so it's never part of the main module graph
+  {
+    entry: {'plugin-format/worker': 'src/plugin-format/worker.ts'},
+    format: 'esm',
+    dts: false,
+    deps: {
+      // Formatting uses the user's formatters
+      neverBundle: ['prettier', 'oxfmt', '@dprint/formatter'],
     },
     checks: {
       pluginTimings: false,

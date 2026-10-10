@@ -17,7 +17,11 @@ const config: KnipConfig = {
     // Read by the prep script through a dynamic import, never statically
     'src/plugins/*.ts',
   ],
-  ignoreDependencies: ['lychee-config-nick2bad4u'],
+  ignoreDependencies: [
+    'lychee-config-nick2bad4u',
+    // The `format/dprint` rule loads it by name, which tests pass in its options
+    '@dprint/markdown',
+  ],
   vitest: {
     config: ['vitest.config.ts', 'vitest.e2e.config.ts'],
   },

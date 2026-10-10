@@ -2,7 +2,6 @@ import type * as Eslint from 'eslint';
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import oxfmtConfig from './oxfmt.config';
 import {eslintConfig, isInCi} from './src';
-import {GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS} from './src/constants';
 import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared';
 import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
@@ -70,7 +69,9 @@ export default eslintConfig({
     },
     expectType: true,
     format: {
-      files: [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS],
+      // Other files are formatted by oxfmt itself
+      files: [],
+      configFencedCodeBlocks: true,
       formatter: [
         'oxfmt',
         {
@@ -100,8 +101,6 @@ export default eslintConfig({
       },
     },
     markdown: {
-      // Formats fenced code blocks with `prettier`, superseded by the `format` config above
-      configFormatFencedCodeBlocks: false,
       configSentencesPerLine: {
         ignores: [
           'CHANGELOG.md',
@@ -215,6 +214,8 @@ export default eslintConfig({
               '@angular-eslint/eslint-plugin',
               '@angular-eslint/eslint-plugin-template',
               '@angular-eslint/template-parser',
+              // oxfmt is pre-1.0 and released often, so a caret range would only allow one minor version
+              'oxfmt',
               // Inlined plugins format with the user's Prettier, which can be any 3.x version
               'prettier',
               // Must stay a peer: under Yarn PnP, `typescript-eslint` can only get the `typescript` it requires through us, and it checks the version itself

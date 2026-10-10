@@ -54,7 +54,7 @@ const FIXTURE_DEPENDENCIES = {
   clsx: '2.1.1',
   eslint: packageJson.devDependencies.eslint,
   'eslint-plugin-clsx': packageJson.devDependencies['eslint-plugin-clsx'],
-  // Makes the inlined plugins spawn their Prettier workers
+  // Makes the inlined plugins and the `format` config spawn their Prettier workers
   prettier: packageJson.devDependencies.prettier,
   // Our own `typescript` dev dependency is an npm alias, so only its version is reusable
   typescript: packageJson.devDependencies.typescript.split('@').at(-1),
@@ -371,7 +371,7 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
     );
     // A broken worker would crash the whole run instead
     expect(messagesByFileName.get('README.md')?.map(({ruleId}) => ruleId)).toContain(
-      'prettier/prettier',
+      'format/prettier',
     );
     // The inlined `eslint-plugin-html` has to find and patch the project's own ESLint
     expect(messagesByFileName.get('index.html')?.map(({ruleId}) => ruleId)).toContain('no-eval');

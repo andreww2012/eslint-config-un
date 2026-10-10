@@ -73,6 +73,7 @@ trustPolicyExclude: # []
   - postcss-svgo@9.0.5
   - postcss-unique-selectors@9.0.6
   - stylehacks@9.0.8
+  - synckit@0.12.1
 
 audit:
   ignore: # []
@@ -120,8 +121,6 @@ overrides:
   basic-ftp@<6.2.1: 6.2.1
   brace-expansion@>=5.0.0 <5.0.12: 5.0.12
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
-  # Format Markdown code blocks with the same oxfmt version as all other files
-  eslint-plugin-format>oxfmt: 'catalog:format'
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   handlebars@>=4.0.0 <4.7.10: 4.7.10
@@ -133,7 +132,6 @@ patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
-  eslint-plugin-prettier@5.5.6: patches/eslint-plugin-prettier@5.5.6.patch
   eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch

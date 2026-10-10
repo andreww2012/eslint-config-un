@@ -96,17 +96,6 @@ export interface MarkdownEslintConfigOptions<
       >;
 
   /**
-   * Format fenced code blocks with Prettier.
-   *
-   * 📁 Default `files`: fenced code blocks of the supported languages inside
-   * <code>**&#47;*.md</code> files
-   *
-   * 🧩 Main plugin: [`eslint-plugin-prettier`](https://npmx.dev/eslint-plugin-prettier)
-   * @default true <=> `prettier` package is installed
-   */
-  configFormatFencedCodeBlocks?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'prettier'>;
-
-  /**
    * Config with the plugin that allows you to enforce that no line in your Markdown files contains
    * more than one sentence.
    *
@@ -208,7 +197,6 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configCodeBlocks: true,
-    configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
     configSentencesPerLine: false,
     lintMarkdown: true,
     language: 'gfm',
@@ -222,7 +210,6 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     ignores: parentConfigIgnores,
 
     configCodeBlocks,
-    configFormatFencedCodeBlocks,
     configSentencesPerLine,
 
     lintMarkdown,
@@ -398,22 +385,6 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
       },
     );
   }
-
-  const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
-    configFormatFencedCodeBlocks,
-    'prettier',
-  );
-
-  configFormatFencedCodeBlocksBuilder
-    ?.addConfig([
-      'markdown/format-fenced-code-blocks',
-      {
-        filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
-        ignoresInternal: false,
-      },
-    ])
-    .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}])
-    .addOverrides();
 
   const configBuilderSentencesPerLine = context.createConfigBuilder(
     configSentencesPerLine,

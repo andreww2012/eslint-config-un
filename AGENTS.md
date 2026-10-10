@@ -21,7 +21,7 @@ Keep each call chain on a Config builder (`.addRule(...)`, `.markCategory(...)` 
 
 Never reference Sub-configs with the `config` prefix: use `scss` in docs, not `configScss`.
 
-Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, it won't if any operand is a union).
+Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, inline as a property or parameter type, it won't if any operand is a union; as the whole body of a type alias, it still does).
 
 If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.
 Declare the corresponding array using `allUnionMembers` helper.

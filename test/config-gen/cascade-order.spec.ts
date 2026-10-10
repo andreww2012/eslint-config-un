@@ -228,11 +228,9 @@ describe('cascade order', () => {
       eslint-config-un/markdown/markdown
       eslint-config-un/markdown/code-blocks-processor
       eslint-config-un/markdown/code-blocks
-      eslint-config-un/markdown/format-fenced-code-blocks
       eslint-config-un/mdx/mdx
       eslint-config-un/mdx/code-blocks-processor
       eslint-config-un/mdx/code-blocks
-      eslint-config-un/mdx/format-fenced-code-blocks
       eslint-config-un/parsing/ts
       eslint-config-un/parsing/ts/type-aware
       eslint-config-un/parsing/css

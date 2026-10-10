@@ -236,6 +236,7 @@ export const SASS_PACKAGES = ['sass', 'sass-embedded'] as const;
 export const PACKAGES_TO_GET_INFO_FOR = [
   'prettier',
   'oxfmt',
+  '@dprint/formatter',
   'typescript',
   'graphql',
   '@tanstack/query-core',

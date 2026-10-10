@@ -1,4 +1,4 @@
-import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
+import {GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
@@ -56,7 +56,7 @@ export interface MdxPluginSettings {
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
-    Pick<MarkdownEslintConfigOptions, 'configCodeBlocks' | 'configFormatFencedCodeBlocks'> {}
+    Pick<MarkdownEslintConfigOptions, 'configCodeBlocks'> {}
 
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
@@ -67,10 +67,9 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configCodeBlocks: true,
-    configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
   });
 
-  const {configCodeBlocks, configFormatFencedCodeBlocks} = optionsResolved;
+  const {configCodeBlocks} = optionsResolved;
 
   const pluginSettings = context.getPluginSettings('mdx');
 
@@ -178,20 +177,4 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
       },
     );
   }
-
-  const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
-    configFormatFencedCodeBlocks,
-    'prettier',
-  );
-
-  configFormatFencedCodeBlocksBuilder
-    ?.addConfig([
-      'mdx/format-fenced-code-blocks',
-      {
-        filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
-        ignoresInternal: false,
-      },
-    ])
-    .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}])
-    .addOverrides();
 });
