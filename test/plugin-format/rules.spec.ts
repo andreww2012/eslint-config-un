@@ -100,8 +100,9 @@ ruleTester.run('dprint', formatRules.dprint, {
       options: [{language: 'missing-plugin.wasm'}],
       errors: [
         {
+          // On Windows, Node.js puts the absolute path into the message
           message:
-            "Failed to format the code: ENOENT: no such file or directory, open 'missing-plugin.wasm'",
+            /^Failed to format the code: ENOENT: no such file or directory, open '(?:.+[/\\])?missing-plugin\.wasm'$/,
         },
       ],
     },

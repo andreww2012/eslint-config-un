@@ -65,7 +65,7 @@ export interface SveltePluginSettings {
    * If you are using SvelteKit with a non-default configuration, you need to set the following
    * options.
    * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
-   * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
+   * for more details: https://svelte.dev/docs/kit/@sveltejs-kit-vite" - plugin docs
    *
    * SvelteKit 3 has no `svelte.config.js`, so for it, non-default options must be set explicitly.
    */
