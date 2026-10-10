@@ -868,7 +868,7 @@ Groups for the languages Prettier can only format through an extra plugin are ap
 
 All other groups (`js`, `vue`, `json`, `yaml`, `markdown`, `html`) are always applied.
 The `languages` option forces any group on or off.
-oxfmt formats Svelte files only when its `svelte` option is on, and its config cannot be read to detect that: if you use it, set `languages.svelte` to `true` (and the `svelte.isPrettierPluginSvelteUsed` option too).
+oxfmt formats Svelte files only when its `svelte` option is on, and its config cannot be read to detect that: if you use it, set `languages.svelte` to `true`, as well as the `svelte.isPrettierPluginSvelteUsed` option (the `svelte` config warns about it).
 
 <!-- eslint-skip -->
 

@@ -240,6 +240,39 @@ describe('options', () => {
         0,
       );
     });
+
+    describe('`oxfmt` warning', () => {
+      const WARNING = "[svelte] `oxfmt` is installed, but its config can't be read";
+
+      beforeEach(() => {
+        addInstalledPackages({oxfmt: '0.72.0'});
+      });
+
+      it('prints a warning when `oxfmt` is installed and option is not set', async () => {
+        using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+        await computeEslintConfig('svelte');
+
+        expect(stderrSpy.mock.calls.flat().join('')).toContain(WARNING);
+      });
+
+      it('does not print a warning when `oxfmt` is installed and option is `false`', async () => {
+        using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+        await computeEslintConfig({svelte: {isPrettierPluginSvelteUsed: false}});
+
+        expect(stderrSpy.mock.calls.flat().join('')).not.toContain(WARNING);
+      });
+
+      it('does not print a warning when both `oxfmt` and `prettier-plugin-svelte` are installed', async () => {
+        addInstalledPackages({'prettier-plugin-svelte': '3.0.0'});
+        using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+        await computeEslintConfig('svelte');
+
+        expect(stderrSpy.mock.calls.flat().join('')).not.toContain(WARNING);
+      });
+    });
   });
 
   describe('option: `disallowedHtmlTags`', () => {

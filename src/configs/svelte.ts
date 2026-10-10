@@ -135,8 +135,9 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * If `true`, will disable
    * [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
    *
-   * Also set it to `true` if you format Svelte files with oxfmt (its `svelte` option): oxfmt's
-   * config cannot be read to detect that.
+   * If `oxfmt` is installed, set this explicitly: `true` if it formats Svelte files (its `svelte`
+   * option), `false` otherwise.
+   * Its config cannot be read to detect that, so a warning is printed until this is set.
    * @default detected automatically
    */
   isPrettierPluginSvelteUsed?: boolean;
@@ -197,6 +198,16 @@ export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>
     isPrettierPluginSvelteUsed,
     reportUnusedDisableDirectives,
   } = optionsResolved;
+
+  if (
+    !isPrettierPluginSvelteInstalled &&
+    context.packagesInfo.oxfmt &&
+    (typeof optionsRaw !== 'object' || optionsRaw.isPrettierPluginSvelteUsed == null)
+  ) {
+    context.logger.warn(
+      "[svelte] `oxfmt` is installed, but its config can't be read to tell whether it formats Svelte files (its `svelte` option). Set `isPrettierPluginSvelteUsed` to `true` if it does, or to `false` otherwise",
+    );
+  }
 
   const pluginSettings = context.getPluginSettings('svelte');
 
