@@ -13,5 +13,5 @@ unicorn: updated [`eslint-plugin-unicorn` from v71.1.0 to v72.0.0](https://githu
   - [`unicorn/prefer-then-catch`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-then-catch.md)
 - 🔴 not enabled the following rules:
   - [`unicorn/no-missing-local-resource`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-missing-local-resource.md)
-  - [`unicorn/prefer-explicit-viewport-units`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-explicit-viewport-units.md)
+  - [`unicorn/prefer-explicit-viewport-units`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/prefer-explicit-viewport-units.md)
   - [`unicorn/require-frontmatter-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-frontmatter-fields.md)

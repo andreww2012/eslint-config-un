@@ -12,17 +12,17 @@ unicorn: updated [`eslint-plugin-unicorn` from v74.0.0 to v75.0.0](https://githu
   - [`unicorn/prefer-temporal-conversion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-temporal-conversion.md)
 - 🟢 enabled [`unicorn/no-useless-set-construction`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-set-construction.md) rule and added it to the `noStylisticRules` config
 - The following rules were 🟢 enabled in ⚙️ `css` sub-config:
-  - [`unicorn/no-deprecated-css-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-deprecated-css-features.md)
-  - [`unicorn/no-duplicate-css-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-css-selectors.md)
-  - [`unicorn/no-duplicate-font-family-names`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-font-family-names.md)
-  - [`unicorn/no-invalid-media-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-media-features.md)
-  - [`unicorn/no-nesting-with-mixed-specificity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-nesting-with-mixed-specificity.md)
-  - [`unicorn/no-unknown-css-annotations`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unknown-css-annotations.md)
-  - [`unicorn/no-unknown-pseudo-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unknown-pseudo-selectors.md)
-  - [`unicorn/no-unscoped-css-nesting-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unscoped-css-nesting-selector.md)
+  - [`unicorn/no-deprecated-css-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-deprecated-css-features.md)
+  - [`unicorn/no-duplicate-css-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-duplicate-css-selectors.md)
+  - [`unicorn/no-duplicate-font-family-names`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-duplicate-font-family-names.md)
+  - [`unicorn/no-invalid-media-features`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-invalid-media-features.md)
+  - [`unicorn/no-nesting-with-mixed-specificity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-nesting-with-mixed-specificity.md)
+  - [`unicorn/no-unknown-css-annotations`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-unknown-css-annotations.md)
+  - [`unicorn/no-unknown-pseudo-selectors`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-unknown-pseudo-selectors.md)
+  - [`unicorn/no-unscoped-css-nesting-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-unscoped-css-nesting-selector.md)
 - The following rules were 🟢 enabled in ⚙️ `css` sub-config and added to the `noStylisticRules` config:
-  - [`unicorn/no-redundant-nested-style-rules`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-redundant-nested-style-rules.md)
-  - [`unicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-media-feature-range-syntax.md)
+  - [`unicorn/no-redundant-nested-style-rules`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/no-redundant-nested-style-rules.md)
+  - [`unicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v76.0.0/docs/rules/prefer-media-feature-range-syntax.md)
 - The following rules were 🔴 not enabled:
   - [`unicorn/prefer-iterator-zip`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-zip.md)
   - [`unicorn/prefer-json-import`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-import.md)
