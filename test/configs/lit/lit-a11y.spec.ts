@@ -65,7 +65,7 @@ describe('lit: sub config `a11y`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `lit-a11y` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           lit: {configA11y: {files: FILES}},
@@ -85,7 +85,7 @@ describe('lit: sub config `a11y`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `lit-a11y` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           lit: {configA11y: {ignores: IGNORES}},

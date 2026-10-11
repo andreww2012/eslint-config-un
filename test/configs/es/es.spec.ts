@@ -118,7 +118,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `es` eslint config', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({es: {files: FILES}});
 
@@ -134,7 +134,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `es` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({es: {ignores: IGNORES}});
 
@@ -167,7 +167,7 @@ describe('options', () => {
     });
 
     it('sets `es-x` settings when `aggressive` is provided', async () => {
-      const SETTINGS = {aggressive: true};
+      const SETTINGS = {aggressive: true} as const;
 
       const configResult = await computeEslintConfig('es', {
         un: {plugins: {es: {settings: SETTINGS}}},

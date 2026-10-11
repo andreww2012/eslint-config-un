@@ -1,3 +1,7 @@
+Keep using the cache when `--cooldown` is set:
+- read cached versions if they have a publish time, which the cooldown check needs;
+- cache a version unless the cooldown held it back.
+
 diff --git a/build/index.js b/build/index.js
 index fb82840de43932df085943aa8e0681c43e86da50..a098e8f75110df40c91a3f9e73aee0da6921e52a 100644
 --- a/build/index.js

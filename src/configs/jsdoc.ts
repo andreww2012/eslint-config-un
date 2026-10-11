@@ -327,7 +327,9 @@ export interface JsdocEslintConfigOptions<
     | NormalizeSeeLinksRuleOptions;
 }
 
-export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
+export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE: Readonly<
+  Partial<Record<string, boolean>>
+> = {
   // TypeScript directives
   'ts-check': true,
   'ts-expect-error': true,
@@ -337,7 +339,7 @@ export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
   __PURE__: true,
   __NO_SIDE_EFFECTS__: true,
   'vite-ignore': true,
-} satisfies Partial<Record<string, boolean>>;
+};
 
 export default defineUnConfig<JsdocEslintConfigOptions>(
   'jsdoc',

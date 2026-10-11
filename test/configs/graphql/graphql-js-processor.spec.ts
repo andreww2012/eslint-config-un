@@ -33,7 +33,7 @@ describe('graphql: sub config `jsProcessor`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `graphql/processor` eslint config', async () => {
-        const FILES = ['src/**/*.{js,ts}'];
+        const FILES = ['src/**/*.{js,ts}'] as const;
 
         const configResult = await computeEslintConfig({
           graphql: {configJsProcessor: {files: FILES}},
@@ -53,7 +53,7 @@ describe('graphql: sub config `jsProcessor`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `graphql/processor` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           graphql: {configJsProcessor: {ignores: IGNORES}},

@@ -118,7 +118,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `mocha` eslint config', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({mocha: {files: FILES}});
 
@@ -134,7 +134,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `mocha` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({mocha: {ignores: IGNORES}});
 
@@ -166,11 +166,11 @@ describe('options', () => {
     });
 
     it('sets mocha settings when provided', async () => {
-      const SETTINGS = {
+      const SETTINGS = Object.freeze({
         additionalCustomNames: [
           {name: 'myDescribe', type: 'suite' as const, interface: 'BDD' as const},
         ],
-      };
+      });
 
       const configResult = await computeEslintConfig('mocha', {
         un: {plugins: {mocha: {settings: SETTINGS}}},

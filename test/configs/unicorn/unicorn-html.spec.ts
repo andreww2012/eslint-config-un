@@ -88,7 +88,7 @@ describe('unicorn: sub config `html`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `unicorn/html` eslint config', async () => {
-        const FILES = ['src/**/*.html'];
+        const FILES = ['src/**/*.html'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configHtml: {files: FILES}},
@@ -110,7 +110,7 @@ describe('unicorn: sub config `html`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `unicorn/html` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/vendor/**'];
+        const IGNORES = ['**/vendor/**'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configHtml: {ignores: IGNORES}},

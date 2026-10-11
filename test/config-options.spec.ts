@@ -18,9 +18,9 @@ describe('option: `files`', () => {
     });
 
     it('replaces the resolved patterns with the returned ones', async () => {
-      const FILES = ['tests/**/*.vitest.ts'];
+      const FILES = ['tests/**/*.vitest.ts'] as const;
 
-      const configResult = await computeEslintConfig({vitest: {files: () => FILES}});
+      const configResult = await computeEslintConfig({vitest: {files: () => [...FILES]}});
 
       expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual(FILES);
     });
@@ -70,9 +70,9 @@ describe('option: `ignores`', () => {
     });
 
     it('replaces both of them with the returned patterns', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
-      const configResult = await computeEslintConfig({import: {ignores: () => IGNORES}});
+      const configResult = await computeEslintConfig({import: {ignores: () => [...IGNORES]}});
 
       expect(configResult.getConfigByUnPostfix('import')?.ignores).toStrictEqual(IGNORES);
     });

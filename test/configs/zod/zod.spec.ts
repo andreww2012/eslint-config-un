@@ -165,7 +165,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `zod` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({zod: {files: FILES}});
 
@@ -181,7 +181,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `zod` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({zod: {ignores: IGNORES}});
 
@@ -350,7 +350,7 @@ describe('options', () => {
     });
 
     it('uses provided object options when option is an object', async () => {
-      const SCHEMA_VAR_NAME_OPTIONS = {after: 'Schema'};
+      const SCHEMA_VAR_NAME_OPTIONS = {after: 'Schema'} as const;
 
       const configResult = await computeEslintConfig({
         zod: {schemaVariableName: SCHEMA_VAR_NAME_OPTIONS},

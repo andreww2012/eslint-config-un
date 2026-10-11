@@ -98,7 +98,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `markdown/markdown` eslint config', async () => {
-      const FILES = ['docs/**/*.md'];
+      const FILES = ['docs/**/*.md'] as const;
 
       const configResult = await computeEslintConfig({markdown: {files: FILES}});
 
@@ -115,7 +115,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `markdown/markdown` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({markdown: {ignores: IGNORES}});
 
@@ -201,10 +201,10 @@ describe('options', () => {
     });
 
     it('creates `markdown/language-override/{i}` eslint config when `language` is array', async () => {
-      const FILES = ['CHANGELOG.md'];
+      const FILES = ['CHANGELOG.md'] as const;
 
       const configResult = await computeEslintConfig({
-        markdown: {language: [{language: 'commonmark', files: FILES}]},
+        markdown: {language: [{language: 'commonmark', files: [...FILES]}]},
       });
 
       expect(
@@ -241,10 +241,10 @@ describe('options', () => {
     });
 
     it('enables `markdown/no-html` rule with `allowed` option when set to array', async () => {
-      const ALLOWED_HTML_TAGS = ['details', 'summary'];
+      const ALLOWED_HTML_TAGS = ['details', 'summary'] as const;
 
       const configResult = await computeEslintConfig({
-        markdown: {allowHtmlTags: ALLOWED_HTML_TAGS},
+        markdown: {allowHtmlTags: [...ALLOWED_HTML_TAGS]},
       });
 
       expect(
@@ -263,10 +263,10 @@ describe('options', () => {
     });
 
     it('enables `markdown/fenced-code-language` rule with `required` when `codeBlocksAllowedLanguages` is array', async () => {
-      const LANGUAGES = ['js', 'ts'] satisfies NonEmptyTuple;
+      const LANGUAGES = ['js', 'ts'] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({
-        markdown: {codeBlocksAllowedLanguages: LANGUAGES},
+        markdown: {codeBlocksAllowedLanguages: [...LANGUAGES]},
       });
 
       expect(

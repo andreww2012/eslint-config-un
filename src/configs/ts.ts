@@ -31,7 +31,7 @@ import {
 } from './index';
 
 const TS_PLUGIN_TYPE_AWARE_RULES = RULE_CATEGORIES_PER_PLUGIN.ts.typeAware;
-const TS_PLUGIN_TYPE_AWARE_RULES_SET = new Set<string>(TS_PLUGIN_TYPE_AWARE_RULES);
+const TS_PLUGIN_TYPE_AWARE_RULES_SET: ReadonlySet<string> = new Set(TS_PLUGIN_TYPE_AWARE_RULES);
 
 type TypeAwareRulesWithPrefixes = Pick<
   UnRulesConfigPartial<'ts'>,
@@ -47,7 +47,7 @@ type TsPluginNoUnsafeRules =
   | 'no-unsafe-return'
   | 'no-unsafe-type-assertion';
 
-const TS_PLUGIN_NO_UNSAFE_RULES_SET = new Set<string>(
+const TS_PLUGIN_NO_UNSAFE_RULES_SET: ReadonlySet<string> = new Set(
   allUnionMembers<TsPluginNoUnsafeRules>()([
     'no-unsafe-argument',
     'no-unsafe-assignment',
@@ -75,7 +75,7 @@ type TsconfigTopLevelKeys =
   | 'angularCompilerOptions'
   | 'ts-node'
   | (string & {});
-const DEFAULT_TSCONFIG_TOP_LEVEL_ORDER: TsconfigTopLevelKeys[] = [
+const DEFAULT_TSCONFIG_TOP_LEVEL_ORDER: readonly TsconfigTopLevelKeys[] = [
   'extends',
   'references',
   'files',
@@ -348,7 +348,7 @@ export const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
     /* If your code runs/doesn't run in the DOM: */
     'lib',
   ],
-} satisfies Record<string, TsconfigCompilerOptionsKeys[]>;
+} as const satisfies Record<string, TsconfigCompilerOptionsKeys[]>;
 
 interface SortTsconfigKeysSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -549,8 +549,8 @@ export interface TsEslintConfigOptions<
   >;
 }
 
-const TS_FILES_DEFAULT = [GLOB_TS_X];
-const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED];
+const TS_FILES_DEFAULT = [GLOB_TS_X] as const;
+const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED] as const;
 
 const mergeParserOptions = (
   lower: TsEslintParserOptions,
@@ -1298,7 +1298,7 @@ export default defineUnConfig<
     const topLevelOptionsOrder: string[] = Array.isArray(orderTopLevel)
       ? orderTopLevel
       : orderTopLevel
-        ? DEFAULT_TSCONFIG_TOP_LEVEL_ORDER
+        ? [...DEFAULT_TSCONFIG_TOP_LEVEL_ORDER]
         : [];
 
     const compilerOptionsOrder: string[] =

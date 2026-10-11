@@ -6,7 +6,7 @@ import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared'
 import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
-const PLUGIN_METADATA_GROUP_ORDER = [...PLUGIN_METADATA_KEY_ORDER, ...RULE_TRAIT_ORDER];
+const PLUGIN_METADATA_GROUP_ORDER = [...PLUGIN_METADATA_KEY_ORDER, ...RULE_TRAIT_ORDER] as const;
 
 const noRestrictedSyntaxPlugin = createNoRestrictedSyntaxRule('local-rules', {
   name: 'no-catch-parameter-type-annotation',
@@ -82,7 +82,7 @@ export default eslintConfig({
       ],
     },
     import: {
-      extraneousDependenciesCheck: {whitelist: ALWAYS_BUNDLED_DEPENDENCIES},
+      extraneousDependenciesCheck: {whitelist: [...ALWAYS_BUNDLED_DEPENDENCIES]},
       configAllowDefaultExport: {
         files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts', 'src/plugins/*.ts'],
       },
@@ -92,6 +92,10 @@ export default eslintConfig({
     },
     jsdoc: {
       customTags: ['knipignore', 'until', 'aka'],
+      overrides: {
+        // Missing from the plugin's list of TypeScript globals
+        'jsdoc/no-undefined-types': [2, {definedTypes: ['ReadonlySet']}],
+      },
     },
     lockfile: {
       overrides: {

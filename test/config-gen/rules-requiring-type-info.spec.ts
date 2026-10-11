@@ -72,7 +72,7 @@ describe('rules requiring type information', () => {
     });
 
     it("intersects `files` with the original config's `files`", async () => {
-      const FILES = ['*.ts'];
+      const FILES = ['*.ts'] as const;
 
       const configResult = await computeEslintConfig(
         {awsCdk: {files: FILES}},
@@ -92,14 +92,14 @@ describe('rules requiring type information', () => {
     });
 
     it('creates a separate config for a single rule override', async () => {
-      const BASE_FILES = ['**/*.ts'];
-      const RULE_OVERRIDE_FILES = ['special/**/*.ts'];
+      const BASE_FILES = ['**/*.ts'] as const;
+      const RULE_OVERRIDE_FILES = ['special/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig(
         {
           awsCdk: {
             files: BASE_FILES,
-            overrides: {'awscdk/no-unused-props': {severity: 2, files: RULE_OVERRIDE_FILES}},
+            overrides: {'awscdk/no-unused-props': {severity: 2, files: [...RULE_OVERRIDE_FILES]}},
           },
         },
         {internalOptions: {}},
@@ -229,7 +229,7 @@ describe('rules requiring type information', () => {
     });
 
     it('adds .svelte to `extraFileExtensions` in the extra config if there is a "typed" rule coming from `svelte` plugin and intersects original `files` with ts and svelte files', async () => {
-      const FILES = ['foo/**/*.svelte'];
+      const FILES = ['foo/**/*.svelte'] as const;
 
       const configResult = await computeEslintConfig(
         {svelte: {files: FILES}},
@@ -391,7 +391,7 @@ describe('rules requiring type information', () => {
       },
     );
 
-    const IGNORES = ['legacy/**'];
+    const IGNORES = ['legacy/**'] as const;
 
     it.each([
       {configName: 'astro', configs: {astro: {ignores: IGNORES}}},
@@ -661,38 +661,38 @@ describe('rules requiring type information', () => {
 
   describe('`typeInfoRules.ignores`', () => {
     it('appends ignores to generated split configs and to never-split configs', async () => {
-      const IGNORES = ['vendor/**'];
+      const IGNORES = ['vendor/**'] as const;
 
       const configResult = await computeEslintConfig(
         {eslintPlugin: true, vitest: {configTypescript: true}},
-        {un: {typeInfoRules: {mode: 'standalone', ignores: IGNORES}}, internalOptions: {}},
+        {un: {typeInfoRules: {mode: 'standalone', ignores: [...IGNORES]}}, internalOptions: {}},
       );
 
       expect(
         configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.ignores,
-      ).toStrictEqual(expect.arrayContaining(IGNORES));
+      ).toStrictEqual(expect.arrayContaining([...IGNORES]));
       expect(configResult.getConfigByUnPostfix('vitest/ts')?.ignores).toStrictEqual(
-        expect.arrayContaining(IGNORES),
+        expect.arrayContaining([...IGNORES]),
       );
     });
 
     it('appends ignores to the type information entry so excluded files do not request type info', async () => {
-      const IGNORES = ['vendor/**'];
+      const IGNORES = ['vendor/**'] as const;
 
       const configResult = await computeEslintConfig('ts', {
-        un: {typeInfoRules: {ignores: IGNORES}},
+        un: {typeInfoRules: {ignores: [...IGNORES]}},
         internalOptions: {},
       });
 
       expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.ignores).toStrictEqual(
-        expect.arrayContaining(IGNORES),
+        expect.arrayContaining([...IGNORES]),
       );
       expect(configResult.getConfigByUnPostfix('parsing/ts')?.ignores).not.toStrictEqual(
-        expect.arrayContaining(IGNORES),
+        expect.arrayContaining([...IGNORES]),
       );
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.ignores,
-      ).not.toStrictEqual(expect.arrayContaining(IGNORES));
+      ).not.toStrictEqual(expect.arrayContaining([...IGNORES]));
     });
   });
 });

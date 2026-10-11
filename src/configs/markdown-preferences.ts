@@ -29,7 +29,7 @@ const DEFAULT_IGNORE_PATTERNS = [
   String.raw`/\w+(?:SDK|Sdk)$/u`, // nodeSDK, etc.
   String.raw`/\w+(?:CLI|Cli)$/u`, // nodeCLI, etc.
   /* eslint-enable case-police/string-check */
-];
+] as const;
 
 /**
  * An ESLint plugin that helps enforce consistent writing style and formatting conventions in

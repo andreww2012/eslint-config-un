@@ -11,7 +11,7 @@ import {
   defineUnConfig,
 } from '../index';
 
-const STYLISTIC_RULES_PER_PLUGIN: Partial<Record<string, Partial<Record<string, true>>>> =
+const STYLISTIC_RULES_PER_PLUGIN: Readonly<Partial<Record<string, Partial<Record<string, true>>>>> =
   ALL_STYLISTIC_RULES;
 
 /* eslint-disable perfectionist/sort-objects */

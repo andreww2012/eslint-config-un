@@ -32,11 +32,11 @@ interface PackageMeta {
   optionalPeerDependencyReason?: string;
 }
 
-interface PluginPackageMeta extends PackageMeta {
+export interface PluginPackageMeta extends PackageMeta {
   pluginPrefix: LoadablePluginPrefix;
 }
 
-export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fromEntries(
+export const PLUGIN_PACKAGES_META: Readonly<Record<string, PluginPackageMeta>> = Object.fromEntries(
   (await readPluginMetadata()).flatMap(({metadata, prefix}) => {
     if (prefix === '') {
       return [];
@@ -65,7 +65,7 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
   }),
 );
 
-export const PACKAGES_META: Record<string, PackageMeta> = {
+export const PACKAGES_META: Readonly<Record<string, PackageMeta>> = {
   ...PLUGIN_PACKAGES_META,
   '@angular-eslint/template-parser': {
     configs: ['angular'],
@@ -149,14 +149,16 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
   },
 };
 
-export const CONFIGS_META = objectFromEntriesUnsafe(
-  Array.from(
-    Map.groupBy(
-      Object.entries(PACKAGES_META).flatMap(([packageName, packageMeta]) =>
-        packageMeta.configs.map((config) => ({config, packageName})),
+export const CONFIGS_META = Object.freeze(
+  objectFromEntriesUnsafe(
+    Array.from(
+      Map.groupBy(
+        Object.entries(PACKAGES_META).flatMap(([packageName, packageMeta]) =>
+          packageMeta.configs.map((config) => ({config, packageName})),
+        ),
+        (v) => v.config,
       ),
-      (v) => v.config,
+      ([config, entries]) => [config, {packages: entries.map((v) => v.packageName)}],
     ),
-    ([config, entries]) => [config, {packages: entries.map((v) => v.packageName)}],
   ),
 );

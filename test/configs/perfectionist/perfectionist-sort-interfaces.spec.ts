@@ -76,7 +76,7 @@ describe('perfectionist: sub config `sortInterfaces`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `perfectionist/sort-interfaces` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortInterfaces: {files: FILES}},
@@ -98,7 +98,7 @@ describe('perfectionist: sub config `sortInterfaces`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `perfectionist/sort-interfaces` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortInterfaces: {ignores: IGNORES}},

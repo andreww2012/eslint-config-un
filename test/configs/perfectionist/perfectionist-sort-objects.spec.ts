@@ -85,7 +85,7 @@ describe('perfectionist: sub config `sortObjects`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `perfectionist/sort-objects` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortObjects: {files: FILES}},
@@ -107,7 +107,7 @@ describe('perfectionist: sub config `sortObjects`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `perfectionist/sort-objects` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortObjects: {ignores: IGNORES}},

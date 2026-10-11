@@ -113,7 +113,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `css` eslint config', async () => {
-      const FILES = ['src/**/*.css'];
+      const FILES = ['src/**/*.css'] as const;
 
       const configResult = await computeEslintConfig({css: {files: FILES}});
 
@@ -129,7 +129,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `css` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({css: {ignores: IGNORES}});
 
@@ -191,7 +191,7 @@ describe('options', () => {
     });
 
     it('sets user-provided `customSyntax` directly when `tailwindcss` is not installed', async () => {
-      const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+      const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
       const configResult = await computeEslintConfig({
         css: {customSyntax: USER_CUSTOM_SYNTAX},
@@ -205,7 +205,7 @@ describe('options', () => {
     it('uses user-provided `customSyntax` object directly when `tailwindcss@3` is installed', async () => {
       addInstalledPackages({tailwindcss: '3.4.17'});
 
-      const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+      const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
       const configResult = await computeEslintConfig({
         css: {customSyntax: USER_CUSTOM_SYNTAX},

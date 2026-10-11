@@ -9,7 +9,7 @@ beforeEach(() => {
 describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
   describe('basic tests', () => {
     it('creates `svelte/enforce-typescript-in-script-section` eslint config, uses parent config `files` and `ignores` and enforces `ts` lang for <script> sections when `ts` config is enabled', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({svelte: {ignores: IGNORES}, ts: true});
 
@@ -103,7 +103,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `svelte/enforce-typescript-in-script-section` eslint config', async () => {
-        const FILES = ['src/**/*.svelte'];
+        const FILES = ['src/**/*.svelte'] as const;
 
         const configResult = await computeEslintConfig({
           svelte: {configEnforceTypescriptInScriptSection: {files: FILES}},
@@ -127,7 +127,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `svelte/enforce-typescript-in-script-section` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           svelte: {configEnforceTypescriptInScriptSection: {ignores: IGNORES}},

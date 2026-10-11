@@ -54,7 +54,7 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in rule tests eslint config', async () => {
-        const FILES = ['src/rules/**/*.spec.js'];
+        const FILES = ['src/rules/**/*.spec.js'] as const;
 
         const configResult = await computeEslintConfig({
           eslintPlugin: {configRuleTests: {files: FILES}},
@@ -76,7 +76,7 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in rule tests eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           eslintPlugin: {configRuleTests: {ignores: IGNORES}},

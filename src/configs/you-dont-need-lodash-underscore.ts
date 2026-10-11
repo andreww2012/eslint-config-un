@@ -84,9 +84,8 @@ type LodashMethods =
   | 'uniq'
   | 'values';
 
-const LODASH_METHODS_TO_RULE_NAMES: Record<
-  LodashMethods,
-  GetRuleNamesInPlugin<'you-dont-need-lodash-underscore'>
+const LODASH_METHODS_TO_RULE_NAMES: Readonly<
+  Record<LodashMethods, GetRuleNamesInPlugin<'you-dont-need-lodash-underscore'>>
 > = {
   all: 'all',
   any: 'any',

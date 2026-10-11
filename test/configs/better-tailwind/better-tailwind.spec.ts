@@ -10,11 +10,11 @@ beforeEach(() => {
 
 const TW3_SETTINGS = {
   tailwindConfig: path.resolve(import.meta.dirname, 'fixtures', 'tailwind.config.js'),
-};
+} as const;
 
 const TW4_SETTINGS = {
   entryPoint: path.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
-};
+} as const;
 
 describe('basic tests', () => {
   it('creates `better-tailwindcss` eslint config and loads `better-tailwindcss` plugin if set to `true`', async () => {
@@ -175,7 +175,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `better-tailwindcss` eslint config', async () => {
-      const FILES = ['**/*.jsx'];
+      const FILES = ['**/*.jsx'] as const;
 
       const configResult = await computeEslintConfig(
         {
@@ -199,8 +199,8 @@ describe('un options', () => {
     });
 
     it('does not append `css` config files to the user-provided `files`', async () => {
-      const FILES = ['**/*.jsx'];
-      const CSS_FILES = ['src/**/*.css'];
+      const FILES = ['**/*.jsx'] as const;
+      const CSS_FILES = ['src/**/*.css'] as const;
 
       spyOnProcessOutput();
 
@@ -216,8 +216,8 @@ describe('un options', () => {
     });
 
     it('passes no patterns to the function form of `files` and uses the returned ones', async () => {
-      const FILES = ['**/*.jsx'];
-      const filesFn = vi.fn<() => string[]>(() => FILES);
+      const FILES = ['**/*.jsx'] as const;
+      const filesFn = vi.fn<() => string[]>(() => [...FILES]);
 
       spyOnProcessOutput();
 
@@ -236,7 +236,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `better-tailwindcss` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig(
         {

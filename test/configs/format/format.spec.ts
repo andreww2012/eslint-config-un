@@ -233,7 +233,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `format/prettier` eslint config', async () => {
-      const FILES = ['**/*.js'];
+      const FILES = ['**/*.js'] as const;
 
       const configResult = await computeEslintConfig({format: {files: FILES}});
 
@@ -249,7 +249,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `format/prettier` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({format: {ignores: IGNORES}});
 
@@ -327,7 +327,7 @@ describe('options', () => {
 
     it("passes options to `format/oxfmt` rule when `formatter` is `['oxfmt', options]`", async () => {
       addInstalledPackages({oxfmt: '0.72.0'});
-      const OPTIONS = {printWidth: 100};
+      const OPTIONS = Object.freeze({printWidth: 100});
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['oxfmt', OPTIONS]},
@@ -339,7 +339,7 @@ describe('options', () => {
     });
 
     it("passes options to `format/prettier` rule when `formatter` is `['prettier', options]`", async () => {
-      const OPTIONS = {singleQuote: false, printWidth: 120};
+      const OPTIONS = Object.freeze({singleQuote: false, printWidth: 120});
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['prettier', OPTIONS]},
@@ -352,10 +352,10 @@ describe('options', () => {
 
     it("passes options to `format/dprint` rule when `formatter` is `['dprint', options]`", async () => {
       addInstalledPackages({'@dprint/formatter': '0.5.1'});
-      const OPTIONS = {
+      const OPTIONS = Object.freeze({
         plugins: [],
         typescript: 'https://plugins.dprint.dev/typescript-0.93.0.wasm',
-      };
+      });
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['dprint', OPTIONS]},
@@ -391,7 +391,7 @@ describe('options', () => {
     });
 
     it('stops `format/prettier` rule from reading the Prettier config when set to `false`', async () => {
-      const OPTIONS = {printWidth: 120};
+      const OPTIONS = Object.freeze({printWidth: 120});
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['prettier', OPTIONS], readFormatterConfig: false},
@@ -438,10 +438,10 @@ describe('options', () => {
     });
 
     it('sets `eslint-parser-plain` parser on the `files` of the config when set to `true`', async () => {
-      const FILES = ['**/*.xml'];
+      const FILES = ['**/*.xml'] as const;
 
       const configResult = await computeEslintConfig({
-        format: [{files: FILES, usePlainParser: true}],
+        format: [{files: [...FILES], usePlainParser: true}],
       });
 
       const config = configResult.getConfigByUnPostfix('parsing/plain');

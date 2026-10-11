@@ -4,7 +4,7 @@ const FIXTURES = {
   runtimeV2Features: 'runtime-v2-features.js',
 } as const;
 
-const V1_FILES = ['**/cloudfront-v1/**/*.js'];
+const V1_FILES = ['**/cloudfront-v1/**/*.js'] as const;
 
 describe('cloudfront functions: sub config `v1`', () => {
   describe('basic tests', () => {
@@ -120,7 +120,7 @@ describe('cloudfront functions: sub config `v1`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `cloudfront-functions/v1` eslint config', async () => {
-        const FILES = ['src/**/*.cf-v1.js'];
+        const FILES = ['src/**/*.cf-v1.js'] as const;
 
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {files: FILES}},
@@ -142,7 +142,7 @@ describe('cloudfront functions: sub config `v1`', () => {
 
     describe('option: `ignores`', () => {
       it('creates `cloudfront-functions/v1` eslint config when `configV1.ignores` is non-empty (even without `files`)', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {ignores: IGNORES}},
@@ -152,7 +152,7 @@ describe('cloudfront functions: sub config `v1`', () => {
       });
 
       it('uses user-provided `ignores` in `cloudfront-functions/v1` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {files: ['**/*.js'], ignores: IGNORES}},

@@ -11,7 +11,7 @@ import {FIXTURE_FILES} from './fixture';
  * The members of the typescript-eslint parser services that only exist when type information does.
  * Reading any of them is what "the rule consumes type information" means
  */
-const TYPE_INFO_SERVICE_KEYS = new Set([
+const TYPE_INFO_SERVICE_KEYS: ReadonlySet<string> = new Set([
   'emitDecoratorMetadata',
   'esTreeNodeToTSNodeMap',
   'getSymbolAtLocation',
@@ -46,7 +46,7 @@ const RULE_DIRECTORY_CANDIDATES = [
   'dist/lib/rules',
   'lib/src/rules',
   'build/rules',
-];
+] as const;
 
 const JS_FILE_REGEX = /\.[cm]?js$/;
 
@@ -65,7 +65,7 @@ const NAMESPACE_IMPORT_NAME = '*';
 /**
  * A name resolving to a barrel says nothing about which of its exports is checker-backed
  */
-const OPAQUE_MODULE_NAMES = new Set(['index.js', 'utils.js']);
+const OPAQUE_MODULE_NAMES: ReadonlySet<string> = new Set(['index.js', 'utils.js']);
 
 const isVisitorListener = (value: unknown): value is (...listenerArguments: unknown[]) => unknown =>
   typeof value === 'function';
@@ -79,19 +79,19 @@ const describeError = (error: unknown) => (error instanceof Error ? error.messag
 const withSilencedOutput = <Result>(run: () => Result) => {
   const streams = [process.stdout, process.stderr];
   const originalWrites = streams.map((stream) => stream.write.bind(stream));
-  for (const stream of streams) {
+  streams.forEach((stream) => {
     stream.write = () => true;
-  }
+  });
 
   try {
     return run();
   } finally {
-    for (const [index, stream] of streams.entries()) {
+    streams.forEach((stream, index) => {
       const originalWrite = originalWrites[index];
       if (originalWrite) {
         stream.write = originalWrite;
       }
-    }
+    });
   }
 };
 
@@ -394,7 +394,7 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
   const starExportsOf = new Map<string, string[]>();
   const localExportsOf = new Map<string, Set<string>>();
 
-  for (const file of files) {
+  files.forEach((file) => {
     const code = sourceOf(file);
 
     reExportsOf.set(
@@ -428,7 +428,7 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
         ...(code.includes('export default') ? [DEFAULT_EXPORT_NAME] : []),
       ]),
     );
-  }
+  });
 
   // eslint-disable-next-line unicorn/no-unnecessary-parameters -- the set must be shared across the recursive calls
   const resolveExport = (file: string, name: string, seen = new Set<string>()): string => {

@@ -118,7 +118,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `clsx` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
+      const FILES = ['src/**/*.tsx'] as const;
 
       const configResult = await computeEslintConfig({clsx: {files: FILES}});
 
@@ -134,7 +134,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `clsx` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({clsx: {ignores: IGNORES}});
 
@@ -168,7 +168,7 @@ describe('options', () => {
     });
 
     it('assigns `settings` to `clsxOptions` settings property', async () => {
-      const SETTINGS = {clsx: ['cn', 'cx'], classnames: 'default'};
+      const SETTINGS = Object.freeze({clsx: ['cn', 'cx'], classnames: 'default'});
 
       const configResult = await computeEslintConfig('clsx', {
         un: {plugins: {clsx: {settings: SETTINGS}}},

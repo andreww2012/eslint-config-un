@@ -360,7 +360,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
     options: EsEslintConfigOptions;
   },
 ) => {
-  const optionsResolved = assignDefaults(customConfig?.options ?? optionsRawFromParameters, {
+  const optionsResolved = assignDefaults(customConfig?.options || optionsRawFromParameters, {
     ecmaVersion: 'latest',
   });
 

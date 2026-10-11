@@ -8,23 +8,26 @@ import {
   defineUnConfig,
 } from '../index';
 
-const CLI_RULES_FLAT = Object.entries(RULES_ADJUSTED_FOR_CLI_FILES).flatMap(
-  ([pluginPrefix, rules]) =>
+const CLI_RULES_FLAT = Object.freeze(
+  Object.entries(RULES_ADJUSTED_FOR_CLI_FILES).flatMap(([pluginPrefix, rules]) =>
     Object.entries(rules).map(
       ([ruleName, severity]) =>
         [`${pluginPrefix ? `${pluginPrefix}/` : ''}${ruleName}`, severity] as const,
     ),
-);
-
-const RULES_ENABLED_BY_DEFAULT = Object.fromEntries(
-  CLI_RULES_FLAT.filter(([, severity]) => severity === 'error').map(
-    ([ruleName]) => [ruleName, ERROR] as const,
   ),
 );
 
-const RULE_NAMES_DISABLED_BY_DEFAULT = CLI_RULES_FLAT.filter(
-  ([, severity]) => severity === 'off',
-).map(([ruleName]) => ruleName);
+const RULES_ENABLED_BY_DEFAULT = Object.freeze(
+  Object.fromEntries(
+    CLI_RULES_FLAT.filter(([, severity]) => severity === 'error').map(
+      ([ruleName]) => [ruleName, ERROR] as const,
+    ),
+  ),
+);
+
+const RULE_NAMES_DISABLED_BY_DEFAULT = Object.freeze(
+  CLI_RULES_FLAT.filter(([, severity]) => severity === 'off').map(([ruleName]) => ruleName),
+);
 
 /**
  * A config specific to files meant to be executed.

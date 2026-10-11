@@ -5,7 +5,7 @@ const FIXTURES = {
   unsupportedApis: 'unsupported-apis.js',
 } as const;
 
-const V2_FILES = ['**/cloudfront-v2/**/*.js'];
+const V2_FILES = ['**/cloudfront-v2/**/*.js'] as const;
 
 describe('basic tests', () => {
   it('creates `cloudfront-functions/v2` and `cloudfront-functions/v2/es-features` eslint configs, but not `cloudfront-functions/v1` by default', async () => {
@@ -185,7 +185,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `cloudfront-functions/v2` eslint config', async () => {
-      const FILES = ['src/**/*.cf.js'];
+      const FILES = ['src/**/*.cf.js'] as const;
 
       const configResult = await computeEslintConfig({cloudfrontFunctions: {files: FILES}});
 
@@ -206,7 +206,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `cloudfront-functions/v2` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({
         cloudfrontFunctions: {files: V2_FILES, ignores: IGNORES},

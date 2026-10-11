@@ -10,7 +10,7 @@ const FIXTURES = {
 } as const;
 
 // eslint-disable-next-line unicorn/no-array-sort
-const ENABLED_PARSERS = ['json', 'jsonc', 'yaml'].sort();
+const ENABLED_PARSERS: readonly string[] = ['json', 'jsonc', 'yaml'].sort();
 
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
@@ -120,7 +120,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `lockfile` eslint config', async () => {
-      const FILES = ['package-lock.json'];
+      const FILES = ['package-lock.json'] as const;
 
       const configResult = await computeEslintConfig({lockfile: {files: FILES}});
 
@@ -231,7 +231,7 @@ describe('un options', () => {
     it('prints a warning if some glob pattern does not match a known lockfile', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
-      const FILES = ['pkg-lock.json', 'yarn.lock', 'bun.json'] satisfies NonEmptyTuple;
+      const FILES = ['pkg-lock.json', 'yarn.lock', 'bun.json'] as const satisfies NonEmptyTuple;
 
       await computeEslintConfig({lockfile: {files: FILES}});
 
@@ -243,7 +243,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `lockfile` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({lockfile: {ignores: IGNORES}});
 
@@ -355,7 +355,10 @@ describe('options', () => {
     });
 
     it('enables `lockfile/non-registry-specifiers` rule with options when set to object', async () => {
-      const IGNORE_ENTRY = {specifier: 'github:my-org/some-private-pkg', explanation: 'internal'};
+      const IGNORE_ENTRY = {
+        specifier: 'github:my-org/some-private-pkg',
+        explanation: 'internal',
+      } as const;
 
       const configResult = await computeEslintConfig({
         lockfile: {noNonRegistryDependencySpecifiers: {ignore: [IGNORE_ENTRY]}},

@@ -19,22 +19,22 @@ import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schem
 
 const __dirname = import.meta.dirname;
 
-const COMPILE_OPTIONS = {bannerComment: '', format: false};
+const COMPILE_OPTIONS = {bannerComment: '', format: false} as const;
 
-const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
+const PLUGIN_LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {
   rootOptions: {},
   missingPackages: new Map(),
 };
 
-await fs.mkdir(resolveInOutDir(), {recursive: true});
-
-const {
-  allRuleTypesCode: allRuleTypesCodeUnformatted,
-  perPluginCode: perPluginCodeUnformatted,
-  fixableRulesOnlyCode,
-  allRulesCode,
-  ruleCategoriesCode,
-} = await generateRuleTypes();
+const [
+  {
+    allRuleTypesCode: allRuleTypesCodeUnformatted,
+    perPluginCode: perPluginCodeUnformatted,
+    fixableRulesOnlyCode,
+    allRulesCode,
+    ruleCategoriesCode,
+  },
+] = await Promise.all([generateRuleTypes(), fs.mkdir(resolveInOutDir(), {recursive: true})]);
 
 const [allRuleTypesCode, perPluginCode] = await Promise.all([
   formatTypescript(allRuleTypesCodeUnformatted),
@@ -200,9 +200,9 @@ ${fixableRuleNames.map((ruleName) => `    '${ruleName}': true,`).join('\n')}
   },`,
   )
   .join('\n')}
-};
+} as const;
 
-export const FIXABLE_RULES_PER_PLUGIN: Partial<Record<string, Partial<Record<string, boolean>>>> =
+export const FIXABLE_RULES_PER_PLUGIN: Readonly<Partial<Record<string, Partial<Record<string, boolean>>>>> =
   FIXABLE_RULES_PER_PLUGIN_RAW;
 
 export type FixableRuleNames = {

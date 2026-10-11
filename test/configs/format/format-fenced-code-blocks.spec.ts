@@ -97,7 +97,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `format/prettier/fenced-code-blocks` eslint config', async () => {
-        const FILES = ['docs/**/*.md/**/*.js'];
+        const FILES = ['docs/**/*.md/**/*.js'] as const;
 
         const configResult = await computeEslintConfig({
           format: {configFencedCodeBlocks: {files: FILES}},
@@ -117,7 +117,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `format/prettier/fenced-code-blocks` eslint config', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           format: {configFencedCodeBlocks: {ignores: IGNORES}},
@@ -158,7 +158,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
 
       it('uses its own formatter and options when option is set', async () => {
         addInstalledPackages({oxfmt: '0.72.0'});
-        const OPTIONS = {printWidth: 100};
+        const OPTIONS = {printWidth: 100} as const;
 
         const configResult = await computeEslintConfig({
           format: {configFencedCodeBlocks: {formatter: ['oxfmt', OPTIONS]}},
@@ -226,7 +226,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
     });
 
     it('keeps fenced code blocks out of the parent config with user-provided `ignores`', async () => {
-      const IGNORES = ['dist/**'];
+      const IGNORES = ['dist/**'] as const;
 
       const configResult = await computeEslintConfig({
         format: {ignores: IGNORES, configFencedCodeBlocks: true},

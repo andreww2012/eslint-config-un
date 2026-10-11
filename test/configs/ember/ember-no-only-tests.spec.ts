@@ -38,7 +38,7 @@ describe('ember: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from `configTestFiles` when provided', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         ember: {configTestFiles: {files: FILES}},
@@ -75,7 +75,7 @@ describe('ember: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ember/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {configNoOnlyTests: {files: FILES}}},
@@ -97,7 +97,7 @@ describe('ember: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ember/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {configNoOnlyTests: {ignores: IGNORES}}},

@@ -7,7 +7,7 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin for [`zod-openapi`](https://github.com/samchungy/zod-openapi).
+ * An ESLint plugin for [`zod-openapi`](https://npmx.dev/zod-openapi).
  *
  * Note that the plugin assumes that all Zod schemas in the matched files are meant to be used with
  * `zod-openapi`, so prefer scoping this config to your API schema files via `files`/`ignores`.

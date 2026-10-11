@@ -27,7 +27,7 @@ describe('testing-library: sub config `angular.noOnlyTests`', () => {
     });
 
     it('inherits `files` from the parent `testing-library/angular` eslint config', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         testingLibrary: {configAngular: {files: FILES}},
@@ -80,7 +80,7 @@ describe('testing-library: sub config `angular.noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `testing-library/angular/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configAngular: {configNoOnlyTests: {files: FILES}}},
@@ -104,7 +104,7 @@ describe('testing-library: sub config `angular.noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `testing-library/angular/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configAngular: {configNoOnlyTests: {ignores: IGNORES}}},

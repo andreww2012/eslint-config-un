@@ -8,8 +8,10 @@ import packageJson from './package.json' with {type: 'json'};
 const CACHE_DIRECTORY = path.join(import.meta.dirname, 'node_modules/.cache/npm-check-updates');
 fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
+/** @type {ReadonlySet<string>} */
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
 
+/** @type {ReadonlySet<string>} */
 const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Set([
   '@cspell/eslint-plugin',
   '@docusaurus/eslint-plugin',
@@ -32,14 +34,17 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   'eslint-plugin-turbo',
 ]);
 
+/** @type {ReadonlySet<string>} */
 const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set([
   'eslint-cssicorn',
   'eslint-mdx',
   'import-integrity-lint',
 ]);
 
+/** @type {ReadonlySet<string>} */
 const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-csstree']);
 
+/** @type {ReadonlySet<string>} */
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
 /**
@@ -47,10 +52,11 @@ const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
  * (it does not restrict the version we update *from*).
  * Use to skip a known-broken release until a fix ships.
  * Each entry should document why it is blocked
- * @type {Record<string, string>}
+ * @type {Readonly<Record<string, string>>}
  */
 const IGNORED_PACKAGE_RANGES_TO_UPDATE = {};
 
+/** @type {ReadonlySet<string>} */
 const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   '@types/node',
   'angular-eslint-plugin-template15',
@@ -59,42 +65,45 @@ const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   'eslint',
 ]);
 
+/** @type {ReadonlySet<string>} */
 const PACKAGES_ON_PRERELEASE_CHANNEL = new Set([
   '@effect/platform-node',
   'all-contributors-cli',
   'effect',
 ]);
 
-const PACKAGE_GROUPS = Object.entries({
-  'Package manager': {packages: ['pnpm'], nonEslint: true},
-  tsgo: {packages: ['@typescript/native-preview'], nonEslint: true},
-  '@commitlint': {packages: [], nonEslint: true},
-  '@effect': {packages: ['effect'], nonEslint: true},
-  '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin'], nonEslint: true},
+const PACKAGE_GROUPS = Object.freeze(
+  Object.entries({
+    'Package manager': {packages: ['pnpm'], nonEslint: true},
+    tsgo: {packages: ['@typescript/native-preview'], nonEslint: true},
+    '@commitlint': {packages: [], nonEslint: true},
+    '@effect': {packages: ['effect'], nonEslint: true},
+    '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin'], nonEslint: true},
 
-  '@typescript-eslint': {packages: ['typescript-eslint']},
-  '@angular-eslint': {packages: []},
-  '@eslint-react': {packages: ['eslint-plugin-react-debug']},
-  '@html-eslint': {packages: []},
-  '@jest': {packages: []},
-  '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
-  '@tsrx': {packages: []},
-  'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
-  'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
-  'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
-}).reduce((result, [groupName, {packages: packagesInGroup, ...groupMeta}]) => {
-  const groupInfo = {
-    groupName,
-    ...groupMeta,
-  };
+    '@typescript-eslint': {packages: ['typescript-eslint']},
+    '@angular-eslint': {packages: []},
+    '@eslint-react': {packages: ['eslint-plugin-react-debug']},
+    '@html-eslint': {packages: []},
+    '@jest': {packages: []},
+    '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
+    '@tsrx': {packages: []},
+    'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
+    'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
+    'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
+  }).reduce((result, [groupName, {packages: packagesInGroup, ...groupMeta}]) => {
+    const groupInfo = {
+      groupName,
+      ...groupMeta,
+    };
 
-  const packagesInCurrentGroup = Object.fromEntries([
-    [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupInfo],
-    ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupInfo]),
-  ]);
+    const packagesInCurrentGroup = Object.fromEntries([
+      [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupInfo],
+      ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupInfo]),
+    ]);
 
-  return Object.assign(result, packagesInCurrentGroup);
-}, {});
+    return Object.assign(result, packagesInCurrentGroup);
+  }, {}),
+);
 
 export default defineConfig({
   cache: true,

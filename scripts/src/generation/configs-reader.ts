@@ -15,7 +15,7 @@ const ROOT_DIR = pathe.join(import.meta.dirname, '../../..');
 const CONFIGS_DIR = pathe.join(ROOT_DIR, 'src/configs');
 const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIR, 'src/config-un/shared.ts');
 
-const NON_CONFIG_MODULES = new Set(['index.ts', 'shared.ts']);
+const NON_CONFIG_MODULES: ReadonlySet<string> = new Set(['index.ts', 'shared.ts']);
 
 const MISC_GROUP_BULLET_REGEXP = /^ {2}- `([^`]+)`$/;
 const JS_DOC_OPENING_REGEXP = /^\/\*\*/;
@@ -33,7 +33,10 @@ export const isCascadeAnchor = (entry: string) => arrayIncludes(CASCADE_ANCHORS,
  * Listing them together is what lets an anchor be placed without naming any Config: every anchor
  * sits on a phase boundary
  */
-export const CASCADE_LAYOUT = allUnionMembers<CascadeAnchor | ConfigPhase | 'default'>()([
+export const CASCADE_LAYOUT = allUnionMembers<
+  CascadeAnchor | ConfigPhase | 'default',
+  {readonly: true}
+>()([
   'globalSetup',
   'first',
   'default',
@@ -46,7 +49,7 @@ export const CASCADE_LAYOUT = allUnionMembers<CascadeAnchor | ConfigPhase | 'def
   'terminal',
 ]);
 
-export const CONFIG_PHASES = CASCADE_LAYOUT.filter(
+export const CONFIG_PHASES: readonly string[] = CASCADE_LAYOUT.filter(
   (entry): entry is ConfigPhase | 'default' => !isCascadeAnchor(entry),
 );
 

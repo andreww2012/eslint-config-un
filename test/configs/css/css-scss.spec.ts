@@ -89,7 +89,7 @@ describe('css: sub config `scss`', () => {
   // Linting `.scss` files at all is what exposes them to the configs that are not restricted to
   // any `files`, so this sub-config is what makes the implicit ignores of those configs matter
   describe('implicit ignores of other configs', () => {
-    const CONFIGS = {css: {configScss: true}, cssInJs: true};
+    const CONFIGS = {css: {configScss: true}, cssInJs: true} as const;
 
     it('adds `**/*.scss` to the ignores of configs applying to every file', async () => {
       const configResult = await computeEslintConfig(CONFIGS);
@@ -193,7 +193,7 @@ describe('css: sub config `scss`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `css/scss` eslint config', async () => {
-        const FILES = ['src/**/*.scss'];
+        const FILES = ['src/**/*.scss'] as const;
 
         const configResult = await computeEslintConfig({css: {configScss: {files: FILES}}});
 
@@ -201,7 +201,7 @@ describe('css: sub config `scss`', () => {
       });
 
       it('applies the SCSS syntax to the user-provided `files` only', async () => {
-        const FILES = ['src/**/*.scss'];
+        const FILES = ['src/**/*.scss'] as const;
 
         const configResult = await computeEslintConfig({css: {configScss: {files: FILES}}});
 
@@ -217,7 +217,7 @@ describe('css: sub config `scss`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `css/scss` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({css: {configScss: {ignores: IGNORES}}});
 
@@ -256,7 +256,7 @@ describe('css: sub config `scss`', () => {
       });
 
       it('uses user-provided `customSyntax` object directly', async () => {
-        const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+        const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
         const configResult = await computeEslintConfig({
           css: {configScss: {customSyntax: USER_CUSTOM_SYNTAX}},
@@ -289,7 +289,7 @@ describe('css: sub config `scss`', () => {
       });
 
       it('does not apply the `customSyntax` of the parent config', async () => {
-        const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+        const USER_CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
         const configResult = await computeEslintConfig({
           css: {configScss: true, customSyntax: USER_CUSTOM_SYNTAX},

@@ -1,8 +1,8 @@
 import {ERROR, OFF} from '../constants';
 import {
   type IgnoresAdditionalOptions,
-  TOML_DEFAULT_FILES,
   generateIgnoresWithAdditional,
+  TOML_DEFAULT_FILES,
 } from './shared';
 import {
   type ExtraPluginsType,

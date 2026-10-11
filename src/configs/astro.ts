@@ -50,7 +50,7 @@ export interface AstroEslintConfigOptions<
       >;
 }
 
-const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
+const DEFAULT_ASTRO_FILES: readonly string[] = [GLOB_ASTRO];
 
 export interface AstroConfigResult {
   optionsResolved: AstroEslintConfigOptions;

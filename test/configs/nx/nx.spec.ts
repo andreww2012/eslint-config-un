@@ -55,12 +55,14 @@ const MOCK_PROJECT_GRAPH = {
     'test-project': [],
     'project-b': [],
   },
-};
+} as const;
 
-const MOCK_PROJECT_ROOT_MAPPINGS = new Map([
-  ['.', 'test-project'],
-  [PROJECT_B_ROOT, 'project-b'],
-]);
+const MOCK_PROJECT_ROOT_MAPPINGS = Object.freeze(
+  new Map([
+    ['.', 'test-project'],
+    [PROJECT_B_ROOT, 'project-b'],
+  ]),
+);
 
 let originalProcessArgv1: string;
 
@@ -238,7 +240,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `nx` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({nx: {files: FILES}});
 
@@ -254,7 +256,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `nx` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({nx: {ignores: IGNORES}});
 

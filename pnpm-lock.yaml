@@ -184,10 +184,10 @@ overrides:
 patchedDependencies:
   '@eslint/compat': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
   eslint-plugin-file-progress@4.0.0: 5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05
-  eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
-  eslint-typegen: 4d8c32b04694af309caffb5c8be4c9c4db4fbd35ec57dc9959d7b5c57530e110
-  import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
-  npm-check-updates: 3da5b2c3d914ea3e6f5fd839fd1feccbc8d1e8028d587a6e89f7d2f36fca3f86
+  eslint-plugin-node-dependencies: 127b38ecf6e6f673e48fadb05d9ce4ac984dadd9086427e2d22b1958567b6b3f
+  eslint-typegen: ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b
+  import-meta-resolve: dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79
+  npm-check-updates: c72b785b832ded03605eb57b53ce368a43984848d0d37b850d59f2286d02205c
 
 importers:
 
@@ -318,7 +318,7 @@ importers:
         version: 4.1.5(eslint@10.12.0)
       eslint-plugin-node-dependencies:
         specifier: 2.2.0
-        version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.1.1)(eslint@10.12.0)
+        version: 2.2.0(patch_hash=127b38ecf6e6f673e48fadb05d9ce4ac984dadd9086427e2d22b1958567b6b3f)(@eslint/json@2.1.1)(eslint@10.12.0)
       eslint-plugin-package-json:
         specifier: 1.10.1
         version: 1.10.1(@eslint/json@2.1.1)(eslint@10.12.0)
@@ -817,13 +817,13 @@ importers:
         version: 2.0.0(@vue/compiler-sfc@3.5.43)(eslint@10.12.0)
       eslint-typegen:
         specifier: 2.3.1
-        version: 2.3.1(patch_hash=4d8c32b04694af309caffb5c8be4c9c4db4fbd35ec57dc9959d7b5c57530e110)(eslint@10.12.0)
+        version: 2.3.1(patch_hash=ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b)(eslint@10.12.0)
       import-integrity-lint:
         specifier: 1.3.0
         version: 1.3.0(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
       import-meta-resolve:
         specifier: 4.2.0
-        version: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
+        version: 4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79)
       is-immutable-type:
         specifier: 5.0.4
         version: 5.0.4(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)
@@ -856,7 +856,7 @@ importers:
         version: 3.0.2
       npm-check-updates:
         specifier: 23.1.0
-        version: 23.1.0(patch_hash=3da5b2c3d914ea3e6f5fd839fd1feccbc8d1e8028d587a6e89f7d2f36fca3f86)
+        version: 23.1.0(patch_hash=c72b785b832ded03605eb57b53ce368a43984848d0d37b850d59f2286d02205c)
       npm-package-arg:
         specifier: 14.0.0
         version: 14.0.0
@@ -14442,7 +14442,7 @@ snapshots:
       '@changesets/git': 4.0.1
       '@changesets/should-skip-package': 1.0.0
       '@changesets/types': 7.0.0
-      import-meta-resolve: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
+      import-meta-resolve: 4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79)
       jsonc-parser: 3.3.1
       semver: 7.8.5
 
@@ -14481,7 +14481,7 @@ snapshots:
       '@manypkg/get-packages': 3.1.0
       '@pnpm/deps.graph-sequencer': 1100.0.1
       cac: 7.0.1
-      import-meta-resolve: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
+      import-meta-resolve: 4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79)
       launch-editor: 2.14.2
       package-manager-detector: 1.9.0
       semver: 7.8.5
@@ -14910,7 +14910,7 @@ snapshots:
   '@cspell/dynamic-import@10.3.6':
     dependencies:
       '@cspell/url': 10.3.6
-      import-meta-resolve: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
+      import-meta-resolve: 4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79)
 
   '@cspell/eslint-plugin@10.3.6(eslint@10.12.0)':
     dependencies:
@@ -21260,7 +21260,7 @@ snapshots:
     dependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  eslint-plugin-node-dependencies@2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.1.1)(eslint@10.12.0):
+  eslint-plugin-node-dependencies@2.2.0(patch_hash=127b38ecf6e6f673e48fadb05d9ce4ac984dadd9086427e2d22b1958567b6b3f)(@eslint/json@2.1.1)(eslint@10.12.0):
     dependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
       eslint-json-compat-utils: 0.2.3(@eslint/json@2.1.1)(eslint@10.12.0)(jsonc-eslint-parser@3.3.0)
@@ -21836,7 +21836,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0)
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  eslint-typegen@2.3.1(patch_hash=4d8c32b04694af309caffb5c8be4c9c4db4fbd35ec57dc9959d7b5c57530e110)(eslint@10.12.0):
+  eslint-typegen@2.3.1(patch_hash=ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b)(eslint@10.12.0):
     dependencies:
       eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
       json-schema-to-typescript-lite: 15.0.0
@@ -22589,7 +22589,7 @@ snapshots:
       - supports-color
       - typescript
 
-  import-meta-resolve@4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba): {}
+  import-meta-resolve@4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79): {}
 
   import-without-cache@0.4.1: {}
 
@@ -23378,7 +23378,7 @@ snapshots:
   load-plugin@6.0.3:
     dependencies:
       '@npmcli/config': 8.3.4
-      import-meta-resolve: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
+      import-meta-resolve: 4.2.0(patch_hash=dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79)
     transitivePeerDependencies:
       - bluebird
 
@@ -24380,7 +24380,7 @@ snapshots:
     dependencies:
       npm-normalize-package-bin: 5.0.0
 
-  npm-check-updates@23.1.0(patch_hash=3da5b2c3d914ea3e6f5fd839fd1feccbc8d1e8028d587a6e89f7d2f36fca3f86): {}
+  npm-check-updates@23.1.0(patch_hash=c72b785b832ded03605eb57b53ce368a43984848d0d37b850d59f2286d02205c): {}
 
   npm-install-checks@6.3.0:
     dependencies:

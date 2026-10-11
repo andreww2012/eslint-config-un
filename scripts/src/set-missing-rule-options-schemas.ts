@@ -3,7 +3,9 @@ import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import type {PluginPrefix} from '../../src/loaders';
 import {cloneDeep, interopDefault, objectEntriesUnsafe} from '../../src/utils';
 
-const PLUGIN_OPTIONS_SCHEMAS: Partial<Record<PluginPrefix, Record<string, JSONSchema[]>>> = {
+const PLUGIN_OPTIONS_SCHEMAS: Readonly<
+  Partial<Record<PluginPrefix, Record<string, JSONSchema[]>>>
+> = {
   header: {
     header: [
       // option 0: comment type (`'block' | 'line'`) or path to a file containing the expected header

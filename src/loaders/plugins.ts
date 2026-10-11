@@ -629,7 +629,7 @@ export const pluginsLoaders = {
 } satisfies Record<string, ModuleLoader<EslintPlugin, string, boolean>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;
-export const LOADABLE_PLUGIN_PREFIXES_LIST = objectKeysUnsafe(pluginsLoaders);
+export const LOADABLE_PLUGIN_PREFIXES_LIST = Object.freeze(objectKeysUnsafe(pluginsLoaders));
 
 export type PluginPrefix = LoadablePluginPrefix | '';
 

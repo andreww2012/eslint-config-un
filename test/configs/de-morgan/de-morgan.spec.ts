@@ -118,7 +118,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `de-morgan` eslint config', async () => {
-      const FILES = ['**/*.ts'];
+      const FILES = ['**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({deMorgan: {files: FILES}});
 
@@ -134,7 +134,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `de-morgan` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({deMorgan: {ignores: IGNORES}});
 

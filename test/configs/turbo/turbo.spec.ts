@@ -118,7 +118,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `turbo` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({turbo: {files: FILES}});
 
@@ -134,7 +134,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `turbo` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({turbo: {ignores: IGNORES}});
 
@@ -166,7 +166,7 @@ describe('options', () => {
     });
 
     it('passes provided options to `turbo/no-undeclared-env-vars` rule when `undeclaredEnvVarsOptions` is set', async () => {
-      const OPTIONS = {allowList: ['^CI_']};
+      const OPTIONS = Object.freeze({allowList: ['^CI_']});
 
       const configResult = await computeEslintConfig({
         turbo: {undeclaredEnvVarsOptions: OPTIONS},

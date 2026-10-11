@@ -66,7 +66,7 @@ describe('pnpm: sub config `packageJson`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `pnpm/package.json` eslint config', async () => {
-        const FILES = ['custom-package.json'];
+        const FILES = ['custom-package.json'] as const;
 
         const configResult = await computeEslintConfig({
           pnpm: {configPackageJson: {files: FILES}},
@@ -86,7 +86,7 @@ describe('pnpm: sub config `packageJson`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `pnpm/package.json` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           pnpm: {configPackageJson: {ignores: IGNORES}},

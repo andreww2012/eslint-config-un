@@ -60,8 +60,8 @@ const SPACE_CODE_POINT = ' '.codePointAt(0);
 const TAB_CODE_POINT = '\t'.codePointAt(0);
 const BACKSLASH_CODE_POINT = '\\'.codePointAt(0);
 const ESCAPE_SEQUENCE_CODE_POINT_REGEXP = /^\\(?:x|u\{?)([\dA-Fa-f]+)\}?$/;
-const ESCAPED_LINE_BREAKS = [String.raw`\n`, String.raw`\r`];
-const LITERAL_AND_ESCAPED_LINE_BREAKS = ['\n', '\r', ...ESCAPED_LINE_BREAKS];
+const ESCAPED_LINE_BREAKS = [String.raw`\n`, String.raw`\r`] as const;
+const LITERAL_AND_ESCAPED_LINE_BREAKS = ['\n', '\r', ...ESCAPED_LINE_BREAKS] as const;
 
 const getCodePoint = (token: string) => {
   const escapedCodePoint = ESCAPE_SEQUENCE_CODE_POINT_REGEXP.exec(token)?.[1];
@@ -130,7 +130,7 @@ const isEscapeStartingAt = (text: string, index: number) => {
   return backslashCount % 2 === 1;
 };
 
-const isLineBreakBefore = (text: string, index: number, lineBreaks: string[]) =>
+const isLineBreakBefore = (text: string, index: number, lineBreaks: readonly string[]) =>
   lineBreaks.some(
     (lineBreak) =>
       text.endsWith(lineBreak, index) &&
@@ -188,7 +188,11 @@ const rule: Eslint.Rule.RuleModule = {
       node: Eslint.Rule.Node,
       text: string,
       textStartIndex: number,
-      {isFirst, isLast, lineBreaks}: {isFirst: boolean; isLast: boolean; lineBreaks: string[]},
+      {
+        isFirst,
+        isLast,
+        lineBreaks,
+      }: {isFirst: boolean; isLast: boolean; lineBreaks: readonly string[]},
     ) => {
       const runs = findSpaceRuns(text);
 

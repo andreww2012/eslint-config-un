@@ -125,7 +125,7 @@ describe('un options', () => {
     });
 
     it('uses user-provided `files` in `sonar` eslint config', async () => {
-      const FILES = ['src/**/*.{js,ts}'];
+      const FILES = ['src/**/*.{js,ts}'] as const;
 
       const configResult = await computeEslintConfig({sonar: {files: FILES}});
 
@@ -141,7 +141,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `sonar` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({sonar: {ignores: IGNORES}});
 
@@ -181,7 +181,10 @@ describe('options', () => {
     });
 
     it('sets sonar settings when `settings` is provided', async () => {
-      const SETTINGS = {testFileExtensions: ['.ts'], predefinedGlobals: ['myGlobal']};
+      const SETTINGS = Object.freeze({
+        testFileExtensions: ['.ts'],
+        predefinedGlobals: ['myGlobal'],
+      });
 
       const configResult = await computeEslintConfig('sonar', {
         un: {plugins: {sonar: {settings: SETTINGS}}},

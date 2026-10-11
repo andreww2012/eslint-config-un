@@ -62,7 +62,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `sort-tsconfig-keys` eslint config', async () => {
-        const FILES = ['tsconfig.json'];
+        const FILES = ['tsconfig.json'] as const;
 
         const configResult = await computeEslintConfig({
           ts: {configSortTsconfigKeys: {files: FILES}},
@@ -80,7 +80,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `sort-tsconfig-keys` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/node_modules/**'];
+        const IGNORES = ['**/node_modules/**'] as const;
 
         const configResult = await computeEslintConfig({
           ts: {configSortTsconfigKeys: {ignores: IGNORES}},
@@ -133,10 +133,10 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('uses custom top-level key order when set to array', async () => {
-        const ORDER = ['compilerOptions', 'extends', 'include', 'exclude'];
+        const ORDER = ['compilerOptions', 'extends', 'include', 'exclude'] as const;
 
         const configResult = await computeEslintConfig({
-          ts: {configSortTsconfigKeys: {orderTopLevel: ORDER}},
+          ts: {configSortTsconfigKeys: {orderTopLevel: [...ORDER]}},
         });
 
         expect(
@@ -197,10 +197,12 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('uses custom key order when `type` is `order-keys`', async () => {
-        const ORDER = ['strict', 'target', 'module', 'lib'];
+        const ORDER = ['strict', 'target', 'module', 'lib'] as const;
 
         const configResult = await computeEslintConfig({
-          ts: {configSortTsconfigKeys: {orderCompilerOptions: {type: 'order-keys', order: ORDER}}},
+          ts: {
+            configSortTsconfigKeys: {orderCompilerOptions: {type: 'order-keys', order: [...ORDER]}},
+          },
         });
 
         expect(
@@ -245,7 +247,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('uses custom order within a group when `orderWithinGroup` is array', async () => {
-        const TYPE_CHECKING_ORDER = ['strict', 'noImplicitAny'];
+        const TYPE_CHECKING_ORDER = ['strict', 'noImplicitAny'] as const;
 
         const configResult = await computeEslintConfig({
           ts: {
@@ -253,7 +255,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
               orderCompilerOptions: {
                 type: 'order-groups',
                 order: ['typeChecking'],
-                orderWithinGroup: {typeChecking: TYPE_CHECKING_ORDER},
+                orderWithinGroup: {typeChecking: [...TYPE_CHECKING_ORDER]},
               },
             },
           },
@@ -265,7 +267,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('uses default `antfu` order for groups not present in `orderWithinGroup`', async () => {
-        const TYPE_CHECKING_ORDER = ['strict', 'noImplicitAny'];
+        const TYPE_CHECKING_ORDER = ['strict', 'noImplicitAny'] as const;
 
         const configResult = await computeEslintConfig({
           ts: {
@@ -273,7 +275,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
               orderCompilerOptions: {
                 type: 'order-groups',
                 order: ['typeChecking', 'modules'],
-                orderWithinGroup: {typeChecking: TYPE_CHECKING_ORDER},
+                orderWithinGroup: {typeChecking: [...TYPE_CHECKING_ORDER]},
               },
             },
           },
@@ -351,10 +353,10 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('appends extra sort-keys configs when provided', async () => {
-        const EXTRA = [{pathPattern: '^paths$', order: {type: 'asc'}} as const];
+        const EXTRA = [{pathPattern: '^paths$', order: {type: 'asc'}} as const] as const;
 
         const configResult = await computeEslintConfig({
-          ts: {configSortTsconfigKeys: {extraSortKeysConfigs: EXTRA}},
+          ts: {configSortTsconfigKeys: {extraSortKeysConfigs: [...EXTRA]}},
         });
 
         const ruleEntryOptions = configResult.getRuleEntryOptions(

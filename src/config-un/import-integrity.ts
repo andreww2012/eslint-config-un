@@ -22,7 +22,7 @@ const IMPORT_RULES_TO_REPLACE = {
   'no-cycle': 'no-cycle',
   'no-named-as-default': 'no-named-as-default',
   'no-unresolved': 'no-unresolved-imports',
-} satisfies Partial<
+} as const satisfies Partial<
   Record<GetRuleNamesInPlugin<'import'>, GetRuleNamesInPlugin<'import-integrity'>>
 >;
 

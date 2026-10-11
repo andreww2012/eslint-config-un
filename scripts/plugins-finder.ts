@@ -218,11 +218,11 @@ const fetchPage = (browserPage: Page, page: number, eslintPluginsDbRef: Ref.Ref<
 
     yield* Ref.update(eslintPluginsDbRef, (db) => {
       const updatedDb = {...db};
-      for (const pluginName of newEslintPlugins) {
+      newEslintPlugins.forEach((pluginName) => {
         if (!(pluginName in updatedDb)) {
           updatedDb[pluginName] = null;
         }
-      }
+      });
       return updatedDb;
     });
 

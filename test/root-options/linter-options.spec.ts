@@ -24,7 +24,7 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates a respective config with only `files` and `value`', async () => {
-    const FILES = ['**/*.ts'];
+    const FILES = ['**/*.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -37,7 +37,7 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `false` for those paths', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -50,7 +50,7 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `false` for those paths', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -63,7 +63,7 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('keeps `ignores` as-is when `value` is specified', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -76,8 +76,8 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates a respective config with `files`, `ignores` and no `value`', async () => {
-    const FILES = ['**/*.ts'];
-    const IGNORES = ['**/*.test.ts'];
+    const FILES = ['**/*.ts'] as const;
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -90,8 +90,8 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates a respective config with `files`, `ignores` and `value` specified', async () => {
-    const FILES = ['**/*.ts'];
-    const IGNORES = ['**/*.test.ts'];
+    const FILES = ['**/*.ts'] as const;
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -104,16 +104,16 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
   });
 
   it('creates multiple respective configs when array form is used', async () => {
-    const FILES_1 = ['**/*.ts'];
-    const FILES_2 = ['**/*.js'];
+    const FILES_1 = ['**/*.ts'] as const;
+    const FILES_2 = ['**/*.js'] as const;
 
     const configResult = await computeEslintConfig(
       {},
       {
         un: {
           linterOptionsNoInlineConfig: [
-            {value: true, files: FILES_1},
-            {value: false, files: FILES_2},
+            {value: true, files: [...FILES_1]},
+            {value: false, files: [...FILES_2]},
           ],
         },
       },
@@ -191,7 +191,7 @@ describe.each([
   });
 
   it('creates a respective config with only `files` and `value`', async () => {
-    const FILES = ['**/*.ts'];
+    const FILES = ['**/*.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -204,7 +204,7 @@ describe.each([
   });
 
   it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `off` for those paths', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig({}, {un: {[unOptionName]: {ignores: IGNORES}}});
 
@@ -214,7 +214,7 @@ describe.each([
   });
 
   it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `off` for those paths', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -227,7 +227,7 @@ describe.each([
   });
 
   it('keeps `ignores` as-is when `value` is specified', async () => {
-    const IGNORES = ['**/*.test.ts'];
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -240,8 +240,8 @@ describe.each([
   });
 
   it('creates a respective config with `files`, `ignores` and no `value`', async () => {
-    const FILES = ['**/*.ts'];
-    const IGNORES = ['**/*.test.ts'];
+    const FILES = ['**/*.ts'] as const;
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -254,8 +254,8 @@ describe.each([
   });
 
   it('creates a respective config with `files`, `ignores` and `value` specified', async () => {
-    const FILES = ['**/*.ts'];
-    const IGNORES = ['**/*.test.ts'];
+    const FILES = ['**/*.ts'] as const;
+    const IGNORES = ['**/*.test.ts'] as const;
 
     const configResult = await computeEslintConfig(
       {},
@@ -280,16 +280,16 @@ describe.each([
   });
 
   it('creates multiple respective configs when array form is used', async () => {
-    const FILES_1 = ['**/*.ts'];
-    const FILES_2 = ['**/*.js'];
+    const FILES_1 = ['**/*.ts'] as const;
+    const FILES_2 = ['**/*.js'] as const;
 
     const configResult = await computeEslintConfig(
       {},
       {
         un: {
           [unOptionName]: [
-            {value: 2, files: FILES_1},
-            {value: 'error', files: FILES_2},
+            {value: 2, files: [...FILES_1]},
+            {value: 'error', files: [...FILES_2]},
           ],
         },
       },

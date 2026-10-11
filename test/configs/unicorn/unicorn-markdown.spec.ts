@@ -81,7 +81,7 @@ describe('unicorn: sub config `markdown`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `unicorn/markdown` eslint config', async () => {
-        const FILES = ['docs/**/*.md'];
+        const FILES = ['docs/**/*.md'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configMarkdown: {files: FILES}},
@@ -103,7 +103,7 @@ describe('unicorn: sub config `markdown`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `unicorn/markdown` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/vendor/**'];
+        const IGNORES = ['**/vendor/**'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configMarkdown: {ignores: IGNORES}},

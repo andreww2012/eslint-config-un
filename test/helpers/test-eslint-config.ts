@@ -8,22 +8,52 @@ import type {
   EslintConfigUnOptions,
 } from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
-import type {NonEmptyTuple, OmitStrict} from '../../src/types';
+import type {NonEmptyTuple, OmitStrict, Prettify} from '../../src/types';
 import {arrayify} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
+/**
+ * Lets specs pass read-only arrays (CONSTANT_CASE constants) as `files` and `ignores`, including
+ * those of Sub-configs and of the root `linterOptions*` options
+ */
+type AcceptReadonlyFilesAndIgnores<T> = T extends (...args: never[]) => unknown
+  ? T
+  : T extends readonly (infer Element)[]
+    ? T | readonly Element[]
+    : T extends object
+      ? {
+          [K in keyof T]: K extends
+            | 'files'
+            | 'ignores'
+            | `config${string}`
+            | `linterOptions${string}`
+            ? AcceptReadonlyFilesAndIgnores<T[K]>
+            : T[K];
+        }
+      : T;
+
+type ConfigsOption = {
+  [K in keyof (EslintConfigUnOptions['configs'] & {})]?: AcceptReadonlyFilesAndIgnores<
+    (EslintConfigUnOptions['configs'] & {})[K]
+  >;
+};
+
+type UnOption = AcceptReadonlyFilesAndIgnores<OmitStrict<EslintConfigUnOptions, 'configs'>>;
+
+// The generator never mutates `files` and `ignores`, so read-only arrays are fine at runtime
+const asEslintConfigUnOptions = (options: Prettify<UnOption & {configs: ConfigsOption}>) =>
+  options as EslintConfigUnOptions;
+
 export const computeEslintConfig = async (
-  configsOrSingleConfigName:
-    | EslintConfigUnOptions['configs']
-    | keyof (EslintConfigUnOptions['configs'] & {}),
+  configsOrSingleConfigName: ConfigsOption | keyof (EslintConfigUnOptions['configs'] & {}),
   options?: {
     /**
      * Do not set implicit default options
      * @default false
      */
     reset?: boolean;
-    un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
+    un?: UnOption;
     // `testMode` makes the generator return errors alongside the configs, which these helpers,
     // returning the configs alone, are not written for
     internalOptions?: OmitStrict<EslintConfigUnInternalOptions, 'testMode'>;
@@ -38,7 +68,7 @@ export const computeEslintConfig = async (
   const unOptions = options?.un;
 
   const config = await eslintConfig(
-    {
+    asEslintConfigUnOptions({
       ...(!options?.reset && {defaultConfigsStatus: 'all-disabled'}),
       // Decouple tests from `ESLINT_CONFIG_UN_OFFLINE_MODE` env var, which would
       // otherwise disable network-accessing rules, making rule-firing assertions fail
@@ -55,7 +85,7 @@ export const computeEslintConfig = async (
               [configsOrSingleConfigName]: true,
             }
           : configsOrSingleConfigName,
-    },
+    }),
     options?.internalOptions || {
       skipTypeInfoSplit: true,
     },
@@ -74,7 +104,9 @@ export const computeEslintConfig = async (
   const getConfigByUnPostfix = (eslintConfigNamePostfix: string) =>
     eslintConfigsByName[eslintConfigNamePostfix];
 
-  const getConfigsByUnPostfix = (predicateOrList: ((postfix: string) => boolean) | string[]) =>
+  const getConfigsByUnPostfix = (
+    predicateOrList: ((postfix: string) => boolean) | readonly string[],
+  ) =>
     config
       .map((config) => {
         if (!config.name?.startsWith(UN_ESLINT_CONFIGS_PREFIX)) {
@@ -141,15 +173,13 @@ export const computeEslintConfig = async (
 export const testEslintConfig = async <
   const FixturePaths extends string | readonly [string, ...string[]],
 >(
-  configsOrSingleConfigName:
-    | EslintConfigUnOptions['configs']
-    | keyof (EslintConfigUnOptions['configs'] & {}),
+  configsOrSingleConfigName: ConfigsOption | keyof (EslintConfigUnOptions['configs'] & {}),
   fixturePaths: FixturePaths,
   optionsOrFixtureSearchRelativeToPath?:
     | string
     | {
         searchFixturesRelativeToPath?: string;
-        un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
+        un?: UnOption;
         internalOptions?: OmitStrict<EslintConfigUnInternalOptions, 'testMode'>;
       },
 ): Promise<
@@ -163,7 +193,7 @@ export const testEslintConfig = async <
   const {eslintConfigInternal: eslintConfig} = await import('../../src/config-un/config');
 
   const config = await eslintConfig(
-    {
+    asEslintConfigUnOptions({
       defaultConfigsStatus: 'all-disabled',
       // See the comment in `computeEslintConfig` for why offline mode is forced off here.
       offlineMode: false,
@@ -176,7 +206,7 @@ export const testEslintConfig = async <
               [configsOrSingleConfigName]: true,
             }
           : configsOrSingleConfigName,
-    },
+    }),
     (typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
       optionsOrFixtureSearchRelativeToPath.internalOptions) || {
       skipTypeInfoSplit: true,

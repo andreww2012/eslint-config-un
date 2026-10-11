@@ -65,9 +65,11 @@ const checkIfModuleCorrectlyLoaded = async (
 
 const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
 
-const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Record<
-  NonNullable<UnConfigContext['meta']['usedPackageManager']>['name'],
-  {subcommand?: 'add' | 'i'; dev?: string; exact?: string}
+const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Readonly<
+  Record<
+    NonNullable<UnConfigContext['meta']['usedPackageManager']>['name'],
+    {subcommand?: 'add' | 'i'; dev?: string; exact?: string}
+  >
 > = {
   aube: {subcommand: 'add'},
   bun: {dev: '--dev', exact: '--exact'},
@@ -107,7 +109,7 @@ const PACKAGE_REQUESTER_RENDERERS = {
   option: (optionNames) =>
     `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} option${optionNames.length === 1 ? '' : 's'}`,
   package: (packageNames) => `a dependency of ${packageNames.map(stylePackageName).join(', ')}`,
-} satisfies Record<string, (names: string[]) => string>;
+} as const satisfies Record<string, (names: string[]) => string>;
 
 /**
  * Turns the requesters of a single package into the reason it is needed, such as

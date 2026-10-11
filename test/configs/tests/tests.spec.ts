@@ -147,7 +147,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tests` eslint config', async () => {
-      const FILES = ['spec/**/*.ts'];
+      const FILES = ['spec/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({tests: {files: FILES}});
 
@@ -163,7 +163,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tests` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({tests: {ignores: IGNORES}});
 

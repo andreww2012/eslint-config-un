@@ -1,3 +1,6 @@
+Use the original `json-schema-to-typescript` instead of its `json-schema-to-typescript-lite` fork for rule types generation.
+The original package does not export `normalizeIdentifier` from its entry point, so its internal `toSafeString` is used instead.
+
 diff --git a/dist/core.d.mts b/dist/core.d.mts
 index 909d28cd462acedbfc47b5e261ae8cc4fe553731..ceb1b6217bec1f7cb5b00b34a101c51519bcdc03 100644
 --- a/dist/core.d.mts

@@ -8,7 +8,7 @@ import {
   defineUnConfig,
 } from './index';
 
-const VUE_TEMPLATE_RULE_OPTIONS: GetRuleOptions<'i18next', 'no-literal-string'> = {
+const VUE_TEMPLATE_RULE_OPTIONS: Readonly<GetRuleOptions<'i18next', 'no-literal-string'>> = {
   framework: 'vue',
   mode: 'vue-template-only',
   // Matches the default `jsx-text-only` mode, which never reports attribute values

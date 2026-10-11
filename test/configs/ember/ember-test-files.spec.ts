@@ -66,7 +66,7 @@ describe('ember: sub config `testFiles`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ember/tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {files: FILES}},
@@ -86,7 +86,7 @@ describe('ember: sub config `testFiles`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ember/tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {ignores: IGNORES}},

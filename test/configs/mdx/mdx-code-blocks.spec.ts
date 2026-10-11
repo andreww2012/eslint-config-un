@@ -97,7 +97,7 @@ describe('mdx: sub config `codeBlocks`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `mdx/code-blocks-processor` eslint config', async () => {
-        const FILES = ['docs/**/*.mdx'];
+        const FILES = ['docs/**/*.mdx'] as const;
 
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {files: FILES}},
@@ -109,7 +109,7 @@ describe('mdx: sub config `codeBlocks`', () => {
       });
 
       it('does not apply user-provided `files` to `mdx/code-blocks` eslint config', async () => {
-        const FILES = ['docs/**/*.mdx'];
+        const FILES = ['docs/**/*.mdx'] as const;
 
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {files: FILES}},
@@ -129,7 +129,7 @@ describe('mdx: sub config `codeBlocks`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `mdx/code-blocks-processor` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['CHANGELOG.mdx'];
+        const IGNORES = ['CHANGELOG.mdx'] as const;
 
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {ignores: IGNORES}},

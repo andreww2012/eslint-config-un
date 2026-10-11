@@ -1,6 +1,6 @@
 import type {UnConfigs} from '../../src/configs';
 import type {Prettify} from '../../src/types';
-import {type MaybeArray, arrayify} from '../../src/utils';
+import {arrayify} from '../../src/utils';
 import {computeEslintConfig} from './test-eslint-config';
 
 type ConfigResultType = Awaited<ReturnType<typeof computeEslintConfig>>;
@@ -14,7 +14,7 @@ type ComputeOptions = Parameters<typeof computeEslintConfig>[1];
  */
 type ConfigMode = 'all-disabled' | 'default' | 'misc-enabled';
 
-const CONFIG_MODE_OPTIONS: Record<ConfigMode, ComputeOptions> = {
+const CONFIG_MODE_OPTIONS: Readonly<Record<ConfigMode, ComputeOptions>> = {
   'all-disabled': undefined,
   default: {reset: true},
   'misc-enabled': {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
@@ -36,7 +36,7 @@ const CONFIG_MODE_OPTIONS: Record<ConfigMode, ComputeOptions> = {
  */
 export const expectConfigState = async (
   configs: Parameters<typeof computeEslintConfig>[0],
-  postfixOrPostfixes: MaybeArray<string>,
+  postfixOrPostfixes: string | readonly string[],
   state: boolean | [configName: keyof UnConfigs, action: boolean],
   modeOrComputeOptions?: ConfigMode | Prettify<ComputeOptions & {mode?: ConfigMode}>,
 ): Promise<ConfigResultType> => {
@@ -57,13 +57,13 @@ export const expectConfigState = async (
 
   const isEnabled = typeof state === 'boolean' ? state : state[1];
 
-  for (const postfix of arrayify(postfixOrPostfixes)) {
+  arrayify(postfixOrPostfixes).forEach((postfix) => {
     if (isEnabled) {
       expect(configResult.getConfigByUnPostfix(postfix)).toBeDefined();
     } else {
       expect(configResult.getConfigByUnPostfix(postfix)).toBeUndefined();
     }
-  }
+  });
 
   if (typeof state === 'boolean') {
     expect(stderrSpy.mock.calls).toBeEmpty();

@@ -68,7 +68,7 @@ describe('import: sub config `allowDefaultExport`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `import/allow-default-export` eslint config', async () => {
-        const FILES = ['scripts/**/*.ts'];
+        const FILES = ['scripts/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           import: {configAllowDefaultExport: {files: FILES}},
@@ -90,7 +90,7 @@ describe('import: sub config `allowDefaultExport`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` and merges them with defaults', async () => {
-        const IGNORES = ['**/vite.config.*'];
+        const IGNORES = ['**/vite.config.*'] as const;
 
         const configResult = await computeEslintConfig({
           import: {configAllowDefaultExport: {ignores: IGNORES}},

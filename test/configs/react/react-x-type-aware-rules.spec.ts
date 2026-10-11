@@ -50,7 +50,7 @@ describe('react: sub config `reactX.typeAwareRules`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/x/rules-type-aware` eslint config', async () => {
-        const FILES = ['src/**/*.tsx'];
+        const FILES = ['src/**/*.tsx'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configReactX: {configTypeAwareRules: {files: FILES}}},
@@ -74,7 +74,7 @@ describe('react: sub config `reactX.typeAwareRules`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/x/rules-type-aware` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configReactX: {configTypeAwareRules: {ignores: IGNORES}}},

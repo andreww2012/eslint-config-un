@@ -136,7 +136,7 @@ export const definePluginMetadata = <const Prefix extends PluginPrefix>(
 /**
  * The order the traits are authored, rendered and reported in
  */
-export const RULE_TRAIT_ORDER = allUnionMembers<keyof RuleMetadata>()([
+export const RULE_TRAIT_ORDER = allUnionMembers<keyof RuleMetadata, {readonly: true}>()([
   'requiresTypeInfo',
   'requiresNetwork',
   'stylistic',
@@ -151,7 +151,8 @@ export const RULE_TRAIT_ORDER = allUnionMembers<keyof RuleMetadata>()([
  * The order the metadata keys are authored in, `typeInfo`'s own keys included
  */
 export const PLUGIN_METADATA_KEY_ORDER = allUnionMembers<
-  keyof PluginMetadata | keyof NonNullable<PluginMetadata['typeInfo']>
+  keyof PluginMetadata | keyof NonNullable<PluginMetadata['typeInfo']>,
+  {readonly: true}
 >()([
   'configs',
   'isMainPlugin',

@@ -46,7 +46,7 @@ export type CascadeAnchor = 'globalSetup' | 'parsing' | 'rootConfig' | 'userExtr
  * `extraConfigs` root option.
  * Each of them sits on a phase boundary of the cascade layout the artifact generator reads
  */
-export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor>()([
+export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor, {readonly: true}>()([
   'globalSetup',
   'parsing',
   'rootConfig',

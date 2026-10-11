@@ -2,7 +2,7 @@ const FIXTURES = {
   explicitAny: 'explicit-any.ts',
 } as const;
 
-const MAIN_TS_ESLINT_CONFIGS = ['ts/non-type-aware/rules', 'ts/type-aware/rules'];
+const MAIN_TS_ESLINT_CONFIGS = ['ts/non-type-aware/rules', 'ts/type-aware/rules'] as const;
 
 beforeEach(() => {
   addInstalledPackages({typescript: '5.0.0'});
@@ -125,7 +125,7 @@ describe('rules', () => {
 
 describe('un options', () => {
   describe('option: `files`', async () => {
-    const FILES = ['src/**/*.ts'];
+    const FILES = ['src/**/*.ts'] as const;
 
     const configResult = await computeEslintConfig({ts: {files: FILES}});
 
@@ -135,11 +135,11 @@ describe('un options', () => {
       );
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')?.files).toStrictEqual(FILES);
 
-      for (const configName of ['parsing/ts', 'parsing/ts/type-aware'] as const) {
+      (['parsing/ts', 'parsing/ts/type-aware'] as const).forEach((configName) => {
         expect(configResult.getConfigByUnPostfix(configName)?.files).toIncludeAllMembers([
           '**/*.?([cm])ts?(x)',
         ]);
-      }
+      });
     });
 
     it('disables both rules configs when set to empty array, but keeps the files parsed', async () => {
@@ -148,17 +148,17 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
 
-      for (const configName of ['parsing/ts', 'parsing/ts/type-aware'] as const) {
+      (['parsing/ts', 'parsing/ts/type-aware'] as const).forEach((configName) => {
         const config = configResult.getConfigByUnPostfix(configName);
 
         expect(config).toBeDefined();
         expect(config?.files).not.toStrictEqual([]);
-      }
+      });
     });
   });
 
   describe('option: `ignores`', async () => {
-    const IGNORES = ['**/fixtures/*.ts'];
+    const IGNORES = ['**/fixtures/*.ts'] as const;
 
     const configResult = await computeEslintConfig({ts: {ignores: IGNORES}});
 
@@ -348,10 +348,10 @@ describe('options', () => {
     });
 
     it('sets `allowDefaultProject` in parser options when provided', async () => {
-      const ALLOW_DEFAULT_PROJECT = ['*.js'];
+      const ALLOW_DEFAULT_PROJECT = ['*.js'] as const;
 
       const configResult = await computeEslintConfig({
-        ts: {allowDefaultProject: ALLOW_DEFAULT_PROJECT},
+        ts: {allowDefaultProject: [...ALLOW_DEFAULT_PROJECT]},
       });
 
       expect(

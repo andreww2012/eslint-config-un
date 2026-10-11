@@ -385,7 +385,7 @@ export interface UnicornEslintConfigOptions<
 }
 
 // ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
-const DEFAULT_ALLOWED_BOOLEAN_PREFIXES = {
+const DEFAULT_ALLOWED_BOOLEAN_PREFIXES: Readonly<Partial<Record<string, boolean>>> = {
   is: true,
   are: true,
   was: true,
@@ -408,10 +408,10 @@ const DEFAULT_ALLOWED_BOOLEAN_PREFIXES = {
   supports: true,
   contains: true,
   includes: true,
-} satisfies Partial<Record<string, boolean>>;
+};
 
 // ⚠️ Must be in sync with the plugin's rule source
-const DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES = new Set([
+const DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES: ReadonlySet<string> = new Set([
   'is',
   'are',
   'has',
@@ -444,7 +444,7 @@ const DEFAULT_BOOLEAN_VALUE_WRAPPERS = {
   mobx: {
     IObservableValue: 'get',
   },
-} satisfies Partial<Record<ConfigKey, Record<string, string>>>;
+} as const satisfies Partial<Record<ConfigKey, Record<string, string>>>;
 
 // ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
 const DEFAULT_CALLABLE_OR_CONSTRUCTABLE_PREFIXES = {
@@ -456,9 +456,10 @@ const DEFAULT_CALLABLE_OR_CONSTRUCTABLE_PREFIXES = {
   remove: true,
   destroy: true,
   create: true,
-} satisfies Partial<Record<string, boolean>>;
+} as const satisfies Partial<Record<string, boolean>>;
 
-const DEFAULT_NUMBER_PROPERTIES: UnicornEslintConfigOptions['numberProperties'] = 'namespace';
+const DEFAULT_NUMBER_PROPERTIES: Readonly<UnicornEslintConfigOptions['numberProperties']> =
+  'namespace';
 
 export default defineUnConfig<UnicornEslintConfigOptions>(
   'unicorn',

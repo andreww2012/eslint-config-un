@@ -65,7 +65,7 @@ describe('react: sub config `dom`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/dom` eslint config', async () => {
-        const FILES = ['src/**/*.jsx'];
+        const FILES = ['src/**/*.jsx'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configDom: {files: FILES}},
@@ -85,7 +85,7 @@ describe('react: sub config `dom`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/dom` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configDom: {ignores: IGNORES}},

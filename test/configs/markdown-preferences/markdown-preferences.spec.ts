@@ -123,7 +123,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `markdown-preferences` eslint config', async () => {
-      const FILES = ['docs/**/*.md'];
+      const FILES = ['docs/**/*.md'] as const;
 
       const configResult = await computeEslintConfig({markdownPreferences: {files: FILES}});
 
@@ -139,7 +139,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `markdown-preferences` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({markdownPreferences: {ignores: IGNORES}});
 
@@ -474,7 +474,7 @@ describe('options', () => {
 
   describe('option: `casingEnforcementIgnorePatterns`', () => {
     it('merges array-provided patterns with default ignore patterns for heading-casing and table-header-casing rules', async () => {
-      const PATTERNS = ['/myPatternApi/u' as const];
+      const PATTERNS = ['/myPatternApi/u' as const] as const;
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: true, casingEnforcementIgnorePatterns: [...PATTERNS]},
@@ -487,7 +487,7 @@ describe('options', () => {
         ),
       ).toMatchObject({
         severity: 2,
-        options: [{ignorePatterns: expect.arrayContaining(PATTERNS) as unknown}],
+        options: [{ignorePatterns: expect.arrayContaining([...PATTERNS]) as unknown}],
       });
 
       expect(
@@ -497,7 +497,7 @@ describe('options', () => {
         ),
       ).toMatchObject({
         severity: 2,
-        options: [{ignorePatterns: expect.arrayContaining(PATTERNS) as unknown}],
+        options: [{ignorePatterns: expect.arrayContaining([...PATTERNS]) as unknown}],
       });
     });
 
@@ -643,10 +643,10 @@ describe('options', () => {
     });
 
     it('directly passes options passed to `style` to `markdown-preferences/ordered-list-marker-style` rule', async () => {
-      const OPTIONS = {
+      const OPTIONS = Object.freeze({
         overrides: [{level: 2, parentMarker: 'bullet' as const}],
         prefer: 'n)' as const,
-      };
+      });
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {orderedLists: {style: OPTIONS}},
@@ -688,7 +688,7 @@ describe('options', () => {
 
   describe('option: `wordsToPreserveCasingOf`', () => {
     it('merges array-provided words with plugin default preserve-words list', async () => {
-      const WORDS = ['GitHub', 'ESLint'];
+      const WORDS = ['GitHub', 'ESLint'] as const;
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: true, wordsToPreserveCasingOf: [...WORDS]},
@@ -701,7 +701,7 @@ describe('options', () => {
         ),
       ).toMatchObject({
         severity: 2,
-        options: [{preserveWords: expect.arrayContaining(WORDS) as unknown}],
+        options: [{preserveWords: expect.arrayContaining([...WORDS]) as unknown}],
       });
       expect(
         configResult.getRuleEntryParsed(
@@ -710,7 +710,7 @@ describe('options', () => {
         ),
       ).toMatchObject({
         severity: 2,
-        options: [{preserveWords: expect.arrayContaining(WORDS) as unknown}],
+        options: [{preserveWords: expect.arrayContaining([...WORDS]) as unknown}],
       });
     });
 

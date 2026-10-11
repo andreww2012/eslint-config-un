@@ -30,7 +30,7 @@ const FIXTURE_JS_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', 'proje
 
 const WORKSPACE_PACKAGE_DIR = 'packages/app';
 
-const FIXTURE_EXAMPLE_LINES = (
+const FIXTURE_EXAMPLE_LINES: readonly string[] = (
   await fs.readFile(path.join(FIXTURE_PROJECT_DIR, 'src', 'example.ts'), 'utf8')
 ).split('\n');
 
@@ -58,7 +58,7 @@ const FIXTURE_DEPENDENCIES = {
   prettier: packageJson.devDependencies.prettier,
   // Our own `typescript` dev dependency is an npm alias, so only its version is reusable
   typescript: packageJson.devDependencies.typescript.split('@').at(-1),
-};
+} as const;
 
 // Scripts receive the config of the package manager running them through these variables, which
 // would override the fixture's `.npmrc`
@@ -68,7 +68,7 @@ const CHILD_PROCESS_ENV = {
       .filter((name) => NPM_ENV_VARIABLE_REGEXP.test(name))
       .map((name) => [name, undefined]),
   ),
-};
+} as const;
 
 const getPnpmFiles = (extraSettings: string[] = []) => ({
   'pnpm-workspace.yaml': [
@@ -96,7 +96,7 @@ const getYarnBerryFiles = (registryUrl: string, nodeLinker: 'node-modules' | 'pn
 });
 
 // Release age gates are turned off, as our dependencies are often updated the day they're published
-const PACKAGE_MANAGERS: {
+const PACKAGE_MANAGERS: readonly {
   id: string;
   // Installed on first use, so local runs get the same version as CI
   npmPackage?: `${string}@${string}`;

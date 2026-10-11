@@ -3,7 +3,6 @@ import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
 import {
-  type MaybeArray,
   Mutex,
   arrayify,
   interopDefault,
@@ -16,7 +15,10 @@ import {
 export type {Processor as EslintProcessor} from '@eslint/core';
 export type EslintParser = Eslint.Linter.Parser;
 
-export const MODULE_NOT_FOUND_ERROR_CODES = ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'];
+export const MODULE_NOT_FOUND_ERROR_CODES: readonly string[] = [
+  'ERR_MODULE_NOT_FOUND',
+  'MODULE_NOT_FOUND',
+];
 
 export type ModuleLoaderContext = Pick<UnConfigContext, 'rootOptions' | 'missingPackages'>;
 
@@ -45,7 +47,7 @@ function createModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
   module: () => MaybePromise<T | {default: T}>,
-  ignoredErrors?: MaybeArray<string>,
+  ignoredErrors?: string | readonly string[],
 ): ModuleLoader<T, N> {
   const result: ModuleLoader<T, N> = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
@@ -130,7 +132,7 @@ type ResolvesToNull<N extends string, IgnoredErrors> = IgnoredErrors extends und
 type ModuleLoaderFactory<EraseModuleType extends boolean> = <
   T,
   N extends string,
-  IgnoredErrors extends MaybeArray<string> | undefined = undefined,
+  IgnoredErrors extends string | readonly string[] | undefined = undefined,
 >(
   property: string,
   packageName: N,

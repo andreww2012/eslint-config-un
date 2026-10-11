@@ -4,7 +4,7 @@ import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 
-const TYPEOF_POSSIBLE_RETURN_VALUES_SET = new Set([
+const TYPEOF_POSSIBLE_RETURN_VALUES_SET: ReadonlySet<string> = new Set([
   'string',
   'number',
   'boolean',
@@ -15,14 +15,14 @@ const TYPEOF_POSSIBLE_RETURN_VALUES_SET = new Set([
   'undefined',
 ]);
 
-const COMPARISON_OPERATORS_SET = new Set<string>([
+const COMPARISON_OPERATORS_SET: ReadonlySet<string> = new Set([
   '==',
   '===',
   '!=',
   '!==',
 ] satisfies ESTree.BinaryOperator[]);
 
-const DEFAULT_ALLOWED_LITERAL_VALUES_SET = new Set<string>(['undefined']);
+const DEFAULT_ALLOWED_LITERAL_VALUES_SET: ReadonlySet<string> = new Set(['undefined']);
 
 /**
  * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are erased

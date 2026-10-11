@@ -19,9 +19,11 @@ import {
 } from '../utils';
 import type {PackageRequester, UnConfigContext} from './shared';
 
-const LOCKFILES_PER_PACKAGE_MANAGER = Object.groupBy(
-  Object.entries(packageManagerLockfilesReversed),
-  ([, packageManager]) => packageManager,
+const LOCKFILES_PER_PACKAGE_MANAGER = Object.freeze(
+  Object.groupBy(
+    Object.entries(packageManagerLockfilesReversed),
+    ([, packageManager]) => packageManager,
+  ),
 );
 
 // Source: https://github.com/eslint/eslint/blob/3822e1b768bb4a64b72b73b5657737a6ee5c8afe/lib/config/config-loader.js#L43
@@ -32,7 +34,7 @@ const ESLINT_FLAT_CONFIG_FILE_NAMES = [
   'eslint.config.ts',
   'eslint.config.mts',
   'eslint.config.cts',
-];
+] as const;
 
 // TODO more logging
 const computeCacheKey = async (context: UnConfigContext) => {
@@ -101,11 +103,11 @@ const computeCacheKey = async (context: UnConfigContext) => {
   };
 };
 
-const CACHE_KEYS_PER_CONTEXT = new WeakMap<UnConfigContext, ReturnType<typeof computeCacheKey>>();
+const cacheKeysPerContext = new WeakMap<UnConfigContext, ReturnType<typeof computeCacheKey>>();
 
 const getCacheKey = (context: UnConfigContext) => {
-  const cacheKey = CACHE_KEYS_PER_CONTEXT.get(context) ?? computeCacheKey(context);
-  CACHE_KEYS_PER_CONTEXT.set(context, cacheKey);
+  const cacheKey = cacheKeysPerContext.get(context) || computeCacheKey(context);
+  cacheKeysPerContext.set(context, cacheKey);
   return cacheKey;
 };
 

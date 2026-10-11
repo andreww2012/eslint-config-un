@@ -19,7 +19,7 @@ export interface TsrxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tsrx'> {}
 
-const DEFAULT_TSRX_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
+const DEFAULT_TSRX_FILES: readonly string[] = [GLOB_TSRX, GLOB_RIPPLE];
 
 export default defineUnConfig<TsrxEslintConfigOptions>('tsrx', {
   enabledBy: {packages: ['@tsrx/core', 'ripple']},

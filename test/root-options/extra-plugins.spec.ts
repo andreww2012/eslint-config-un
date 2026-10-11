@@ -2,9 +2,9 @@ import {eslintConfigInternal} from '../../src/config-un/config';
 import type {EslintConfigUnOptions, ExtraPluginsType} from '../../src/config-un/shared';
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
 
-const EXTRA_PLUGIN = {
+const EXTRA_PLUGIN: Readonly<EslintPlugin> = {
   rules: {'my-rule': {meta: {type: 'problem', schema: []}, create: () => ({})}},
-} satisfies EslintPlugin;
+};
 
 /**
  * The shared `computeEslintConfig` helper cannot be used here: it deliberately does not take the

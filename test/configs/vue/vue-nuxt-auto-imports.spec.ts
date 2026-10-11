@@ -719,10 +719,12 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // Our own location may be in a store shared between projects, where it reaches another project's Nuxt or none at all
     it("uses the project's own Nuxt", async () => {
-      const {resolveNuxtAutoImports} = await importActualNuxt();
-      const projectDir = await createNuxtProject(
-        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, _layers: []});\n",
-      );
+      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+        importActualNuxt(),
+        createNuxtProject(
+          "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, _layers: []});\n",
+        ),
+      ]);
 
       const result = await resolveNuxtAutoImports({cwd: projectDir});
 
@@ -733,10 +735,12 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // What `loadNuxtConfig` makes up when it finds no layer at all
     it('assumes the default directories of a layer its config says nothing about', async () => {
-      const {resolveNuxtAutoImports} = await importActualNuxt();
-      const projectDir = await createNuxtProject(
-        "export const loadNuxtConfig = async ({cwd}) => ({buildDir: '.nuxt', rootDir: cwd, srcDir: cwd, alias: {}, _layers: [{cwd, config: {rootDir: cwd, srcDir: cwd}}]});\nexport const resolveAlias = (path) => path;\n",
-      );
+      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+        importActualNuxt(),
+        createNuxtProject(
+          "export const loadNuxtConfig = async ({cwd}) => ({buildDir: '.nuxt', rootDir: cwd, srcDir: cwd, alias: {}, _layers: [{cwd, config: {rootDir: cwd, srcDir: cwd}}]});\nexport const resolveAlias = (path) => path;\n",
+        ),
+      ]);
 
       const result = await resolveNuxtAutoImports({cwd: projectDir});
 
@@ -747,8 +751,10 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // Like under Yarn PnP, where there is no `node_modules` to resolve from
     it('falls back to the Nuxt reachable from its own location when the project has none to resolve', async () => {
-      const {resolveNuxtAutoImports} = await importActualNuxt();
-      const projectDir = await createNuxtProject();
+      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+        importActualNuxt(),
+        createNuxtProject(),
+      ]);
 
       const result = await resolveNuxtAutoImports({cwd: projectDir});
 
@@ -766,8 +772,10 @@ describe('vue: `resolveNuxtAutoImports`', () => {
         ...(await importOriginal()),
         up: () => SHARED_STORE_PACKAGE_JSON_PATH,
       }));
-      const {resolveNuxtAutoImports} = await importActualNuxt();
-      const projectDir = await createNuxtProject();
+      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+        importActualNuxt(),
+        createNuxtProject(),
+      ]);
 
       await expect(resolveNuxtAutoImports({cwd: projectDir})).resolves.toMatchObject({
         error: "Cannot find package 'nuxt'",

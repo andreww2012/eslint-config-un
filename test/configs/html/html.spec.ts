@@ -116,7 +116,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `html` eslint config', async () => {
-      const FILES = ['src/**/*.html'];
+      const FILES = ['src/**/*.html'] as const;
 
       const configResult = await computeEslintConfig({html: {files: FILES}});
 
@@ -132,7 +132,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `html` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({html: {ignores: IGNORES}});
 
@@ -185,7 +185,7 @@ describe('options', () => {
     });
 
     it('sets parserOptions when provided', async () => {
-      const PARSER_OPTIONS = {frontmatter: true};
+      const PARSER_OPTIONS = {frontmatter: true} as const;
 
       const configResult = await computeEslintConfig({
         html: {parserOptions: PARSER_OPTIONS},
@@ -197,14 +197,19 @@ describe('options', () => {
   });
 
   describe('option: `disallowedHtmlTags`', () => {
-    const SOME_DEFAULT_DISALLOWED_TAG_PATTERNS = ['^center$', '^font$', '^marquee$', '^param$'];
+    const SOME_DEFAULT_DISALLOWED_TAG_PATTERNS = [
+      '^center$',
+      '^font$',
+      '^marquee$',
+      '^param$',
+    ] as const;
 
     it('restricts default invalid html tags except `image` in `no-restricted-tags` by default', async () => {
       const configResult = await computeEslintConfig('html');
       const ruleOptions = configResult.getRuleEntryOptions('html', 'html/no-restricted-tags');
 
       expect(ruleOptions).toMatchObject([
-        {tagPatterns: expect.arrayContaining(SOME_DEFAULT_DISALLOWED_TAG_PATTERNS) as unknown},
+        {tagPatterns: expect.arrayContaining([...SOME_DEFAULT_DISALLOWED_TAG_PATTERNS]) as unknown},
       ]);
       expect(ruleOptions).toMatchObject([
         {tagPatterns: expect.not.arrayContaining(['^image$']) as unknown},

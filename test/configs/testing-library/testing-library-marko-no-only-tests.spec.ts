@@ -27,7 +27,7 @@ describe('testing-library: sub config `marko.noOnlyTests`', () => {
     });
 
     it('inherits `files` from the parent `testing-library/marko` eslint config', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         testingLibrary: {configMarko: {files: FILES}},
@@ -76,7 +76,7 @@ describe('testing-library: sub config `marko.noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `testing-library/marko/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configMarko: {configNoOnlyTests: {files: FILES}}},
@@ -100,7 +100,7 @@ describe('testing-library: sub config `marko.noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `testing-library/marko/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configMarko: {configNoOnlyTests: {ignores: IGNORES}}},

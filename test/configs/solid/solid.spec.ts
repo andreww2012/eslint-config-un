@@ -200,7 +200,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `solid` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
+      const FILES = ['src/**/*.tsx'] as const;
 
       const configResult = await computeEslintConfig({solid: {files: FILES}});
 
@@ -216,7 +216,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `solid` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({solid: {ignores: IGNORES}});
 
@@ -360,10 +360,10 @@ describe('options', () => {
     });
 
     it('passes user-provided `moduleSources` to the plugin', async () => {
-      const MODULE_SOURCES = ['my-custom-renderer', '@my-org/solid-wrapper'];
+      const MODULE_SOURCES = ['my-custom-renderer', '@my-org/solid-wrapper'] as const;
 
       const configResult = await computeEslintConfig('solid', {
-        un: {plugins: {solid: {settings: {moduleSources: MODULE_SOURCES}}}},
+        un: {plugins: {solid: {settings: {moduleSources: [...MODULE_SOURCES]}}}},
       });
 
       expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({
@@ -384,10 +384,10 @@ describe('options', () => {
     it('sets `settings.solid` when only `moduleSources` is set and `solid-js` version is unknown', async () => {
       setInstalledPackages({});
 
-      const MODULE_SOURCES = ['my-custom-renderer'];
+      const MODULE_SOURCES = ['my-custom-renderer'] as const;
 
       const configResult = await computeEslintConfig('solid', {
-        un: {plugins: {solid: {settings: {moduleSources: MODULE_SOURCES}}}},
+        un: {plugins: {solid: {settings: {moduleSources: [...MODULE_SOURCES]}}}},
       });
 
       expect(configResult.getConfigByUnPostfix('solid')?.settings).toStrictEqual({

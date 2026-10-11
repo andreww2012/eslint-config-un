@@ -307,9 +307,9 @@ describe('fetchPackageInfo', () => {
 describe('getKeysOfTruthyValues', () => {
   describe('array input', () => {
     it('returns the array as-is', () => {
-      const ARRAY = ['a', 'b'];
+      const array = ['a', 'b'];
 
-      expect(getKeysOfTruthyValues(ARRAY)).toBe(ARRAY);
+      expect(getKeysOfTruthyValues(array)).toBe(array);
     });
 
     it('returns the array as-is in `nonEmptyArray` mode when it is not empty', () => {

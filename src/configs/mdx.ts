@@ -58,8 +58,8 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
     UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
     Pick<MarkdownEslintConfigOptions, 'configCodeBlocks'> {}
 
-const DEFAULT_FILES = [GLOB_MDX];
-const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
+const DEFAULT_FILES = [GLOB_MDX] as const;
+const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS] as const;
 
 export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   context,

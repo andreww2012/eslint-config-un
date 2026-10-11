@@ -81,7 +81,7 @@ describe('ts: sub config `typeAware`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ts/type-aware/rules` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({ts: {configTypeAware: {files: FILES}}});
 
@@ -100,7 +100,7 @@ describe('ts: sub config `typeAware`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ts/type-aware/rules` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({ts: {configTypeAware: {ignores: IGNORES}}});
 

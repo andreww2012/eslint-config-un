@@ -106,7 +106,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `import-integrity` eslint config', async () => {
-      const FILES = ['src/**/*.{js,ts}'];
+      const FILES = ['src/**/*.{js,ts}'] as const;
 
       const configResult = await computeEslintConfig({importIntegrity: {files: FILES}});
 
@@ -122,7 +122,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `import-integrity` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({importIntegrity: {ignores: IGNORES}});
 
@@ -194,7 +194,7 @@ describe('options', () => {
     });
 
     it('merges user-provided `settings` into `import-integrity` settings (e.g. overrides `packageRootDir`)', async () => {
-      const SETTINGS = {packageRootDir: 'custom-root', mode: 'fix' as const};
+      const SETTINGS = {packageRootDir: 'custom-root', mode: 'fix' as const} as const;
 
       const configResult = await computeEslintConfig('importIntegrity', {
         un: {plugins: {'import-integrity': {settings: SETTINGS}}},
@@ -219,9 +219,9 @@ describe('options', () => {
     });
 
     it('enables `import-integrity/no-restricted-imports` rule when `restrictImports` is provided', async () => {
-      const OPTIONS = {
+      const OPTIONS = Object.freeze({
         rules: [{type: 'built-in' as const, moduleSpecifier: 'fs', denied: ['*']}],
-      };
+      });
       const configResult = await computeEslintConfig({
         importIntegrity: {restrictImports: OPTIONS},
       });

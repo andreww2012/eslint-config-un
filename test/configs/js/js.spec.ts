@@ -129,7 +129,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `js` and `js/stylistic_spaced-comment` eslint configs', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({js: {files: FILES}});
 
@@ -147,7 +147,7 @@ describe('un options', () => {
   });
 
   it('does not apply user-provided `files` and `ignores` to `js/disable-in-ts-files` eslint config', async () => {
-    const IGNORES = ['**/fixtures/**'];
+    const IGNORES = ['**/fixtures/**'] as const;
 
     const configResult = await computeEslintConfig({
       js: {files: ['src/**/*.js'], ignores: IGNORES},
@@ -161,7 +161,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `js` and `js/stylistic_spaced-comment` eslint configs and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({js: {ignores: IGNORES}});
 

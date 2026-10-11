@@ -11,8 +11,8 @@ import {
   toKebabCase,
 } from '../utils';
 
-const NUXT_CONFIG_FILE_NAMES = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map(
-  (extension) => `nuxt.config.${extension}`,
+const NUXT_CONFIG_FILE_NAMES = Object.freeze(
+  ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map((extension) => `nuxt.config.${extension}`),
 );
 
 /** Every auto-import is emitted as its own `const <name>: ...` line inside a `declare global` block */
@@ -256,7 +256,7 @@ export const resolveNuxtAutoImports = async ({
   buildDir: buildDirOption,
 }: {cwd?: string; buildDir?: string} = {}): Promise<NuxtAutoImportsResult | null> => {
   // Yes, bounded to `cwd` because a potential config above it belongs to a different project
-  const hasNuxtConfig = findUp.any(NUXT_CONFIG_FILE_NAMES, {cwd, last: cwd}) != null;
+  const hasNuxtConfig = findUp.any([...NUXT_CONFIG_FILE_NAMES], {cwd, last: cwd}) != null;
   if (!hasNuxtConfig && !buildDirOption) {
     return null;
   }

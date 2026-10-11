@@ -95,7 +95,7 @@ describe('lockfile: sub config `package.json`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `lockfile/package.json` eslint config', async () => {
-        const FILES = ['**/foo/package.json'];
+        const FILES = ['**/foo/package.json'] as const;
 
         const configResult = await computeEslintConfig({
           lockfile: {configPackageJson: {files: FILES}},
@@ -117,7 +117,7 @@ describe('lockfile: sub config `package.json`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `lockfile/package.json` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           lockfile: {configPackageJson: {ignores: IGNORES}},
@@ -167,10 +167,10 @@ describe('lockfile: sub config `package.json`', () => {
       });
 
       it('uses the specified package managers for `lockfile/tracked` when set to an array', async () => {
-        const PACKAGE_MANAGERS = ['npm' as const, 'yarn' as const];
+        const PACKAGE_MANAGERS = ['npm' as const, 'yarn' as const] as const;
 
         const configResult = await computeEslintConfig({
-          lockfile: {packageManager: PACKAGE_MANAGERS},
+          lockfile: {packageManager: [...PACKAGE_MANAGERS]},
         });
 
         expect(

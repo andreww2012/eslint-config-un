@@ -22,7 +22,7 @@ describe('jest: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `jest` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         jest: {files: FILES, configNoOnlyTests: true},
@@ -64,7 +64,7 @@ describe('jest: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configNoOnlyTests: {files: FILES}},
@@ -84,7 +84,7 @@ describe('jest: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configNoOnlyTests: {ignores: IGNORES}},

@@ -73,10 +73,10 @@ const {
   return {
     installedPackages,
     setInstalledPackages(packages: Record<string, string>): void {
-      for (const key of Object.keys(installedPackages)) {
+      Object.keys(installedPackages).forEach((key) => {
         // eslint-disable-next-line ts/no-dynamic-delete
         delete installedPackages[key];
-      }
+      });
       Object.assign(installedPackages, packages);
     },
     addInstalledPackages(packages: Record<string, string>): void {

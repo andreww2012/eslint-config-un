@@ -19,7 +19,7 @@ export interface CivetEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'civet'> {}
 
-const RULES_REPORTING_GENERATED_CODE = [
+const RULES_REPORTING_GENERATED_CODE: readonly UnAllRuleNames[] = [
   // Implicit returns
   'array-callback-return',
   'no-else-return',
@@ -123,7 +123,7 @@ const RULES_REPORTING_GENERATED_CODE = [
   'stylistic/space-in-parens',
   'stylistic/space-infix-ops',
   'stylistic/type-annotation-spacing',
-] satisfies UnAllRuleNames[];
+];
 
 export default defineUnConfig<CivetEslintConfigOptions>('civet', {
   enabledBy: {package: '@danielx/civet'},

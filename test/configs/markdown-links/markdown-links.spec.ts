@@ -131,7 +131,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `markdown-links` eslint config', async () => {
-      const FILES = ['docs/**/*.md'];
+      const FILES = ['docs/**/*.md'] as const;
 
       const configResult = await computeEslintConfig({markdownLinks: {files: FILES}});
 
@@ -147,7 +147,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `markdown-links` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({markdownLinks: {ignores: IGNORES}});
 

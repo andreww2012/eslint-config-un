@@ -318,11 +318,19 @@ const {write: shouldWriteChangesets} = cli({
   },
 }).flags;
 
-const updatedDependenciesInfo = await main();
-const unreleasedChangesets = await readUnreleasedChangesets();
+const [updatedDependenciesInfo, unreleasedChangesets] = await Promise.all([
+  main(),
+  readUnreleasedChangesets(),
+]);
 
-const EXTENSIONS_TO_SKIP_IN_DIFF = new Set(['map', 'ts', 'cts', 'mts', 'tsbuildinfo']);
-const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, string[]> = {
+const EXTENSIONS_TO_SKIP_IN_DIFF: ReadonlySet<string> = new Set([
+  'map',
+  'ts',
+  'cts',
+  'mts',
+  'tsbuildinfo',
+]);
+const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<Record<string, string[]>> = {
   // For packages distributed as ESM+CJS (for example: eslint-plugin-zod-x@2.0.0)
   cjs: ['js', 'mjs'],
   cts: ['ts', 'mts'],
@@ -398,7 +406,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   let isDiffForLastFileSkipped = false;
   let lastFileExtension: string | undefined;
-  for (const line of lines) {
+  lines.forEach((line) => {
     let isDiffHeader = line.startsWith('--- ') || line.startsWith('+++ ');
     const formattedLine = line.startsWith('@')
       ? styleText('cyan', line)
@@ -444,7 +452,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     if (isDiffForLastFileSkipped && line.startsWith('+++ ')) {
       console.log(`  ${styleText('yellow', 'Diff for this file is not shown')}`);
     }
-  }
+  });
 
   const packageMeta = PACKAGES_META[dependency];
 
@@ -522,7 +530,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
         ),
       ),
     );
-    for (const {id, summary} of changesetCandidates) {
+    changesetCandidates.forEach(({id, summary}) => {
       console.log(`  ${styleText('yellow', `.changeset/${id}.md`)}`);
       console.log(
         summary
@@ -530,7 +538,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
           .map((line) => `    ${line}`)
           .join('\n'),
       );
-    }
+    });
   } else if (shouldWriteChangesets) {
     const changesetSummary = `${changelogEntry}\n${changelogEntryOptions}`;
     const changesetId = await writeChangeset(

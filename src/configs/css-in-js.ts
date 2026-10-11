@@ -124,7 +124,7 @@ export default defineUnConfig<CssInJsEslintConfigOptions>(
       'css-in-js',
       {
         settings: {
-          css: pluginSettings ? {target: pluginSettings} : undefined,
+          ...(pluginSettings && {css: {target: pluginSettings}}),
         },
       },
     ])

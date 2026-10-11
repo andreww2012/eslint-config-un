@@ -20,7 +20,7 @@ type SchemaCompletenessCheck = keyof (GetRuleOptions<
   'no-incomplete-meta-schema'
 >['checks'] & {});
 
-const SCHEMA_COMPLETENESS_CHECKS = allUnionMembers<SchemaCompletenessCheck>()([
+const SCHEMA_COMPLETENESS_CHECKS = allUnionMembers<SchemaCompletenessCheck, {readonly: true}>()([
   'boundedTuples',
   'explicitAdditionalProperties',
   'explicitItems',
@@ -28,9 +28,11 @@ const SCHEMA_COMPLETENESS_CHECKS = allUnionMembers<SchemaCompletenessCheck>()([
 ]);
 
 // ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
-const DEFAULT_SCHEMA_COMPLETENESS_CHECKS = {
+const DEFAULT_SCHEMA_COMPLETENESS_CHECKS: Readonly<
+  Partial<Record<SchemaCompletenessCheck, boolean>>
+> = {
   explicitAdditionalProperties: true,
-} satisfies Partial<Record<SchemaCompletenessCheck, boolean>>;
+};
 
 /**
  * [`eslint-plugin-eslint-plugin`](https://npmx.dev/eslint-plugin-eslint-plugin) plugin

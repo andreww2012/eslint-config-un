@@ -2,7 +2,7 @@ import type {EslintPlugin} from '../../src/eslint/eslint-types';
 
 const SETTINGS_CONFIG_NAME = 'global-setup/import-integrity';
 
-const REPLACED_RULE_NAMES = ['no-cycle', 'no-named-as-default', 'no-unresolved'];
+const REPLACED_RULE_NAMES = ['no-cycle', 'no-named-as-default', 'no-unresolved'] as const;
 
 type ConfigResult = Awaited<ReturnType<typeof computeEslintConfig>>;
 
@@ -44,10 +44,10 @@ describe('option: `useImportIntegrity`', () => {
   });
 
   it('keeps the schema of a replacing rule that declares one', async () => {
-    const SCHEMA = [{type: 'object', properties: {maxDepth: {type: 'number'}}}];
-    const PLUGIN_WITH_SCHEMA = {
+    const SCHEMA = [{type: 'object', properties: {maxDepth: {type: 'number'}}}] as const;
+    const PLUGIN_WITH_SCHEMA: Readonly<EslintPlugin> = {
       rules: {'no-cycle': {meta: {type: 'problem', schema: SCHEMA}, create: () => ({})}},
-    } satisfies EslintPlugin;
+    };
 
     const configResult = await computeEslintConfig('import', {
       un: {useImportIntegrity: true, plugins: {'import-integrity': {plugin: PLUGIN_WITH_SCHEMA}}},
@@ -59,7 +59,7 @@ describe('option: `useImportIntegrity`', () => {
   });
 
   it('keeps the original implementations when the plugin provides none of the rules', async () => {
-    const EMPTY_PLUGIN = {rules: {}} satisfies EslintPlugin;
+    const EMPTY_PLUGIN: Readonly<EslintPlugin> = {rules: {}};
 
     const configResult = await computeEslintConfig('import', {
       un: {useImportIntegrity: true, plugins: {'import-integrity': {plugin: EMPTY_PLUGIN}}},
@@ -86,7 +86,7 @@ describe('option: `useImportIntegrity`', () => {
   });
 
   it('merges the plugin settings into the settings config', async () => {
-    const ALIAS = {'@': './src'};
+    const ALIAS = {'@': './src'} as const;
 
     const configResult = await computeEslintConfig('import', {
       un: {

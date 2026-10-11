@@ -72,7 +72,7 @@ describe('perfectionist: sub config `sortNamedImports`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `perfectionist/sort-named-imports` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortNamedImports: {files: FILES}},
@@ -96,7 +96,7 @@ describe('perfectionist: sub config `sortNamedImports`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `perfectionist/sort-named-imports` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortNamedImports: {ignores: IGNORES}},

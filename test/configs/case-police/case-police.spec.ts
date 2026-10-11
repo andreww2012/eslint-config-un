@@ -96,7 +96,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `case-police` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({casePolice: {files: FILES}});
 
@@ -112,7 +112,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `case-police` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({casePolice: {ignores: IGNORES}});
 

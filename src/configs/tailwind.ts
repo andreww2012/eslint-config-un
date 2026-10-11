@@ -25,7 +25,7 @@ const DEFAULT_PLUGIN_SETTINGS = {
   ],
   parseKeyFunctions: ['classnames', 'classNames', 'clsx'],
   ignoredKeys: ['defaultVariants', 'compoundVariants', 'compoundSlots'],
-};
+} as const;
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 
@@ -70,10 +70,9 @@ export default defineUnConfig<TailwindEslintConfigOptions>('tailwind', {
             ...objectKeysUnsafe(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
               (acc, settingKey) => {
                 if (pluginSettings?.[settingKey]) {
-                  acc[settingKey] = maybeCall(
-                    pluginSettings[settingKey],
-                    DEFAULT_PLUGIN_SETTINGS[settingKey],
-                  );
+                  acc[settingKey] = maybeCall(pluginSettings[settingKey], [
+                    ...DEFAULT_PLUGIN_SETTINGS[settingKey],
+                  ]);
                 }
                 return acc;
               },

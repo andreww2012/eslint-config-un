@@ -105,7 +105,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `formatjs` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({formatJs: {files: FILES}});
 
@@ -121,7 +121,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `formatjs` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({formatJs: {ignores: IGNORES}});
 
@@ -154,10 +154,10 @@ describe('options', () => {
     });
 
     it('sets `formatjs` settings when provided', async () => {
-      const SETTINGS = {
+      const SETTINGS = Object.freeze({
         additionalFunctionNames: ['$t'],
         additionalComponentNames: ['Trans'],
-      };
+      });
 
       const configResult = await computeEslintConfig('formatJs', {
         un: {plugins: {formatjs: {settings: SETTINGS}}},

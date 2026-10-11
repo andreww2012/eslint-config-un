@@ -150,9 +150,8 @@ export interface ImportIntegrityEslintConfigOptions<
   restrictImports?: GetRuleOptions<'import-integrity', 'no-restricted-imports'>;
 }
 
-const MODE_PER_ENVIRONMENT: Record<
-  Exclude<Environment, 'default'>,
-  ImportIntegrityPluginSettings['mode']
+const MODE_PER_ENVIRONMENT: Readonly<
+  Record<Exclude<Environment, 'default'>, ImportIntegrityPluginSettings['mode']>
 > = {
   ci: 'one-shot',
   editor: 'editor',

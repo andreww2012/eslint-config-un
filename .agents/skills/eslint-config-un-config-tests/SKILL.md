@@ -22,7 +22,7 @@ Tests must live in the `/test` directory and have `.spec.ts` extension.
 - Prefer `it` over `test`; start test/section names with a lowercase letter.
 - Use global helpers from `test/helpers` whenever possible.
 - Ensure tests pass.
-  Run tests with `nr t` (alias for `npx vitest`), do not use IDE integration.
+  Run tests with `nr t` (runs `vitest`), do not use IDE integration.
 - Insert a blank line before `describe`, `it`, and the *first* `expect` unless they are the first line in a block.
   Only add a blank line between `expect`s if they are logically separate.
 - Prefer `toStrictEqual` over `toEqual` for non-primitives; use `toBe` for primitives.
@@ -139,7 +139,7 @@ Ignore coverage issues in `enableConfigTesterForPlugin` block, since it's only s
 - Other cases: use the reference or your judgement
 
 When using `toMatchInlineSnapshot`, **never** guess the expected output.
-Run tests with empty `.toMatchInlineSnapshot()` and let Vitest fill them via `npx vitest run --update`.
+Run tests with empty `.toMatchInlineSnapshot()` and let Vitest fill them via `nr t run --update`.
 Never re-run without `--update` if inline snapshots are already filled — Vitest will append a duplicate instead of replacing.
 If a filled snapshot is `undefined`, switch to a different assertion type.
 

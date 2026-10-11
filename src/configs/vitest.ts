@@ -22,12 +22,10 @@ import {
 
 type ConsistentEachForRuleOptions = GetRuleOptions<'vitest', 'consistent-each-for'>;
 type EachOrFor = 'each' | 'for';
-const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOptions>()([
-  'describe',
-  'it',
-  'suite',
-  'test',
-]);
+const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<
+  keyof ConsistentEachForRuleOptions,
+  {readonly: true}
+>()(['describe', 'it', 'suite', 'test']);
 
 /**
  * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
@@ -252,11 +250,11 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 // Mirrors `defaultOptions` of `vitest/expect-expect`. The `typecheck`-conditional
 // `expectTypeOf`/`assertType` are appended by the rule itself based on settings.
 // Source: https://github.com/vitest-dev/eslint-plugin-vitest/blob/9cca3c31e355d41e615964dcf7ffd7a9df338ab6/src/rules/expect-expect.ts
-const EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES = ['expect', 'assert'];
+const EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES = ['expect', 'assert'] as const;
 
 const VITEST_RULES_REQUIRING_TYPE_INFORMATION = RULE_CATEGORIES_PER_PLUGIN.vitest.typeAware;
 
-const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET = new Set<string>(
+const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET: ReadonlySet<string> = new Set(
   VITEST_RULES_REQUIRING_TYPE_INFORMATION,
 );
 

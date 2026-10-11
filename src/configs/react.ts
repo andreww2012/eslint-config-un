@@ -578,7 +578,7 @@ export interface ReactEslintConfigOptions<
 }
 
 const LATEST_REACT_VERSION = 19;
-const JSX_FILE_EXTENSIONS = ['.jsx', '.tsx', '.cjsx', '.mjsx', '.ctsx', '.mtsx'];
+const JSX_FILE_EXTENSIONS = ['.jsx', '.tsx', '.cjsx', '.mjsx', '.ctsx', '.mtsx'] as const;
 
 const getSeverity = (severity: boolean | 'warn' = true) =>
   severity === 'warn' ? WARNING : severity ? ERROR : OFF;
@@ -645,7 +645,7 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
-const REACT_ORIGINAL_DOM_RULES = new Set<string>([
+const REACT_ORIGINAL_DOM_RULES: ReadonlySet<string> = new Set([
   'button-has-type',
   'checked-requires-onchange-or-readonly',
   'forbid-dom-props',
@@ -663,7 +663,7 @@ const REACT_ORIGINAL_DOM_RULES = new Set<string>([
   'void-dom-elements-no-children',
 ] satisfies GetRuleNamesInPlugin<'react'>[]);
 
-const REACT_X_TYPE_AWARE_RULES = new Set<string>(
+const REACT_X_TYPE_AWARE_RULES: ReadonlySet<string> = new Set(
   allUnionMembers<ReactXTypeAwareRules>()([
     'no-implicit-children',
     'no-implicit-key',
@@ -673,7 +673,7 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>(
   ] satisfies GetRuleNamesInPlugin<'eslint-react'>[]),
 );
 
-const DEFAULT_FILES = [GLOB_JS_TS_X];
+const DEFAULT_FILES = [GLOB_JS_TS_X] as const;
 
 export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
   enabledBy: {package: 'react'},
@@ -879,7 +879,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('jsx-equals-spacing', OFF) /** @since 3.16.0 */
     .addRule('jsx-filename-extension', WARNING, [
       {
-        extensions: JSX_FILE_EXTENSIONS,
+        extensions: [...JSX_FILE_EXTENSIONS],
         ignoreFilesWithoutCode: true,
       },
     ]) /** @since 5.2.0 */

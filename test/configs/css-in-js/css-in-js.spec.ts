@@ -17,7 +17,7 @@ const FIXTURES = {
   defineFunctionNoDupe: 'define-function-no-dupe.js',
 } as const;
 
-const JSX_EXTRA_CONFIGS: Parameters<typeof testEslintConfig>[2] = {
+const JSX_EXTRA_CONFIGS: Readonly<Parameters<typeof testEslintConfig>[2]> = {
   un: {
     // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
     extraConfigs: [{files: ['**/*.jsx']}],
@@ -129,7 +129,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `css-in-js` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
+      const FILES = ['src/**/*.tsx'] as const;
 
       const configResult = await computeEslintConfig({cssInJs: {files: FILES}});
 
@@ -145,7 +145,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `css-in-js` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({cssInJs: {ignores: IGNORES}});
 

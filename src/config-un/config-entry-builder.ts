@@ -77,7 +77,9 @@ export type FlatConfigEntryForBuilder = OmitStrict<
   'name' | 'rules' | 'language' | 'settings'
 >;
 
-const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
+const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonly<
+  Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>
+> = {
   css: [GLOB_CSS],
   scss: [GLOB_SCSS],
   json: [GLOB_JSON],
@@ -88,7 +90,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   html: [GLOB_HTM_HTML],
   toml: [GLOB_TOML],
   yaml: [GLOB_YML_YAML],
-} as const satisfies Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>;
+};
 
 type AddRuleInternalOptions = EmptyObject;
 
@@ -97,7 +99,7 @@ const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).joi
 const TYPE_AWARE_PARSING_DEFAULT = {
   files: [GLOB_TS_X],
   ignores: [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED],
-};
+} as const;
 
 const doesRuleThrowWithoutTypeInfo = (rule: {plugin: PluginPrefix; ruleName: string}) =>
   RULES_REQUIRING_TYPE_INFORMATION[rule.plugin]?.rules[rule.ruleName] === true;
@@ -219,14 +221,14 @@ export class ConfigEntryBuilder<
              */
             applyUserFilesAndIgnores?: boolean;
 
-            filesDefault?: string[];
+            filesDefault?: readonly string[];
             filesDefaultMergedWithUserFiles?: boolean;
 
             /**
              * Will be merged with the internal `ignores`, and, if
              * `ignoresDefaultMergedWithUserIgnores` is set to `true`, with the user-provided ones.
              */
-            ignoresDefault?: string[];
+            ignoresDefault?: readonly string[];
             ignoresDefaultMergedWithUserIgnores?: boolean;
 
             inheritFilesAndIgnoresFrom?: UnFlatConfigEntryFilesAndIgnores;
@@ -238,7 +240,7 @@ export class ConfigEntryBuilder<
              * For example:
              * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
              *   crashes on `.css` files or on `.json`, `.jsonc` and `.json5` files parsed by
-             *   [`@eslint/json`](https://github.com/eslint/json)
+             *   [`@eslint/json`](https://npmx.dev/@eslint/json)
              * - [`regexp/no-legacy-features`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/no-legacy-features.html)
              *   crashes on `.md` files (only if `language` option is specified in the markdown
              *   config)
@@ -336,7 +338,7 @@ export class ConfigEntryBuilder<
         ? internalOptions.filesDefaultMergedWithUserFiles
           ? [...(internalOptions.filesDefault || []), ...filesWhenArray]
           : filesWhenArray
-        : internalOptions.filesDefault || [];
+        : [...(internalOptions.filesDefault || [])];
 
       const filesWhenFn =
         typeof filesOption === 'function'
@@ -618,7 +620,7 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | Falsy) => {
+      disableBulkRules: (rules: readonly (UnAllRuleNames | (string & {}))[] | Falsy) => {
         if (!isConfigDisabled && rules && rules.length > 0) {
           const newRuleEntries = Object.fromEntries(
             rules.flatMap((ruleName) => {

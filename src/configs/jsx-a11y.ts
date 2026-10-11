@@ -11,7 +11,13 @@ import {
   defineUnConfig,
 } from './index';
 
-const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
+const DEFAULT_AMBIGUOUS_WORDS: readonly string[] = [
+  'click here',
+  'here',
+  'link',
+  'a link',
+  'learn more',
+];
 
 interface WordsListAndOptionalSeverity {
   /**
@@ -355,10 +361,11 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
   },
 ) => {
   const optionsRaw =
-    customConfig?.options ?? optionsRawFromParameters ?? context.rootOptions.configs?.jsxA11y;
+    (customConfig?.options || optionsRawFromParameters) ?? context.rootOptions.configs?.jsxA11y;
   const optionsResolved = assignDefaults(optionsRaw, {
     ambiguousWordsForAnchorText: {
-      words: DEFAULT_AMBIGUOUS_WORDS,
+      // eslint-disable-next-line unicorn/prefer-spread -- `assignDefaults` would infer a spread as read-only
+      words: DEFAULT_AMBIGUOUS_WORDS.slice(),
     },
     customComponents: {},
   });
@@ -375,7 +382,7 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
     customComponents,
   } = optionsResolved;
 
-  const ambiguousWords = maybeCall(ambiguousWordsForAnchorText, DEFAULT_AMBIGUOUS_WORDS);
+  const ambiguousWords = maybeCall(ambiguousWordsForAnchorText, [...DEFAULT_AMBIGUOUS_WORDS]);
   const anchorIsValidFinalCheckedAspects = getKeysOfTruthyValues(
     {
       ...anchorIsValidDefaultAspectsToCheck,

@@ -129,7 +129,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `web-components` eslint config', async () => {
-      const FILES = ['src/**/*.js', 'src/**/*.ts'];
+      const FILES = ['src/**/*.js', 'src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({webComponents: {files: FILES}});
 
@@ -145,7 +145,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `web-components` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({webComponents: {ignores: IGNORES}});
 
@@ -181,7 +181,7 @@ describe('options', () => {
     });
 
     it('sets `wc` settings when `settings` is provided', async () => {
-      const SETTINGS = {elementBaseClasses: ['LitElement', 'PolymerElement']};
+      const SETTINGS = Object.freeze({elementBaseClasses: ['LitElement', 'PolymerElement']});
 
       const configResult = await computeEslintConfig('webComponents', {
         un: {plugins: {wc: {settings: SETTINGS}}},

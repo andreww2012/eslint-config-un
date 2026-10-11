@@ -2,7 +2,7 @@ import path from 'node:path';
 import {type UserConfig, defineConfig} from 'tsdown';
 
 // Their own dependencies get inlined as well, unless we also declare them in `dependencies`
-export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
+export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
   'import-meta-resolve', // Patched
   'remeda', // Inlined to avoid always considered installed
   'eslint-plugin-no-type-assertion', // Inlined to avoid installation warnings about incompatibility with ESLint 9/10
@@ -16,7 +16,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
 // Inlined plugins spawn these by file path, so they're never part of the main module graph
 const INLINED_PLUGIN_WORKERS = [
   'eslint-plugin-arrow-return-style-x/dist/workers/prettier-worker.mjs',
-];
+] as const;
 
 const MJS_EXTENSION_REGEXP = /\.mjs$/;
 

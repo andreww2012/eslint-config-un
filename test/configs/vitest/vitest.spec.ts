@@ -119,7 +119,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `vitest` eslint config without affecting `vitest/ts`', async () => {
-      const FILES = ['tests/**/*.vitest.ts'];
+      const FILES = ['tests/**/*.vitest.ts'] as const;
 
       const configResult = await computeEslintConfig({
         vitest: {files: FILES},
@@ -145,7 +145,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `vitest` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({vitest: {ignores: IGNORES}});
 
@@ -172,7 +172,7 @@ describe('un options', () => {
 describe('options', () => {
   describe('option: `settings`', () => {
     it('sets plugin settings on `vitest` and `vitest/ts` eslint configs', async () => {
-      const PLUGIN_SETTINGS = {typecheck: true};
+      const PLUGIN_SETTINGS = {typecheck: true} as const;
 
       const configResult = await computeEslintConfig(
         {

@@ -141,7 +141,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `yaml` eslint config and merges them with defaults', async () => {
-      const FILES = ['.github/**/*.yml'];
+      const FILES = ['.github/**/*.yml'] as const;
 
       const configResult = await computeEslintConfig({yaml: {files: FILES}});
 
@@ -156,7 +156,7 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    const IGNORES = ['**/fixtures/**'];
+    const IGNORES = ['**/fixtures/**'] as const;
 
     it('uses user-provided `ignores` in `yaml` eslint config and merges them with defaults', async () => {
       const configResult = await computeEslintConfig({yaml: {ignores: IGNORES}});
@@ -169,7 +169,7 @@ describe('un options', () => {
     });
 
     it('replaces the default `ignores` when the function form is used', async () => {
-      const configResult = await computeEslintConfig({yaml: {ignores: () => IGNORES}});
+      const configResult = await computeEslintConfig({yaml: {ignores: () => [...IGNORES]}});
 
       expect(configResult.getConfigByUnPostfix('yaml')?.ignores).toStrictEqual(IGNORES);
     });
@@ -195,7 +195,7 @@ describe('options', () => {
     });
 
     it('sets yaml settings when `settings` is provided', async () => {
-      const SETTINGS = {indent: 4};
+      const SETTINGS = {indent: 4} as const;
 
       const configResult = await computeEslintConfig('yaml', {
         un: {plugins: {yaml: {settings: SETTINGS}}},
@@ -306,7 +306,7 @@ describe('options', () => {
     });
 
     it('sets `languageOptions.parserOptions` when provided', async () => {
-      const PARSER_OPTIONS = {defaultYAMLVersion: '1.1' as const};
+      const PARSER_OPTIONS = {defaultYAMLVersion: '1.1' as const} as const;
 
       const configResult = await computeEslintConfig({yaml: {parserOptions: PARSER_OPTIONS}});
 

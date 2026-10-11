@@ -18,20 +18,22 @@ type Trait = keyof RuleMetadata;
 const styleTrait = (trait: Trait) => styleText('cyan', trait);
 const styleFileName = (fileName: string) => styleText('yellow', fileName);
 
-const RULE_NAMES_PER_PLUGIN: Partial<Record<string, readonly string[]>> = ALL_RULES_PER_PLUGIN;
+const RULE_NAMES_PER_PLUGIN: Readonly<Partial<Record<string, readonly string[]>>> =
+  ALL_RULES_PER_PLUGIN;
 
-const PLUGIN_LOADERS: Partial<Record<string, {packageName: string}>> = pluginsLoaders;
+const PLUGIN_LOADERS: Readonly<Partial<Record<string, {packageName: string}>>> = pluginsLoaders;
 
 /**
  * The plugins whose rules declare the requirement themselves.
  * Listing a rule by hand there is an override, and only allowed when it says something the plugin
  * does not
  */
-const TYPE_AWARE_CATEGORIES: Partial<Record<string, readonly string[]>> = Object.fromEntries(
-  Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
-    'typeAware' in categories ? [[prefix, categories.typeAware]] : [],
-  ),
-);
+const TYPE_AWARE_CATEGORIES: Readonly<Partial<Record<string, readonly string[]>>> =
+  Object.fromEntries(
+    Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
+      'typeAware' in categories ? [[prefix, categories.typeAware]] : [],
+    ),
+  );
 
 interface TraitEntry {
   value: boolean | string;
@@ -326,7 +328,7 @@ ${renderPerPlugin(cliFiles, (value) => `'${String(value)}'`)}
 
 export type CliAdjustedRuleName =${renderUnion(fullRuleNames(cliFiles))};
 
-export const RULES_REQUIRING_TYPE_INFORMATION: Partial<Record<string, TypeInfoRequirement>> = {
+export const RULES_REQUIRING_TYPE_INFORMATION: Readonly<Partial<Record<string, TypeInfoRequirement>>> = {
 ${renderTypeInfo(plugins, withTypeAwareCategories(plugins, typeInfo))}
 };
 `;

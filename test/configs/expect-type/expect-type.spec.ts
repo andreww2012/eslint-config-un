@@ -94,7 +94,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `options`', () => {
     it('passes rule options to `expect-type/expect` rule when provided', async () => {
-      const OPTIONS = {disableExpectTypeSnapshotFix: true};
+      const OPTIONS = {disableExpectTypeSnapshotFix: true} as const;
 
       const configResult = await computeEslintConfig({expectType: {options: OPTIONS}});
 
@@ -106,7 +106,7 @@ describe('un options', () => {
 
   describe('option: `files`', () => {
     it('uses user-provided `files` in `expect-type` eslint config', async () => {
-      const FILES = ['tests/**/*.ts'];
+      const FILES = ['tests/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({expectType: {files: FILES}});
 
@@ -122,7 +122,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `expect-type` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({expectType: {ignores: IGNORES}});
 

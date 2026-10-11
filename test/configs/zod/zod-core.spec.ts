@@ -62,7 +62,7 @@ describe('zod: sub config `core`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `zod/core` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({zod: {configCore: {files: FILES}}});
 
@@ -76,7 +76,7 @@ describe('zod: sub config `core`', () => {
       });
 
       it('inherits parent `files` when sub-config does not specify `files` or `ignores`', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({zod: {files: FILES}});
 
@@ -84,8 +84,8 @@ describe('zod: sub config `core`', () => {
       });
 
       it('does not inherit parent `files` when sub-config specifies its own `files`', async () => {
-        const PARENT_FILES = ['src/**/*.ts'];
-        const SUB_FILES = ['lib/**/*.ts'];
+        const PARENT_FILES = ['src/**/*.ts'] as const;
+        const SUB_FILES = ['lib/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           zod: {files: PARENT_FILES, configCore: {files: SUB_FILES}},
@@ -95,8 +95,8 @@ describe('zod: sub config `core`', () => {
       });
 
       it('does not inherit parent `files` when sub-config specifies its own `ignores`', async () => {
-        const PARENT_FILES = ['src/**/*.ts'];
-        const SUB_IGNORES = ['**/fixtures/**'];
+        const PARENT_FILES = ['src/**/*.ts'] as const;
+        const SUB_IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           zod: {files: PARENT_FILES, configCore: {ignores: SUB_IGNORES}},
@@ -110,7 +110,7 @@ describe('zod: sub config `core`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `zod/core` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({zod: {configCore: {ignores: IGNORES}}});
 
@@ -121,7 +121,7 @@ describe('zod: sub config `core`', () => {
       });
 
       it('inherits parent `ignores` when sub-config does not specify `files` or `ignores`', async () => {
-        const IGNORES = ['**/parent-ignored/**'];
+        const IGNORES = ['**/parent-ignored/**'] as const;
 
         const configResult = await computeEslintConfig({zod: {ignores: IGNORES}});
 
@@ -129,8 +129,8 @@ describe('zod: sub config `core`', () => {
       });
 
       it('does not inherit parent `ignores` when sub-config specifies its own `ignores`', async () => {
-        const PARENT_IGNORES = ['**/parent-ignored/**'];
-        const SUB_IGNORES = ['**/sub-ignored/**'];
+        const PARENT_IGNORES = ['**/parent-ignored/**'] as const;
+        const SUB_IGNORES = ['**/sub-ignored/**'] as const;
 
         const configResult = await computeEslintConfig({
           zod: {ignores: PARENT_IGNORES, configCore: {ignores: SUB_IGNORES}},
@@ -143,8 +143,8 @@ describe('zod: sub config `core`', () => {
       });
 
       it('does not inherit parent `ignores` when sub-config specifies its own `files`', async () => {
-        const PARENT_IGNORES = ['**/parent-ignored/**'];
-        const SUB_FILES = ['lib/**/*.ts'];
+        const PARENT_IGNORES = ['**/parent-ignored/**'] as const;
+        const SUB_FILES = ['lib/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           zod: {ignores: PARENT_IGNORES, configCore: {files: SUB_FILES}},

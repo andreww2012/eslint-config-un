@@ -12,7 +12,7 @@ describe('option: `files`', () => {
   });
 
   it('creates a respective config with only `files` when non-empty', async () => {
-    const FILES = ['**/*.gjs', '**/*.gts'];
+    const FILES = ['**/*.gjs', '**/*.gts'] as const;
 
     const configResult = await computeEslintConfig({}, {un: {files: FILES}});
 
@@ -25,7 +25,7 @@ describe('option: `files`', () => {
   });
 
   it('passes nested array `files` patterns as-is', async () => {
-    const FILES = [['**/*.gjs', '**/*.gts']];
+    const FILES = Object.freeze([['**/*.gjs', '**/*.gts']]);
 
     const configResult = await computeEslintConfig({}, {un: {files: FILES}});
 

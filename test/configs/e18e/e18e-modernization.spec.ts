@@ -82,7 +82,7 @@ describe('e18e: sub config `modernization`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `e18e/modernization` eslint config', async () => {
-        const FILES = ['src/**/*.js'];
+        const FILES = ['src/**/*.js'] as const;
 
         const configResult = await computeEslintConfig({
           e18e: {configModernization: {files: FILES}},
@@ -100,7 +100,7 @@ describe('e18e: sub config `modernization`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `e18e/modernization` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           e18e: {configModernization: {ignores: IGNORES}},

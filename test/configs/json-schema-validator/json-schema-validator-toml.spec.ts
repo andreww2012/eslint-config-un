@@ -58,7 +58,7 @@ describe('json-schema-validator: sub config `toml`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `json-schema-validator/toml` eslint config', async () => {
-        const FILES = ['src/**/*.toml'];
+        const FILES = ['src/**/*.toml'] as const;
 
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configToml: {files: FILES}},
@@ -80,7 +80,7 @@ describe('json-schema-validator: sub config `toml`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `json-schema-validator/toml` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configToml: {ignores: IGNORES}},

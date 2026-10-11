@@ -22,7 +22,7 @@ describe('cypress: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `cypress` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['e2e/**/*.cy.ts'];
+      const FILES = ['e2e/**/*.cy.ts'] as const;
 
       const configResult = await computeEslintConfig({
         cypress: {files: FILES, configNoOnlyTests: true},
@@ -63,7 +63,7 @@ describe('cypress: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `cypress/no-only-tests` eslint config', async () => {
-        const FILES = ['e2e/**/*.cy.ts'];
+        const FILES = ['e2e/**/*.cy.ts'] as const;
 
         const configResult = await computeEslintConfig({
           cypress: {configNoOnlyTests: {files: FILES}},
@@ -85,7 +85,7 @@ describe('cypress: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `cypress/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           cypress: {configNoOnlyTests: {ignores: IGNORES}},

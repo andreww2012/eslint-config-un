@@ -249,9 +249,11 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 const JEST_RULES_FOR_TYPESCRIPT_FILES = [
   ...RULE_CATEGORIES_PER_PLUGIN.jest.typeAware,
   'no-untyped-mock-factory', // Needs TypeScript syntax, but no type information
-] satisfies GetRuleNamesInPlugin<'jest'>[];
+] as const satisfies GetRuleNamesInPlugin<'jest'>[];
 
-const JEST_RULES_FOR_TYPESCRIPT_FILES_SET = new Set<string>(JEST_RULES_FOR_TYPESCRIPT_FILES);
+const JEST_RULES_FOR_TYPESCRIPT_FILES_SET: ReadonlySet<string> = new Set(
+  JEST_RULES_FOR_TYPESCRIPT_FILES,
+);
 
 export default defineUnConfig<JestEslintConfigOptions>('jest', {enabledBy: {package: 'jest'}})(
   async (context, optionsRaw) => {

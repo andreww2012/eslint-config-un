@@ -116,7 +116,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `cypress` eslint config', async () => {
-      const FILES = ['e2e/**/*.cy.ts'];
+      const FILES = ['e2e/**/*.cy.ts'] as const;
 
       const configResult = await computeEslintConfig({cypress: {files: FILES}});
 
@@ -132,7 +132,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `cypress` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({cypress: {ignores: IGNORES}});
 

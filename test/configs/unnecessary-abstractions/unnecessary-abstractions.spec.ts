@@ -144,7 +144,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `unnecessary-abstractions` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({unnecessaryAbstractions: {files: FILES}});
 
@@ -162,9 +162,11 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `unnecessary-abstractions` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
-      const configResult = await computeEslintConfig({unnecessaryAbstractions: {ignores: IGNORES}});
+      const configResult = await computeEslintConfig({
+        unnecessaryAbstractions: {ignores: IGNORES},
+      });
 
       const ignores = configResult.getConfigByUnPostfix('unnecessary-abstractions')?.ignores;
 

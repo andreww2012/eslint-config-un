@@ -75,7 +75,7 @@ describe('vue: sub config `pinia`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `pinia` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({vue: {configPinia: {files: FILES}}});
 
@@ -91,9 +91,11 @@ describe('vue: sub config `pinia`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `pinia` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
-        const configResult = await computeEslintConfig({vue: {configPinia: {ignores: IGNORES}}});
+        const configResult = await computeEslintConfig({
+          vue: {configPinia: {ignores: IGNORES}},
+        });
 
         const ignores = configResult.getConfigByUnPostfix('pinia')?.ignores;
 

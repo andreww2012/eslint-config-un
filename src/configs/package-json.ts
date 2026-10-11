@@ -34,7 +34,7 @@ type PackageJsonCollection =
 type PackageJsonCollectionsToSort = Partial<Record<PackageJsonCollection, boolean>>;
 
 // Note: unlike the rule's default, we don't sort `scripts`, `config` and `exports` sections
-const DEFAULT_COLLECTIONS_TO_SORT = {
+const DEFAULT_COLLECTIONS_TO_SORT: Readonly<PackageJsonCollectionsToSort> = {
   devDependencies: true,
   dependencies: true,
   peerDependencies: true,
@@ -48,11 +48,11 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   'pnpm.packageExtensions': true,
   'pnpm.patchedDependencies': true,
   'pnpm.peerDependencyRules.allowedVersions': true,
-} satisfies PackageJsonCollectionsToSort;
+};
 
-const DEFAULT_PROPERTIES_ALLOWED_TO_BE_EMPTY = {
+const DEFAULT_PROPERTIES_ALLOWED_TO_BE_EMPTY: Readonly<Partial<Record<string, boolean>>> = {
   browserslist: true,
-} satisfies Partial<Record<string, boolean>>;
+};
 
 type IsRequireRule<RuleName extends string> = RuleName extends `require-${infer RequirableField}`
   ? RequirableField
@@ -94,7 +94,7 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
   volta: 'Volta',
   wireit: 'Wireit', // cspell:disable-line
   xo: 'XO',
-};
+} as const;
 
 /**
  * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin

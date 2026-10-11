@@ -132,7 +132,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `prefer-arrow-functions` eslint config', async () => {
-      const FILES = ['**/*.ts'];
+      const FILES = ['**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({preferArrowFunctions: {files: FILES}});
 
@@ -150,9 +150,11 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `prefer-arrow-functions` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
-      const configResult = await computeEslintConfig({preferArrowFunctions: {ignores: IGNORES}});
+      const configResult = await computeEslintConfig({
+        preferArrowFunctions: {ignores: IGNORES},
+      });
 
       const ignores = configResult.getConfigByUnPostfix('prefer-arrow-functions')?.ignores;
 

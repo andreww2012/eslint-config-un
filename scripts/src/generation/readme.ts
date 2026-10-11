@@ -10,7 +10,7 @@ const RENAMES_MARKER = 'DEFAULT-RENAMES-TABLE';
 
 const GENERATED_NOTICE = 'generated, do not edit manually';
 
-const PLUGIN_LOADERS: Partial<Record<string, {packageName: string}>> = pluginsLoaders;
+const PLUGIN_LOADERS: Readonly<Partial<Record<string, {packageName: string}>>> = pluginsLoaders;
 
 const LINK_REFERENCE_DEFINITION_REGEXP = /^\[([^\]]+)\]: (\S+)$/gm;
 

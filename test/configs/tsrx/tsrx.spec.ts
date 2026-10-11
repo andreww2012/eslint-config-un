@@ -146,7 +146,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tsrx` eslint config', async () => {
-      const FILES = ['src/**/*.tsrx'];
+      const FILES = ['src/**/*.tsrx'] as const;
 
       const configResult = await computeEslintConfig({tsrx: {files: FILES}});
 
@@ -162,7 +162,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tsrx` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({tsrx: {ignores: IGNORES}});
 

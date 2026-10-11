@@ -121,7 +121,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `file-progress` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({fileProgress: {files: FILES}});
 
@@ -137,7 +137,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `file-progress` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({fileProgress: {ignores: IGNORES}});
 
@@ -163,7 +163,7 @@ describe('un options', () => {
 describe('options', () => {
   describe('option: `settings`', () => {
     it('merges default settings with user-provided ones and assigns them to `file-progress` settings property', async () => {
-      const SETTINGS = {hideFileName: true};
+      const SETTINGS = {hideFileName: true} as const;
 
       const configResult = await computeEslintConfig('fileProgress', {
         un: {plugins: {'file-progress': {settings: SETTINGS}}},

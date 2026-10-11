@@ -15,7 +15,7 @@ type ZodObjectSchemaType = (GetRuleOptions<
   'zod',
   'consistent-object-schema-type'
 >['allow'] & {})[number];
-const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType>()([
+const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType, {readonly: true}>()([
   'object',
   'looseObject',
   'strictObject',

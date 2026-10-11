@@ -74,7 +74,7 @@ describe('react: sub config `refresh`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/refresh` eslint config', async () => {
-        const FILES = ['src/**/*.jsx'];
+        const FILES = ['src/**/*.jsx'] as const;
 
         const configResult = await computeEslintConfig({react: {configRefresh: {files: FILES}}});
 
@@ -90,7 +90,7 @@ describe('react: sub config `refresh`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/refresh` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configRefresh: {ignores: IGNORES}},
@@ -167,10 +167,10 @@ describe('react: sub config `refresh`', () => {
       });
 
       it('includes user-provided names in `allowExportNames` when set', async () => {
-        const ALLOW_EXPORT_NAMES = ['myCustomExport'];
+        const ALLOW_EXPORT_NAMES = ['myCustomExport'] as const;
 
         const configResult = await computeEslintConfig({
-          react: {configRefresh: {allowExportNames: ALLOW_EXPORT_NAMES}},
+          react: {configRefresh: {allowExportNames: [...ALLOW_EXPORT_NAMES]}},
         });
 
         expect(

@@ -1,3 +1,7 @@
+Fix "Invalid version. Must be a string. Got type "symbol"" crash in `normalizeSemverRange`:
+- skip comparators whose `semver` is the `ANY` symbol (ranges like `*`) when looking for the min version;
+- treat ranges without a min version as equal when sorting.
+
 diff --git a/dist/index.mjs b/dist/index.mjs
 index 4204d90c275c06b24ae8b80ee964d7b63f5eaccc..0b0f123d7b194a12564dd3430a3e480830389cc0 100644
 --- a/dist/index.mjs

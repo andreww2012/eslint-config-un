@@ -21,9 +21,11 @@ import {
 const LOCKFILE_RULES_FOR_PACKAGE_JSON = [
   'no-weakening-config',
   'tracked',
-] satisfies GetRuleNamesInPlugin<'lockfile'>[];
+] as const satisfies GetRuleNamesInPlugin<'lockfile'>[];
 
-const LOCKFILE_RULES_FOR_PACKAGE_JSON_SET = new Set<string>(LOCKFILE_RULES_FOR_PACKAGE_JSON);
+const LOCKFILE_RULES_FOR_PACKAGE_JSON_SET: ReadonlySet<string> = new Set(
+  LOCKFILE_RULES_FOR_PACKAGE_JSON,
+);
 
 type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, string>;
 
@@ -140,18 +142,20 @@ const LOCKFILE_LANGUAGES = {
   yaml: 'yaml',
 } as const satisfies Record<string, ParsingLanguagesWithDialects>;
 
-const LOCKFILES_INFO_MAP = {
+const LOCKFILES_INFO_MAP: Readonly<
+  Record<
+    SupportedPackageManagers,
+    [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: string[]]
+  >
+> = {
   npm: ['json', ['package-lock.json', 'npm-shrinkwrap.json']],
   yarn: ['yaml', ['yarn.lock']],
   pnpm: ['yaml', ['pnpm-lock.yaml']],
   bun: ['jsonc', ['bun.lock', 'bun.lockb']],
   vlt: ['json', ['vlt-lock.json']],
-} satisfies Record<
-  SupportedPackageManagers,
-  [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: string[]]
->;
+};
 
-const LOCKFILES_INFO = objectEntriesUnsafe(LOCKFILES_INFO_MAP);
+const LOCKFILES_INFO = Object.freeze(objectEntriesUnsafe(LOCKFILES_INFO_MAP));
 
 export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
   enabledBy: {group: 'misc'},

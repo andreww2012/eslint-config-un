@@ -330,7 +330,7 @@ const fetchPackageInfo = (packageName: string) =>
             return Effect.succeed(null);
           }),
         )
-      : (cachedInfo?.stats ?? null);
+      : cachedInfo?.stats || null;
     if (shouldFetchStats && !packageStats) {
       return null;
     }

@@ -16,18 +16,21 @@ export type ArrayOrBooleanRecord<
       >
     >;
 
+// `Array.isArray` does not narrow read-only arrays
+const isReadonlyArray = (value: unknown): value is readonly unknown[] => Array.isArray(value);
+
 /**
  * Applies the given lists in order, where the object notation additionally allows removing an entry
  * that an earlier list added by setting its value to a falsy value
  */
 export const mergeArrayOrBooleanRecords = (
-  ...sources: (ArrayOrBooleanRecord | Falsy)[]
+  ...sources: (ArrayOrBooleanRecord | readonly string[] | Falsy)[]
 ): string[] => {
   const result = new Set<string>();
 
-  for (const source of sources) {
+  sources.forEach((source) => {
     if (source) {
-      (Array.isArray(source) ? source : Object.entries(source)).forEach((entry) => {
+      (isReadonlyArray(source) ? source : Object.entries(source)).forEach((entry) => {
         const isEntryPlainKey = typeof entry === 'string';
 
         const key = isEntryPlainKey ? entry : entry[0];
@@ -39,7 +42,7 @@ export const mergeArrayOrBooleanRecords = (
         }
       });
     }
-  }
+  });
 
   return [...result];
 };

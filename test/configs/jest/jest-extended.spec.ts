@@ -89,7 +89,7 @@ describe('jest: sub config `jestExtended`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/extended` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {files: FILES}},
@@ -109,7 +109,7 @@ describe('jest: sub config `jestExtended`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/extended` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {ignores: IGNORES}},
@@ -148,7 +148,7 @@ describe('jest: sub config `jestExtended`', () => {
         'prefer-to-be-object',
         'prefer-to-be-true',
         'prefer-to-have-been-called-once',
-      ];
+      ] as const;
 
       it('enables all suggest-using rules by default', async () => {
         const configResult = await computeEslintConfig({jest: {configJestExtended: true}});

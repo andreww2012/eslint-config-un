@@ -58,7 +58,7 @@ describe('react: sub config `hooks`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/hooks` eslint config', async () => {
-        const FILES = ['src/**/*.jsx'];
+        const FILES = ['src/**/*.jsx'] as const;
 
         const configResult = await computeEslintConfig({react: {configHooks: {files: FILES}}});
 
@@ -76,9 +76,11 @@ describe('react: sub config `hooks`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/hooks` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
-        const configResult = await computeEslintConfig({react: {configHooks: {ignores: IGNORES}}});
+        const configResult = await computeEslintConfig({
+          react: {configHooks: {ignores: IGNORES}},
+        });
 
         const ignores = configResult.getConfigByUnPostfix('react/hooks')?.ignores;
 

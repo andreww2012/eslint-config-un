@@ -22,7 +22,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `mocha` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         mocha: {files: FILES, configNoOnlyTests: true},
@@ -61,7 +61,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `mocha/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           mocha: {configNoOnlyTests: {files: FILES}},
@@ -83,7 +83,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `mocha/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           mocha: {configNoOnlyTests: {ignores: IGNORES}},

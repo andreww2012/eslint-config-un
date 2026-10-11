@@ -53,7 +53,7 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `unused-imports/no-unused-vars` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {files: FILES}},
@@ -75,7 +75,7 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `unused-imports/no-unused-vars` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {ignores: IGNORES}},
@@ -126,7 +126,7 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
       });
 
       it('adds options to `unused-imports/no-unused-vars` rule when `ruleOptions` is provided', async () => {
-        const OPTIONS = {vars: 'all' as const, args: 'after-used' as const};
+        const OPTIONS = {vars: 'all' as const, args: 'after-used' as const} as const;
 
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {ruleOptions: OPTIONS}},

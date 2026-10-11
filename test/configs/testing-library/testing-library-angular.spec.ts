@@ -63,7 +63,7 @@ describe('testing-library: sub config `angular`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `testing-library/angular` eslint config', async () => {
-        const FILES = ['src/**/*.spec.ts'];
+        const FILES = ['src/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configAngular: {files: FILES}},
@@ -85,7 +85,7 @@ describe('testing-library: sub config `angular`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `testing-library/angular` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configAngular: {ignores: IGNORES}},
@@ -235,10 +235,10 @@ describe('testing-library: sub config `angular`', () => {
       });
 
       it('enables `testing-library/prefer-query-matchers` rule with provided entries', async () => {
-        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const];
+        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const] as const;
 
         const configResult = await computeEslintConfig({
-          testingLibrary: {configAngular: {preferQueryMatchers: MATCHERS}},
+          testingLibrary: {configAngular: {preferQueryMatchers: [...MATCHERS]}},
         });
 
         expect(

@@ -40,7 +40,7 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/allow-default-export-in-jsx-files` eslint config', async () => {
-        const FILES = ['src/**/*.jsx'];
+        const FILES = ['src/**/*.jsx'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configAllowDefaultExportsInJsxFiles: {files: FILES}},
@@ -64,7 +64,7 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` and merges them with defaults', async () => {
-        const IGNORES = ['**/stories/**'];
+        const IGNORES = ['**/stories/**'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configAllowDefaultExportsInJsxFiles: {ignores: IGNORES}},

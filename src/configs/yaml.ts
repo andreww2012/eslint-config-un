@@ -8,7 +8,7 @@ import {
   defineUnConfig,
 } from './index';
 
-const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'];
+const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'] as const;
 
 /**
  * [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml) plugin

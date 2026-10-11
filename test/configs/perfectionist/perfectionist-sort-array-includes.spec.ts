@@ -78,7 +78,7 @@ describe('perfectionist: sub config `sortArrayIncludes`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `perfectionist/sort-array-includes` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortArrayIncludes: {files: FILES}},
@@ -102,7 +102,7 @@ describe('perfectionist: sub config `sortArrayIncludes`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `perfectionist/sort-array-includes` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortArrayIncludes: {ignores: IGNORES}},

@@ -49,7 +49,7 @@ describe('json: sub config `jsonc`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `json/jsonc` eslint config', async () => {
-        const FILES = ['packages/**/*.jsonc'];
+        const FILES = ['packages/**/*.jsonc'] as const;
 
         const configResult = await computeEslintConfig({
           json: {configJsonc: {files: FILES}},
@@ -69,7 +69,7 @@ describe('json: sub config `jsonc`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `json/jsonc` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           json: {configJsonc: {ignores: IGNORES}},

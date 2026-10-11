@@ -54,7 +54,7 @@ describe('pnpm: sub config `pnpmWorkspace`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `pnpm/pnpm-workspace-yaml` eslint config', async () => {
-        const FILES = ['workspace.yaml'];
+        const FILES = ['workspace.yaml'] as const;
 
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {files: FILES}},
@@ -76,7 +76,7 @@ describe('pnpm: sub config `pnpmWorkspace`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `pnpm/pnpm-workspace-yaml` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {ignores: IGNORES}},
@@ -123,7 +123,7 @@ describe('pnpm: sub config `pnpmWorkspace`', () => {
       });
 
       it('enables `pnpm/yaml-enforce-settings` rule with options when `enforcePnpmWorkspaceSettings` is provided', async () => {
-        const SETTINGS = {requiredFields: ['catalogs']};
+        const SETTINGS = Object.freeze({requiredFields: ['catalogs']});
 
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {enforcePnpmWorkspaceSettings: SETTINGS}},

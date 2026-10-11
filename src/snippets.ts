@@ -8,7 +8,7 @@ export {
   createSyntax as createNoRestrictedSyntaxRule,
 } from 'eslint-no-restricted';
 
-const UTILITY_PACKAGES = {
+const UTILITY_PACKAGES: Readonly<Record<string, true>> = {
   lodash: true,
   'lodash-es': true,
   underscore: true,
@@ -30,7 +30,7 @@ const UTILITY_PACKAGES = {
   'type-fest': true,
   'ts-toolbelt': true,
   'ts-essentials': true,
-} satisfies Record<string, true>;
+};
 
 /**
  * Provides a regex for the

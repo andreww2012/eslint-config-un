@@ -33,8 +33,11 @@ import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
  */
 export const resolveFilesOption = (
   files: UnFlatConfigEntryFilesAndIgnores['files'],
-  filesDefault: string[],
-) => (typeof files === 'function' ? files({filesDefault}) : files) || filesDefault;
+  filesDefault: readonly string[],
+) =>
+  (typeof files === 'function' ? files({filesDefault: [...filesDefault]}) : files) || [
+    ...filesDefault,
+  ];
 
 /**
  * Same as {@link resolveFilesOption}, but for `ignores`. The implicitly ignored patterns are only
@@ -126,11 +129,13 @@ export const generateDefaultTestFiles = <T extends string>(
   ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}` as const] : []), // 115k, 2.2k
 ];
 
-export const TESTS_CONFIG_DEFAULT_FILES = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
-  includeCypressTests: true,
-  includeStorybookStories: true,
-  includeVitestBenchmarkFiles: true,
-});
+export const TESTS_CONFIG_DEFAULT_FILES = Object.freeze(
+  generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+    includeCypressTests: true,
+    includeStorybookStories: true,
+    includeVitestBenchmarkFiles: true,
+  }),
+);
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
   | boolean
@@ -278,13 +283,13 @@ export const resolveUnusedDisableDirectivesReporting = (
   };
 };
 
-export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
+export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5] as const;
 
-export const TOML_DEFAULT_FILES = [GLOB_TOML];
+export const TOML_DEFAULT_FILES = [GLOB_TOML] as const;
 
-export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
+export const YAML_DEFAULT_FILES = [GLOB_YML_YAML] as const;
 
-export const CORE_RULES_HANDLED_BY_TS_COMPILER = [
+export const CORE_RULES_HANDLED_BY_TS_COMPILER: readonly GetRuleNamesInPlugin<''>[] = [
   'constructor-super',
   'getter-return',
   'no-class-assign',
@@ -310,9 +315,9 @@ export const CORE_RULES_HANDLED_BY_TS_COMPILER = [
   'no-with',
   // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
   'no-duplicate-imports',
-] satisfies GetRuleNamesInPlugin<''>[];
+];
 
-export const CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES = [
+export const CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES: readonly GetRuleNamesInPlugin<''>[] = [
   'class-methods-use-this',
   'default-param-last',
   'init-declarations',
@@ -328,7 +333,7 @@ export const CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES = [
   'no-unused-vars',
   'no-use-before-define',
   'no-useless-constructor',
-] satisfies GetRuleNamesInPlugin<''>[];
+];
 
 export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigContext) =>
   [

@@ -124,7 +124,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `zod-openapi` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({zodOpenapi: {files: FILES}});
 
@@ -140,7 +140,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `zod-openapi` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({zodOpenapi: {ignores: IGNORES}});
 

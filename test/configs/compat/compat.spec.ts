@@ -123,7 +123,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `compat` eslint config', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({compat: {files: FILES}});
 
@@ -139,7 +139,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `compat` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({compat: {ignores: IGNORES}});
 
@@ -169,7 +169,7 @@ describe('options', () => {
     });
 
     it('sets compat settings when provided', async () => {
-      const SETTINGS = {targets: ['ie 11'], polyfills: ['fetch']};
+      const SETTINGS = Object.freeze({targets: ['ie 11'], polyfills: ['fetch']});
 
       const configResult = await computeEslintConfig('compat', {
         un: {plugins: {compat: {settings: SETTINGS}}},

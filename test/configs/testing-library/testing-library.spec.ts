@@ -137,7 +137,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `testing-library/dom` eslint config', async () => {
-      const FILES = ['src/**/*.spec.js'];
+      const FILES = ['src/**/*.spec.js'] as const;
 
       const configResult = await computeEslintConfig({testingLibrary: {files: FILES}});
 
@@ -153,7 +153,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `testing-library/dom` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({testingLibrary: {ignores: IGNORES}});
 
@@ -198,7 +198,7 @@ describe('options', () => {
     });
 
     it('sets testing-library settings when `settings` is provided', async () => {
-      const SETTINGS = {utilsModule: 'my-test-utils'};
+      const SETTINGS = {utilsModule: 'my-test-utils'} as const;
 
       const configResult = await computeEslintConfig('testingLibrary', {
         un: {plugins: {'testing-library': {settings: SETTINGS}}},
@@ -301,10 +301,10 @@ describe('options', () => {
     });
 
     it('enables `testing-library/prefer-query-matchers` rule with provided entries', async () => {
-      const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const];
+      const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const] as const;
 
       const configResult = await computeEslintConfig({
-        testingLibrary: {preferQueryMatchers: MATCHERS},
+        testingLibrary: {preferQueryMatchers: [...MATCHERS]},
       });
 
       expect(
@@ -342,10 +342,10 @@ describe('options', () => {
     });
 
     it('enables `testing-library/prefer-user-event` rule with options when set to object', async () => {
-      const ALLOWED_METHODS = ['paste'];
+      const ALLOWED_METHODS = ['paste'] as const;
 
       const configResult = await computeEslintConfig({
-        testingLibrary: {preferUserEventOverFireEvent: {allowedMethods: ALLOWED_METHODS}},
+        testingLibrary: {preferUserEventOverFireEvent: {allowedMethods: [...ALLOWED_METHODS]}},
       });
 
       expect(

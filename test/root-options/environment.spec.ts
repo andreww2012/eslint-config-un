@@ -3,17 +3,17 @@ import * as utils from '../../src/utils';
 
 const ENV_VAR_NAME = 'ESLINT_CONFIG_UN_ENVIRONMENT';
 
-const IMPORT_INTEGRITY_SETTINGS = {packageRootDir: expect.any(String) as unknown};
+const IMPORT_INTEGRITY_SETTINGS = {packageRootDir: expect.any(String) as unknown} as const;
 
 /**
  * `fileProgress` and `importIntegrity` are the only configs affected by the resolved environment,
  * and between them their settings tell all three environments apart
  */
-const EXPECTED_SETTINGS_PER_ENVIRONMENT = {
+const EXPECTED_SETTINGS_PER_ENVIRONMENT: Readonly<Record<Environment, unknown>> = {
   default: {progress: {hide: false}, importIntegrity: IMPORT_INTEGRITY_SETTINGS},
   ci: {progress: {hide: true}, importIntegrity: {...IMPORT_INTEGRITY_SETTINGS, mode: 'one-shot'}},
   editor: {progress: {hide: true}, importIntegrity: {...IMPORT_INTEGRITY_SETTINGS, mode: 'editor'}},
-} satisfies Record<Environment, unknown>;
+};
 
 const getResolvedEnvironmentSettings = async (
   environment: EslintConfigUnOptions['environment'],

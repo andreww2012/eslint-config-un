@@ -225,13 +225,13 @@ const mergeRulesPresenceResults = (
 ): ReturnType<typeof generateEslintPluginsRulesPresence> => {
   const ruleMap = new Map<string, {versions: string[]; deprecatedVersions: string[]}>();
 
-  for (const {rules} of results) {
-    for (const {ruleName, versions, deprecatedVersions} of rules) {
+  results.forEach(({rules}) => {
+    rules.forEach(({ruleName, versions, deprecatedVersions}) => {
       const existing = mapGetOrInsert(ruleMap, ruleName, {versions: [], deprecatedVersions: []});
       existing.versions.push(...versions);
       existing.deprecatedVersions.push(...deprecatedVersions);
-    }
-  }
+    });
+  });
 
   return {
     rules: Array.from(ruleMap, ([ruleName, {versions, deprecatedVersions}]) => {

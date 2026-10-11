@@ -136,7 +136,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `react/plugin-original` eslint config', async () => {
-      const FILES = ['src/**/*.jsx'];
+      const FILES = ['src/**/*.jsx'] as const;
 
       const configResult = await computeEslintConfig({react: {files: FILES}});
 
@@ -154,7 +154,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `react/plugin-original` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({react: {ignores: IGNORES}});
 
@@ -188,7 +188,7 @@ describe('options', () => {
     });
 
     it('merges user-provided `settings` with auto-detected react version', async () => {
-      const EXTRA_SETTINGS = {pragma: 'Preact', fragment: 'Fragment'};
+      const EXTRA_SETTINGS = {pragma: 'Preact', fragment: 'Fragment'} as const;
 
       const configResult = await computeEslintConfig('react', {
         un: {plugins: {react: {settings: EXTRA_SETTINGS}}},
@@ -200,12 +200,12 @@ describe('options', () => {
     });
 
     it('assigns the settings read from the `settings` root outside of the `react` property', async () => {
-      const ROOT_SETTINGS = {
+      const ROOT_SETTINGS = Object.freeze({
         componentWrapperFunctions: ['observer'],
         formComponents: ['CustomForm'],
         linkComponents: ['Hyperlink'],
         propWrapperFunctions: ['forbidExtraProps'],
-      };
+      });
 
       const configResult = await computeEslintConfig('react', {
         un: {plugins: {react: {settings: ROOT_SETTINGS}}},

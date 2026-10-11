@@ -113,7 +113,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `unocss` eslint config', async () => {
-      const FILES = ['src/**/*.jsx'];
+      const FILES = ['src/**/*.jsx'] as const;
 
       const configResult = await computeEslintConfig({unocss: {files: FILES}});
 
@@ -129,7 +129,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `unocss` eslint config and merges with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({unocss: {ignores: IGNORES}});
 
@@ -163,7 +163,7 @@ describe('options', () => {
     });
 
     it('sets unocss settings when `settings` is provided', async () => {
-      const SETTINGS = {configPath: 'uno.config.ts'};
+      const SETTINGS = {configPath: 'uno.config.ts'} as const;
 
       const configResult = await computeEslintConfig('unocss', {
         un: {plugins: {unocss: {settings: SETTINGS}}},

@@ -14,12 +14,12 @@ You can change any of that without rewriting the defaults by hand.
   [![JavaScript](./assets/devicon-javascript.svg) Vanilla JS rules](https://eslint.org/docs/latest/rules),
   [![TypeScript] typescript-eslint](https://typescript-eslint.io/rules/),
   [🦄unicorn](https://npmx.dev/eslint-plugin-unicorn),
-  [⭐regexp](https://github.com/ota-meshi/eslint-plugin-regexp),
+  [⭐regexp](https://npmx.dev/eslint-plugin-regexp),
   [![NodeJS](./assets/devicon-nodejs.svg) node](https://github.com/eslint-community/eslint-plugin-n),
   [![VueJS] vue](https://eslint.vuejs.org),
-  [![Angular] angular](https://github.com/angular-eslint/angular-eslint),
+  [![Angular] angular](https://npmx.dev/angular-eslint),
   [![ReactJS] react](https://github.com/jsx-eslint/eslint-plugin-react) and 5 sister plugins,
-  [![SolidJS](./assets/devicon-solidjs.svg) solid](https://github.com/solidjs-community/eslint-plugin-solid),
+  [![SolidJS](./assets/devicon-solidjs.svg) solid](https://npmx.dev/eslint-plugin-solid),
   [![tailwindcss][TailwindCSS] tailwind](https://github.com/schoero/eslint-plugin-better-tailwindcss),
   [![CSS] css](https://github.com/eslint/css),
   [![YAML](./assets/devicon-yaml.svg) yaml](https://github.com/ota-meshi/eslint-plugin-yml)
@@ -413,7 +413,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![Zod] `zod`                                                                        | ✅ (`zod@^3\|\|^4` is installed)                                       | [eslint-plugin-zod](https://npmx.dev/eslint-plugin-zod) (`zod`)                                                                                     | Since v1.0.0                                                                                            |
 | ![Zod] `zod/mini`                                                                   | ✅                                                                     | [eslint-plugin-zod-mini](https://npmx.dev/eslint-plugin-zod-mini) (`zod-mini`)                                                                      | Since v1.0.0<br>Rules for [`zod/mini`](https://zod.dev/packages/mini)                                   |
 | ![Zod] `zod/core`                                                                   | ✅                                                                     | [eslint-plugin-zod-core](https://npmx.dev/eslint-plugin-zod-core) (`zod-core`)                                                                      | Since v1.0.0<br>Rules for [`zod/v4/core`](https://zod.dev/packages/core)                                |
-| ![Zod] `zodOpenapi`                                                                 | ✅ (`zod-openapi` is installed)                                        | [eslint-plugin-zod-openapi](https://npmx.dev/eslint-plugin-zod-openapi) (`zod-openapi`)                                                             | Since v1.0.0<br>Rules for [`zod-openapi`](https://github.com/samchungy/zod-openapi)                     |
+| ![Zod] `zodOpenapi`                                                                 | ✅ (`zod-openapi` is installed)                                        | [eslint-plugin-zod-openapi](https://npmx.dev/eslint-plugin-zod-openapi) (`zod-openapi`)                                                             | Since v1.0.0<br>Rules for [`zod-openapi`](https://npmx.dev/zod-openapi)                                 |
 | ![FormatJS](./assets/logos-formatjs.svg) `formatJs`                                 | ✅ (`@formatjs/icu-messageformat-parser` is installed)                 | [eslint-plugin-formatjs](https://npmx.dev/eslint-plugin-formatjs) (`formatjs`)                                                                      | Since v1.0.0                                                                                            |
 | `i18next`                                                                           | ✅ (`i18next` or its React/Next.js/Remix/Vue binding is installed)     | [eslint-plugin-i18next](https://npmx.dev/eslint-plugin-i18next) (`i18next`)                                                                         | Since v1.0.0                                                                                            |
 | `i18next/vue`                                                                       | ✅ (`vue` config is enabled)                                           | ^                                                                                                                                                   | Since v1.0.0<br>Rule options adjusted for Vue templates                                                 |

@@ -26,13 +26,13 @@ const packageJsonsResult = await Promise.all(
   }),
 );
 
-const DEPENDENCIES_TO_SKIP = new Set<string>([
+const DEPENDENCIES_TO_SKIP: ReadonlySet<string> = new Set([
   'eslint',
   'eslint-typegen',
   '@eslint/config-inspector',
 ] satisfies (keyof typeof packageJson.devDependencies)[]);
 
-const WELL_KNOWN_PEER_DEPENDENCIES = new Set<string>([
+const WELL_KNOWN_PEER_DEPENDENCIES: ReadonlySet<string> = new Set([
   'eslint',
   'typescript',
   '@typescript-eslint/eslint-plugin',
@@ -60,7 +60,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
     styleText('bgGray', packageInfo.info.version || '[version unknown]'),
     isDev ? styleText('bgGreenBright', ' DEV ') : '',
   );
-  for (const [peerDependencyName, peerDependencyRange = ''] of Object.entries(peerDependencies)) {
+  Object.entries(peerDependencies).forEach(([peerDependencyName, peerDependencyRange]) => {
     const isOptional = packageInfo.info.peerDependenciesMeta?.[peerDependencyName]?.optional;
     console.log(
       '\t',
@@ -72,5 +72,5 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
       styleText('gray', peerDependencyRange),
       styleText('greenBright', isOptional ? '[optional]' : ''),
     );
-  }
+  });
 }

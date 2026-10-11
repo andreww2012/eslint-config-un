@@ -20,18 +20,21 @@ const logger = consola.withTag('type-info-rules');
 
 const require = createRequire(import.meta.url);
 
-const LOADER_CONTEXT: ModuleLoaderContext = {rootOptions: {}, missingPackages: new Map()};
+const LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {rootOptions: {}, missingPackages: new Map()};
 
 /**
  * Both take over the process when their prerequisites are missing, which kills the probe
  */
-const PLUGINS_BREAKING_THE_PROBE = new Set(['file-progress', 'import-integrity']);
+const PLUGINS_BREAKING_THE_PROBE: ReadonlySet<string> = new Set([
+  'file-progress',
+  'import-integrity',
+]);
 
 /**
  * Their entries are derived from what the plugin itself declares, so a candidate the plugin does not
  * flag is a decision taken upstream, not a gap here
  */
-const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES = new Set(
+const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES: ReadonlySet<string> = new Set(
   Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
     'typeAware' in categories ? prefix : [],
   ),
@@ -105,12 +108,12 @@ const report = (
   const groups = [...Map.groupBy(findings, ({prefix}) => prefix)].toSorted(([left], [right]) =>
     left.localeCompare(right),
   );
-  for (const [prefix, group] of groups) {
+  groups.forEach(([prefix, group]) => {
     console.log(`  ${stylePluginPrefix(prefix)} (${group.length})`);
-    for (const finding of group) {
+    group.forEach((finding) => {
       console.log(`    ${styleRuleName(finding.ruleName).padEnd(60)} ${describe(finding)}`);
-    }
-  }
+    });
+  });
 };
 
 const main = async () => {
@@ -185,11 +188,11 @@ const main = async () => {
     }
   };
 
-  for (const {prefix, plugin} of plugins) {
-    for (const ruleName of detectViaMeta(plugin)) {
+  plugins.forEach(({prefix, plugin}) => {
+    detectViaMeta(plugin).forEach((ruleName) => {
       addDetection(`${prefix}/${ruleName}`, 'meta.docs.requiresTypeChecking');
-    }
-  }
+    });
+  });
 
   if (argv.flags.probe) {
     const probeInput = Object.fromEntries(
@@ -203,11 +206,11 @@ const main = async () => {
       probeRules(probeInput, {withTypeInfo: false}),
     ]);
 
-    for (const failure of [...typed.failures, ...untyped.failures]) {
+    [...typed.failures, ...untyped.failures].forEach((failure) => {
       logger.warn(`The probe could not finish a fixture file: ${failure}`);
-    }
+    });
 
-    for (const [fullRuleName, keys] of typed.accessed) {
+    typed.accessed.forEach((keys, fullRuleName) => {
       const doesThrowWithoutTypeInfo =
         untyped.threw.has(fullRuleName) && !typed.threw.has(fullRuleName);
       // Not throwing proves nothing on its own: the fixture may simply never take the rule down the
@@ -224,13 +227,13 @@ const main = async () => {
           doesThrowWithoutTypeInfo || (doesDegradeGracefully ? 'optional' : undefined),
         );
       }
-    }
+    });
 
-    for (const fullRuleName of untyped.threw.keys()) {
+    untyped.threw.keys().forEach((fullRuleName) => {
       if (!typed.threw.has(fullRuleName)) {
         addDetection(fullRuleName, 'probe: throws without type information', true);
       }
-    }
+    });
   }
 
   if (argv.flags.trace) {
@@ -244,11 +247,11 @@ const main = async () => {
         continue;
       }
       const knownRuleNames = new Set(Object.keys(plugin.rules || {}));
-      for (const [ruleName, reason] of await traceRulesUsingTypeInfo(packageRoot, ruleDirectory)) {
+      (await traceRulesUsingTypeInfo(packageRoot, ruleDirectory)).forEach((reason, ruleName) => {
         if (knownRuleNames.has(ruleName)) {
           addDetection(`${prefix}/${ruleName}`, `trace: ${reason}`);
         }
-      }
+      });
     }
   }
 

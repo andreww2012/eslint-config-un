@@ -88,7 +88,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tsdoc` eslint config', async () => {
-      const FILES = ['**/*.ts'];
+      const FILES = ['**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({tsdoc: {files: FILES}});
 
@@ -104,7 +104,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tsdoc` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({tsdoc: {ignores: IGNORES}});
 

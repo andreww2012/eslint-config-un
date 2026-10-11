@@ -99,7 +99,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `js-inline` eslint config', async () => {
-      const FILES = ['src/**/*.html'];
+      const FILES = ['src/**/*.html'] as const;
 
       const configResult = await computeEslintConfig({jsInline: {files: FILES}});
 
@@ -118,7 +118,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `js-inline` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({jsInline: {ignores: IGNORES}});
 
@@ -129,7 +129,7 @@ describe('un options', () => {
     });
 
     it('does not propagate user `ignores` to `js-inline/js-inside-html-inside-markdown` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({jsInline: {ignores: IGNORES}});
 
@@ -181,8 +181,8 @@ describe('options', () => {
     });
 
     it('customizes `html-extensions` when provided', async () => {
-      const DISABLED_EXTENSIONS = ['.erb'];
-      const ENABLED_EXTENSIONS = ['.custom'];
+      const DISABLED_EXTENSIONS = ['.erb'] as const;
+      const ENABLED_EXTENSIONS = ['.custom'] as const;
 
       const configResult = await computeEslintConfig('jsInline', {
         un: {
@@ -203,11 +203,11 @@ describe('options', () => {
 
       expect(htmlSettings).toHaveProperty(
         'html-extensions',
-        expect.not.arrayContaining(DISABLED_EXTENSIONS),
+        expect.not.arrayContaining([...DISABLED_EXTENSIONS]),
       );
       expect(htmlSettings).toHaveProperty(
         'html-extensions',
-        expect.arrayContaining(ENABLED_EXTENSIONS),
+        expect.arrayContaining([...ENABLED_EXTENSIONS]),
       );
     });
 
@@ -226,8 +226,8 @@ describe('options', () => {
     });
 
     it('customizes `xml-extensions` when provided', async () => {
-      const DISABLED_EXTENSIONS = ['.xhtml'];
-      const ENABLED_EXTENSIONS = ['.svg'];
+      const DISABLED_EXTENSIONS = ['.xhtml'] as const;
+      const ENABLED_EXTENSIONS = ['.svg'] as const;
 
       const configResult = await computeEslintConfig('jsInline', {
         un: {
@@ -248,23 +248,23 @@ describe('options', () => {
 
       expect(htmlSettings).toHaveProperty(
         'xml-extensions',
-        expect.not.arrayContaining(DISABLED_EXTENSIONS),
+        expect.not.arrayContaining([...DISABLED_EXTENSIONS]),
       );
       expect(htmlSettings).toHaveProperty(
         'xml-extensions',
-        expect.arrayContaining(ENABLED_EXTENSIONS),
+        expect.arrayContaining([...ENABLED_EXTENSIONS]),
       );
     });
 
     it('passes through other settings properties', async () => {
-      const SETTINGS = {
+      const SETTINGS = Object.freeze({
         'html-extensions': {},
         indent: '2' as const,
         'report-bad-indent': 'warn' as const,
         'javascript-tag-names': ['script'],
         'javascript-mime-types': 'text/javascript',
         'ignore-tags-without-type': false,
-      };
+      });
 
       const configResult = await computeEslintConfig('jsInline', {
         un: {plugins: {'html-processor': {settings: SETTINGS}}},

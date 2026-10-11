@@ -152,7 +152,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `github-actions` eslint config', async () => {
-      const FILES = ['.github/**/*.yml'];
+      const FILES = ['.github/**/*.yml'] as const;
 
       const configResult = await computeEslintConfig({githubActions: {files: FILES}});
 
@@ -168,7 +168,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `github-actions` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({githubActions: {ignores: IGNORES}});
       const ignores = configResult.getConfigByUnPostfix('github-actions')?.ignores;

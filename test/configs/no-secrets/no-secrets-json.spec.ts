@@ -54,7 +54,7 @@ describe('no-secrets: sub config `json`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `no-secrets/json` eslint config', async () => {
-        const FILES = ['**/*.json'];
+        const FILES = ['**/*.json'] as const;
 
         const configResult = await computeEslintConfig({
           noSecrets: {configJson: {files: FILES}},
@@ -74,7 +74,7 @@ describe('no-secrets: sub config `json`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `no-secrets/json` eslint config and always includes `**/package-lock.json`', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           noSecrets: {configJson: {ignores: IGNORES}},

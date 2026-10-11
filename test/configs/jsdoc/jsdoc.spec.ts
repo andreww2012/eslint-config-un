@@ -121,7 +121,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `jsdoc` eslint config', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({jsdoc: {files: FILES}});
 
@@ -137,7 +137,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `jsdoc` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({jsdoc: {ignores: IGNORES}});
 
@@ -188,10 +188,10 @@ describe('options', () => {
     });
 
     it('sets `definedTags` in `jsdoc/check-tag-names` rule options when `customTags` is provided', async () => {
-      const CUSTOM_TAGS = ['slot', 'component'];
+      const CUSTOM_TAGS = ['slot', 'component'] as const;
 
       const configResult = await computeEslintConfig({
-        jsdoc: {customTags: CUSTOM_TAGS},
+        jsdoc: {customTags: [...CUSTOM_TAGS]},
       });
 
       expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/check-tag-names')).toStrictEqual([

@@ -2,12 +2,12 @@ const FIXTURES = {
   sqlTaggedQuery: 'sql-tagged-query.ts',
 } as const;
 
-const UNREACHABLE_CONNECTION = {
+const UNREACHABLE_CONNECTION = Object.freeze({
   databaseUrl: 'postgres://postgres:postgres@127.0.0.1:1/postgres',
   targets: [{tag: 'sql'}],
-};
+});
 
-const CONFIGURED = {safeql: {options: {connections: UNREACHABLE_CONNECTION}}};
+const CONFIGURED = Object.freeze({safeql: {options: {connections: UNREACHABLE_CONNECTION}}});
 
 beforeEach(() => {
   addInstalledPackages({'@ts-safeql/sql-tag': '0.2.2'});
@@ -141,7 +141,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `safeql` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({
         safeql: {...CONFIGURED.safeql, files: FILES},
@@ -162,7 +162,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `safeql` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({
         safeql: {...CONFIGURED.safeql, ignores: IGNORES},

@@ -104,7 +104,7 @@ describe('markdown: sub config `codeBlocks`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `markdown/code-blocks-processor` eslint config', async () => {
-        const FILES = ['docs/**/*.md'];
+        const FILES = ['docs/**/*.md'] as const;
 
         const configResult = await computeEslintConfig({
           markdown: {configCodeBlocks: {files: FILES}},
@@ -116,7 +116,7 @@ describe('markdown: sub config `codeBlocks`', () => {
       });
 
       it('does not apply user-provided `files` to `markdown/code-blocks` eslint config', async () => {
-        const FILES = ['docs/**/*.md'];
+        const FILES = ['docs/**/*.md'] as const;
 
         const configResult = await computeEslintConfig({
           markdown: {configCodeBlocks: {files: FILES}},
@@ -137,7 +137,7 @@ describe('markdown: sub config `codeBlocks`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `markdown/code-blocks-processor` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['CHANGELOG.md'];
+        const IGNORES = ['CHANGELOG.md'] as const;
 
         const configResult = await computeEslintConfig({
           markdown: {configCodeBlocks: {ignores: IGNORES}},

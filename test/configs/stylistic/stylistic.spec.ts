@@ -18,7 +18,7 @@ describe('basic tests', () => {
     expect(config?.ignores?.length).toBeGreaterThan(0);
     expect(configResult.getConfigByUnPostfix('stylistic/spaced-comment')?.files).toBeUndefined();
 
-    const EXPECTED_IGNORES = [GLOB_YML_YAML, GLOB_HTM_HTML];
+    const EXPECTED_IGNORES = [GLOB_YML_YAML, GLOB_HTM_HTML] as const;
 
     const ignores = configResult.getConfigByUnPostfix('stylistic/spaced-comment')?.ignores;
 
@@ -174,7 +174,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `stylistic` and `stylistic/spaced-comment` eslint configs', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({stylistic: {files: FILES}});
 
@@ -194,7 +194,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `stylistic` and `stylistic/spaced-comment` eslint configs and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({stylistic: {ignores: IGNORES}});
 

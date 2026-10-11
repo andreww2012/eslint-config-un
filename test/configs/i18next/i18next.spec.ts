@@ -132,7 +132,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `i18next` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
+      const FILES = ['src/**/*.tsx'] as const;
 
       const configResult = await computeEslintConfig({i18next: {files: FILES}});
 
@@ -148,7 +148,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `i18next` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({i18next: {ignores: IGNORES}});
 
@@ -185,7 +185,7 @@ describe('options', () => {
     });
 
     it('passes the provided options to `i18next/no-literal-string`', async () => {
-      const OPTIONS = {mode: 'jsx-only' as const, callees: {exclude: ['logger.*']}};
+      const OPTIONS = Object.freeze({mode: 'jsx-only' as const, callees: {exclude: ['logger.*']}});
 
       const configResult = await computeEslintConfig({i18next: {options: OPTIONS}});
 

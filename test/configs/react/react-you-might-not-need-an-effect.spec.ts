@@ -61,7 +61,7 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/you-might-not-need-an-effect` eslint config', async () => {
-        const FILES = ['src/**/*.tsx'];
+        const FILES = ['src/**/*.tsx'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configYouMightNotNeedAnEffect: {files: FILES}},
@@ -85,7 +85,7 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           react: {configYouMightNotNeedAnEffect: {ignores: IGNORES}},

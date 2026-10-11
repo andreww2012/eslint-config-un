@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
-import {PLUGIN_PACKAGES_META} from '../../shared/packages-meta';
+import {PLUGIN_PACKAGES_META, type PluginPackageMeta} from '../../shared/packages-meta';
 import {
   CASCADE_LAYOUT,
   CONFIG_PHASES,
@@ -72,11 +72,14 @@ const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {
   return `@default ${isEnabledByDefault}${condition ? ` <=> ${condition}` : ''}`;
 };
 
-const PLUGINS_BY_CONFIG_KEY = Map.groupBy(
+const PLUGINS_BY_CONFIG_KEY: ReadonlyMap<
+  string,
+  {configKey: string; meta: PluginPackageMeta; packageName: string}[]
+> = Map.groupBy(
   Object.entries(PLUGIN_PACKAGES_META).flatMap(([packageName, meta]) =>
     meta.configs.map((configKey) => ({configKey, meta, packageName})),
   ),
-  ({configKey}): string => configKey,
+  ({configKey}) => configKey,
 );
 
 /**
@@ -447,7 +450,7 @@ const renderManifests = (configs: readonly DiscoveredConfig[], cascadeOrder: rea
   return `import type {CascadeAnchor, ConfigModuleLoader} from '../config-un/define-config';
 import type {ConfigKey} from './index.gen';
 
-export const CONFIG_MANIFESTS: Partial<Record<ConfigKey, ConfigModuleLoader>> = {
+export const CONFIG_MANIFESTS: Readonly<Partial<Record<ConfigKey, ConfigModuleLoader>>> = {
 ${configs
   .map(
     (config) => `  ${config.key}: {
@@ -461,17 +464,17 @@ ${serializeStaticFacts(config)}
 /**
  * Configs enabled by \`defaultConfigsStatus: 'misc-enabled'\`
  */
-export const MISC_GROUP_CONFIGS = [
+export const MISC_GROUP_CONFIGS: readonly ConfigKey[] = [
 ${miscGroupConfigs.map((key) => `  '${key}',`).join('\n')}
-] as const satisfies readonly ConfigKey[];
+];
 
 /**
  * Resolved cascade order: every Config, plus the anchors marking the places held by the cascade
  * entries that are not Configs
  */
-export const CONFIG_ORDER = [
+export const CONFIG_ORDER: readonly (CascadeAnchor | ConfigKey)[] = [
 ${cascadeOrder.map((entry) => `  '${entry}',`).join('\n')}
-] as const satisfies readonly (CascadeAnchor | ConfigKey)[];
+];
 `;
 };
 

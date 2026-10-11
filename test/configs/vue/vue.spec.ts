@@ -180,7 +180,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `vue` eslint config', async () => {
-      const FILES = ['src/**/*.vue'];
+      const FILES = ['src/**/*.vue'] as const;
 
       const configResult = await computeEslintConfig({vue: {files: FILES}});
 
@@ -196,7 +196,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `vue` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({vue: {ignores: IGNORES}});
 
@@ -581,14 +581,14 @@ describe('options', () => {
     });
 
     it("adds specified components to `vue/no-undef-components`'s `ignorePatterns` when array syntax is used", async () => {
-      const KNOWN_COMPONENTS = ['^MyComponent$'];
+      const KNOWN_COMPONENTS = ['^MyComponent$'] as const;
 
       const configResult = await computeEslintConfig({
-        vue: {knownComponentNames: KNOWN_COMPONENTS},
+        vue: {knownComponentNames: [...KNOWN_COMPONENTS]},
       });
 
       expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-components')).toMatchObject([
-        {ignorePatterns: expect.arrayContaining(KNOWN_COMPONENTS) as unknown},
+        {ignorePatterns: expect.arrayContaining([...KNOWN_COMPONENTS]) as unknown},
       ]);
     });
 
@@ -621,10 +621,10 @@ describe('options', () => {
     });
 
     it("adds specified directives to `vue/no-undef-directives`'s `ignore` when array syntax is used", async () => {
-      const KNOWN_DIRECTIVES = ['my-directive'];
+      const KNOWN_DIRECTIVES = ['my-directive'] as const;
 
       const configResult = await computeEslintConfig({
-        vue: {knownDirectiveNames: KNOWN_DIRECTIVES},
+        vue: {knownDirectiveNames: [...KNOWN_DIRECTIVES]},
       });
 
       expect(configResult.getRuleEntryOptions('vue', 'vue/no-undef-directives')).toStrictEqual([
@@ -785,7 +785,7 @@ describe('`vue` and `ts` configs relationship', () => {
   });
 
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if explicitly specified', async () => {
-    const FILES = ['src/**/*.vue'];
+    const FILES = ['src/**/*.vue'] as const;
 
     const configResult = await computeEslintConfig({vue: {files: FILES}, ts: true});
 

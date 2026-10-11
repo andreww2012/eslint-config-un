@@ -127,7 +127,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `check-file` eslint config', async () => {
-      const FILES = ['src/**/*.{js,ts}'];
+      const FILES = ['src/**/*.{js,ts}'] as const;
 
       const configResult = await computeEslintConfig({checkFile: {files: FILES}});
 
@@ -152,7 +152,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `check-file` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({checkFile: {ignores: IGNORES}});
 
@@ -182,7 +182,7 @@ describe('options', () => {
     });
 
     it('enables `check-file/filename-naming-convention` rule when provided as object', async () => {
-      const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
+      const CONVENTIONS = Object.freeze({'**/*': 'KEBAB_CASE'});
 
       const configResult = await computeEslintConfig({
         checkFile: {fileNamingConventions: CONVENTIONS},
@@ -197,10 +197,10 @@ describe('options', () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {ignoreMiddleExtensions: true},
-      ] satisfies NonEmptyTuple;
+      ] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({
-        checkFile: {fileNamingConventions: CONVENTIONS},
+        checkFile: {fileNamingConventions: [...CONVENTIONS]},
       });
 
       expect(
@@ -219,7 +219,7 @@ describe('options', () => {
     });
 
     it('enables `check-file/folder-naming-convention` rule when provided as object', async () => {
-      const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
+      const CONVENTIONS = Object.freeze({'**/*': 'KEBAB_CASE'});
 
       const configResult = await computeEslintConfig({
         checkFile: {folderNamingConventions: CONVENTIONS},
@@ -234,10 +234,10 @@ describe('options', () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {errorMessage: 'use kebab-case folders'},
-      ] satisfies NonEmptyTuple;
+      ] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({
-        checkFile: {folderNamingConventions: CONVENTIONS},
+        checkFile: {folderNamingConventions: [...CONVENTIONS]},
       });
 
       expect(

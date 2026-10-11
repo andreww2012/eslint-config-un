@@ -149,7 +149,7 @@ export const fetchPackageStats = (packageName: string) =>
 const ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS = 300_000 satisfies Ms<'5m'>;
 
 // TODO start executing packages in a separate process so that it won't crash the main process
-const CRASHING_PACKAGES = new Set(['@servicenow/eslint-plugin']);
+const CRASHING_PACKAGES: ReadonlySet<string> = new Set(['@servicenow/eslint-plugin']);
 
 export const executePackageAsEslintPlugin = (packageName: string) =>
   Effect.gen(function* () {

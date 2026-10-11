@@ -34,9 +34,8 @@ export interface JsonEslintConfigOptions<
   configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json'>;
 }
 
-const JSON_SUB_CONFIGS_FILES: Record<
-  keyof (typeof PARSING_LANGUAGES)['json']['dialects'],
-  string[]
+const JSON_SUB_CONFIGS_FILES: Readonly<
+  Record<keyof (typeof PARSING_LANGUAGES)['json']['dialects'], string[]>
 > = {
   json: [GLOB_JSON],
   jsonc: [GLOB_JSONC],

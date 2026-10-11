@@ -102,7 +102,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tree-shaking` eslint config', async () => {
-      const FILES = ['**/*.ts'];
+      const FILES = ['**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({treeShaking: {files: FILES}});
 
@@ -118,7 +118,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tree-shaking` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({treeShaking: {ignores: IGNORES}});
 
@@ -161,7 +161,7 @@ describe('options', () => {
     });
 
     it('passes provided options to `tree-shaking/no-side-effects-in-initialization` rule when `options` is set', async () => {
-      const OPTIONS = {noSideEffectsWhenCalled: [{function: 'define'}]};
+      const OPTIONS = Object.freeze({noSideEffectsWhenCalled: [{function: 'define'}]});
 
       const configResult = await computeEslintConfig({treeShaking: {options: OPTIONS}});
 

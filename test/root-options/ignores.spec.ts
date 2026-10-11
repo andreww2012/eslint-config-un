@@ -1,6 +1,6 @@
 import {DEFAULT_GLOBAL_IGNORES} from '../../src/constants';
 
-const IGNORES = ['**/coverage', '**/temp'];
+const IGNORES = ['**/coverage', '**/temp'] as const;
 
 const getGlobalIgnores = async (
   ignores: ((Parameters<typeof computeEslintConfig>[1] & {})['un'] & {})['ignores'],

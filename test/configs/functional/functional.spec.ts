@@ -126,7 +126,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `functional` eslint config', async () => {
-      const FILES = ['**/*.ts'];
+      const FILES = ['**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({functional: {files: FILES}});
 
@@ -142,7 +142,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `functional` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({functional: {ignores: IGNORES}});
 
@@ -179,7 +179,9 @@ describe('options', () => {
     });
 
     it('sets user-provided `immutability` settings on `functional` eslint config', async () => {
-      const PLUGIN_SETTINGS = {overrides: [{type: 'ReadonlyDeep', to: 'Immutable'} as const]};
+      const PLUGIN_SETTINGS = Object.freeze({
+        overrides: [{type: 'ReadonlyDeep', to: 'Immutable'} as const],
+      });
 
       const configResult = await computeEslintConfig('functional', {
         un: {plugins: {functional: {settings: PLUGIN_SETTINGS}}},

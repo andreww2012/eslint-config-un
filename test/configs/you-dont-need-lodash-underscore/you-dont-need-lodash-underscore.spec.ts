@@ -128,7 +128,7 @@ describe('basic tests', () => {
       'lodash',
       'lodash-es',
       ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}`),
-    ];
+    ] as const;
 
     it('does not create `you-dont-need-lodash-underscore` eslint config when no lodash package is installed', async () => {
       setInstalledPackages({});
@@ -201,7 +201,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `you-dont-need-lodash-underscore` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({youDontNeedLodashUnderscore: {files: FILES}});
 
@@ -219,7 +219,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `you-dont-need-lodash-underscore` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({
         youDontNeedLodashUnderscore: {ignores: IGNORES},

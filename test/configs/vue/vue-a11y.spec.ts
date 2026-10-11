@@ -58,7 +58,7 @@ describe('vue: sub config `a11y`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `vue/a11y` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({vue: {configA11y: {files: FILES}}});
 
@@ -74,7 +74,7 @@ describe('vue: sub config `a11y`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `vue/a11y` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({vue: {configA11y: {ignores: IGNORES}}});
 

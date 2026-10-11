@@ -94,7 +94,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `toml` eslint config', async () => {
-      const FILES = ['app/**/*.toml'];
+      const FILES = ['app/**/*.toml'] as const;
 
       const configResult = await computeEslintConfig({toml: {files: FILES}});
 
@@ -110,7 +110,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('includes user-provided `ignores` in `toml` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({toml: {ignores: IGNORES}});
 

@@ -91,7 +91,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `sql` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({sql: {files: FILES}});
 
@@ -107,7 +107,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `sql` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({sql: {ignores: IGNORES}});
 
@@ -137,7 +137,7 @@ describe('options', () => {
     });
 
     it('assigns `placeholderRule` to `sql` settings property', async () => {
-      const SETTINGS = {placeholderRule: String.raw`\?`};
+      const SETTINGS = {placeholderRule: String.raw`\?`} as const;
 
       const configResult = await computeEslintConfig('sql', {
         un: {plugins: {sql: {settings: SETTINGS}}},

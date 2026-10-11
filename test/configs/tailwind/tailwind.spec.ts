@@ -99,7 +99,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tailwind` eslint config', async () => {
-      const FILES = ['src/**/*.jsx'];
+      const FILES = ['src/**/*.jsx'] as const;
 
       const configResult = await computeEslintConfig({tailwind: {files: FILES}});
 
@@ -115,7 +115,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tailwind` eslint config and merges with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({tailwind: {ignores: IGNORES}});
 
@@ -152,7 +152,7 @@ describe('options', () => {
     });
 
     it('passes plain settings directly to `tailwindcss` settings property', async () => {
-      const SETTINGS = {cssConfigPath: 'src/style.css'};
+      const SETTINGS = {cssConfigPath: 'src/style.css'} as const;
 
       const configResult = await computeEslintConfig('tailwind', {
         un: {plugins: {tailwindcss: {settings: SETTINGS}}},
@@ -165,10 +165,10 @@ describe('options', () => {
 
     describe('`functions` setting', () => {
       it('overwrites default `functions` when provided as array', async () => {
-        const FUNCTIONS = ['cn', 'clsx'];
+        const FUNCTIONS = ['cn', 'clsx'] as const;
 
         const configResult = await computeEslintConfig('tailwind', {
-          un: {plugins: {tailwindcss: {settings: {functions: FUNCTIONS}}}},
+          un: {plugins: {tailwindcss: {settings: {functions: [...FUNCTIONS]}}}},
         });
 
         expect(
@@ -202,10 +202,10 @@ describe('options', () => {
 
     describe('`ignoredKeys` setting', () => {
       it('overwrites default `ignoredKeys` when provided as array', async () => {
-        const IGNORED_KEYS = ['customVariants'];
+        const IGNORED_KEYS = ['customVariants'] as const;
 
         const configResult = await computeEslintConfig('tailwind', {
-          un: {plugins: {tailwindcss: {settings: {ignoredKeys: IGNORED_KEYS}}}},
+          un: {plugins: {tailwindcss: {settings: {ignoredKeys: [...IGNORED_KEYS]}}}},
         });
 
         expect(
@@ -239,10 +239,10 @@ describe('options', () => {
 
     describe('`attributes` setting', () => {
       it('overwrites default `attributes` when provided as array', async () => {
-        const ATTRIBUTES = ['class', 'className'];
+        const ATTRIBUTES = ['class', 'className'] as const;
 
         const configResult = await computeEslintConfig('tailwind', {
-          un: {plugins: {tailwindcss: {settings: {attributes: ATTRIBUTES}}}},
+          un: {plugins: {tailwindcss: {settings: {attributes: [...ATTRIBUTES]}}}},
         });
 
         expect(

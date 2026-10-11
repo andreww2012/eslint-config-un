@@ -153,7 +153,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `import` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({import: {files: FILES}});
 
@@ -169,7 +169,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `import` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({import: {ignores: IGNORES}});
 
@@ -195,9 +195,9 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `extraneousDependenciesCheck`', () => {
-    const IGNORE_PATTERNS = ['**/test/**', '**/spec/**'];
-    const PACKAGE_DIRS = ['.', 'packages/my-package'];
-    const WHITELIST = ['my-bundled-lib', 'another-lib'];
+    const IGNORE_PATTERNS = ['**/test/**', '**/spec/**'] as const;
+    const PACKAGE_DIRS = ['.', 'packages/my-package'] as const;
+    const WHITELIST = ['my-bundled-lib', 'another-lib'] as const;
 
     it('enables `import/no-extraneous-dependencies` rule and allows dev dependencies by default', async () => {
       const configResult = await computeEslintConfig('import');
@@ -283,7 +283,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         import: {
           extraneousDependenciesCheck: {
-            checkDevDependencies: {ignorePatterns: IGNORE_PATTERNS},
+            checkDevDependencies: {ignorePatterns: [...IGNORE_PATTERNS]},
           },
         },
       });
@@ -298,7 +298,7 @@ describe('options', () => {
         {
           import: {
             extraneousDependenciesCheck: {
-              checkDevDependencies: {ignorePatterns: IGNORE_PATTERNS},
+              checkDevDependencies: {ignorePatterns: [...IGNORE_PATTERNS]},
             },
           },
         },
@@ -323,7 +323,7 @@ describe('options', () => {
 
     it('never reports the whitelisted packages', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesCheck: {whitelist: WHITELIST}},
+        import: {extraneousDependenciesCheck: {whitelist: [...WHITELIST]}},
       });
 
       expect(
@@ -343,7 +343,7 @@ describe('options', () => {
 
     it('looks up the dependencies in all the given directories when `packageDir` is an array', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesCheck: {packageDir: PACKAGE_DIRS}},
+        import: {extraneousDependenciesCheck: {packageDir: [...PACKAGE_DIRS]}},
       });
 
       expect(
@@ -363,7 +363,7 @@ describe('options', () => {
 
     it('merges the object form with the default value', async () => {
       const configResult = await computeEslintConfig(
-        {import: {extraneousDependenciesCheck: {whitelist: WHITELIST}}},
+        {import: {extraneousDependenciesCheck: {whitelist: [...WHITELIST]}}},
         {un: {mode: 'lib'}},
       );
 
@@ -379,7 +379,7 @@ describe('options', () => {
 
     it('passes the rule options as-is when an array is provided', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesCheck: [{includeTypes: true, whitelist: WHITELIST}]},
+        import: {extraneousDependenciesCheck: [{includeTypes: true, whitelist: [...WHITELIST]}]},
       });
 
       expect(
@@ -413,7 +413,7 @@ describe('options', () => {
 
     it('merges the value returned by the function form with the default value', async () => {
       const configResult = await computeEslintConfig(
-        {import: {extraneousDependenciesCheck: () => ({whitelist: WHITELIST})}},
+        {import: {extraneousDependenciesCheck: () => ({whitelist: [...WHITELIST]})}},
         {un: {mode: 'lib'}},
       );
 
@@ -473,10 +473,10 @@ describe('options', () => {
     });
 
     it('adds `ignore` to `import/no-unresolved` rule when provided as array', async () => {
-      const PATTERNS = ['virtual:*', 'bun:*'];
+      const PATTERNS = ['virtual:*', 'bun:*'] as const;
 
       const configResult = await computeEslintConfig({
-        import: {importPatternsToIgnoreWhenTryingToResolve: PATTERNS},
+        import: {importPatternsToIgnoreWhenTryingToResolve: [...PATTERNS]},
       });
 
       expect(configResult.getRuleEntryOptions('import', 'import/no-unresolved')).toStrictEqual([
@@ -503,7 +503,7 @@ describe('options', () => {
     });
 
     it('enables `import/extensions` with `*` key controlling default when `requireModuleExtensions` is object with `*`', async () => {
-      const OPTIONS = {'*': 'always' as const, ts: 'never' as const};
+      const OPTIONS = {'*': 'always' as const, ts: 'never' as const} as const;
 
       const configResult = await computeEslintConfig({
         import: {requireModuleExtensions: OPTIONS},
@@ -537,7 +537,7 @@ describe('options', () => {
     });
 
     it('merges provided options into `import/no-duplicates` rule', async () => {
-      const OPTIONS = {considerQueryString: true};
+      const OPTIONS = {considerQueryString: true} as const;
 
       const configResult = await computeEslintConfig({
         import: {noDuplicatesOptions: OPTIONS},

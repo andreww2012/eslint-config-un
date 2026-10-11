@@ -88,7 +88,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `header` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({header: {files: FILES}});
 
@@ -104,7 +104,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `header` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({header: {ignores: IGNORES}});
 
@@ -139,10 +139,10 @@ describe('options', () => {
         'Copy-right',
         2,
         {lineEndings: 'windows' as const},
-      ] satisfies NonEmptyTuple;
+      ] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({
-        header: {options: OPTIONS},
+        header: {options: [...OPTIONS]},
       });
 
       expect(configResult.getRuleEntryOptions('header', 'header/header')).toStrictEqual(OPTIONS);

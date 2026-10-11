@@ -122,7 +122,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `jest` eslint config', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({jest: {files: FILES}});
 
@@ -138,7 +138,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `jest` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({jest: {ignores: IGNORES}});
 
@@ -168,7 +168,7 @@ describe('options', () => {
     });
 
     it('sets jest settings when provided', async () => {
-      const SETTINGS = {version: 29};
+      const SETTINGS = {version: 29} as const;
 
       const configResult = await computeEslintConfig('jest', {
         un: {plugins: {jest: {settings: SETTINGS}}},
@@ -329,10 +329,10 @@ describe('options', () => {
     });
 
     it('adds provided `asyncMatchers` to `jest/valid-expect` options', async () => {
-      const ASYNC_MATCHERS = ['toResolve', 'toReject'];
+      const ASYNC_MATCHERS = ['toResolve', 'toReject'] as const;
 
       const configResult = await computeEslintConfig({
-        jest: {asyncMatchers: ASYNC_MATCHERS},
+        jest: {asyncMatchers: [...ASYNC_MATCHERS]},
       });
 
       expect(configResult.getRuleEntryOptions('jest', 'jest/valid-expect')).toStrictEqual([

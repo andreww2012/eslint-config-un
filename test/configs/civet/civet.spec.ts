@@ -229,7 +229,7 @@ describe('processor', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `civet` eslint config and the processor follows them', async () => {
-      const FILES = ['src/**/*.civet'];
+      const FILES = ['src/**/*.civet'] as const;
 
       const configResult = await computeEslintConfig({civet: {files: FILES}});
 
@@ -238,7 +238,7 @@ describe('un options', () => {
     });
 
     it('does not use user-provided `files` in `civet/compiled` eslint config', async () => {
-      const FILES = ['src/**/*.civet'];
+      const FILES = ['src/**/*.civet'] as const;
 
       const configResult = await computeEslintConfig({civet: {files: FILES}});
 
@@ -260,7 +260,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `civet` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({civet: {ignores: IGNORES}});
 

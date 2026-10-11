@@ -7,7 +7,7 @@ const DEV_PLUGIN = {
   rules: {
     'dev-only-rule': {meta: {type: 'problem', schema: []}, create: () => ({})},
   },
-} satisfies EslintPlugin;
+} as const satisfies EslintPlugin;
 
 const computeUnicornConfig = (plugins?: PluginsOption) =>
   computeEslintConfig('unicorn', {un: {plugins}});

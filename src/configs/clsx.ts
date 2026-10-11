@@ -23,7 +23,7 @@ export type ClsxPluginSettings = Partial<
 >;
 
 /**
- * [clsx](https://github.com/lukeed/clsx) specific rules.
+ * [clsx](https://npmx.dev/clsx) specific rules.
  *
  * 📁 Default `files`: all files
  */

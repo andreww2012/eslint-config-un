@@ -92,7 +92,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `perfectionist` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({perfectionist: {files: FILES}});
 
@@ -108,7 +108,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `perfectionist` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({perfectionist: {ignores: IGNORES}});
 
@@ -136,7 +136,7 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', async () => {
-    const PLUGIN_SETTINGS = {ignoreCase: false};
+    const PLUGIN_SETTINGS = {ignoreCase: false} as const;
 
     const configResult = await computeEslintConfig('perfectionist', {
       un: {plugins: {perfectionist: {settings: PLUGIN_SETTINGS}}},

@@ -75,7 +75,7 @@ describe('vue: sub config `nuxt`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `vue/nuxt` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({vue: {configNuxt: {files: FILES}}});
 
@@ -91,7 +91,7 @@ describe('vue: sub config `nuxt`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `vue/nuxt` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({vue: {configNuxt: {ignores: IGNORES}}});
 

@@ -44,9 +44,9 @@ describe('ts: how the files it lints are parsed', () => {
         );
 
         const configNames = ['parsing/ts', 'parsing/ts/type-aware', 'ts/non-type-aware/rules'];
-        for (const name of configNames) {
+        configNames.forEach((name) => {
           expect(configResult.getConfigByUnPostfix(name)?.files).not.toIncludeAnyMembers([glob]);
-        }
+        });
       },
     );
   });

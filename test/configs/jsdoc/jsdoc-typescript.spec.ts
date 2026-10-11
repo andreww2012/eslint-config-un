@@ -60,7 +60,7 @@ describe('jsdoc: sub config `typescript`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jsdoc/ts` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           jsdoc: {configTypescript: {files: FILES}},
@@ -82,7 +82,7 @@ describe('jsdoc: sub config `typescript`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jsdoc/ts` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           jsdoc: {configTypescript: {ignores: IGNORES}},

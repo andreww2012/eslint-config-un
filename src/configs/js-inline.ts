@@ -25,8 +25,8 @@ const DEFAULT_HTML_EXTENSIONS = [
   '.riot',
   '.twig',
   '.we',
-];
-const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
+] as const;
+const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'] as const;
 
 /**
  * [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) plugin

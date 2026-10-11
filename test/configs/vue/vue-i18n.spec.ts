@@ -71,7 +71,7 @@ describe('vue: sub config `i18n`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `vue/i18n` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({vue: {configI18n: {files: FILES}}});
 
@@ -87,7 +87,7 @@ describe('vue: sub config `i18n`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `vue/i18n` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({vue: {configI18n: {ignores: IGNORES}}});
 
@@ -126,7 +126,7 @@ describe('vue: sub config `i18n`', () => {
       });
 
       it('passes `settings` to `vue/i18n` eslint config when provided', async () => {
-        const SETTINGS = {localeDir: 'src/locales/**'};
+        const SETTINGS = {localeDir: 'src/locales/**'} as const;
 
         const configResult = await computeEslintConfig(
           {

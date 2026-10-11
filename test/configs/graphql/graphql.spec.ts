@@ -133,7 +133,7 @@ describe('rules', async () => {
     overrides: Object.fromEntries(
       GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
     ),
-  };
+  } as const;
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('graphql')).toMatchObject({
@@ -185,7 +185,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `graphql` eslint config', async () => {
-      const FILES = ['src/**/*.graphql'];
+      const FILES = ['src/**/*.graphql'] as const;
 
       const configResult = await computeEslintConfig({graphql: {files: FILES}});
 
@@ -201,7 +201,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `graphql` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({graphql: {ignores: IGNORES}});
 
@@ -296,7 +296,7 @@ describe('options', () => {
     });
 
     it('sets `parserOptions.graphQLConfig` when `graphqlConfig` is provided', async () => {
-      const GRAPHQL_CONFIG: IGraphQLConfig = {schema: './schema.graphql'};
+      const GRAPHQL_CONFIG: Readonly<IGraphQLConfig> = {schema: './schema.graphql'};
 
       const configResult = await computeEslintConfig({
         graphql: {graphqlConfig: GRAPHQL_CONFIG},

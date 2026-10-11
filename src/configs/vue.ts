@@ -233,7 +233,7 @@ interface ScopedCssEslintConfigOptions<
 }
 
 type SupportedVueMajorVersion = 2 | 3;
-const SUPPORTED_VUE_MAJOR_VERSIONS = new Set<number>(
+const SUPPORTED_VUE_MAJOR_VERSIONS: ReadonlySet<number> = new Set(
   allUnionMembers<SupportedVueMajorVersion>()([2, 3]),
 );
 const isSupportedVueMajorVersion = (
@@ -579,12 +579,12 @@ export interface VueEslintConfigOptions<
   vueOrNuxtProjectDir?: string;
 }
 
-const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
+const DEFAULT_VUE_FILES: readonly string[] = [GLOB_VUE];
 
-const VUE_KNOWN_COMPONENT_NAME_PATTERNS = ['^router-link$', '^router-view$'];
-const NUXT_KNOWN_COMPONENT_NAME_PATTERNS = ['^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)'];
+const VUE_KNOWN_COMPONENT_NAME_PATTERNS = ['^router-link$', '^router-view$'] as const;
+const NUXT_KNOWN_COMPONENT_NAME_PATTERNS = ['^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)'] as const;
 
-const NUXT_CONFIG_RULES = new Set<string>(
+const NUXT_CONFIG_RULES: ReadonlySet<string> = new Set(
   allUnionMembers<
     keyof Pick<UnRuleOptionsByPlugin['nuxt'], 'no-nuxt-config-test-key' | 'nuxt-config-keys-order'>
   >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),

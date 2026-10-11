@@ -60,7 +60,7 @@ describe('unicorn: sub config `anyLanguage`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `unicorn/any-language` eslint config', async () => {
-        const FILES = ['src/**/*.js'];
+        const FILES = ['src/**/*.js'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configAnyLanguage: {files: FILES}},
@@ -80,7 +80,7 @@ describe('unicorn: sub config `anyLanguage`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `unicorn/any-language` eslint config', async () => {
-        const IGNORES = ['**/vendor/**'];
+        const IGNORES = ['**/vendor/**'] as const;
 
         const configResult = await computeEslintConfig({
           unicorn: {configAnyLanguage: {ignores: IGNORES}},

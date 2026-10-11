@@ -22,7 +22,7 @@ describe('qunit: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `qunit` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         qunit: {files: FILES, configNoOnlyTests: true},
@@ -61,7 +61,7 @@ describe('qunit: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `qunit/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           qunit: {configNoOnlyTests: {files: FILES}},
@@ -83,7 +83,7 @@ describe('qunit: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `qunit/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           qunit: {configNoOnlyTests: {ignores: IGNORES}},

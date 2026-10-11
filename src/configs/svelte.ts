@@ -157,7 +157,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 }
 
 const LATEST_SVELTE_MAJOR_VERSION = 5;
-const DEFAULT_SVELTE_FILES = [GLOB_SVELTE];
+const DEFAULT_SVELTE_FILES = [GLOB_SVELTE] as const;
 
 const SVELTE_SYSTEM_RULES = RULE_CATEGORIES_PER_PLUGIN.svelte.system;
 

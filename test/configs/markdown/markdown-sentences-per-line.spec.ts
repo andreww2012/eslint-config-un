@@ -66,7 +66,7 @@ describe('markdown: sub config `sentencesPerLine`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `markdown/sentences-per-line` eslint config', async () => {
-        const FILES = ['docs/**/*.md'];
+        const FILES = ['docs/**/*.md'] as const;
 
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {files: FILES}},
@@ -88,7 +88,7 @@ describe('markdown: sub config `sentencesPerLine`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `markdown/sentences-per-line` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {ignores: IGNORES}},
@@ -223,7 +223,7 @@ describe('markdown: sub config `sentencesPerLine`', () => {
     });
 
     describe('option: `options`', () => {
-      const OPTIONS = {additionalAbbreviations: ['Mme.']};
+      const OPTIONS = Object.freeze({additionalAbbreviations: ['Mme.']});
 
       it('does not pass options to `sentences-per-line/one` rule by default', async () => {
         const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});

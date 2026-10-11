@@ -104,7 +104,7 @@ describe('i18next: sub config `vue`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `i18next/vue` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({
           i18next: {configVue: {files: FILES}},
@@ -126,7 +126,7 @@ describe('i18next: sub config `vue`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `i18next/vue` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           i18next: {configVue: {ignores: IGNORES}},

@@ -15,7 +15,7 @@ const OPTIONS = {
       },
     },
   },
-};
+} as const;
 
 beforeEach(() => {
   addInstalledPackages({tailwindcss: '3.4.17'});
@@ -90,7 +90,7 @@ describe('betterTailwind: sub config `css`', () => {
   });
 
   describe('interaction with the parent `files` option', () => {
-    const FILES = ['**/*.jsx'];
+    const FILES = ['**/*.jsx'] as const;
 
     it('does not create `better-tailwindcss/css` eslint config and warns when parent `files` is specified', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
@@ -121,7 +121,7 @@ describe('betterTailwind: sub config `css`', () => {
     });
 
     it('lints only its own `files` when parent `files` is specified', async () => {
-      const CSS_FILES = ['packages/app/**/*.css'];
+      const CSS_FILES = ['packages/app/**/*.css'] as const;
 
       const configResult = await computeEslintConfig(
         {css: true, betterTailwind: {configCss: {files: CSS_FILES}, files: FILES}},
@@ -218,7 +218,7 @@ describe('betterTailwind: sub config `css`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses `files` of the `css` config when option is not set', async () => {
-        const CSS_FILES = ['src/**/*.css'];
+        const CSS_FILES = ['src/**/*.css'] as const;
 
         const configResult = await computeEslintConfig(
           {css: {files: CSS_FILES}, betterTailwind: true},
@@ -231,8 +231,8 @@ describe('betterTailwind: sub config `css`', () => {
       });
 
       it('adds user-provided `files` to the ones parsed as CSS', async () => {
-        const FILES = ['packages/**/*.css'];
-        const CSS_FILES = ['src/**/*.css'];
+        const FILES = ['packages/**/*.css'] as const;
+        const CSS_FILES = ['src/**/*.css'] as const;
 
         const configResult = await computeEslintConfig(
           {css: {files: CSS_FILES}, betterTailwind: {configCss: {files: FILES}}},
@@ -246,7 +246,7 @@ describe('betterTailwind: sub config `css`', () => {
       });
 
       it('uses user-provided `files` in `better-tailwindcss/css` eslint config', async () => {
-        const FILES = ['src/**/*.css'];
+        const FILES = ['src/**/*.css'] as const;
 
         const configResult = await computeEslintConfig(
           {css: true, betterTailwind: {configCss: {files: FILES}}},
@@ -271,7 +271,7 @@ describe('betterTailwind: sub config `css`', () => {
 
     describe('option: `ignores`', () => {
       it('uses `ignores` of the `css` config when option is not set', async () => {
-        const CSS_IGNORES = ['**/vendor/**'];
+        const CSS_IGNORES = ['**/vendor/**'] as const;
 
         const configResult = await computeEslintConfig(
           {css: {ignores: CSS_IGNORES}, betterTailwind: true},
@@ -284,8 +284,8 @@ describe('betterTailwind: sub config `css`', () => {
       });
 
       it('uses user-provided `ignores` in `better-tailwindcss/css` eslint config and merges them with defaults', async () => {
-        const CSS_IGNORES = ['**/vendor/**'];
-        const IGNORES = ['**/fixtures/**'];
+        const CSS_IGNORES = ['**/vendor/**'] as const;
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig(
           {css: {ignores: CSS_IGNORES}, betterTailwind: {configCss: {ignores: IGNORES}}},

@@ -176,7 +176,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `node` eslint config', async () => {
-      const FILES = ['src/**/*.js'];
+      const FILES = ['src/**/*.js'] as const;
 
       const configResult = await computeEslintConfig({node: {files: FILES}});
 
@@ -192,7 +192,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `node` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({node: {ignores: IGNORES}});
 
@@ -222,7 +222,7 @@ describe('options', () => {
     });
 
     it('sets plugin settings on `node` eslint config when set', async () => {
-      const PLUGIN_SETTINGS = {tsconfigPath: 'foo/tsconfig.json'};
+      const PLUGIN_SETTINGS = {tsconfigPath: 'foo/tsconfig.json'} as const;
 
       const configResult = await computeEslintConfig('node', {
         un: {plugins: {node: {settings: PLUGIN_SETTINGS}}},
@@ -258,10 +258,10 @@ describe('options', () => {
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/es-syntax` rule if `noUnsupportedFeaturesIgnores.esSyntax` is non-empty array', async () => {
-      const SYNTAX = ['modules' as const];
+      const SYNTAX = ['modules' as const] as const;
 
       const result = await computeEslintConfig({
-        node: {noUnsupportedFeaturesIgnores: {esSyntax: SYNTAX}},
+        node: {noUnsupportedFeaturesIgnores: {esSyntax: [...SYNTAX]}},
       });
 
       expect(
@@ -270,10 +270,10 @@ describe('options', () => {
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/node-builtins` rule if `noUnsupportedFeaturesIgnores.nodeBuiltins` is non-empty array', async () => {
-      const NODE_BUILTINS = ['fs' as const];
+      const NODE_BUILTINS = ['fs' as const] as const;
 
       const result = await computeEslintConfig({
-        node: {noUnsupportedFeaturesIgnores: {nodeBuiltins: NODE_BUILTINS}},
+        node: {noUnsupportedFeaturesIgnores: {nodeBuiltins: [...NODE_BUILTINS]}},
       });
 
       expect(

@@ -11,7 +11,7 @@ import {
 } from './index';
 
 type SupportedTailwindVersion = 3 | 4;
-const SUPPORTED_TAILWIND_VERSIONS = new Set<number>(
+const SUPPORTED_TAILWIND_VERSIONS: ReadonlySet<number> = new Set(
   allUnionMembers<SupportedTailwindVersion>()([3, 4]),
 );
 

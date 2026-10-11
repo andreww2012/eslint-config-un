@@ -6,7 +6,7 @@ import type {Prettify} from '../../src/types';
 
 const PLUGINS_DIR = pathe.join(import.meta.dirname, '../../src/plugins');
 
-const NON_METADATA_MODULES = new Set(['shared.ts']);
+const NON_METADATA_MODULES: ReadonlySet<string> = new Set(['shared.ts']);
 
 export interface DiscoveredPlugin {
   prefix: string;

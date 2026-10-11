@@ -2,9 +2,9 @@ const FIXTURES = {
   elementTypesViolation: 'pages/Home.js',
 } as const;
 
-const PLUGIN_SETTINGS_OPTIONS = {
+const PLUGIN_SETTINGS_OPTIONS: Readonly<Parameters<typeof expectConfigState>[3]> = {
   un: {plugins: {boundaries: {settings: {elements: []}}}},
-} satisfies Parameters<typeof expectConfigState>[3];
+};
 
 describe('basic tests', () => {
   it('creates `boundaries` eslint config and loads `boundaries` plugin by default', async () => {
@@ -134,7 +134,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `boundaries` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig(
         {
@@ -160,7 +160,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `boundaries` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig(
         {
@@ -217,10 +217,10 @@ describe('options', () => {
     });
 
     it('sets `boundaries/elements` in ESLint config settings when `elements` is provided', async () => {
-      const ELEMENTS = [{type: 'component', pattern: 'components/*'}];
+      const ELEMENTS = [{type: 'component', pattern: 'components/*'}] as const;
 
       const configResult = await computeEslintConfig('boundaries', {
-        un: {plugins: {boundaries: {settings: {elements: ELEMENTS}}}},
+        un: {plugins: {boundaries: {settings: {elements: [...ELEMENTS]}}}},
       });
 
       expect(

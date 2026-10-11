@@ -27,8 +27,8 @@ describe('react: sub config `html`', () => {
     });
 
     it('uses parent config `files` and `ignores` in `react/html` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
-      const IGNORES = ['**/fixtures/**'];
+      const FILES = ['src/**/*.tsx'] as const;
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({react: {files: FILES, ignores: IGNORES}});
 
@@ -77,7 +77,7 @@ describe('react: sub config `html`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/html` eslint config', async () => {
-        const FILES = ['src/**/*.jsx'];
+        const FILES = ['src/**/*.jsx'] as const;
 
         const configResult = await computeEslintConfig({react: {configHtml: {files: FILES}}});
 
@@ -93,9 +93,11 @@ describe('react: sub config `html`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/html` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
-        const configResult = await computeEslintConfig({react: {configHtml: {ignores: IGNORES}}});
+        const configResult = await computeEslintConfig({
+          react: {configHtml: {ignores: IGNORES}},
+        });
 
         const ignores = configResult.getConfigByUnPostfix('react/html')?.ignores;
 

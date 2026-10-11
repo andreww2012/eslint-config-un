@@ -113,7 +113,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `rxjs` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({rxjs: {files: FILES}});
 
@@ -129,7 +129,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `rxjs` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({rxjs: {ignores: IGNORES}});
 
@@ -159,9 +159,11 @@ describe('options', () => {
     });
 
     it('enables `rxjs/ban-observables` rule when set to non-empty array', async () => {
-      const BANNED_OBSERVABLES = ['Observable'];
+      const BANNED_OBSERVABLES = ['Observable'] as const;
 
-      const configResult = await computeEslintConfig({rxjs: {banObservables: BANNED_OBSERVABLES}});
+      const configResult = await computeEslintConfig({
+        rxjs: {banObservables: [...BANNED_OBSERVABLES]},
+      });
 
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-observables')).toStrictEqual([
         Object.fromEntries(BANNED_OBSERVABLES.map((name) => [name, true])),
@@ -169,7 +171,7 @@ describe('options', () => {
     });
 
     it('enables `rxjs/ban-observables` rule when set to non-empty object', async () => {
-      const BANNED_OBSERVABLES = {Observable: 'Use Subject instead'};
+      const BANNED_OBSERVABLES = Object.freeze({Observable: 'Use Subject instead'});
 
       const configResult = await computeEslintConfig({rxjs: {banObservables: BANNED_OBSERVABLES}});
 
@@ -201,7 +203,7 @@ describe('options', () => {
     });
 
     it('merges user-provided operators with default `tap: true` when set to object', async () => {
-      const BANNED_OPERATORS = {switchMap: true};
+      const BANNED_OPERATORS = Object.freeze({switchMap: true});
 
       const configResult = await computeEslintConfig({
         rxjs: {banOperators: BANNED_OPERATORS},
@@ -213,10 +215,10 @@ describe('options', () => {
     });
 
     it('user-provided operators override default ignored ones when set to array', async () => {
-      const BANNED_OPERATORS = ['switchMap'];
+      const BANNED_OPERATORS = ['switchMap'] as const;
 
       const configResult = await computeEslintConfig({
-        rxjs: {banOperators: BANNED_OPERATORS},
+        rxjs: {banOperators: [...BANNED_OPERATORS]},
       });
 
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-operators')).toStrictEqual([
@@ -225,7 +227,7 @@ describe('options', () => {
     });
 
     it('allows overriding `tap` when set to object with `tap: false`', async () => {
-      const BANNED_OPERATORS = {tap: false};
+      const BANNED_OPERATORS = Object.freeze({tap: false});
 
       const configResult = await computeEslintConfig({
         rxjs: {banOperators: BANNED_OPERATORS},

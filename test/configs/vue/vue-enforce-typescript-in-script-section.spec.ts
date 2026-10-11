@@ -10,7 +10,7 @@ beforeEach(() => {
 describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
   describe('basic tests', () => {
     it('creates `vue/enforce-typescript-in-script-section` eslint config, uses parent config `files` and `ignores` and enforces `ts` lang for <script> sections when `ts` config is enabled', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({vue: {ignores: IGNORES}, ts: true});
 
@@ -118,7 +118,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `vue/enforce-typescript-in-script-section` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {configEnforceTypescriptInScriptSection: {files: FILES}},
@@ -142,7 +142,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `vue/enforce-typescript-in-script-section` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {configEnforceTypescriptInScriptSection: {ignores: IGNORES}},
@@ -179,7 +179,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
   describe('options', () => {
     describe('option: `typescriptRules`', () => {
       it('flows vue files into the type information entry by default', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {configEnforceTypescriptInScriptSection: {files: FILES}},
@@ -192,7 +192,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
       });
 
       it('does not flow vue files into the type information entry when set to `only-non-type-aware`', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {
@@ -210,7 +210,7 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
       });
 
       it('does not flow vue files into `ts` eslint configs when set to `false`', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {configEnforceTypescriptInScriptSection: {files: FILES, typescriptRules: false}},

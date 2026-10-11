@@ -24,7 +24,7 @@ describe('playwright: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `playwright` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['e2e/**/*.spec.ts'];
+      const FILES = ['e2e/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         playwright: {files: FILES, configNoOnlyTests: true},
@@ -67,7 +67,7 @@ describe('playwright: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `playwright/no-only-tests` eslint config', async () => {
-        const FILES = ['e2e/**/*.spec.ts'];
+        const FILES = ['e2e/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           playwright: {configNoOnlyTests: {files: FILES}},
@@ -89,7 +89,7 @@ describe('playwright: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `playwright/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           playwright: {configNoOnlyTests: {ignores: IGNORES}},

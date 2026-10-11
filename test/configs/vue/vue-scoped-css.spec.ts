@@ -65,7 +65,7 @@ describe('vue: sub config `scopedCss`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `vue/scoped-css` eslint config', async () => {
-        const FILES = ['src/**/*.vue'];
+        const FILES = ['src/**/*.vue'] as const;
 
         const configResult = await computeEslintConfig({vue: {configScopedCss: {files: FILES}}});
 
@@ -81,7 +81,7 @@ describe('vue: sub config `scopedCss`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `vue/scoped-css` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           vue: {configScopedCss: {ignores: IGNORES}},

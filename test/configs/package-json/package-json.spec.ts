@@ -94,7 +94,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `package-json` eslint config', async () => {
-      const FILES = ['package.json'];
+      const FILES = ['package.json'] as const;
 
       const configResult = await computeEslintConfig({packageJson: {files: FILES}});
 
@@ -110,7 +110,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `package-json` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({packageJson: {ignores: IGNORES}});
 
@@ -138,7 +138,7 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', async () => {
-    const PLUGIN_SETTINGS = {enforceForPrivate: true};
+    const PLUGIN_SETTINGS = {enforceForPrivate: true} as const;
 
     const configResult = await computeEslintConfig('packageJson', {
       un: {plugins: {'package-json': {settings: PLUGIN_SETTINGS}}},
@@ -161,9 +161,9 @@ describe('options', () => {
     });
 
     it('uses provided order in `package-json/order-properties` rule', async () => {
-      const ORDER = ['name', 'version'];
+      const ORDER = ['name', 'version'] as const;
 
-      const configResult = await computeEslintConfig({packageJson: {order: ORDER}});
+      const configResult = await computeEslintConfig({packageJson: {order: [...ORDER]}});
 
       expect(
         configResult.getRuleEntryOptions('package-json', 'package-json/order-properties'),
@@ -372,10 +372,10 @@ describe('options', () => {
     });
 
     it('enables `package-json/restrict-private-properties` rule with custom blocked properties when set to a string array', async () => {
-      const PROPERTIES = ['funding', 'bugs'];
+      const PROPERTIES = ['funding', 'bugs'] as const;
 
       const configResult = await computeEslintConfig({
-        packageJson: {disallowUnnecessaryPropertiesInPrivatePackages: PROPERTIES},
+        packageJson: {disallowUnnecessaryPropertiesInPrivatePackages: [...PROPERTIES]},
       });
 
       expect(
@@ -515,10 +515,10 @@ describe('options', () => {
     });
 
     it('enables `package-json/restrict-dist-tags` rule with custom allowed dist-tags when set to a string array', async () => {
-      const DIST_TAGS = ['next', 'beta'];
+      const DIST_TAGS = ['next', 'beta'] as const;
 
       const configResult = await computeEslintConfig({
-        packageJson: {allowedDistTags: DIST_TAGS},
+        packageJson: {allowedDistTags: [...DIST_TAGS]},
       });
 
       expect(
@@ -527,7 +527,7 @@ describe('options', () => {
     });
 
     it('passes rule options as-is when set to an object', async () => {
-      const RULE_OPTIONS = {allowedFor: ['devDependencies' as const]};
+      const RULE_OPTIONS = Object.freeze({allowedFor: ['devDependencies' as const]});
 
       const configResult = await computeEslintConfig({
         packageJson: {allowedDistTags: RULE_OPTIONS},

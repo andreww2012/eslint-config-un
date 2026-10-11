@@ -90,7 +90,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `headers` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({headers: {files: FILES}});
 
@@ -106,7 +106,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `headers` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({headers: {ignores: IGNORES}});
 
@@ -138,7 +138,7 @@ describe('options', () => {
     });
 
     it('passes provided options to `headers/header-format` rule when `options` is set', async () => {
-      const OPTIONS = {source: 'string' as const, content: 'Copyright'};
+      const OPTIONS = {source: 'string' as const, content: 'Copyright'} as const;
 
       const configResult = await computeEslintConfig({
         headers: {options: OPTIONS},

@@ -5,7 +5,7 @@
  * A rule only asks the type checker a question when it meets the syntax it is about, so the wider
  * this is, the fewer rules the probe misses
  */
-export const FIXTURE_FILES: Record<string, string> = {
+export const FIXTURE_FILES: Readonly<Record<string, string>> = {
   'tsconfig.json': JSON.stringify(
     {
       compilerOptions: {

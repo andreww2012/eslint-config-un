@@ -8,7 +8,7 @@ import {
   GLOB_YML_YAML,
 } from '../../src/constants';
 
-const IGNORES = ['vendor/**', '**/*.generated.css'];
+const IGNORES = ['vendor/**', '**/*.generated.css'] as const;
 
 describe('option: `parsing`', () => {
   describe('emitted config entries', () => {
@@ -77,9 +77,11 @@ describe('option: `parsing`', () => {
     });
 
     it('replaces the derived files when provided', async () => {
-      const FILES = ['styles/**/*.css'];
+      const FILES = ['styles/**/*.css'] as const;
 
-      const configResult = await computeEslintConfig('css', {un: {parsing: {css: {files: FILES}}}});
+      const configResult = await computeEslintConfig('css', {
+        un: {parsing: {css: {files: [...FILES]}}},
+      });
 
       expect(configResult.getConfigByUnPostfix('parsing/css')?.files).toStrictEqual(FILES);
     });
@@ -112,7 +114,7 @@ describe('option: `parsing`', () => {
   describe('option: `ignores`', () => {
     it('adds the patterns to the entry itself', async () => {
       const configResult = await computeEslintConfig('css', {
-        un: {parsing: {css: {ignores: IGNORES}}},
+        un: {parsing: {css: {ignores: [...IGNORES]}}},
       });
 
       expect(configResult.getConfigByUnPostfix('parsing/css')?.ignores).toStrictEqual(IGNORES);
@@ -121,7 +123,7 @@ describe('option: `parsing`', () => {
     it('adds the patterns to every config targeting the language', async () => {
       const configResult = await computeEslintConfig(
         {css: true, unicorn: true},
-        {un: {parsing: {css: {ignores: IGNORES}}}},
+        {un: {parsing: {css: {ignores: [...IGNORES]}}}},
       );
 
       expect(configResult.getConfigByUnPostfix('css')?.ignores).toIncludeAllMembers(IGNORES);
@@ -133,7 +135,7 @@ describe('option: `parsing`', () => {
     it('adds the patterns to the configs merely running on top of the language', async () => {
       const configResult = await computeEslintConfig(
         {markdown: true, unicorn: true},
-        {un: {parsing: {markdown: {ignores: IGNORES}}}},
+        {un: {parsing: {markdown: {ignores: [...IGNORES]}}}},
       );
 
       expect(configResult.getConfigByUnPostfix('unicorn/markdown')?.ignores).toIncludeAllMembers(
@@ -189,7 +191,7 @@ describe('option: `parsing`', () => {
 
     it('wins over a deferred property contributed by a config', async () => {
       addInstalledPackages({tailwindcss: '4.1.0'});
-      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
       const configResult = await computeEslintConfig(
         {css: {customSyntax: {atrules: {tailwind: {prelude: '<string>'}}}}},
@@ -203,7 +205,7 @@ describe('option: `parsing`', () => {
 
     it('wins over what a config contributes to a layer of the entry', async () => {
       addInstalledPackages({sass: '1.80.0'});
-      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
       const configResult = await computeEslintConfig('css', {
         un: {parsing: {css: {languageOptions: {customSyntax: CUSTOM_SYNTAX}}}},
@@ -286,7 +288,7 @@ describe('option: `parsing`', () => {
 
     it('is replaced by the `languageOptions` provided in this option', async () => {
       addInstalledPackages({tailwindcss: '4.1.0'});
-      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}};
+      const CUSTOM_SYNTAX = {atrules: {apply: {prelude: '<custom-selector>'}}} as const;
 
       const configResult = await computeEslintConfig('css', {
         un: {parsing: {css: {languageOptions: {customSyntax: CUSTOM_SYNTAX}}}},
@@ -303,7 +305,7 @@ describe('option: `parsing`', () => {
       'replaces the parser the `%s` dialect would have picked',
       async (language) => {
         addInstalledPackages({vue: '3.5.0', typescript: '5.9.0'});
-        const PARSER = {parseForESLint: () => ({})};
+        const PARSER = {parseForESLint: () => ({})} as const;
 
         const configResult = await computeEslintConfig(
           {vue: true, ts: true},
@@ -366,9 +368,9 @@ describe('option: `parsing`', () => {
     it('reaches every config written for it, not only the one that declared the language', async () => {
       const configResult = await computeEslintConfig({vue: true}, {un: {parsing: {vue: false}}});
 
-      for (const configName of ['vue', 'vue/a11y', 'vue/scoped-css'] as const) {
+      (['vue', 'vue/a11y', 'vue/scoped-css'] as const).forEach((configName) => {
         expect(configResult.getConfigByUnPostfix(configName)?.ignores).toContain('**/*');
-      }
+      });
     });
 
     it('reaches the configs holding the rules, not only the ones setting the parser up', async () => {
@@ -382,14 +384,11 @@ describe('option: `parsing`', () => {
       );
 
       // Leaving these on would lint files nothing can parse
-      for (const configName of [
-        'ts/non-type-aware/rules',
-        'ts/type-aware/rules',
-        'ts/overrides',
-        'jsdoc/ts',
-      ] as const) {
+      (
+        ['ts/non-type-aware/rules', 'ts/type-aware/rules', 'ts/overrides', 'jsdoc/ts'] as const
+      ).forEach((configName) => {
         expect(configResult.getConfigByUnPostfix(configName)?.ignores).toContain('**/*');
-      }
+      });
     });
 
     it('leaves the configs merely running on top of the language alone', async () => {

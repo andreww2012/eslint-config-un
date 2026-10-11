@@ -66,7 +66,7 @@ describe('ava: sub config `packageJson`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ava/package.json` eslint config', async () => {
-        const FILES = ['packages/*/package.json'];
+        const FILES = ['packages/*/package.json'] as const;
 
         const configResult = await computeEslintConfig({ava: {configPackageJson: {files: FILES}}});
 
@@ -82,7 +82,7 @@ describe('ava: sub config `packageJson`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ava/package.json` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           ava: {configPackageJson: {ignores: IGNORES}},

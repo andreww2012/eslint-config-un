@@ -27,7 +27,7 @@ import type {ConfigEnabledBy, ConfigManifest, PackageToCheck} from './define-con
 import type {PluginSettingsMap} from './plugin-settings';
 import type {PackageRequester, UnConfigContext} from './shared';
 
-const MISC_GROUP_CONFIGS_SET = new Set<keyof UnConfigs>(MISC_GROUP_CONFIGS);
+const MISC_GROUP_CONFIGS_SET: ReadonlySet<keyof UnConfigs> = new Set(MISC_GROUP_CONFIGS);
 
 const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) => {
   const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
@@ -37,9 +37,9 @@ const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) =>
     packageName: (hasVersionRange
       ? packageNameAndMaybeVersionRange.slice(0, versionDelimiterIndex)
       : packageNameAndMaybeVersionRange) as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
-    versionRangeToSatisfy: hasVersionRange
-      ? packageNameAndMaybeVersionRange.slice(versionDelimiterIndex + 1)
-      : undefined,
+    ...(hasVersionRange && {
+      versionRangeToSatisfy: packageNameAndMaybeVersionRange.slice(versionDelimiterIndex + 1),
+    }),
   };
 };
 
@@ -193,7 +193,7 @@ export function getIsConfigEnabledByManifest(
 
 type ModuleKind = 'package' | 'parser' | 'plugin';
 
-const MODULE_LOADERS: Record<ModuleKind, Record<string, {packageName: string}>> = {
+const MODULE_LOADERS: Readonly<Record<ModuleKind, Record<string, {packageName: string}>>> = {
   package: packagesLoaders,
   parser: parsersLoaders,
   plugin: pluginsLoaders,

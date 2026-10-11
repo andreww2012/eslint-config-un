@@ -84,7 +84,7 @@ describe('perfectionist: sub config `sortIntersectionTypes`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `perfectionist/sort-intersection-types` eslint config', async () => {
-        const FILES = ['src/**/*.ts'];
+        const FILES = ['src/**/*.ts'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortIntersectionTypes: {files: FILES}},
@@ -108,7 +108,7 @@ describe('perfectionist: sub config `sortIntersectionTypes`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `perfectionist/sort-intersection-types` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           perfectionist: {configSortIntersectionTypes: {ignores: IGNORES}},

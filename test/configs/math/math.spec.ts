@@ -114,7 +114,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `math` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({math: {files: FILES}});
 
@@ -130,7 +130,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `math` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({math: {ignores: IGNORES}});
 
@@ -164,7 +164,7 @@ describe('options', () => {
     });
 
     it('sets math settings when `settings` is provided', async () => {
-      const SETTINGS = {aggressive: true};
+      const SETTINGS = {aggressive: true} as const;
 
       const configResult = await computeEslintConfig('math', {
         un: {plugins: {math: {settings: SETTINGS}}},

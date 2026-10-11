@@ -3,7 +3,9 @@ import ourPackageJson from '../package.json' with {type: 'json'};
 import type {Branded} from './types';
 import {omit} from './utils';
 
-export const OPTIONAL_PEER_DEPENDENCIES = omit(ourPackageJson.peerDependencies, ['eslint']);
+export const OPTIONAL_PEER_DEPENDENCIES = Object.freeze(
+  omit(ourPackageJson.peerDependencies, ['eslint']),
+);
 
 /* Error levels */
 
@@ -144,9 +146,9 @@ export const GLOB_CIVET_COMPILED = `${GLOB_CIVET}/**/*.*` as const;
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
 
 export const GLOB_CONFIG_FILES = [
-  `**/*.config.${GLOB_JS_TS_X_EXTENSION}` as const,
-  `**/.*rc.${GLOB_JS_TS_X_EXTENSION}` as const,
-];
+  `**/*.config.${GLOB_JS_TS_X_EXTENSION}`,
+  `**/.*rc.${GLOB_JS_TS_X_EXTENSION}`,
+] as const;
 
 const GLOB_SUPPORTED_EXTENSIONS = [
   GLOB_JS_TS_X_EXTENSION,
@@ -223,11 +225,15 @@ export const CHECKED_LODASH_METHODS = [
 ] as const;
 
 const REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES = ['react', 'node', 'serve', 'dev'] as const;
-export const REMIX_PACKAGES = REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
-  (packageName) => `@remix-run/${packageName}` as const,
+export const REMIX_PACKAGES = Object.freeze(
+  REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
+    (packageName) => `@remix-run/${packageName}` as const,
+  ),
 );
-export const REACT_ROUTER_PACKAGES = REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
-  (packageName) => `@react-router/${packageName}` as const,
+export const REACT_ROUTER_PACKAGES = Object.freeze(
+  REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
+    (packageName) => `@react-router/${packageName}` as const,
+  ),
 );
 
 // `node-sass` is not here because it's deprecated and has order of magnitude less downloads

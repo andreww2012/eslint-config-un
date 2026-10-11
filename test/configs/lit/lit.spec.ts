@@ -146,7 +146,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `lit` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({lit: {files: FILES}});
 
@@ -162,7 +162,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `lit` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({lit: {ignores: IGNORES}});
 
@@ -192,7 +192,7 @@ describe('options', () => {
     });
 
     it('assigns `elementBaseClasses` to `lit` settings property', async () => {
-      const ELEMENT_BASE_CLASSES = {elementBaseClasses: ['MyBaseElement']};
+      const ELEMENT_BASE_CLASSES = Object.freeze({elementBaseClasses: ['MyBaseElement']});
 
       const configResult = await computeEslintConfig('lit', {
         un: {plugins: {lit: {settings: ELEMENT_BASE_CLASSES}}},

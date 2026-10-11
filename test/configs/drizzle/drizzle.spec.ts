@@ -136,7 +136,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `drizzle` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({drizzle: {files: FILES}});
 
@@ -152,7 +152,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `drizzle` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({drizzle: {ignores: IGNORES}});
 
@@ -205,10 +205,10 @@ describe('options', () => {
     });
 
     it('passes the set array to both delete and update rules', async () => {
-      const DRIZZLE_OBJECT_NAME = ['db', 'db2'];
+      const DRIZZLE_OBJECT_NAME = ['db', 'db2'] as const;
 
       const configResult = await computeEslintConfig({
-        drizzle: {drizzleObjectName: DRIZZLE_OBJECT_NAME},
+        drizzle: {drizzleObjectName: [...DRIZZLE_OBJECT_NAME]},
       });
 
       expect(

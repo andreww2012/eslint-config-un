@@ -209,8 +209,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       typeof vueConfigOptions === 'object' ? vueConfigOptions.configNuxt : undefined;
     return {
       isNuxtConfigDisabled: vueConfigOptions === false || nuxtConfigOptions === false,
-      nuxtBuildDirOption:
-        typeof nuxtConfigOptions === 'object' ? nuxtConfigOptions.buildDir : undefined,
+      ...(typeof nuxtConfigOptions === 'object' && {
+        nuxtBuildDirOption: nuxtConfigOptions.buildDir,
+      }),
     };
   })();
 
@@ -382,12 +383,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPluginPrefixes.has(prefix)),
   );
   const badPluginRenames = new Set<string>();
-  for (const newName of newPluginPrefixes) {
+  newPluginPrefixes.forEach((newName) => {
     if (newName === DISABLE_AUTOFIX || occupiedPluginPrefixes.has(newName)) {
       badPluginRenames.add(newName);
     }
     occupiedPluginPrefixes.add(newName);
-  }
+  });
   if (badPluginRenames.size > 0) {
     logger.fatal(
       `Invalid plugin renames: ${Array.from(badPluginRenames, (name) => styleText('red', name || styleText('italic', '<empty string>'))).join(', ')}. New names must not clash with the default plugin prefixes, have duplicates, be empty, or equal the reserved ${stylePluginPrefix(DISABLE_AUTOFIX)} prefix. If you happen to have a duplicate new prefix, please choose a different name. If you happen to rename some plugin to one of the default prefixes, you must also rename the plugin corresponding to that prefix.`,
@@ -500,7 +501,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const configSetups = new Map<ManifestConfigKey, ReturnType<typeof setupManifestConfig>>();
   const loadManifestConfig = (configKey: ManifestConfigKey) => {
-    const setup = configSetups.get(configKey) ?? setupManifestConfig(configKey);
+    const setup = configSetups.get(configKey) || setupManifestConfig(configKey);
     configSetups.set(configKey, setup);
     return setup;
   };
@@ -529,7 +530,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const rootConfigBuilder = context.createConfigBuilder({}, '');
   rootConfigBuilder
     ?.addConfig(['config-files', {applyUserFilesAndIgnores: false}], {
-      files: GLOB_CONFIG_FILES,
+      files: [...GLOB_CONFIG_FILES],
     })
     .disableAnyRule('node', 'no-unpublished-require')
     // Reports the `export default defineConfig(...)` most config files consist of
@@ -709,7 +710,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const usedPluginPrefixes: string[] =
     loadPluginsOnDemand === false
-      ? LOADABLE_PLUGIN_PREFIXES_LIST
+      ? [...LOADABLE_PLUGIN_PREFIXES_LIST]
       : // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
         // eslint-disable-next-line unicorn/no-array-sort
         [...context.usedPlugins].sort();

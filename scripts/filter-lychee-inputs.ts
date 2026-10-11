@@ -12,11 +12,11 @@ const allowedExtensions = new Set<string>();
 for (const configPath of configPaths) {
   const {extensions} = parseToml(await fs.readFile(configPath, 'utf8'));
   if (Array.isArray(extensions)) {
-    for (const extension of extensions) {
+    extensions.forEach((extension) => {
       if (typeof extension === 'string') {
         allowedExtensions.add(extension.toLowerCase());
       }
-    }
+    });
   }
 }
 

@@ -22,7 +22,7 @@ describe('ava: sub config `noOnlyTests`', () => {
     });
 
     it('inherits `files` from parent `ava` config when `configNoOnlyTests` is enabled', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({
         ava: {files: FILES, configNoOnlyTests: true},
@@ -61,7 +61,7 @@ describe('ava: sub config `noOnlyTests`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ava/no-only-tests` eslint config', async () => {
-        const FILES = ['tests/**/*.spec.ts'];
+        const FILES = ['tests/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           ava: {configNoOnlyTests: {files: FILES}},
@@ -81,7 +81,7 @@ describe('ava: sub config `noOnlyTests`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ava/no-only-tests` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           ava: {configNoOnlyTests: {ignores: IGNORES}},

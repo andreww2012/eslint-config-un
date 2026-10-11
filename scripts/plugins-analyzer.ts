@@ -46,12 +46,14 @@ const ANALYSIS_CRITERION_WEIGHTS = {
   rulesCount: 0.1,
 } as const;
 
-const ESLINT_PLUGIN_STATUSES_META: Record<
-  (ObjectValues<EslintPluginsDb> & {})['status'],
-  {
-    emoji: string;
-    priority: number;
-  }
+const ESLINT_PLUGIN_STATUSES_META: Readonly<
+  Record<
+    (ObjectValues<EslintPluginsDb> & {})['status'],
+    {
+      emoji: string;
+      priority: number;
+    }
+  >
 > = {
   added: {emoji: '✅', priority: 1},
   declined: {emoji: '❌', priority: 2},

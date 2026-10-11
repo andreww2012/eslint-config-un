@@ -9,7 +9,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  const MAIN_ESLINT_CONFIGS = ['angular/general', 'angular/template'];
+  const MAIN_ESLINT_CONFIGS = ['angular/general', 'angular/template'] as const;
 
   it('creates `angular/{general,template}` eslint configs and loads `angular` and `angular-template` plugins if set to `true`', async () => {
     const configResult = await computeEslintConfig('angular');
@@ -157,7 +157,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `angular/general` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({angular: {files: FILES}});
 
@@ -179,7 +179,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `angular/general` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({angular: {ignores: IGNORES}});
 
@@ -244,9 +244,11 @@ describe('options', () => {
     });
 
     it('uses custom `componentClassSuffixes` on `angular/component-class-suffix` rule', async () => {
-      const SUFFIXES = ['Component', 'Page'];
+      const SUFFIXES = ['Component', 'Page'] as const;
 
-      const configResult = await computeEslintConfig({angular: {componentClassSuffixes: SUFFIXES}});
+      const configResult = await computeEslintConfig({
+        angular: {componentClassSuffixes: [...SUFFIXES]},
+      });
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/component-class-suffix'),
@@ -280,7 +282,7 @@ describe('options', () => {
     });
 
     it('merges object options passed to `componentSelector` with defaults on `angular/component-selector` rule', async () => {
-      const OPTIONS = {prefix: ['app']};
+      const OPTIONS = Object.freeze({prefix: ['app']});
 
       const configResult = await computeEslintConfig({angular: {componentSelector: OPTIONS}});
 
@@ -290,11 +292,11 @@ describe('options', () => {
     });
 
     it('uses raw array options on `angular/component-selector` rule when `componentSelector` is array', async () => {
-      const SELECTOR = [
+      const SELECTOR = Object.freeze([
         {type: 'element' as const, prefix: ['app'], style: 'kebab-case' as const},
-      ] satisfies NonEmptyTuple;
+      ] satisfies NonEmptyTuple);
 
-      const configResult = await computeEslintConfig({angular: {componentSelector: SELECTOR}});
+      const configResult = await computeEslintConfig({angular: {componentSelector: [...SELECTOR]}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/component-selector'),
@@ -356,9 +358,11 @@ describe('options', () => {
     });
 
     it('uses the suffixes list passed to `directiveClassSuffixes` on `angular/directive-class-suffix` rule', async () => {
-      const SUFFIXES = ['Directive', 'Component'];
+      const SUFFIXES = ['Directive', 'Component'] as const;
 
-      const configResult = await computeEslintConfig({angular: {directiveClassSuffixes: SUFFIXES}});
+      const configResult = await computeEslintConfig({
+        angular: {directiveClassSuffixes: [...SUFFIXES]},
+      });
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/directive-class-suffix'),
@@ -384,7 +388,7 @@ describe('options', () => {
     });
 
     it('merges options passed to `directiveSelector` with default ones and sets them on `angular/directive-selector` rule', async () => {
-      const OPTIONS = {type: ['element' as const], prefix: 'foo'};
+      const OPTIONS = Object.freeze({type: ['element' as const], prefix: 'foo'});
 
       const configResult = await computeEslintConfig({angular: {directiveSelector: OPTIONS}});
 
@@ -402,11 +406,11 @@ describe('options', () => {
     });
 
     it('uses raw array options on `angular/directive-selector` rule when `directiveSelector` is array', async () => {
-      const SELECTOR = [
+      const SELECTOR = Object.freeze([
         {type: 'attribute' as const, prefix: ['app'], style: 'camelCase' as const},
-      ] satisfies NonEmptyTuple;
+      ] satisfies NonEmptyTuple);
 
-      const configResult = await computeEslintConfig({angular: {directiveSelector: SELECTOR}});
+      const configResult = await computeEslintConfig({angular: {directiveSelector: [...SELECTOR]}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/directive-selector'),
@@ -574,10 +578,10 @@ describe('options', () => {
     });
 
     it('uses custom `disallowedInputPrefixes`', async () => {
-      const PREFIXES = ['handle', 'on'];
+      const PREFIXES = ['handle', 'on'] as const;
 
       const configResult = await computeEslintConfig({
-        angular: {disallowedInputPrefixes: PREFIXES},
+        angular: {disallowedInputPrefixes: [...PREFIXES]},
       });
 
       expect(
@@ -650,9 +654,9 @@ describe('options', () => {
     });
 
     it('uses custom `pipePrefixes`', async () => {
-      const PREFIXES = ['app'];
+      const PREFIXES = ['app'] as const;
 
-      const configResult = await computeEslintConfig({angular: {pipePrefixes: PREFIXES}});
+      const configResult = await computeEslintConfig({angular: {pipePrefixes: [...PREFIXES]}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/pipe-prefix'),

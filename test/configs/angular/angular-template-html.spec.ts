@@ -53,8 +53,8 @@ describe('angular: sub config `template/html`', () => {
     });
 
     it('uses parent config `files` and `ignores` in `angular/template/html` eslint config', async () => {
-      const FILES = ['src/**/*.component.html'];
-      const IGNORES = ['**/fixtures/**'];
+      const FILES = ['src/**/*.component.html'] as const;
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({
         angular: {configTemplate: {files: FILES, ignores: IGNORES}},
@@ -105,7 +105,7 @@ describe('angular: sub config `template/html`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `angular/template/html` eslint config', async () => {
-        const FILES = ['src/**/*.html'];
+        const FILES = ['src/**/*.html'] as const;
 
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {configHtml: {files: FILES}}},
@@ -127,7 +127,7 @@ describe('angular: sub config `template/html`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `angular/template/html` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {configHtml: {ignores: IGNORES}}},

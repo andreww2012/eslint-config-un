@@ -83,7 +83,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in the `json/json` eslint config', async () => {
-      const FILES = ['src/**/*.json'];
+      const FILES = ['src/**/*.json'] as const;
 
       const configResult = await computeEslintConfig({json: {files: FILES}});
 
@@ -99,7 +99,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in the `json/json` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({json: {ignores: IGNORES}});
 

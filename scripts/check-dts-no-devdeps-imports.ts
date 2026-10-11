@@ -75,15 +75,15 @@ const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
  */
 function resolveAllowedPackages(pkg: PackageJson): Set<string> {
   const allowed = new Set<string>();
-  for (const section of ['dependencies', 'peerDependencies'] as const) {
-    for (const [name, version] of Object.entries(pkg[section] ?? {})) {
+  (['dependencies', 'peerDependencies'] as const).forEach((section) => {
+    Object.entries(pkg[section] || {}).forEach(([name, version]) => {
       allowed.add(name);
       const resolvedAlias = version.match(NPM_ALIAS_REGEX)?.[1];
       if (resolvedAlias) {
         allowed.add(resolvedAlias);
       }
-    }
-  }
+    });
+  });
   return allowed;
 }
 
@@ -99,11 +99,11 @@ function collectInlinedPackages(distDir: string): Set<string> {
       continue;
     }
     if (entry.name.startsWith('@')) {
-      for (const sub of fs.readdirSync(path.join(nmDir, entry.name), {withFileTypes: true})) {
+      fs.readdirSync(path.join(nmDir, entry.name), {withFileTypes: true}).forEach((sub) => {
         if (sub.isDirectory()) {
           inlined.add(`${entry.name}/${sub.name}`);
         }
-      }
+      });
     } else {
       inlined.add(entry.name);
     }
@@ -124,7 +124,7 @@ const inlinedDir = path.join(DIST_DIR, 'node_modules');
 
 const leaks = new Map<string, Set<string>>(); // file → leaked specifiers
 
-for (const file of walkDeclarations(DIST_DIR, inlinedDir)) {
+walkDeclarations(DIST_DIR, inlinedDir).forEach((file) => {
   const content = fs.readFileSync(file, 'utf8');
   const leakedSpecifiers = extractBareImports(file, content).filter((specifier) => {
     const packageName = toPkgName(specifier);
@@ -133,16 +133,16 @@ for (const file of walkDeclarations(DIST_DIR, inlinedDir)) {
   if (leakedSpecifiers.length > 0) {
     leaks.set(path.relative(ROOT, file), new Set(leakedSpecifiers));
   }
-}
+});
 
 if (leaks.size > 0) {
   console.error(styleText('red', '✗ devDependency types are leaking into declaration files:'));
-  for (const [file, specs] of leaks) {
+  leaks.forEach((specs, file) => {
     console.error(`  ${styleText('yellow', file)}`);
-    for (const spec of specs) {
+    specs.forEach((spec) => {
       console.error(`    ${spec}`);
-    }
-  }
+    });
+  });
   console.error(
     `\nRemove them from ${styleText('cyan', 'deps.dts.neverBundle')} in ${styleText('cyan', 'tsdown.config.ts')} to inline their types, or declare them as optional peer dependencies if their types can't be inlined.`,
   );

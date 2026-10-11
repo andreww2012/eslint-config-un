@@ -126,7 +126,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `nextjs` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
+      const FILES = ['src/**/*.tsx'] as const;
 
       const configResult = await computeEslintConfig({nextJs: {files: FILES}});
 
@@ -142,7 +142,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `nextjs` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({nextJs: {ignores: IGNORES}});
 
@@ -175,7 +175,7 @@ describe('options', () => {
     });
 
     it('sets `next` settings with `rootDir` as a string when provided', async () => {
-      const SETTINGS = {rootDir: '/path/to/app'};
+      const SETTINGS = {rootDir: '/path/to/app'} as const;
 
       const configResult = await computeEslintConfig('nextJs', {
         un: {plugins: {nextjs: {settings: SETTINGS}}},

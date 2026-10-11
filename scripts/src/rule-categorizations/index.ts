@@ -11,7 +11,7 @@ import {unicornRuleCategorization} from './unicorn';
  * A plugin needs one if its Configs split its rules into several Sub-configs, or if a category
  * describes something about the rules themselves, like requiring type information
  */
-export const RULE_CATEGORIZATIONS: Record<string, PluginRuleCategorizations> = {
+export const RULE_CATEGORIZATIONS: Readonly<Record<string, PluginRuleCategorizations>> = {
   e18e: e18eRuleCategorization,
   ember: createDocsCategoryCategorization('testing', 'Testing', {
     rulesToExclude: [

@@ -120,7 +120,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `svelte` eslint config', async () => {
-      const FILES = ['src/**/*.svelte'];
+      const FILES = ['src/**/*.svelte'] as const;
 
       const configResult = await computeEslintConfig({svelte: {files: FILES}});
 
@@ -136,7 +136,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `svelte` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({svelte: {ignores: IGNORES}});
 
@@ -276,7 +276,7 @@ describe('options', () => {
   });
 
   describe('option: `disallowedHtmlTags`', () => {
-    const SOME_DEFAULT_DISALLOWED_TAGS = ['center', 'font', 'marquee', 'param'];
+    const SOME_DEFAULT_DISALLOWED_TAGS = ['center', 'font', 'marquee', 'param'] as const;
 
     it('restricts default invalid html tags except `image` in `svelte/no-restricted-html-elements` by default', async () => {
       const configResult = await computeEslintConfig('svelte');
@@ -323,7 +323,7 @@ describe('options', () => {
     });
 
     it('sets svelte settings when `settings` is provided', async () => {
-      const SETTINGS = {ignoreWarnings: ['some-rule']};
+      const SETTINGS = Object.freeze({ignoreWarnings: ['some-rule']});
 
       const configResult = await computeEslintConfig('svelte', {
         un: {plugins: {svelte: {settings: SETTINGS}}},
@@ -451,7 +451,7 @@ describe('`svelte` and `ts` configs relationship', () => {
   });
 
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if explicitly specified', async () => {
-    const FILES = ['src/**/*.svelte'];
+    const FILES = ['src/**/*.svelte'] as const;
 
     const configResult = await computeEslintConfig({svelte: {files: FILES}, ts: true});
 
@@ -462,8 +462,8 @@ describe('`svelte` and `ts` configs relationship', () => {
   });
 
   it('`files` specified in `enforceTypescriptInScriptSection` sub-config take precedence over the parent config `files` and flow to `ts/{non-type-aware,type-aware}/setup` eslint configs', async () => {
-    const MAIN_FILES = ['a/**/*.svelte'];
-    const TS_FILES = ['b/**/*.svelte'];
+    const MAIN_FILES = ['a/**/*.svelte'] as const;
+    const TS_FILES = ['b/**/*.svelte'] as const;
 
     const configResult = await computeEslintConfig({
       svelte: {files: MAIN_FILES, configEnforceTypescriptInScriptSection: {files: TS_FILES}},
@@ -507,8 +507,8 @@ describe('`svelte/system` sub config', () => {
   });
 
   it('follows the `files` and `ignores` of the parent config', async () => {
-    const FILES = ['src/**/*.svelte'];
-    const IGNORES = ['legacy/**'];
+    const FILES = ['src/**/*.svelte'] as const;
+    const IGNORES = ['legacy/**'] as const;
 
     const configResult = await computeEslintConfig({svelte: {files: FILES, ignores: IGNORES}});
 

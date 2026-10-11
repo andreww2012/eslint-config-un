@@ -165,7 +165,7 @@ export interface CssConfigResult {
   optionsResolved: CssEslintConfigOptions;
 }
 
-const DEFAULT_FILES = [GLOB_CSS];
+const DEFAULT_FILES = [GLOB_CSS] as const;
 
 /**
  * SCSS ships `@function`, and CSS is shipping an unrelated at-rule of the same name that is not

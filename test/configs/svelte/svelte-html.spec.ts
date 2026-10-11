@@ -27,8 +27,8 @@ describe('svelte: sub config `html`', () => {
     });
 
     it('uses parent config `files` and `ignores` in `svelte/html` eslint config', async () => {
-      const FILES = ['src/**/*.svelte'];
-      const IGNORES = ['**/fixtures/**'];
+      const FILES = ['src/**/*.svelte'] as const;
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({svelte: {files: FILES, ignores: IGNORES}});
 
@@ -77,7 +77,7 @@ describe('svelte: sub config `html`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `svelte/html` eslint config', async () => {
-        const FILES = ['src/**/*.svelte'];
+        const FILES = ['src/**/*.svelte'] as const;
 
         const configResult = await computeEslintConfig({svelte: {configHtml: {files: FILES}}});
 
@@ -93,9 +93,11 @@ describe('svelte: sub config `html`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `svelte/html` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
-        const configResult = await computeEslintConfig({svelte: {configHtml: {ignores: IGNORES}}});
+        const configResult = await computeEslintConfig({
+          svelte: {configHtml: {ignores: IGNORES}},
+        });
 
         const ignores = configResult.getConfigByUnPostfix('svelte/html')?.ignores;
 

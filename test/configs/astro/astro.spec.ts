@@ -142,7 +142,7 @@ describe('un options', () => {
     });
 
     it('uses user-provided `files` in `astro` eslint config', async () => {
-      const FILES = ['src/**/*.astro'];
+      const FILES = ['src/**/*.astro'] as const;
 
       const configResult = await computeEslintConfig({astro: {files: FILES}});
 
@@ -167,7 +167,7 @@ describe('un options', () => {
     });
 
     it('uses user-provided `ignores` in `astro` eslint config', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({astro: {ignores: IGNORES}});
 
@@ -204,7 +204,7 @@ describe('`astro` and `ts` configs relationship', () => {
   });
 
   it('`files` flow to `ts/{non-type-aware,type-aware}/setup` eslint configs if explicitly specified', async () => {
-    const FILES = ['src/**/*.astro'];
+    const FILES = ['src/**/*.astro'] as const;
 
     const configResult = await computeEslintConfig({astro: {files: FILES}, ts: true});
 

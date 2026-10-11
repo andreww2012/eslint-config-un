@@ -51,7 +51,7 @@ describe('e18e: sub config `moduleReplacements`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `e18e/module-replacements` eslint config', async () => {
-        const FILES = ['**/package.json', '**/packages/*/package.json'];
+        const FILES = ['**/package.json', '**/packages/*/package.json'] as const;
 
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {files: FILES}},
@@ -73,7 +73,7 @@ describe('e18e: sub config `moduleReplacements`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `e18e/module-replacements` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/package.json'];
+        const IGNORES = ['**/fixtures/package.json'] as const;
 
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {ignores: IGNORES}},
@@ -114,7 +114,7 @@ describe('e18e: sub config `moduleReplacements`', () => {
       });
 
       it('passes custom `options` to `e18e/ban-dependencies` rule when provided', async () => {
-        const OPTIONS = {modules: ['lodash']};
+        const OPTIONS = Object.freeze({modules: ['lodash']});
 
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {options: OPTIONS}},

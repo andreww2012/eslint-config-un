@@ -30,7 +30,7 @@ function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModul
   };
 }
 
-const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, RuleSeverity> = {
+const STRING_SEVERITY_TO_NUMERIC: Readonly<Record<EslintSeverity & string, RuleSeverity>> = {
   off: OFF,
   warn: WARNING,
   error: ERROR,
@@ -48,7 +48,7 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
       : severityRaw) as RuleSeverity);
   return [
     severity,
-    severityOrOptionsOverride?.[1] ??
+    severityOrOptionsOverride?.[1] ||
       (Array.isArray(entry) ? structuredClone(entry.slice(1) as Options) : []),
   ];
 };

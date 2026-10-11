@@ -121,7 +121,7 @@ export const PARSING_LANGUAGES = (
     },
   >(
     languages: Languages,
-  ) => Languages
+  ) => Readonly<Languages>
 )({
   // Must go first so that every framework whose files embed TypeScript can take the parsing over
   ts: {
@@ -548,10 +548,10 @@ const resolveEntriesForLanguage = (
   const requestsRequiringLanguage = requests.filter(
     ({kind}) => kind === 'writtenFor' || kind === 'setUpOnly',
   );
-  for (const request of requestsRequiringLanguage) {
+  requestsRequiringLanguage.forEach((request) => {
     const dialect = dialectFromUser || request.dialect || definition.dialectDefault;
     mapGetOrInsert(requestsByDialect, dialect, []).push(request);
-  }
+  });
 
   const layersOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix != null);
@@ -657,7 +657,7 @@ const resolveEntriesForLanguage = (
   }));
 };
 
-const CONFIG_NAME_COLLATOR = new Intl.Collator('en');
+const configNameCollator = new Intl.Collator('en');
 
 /** This must be the only place a language, a parser or a processor is ever assigned */
 export const resolveParsingConfigs = (context: UnConfigContext) => {
@@ -671,11 +671,11 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
     entries: ResolvedParsingEntry[];
   }[] = [];
 
-  for (const language of objectKeysUnsafe(PARSING_LANGUAGES)) {
+  objectKeysUnsafe(PARSING_LANGUAGES).forEach((language) => {
     // Configs resolve concurrently, so request order differs between runs
     const requests = (context.parsingRequests.get(language) || []).toSorted(
       ({config: configA}, {config: configB}) =>
-        CONFIG_NAME_COLLATOR.compare(configA?.name || '', configB?.name || ''),
+        configNameCollator.compare(configA?.name || '', configB?.name || ''),
     );
     const entries = resolveEntriesForLanguage(language, parsingOptions[language], requests);
 
@@ -781,11 +781,11 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
     });
 
     resolved.push({language, requests, entries});
-  }
+  });
 
   const filesParsedByAnyLanguage = new Set(resultConfigs.flatMap(({files}) => files || []));
 
-  for (const {language, requests, entries} of resolved) {
+  resolved.forEach(({language, requests, entries}) => {
     const ignoresToPropagate = arrayUnique(entries.flatMap((entry) => entry.ignores || []));
     // A `runsOn` config may still be served by another language parsing the same files, so a
     // disabled language only keeps it off the files nothing is left to parse
@@ -806,7 +806,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         config.ignores = [...(config.ignores || []), ...ignores];
       }
     });
-  }
+  });
 
   return resultConfigs;
 };

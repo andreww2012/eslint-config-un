@@ -111,7 +111,7 @@ describe('rules', () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `remeda` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
+      const FILES = ['src/**/*.ts'] as const;
 
       const configResult = await computeEslintConfig({remeda: {files: FILES}});
 
@@ -127,7 +127,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `remeda` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({remeda: {ignores: IGNORES}});
 
@@ -163,7 +163,7 @@ describe('options', () => {
     });
 
     it('sets remeda settings when `settings` is provided', async () => {
-      const SETTINGS = {pragma: 'R'};
+      const SETTINGS = {pragma: 'R'} as const;
 
       const configResult = await computeEslintConfig('remeda', {
         un: {plugins: {remeda: {settings: SETTINGS}}},

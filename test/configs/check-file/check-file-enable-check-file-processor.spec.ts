@@ -31,7 +31,7 @@ describe('check-file: sub config `enableCheckFileProcessor`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `check-file/processor` eslint config', async () => {
-        const FILES = ['src/**/*.{js,ts}'];
+        const FILES = ['src/**/*.{js,ts}'] as const;
 
         const configResult = await computeEslintConfig({
           checkFile: {configEnableCheckFileProcessor: {files: FILES}},
@@ -53,7 +53,7 @@ describe('check-file: sub config `enableCheckFileProcessor`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `check-file/processor` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           checkFile: {configEnableCheckFileProcessor: {ignores: IGNORES}},

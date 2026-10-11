@@ -12,7 +12,12 @@ const UPSTREAM_IDLE_TIMEOUT_MS = 30_000;
 const PUBLISH_TIME = new Date(0).toISOString();
 
 // These describe a single connection, so forwarding them would break the other one
-const HOP_BY_HOP_HEADERS = new Set(['connection', 'host', 'keep-alive', 'transfer-encoding']);
+const HOP_BY_HOP_HEADERS: ReadonlySet<string> = new Set([
+  'connection',
+  'host',
+  'keep-alive',
+  'transfer-encoding',
+]);
 
 const omitHopByHopHeaders = (headers: http.IncomingHttpHeaders) =>
   Object.fromEntries(Object.entries(headers).filter(([name]) => !HOP_BY_HOP_HEADERS.has(name)));

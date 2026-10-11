@@ -87,7 +87,7 @@ describe('angular: sub config `template`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `angular/template` eslint config', async () => {
-        const FILES = ['src/**/*.html'];
+        const FILES = ['src/**/*.html'] as const;
 
         const configResult = await computeEslintConfig({angular: {configTemplate: {files: FILES}}});
 
@@ -103,7 +103,7 @@ describe('angular: sub config `template`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `angular/template` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {ignores: IGNORES}},

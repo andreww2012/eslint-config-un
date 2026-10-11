@@ -61,7 +61,7 @@ describe('astro: sub config `jsxA11y`', () => {
     });
 
     it('inherits `files` from parent `astro` config when `configJsxA11y` is enabled', async () => {
-      const FILES = ['src/**/*.astro'];
+      const FILES = ['src/**/*.astro'] as const;
 
       const inheritedConfigResult = await computeEslintConfig({
         astro: {files: FILES, configJsxA11y: true},
@@ -102,7 +102,7 @@ describe('astro: sub config `jsxA11y`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jsx-a11y/astro` eslint config', async () => {
-        const FILES = ['src/**/*.astro'];
+        const FILES = ['src/**/*.astro'] as const;
 
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {files: FILES}},
@@ -122,7 +122,7 @@ describe('astro: sub config `jsxA11y`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jsx-a11y/astro` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {ignores: IGNORES}},
@@ -164,7 +164,7 @@ describe('astro: sub config `jsxA11y`', () => {
       });
 
       it('sets both `jsx-a11y-x` and `jsx-a11y` settings when set', async () => {
-        const SETTINGS = {components: {CardLink: 'a'}};
+        const SETTINGS = {components: {CardLink: 'a'}} as const;
 
         const configResult = await computeEslintConfig(
           {

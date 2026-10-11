@@ -57,7 +57,7 @@ describe('testing-library: sub config `marko`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `testing-library/marko` eslint config', async () => {
-        const FILES = ['src/**/*.spec.ts'];
+        const FILES = ['src/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configMarko: {files: FILES}},
@@ -79,7 +79,7 @@ describe('testing-library: sub config `marko`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `testing-library/marko` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configMarko: {ignores: IGNORES}},
@@ -191,10 +191,10 @@ describe('testing-library: sub config `marko`', () => {
       });
 
       it('enables `testing-library/prefer-query-matchers` rule with provided entries', async () => {
-        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const];
+        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const] as const;
 
         const configResult = await computeEslintConfig({
-          testingLibrary: {configMarko: {preferQueryMatchers: MATCHERS}},
+          testingLibrary: {configMarko: {preferQueryMatchers: [...MATCHERS]}},
         });
 
         expect(

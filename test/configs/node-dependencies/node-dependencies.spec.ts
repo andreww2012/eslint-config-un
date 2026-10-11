@@ -110,7 +110,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `node-dependencies` eslint config', async () => {
-      const FILES = ['package.json'];
+      const FILES = ['package.json'] as const;
 
       const configResult = await computeEslintConfig({nodeDependencies: {files: FILES}});
 
@@ -126,7 +126,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `node-dependencies` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({nodeDependencies: {ignores: IGNORES}});
 
@@ -211,7 +211,7 @@ describe('options', () => {
     });
 
     it('enables `node-dependencies/absolute-version` rule with custom options when set to object', async () => {
-      const OPTIONS = {dependencies: 'always' as const};
+      const OPTIONS = {dependencies: 'always' as const} as const;
 
       const configResult = await computeEslintConfig({
         nodeDependencies: {enforceAbsoluteVersion: OPTIONS},

@@ -25,7 +25,7 @@ describe('jest: sub config `typescript`', () => {
     });
 
     it('uses default TypeScript files even when parent `jest` config has explicit `files`', async () => {
-      const FILES = ['tests/**/*.spec.ts'];
+      const FILES = ['tests/**/*.spec.ts'] as const;
 
       const configResult = await computeEslintConfig({jest: {files: FILES}, ts: true});
 
@@ -49,7 +49,7 @@ describe('jest: sub config `typescript`', () => {
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/ts` eslint config', async () => {
-        const FILES = ['src/**/*.spec.ts'];
+        const FILES = ['src/**/*.spec.ts'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configTypescript: {files: FILES}},
@@ -71,7 +71,7 @@ describe('jest: sub config `typescript`', () => {
 
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/ts` eslint config and merges them with defaults', async () => {
-        const IGNORES = ['**/fixtures/**'];
+        const IGNORES = ['**/fixtures/**'] as const;
 
         const configResult = await computeEslintConfig({
           jest: {configTypescript: {ignores: IGNORES}},

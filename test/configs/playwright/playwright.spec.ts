@@ -122,7 +122,7 @@ describe('rules', async () => {
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `playwright` eslint config', async () => {
-      const FILES = ['tests/**/*.playwright.ts'];
+      const FILES = ['tests/**/*.playwright.ts'] as const;
 
       const configResult = await computeEslintConfig({playwright: {files: FILES}});
 
@@ -138,7 +138,7 @@ describe('un options', () => {
 
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `playwright` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
+      const IGNORES = ['**/fixtures/**'] as const;
 
       const configResult = await computeEslintConfig({playwright: {ignores: IGNORES}});
 
@@ -172,7 +172,7 @@ describe('options', () => {
     });
 
     it('sets `playwright` settings when `settings` is provided', async () => {
-      const SETTINGS = {globalAliases: {test: ['myTest']}};
+      const SETTINGS = Object.freeze({globalAliases: {test: ['myTest']}});
 
       const configResult = await computeEslintConfig('playwright', {
         un: {plugins: {playwright: {settings: SETTINGS}}},

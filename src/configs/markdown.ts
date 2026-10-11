@@ -24,8 +24,8 @@ type MarkdownDialect = 'commonmark' | 'gfm';
 
 type CodeBlockLanguage = ShikiLanguageCodesList | (string & {});
 
-const DEFAULT_FILES = [GLOB_MARKDOWN];
-const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS];
+const DEFAULT_FILES = [GLOB_MARKDOWN] as const;
+const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS] as const;
 
 const GFM_ALERTS_TYPES = ['note', 'tip', 'important', 'warning', 'caution'] as const;
 
