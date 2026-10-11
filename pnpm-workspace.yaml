@@ -27,6 +27,11 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-web-api@5.26.0
   - eslint-plugin-react-x@5.26.0
   - eslint-plugin-jsdoc@65.3.0
+  - '@angular-eslint/bundled-angular-compiler@22.6.0'
+  - '@angular-eslint/eslint-plugin-template@22.6.0'
+  - '@angular-eslint/eslint-plugin@22.6.0'
+  - '@angular-eslint/template-parser@22.6.0'
+  - '@angular-eslint/utils@22.6.0'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
