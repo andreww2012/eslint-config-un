@@ -5,7 +5,6 @@ import {type UserConfig, defineConfig} from 'tsdown';
 export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
   'import-meta-resolve', // Patched
   'remeda', // Inlined to avoid always considered installed
-  'eslint-plugin-no-type-assertion', // Inlined to avoid installation warnings about incompatibility with ESLint 9/10
   '@eslint/compat', // Patched
   'eslint-plugin-html', // Under Yarn PnP, only inlined code finds ESLint in `require.cache` and resolves the undeclared `@html-eslint/parser`
   'eslint-plugin-file-progress', // Patched

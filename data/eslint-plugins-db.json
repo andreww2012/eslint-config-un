@@ -4736,7 +4736,7 @@
   "eslint-plugin-no-todo-without-ticket": {"status": "fetched"},
   "eslint-plugin-no-toxic": {"status": "fetched"},
   "eslint-plugin-no-truthy-collections": {"status": "fetched"},
-  "eslint-plugin-no-type-assertion": {"status": "added"},
+  "eslint-plugin-no-type-assertion": {"status": "declined", "reason": "Replaced by our own `un/no-type-assertion` rule"},
   "eslint-plugin-no-typeof-window-undefined": {"status": "fetched"},
   "eslint-plugin-no-ui-async-callback": {"status": "fetched"},
   "eslint-plugin-no-unary-plus": {"status": "fetched"},

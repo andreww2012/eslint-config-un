@@ -5,6 +5,7 @@ const FIXTURES = {
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
   forOfLoopOverArray: 'for-of-loop-over-array.js',
   neverConditionalTypes: 'never-conditional-types.ts',
+  typeAssertions: 'type-assertions.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
 
@@ -146,6 +147,32 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Use `.forEach(…)` instead of this loop."');
+  });
+
+  it('`un/no-type-assertion` rule fires on type assertions when enabled', async () => {
+    const results = await testEslintConfig(
+      {ts: true, un: {overrides: {'un/no-type-assertion': 'error'}}},
+      FIXTURES.typeAssertions,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.typeAssertions,
+      'un/no-type-assertion',
+      {all: true},
+    );
+
+    expect(errors).toHaveLength(2);
+    expect(errors[0]?.message).toMatchInlineSnapshot(
+      '"Type assertions are not allowed, because TypeScript does not check that they are correct. Narrow the type with a runtime check, or use a type annotation or `satisfies T as T` instead."',
+    );
+
+    // Only the assertion that widens the type gets suggestions, which takes type information
+    expect(errors[0]?.suggestions).toBeUndefined();
+    expect(errors[1]?.suggestions?.map(({desc}) => desc)).toMatchInlineSnapshot(
+      '["Replace the assertion with a type annotation", "Check the assertion with `satisfies`"]',
+    );
   });
 
   it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {

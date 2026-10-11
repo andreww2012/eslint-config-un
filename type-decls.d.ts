@@ -10,12 +10,6 @@ declare module 'eslint-plugin-drizzle' {
   export = value;
 }
 
-declare module 'eslint-plugin-no-type-assertion' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  const value: EslintPlugin;
-  export = value;
-}
-
 declare module 'eslint-plugin-promise' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   const value: EslintPlugin;

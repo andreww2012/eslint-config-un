@@ -2,7 +2,6 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('ts', {
   configs: ['ts'],
-  isMainPlugin: true,
   docsUrl: 'https://typescript-eslint.io',
   ruleDocsUrl: (ruleName) => `https://typescript-eslint.io/rules/${ruleName}`,
   suggestedPrefix: [

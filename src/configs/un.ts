@@ -34,6 +34,7 @@ export default defineUnConfig<UnEslintConfigOptions>(
     ])
     .addRule('no-distributive-never-check', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
+    .addRule('no-type-assertion', OFF) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
     .addRule('prefer-array-for-each', OFF) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('un', {

@@ -448,20 +448,6 @@ export interface TsEslintConfigOptions<
     | Prettify<UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>>;
 
   /**
-   * Disallows any type assertions.
-   *
-   * If you'd like to disallow only unsafe type assertions, enable
-   * [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion)
-   * rule instead.
-   *
-   * 📁 Default `files`: all files
-   *
-   * 🧩 Main plugin: [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion)
-   * @default false
-   */
-  configNoTypeAssertion?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-type-assertion'>;
-
-  /**
    * If you have too many `no-unsafe-*` reports, you can disable them all by enabling this config.
    *
    * 📁 Default `files`: all files
@@ -604,7 +590,6 @@ export default defineUnConfig<
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
-    configNoTypeAssertion: false,
     configDisableNoUnsafe: false,
     configSortTsconfigKeys: false,
     extraFileExtensions: [
@@ -617,7 +602,6 @@ export default defineUnConfig<
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
     configTypeAware,
-    configNoTypeAssertion,
     configDisableNoUnsafe,
     configSortTsconfigKeys,
     extraFileExtensions,
@@ -1274,16 +1258,6 @@ export default defineUnConfig<
     .disableAnyRule('', 'no-duplicate-imports')
     // Allow `export {}` to be present to ensure the file is a module
     .disableAnyRule('unicorn', 'require-module-specifiers');
-
-  const configBuilderNoTypeAssertions = context.createConfigBuilder(
-    configNoTypeAssertion,
-    'no-type-assertion',
-  );
-  configBuilderNoTypeAssertions
-    ?.addConfig('no-type-assertion')
-    .addRule('no-type-assertion', ERROR) /** @since 1.0.1 */
-    .enableConfigTesterForPlugin('no-type-assertion')
-    .addOverrides();
 
   const configBuilderSortTsconfigKeys = context.createConfigBuilder(configSortTsconfigKeys, null);
   if (configSortTsconfigKeys) {

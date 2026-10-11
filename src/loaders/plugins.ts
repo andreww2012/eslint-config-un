@@ -360,9 +360,6 @@ export const pluginsLoaders = {
   'no-secrets': genModuleLoader('no-secrets', 'eslint-plugin-no-secrets', () =>
     interopDefault(import('eslint-plugin-no-secrets')),
   ),
-  'no-type-assertion': genModuleLoader('no-type-assertion', 'eslint-plugin-no-type-assertion', () =>
-    interopDefault(import('eslint-plugin-no-type-assertion')),
-  ),
   'no-unsanitized': genModuleLoader('no-unsanitized', 'eslint-plugin-no-unsanitized', () =>
     interopDefault(import('eslint-plugin-no-unsanitized')),
   ),
