@@ -5,11 +5,11 @@ import type {
 } from 'eslint-plugin-import-x';
 import {
   ERROR,
+  GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   OFF,
   WARNING,
-  GLOB_CONFIG_FILES,
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {
@@ -21,7 +21,7 @@ import {
   objectEntriesUnsafe,
   toKebabCase,
 } from '../utils';
-import {resolveFilesOption, TESTS_CONFIG_DEFAULT_FILES} from './shared';
+import {TESTS_CONFIG_DEFAULT_FILES, resolveFilesOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
