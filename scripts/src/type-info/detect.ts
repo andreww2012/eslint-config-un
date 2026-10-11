@@ -242,38 +242,37 @@ export const probeRules = async (
   // Flat config matches `files` against the base path, and the fixture lives outside the project
   const linter = new Linter({cwd: fixtureDirectory});
 
-  for (const [name, source] of Object.entries(FIXTURE_FILES)) {
-    if (!SOURCE_FILE_REGEX.test(name)) {
-      continue;
-    }
-    try {
-      withSilencedOutput(() =>
-        linter.verify(
-          source,
-          {
-            files: ['**/*.ts', '**/*.tsx'],
-            linterOptions: {noInlineConfig: true, reportUnusedDisableDirectives: 'off'},
-            languageOptions: {
-              parser: spyingParser,
-              parserOptions: {
-                ecmaFeatures: {jsx: true},
-                ...(withTypeInfo && {
-                  project: pathe.join(fixtureDirectory, 'tsconfig.json'),
-                  tsconfigRootDir: fixtureDirectory,
-                }),
+  Object.entries(FIXTURE_FILES)
+    .filter(([name]) => SOURCE_FILE_REGEX.test(name))
+    .forEach(([name, source]) => {
+      try {
+        withSilencedOutput(() =>
+          linter.verify(
+            source,
+            {
+              files: ['**/*.ts', '**/*.tsx'],
+              linterOptions: {noInlineConfig: true, reportUnusedDisableDirectives: 'off'},
+              languageOptions: {
+                parser: spyingParser,
+                parserOptions: {
+                  ecmaFeatures: {jsx: true},
+                  ...(withTypeInfo && {
+                    project: pathe.join(fixtureDirectory, 'tsconfig.json'),
+                    tsconfigRootDir: fixtureDirectory,
+                  }),
+                },
+                sourceType: 'module',
               },
-              sourceType: 'module',
+              plugins: wrappedPlugins,
+              rules: rulesToEnable,
             },
-            plugins: wrappedPlugins,
-            rules: rulesToEnable,
-          },
-          {filename: pathe.join(fixtureDirectory, name)},
-        ),
-      );
-    } catch (error) {
-      failures.push(`${name}: ${describeError(error)}`);
-    }
-  }
+            {filename: pathe.join(fixtureDirectory, name)},
+          ),
+        );
+      } catch (error) {
+        failures.push(`${name}: ${describeError(error)}`);
+      }
+    });
 
   await fs.rm(fixtureDirectory, {force: true, recursive: true});
 

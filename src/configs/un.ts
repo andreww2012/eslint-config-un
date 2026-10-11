@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, WARNING} from '../constants';
+import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -35,6 +35,7 @@ export default defineUnConfig<UnEslintConfigOptions>(
     .addRule('no-distributive-never-check', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
+    .addRule('prefer-array-for-each', OFF) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('un', {
       // Added in the `vue` config
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('vue-'),

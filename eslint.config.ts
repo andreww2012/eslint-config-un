@@ -147,6 +147,11 @@ export default eslintConfig({
         },
       },
     },
+    un: {
+      overrides: {
+        'un/prefer-array-for-each': 2,
+      },
+    },
     vitest: {
       additionalAssertions: ['expectConfigState'],
     },

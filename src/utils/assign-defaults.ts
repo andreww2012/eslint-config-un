@@ -59,19 +59,16 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   const result: Record<PropertyKey, unknown> = {...defaults};
 
   if (isObject(source)) {
-    // eslint-disable-next-line unicorn/prefer-object-iterable-methods -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3314
-    for (const key of Object.keys(source)) {
+    Object.keys(source).forEach((key) => {
       if (key === '__proto__' || key === 'constructor') {
-        continue;
+        return;
       }
 
       const value = (source as Record<string, unknown>)[key];
-      if (value == null) {
-        continue;
+      if (value != null) {
+        result[key] = Array.isArray(value) ? [...(value as unknown[])] : value;
       }
-
-      result[key] = Array.isArray(value) ? [...(value as unknown[])] : value;
-    }
+    });
   }
 
   return result as Prettify<

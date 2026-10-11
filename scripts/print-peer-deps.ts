@@ -41,18 +41,18 @@ const WELL_KNOWN_PEER_DEPENDENCIES: ReadonlySet<string> = new Set([
   '@typescript-eslint/types',
 ]);
 
-for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
+packageJsonsResult.forEach(({packageName, isDev, packageInfo}) => {
   if (
     !packageInfo?.info ||
     !packageName.includes('eslint') ||
     DEPENDENCIES_TO_SKIP.has(packageName)
   ) {
-    continue;
+    return;
   }
 
   const {peerDependencies = {}} = packageInfo.info;
   if (Object.keys(peerDependencies).length === 0) {
-    continue;
+    return;
   }
 
   console.log(
@@ -73,4 +73,4 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
       styleText('greenBright', isOptional ? '[optional]' : ''),
     );
   });
-}
+});

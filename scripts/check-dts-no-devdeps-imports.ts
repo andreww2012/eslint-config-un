@@ -94,20 +94,19 @@ function collectInlinedPackages(distDir: string): Set<string> {
   if (!fs.existsSync(nmDir)) {
     return inlined;
   }
-  for (const entry of fs.readdirSync(nmDir, {withFileTypes: true})) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-    if (entry.name.startsWith('@')) {
-      fs.readdirSync(path.join(nmDir, entry.name), {withFileTypes: true}).forEach((sub) => {
-        if (sub.isDirectory()) {
-          inlined.add(`${entry.name}/${sub.name}`);
-        }
-      });
-    } else {
-      inlined.add(entry.name);
-    }
-  }
+  fs.readdirSync(nmDir, {withFileTypes: true})
+    .filter((entry) => entry.isDirectory())
+    .forEach((entry) => {
+      if (entry.name.startsWith('@')) {
+        fs.readdirSync(path.join(nmDir, entry.name), {withFileTypes: true}).forEach((sub) => {
+          if (sub.isDirectory()) {
+            inlined.add(`${entry.name}/${sub.name}`);
+          }
+        });
+      } else {
+        inlined.add(entry.name);
+      }
+    });
   return inlined;
 }
 

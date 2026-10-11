@@ -3,6 +3,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 const FIXTURES = {
   consecutiveSpaces: 'consecutive-spaces.js',
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
+  forOfLoopOverArray: 'for-of-loop-over-array.js',
   neverConditionalTypes: 'never-conditional-types.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
@@ -77,6 +78,7 @@ describe('rules', async () => {
     expect(configResult.getRuleSeverities('un')).toMatchObject({
       'un/no-multiple-consecutive-spaces': 2,
       'un/no-typeof-like-comparisons': 1,
+      'un/prefer-array-for-each': 0,
     });
   });
 
@@ -128,6 +130,22 @@ describe('rules', async () => {
     expect(errors[0]?.message).toMatchInlineSnapshot(
       '"This comparison is likely missing `typeof` operator before the left operand and therefore is forbidden. If this is intentional, you may need to suppress this report."',
     );
+  });
+
+  it('`un/prefer-array-for-each` rule fires on a `for…of` loop over an array when enabled', async () => {
+    const results = await testEslintConfig(
+      {un: {overrides: {'un/prefer-array-for-each': 'error'}}},
+      FIXTURES.forOfLoopOverArray,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.forOfLoopOverArray,
+      'un/prefer-array-for-each',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Use `.forEach(…)` instead of this loop."');
   });
 
   it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
