@@ -56,17 +56,21 @@ export default definePluginMetadata('es', {
     'no-intl-numberformat-prototype-formatrangetoparts': {requiresTypeInfo: 'optional'}, // cspell:disable-line
     'no-intl-numberformat-prototype-formattoparts': {requiresTypeInfo: 'optional'},
     'no-intl-pluralrules-prototype-selectrange': {requiresTypeInfo: 'optional'}, // cspell:disable-line
+    'no-iterator-prototype-chunks': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-drop': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-every': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-filter': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-find': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-flatmap': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-foreach': {requiresTypeInfo: 'optional'},
+    'no-iterator-prototype-includes': {requiresTypeInfo: 'optional'},
+    'no-iterator-prototype-join': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-map': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-reduce': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-some': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-take': {requiresTypeInfo: 'optional'},
     'no-iterator-prototype-toarray': {requiresTypeInfo: 'optional'}, // cspell:disable-line
+    'no-iterator-prototype-windows': {requiresTypeInfo: 'optional'},
     'no-map-prototype-getorinsert': {requiresTypeInfo: 'optional'}, // cspell:disable-line
     'no-map-prototype-getorinsertcomputed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
     'no-nonstandard-array-prototype-properties': {requiresTypeInfo: 'optional'},

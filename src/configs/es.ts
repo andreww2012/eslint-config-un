@@ -16,6 +16,10 @@ interface EcmaFeatures {
     | 'atomicsPause'
     | 'datePrototypeToTemporalInstant'
     | 'disposableStack'
+    | 'iteratorPrototypeChunks'
+    | 'iteratorPrototypeIncludes'
+    | 'iteratorPrototypeJoin'
+    | 'iteratorPrototypeWindows'
     | 'iteratorZip'
     | 'iteratorZipKeyed'
     | 'suppressedError'
@@ -413,6 +417,22 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
         grs(2027, 'datePrototypeToTemporalInstant'),
       ) /** @since 9.6.0 */
       .addRule('no-disposablestack', grs(2027, 'disposableStack')) /** @since 8.7.0 */
+      .addRule(
+        'no-iterator-prototype-chunks',
+        grs(2027, 'iteratorPrototypeChunks'),
+      ) /** @since 10.1.0 */
+      .addRule(
+        'no-iterator-prototype-includes',
+        grs(2027, 'iteratorPrototypeIncludes'),
+      ) /** @since 10.1.0 */
+      .addRule(
+        'no-iterator-prototype-join',
+        grs(2027, 'iteratorPrototypeJoin'),
+      ) /** @since 10.1.0 */
+      .addRule(
+        'no-iterator-prototype-windows',
+        grs(2027, 'iteratorPrototypeWindows'),
+      ) /** @since 10.1.0 */
       .addRule('no-iterator-zip', grs(2027, 'iteratorZip')) /** @since 8.7.0 */
       .addRule(
         'no-iterator-zipkeyed', // cspell:disable-line

@@ -35,6 +35,7 @@ minimumReleaseAgeExclude: # []
   - effect@4.0.3
   - p-queue@9.3.5
   - zod@4.6.6
+  - eslint-plugin-es-x@10.1.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
