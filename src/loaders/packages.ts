@@ -1,8 +1,7 @@
 import path from 'node:path';
-import type {EslintPlugin} from '../eslint/eslint-types';
-import type {OmitStrict, Prettify} from '../types';
+import type {OmitStrict} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
-import {type EslintParser, type EslintProcessor, genInferredModuleLoader} from './shared';
+import {type EslintProcessor, genInferredModuleLoader} from './shared';
 
 const loadCivetProcessor = (outputExtension: '.jsx' | '.tsx') =>
   import('eslint-plugin-civet').then(({civet}): EslintProcessor => {
@@ -26,6 +25,7 @@ export const packagesLoaders = {
     () =>
       interopDefault(import('@angular-eslint/eslint-plugin-template')).then((module) => {
         const fixedProcessor = cloneDeep(
+          // eslint-disable-next-line un/no-type-assertion -- unlike its types say, older versions of the plugin have no `meta`
           module.processors['extract-inline-html'] as EslintProcessor,
         );
         fixedProcessor.meta ||= {name: 'extract-inline-html'};
@@ -37,7 +37,7 @@ export const packagesLoaders = {
     'eslint-plugin-astro',
     () =>
       interopDefault(import('eslint-plugin-astro')).then(
-        (module) => module.processors['client-side-ts'] as EslintProcessor,
+        (module): EslintProcessor => module.processors['client-side-ts'],
       ),
   ),
   checkFileProcessor: genInferredModuleLoader(
@@ -65,23 +65,13 @@ export const packagesLoaders = {
   eslintPluginGraphql: genInferredModuleLoader(
     'eslintPluginGraphql',
     '@graphql-eslint/eslint-plugin',
-    () =>
-      interopDefault(import('@graphql-eslint/eslint-plugin')) as Promise<
-        Prettify<
-          EslintPlugin & {
-            processor: EslintProcessor;
-            parser: EslintParser;
-          }
-        >
-      >,
+    () => interopDefault(import('@graphql-eslint/eslint-plugin')),
   ),
   eslintPluginImportX: genInferredModuleLoader(
     'eslintPluginImportX',
     'eslint-plugin-import-x',
-    () =>
-      interopDefault(import('eslint-plugin-import-x')) as Promise<
-        Pick<typeof import('eslint-plugin-import-x'), 'createNodeResolver'>
-      >,
+    (): Promise<Pick<typeof import('eslint-plugin-import-x'), 'createNodeResolver'>> =>
+      interopDefault(import('eslint-plugin-import-x')),
   ),
   eslintPluginMarkdown: genInferredModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
@@ -109,10 +99,7 @@ export const packagesLoaders = {
   typescriptEslintParser: genInferredModuleLoader(
     'typescriptEslintParser',
     'typescript-eslint',
-    () =>
-      interopDefault(import('typescript-eslint')).then(
-        (m) => m.parser as {parseForESLint: (...args: unknown[]) => unknown},
-      ),
+    () => interopDefault(import('typescript-eslint')).then((m) => m.parser),
   ),
   vueBlocksProcessor: genInferredModuleLoader(
     'vueBlocksProcessor',
@@ -121,6 +108,7 @@ export const packagesLoaders = {
   ),
   vueProcessor: genInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')).then(
+      // eslint-disable-next-line un/no-type-assertion -- the plugin types its processors as `any`
       (module) => module.processors['.vue'] as EslintProcessor,
     ),
   ),

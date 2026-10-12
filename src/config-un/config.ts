@@ -284,7 +284,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     OmitStrict<
       UnConfigContext,
       'packagesInfo' | 'configsMeta'
-    > as unknown as UnConfigContext<ExtraPlugins>);
+    > as unknown as UnConfigContext<ExtraPlugins>); // eslint-disable-line un/no-type-assertion -- `packagesInfo` and `configsMeta` are filled in below
 
   if (cacheConfigs) {
     debug('Attempting to restore configs from memory cache');
@@ -349,6 +349,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const loadablePlugins = new Map(loadablePluginsRaw);
 
+  // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
   const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
 
@@ -398,7 +399,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (
     Object.keys(extraPlugins || {}).some(
       (extraPluginPrefix) =>
-        PLUGIN_PREFIXES_LIST.includes(extraPluginPrefix as PluginPrefix) ||
+        arrayIncludes(PLUGIN_PREFIXES_LIST, extraPluginPrefix) ||
         newPluginPrefixes.includes(extraPluginPrefix),
     )
   ) {

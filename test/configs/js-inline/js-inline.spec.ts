@@ -169,14 +169,22 @@ describe('options', () => {
         un: {plugins: {'html-processor': {settings: {'html-extensions': {}}}}},
       });
 
-      expect(
-        (
-          configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['html-extensions'],
-      ).toMatchInlineSnapshot(
-        '[".erb", ".handlebars", ".hbs", ".htm", ".html", ".mustache", ".nunjucks", ".php", ".tag", ".riot", ".twig", ".we"]',
+      expect(configResult.getConfigByUnPostfix('js-inline')?.settings?.['html']).toHaveProperty(
+        'html-extensions',
+        [
+          '.erb',
+          '.handlebars',
+          '.hbs',
+          '.htm',
+          '.html',
+          '.mustache',
+          '.nunjucks',
+          '.php',
+          '.tag',
+          '.riot',
+          '.twig',
+          '.we',
+        ],
       );
     });
 
@@ -216,13 +224,10 @@ describe('options', () => {
         un: {plugins: {'html-processor': {settings: {}}}},
       });
 
-      expect(
-        (
-          configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['xml-extensions'],
-      ).toMatchInlineSnapshot('[".xhtml", ".xml"]');
+      expect(configResult.getConfigByUnPostfix('js-inline')?.settings?.['html']).toHaveProperty(
+        'xml-extensions',
+        ['.xhtml', '.xml'],
+      );
     });
 
     it('customizes `xml-extensions` when provided', async () => {

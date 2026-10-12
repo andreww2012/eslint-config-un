@@ -2,6 +2,7 @@ import type {
   ConfigObject as EslintConfigObject,
   Plugin as EslintPlugin,
   Severity as EslintSeverity,
+  RuleDefinition,
 } from '@eslint/core';
 import type {TSESLint} from '@typescript-eslint/utils';
 import type * as Eslint from 'eslint';
@@ -197,6 +198,24 @@ export type EslintRuleMetaWithLanguages = Prettify<
 >;
 
 export type PluginTypedByEslintCoreOrTsEslint = EslintPlugin | TSESLint.FlatConfig.Plugin;
+
+/**
+ * A JavaScript rule whose visitor takes the nodes ESLint types know nothing about, like TypeScript
+ * or JSON ones
+ */
+export type JsRuleDefinitionWithNodes<
+  VisitedNode,
+  RuleOptions extends unknown[] = [],
+> = RuleDefinition<{
+  LangOptions: Eslint.Linter.LanguageOptions;
+  Code: Eslint.SourceCode;
+  RuleOptions: RuleOptions;
+  Visitor: Record<string, ((node: VisitedNode) => void) | undefined>;
+  // ESLint only reads the location of a reported node
+  Node: {loc: Eslint.AST.SourceLocation};
+  MessageIds: string;
+  ExtRuleDocs: Record<string, unknown>;
+}>;
 
 // TODO report false positive
 // eslint-disable-next-line unicorn/prefer-export-from

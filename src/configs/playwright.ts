@@ -107,7 +107,8 @@ export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
       'expect-expect',
       ERROR,
       customAssertFunctionNames?.length
-        ? [{assertFunctionNames: customAssertFunctionNames as [string]}]
+        ? // eslint-disable-next-line un/no-type-assertion -- the generated type wrongly allows a single name only
+          [{assertFunctionNames: customAssertFunctionNames as [string]}]
         : [],
     ) /** @since 0.15.0 */ // 🟡
     .addRule('max-expects', OFF) /** @since 1.2.0 */

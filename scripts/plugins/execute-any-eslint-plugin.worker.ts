@@ -59,14 +59,14 @@ try {
 } catch (error) {
   sendMessageToParent({
     error: {
-      code: [
-        'UNEXPECTED',
-        typeof error === 'object' && error && 'code' in error && typeof error.code === 'string'
-          ? error.code
-          : null,
-      ]
-        .filter(Boolean)
-        .join(':') as 'UNEXPECTED' | `UNEXPECTED:${string}`,
+      code:
+        typeof error === 'object' &&
+        error &&
+        'code' in error &&
+        typeof error.code === 'string' &&
+        error.code
+          ? `UNEXPECTED:${error.code}`
+          : 'UNEXPECTED',
       cause:
         error instanceof Error
           ? JSON.stringify(error, ['message', 'code', 'stack'])

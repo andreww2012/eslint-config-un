@@ -69,6 +69,8 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
     ...noSecretsOptionsProvided,
   };
   const noSecretsSeverity = eslintToUnRuleSeverity(noSecretsSeverityRaw, ERROR);
+  // eslint-disable-next-line un/no-type-assertion -- its types say otherwise, but the plugin has defaults for the options left out
+  const noSecretsRuleOptions = noSecretsOptions as NoSecretsOptions;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-secrets');
 
@@ -80,9 +82,7 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
       },
     ])
     .addRule('no-pattern-match', OFF) /** @since 2.1.1-rc.0 */
-    .addRule('no-secrets', noSecretsSeverity, [
-      noSecretsOptions as NoSecretsOptions,
-    ]) /** @since 0.1.0 */
+    .addRule('no-secrets', noSecretsSeverity, [noSecretsRuleOptions]) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('no-secrets')
     .addOverrides();
 
@@ -98,6 +98,6 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
         parseWith: 'jsonc',
       },
     ])
-    .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions as NoSecretsOptions])
+    .addRule('no-secrets', noSecretsSeverity, [noSecretsRuleOptions])
     .addOverrides();
 });

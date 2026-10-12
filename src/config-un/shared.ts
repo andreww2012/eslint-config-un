@@ -37,7 +37,13 @@ import type {
 } from '../loaders';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../plugins.gen';
 import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
-import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
+import {
+  type MaybeArray,
+  type MaybeFn,
+  castToWritableUnsafe,
+  type fetchPackageInfo,
+  maybeCall,
+} from '../utils';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from './config-utils';
@@ -969,7 +975,10 @@ export const processUnOrFlatConfig = (
         ruleNameUnprefixed: ruleName,
         fullRuleNameWithResolvedPrefix: ruleEntryName,
       } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
+      // eslint-disable-next-line un/no-type-assertion -- the prefix of an extra plugin is not a `PluginPrefix`, but is stored all the same
+      const pluginPrefix = pluginPrefixCanonical as PluginPrefix;
 
+      // eslint-disable-next-line un/no-type-assertion -- anything but a regular rule entry is ignored below
       const existingRuleRecord = (config as EslintFlatConfigEntry).rules?.[ruleEntryName];
 
       const rawSeverityInitial = Array.isArray(existingRuleRecord)
@@ -993,7 +1002,7 @@ export const processUnOrFlatConfig = (
         ? ruleEntryRaw.options == null
           ? ruleEntryRaw.severity
           : [ruleEntryRaw.severity, ...ruleEntryRaw.options]
-        : (ruleEntryRaw as EslintRuleEntry);
+        : castToWritableUnsafe(ruleEntryRaw);
       const ruleSeverity = getRuleSeverityFromEslintRuleEntry(ruleEntryPrimary);
 
       const disableAutofix = isRuleEntryRawObject ? ruleEntryRaw.disableAutofix : null;
@@ -1006,7 +1015,7 @@ export const processUnOrFlatConfig = (
 
       insertMetadataFns.push(() => {
         configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
-          plugin: pluginPrefixCanonical as PluginPrefix,
+          plugin: pluginPrefix,
           ruleName,
           ruleEntryName,
           severity: disableAutofix ? OFF : ruleSeverity,
@@ -1025,7 +1034,7 @@ export const processUnOrFlatConfig = (
 
         insertMetadataFns.push(() => {
           configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
-            plugin: pluginPrefixCanonical as PluginPrefix,
+            plugin: pluginPrefix,
             ruleName,
             ruleEntryName: ruleNameWithDisableAutofixPrefix,
             severity: disableAutofix ? ruleSeverity : OFF,
@@ -1034,11 +1043,11 @@ export const processUnOrFlatConfig = (
       }
 
       if (ruleSeverity !== OFF) {
-        context.registerUsedPlugin(pluginPrefixCanonical);
+        context.registerUsedPlugin(pluginPrefix);
 
         if (disableAutofix) {
-          context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
-            ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
+          context.disabledAutofixes[pluginPrefix] = [
+            ...(context.disabledAutofixes[pluginPrefix] || []),
             ruleName,
           ];
         }

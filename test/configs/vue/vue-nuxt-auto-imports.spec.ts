@@ -29,7 +29,7 @@ const NUXT_CUSTOM_DIRS_PROJECT_DIR = path.join(
 
 const {autoImports, resolveNuxtAutoImportsMock} = vi.hoisted(() => {
   // Read on every call, because each test assigns what the resolver should return after this runs
-  const autoImports = {current: null as NuxtAutoImportsResult | null};
+  const autoImports: {current: NuxtAutoImportsResult | null} = {current: null};
   return {
     autoImports,
     resolveNuxtAutoImportsMock: vi.fn<typeof resolveNuxtAutoImports>(() =>

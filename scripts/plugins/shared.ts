@@ -112,22 +112,19 @@ export const getEslintPluginInfo = (
   keys: string[];
   customRules: string[];
 } | null => {
-  const isModuleObject = typeof module === 'object' && module != null;
-  const hasRulesObject =
-    isModuleObject && 'rules' in module && typeof module.rules === 'object' && module.rules != null;
-  const hasConfigsObject =
-    isModuleObject &&
-    'configs' in module &&
-    typeof module.configs === 'object' &&
-    module.configs != null;
+  if (typeof module !== 'object' || module == null) {
+    return null;
+  }
 
-  const isLikelyPlugin = hasRulesObject || hasConfigsObject;
-  if (!isLikelyPlugin) {
+  const rules = 'rules' in module && typeof module.rules === 'object' ? module.rules : null;
+  const hasConfigsObject =
+    'configs' in module && typeof module.configs === 'object' && module.configs != null;
+  if (rules == null && !hasConfigsObject) {
     return null;
   }
 
   return {
-    customRules: hasRulesObject ? Object.keys(module.rules as Record<string, unknown>) : [],
+    customRules: rules ? Object.keys(rules) : [],
     keys: Object.keys(module),
   };
 };

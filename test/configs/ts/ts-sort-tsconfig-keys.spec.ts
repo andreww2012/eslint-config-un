@@ -314,7 +314,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
               orderCompilerOptions: {
                 type: 'order-groups',
                 order: ['tyPeChecking'],
-                orderWithinGroup: {['tyPeChecking' as 'typeChecking']: 'alphabetical'},
+                orderWithinGroup: {tyPeChecking: 'alphabetical'},
               },
             },
           },

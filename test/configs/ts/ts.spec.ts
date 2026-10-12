@@ -528,36 +528,24 @@ describe('options', () => {
       const configResult = await computeEslintConfig({ts: true, astro: true});
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['extraFileExtensions'],
-      ).toMatchInlineSnapshot('[".astro"]');
+        configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('extraFileExtensions', ['.astro']);
     });
 
     it('auto-detects `extraFileExtensions` when `vue` config is enabled', async () => {
       const configResult = await computeEslintConfig({ts: true, vue: true});
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['extraFileExtensions'],
-      ).toMatchInlineSnapshot('[".vue"]');
+        configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('extraFileExtensions', ['.vue']);
     });
 
     it('auto-detects `extraFileExtensions` when `svelte` config is enabled', async () => {
       const configResult = await computeEslintConfig({ts: true, svelte: true});
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['extraFileExtensions'],
-      ).toMatchInlineSnapshot('[".svelte"]');
+        configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('extraFileExtensions', ['.svelte']);
     });
 
     // TODO should merge?
@@ -568,12 +556,8 @@ describe('options', () => {
       });
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
-        )?.['extraFileExtensions'],
-      ).toMatchInlineSnapshot('[".mdx"]');
+        configResult.getConfigByUnPostfix('parsing/ts')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('extraFileExtensions', ['.mdx']);
     });
   });
 

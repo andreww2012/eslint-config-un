@@ -2,7 +2,7 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
-import {memoize} from '../utils';
+import {isKeyIn, memoize} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -387,7 +387,7 @@ export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
     const esFeatures = getEsVersionFeatures(version);
     const isFeatureSupported =
       // eslint-disable-next-line ts/no-unnecessary-condition
-      esFeatures[feature as keyof typeof esFeatures] ?? esFeatures.default;
+      (isKeyIn(feature, esFeatures) ? esFeatures[feature] : null) ?? esFeatures.default;
     return isFeatureSupported ? OFF : ERROR;
   };
 

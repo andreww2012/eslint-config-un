@@ -37,7 +37,6 @@ import {
   type MaybeArray,
   arrayUnique,
   arrayify,
-  identity,
   isObject,
   mapGetOrInsert,
   objectKeysUnsafe,
@@ -104,6 +103,18 @@ export interface ParsingLanguageDefinition {
   dialectDefault: string;
 }
 
+// Checks that every default dialect is one of the language's own
+const defineParsingLanguages = <
+  Languages extends {
+    [Key in keyof Languages]: {
+      dialects: Record<string, ParsingDialectDefinition>;
+      dialectDefault: keyof Languages[Key]['dialects'];
+    };
+  },
+>(
+  languages: Languages,
+): Readonly<Languages> => languages;
+
 /**
  * The single source of truth for how every supported custom file type may be parsed.
  *
@@ -111,18 +122,7 @@ export interface ParsingLanguageDefinition {
  * are emitted in (later entries, if all matched, win).
  * Hence the general rule for this list: the more opt-in a language is, the later it goes
  */
-export const PARSING_LANGUAGES = (
-  identity as <
-    Languages extends {
-      [Key in keyof Languages]: {
-        dialects: Record<string, ParsingDialectDefinition>;
-        dialectDefault: keyof Languages[Key]['dialects'];
-      };
-    },
-  >(
-    languages: Languages,
-  ) => Readonly<Languages>
-)({
+export const PARSING_LANGUAGES = defineParsingLanguages({
   // Must go first so that every framework whose files embed TypeScript can take the parsing over
   ts: {
     dialects: {

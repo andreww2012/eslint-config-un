@@ -34,7 +34,7 @@ const isOptionalElement = (node: AST.VElement['children'][number]) =>
     (attribute) => attribute.directive && OPTIONAL_ELEMENT_DIRECTIVES.has(attribute.key.name.name),
   );
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
   meta: {
     type: 'problem',
     docs: {
@@ -58,7 +58,7 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
     const isCondensed = options?.whitespace !== 'preserve';
 
     const report = (start: number, end: number, messageId: 'trailing' | 'beforeOptional') => {

@@ -1,4 +1,3 @@
-import type * as Eslint from 'eslint';
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import oxfmtConfig from './oxfmt.config';
 import {eslintConfig, isInCi} from './src';
@@ -20,11 +19,7 @@ export default eslintConfig({
   extraPlugins: {
     'local-rules': () => ({
       rules: {
-        // `@typescript-eslint` types plugin rules looser than what ESLint itself accepts
-        ...(noRestrictedSyntaxPlugin.rules as Record<
-          keyof typeof noRestrictedSyntaxPlugin.rules,
-          Eslint.Rule.RuleModule
-        >),
+        ...noRestrictedSyntaxPlugin.rules,
         'optional-peer-dependency-version-should-match-installed-version':
           optionalPeerDependencyVersionShouldMatchInstalledVersion,
       },
@@ -149,6 +144,7 @@ export default eslintConfig({
     },
     un: {
       overrides: {
+        'un/no-type-assertion': 2,
         'un/prefer-array-for-each': 2,
       },
     },

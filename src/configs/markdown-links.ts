@@ -106,7 +106,7 @@ export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
     const isCheckInfoObject = typeof checkInfo === 'object';
     return [
       checkInfo === false ? OFF : isCheckInfoObject && checkInfo.severityWarn ? WARNING : ERROR,
-      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- wrong
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion, un/no-type-assertion -- wrong
       (isCheckInfoObject && checkInfo.options != null ? [checkInfo.options] : []) as [
         RuleOptions,
       ] extends [never]

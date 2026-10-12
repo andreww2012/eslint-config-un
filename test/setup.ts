@@ -16,6 +16,7 @@ import {
 
 // The published matcher types describe the assertions they produce (`(...expected) => R`),
 // not their real `(received, ...expected)` implementation shape
+// eslint-disable-next-line un/no-type-assertion
 expect.extend(jestExtendedMatchers as unknown as MatchersObject);
 
 // `jest-extended` only augments the global `jest` namespace, which Vitest no longer bridges into

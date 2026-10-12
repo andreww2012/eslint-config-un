@@ -102,11 +102,15 @@ const reportError = (context: Eslint.Rule.RuleContext, error: unknown) => {
   });
 };
 
-const createFormatRule = (
+type FormatRule<RuleOptions extends unknown[]> = Eslint.JSRuleDefinition<{
+  RuleOptions: RuleOptions;
+}>;
+
+const createFormatRule = <RuleOptions extends unknown[]>(
   description: string,
   schema: JSONSchema4[],
-  createRequest: (context: Eslint.Rule.RuleContext) => FormatRequest,
-): Eslint.Rule.RuleModule => ({
+  createRequest: (context: Parameters<FormatRule<RuleOptions>['create']>[0]) => FormatRequest,
+): FormatRule<RuleOptions> => ({
   meta: {
     type: 'layout',
     docs: {description},
@@ -131,34 +135,39 @@ const createFormatRule = (
 });
 
 export const formatRules = {
-  dprint: createFormatRule('Use dprint to format code', [DPRINT_OPTIONS_SCHEMA], (context) => ({
-    formatter: 'dprint',
-    code: context.sourceCode.text,
-    filePath: context.filename,
-    options: (context.options[0] || {}) as DprintOptions,
-  })),
-  oxfmt: createFormatRule('Use oxfmt to format code', [ANY_OBJECT_SCHEMA], (context) => ({
-    formatter: 'oxfmt',
-    code: context.sourceCode.text,
-    filePath: context.filename,
-    options: (context.options[0] || {}) as OxfmtOptions,
-  })),
-  prettier: createFormatRule(
-    'Use Prettier to format code',
-    [ANY_OBJECT_SCHEMA, PRETTIER_RULE_OPTIONS_SCHEMA],
-    (context) => {
-      const ruleOptions = context.options[1] as
-        | InferJsonSchemaType<typeof PRETTIER_RULE_OPTIONS_SCHEMA>
-        | undefined;
-      return {
-        formatter: 'prettier',
-        code: context.sourceCode.text,
-        filePath: context.filename,
-        options: (context.options[0] || {}) as PrettierOptions,
-        shouldReadConfig: ruleOptions?.readConfig !== false,
-      };
-    },
+  // Required, as dprint can't format without a plugin
+  dprint: createFormatRule<[DprintOptions]>(
+    'Use dprint to format code',
+    [DPRINT_OPTIONS_SCHEMA],
+    (context) => ({
+      formatter: 'dprint',
+      code: context.sourceCode.text,
+      filePath: context.filename,
+      options: context.options[0],
+    }),
   ),
+  oxfmt: createFormatRule<[OxfmtOptions?]>(
+    'Use oxfmt to format code',
+    [ANY_OBJECT_SCHEMA],
+    (context) => ({
+      formatter: 'oxfmt',
+      code: context.sourceCode.text,
+      filePath: context.filename,
+      options: context.options[0] || {},
+    }),
+  ),
+  prettier: createFormatRule<
+    [PrettierOptions?, InferJsonSchemaType<typeof PRETTIER_RULE_OPTIONS_SCHEMA>?]
+  >('Use Prettier to format code', [ANY_OBJECT_SCHEMA, PRETTIER_RULE_OPTIONS_SCHEMA], (context) => {
+    const [prettierOptions, ruleOptions] = context.options;
+    return {
+      formatter: 'prettier',
+      code: context.sourceCode.text,
+      filePath: context.filename,
+      options: prettierOptions || {},
+      shouldReadConfig: ruleOptions?.readConfig !== false,
+    };
+  }),
 };
 
 const eslintPluginFormat: EslintPlugin = {

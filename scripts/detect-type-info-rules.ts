@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {cli} from 'cleye';
 import consola from 'consola';
@@ -7,7 +6,7 @@ import {RULE_CATEGORIES_PER_PLUGIN} from '../src/eslint-rule-categories.gen';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {RULES_REQUIRING_TYPE_INFORMATION} from '../src/plugins.gen';
-import {stylePluginPrefix, styleRuleName, styleText} from '../src/utils';
+import {readAndParseJson, stylePluginPrefix, styleRuleName, styleText} from '../src/utils';
 import {readPluginMetadata} from './shared/plugin-metadata';
 import {
   detectViaMeta,
@@ -84,10 +83,7 @@ const findPackageRoot = async (packageName: string) => {
     directory !== pathe.dirname(directory);
     directory = pathe.dirname(directory)
   ) {
-    const manifest = await fs
-      .readFile(pathe.join(directory, 'package.json'), 'utf8')
-      .then((contents) => JSON.parse(contents) as {name?: string})
-      .catch(() => null);
+    const manifest = await readAndParseJson<{name?: string}>(pathe.join(directory, 'package.json'));
     if (manifest?.name === packageName) {
       return directory;
     }

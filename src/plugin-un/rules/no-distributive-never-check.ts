@@ -1,9 +1,9 @@
 import {findVariable} from '@eslint-community/eslint-utils';
 import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/types';
-import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
+import type {JsRuleDefinitionWithNodes} from '../../eslint/eslint-types';
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: JsRuleDefinitionWithNodes<TSESTree.TSConditionalType> = {
   meta: {
     type: 'problem',
     docs: {
@@ -32,7 +32,7 @@ const rule: Eslint.Rule.RuleModule = {
     }
 
     return {
-      TSConditionalType: ({checkType, extendsType}: TSESTree.TSConditionalType) => {
+      TSConditionalType: ({checkType, extendsType}) => {
         if (
           checkType.type !== AST_NODE_TYPES.TSTypeReference ||
           extendsType.type !== AST_NODE_TYPES.TSNeverKeyword
@@ -75,8 +75,7 @@ const rule: Eslint.Rule.RuleModule = {
           ],
         });
       },
-      // ESLint types have no way of expressing a node type for a selector unknown to them
-    } as unknown as Eslint.Rule.RuleListener;
+    };
   },
 };
 

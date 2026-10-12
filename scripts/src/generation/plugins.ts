@@ -67,7 +67,7 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  const declaredPrefixes = new Set(plugins.map(({prefix}) => prefix));
+  const declaredPrefixes: ReadonlySet<string> = new Set(plugins.map(({prefix}) => prefix));
   Object.keys(pluginsLoaders)
     .filter((prefix) => !declaredPrefixes.has(prefix))
     .forEach((prefix) => {

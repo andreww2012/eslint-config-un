@@ -1,8 +1,5 @@
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
-import type {
-  NewResolver as ImportPluginNewResolver,
-  PluginSettings as ImportPluginSettingsWithPrefixes,
-} from 'eslint-plugin-import-x';
+import type {PluginSettings as ImportPluginSettingsWithPrefixes} from 'eslint-plugin-import-x';
 import {
   ERROR,
   GLOB_CONFIG_FILES,
@@ -268,9 +265,9 @@ export default defineUnConfig<ImportEslintConfigOptions>(
                       // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
                       // TODO should report?
                       this.isTypescriptEnabled &&
-                        (importResolverTypescript.createTypeScriptImportResolver(
+                        importResolverTypescript.createTypeScriptImportResolver(
                           this.tsResolverOptions,
-                        ) as ImportPluginNewResolver),
+                        ),
                       eslintPluginImportX.createNodeResolver(),
                     ].filter((v) => typeof v === 'object');
                   },

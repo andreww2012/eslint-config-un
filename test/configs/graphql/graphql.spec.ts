@@ -284,15 +284,10 @@ describe('options', () => {
     it('does not set `parserOptions.graphQLConfig` by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
-      expect(
-        (
-          configResult.getConfigByUnPostfix('graphql')?.languageOptions?.['parserOptions'] as
-            | {
-                graphQLConfig?: IGraphQLConfig;
-              }
-            | undefined
-        )?.graphQLConfig,
-      ).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('graphql')?.languageOptions).not.toHaveProperty([
+        'parserOptions',
+        'graphQLConfig',
+      ]);
     });
 
     it('sets `parserOptions.graphQLConfig` when `graphqlConfig` is provided', async () => {
@@ -303,14 +298,8 @@ describe('options', () => {
       });
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('graphql')?.languageOptions?.['parserOptions'] as
-            | {
-                graphQLConfig?: IGraphQLConfig;
-              }
-            | undefined
-        )?.graphQLConfig,
-      ).toStrictEqual(GRAPHQL_CONFIG);
+        configResult.getConfigByUnPostfix('graphql')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('graphQLConfig', GRAPHQL_CONFIG);
     });
   });
 

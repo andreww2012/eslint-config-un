@@ -144,7 +144,7 @@ const RULE_OPTIONS_SCHEMA = {
 
 type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
   meta: {
     type: 'problem',
     docs: {
@@ -161,7 +161,7 @@ const rule: Eslint.Rule.RuleModule = {
   },
 
   create: (context) => {
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
     const allowedLiteralValues = options?.allow
       ? new Set(
           Object.entries({undefined: true, ...options.allow}).flatMap(([value, isAllowed]) =>

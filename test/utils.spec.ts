@@ -456,9 +456,10 @@ describe('assignDefaults', () => {
       '{"__proto__": {"polluted": true}, "constructor": {"x": 1}}',
     ) as unknown;
     const result = assignDefaults(malicious, {safe: 1});
+    const emptyObject: Record<string, unknown> = {};
 
     expect(result).toStrictEqual({safe: 1});
-    expect(({} as Record<string, unknown>)['polluted']).toBeUndefined();
+    expect(emptyObject['polluted']).toBeUndefined();
   });
 
   it('does not mutate the defaults object', () => {

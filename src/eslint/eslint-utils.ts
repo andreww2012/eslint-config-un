@@ -3,7 +3,7 @@ import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
 import type {Nullable} from '../types';
-import {cloneDeep} from '../utils';
+import {arrayIncludes, cloneDeep, isKeyIn} from '../utils';
 import type {
   EslintFlatConfigEntry,
   EslintPlugin,
@@ -20,20 +20,23 @@ function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModul
         report: {
           enumerable: true,
           value: (descriptor: Eslint.Rule.ReportDescriptor): void => {
-            delete (descriptor as {fix?: unknown}).fix;
+            Reflect.deleteProperty(descriptor, 'fix');
             context.report(descriptor);
           },
         },
-      }) as Eslint.Rule.RuleContext;
+      }) as Eslint.Rule.RuleContext; // eslint-disable-line un/no-type-assertion -- only `report` is replaced
       return rule.create(patchedContext);
     },
   };
 }
 
-const STRING_SEVERITY_TO_NUMERIC: Readonly<Record<EslintSeverity & string, RuleSeverity>> = {
+const ESLINT_TO_UN_SEVERITY: Readonly<Record<EslintSeverity, RuleSeverity>> = {
   off: OFF,
+  0: OFF,
   warn: WARNING,
+  1: WARNING,
   error: ERROR,
+  2: ERROR,
 };
 
 export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
@@ -41,15 +44,14 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
   severityOrOptionsOverride?: [RuleSeverity?, Options?],
 ): [severity: RuleSeverity, options: Options | []] => {
   const severityRaw = Array.isArray(entry) ? entry[0] : entry;
-  const severity =
-    severityOrOptionsOverride?.[0] ??
-    ((typeof severityRaw === 'string'
-      ? STRING_SEVERITY_TO_NUMERIC[severityRaw]
-      : severityRaw) as RuleSeverity);
+  const severity = severityOrOptionsOverride?.[0] ?? ESLINT_TO_UN_SEVERITY[severityRaw];
   return [
     severity,
     severityOrOptionsOverride?.[1] ||
-      (Array.isArray(entry) ? structuredClone(entry.slice(1) as Options) : []),
+      (Array.isArray(entry)
+        ? // eslint-disable-next-line un/no-type-assertion -- ESLint types the options as partial, as they may be omitted
+          structuredClone(entry.slice(1) as Options)
+        : []),
   ];
 };
 
@@ -65,7 +67,7 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
     const possiblePrefix = ruleNameSplitted.slice(0, ruleNameSplitted.length - i - 1).join('/');
     if (
       possiblePrefix &&
-      (PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix) ||
+      (arrayIncludes(PLUGIN_PREFIXES_LIST, possiblePrefix) ||
         (context.rootOptions.extraPlugins && possiblePrefix in context.rootOptions.extraPlugins))
     ) {
       return possiblePrefix;
@@ -77,8 +79,12 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
 export const resolvePluginPrefix = (
   context: UnConfigContext,
   pluginPrefix: PluginPrefix | (string & {}),
-) =>
-  context.rootOptions.plugins?.[pluginPrefix as Exclude<PluginPrefix, ''>]?.prefix || pluginPrefix;
+) => {
+  const {plugins} = context.rootOptions;
+  return (
+    (plugins && isKeyIn(pluginPrefix, plugins) && plugins[pluginPrefix]?.prefix) || pluginPrefix
+  );
+};
 
 export const getRuleNameAndPluginPrefixByFullName = (
   context: UnConfigContext,
@@ -117,9 +123,7 @@ export const eslintToUnRuleSeverity = (
   maybeEslintSeverity: EslintSeverity | undefined,
   defaultSeverity: RuleSeverity = OFF,
 ): RuleSeverity =>
-  typeof maybeEslintSeverity === 'string'
-    ? STRING_SEVERITY_TO_NUMERIC[maybeEslintSeverity]
-    : ((maybeEslintSeverity ?? defaultSeverity) as RuleSeverity);
+  maybeEslintSeverity == null ? defaultSeverity : ESLINT_TO_UN_SEVERITY[maybeEslintSeverity];
 
 export const getRuleSeverityFromEslintRuleEntry = (
   entry: Nullable<EslintRuleEntry>,

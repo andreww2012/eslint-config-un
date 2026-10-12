@@ -1,6 +1,7 @@
 import type eslintPluginStylistic from '@stylistic/eslint-plugin';
 import {ERROR, OFF, type RuleSeverity} from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
+import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {mapKeys} from '../utils';
@@ -74,12 +75,13 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     const severityFinal =
       customizedRuleEntry == null
         ? severity
-        : ((Array.isArray(customizedRuleEntry)
-            ? customizedRuleEntry[0]
-            : customizedRuleEntry) as RuleSeverity);
+        : eslintToUnRuleSeverity(
+            Array.isArray(customizedRuleEntry) ? customizedRuleEntry[0] : customizedRuleEntry,
+          );
     const optionsFinal = Array.isArray(customizedRuleEntry)
       ? customizedRuleEntry.slice(1)
       : options || [];
+    // eslint-disable-next-line un/no-type-assertion -- the options come from the preset of the same plugin
     return [ruleName, severityFinal, optionsFinal as _RuleOptions];
   };
 

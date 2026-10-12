@@ -423,15 +423,15 @@ export class ConfigEntryBuilder<
           Object.assign(
             settings,
             Object.fromEntries(
-              Reflect.ownKeys(directlyMappedSettings).map((settingKey) => [
+              Reflect.ownKeys(directlyMappedSettings).map((settingKey): [PropertyKey, unknown] => [
                 settingKey,
-                directlyMappedSettings[settingKey as keyof typeof directlyMappedSettings],
+                Reflect.get(directlyMappedSettings, settingKey),
               ]),
             ),
           );
         }
         Reflect.ownKeys(settings).forEach((settingKey) => {
-          const value = settings[settingKey as keyof typeof settings];
+          const value: unknown = Reflect.get(settings, settingKey);
           if (value == null || (typeof value === 'object' && Reflect.ownKeys(value).length === 0)) {
             Reflect.deleteProperty(settings, settingKey);
           }
@@ -866,7 +866,7 @@ export class ConfigEntryBuilder<
             (extraFileExtensions ||= new Set()).add(extraExtension);
           });
 
-          return [ruleEntryName, entry];
+          return [ruleEntryName, entry] as const;
         });
 
         const originalParserOptions = config.languageOptions?.['parserOptions'];
@@ -904,7 +904,7 @@ export class ConfigEntryBuilder<
               }),
             },
           },
-          rules: Object.fromEntries(rulesEntries) as Record<string, EslintRuleEntry>,
+          rules: Object.fromEntries<EslintRuleEntry | undefined>(rulesEntries),
         };
 
         this.addFlatConfig(configForTypeInformation);

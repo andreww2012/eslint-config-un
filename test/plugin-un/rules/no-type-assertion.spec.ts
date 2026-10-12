@@ -141,15 +141,15 @@ typescriptRuleTester.run(RULE_NAME, noTypeAssertion, {
     },
     {
       code: 'value as const as readonly number[];',
-      errors: [{messageId: MESSAGE_ID, column: 16}],
+      errors: [{messageId: MESSAGE_ID, column: 16, endColumn: 36}],
     },
     {
       code: 'value satisfies Type as Other;',
-      errors: [{messageId: MESSAGE_ID, column: 22}],
+      errors: [{messageId: MESSAGE_ID, column: 22, endColumn: 30}],
     },
     {
       code: 'value satisfies Type as Type as Other;',
-      errors: [{messageId: MESSAGE_ID, column: 30}],
+      errors: [{messageId: MESSAGE_ID, column: 30, endColumn: 38}],
     },
     {
       code: 'value satisfies Map<string, number> as Map<number, string>;',

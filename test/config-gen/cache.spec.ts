@@ -7,6 +7,7 @@ import {exec} from 'tinyexec';
 import type {CacheDataInFs} from '../../src/config-un/cache';
 import type {Environment} from '../../src/config-un/shared';
 import type {Prettify} from '../../src/types';
+import {jsonParseSafe} from '../../src/utils';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -49,8 +50,8 @@ const CONFIGS_USING_PACKAGES = {svelte: true, graphql: true, import: true} as co
 
 type CacheFileContents = Prettify<CacheDataInFs & {key: string; date: string}>;
 
-const readCacheFile = async (): Promise<CacheFileContents> =>
-  JSON.parse(await fs.readFile(CACHE_FILE_PATH, 'utf8')) as CacheFileContents;
+const readCacheFile = async () =>
+  jsonParseSafe<CacheFileContents>(await fs.readFile(CACHE_FILE_PATH, 'utf8'));
 
 const cacheFileExists = () =>
   fs

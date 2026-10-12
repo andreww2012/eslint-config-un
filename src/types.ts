@@ -35,7 +35,6 @@ export type {
   RequireExactlyOne,
   SetFieldType,
   SetRequired,
-  Subtract,
   ToCamelCase,
   UnionToIntersection,
 } from '@andreww2012/unutils';

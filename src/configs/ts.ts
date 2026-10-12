@@ -12,7 +12,15 @@ import {
 import type {GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
-import {type MaybeFn, allUnionMembers, arrayUnique, isKeyIn, maybeCall, omit} from '../utils';
+import {
+  type MaybeFn,
+  allUnionMembers,
+  arrayIncludes,
+  arrayUnique,
+  isKeyIn,
+  maybeCall,
+  omit,
+} from '../utils';
 import {
   CORE_RULES_HANDLED_BY_TS_COMPILER,
   CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
@@ -1296,7 +1304,7 @@ export default defineUnConfig<
                         [] /* v8 ignore stop */
                     : isKeyIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                       ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
-                          TSCONFIG_COMPILER_OPTIONS_KEYS[group].includes(v as never),
+                          arrayIncludes<string>(TSCONFIG_COMPILER_OPTIONS_KEYS[group], v),
                         )
                       : [],
                 )

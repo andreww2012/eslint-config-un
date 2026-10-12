@@ -239,7 +239,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({stylistic: {customizeOptions: {}}});
 
       expect(configResult.getRuleEntry('stylistic', 'stylistic/quotes')).toMatchInlineSnapshot(
-        '["error", "single", {"allowTemplateLiterals": "always", "avoidEscape": false}]',
+        '[2, "single", {"allowTemplateLiterals": "always", "avoidEscape": false}]',
       );
     });
   });

@@ -98,16 +98,16 @@ const withSilencedOutput = <Result>(run: () => Result) => {
 export const detectViaMeta = (plugin: EslintPlugin) =>
   new Set(
     Object.entries(plugin.rules || {})
-      .filter(
-        ([, rule]) =>
-          (rule.meta?.docs as {requiresTypeChecking?: unknown} | undefined)
-            ?.requiresTypeChecking === true,
-      )
+      .filter(([, rule]) => {
+        const docs = rule.meta?.docs;
+        return docs != null && 'requiresTypeChecking' in docs && docs.requiresTypeChecking === true;
+      })
       .map(([ruleName]) => ruleName),
   );
 
 const doesRunOnJavascript = (rule: NonNullable<EslintPlugin['rules']>[string]) => {
-  const languages: unknown = (rule.meta as {languages?: unknown} | undefined)?.languages;
+  const meta: {languages?: unknown} | undefined = rule.meta;
+  const languages = meta?.languages;
   return (
     !Array.isArray(languages) ||
     languages.some((language) => language === '*' || String(language).startsWith('js'))
@@ -202,6 +202,7 @@ export const probeRules = async (
             .filter(([, rule]) => doesRunOnJavascript(rule))
             .map(([ruleName, rule]) => {
               const fullRuleName = `${prefix}/${ruleName}`;
+              // eslint-disable-next-line un/no-type-assertion -- the probe only calls `create` and reads what it returns
               const {create} = rule as unknown as {
                 create: (context: unknown) => Record<string, unknown> | null | undefined;
               };

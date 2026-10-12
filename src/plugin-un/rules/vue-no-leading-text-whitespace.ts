@@ -18,7 +18,7 @@ type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 const LEADING_WHITESPACE_REGEX = /^[\t\n\f\r ]+(?=[^\t\n\f\r ])/;
 const ENDING_WHITESPACE_REGEX = /[\t\n\f\r ]$/;
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
   meta: {
     type: 'layout',
     docs: {
@@ -39,7 +39,7 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
     const getText = (node: AST.HasLocation) => sourceCode.text.slice(...node.range);
 
     // The whitespace at the start of such an element is what separates its text from that content

@@ -3,6 +3,7 @@ import type * as Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type * as ts from 'typescript';
+import type {JsRuleDefinitionWithNodes} from '../../eslint/eslint-types';
 
 type TypeAssertion = TSESTree.TSAsExpression | TSESTree.TSTypeAssertion;
 
@@ -120,7 +121,7 @@ const isWidening = ({checker, getTsNode}: TypeInformation, node: TypeAssertion) 
   }
 };
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: JsRuleDefinitionWithNodes<TypeAssertion, [RuleOptions?]> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -146,7 +147,7 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
     const allowedTypes = new Set(options?.allowedTypes?.map(removeWhitespace));
 
     // eslint-disable-next-line ts/no-unsafe-assignment -- ESLint types parser services as `any`
@@ -252,6 +253,7 @@ const rule: Eslint.Rule.RuleModule = {
         return;
       }
 
+      // Only the assertion itself: `as T`, or `<T>`
       const isAs = node.type === AST_NODE_TYPES.TSAsExpression;
       const boundaryToken = tokenStore.getTokenByRangeStart(
         (isAs ? typeAnnotation : expression).range[0],
@@ -281,13 +283,14 @@ const rule: Eslint.Rule.RuleModule = {
 
     const scriptVisitor = createVisitor(sourceCode, scriptTypeInformation);
     const templateTokenStore = parserServices.getTemplateBodyTokenStore?.();
-    return ((templateTokenStore &&
-      parserServices.defineTemplateBodyVisitor?.(
-        createVisitor(templateTokenStore),
-        scriptVisitor,
-      )) ||
-      // ESLint types have no way of expressing a node type for a selector unknown to them
-      scriptVisitor) as unknown as Eslint.Rule.RuleListener;
+    return (
+      (templateTokenStore &&
+        parserServices.defineTemplateBodyVisitor?.(
+          createVisitor(templateTokenStore),
+          scriptVisitor,
+        )) ||
+      scriptVisitor
+    );
   },
 };
 

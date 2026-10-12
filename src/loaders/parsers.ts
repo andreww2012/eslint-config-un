@@ -34,10 +34,7 @@ export const parsersLoaders = {
   'graphql-eslint-parser': genModuleLoader(
     'graphql-eslint-parser',
     '@graphql-eslint/eslint-plugin',
-    () =>
-      // TODO cannot infer type when building declaration files for some reason unless something like `any` is used
-      // eslint-disable-next-line ts/no-unsafe-return, ts/no-explicit-any
-      import('@graphql-eslint/eslint-plugin').then((m) => m.parser as any),
+    () => import('@graphql-eslint/eslint-plugin').then((m) => m.parser),
   ),
   'mdx-eslint-parser': genModuleLoader(
     'mdx-eslint-parser',

@@ -125,27 +125,25 @@ describe('rules', async () => {
     it('includes `eslint-import-resolver-typescript` in `resolver-next` settings when typescript is enabled', async () => {
       const configResult = await computeEslintConfig({import: true, ts: true});
 
-      const resolvers = configResult.getConfigByUnPostfix('import')?.settings?.[
-        'import-x/resolver-next'
-      ] as {name: string}[] | undefined;
+      const resolvers =
+        configResult.getConfigByUnPostfix('import')?.settings?.['import-x/resolver-next'];
 
       expect(resolvers).toIncludeAllMembers([
         expect.objectContaining({name: 'eslint-import-resolver-typescript'}),
       ]);
-      expect(resolvers?.length).toBeGreaterThan(1); // Should still include node resolver
+      expect(resolvers).toHaveLength(2); // Should still include node resolver
     });
 
     it('does not include typescript resolver in `resolver-next` settings when typescript is disabled', async () => {
       const configResult = await computeEslintConfig('import');
 
-      const resolvers = configResult.getConfigByUnPostfix('import')?.settings?.[
-        'import-x/resolver-next'
-      ] as {name: string}[] | undefined;
+      const resolvers =
+        configResult.getConfigByUnPostfix('import')?.settings?.['import-x/resolver-next'];
 
       expect(resolvers).not.toIncludeAnyMembers([
         expect.objectContaining({name: 'eslint-import-resolver-typescript'}),
       ]);
-      expect(resolvers?.length).toBeGreaterThan(0); // Should still include node resolver
+      expect(resolvers).toHaveLength(1); // Should still include node resolver
     });
   });
 });

@@ -56,7 +56,8 @@ function createModuleLoader<T, N extends string>(
       const {plugins} = context.rootOptions;
       const providedPlugin = plugins && isKeyIn(property, plugins) && plugins[property]?.plugin;
       const overriddenPluginModule = providedPlugin
-        ? await interopDefault(maybeCall(providedPlugin) as T)
+        ? // eslint-disable-next-line un/no-type-assertion -- the user is trusted to provide the right module
+          await interopDefault(maybeCall(providedPlugin) as T)
         : null;
 
       // Otherwise the import could load another project's copy, which is not installed for us
@@ -143,6 +144,8 @@ type ModuleLoaderFactory<EraseModuleType extends boolean> = <
   ignoreErrors?: IgnoredErrors,
 ) => ModuleLoader<T, N, ResolvesToNull<N, IgnoredErrors>>;
 
+/* eslint-disable un/no-type-assertion -- these only change how the type of the module is inferred */
 export const genModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
 
 export const genInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;
+/* eslint-enable un/no-type-assertion */

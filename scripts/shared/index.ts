@@ -1,5 +1,6 @@
 import {compare} from 'verkit';
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
+import {castTsEslintTypedPlugin} from '../../src/loaders/plugins';
 import {interopDefault} from '../../src/utils';
 
 export const generateAngularPluginsWithOldRules = async () => {
@@ -19,23 +20,22 @@ export const generateAngularPluginsWithOldRules = async () => {
     interopDefault(import('angular-eslint-plugin18')),
   ]);
 
-  const plugin: EslintPlugin = {
+  const plugin = castTsEslintTypedPlugin({
     ...angularEslintPlugin,
-    // @ts-expect-error types mismatch
     rules: {
       ...angularEslintPlugin18.rules,
       ...angularEslintPlugin.rules,
     },
-  };
+  });
 
-  const pluginTemplate = {
+  const pluginTemplate = castTsEslintTypedPlugin({
     ...angularTemplateEslintPlugin,
     rules: {
       ...angularTemplateEslintPlugin15.rules,
       ...angularTemplateEslintPlugin17?.rules,
       ...angularTemplateEslintPlugin.rules,
     },
-  } as unknown as EslintPlugin;
+  });
 
   return {
     plugin,

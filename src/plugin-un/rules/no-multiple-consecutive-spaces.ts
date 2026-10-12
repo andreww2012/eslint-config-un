@@ -147,7 +147,7 @@ const isEdgeAllowed = (
     ? option === 'always' || option === 'stringOnly'
     : isLineEdge && (option === 'always' || option === 'linesOnly');
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
   meta: {
     type: 'layout',
     docs: {
@@ -179,7 +179,7 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
     const ignoreRegexps = (options?.ignorePatterns || []).map(
       (pattern) => new RegExp(pattern, 'u'),
     );

@@ -43,6 +43,7 @@ type UnOption = AcceptReadonlyFilesAndIgnores<OmitStrict<EslintConfigUnOptions, 
 
 // The generator never mutates `files` and `ignores`, so read-only arrays are fine at runtime
 const asEslintConfigUnOptions = (options: Prettify<UnOption & {configs: ConfigsOption}>) =>
+  // eslint-disable-next-line un/no-type-assertion
   options as EslintConfigUnOptions;
 
 export const computeEslintConfig = async (

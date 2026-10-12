@@ -32,11 +32,13 @@ const MISC_GROUP_CONFIGS_SET: ReadonlySet<keyof UnConfigs> = new Set(MISC_GROUP_
 const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) => {
   const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
   const hasVersionRange = versionDelimiterIndex > 0;
+  const packageName = hasVersionRange
+    ? packageNameAndMaybeVersionRange.slice(0, versionDelimiterIndex)
+    : packageNameAndMaybeVersionRange;
 
   return {
-    packageName: (hasVersionRange
-      ? packageNameAndMaybeVersionRange.slice(0, versionDelimiterIndex)
-      : packageNameAndMaybeVersionRange) as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+    // eslint-disable-next-line un/no-type-assertion -- the part before the version range is the package name
+    packageName: packageName as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     ...(hasVersionRange && {
       versionRangeToSatisfy: packageNameAndMaybeVersionRange.slice(versionDelimiterIndex + 1),
     }),
@@ -227,14 +229,11 @@ export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
   this: UnConfigContext,
   pluginPrefix: Plugin,
 ) {
-  return (
-    // The cast picks out this plugin's settings and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
-    (
-      this.rootOptions.plugins?.[pluginPrefix] as
-        | {settings?: Prettify<PluginSettingsMap[Plugin]>}
-        | undefined
-    )?.settings
-  );
+  // eslint-disable-next-line un/no-type-assertion -- picks out this plugin's settings, and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
+  const pluginOptions = this.rootOptions.plugins?.[pluginPrefix] as
+    | {settings?: Prettify<PluginSettingsMap[Plugin]>}
+    | undefined;
+  return pluginOptions?.settings;
 }
 
 export function registerUsedPlugin(
@@ -261,6 +260,7 @@ export const savePackagesToLoadFromConfig = (
         return;
       }
 
+      // eslint-disable-next-line un/no-type-assertion -- nothing else is stored under this symbol
       const info = value as PackageToLoadInfo;
       arrayify(info.package).forEach((packageId) => {
         mapGetOrInsert(context.usedPackages, packageId, []).push({

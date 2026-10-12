@@ -340,12 +340,8 @@ describe('options', () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.[
-            'parserOptions'
-          ] as Record<string, unknown> | undefined
-        )?.['svelteConfig'],
-      ).toBeUndefined();
+        configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.['parserOptions'],
+      ).not.toHaveProperty('svelteConfig');
     });
 
     it('sets `svelteConfig` in parserOptions when `svelteKitConfig` is provided', async () => {
@@ -356,12 +352,8 @@ describe('options', () => {
       });
 
       expect(
-        (
-          configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.[
-            'parserOptions'
-          ] as Record<string, unknown> | undefined
-        )?.['svelteConfig'],
-      ).toBe(SVELTE_KIT_CONFIG);
+        configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.['parserOptions'],
+      ).toHaveProperty('svelteConfig', SVELTE_KIT_CONFIG);
     });
   });
 

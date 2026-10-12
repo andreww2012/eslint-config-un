@@ -155,12 +155,8 @@ export const resolveConfigAsyncData = async (
     'cachedData' in options
       ? ({
           usedPluginPrefixes: options.cachedData.usedPlugins,
-          usedParserPrefixes: Object.keys(
-            options.cachedData.usedParsers,
-          ) as ResolveConfigAsyncDataOptions['usedParserPrefixes'],
-          usedPackagesPrefixes: Object.keys(
-            options.cachedData.usedPackages,
-          ) as ResolveConfigAsyncDataOptions['usedPackagesPrefixes'],
+          usedParserPrefixes: objectKeysUnsafe(options.cachedData.usedParsers),
+          usedPackagesPrefixes: objectKeysUnsafe(options.cachedData.usedPackages),
         } satisfies ResolveConfigAsyncDataOptions)
       : options;
 
@@ -211,8 +207,11 @@ export const resolveConfigAsyncData = async (
           }
         }
         if (pluginPrefix) {
+          const {plugins} = rootOptions;
           const isProvided =
-            rootOptions.plugins?.[pluginPrefix as Exclude<PluginPrefix, ''>]?.plugin != null;
+            plugins != null &&
+            isKeyIn(pluginPrefix, plugins) &&
+            plugins[pluginPrefix]?.plugin != null;
           debug(
             `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from the `plugins` option') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
@@ -405,14 +404,14 @@ ${styleText(
     ruleNames,
   }));
 
-  const loadedPlugins = Object.fromEntries(
+  const loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>> = Object.fromEntries(
     loadedPluginsRaw
       .filter((v) => v != null)
       .map(([pluginPrefix, plugin]) => [
         pluginPrefix,
         internalOptions.keepRuleMetaLanguages ? plugin : removeRuleLanguagesFromPlugin(plugin),
       ]),
-  ) as Partial<Record<PluginPrefix, EslintPlugin>>;
+  );
   replaceImportRulesImplementationWithIntegrityPlugin(context, loadedPlugins);
 
   const disableAutofixPlugin: EslintPlugin = {
@@ -542,7 +541,7 @@ ${styleText(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...args)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line no-new-func, ts/no-implied-eval
+                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion
                         fn: new Function('...args', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },

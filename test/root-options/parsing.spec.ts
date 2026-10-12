@@ -242,9 +242,7 @@ describe('option: `parsing`', () => {
       // The parser reading the file, and the one taking its `<script>` blocks
       expect(languageOptions?.['parser']).toBeDefined();
       expect(languageOptions?.['parserOptions']).toMatchObject({sourceType: 'module'});
-      expect(
-        (languageOptions?.['parserOptions'] as Record<string, unknown>)['parser'],
-      ).toBeDefined();
+      expect(languageOptions?.['parserOptions']).toHaveProperty('parser', expect.anything());
     });
 
     it('lets the user override what a config contributed', async () => {
@@ -255,13 +253,12 @@ describe('option: `parsing`', () => {
         {un: {parsing: {vue: {languageOptions: {parserOptions: {sourceType: 'script'}}}}}},
       );
 
-      const parserOptions = configResult.getConfigByUnPostfix('parsing/vue')?.languageOptions?.[
-        'parserOptions'
-      ] as Record<string, unknown> | undefined;
+      const parserOptions =
+        configResult.getConfigByUnPostfix('parsing/vue')?.languageOptions?.['parserOptions'];
 
-      expect(parserOptions?.['sourceType']).toBe('script');
+      expect(parserOptions).toHaveProperty('sourceType', 'script');
       // What the config contributed survives the override
-      expect(parserOptions?.['parser']).toBeDefined();
+      expect(parserOptions).toHaveProperty('parser', expect.anything());
     });
   });
 

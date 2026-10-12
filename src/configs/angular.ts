@@ -1,7 +1,7 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
-import type {NonEmptyTuple, Prettify, Subtract} from '../types';
-import type {fetchPackageInfo} from '../utils';
+import type {NonEmptyTuple, Prettify} from '../types';
+import {arrayIncludes, arrayLast, type fetchPackageInfo} from '../utils';
 import {generateUseBaselineRuleOptions, resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
@@ -17,13 +17,7 @@ type PartialObjectsOnly<T> = T extends readonly unknown[] ? T : Partial<T>;
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22] as const;
 type SupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[number];
-type LatestSupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[Subtract<
-  (typeof SUPPORTED_ANGULAR_VERSIONS)['length'],
-  1
->];
-const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
-  -1,
-) as LatestSupportedAngularVersion;
+const LATEST_SUPPORTED_ANGULAR_VERSION = arrayLast(SUPPORTED_ANGULAR_VERSIONS);
 
 interface ConfigTemplateSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -283,14 +277,9 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     optionsResolved.angularVersion ??
     (() => {
       const majorVersion = context.packagesInfo['@angular/core']?.versions.major;
-      if (
-        majorVersion != null &&
-        majorVersion >= SUPPORTED_ANGULAR_VERSIONS[0] &&
-        majorVersion <= LATEST_SUPPORTED_ANGULAR_VERSION
-      ) {
-        return majorVersion as SupportedAngularVersion;
-      }
-      return LATEST_SUPPORTED_ANGULAR_VERSION;
+      return arrayIncludes(SUPPORTED_ANGULAR_VERSIONS, majorVersion)
+        ? majorVersion
+        : LATEST_SUPPORTED_ANGULAR_VERSION;
     })();
 
   const {

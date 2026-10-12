@@ -137,7 +137,7 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
     ? Record<string /* Package name */, PackageRequester[]>
     : Map<string /* Package name */, Set<PackageRequester>>;
   usedParsers: Serialized extends true
-    ? Record<string, string[] /* Config names */>
+    ? Partial<Record<ParserPrefix, string[] /* Config names */>>
     : Map<ParserPrefix, string[] /* Config names */>;
   usedPackages: Serialized extends true
     ? Partial<

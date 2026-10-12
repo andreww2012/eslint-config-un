@@ -1,10 +1,10 @@
-import type * as Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {AST as JsonAST} from 'jsonc-eslint-parser';
 import {findMinimumForRange as minSemverVersion, isEqual as semverVersionsEqual} from 'verkit';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
+import type {JsRuleDefinitionWithNodes} from '../src/eslint/eslint-types';
 import {jsonParseSafe} from '../src/utils';
 
 const RULE_OPTIONS_SCHEMA = {
@@ -23,7 +23,7 @@ const RULE_OPTIONS_SCHEMA = {
 
 type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
-const rule: Eslint.Rule.RuleModule = {
+const rule: JsRuleDefinitionWithNodes<JsonAST.JSONProperty, [RuleOptions?]> = {
   meta: {
     type: 'problem',
     fixable: 'code',
@@ -40,11 +40,11 @@ const rule: Eslint.Rule.RuleModule = {
       return {};
     }
 
-    const options = context.options[0] as RuleOptions | undefined;
+    const [options] = context.options;
 
     return {
       'Program > JSONExpressionStatement > JSONObjectExpression > JSONProperty[key.value=peerDependencies]':
-        (node: JsonAST.JSONProperty) => {
+        (node) => {
           if (node.value.type === 'JSONObjectExpression') {
             node.value.properties.forEach((peerDependencyNode) => {
               if (peerDependencyNode.key.type !== 'JSONLiteral') {
@@ -98,8 +98,7 @@ const rule: Eslint.Rule.RuleModule = {
             });
           }
         },
-      // ESLint types have no way of expressing a node type for a selector unknown to them
-    } as unknown as Eslint.Rule.RuleListener;
+    };
   },
 };
 

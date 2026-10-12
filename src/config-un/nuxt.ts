@@ -223,7 +223,7 @@ export type NuxtAutoImportsResult = NuxtAutoImports | NuxtAutoImportsFailure;
 const importNuxtKit = async (cwd: string) => {
   const nuxtKitUrl = resolveFromProject('nuxt/kit', cwd);
   if (nuxtKitUrl) {
-    // eslint-disable-next-line no-unsanitized/method -- resolved from a fixed specifier
+    // eslint-disable-next-line no-unsanitized/method, un/no-type-assertion -- resolved from a fixed specifier
     return (await import(nuxtKitUrl)) as typeof import('nuxt/kit');
   }
 

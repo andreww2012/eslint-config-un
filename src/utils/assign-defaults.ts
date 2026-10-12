@@ -1,5 +1,5 @@
 import type {Prettify} from '../types';
-import {isObject} from '../utils';
+import {castToSafe, isObject} from '../utils';
 
 // `any` (not `unknown`) is intentional here: only `Record<PropertyKey, any>` is
 // assignment-compatible with regular object/interface types that lack an
@@ -64,13 +64,14 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
         return;
       }
 
-      const value = (source as Record<string, unknown>)[key];
+      const value: unknown = Reflect.get(source, key);
       if (value != null) {
-        result[key] = Array.isArray(value) ? [...(value as unknown[])] : value;
+        result[key] = Array.isArray(value) ? [...castToSafe<unknown[]>(value)] : value;
       }
     });
   }
 
+  // eslint-disable-next-line un/no-type-assertion -- the loop above builds this very shape
   return result as Prettify<
     [SourceObjectShape<S>] extends [never]
       ? D

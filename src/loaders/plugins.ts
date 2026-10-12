@@ -1,5 +1,5 @@
 // cspell:ignore mathml
-import {fixupPluginRules as fixupPluginRulesOriginal} from '@eslint/compat';
+import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin, PluginTypedByEslintCoreOrTsEslint} from '../eslint/eslint-types';
 import type {Prettify} from '../types';
@@ -12,10 +12,6 @@ import {
   genInferredModuleLoader,
   genModuleLoader,
 } from './shared';
-
-// A tiny wrapper just to preserve the plugin type
-const fixupPluginRules = <Plugin extends EslintPlugin>(plugin: Plugin) =>
-  fixupPluginRulesOriginal(plugin) as Plugin;
 
 const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
   ...m,
@@ -38,12 +34,14 @@ const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin =>
 
 // `typescript-eslint` typings of a plugin don't satisfy `@eslint/core`'s, but describe the same object
 export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslint) =>
+  // eslint-disable-next-line un/no-type-assertion
   plugin as EslintPlugin;
 
 /* v8 ignore next - The preset always contains the requested plugin */
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
     (m) =>
+      // eslint-disable-next-line un/no-type-assertion -- the preset declares the plugins it uses
       (m.default.configs.all as {plugins: Record<string, EslintPlugin>}).plugins[pluginName] ||
       null,
   );

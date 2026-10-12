@@ -41,14 +41,13 @@ export const PLUGIN_PACKAGES_META: Readonly<Record<string, PluginPackageMeta>> =
     if (prefix === '') {
       return [];
     }
-    const pluginPrefix = prefix as LoadablePluginPrefix;
-    const {packageName} = pluginsLoaders[pluginPrefix];
+    const {packageName} = pluginsLoaders[prefix];
     return [
       [
         packageName,
         {
           configs: metadata.configs || [],
-          pluginPrefix,
+          pluginPrefix: prefix,
           ruleDocsUrl: metadata.ruleDocsUrl || null,
           ...(metadata.gitTag != null && {gitTag: metadata.gitTag}),
           ...(metadata.isMainPlugin && {isMainPlugin: metadata.isMainPlugin}),
