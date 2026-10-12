@@ -28,6 +28,7 @@ ruleTester.run('prettier', formatRules.prettier, {
       filename: FILE_NEXT_TO_PRETTIER_CONFIG,
       options: [{singleQuote: false}],
     },
+    {code: 'not supported', filename: 'file.unknown'},
   ],
   invalid: [
     {
@@ -60,6 +61,14 @@ ruleTester.run('prettier', formatRules.prettier, {
       filename: 'file.js',
       errors: [{message: 'Parsing error: Unexpected token', line: 1, column: 7}],
     },
+    // The parser passed to the rule makes any file supported
+    {
+      code: 'const value = 1\n',
+      filename: 'file.unknown',
+      options: [{parser: 'babel'}],
+      output: 'const value = 1;\n',
+      errors: [{message: 'Insert `;`'}],
+    },
   ],
 });
 
@@ -84,13 +93,25 @@ ruleTester.run('oxfmt', formatRules.oxfmt, {
   ],
 });
 
+const DPRINT_MARKDOWN_PLUGINS_OPTIONS = {plugins: [{plugin: '@dprint/markdown'}]} as const;
+
 ruleTester.run('dprint', formatRules.dprint, {
-  valid: [{code: '- item\n', filename: 'file.md', options: [{language: 'markdown'}]}],
+  valid: [
+    {code: '- item\n', filename: 'file.md', options: [{language: 'markdown'}]},
+    {code: '* item\n', filename: 'file.unknown', options: [DPRINT_MARKDOWN_PLUGINS_OPTIONS]},
+  ],
   invalid: [
     {
       code: '* item\n',
       filename: 'file.md',
       options: [{language: 'markdown'}],
+      output: '- item\n',
+      errors: [{message: 'Replace `*` with `-`'}],
+    },
+    {
+      code: '* item\n',
+      filename: 'file.md',
+      options: [DPRINT_MARKDOWN_PLUGINS_OPTIONS],
       output: '- item\n',
       errors: [{message: 'Replace `*` with `-`'}],
     },

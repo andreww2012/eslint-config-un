@@ -60,6 +60,8 @@ const URL_REGEXP = /^[\w-]+:\/\//;
 
 const OXFMT_UNSUPPORTED_FILE_ERROR_PREFIX = 'Unsupported file type:';
 
+const DPRINT_UNSUPPORTED_FILE_ERROR_PREFIX = 'No plugin found for file:';
+
 const dprintFormatters = new Map<string, Promise<Dprint.Formatter>>();
 const dprintContexts = new Map<string, Promise<Dprint.FormatterContext>>();
 
@@ -143,7 +145,14 @@ const formatWithDprint = async (code: string, filePath: string, options: DprintO
     });
     return newContext;
   });
-  return context.formatText({filePath, fileText: code});
+  try {
+    return context.formatText({filePath, fileText: code});
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith(DPRINT_UNSUPPORTED_FILE_ERROR_PREFIX)) {
+      return null;
+    }
+    throw error;
+  }
 };
 
 const formatWithOxfmt = async (code: string, filePath: string, options: OxfmtOptions) => {
@@ -172,7 +181,15 @@ const formatWithPrettier = async (
   const config = shouldReadConfig
     ? await prettier.resolveConfig(filePath, {editorconfig: true})
     : null;
-  return await prettier.format(code, {...config, filepath: filePath, ...options});
+  try {
+    return await prettier.format(code, {...config, filepath: filePath, ...options});
+  } catch (error) {
+    // Neither the file path nor the options and plugins tell Prettier how to parse the file
+    if (error instanceof Error && error.name === 'UndefinedParserError') {
+      return null;
+    }
+    throw error;
+  }
 };
 
 /** Resolves to `null` if the formatter does not support the file */
