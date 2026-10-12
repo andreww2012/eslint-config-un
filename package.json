@@ -313,6 +313,7 @@
     "eslint-plugin-zod-mini": "2.0.0",
     "eslint-plugin-zod-openapi": "2.0.0",
     "eslint-processor-vue-blocks": "2.0.0",
+    "eslint-soml": "0.0.4",
     "eslint-typegen": "2.3.1",
     "import-integrity-lint": "1.3.0",
     "import-meta-resolve": "4.2.0",
@@ -462,6 +463,7 @@
     "eslint-plugin-zod-mini": "^2.0.0",
     "eslint-plugin-zod-openapi": "^2.0.0",
     "eslint-processor-vue-blocks": "^2.0.0",
+    "eslint-soml": "^0.0.4",
     "import-integrity-lint": "^1.3.0",
     "oxfmt": ">=0.35.0 <1",
     "prettier": "^3",
@@ -787,6 +789,9 @@
       "optional": true
     },
     "eslint-processor-vue-blocks": {
+      "optional": true
+    },
+    "eslint-soml": {
       "optional": true
     },
     "import-integrity-lint": {

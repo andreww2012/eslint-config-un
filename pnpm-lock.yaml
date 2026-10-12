@@ -811,6 +811,9 @@ importers:
       eslint-processor-vue-blocks:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.43)(eslint@10.12.0)
+      eslint-soml:
+        specifier: 0.0.4
+        version: 0.0.4(eslint@10.12.0)
       eslint-typegen:
         specifier: 2.3.1
         version: 2.3.1(patch_hash=ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b)(eslint@10.12.0)
@@ -8475,6 +8478,12 @@ packages:
     resolution: {integrity: sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  eslint-soml@0.0.4:
+    resolution: {integrity: sha512-RHjmw2vCsSZCQOE/XCWLZmE5+bZGUt8zi033PNLOARDLpJeXkTPebCJR5uLgQkPugtOddMUABnnMvpMJ/gVTSQ==}
+    engines: {node: ^22.13.0 || >=24}
+    peerDependencies:
+      eslint: '>=10.4'
+
   eslint-type-tracer@0.4.1:
     resolution: {integrity: sha512-7kDovYNNitAxahP/qQ9UrHssUk8d6V5Y9MQaDiHPKsJrk1g6STDqVHjJPu8ycn1+qE4D0jwQRN7waRrxrX9k+Q==}
     engines: {node: ^18 || >=20}
@@ -11893,6 +11902,10 @@ packages:
   socks@2.8.10:
     resolution: {integrity: sha512-e0VyvkVTwVYViNovRkZ9aodhxVlyoMn7eJhVUPxZ+eK9P/7CBkxvvsBOHqFPEH416726W8tLXXXjKwqgTErrCQ==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  soml-lang@0.0.5:
+    resolution: {integrity: sha512-PcHLYLw4JQW5xjgWUxZh/rvm3d4zC5qyswwpsbyJxL1fPE+ZihnlqVCQywb7tHzNLZSpei2N2KjKABh1iWvEGQ==}
+    engines: {node: '>=22'}
 
   sort-object-keys@2.1.0:
     resolution: {integrity: sha512-SOiEnthkJKPv2L6ec6HMwhUcN0/lppkeYuN1x63PbyPRrgSPIuBJCiYxYyvWRTtjMlOi14vQUCGUJqS6PLVm8g==}
@@ -21702,6 +21715,13 @@ snapshots:
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
+  eslint-soml@0.0.4(eslint@10.12.0):
+    dependencies:
+      '@eslint/core': 1.2.1
+      '@eslint/plugin-kit': 0.7.3
+      eslint: 10.12.0(jiti@2.7.0)(supports-color@7.2.0)
+      soml-lang: 0.0.5
+
   eslint-type-tracer@0.4.1(eslint@10.12.0):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0)
@@ -26056,6 +26076,8 @@ snapshots:
     dependencies:
       ip-address: 10.7.3
       smart-buffer: 4.2.0
+
+  soml-lang@0.0.5: {}
 
   sort-object-keys@2.1.0: {}
 

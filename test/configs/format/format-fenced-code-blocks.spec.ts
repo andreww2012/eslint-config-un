@@ -20,7 +20,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
+        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
       );
       expect(config?.ignores).toBeUndefined();
     });

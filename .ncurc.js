@@ -38,6 +38,7 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
 const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set([
   'eslint-cssicorn',
   'eslint-mdx',
+  'eslint-soml',
   'import-integrity-lint',
 ]);
 

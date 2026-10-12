@@ -468,6 +468,7 @@ export const pluginsLoaders = {
   solid: genModuleLoader('solid', 'eslint-plugin-solid', () =>
     interopDefault(import('eslint-plugin-solid')).then(castTsEslintTypedPlugin),
   ),
+  soml: genModuleLoader('soml', 'eslint-soml', () => interopDefault(import('eslint-soml'))),
   sonar: genModuleLoader('sonar', 'eslint-plugin-sonarjs', () =>
     interopDefault(import('eslint-plugin-sonarjs')),
   ),

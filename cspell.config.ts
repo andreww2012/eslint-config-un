@@ -75,6 +75,7 @@ export default {
     'solidjs',
     'danielx', // `@danielx/civet`
     'cssicorn',
+    'soml',
 
     // Technical words/terms
     'arrayify',

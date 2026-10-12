@@ -14,6 +14,7 @@ import {
   GLOB_MARKDOWN,
   GLOB_MDX,
   GLOB_RIPPLE,
+  GLOB_SOML,
   GLOB_SVELTE,
   GLOB_SVELTE_SCRIPT,
   GLOB_TOML,
@@ -62,6 +63,7 @@ export type ImplicitlyIgnoredFileTypeUnlessParsed =
   | 'md'
   | 'mdx'
   | 'scss'
+  | 'soml'
   | 'toml'
   | 'yaml';
 
@@ -213,6 +215,17 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'toml',
+  },
+
+  soml: {
+    dialects: {
+      soml: {
+        mechanism: {language: ['soml', 'soml']},
+        filesDefault: [GLOB_SOML],
+        ignoresExclusions: ['soml'],
+      },
+    },
+    dialectDefault: 'soml',
   },
 
   markdown: {

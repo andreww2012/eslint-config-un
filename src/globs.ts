@@ -60,6 +60,7 @@ export {
   GLOB_HTM_HTML,
   // --
   GLOB_TOML,
+  GLOB_SOML,
   GLOB_VUE,
   GLOB_CSS,
   GLOB_ASTRO,

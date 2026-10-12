@@ -117,6 +117,8 @@ export const GLOB_HTM_HTML = `**/*.${GLOB_HTM_HTML_EXTENSION}` as const;
 
 export const GLOB_TOML = '**/*.toml' as const;
 
+export const GLOB_SOML = '**/*.soml' as const;
+
 export const GLOB_VUE = '**/*.vue' as const;
 
 export const GLOB_CSS = '**/*.css' as const;
@@ -160,6 +162,7 @@ const GLOB_SUPPORTED_EXTENSIONS = [
   'json5',
   GLOB_YML_YAML_EXTENSION,
   'toml',
+  'soml',
   GLOB_HTM_HTML_EXTENSION,
   'css',
   'scss',
@@ -308,6 +311,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@tsrx/core',
   'ripple',
   '@danielx/civet',
+  'soml-lang',
 
   // Used in various configs to determine the default values of their options
   '@changesets/cli',

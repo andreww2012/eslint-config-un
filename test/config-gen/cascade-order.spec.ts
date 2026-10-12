@@ -155,6 +155,7 @@ describe('cascade order', () => {
       eslint-config-un/safeql
       eslint-config-un/security
       eslint-config-un/solid
+      eslint-config-un/soml
       eslint-config-un/sonar
       eslint-config-un/sql
       eslint-config-un/storybook
@@ -242,6 +243,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/json/json5
       eslint-config-un/parsing/yaml
       eslint-config-un/parsing/toml
+      eslint-config-un/parsing/soml
       eslint-config-un/parsing/markdown/commonmark
       eslint-config-un/parsing/markdown/gfm
       eslint-config-un/parsing/html
