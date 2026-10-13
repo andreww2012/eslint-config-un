@@ -48,6 +48,8 @@ minimumReleaseAgeExclude: # []
   - '@typescript-eslint/visitor-keys@8.71.2'
   - typescript-eslint@8.71.2
   - eslint-cssicorn@0.2.0
+  - '@unhead/eslint-plugin@3.4.3'
+  - unhead@3.4.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
