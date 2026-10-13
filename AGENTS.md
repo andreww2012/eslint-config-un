@@ -30,8 +30,10 @@ Don't leave a trailing empty line in .md changeset files.
 
 When referencing rule names in the docs, always wrap it in a link to the rule's docs page if it's available.
 
+Check new or changed links with lychee as [CI](./.github/workflows/check-links.yml) does (local report: `.lychee.report.md`).
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
 
-- Add or modify config tests, follow [this skill](.agents/skills/eslint-config-un-config-tests/SKILL.md).
-- Add support for a new plugin or add a new Config, follow [this skill](.agents/skills/eslint-config-un-new-eslint-plugin/SKILL.md).
+- Add or modify config tests, follow [this skill](./.agents/skills/eslint-config-un-config-tests/SKILL.md).
+- Add support for a new plugin or add a new Config, follow [this skill](./.agents/skills/eslint-config-un-new-eslint-plugin/SKILL.md).

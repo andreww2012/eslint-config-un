@@ -430,7 +430,6 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
     );
   });
 
-  // eslint-disable-next-line unicorn/no-unnecessary-parameters -- the set must be shared across the recursive calls
   const resolveExport = (file: string, name: string, seen = new Set<string>()): string => {
     const key = `${file}\0${name}`;
     if (seen.has(key)) {

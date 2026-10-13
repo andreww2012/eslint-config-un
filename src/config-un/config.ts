@@ -60,7 +60,7 @@ import {
 } from './cache';
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {
-  getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless,
+  getIsConfigEnabledByManifest,
   getPluginSettings,
   recordPackageRequester,
   registerUsedPlugin,
@@ -408,8 +408,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     );
   }
 
-  const getIsConfigEnabledByManifest = getIsConfigEnabledByManifestContextless.bind(context);
-
   const resolveManifestConfigEnablement = (configKey: keyof UnConfigs) => {
     const manifest = CONFIG_MANIFESTS[configKey];
     if (!manifest || configKey in context.configsMeta) {
@@ -466,11 +464,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const setupManifestConfig = async (configKey: ManifestConfigKey) => {
     const manifest = CONFIG_MANIFESTS[configKey];
-    /* v8 ignore next 3 -- every manifest key comes from the generated table */
-    if (!manifest) {
-      return [];
-    }
-    if (!context.configsMeta[configKey].enabled) {
+    if (!manifest || !context.configsMeta[configKey].enabled) {
       return [];
     }
 

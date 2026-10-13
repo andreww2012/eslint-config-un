@@ -259,7 +259,6 @@ const mainProgram = Effect.gen(function* () {
 
 const program = mainProgram.pipe(
   Effect.provide(NodeFileSystem.layer),
-  // eslint-disable-next-line unicorn/prefer-top-level-await -- not a promise chain
   Effect.catch((error) => {
     if (error instanceof UnexpectedResponseError) {
       logger.fatal('Got unexpected response', error.response);

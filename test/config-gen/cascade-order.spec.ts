@@ -118,6 +118,9 @@ describe('cascade order', () => {
       eslint-config-un/unicorn/html
       eslint-config-un/unicorn/json
       eslint-config-un/unicorn/markdown
+      eslint-config-un/unicorn/soml
+      eslint-config-un/unicorn/toml
+      eslint-config-un/unicorn/yaml
       eslint-config-un/unicorn/inline-js
       eslint-config-un/node
       eslint-config-un/node-dependencies

@@ -234,6 +234,25 @@ export default eslintConfig({
       files: ['test/**/*'],
       rules: {
         'ts/no-shadow': 0,
+        // Spies pass for boolean functions; options replace ours, hence the repeated defaults
+        'unicorn/consistent-boolean-name': [
+          2,
+          {
+            checkFunctions: 'prohibit',
+            prefixes: {
+              had: true,
+              cannot: true,
+              must: true,
+              may: true,
+              needs: true,
+              allows: true,
+              supports: true,
+              contains: true,
+              includes: true,
+            },
+            ignore: ['Spy$'],
+          },
+        ],
       },
     },
     {

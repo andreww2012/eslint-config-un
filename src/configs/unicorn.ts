@@ -7,6 +7,9 @@ import {
   GLOB_JSONC,
   GLOB_MARKDOWN,
   GLOB_MDX,
+  GLOB_SOML,
+  GLOB_TOML,
+  GLOB_YML_YAML,
   KEEP_LINTING_INLINE_JS,
   OFF,
   WARNING,
@@ -169,6 +172,39 @@ export interface UnicornEslintConfigOptions<
    * @default true // if any of the following configs are enabled: `markdown`, `markdownLinks`, `markdownPreferences`
    */
   configMarkdown?: LanguageSubConfig<ExtraPlugins, 'markdown'>;
+
+  /**
+   * Applies the rules declaring support for [SOML](https://soml.sh) to SOML files.
+   *
+   * ⚠️ Enabled by default only if the `soml` Config is enabled (see the warning in the `css`
+   * sub-config).
+   *
+   * 📁 Default `files`: <code>**&#47;*.soml</code>
+   * @default true // if `soml` config is enabled
+   */
+  configSoml?: LanguageSubConfig<ExtraPlugins, 'soml'>;
+
+  /**
+   * Applies the rules declaring support for TOML to TOML files.
+   *
+   * ⚠️ Enabled by default only if the `toml` Config is enabled (see the warning in the `css`
+   * sub-config).
+   *
+   * 📁 Default `files`: <code>**&#47;*.toml</code>
+   * @default true // if `toml` config is enabled
+   */
+  configToml?: LanguageSubConfig<ExtraPlugins, 'toml'>;
+
+  /**
+   * Applies the rules declaring support for YAML to YAML files.
+   *
+   * ⚠️ Enabled by default only if the `yaml` Config is enabled (see the warning in the `css`
+   * sub-config).
+   *
+   * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
+   * @default true // if `yaml` config is enabled
+   */
+  configYaml?: LanguageSubConfig<ExtraPlugins, 'yaml'>;
 
   /**
    * Current and extended class references in class static methods can be either accessed with
@@ -420,6 +456,7 @@ const DEFAULT_PLUGIN_ALLOWED_BOOLEAN_PREFIXES: ReadonlySet<string> = new Set([
   'should',
   'was',
   'were',
+  'does',
   'did',
   'will',
   'requires',
@@ -476,6 +513,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       configsMeta.markdown.enabled ||
       configsMeta.markdownLinks.enabled ||
       configsMeta.markdownPreferences.enabled,
+    configSoml: configsMeta.soml.enabled,
+    configToml: configsMeta.toml.enabled,
+    configYaml: configsMeta.yaml.enabled,
     classReferenceInStaticMethodsStyle: 'thisAndSuper',
     compoundWordsSuggestedReplacements: true,
     domDataAttributesStyle: 'dataset',
@@ -495,6 +535,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     configHtml,
     configJson,
     configMarkdown,
+    configSoml,
+    configToml,
+    configYaml,
     classReferenceInStaticMethodsStyle,
     compoundWordsSuggestedReplacements,
     domDataAttributesStyle,
@@ -795,6 +838,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-prevent-default-in-passive-listener', ERROR) /** @since 77.0.0 */
     .addRule('no-process-exit', OFF) /** @since 0.2.0 */ // Used in `node` config
     .addRule('no-redundant-comparison', ERROR) /** @since 66.0.0 */
+    .addRule('no-repeated-call-wrappers', ERROR) /** @since 78.0.0 */ // 🔴
     .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-selector-as-dom-name', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('no-shorthand-property-overrides', ERROR) /** @since 72.0.0 */
@@ -815,6 +859,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-unnecessary-array-splice-count', ERROR) /** @since 59.0.0 */
     .addRule('no-unnecessary-await', ERROR) /** @since 44.0.0 */
     .addRule('no-unnecessary-boolean-comparison', ERROR) /** @since 68.0.0 */ // 🟣
+    .addRule('no-unnecessary-default-arguments', ERROR) /** @since 78.0.0 */ // 🔴
     .addRule('no-unnecessary-fetch-options', ERROR) /** @since 70.0.0 */
     .addRule('no-unnecessary-global-this', ERROR) /** @since 66.0.0 */
     .addRule('no-unnecessary-nested-ternary', ERROR) /** @since 65.0.0 */
@@ -1275,6 +1320,107 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       /* v8 ignore start */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.markdown, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderSoml = context.createConfigBuilder(configSoml, 'unicorn');
+  configBuilderSoml
+    ?.addConfig([
+      'unicorn/soml',
+      {
+        filesDefault: [GLOB_SOML],
+        parsingIgnoresInheritedFrom: ['soml'],
+      },
+    ])
+    .addRule('comma-spacing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
+    .addRule('empty-brace-spaces', OFF)
+    .addRule('escape-case', ERROR)
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('key-name-casing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('name-replacements', OFF)
+    .addRule('no-asterisk-prefix-in-documentation-comments', OFF)
+    // Covered by `soml/no-loss-of-precision`
+    .addRule('no-loss-of-precision', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('no-manually-wrapped-comments', OFF)
+    // Covered by `soml/no-float-trailing-zeros`, which also suggests a string for `3.10`-like versions
+    .addRule('no-zero-fractions', OFF)
+    .addRule('number-literal-case', OFF)
+    // Covered by `soml/numeric-separators-style`
+    .addRule('numeric-separators-style', OFF)
+    // Covered by `soml/no-invisible-characters`
+    .addRule('prefer-escaped-irregular-whitespace', OFF)
+    .addRule('prefer-literal-ascii', ERROR)
+    .addRule('prefer-short-escape-sequences', ERROR)
+    .addRule('single-line-block-comment-style', OFF)
+    .addRule('string-content', OFF)
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.soml, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderToml = context.createConfigBuilder(configToml, 'unicorn');
+  configBuilderToml
+    ?.addConfig([
+      'unicorn/toml',
+      {
+        filesDefault: [GLOB_TOML],
+        parsingIgnoresInheritedFrom: ['toml'],
+      },
+    ])
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
+    .addRule('empty-brace-spaces', OFF)
+    .addRule('escape-case', ERROR)
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('key-name-casing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('name-replacements', OFF)
+    .addRule('no-empty-file', ERROR)
+    .addRule('no-loss-of-precision', ERROR) /** @since 77.0.0 */ // 🔴
+    .addRule('no-manually-wrapped-comments', OFF)
+    .addRule('no-zero-fractions', ERROR)
+    .addRule('number-literal-case', OFF)
+    .addRule('numeric-separators-style', ERROR, [{onlyIfContainsSeparator: true}])
+    .addRule('prefer-escaped-irregular-whitespace', ERROR)
+    .addRule('prefer-short-escape-sequences', ERROR)
+    .addRule('string-content', OFF)
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.toml, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderYaml = context.createConfigBuilder(configYaml, 'unicorn');
+  configBuilderYaml
+    ?.addConfig([
+      'unicorn/yaml',
+      {
+        filesDefault: [GLOB_YML_YAML],
+        parsingIgnoresInheritedFrom: ['yaml'],
+      },
+    ])
+    .addRule('consistent-compound-words', compoundWordsSeverity, compoundWordsOptions)
+    .addRule('empty-brace-spaces', OFF)
+    .addRule('escape-case', ERROR)
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('key-name-casing', OFF) /** @since 77.0.0 */ // 🔴
+    .addRule('name-replacements', OFF)
+    // Covered by `yaml/no-empty-document`, which also reports empty and comment-only files
+    .addRule('no-empty-file', OFF)
+    .addRule('no-manually-wrapped-comments', OFF)
+    // Unquoted `3.10` is the float `3.1`, so the fix would hide a version meant to be a string
+    .addRule('no-zero-fractions', OFF)
+    .addRule('number-literal-case', OFF)
+    .addRule('string-content', OFF)
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.yaml, ruleName),
       /* v8 ignore stop */
     })
     .addOverrides();

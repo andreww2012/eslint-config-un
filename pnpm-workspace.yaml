@@ -36,6 +36,7 @@ minimumReleaseAgeExclude: # []
   - p-queue@9.3.5
   - zod@4.6.6
   - eslint-plugin-es-x@10.1.0
+  - eslint-plugin-unicorn@78.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

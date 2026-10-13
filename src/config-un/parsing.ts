@@ -42,7 +42,7 @@ import {
   mapGetOrInsert,
   objectKeysUnsafe,
 } from '../utils';
-import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
+import {doesConfigRequestTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
 import {generateTailwindCssSyntaxProperty} from './css-syntax';
 import {
   type PackageRequester,
@@ -783,7 +783,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
         };
 
         const typeInfoIgnores = context.typeInfoRulesResolved.ignores;
-        if (typeInfoIgnores?.length && configRequestsTypeInformation(layerConfig)) {
+        if (typeInfoIgnores?.length && doesConfigRequestTypeInformation(layerConfig)) {
           layerConfig.ignores = [...(layerConfig.ignores || []), ...typeInfoIgnores];
         }
 

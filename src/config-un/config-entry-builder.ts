@@ -58,7 +58,7 @@ import {
   styleRuleName,
   styleText,
 } from '../utils';
-import {configRequestsTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
+import {doesConfigRequestTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
 import {
   type ImplicitlyIgnoredFileTypeUnlessParsed,
   PARSING_LANGUAGES,
@@ -812,7 +812,7 @@ export class ConfigEntryBuilder<
         if (
           typeInfoIgnores?.length &&
           ((skipTypeInfoSplit && rulesRequiringTypeInfo?.size) ||
-            configRequestsTypeInformation(config))
+            doesConfigRequestTypeInformation(config))
         ) {
           config.ignores = [...(config.ignores || []), ...typeInfoIgnores];
         }

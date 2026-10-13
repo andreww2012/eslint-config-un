@@ -11,6 +11,7 @@ const UNICORN_LANGUAGES_TO_CATEGORIES = {
   'json/json5': 'json',
   'markdown/commonmark': 'markdown',
   'markdown/gfm': 'markdown',
+  'soml/soml': 'soml',
   'toml/toml': 'toml',
   'yml/yaml': 'yaml',
 } as const;

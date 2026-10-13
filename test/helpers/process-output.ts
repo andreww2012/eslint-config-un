@@ -5,16 +5,16 @@
 export const spyOnProcessOutput = () => {
   // eslint-disable-next-line un/no-type-assertion -- unlike `process.exit`, the mock returns
   const exit = vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never);
-  const stderr = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+  const stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
 
   onTestFinished(() => {
     exit.mockRestore();
-    stderr.mockRestore();
+    stderrSpy.mockRestore();
   });
 
   return {
     exit,
-    stderr,
-    getStderrOutput: () => stderr.mock.calls.map(([chunk]) => String(chunk)).join(''),
+    stderr: stderrSpy,
+    getStderrOutput: () => stderrSpy.mock.calls.map(([chunk]) => String(chunk)).join(''),
   };
 };

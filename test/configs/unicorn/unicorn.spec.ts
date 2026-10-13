@@ -577,6 +577,7 @@ describe('options', () => {
             should: false,
             was: false,
             were: false,
+            does: false,
             did: false,
             will: false,
             requires: false,
@@ -662,7 +663,7 @@ describe('options', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        '"Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."',
+        '"Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `does`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `needs`, `allows`, `supports`, `contains`, `includes`."',
       );
     });
 
@@ -697,7 +698,7 @@ describe('options', () => {
           {all: true},
         ).map(({message}) => message),
       ).toMatchInlineSnapshot(
-        '["Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+        '["Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `does`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
       );
     });
 
@@ -716,7 +717,7 @@ describe('options', () => {
           {all: true},
         ).map(({message}) => message),
       ).toMatchInlineSnapshot(
-        '["`isVisible` starts with `is`, so it should be boolean.", "Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `does`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
+        '["`isVisible` starts with `is`, so it should be boolean.", "Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `does`, `did`, `will`, `requires`, `had`, `cannot`, `must`, `may`, `needs`, `allows`, `supports`, `contains`, `includes`."]',
       );
     });
   });

@@ -30,6 +30,7 @@ try {
     'utf8',
   );
 
+  // eslint-disable-next-line unicorn/prefer-default-parameters -- an empty `stderr` must fall back too
   const {stdout, stderr, exitCode} = await exec('pnpm', ['--ignore-workspace', 'i', packageName], {
     nodeOptions: {cwd: tempDirectoryPath},
   });

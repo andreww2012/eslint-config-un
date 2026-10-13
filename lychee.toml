@@ -33,6 +33,8 @@ remap = [
   '^(https://v2\.remix\.run/[^#]*?)/?#[^/]* $1/',
   # New GitHub repo issue page redirects crawlers (non-auth users)
   '^(https://github\.com/[^/#]+/[^/#]+)/issues/new(?:\?.*)?$ $1/issues',
+  # The short domain of the SOML language redirects to its repo
+  '^https://soml\.sh/?$ https://github.com/soml-lang/soml',
 
   # Drop anchors lychee cannot verify because they are inserted by JS after load;
   # the fragment-less page is valid

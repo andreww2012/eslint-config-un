@@ -181,7 +181,7 @@ Add this to the start of the file:
 Then use the following template for the description (put a blank line after the frontmatter and IGNORE ALL THE COMMENTS in the following snippet for the actual description):
 
 ```md
-Added a new config `<configName>` which uses [`<pluginName>`](<plugin npmx.dev link>),
+Added a new config `<configName>` which uses [`<pluginName>`](https://npmx.dev/<pluginName>),
 
 <!-- Use one of the options below (without actually creating any line breaks! don't forget emojis!): -->
 

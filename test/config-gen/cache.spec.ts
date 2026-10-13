@@ -53,7 +53,7 @@ type CacheFileContents = Prettify<CacheDataInFs & {key: string; date: string}>;
 const readCacheFile = async () =>
   jsonParseSafe<CacheFileContents>(await fs.readFile(CACHE_FILE_PATH, 'utf8'));
 
-const cacheFileExists = () =>
+const doesCacheFileExist = () =>
   fs
     .stat(CACHE_FILE_PATH)
     .then(() => true)
@@ -189,7 +189,7 @@ describe('option: `cacheConfigs`', () => {
     it('does not write anything when caching is disabled', async () => {
       await computeEslintConfig({});
 
-      await expect(cacheFileExists()).resolves.toBe(false);
+      await expect(doesCacheFileExist()).resolves.toBe(false);
     });
 
     it('stores the resolved configs along with the data needed to rehydrate them', async () => {
@@ -289,7 +289,7 @@ describe('option: `cacheConfigs`', () => {
       await computeCachedConfig();
 
       expect(processOutput.getStderrOutput()).toContain('Could not save cache data');
-      await expect(cacheFileExists()).resolves.toBe(false);
+      await expect(doesCacheFileExist()).resolves.toBe(false);
     });
   });
 
@@ -338,7 +338,7 @@ describe('option: `cacheConfigs`', () => {
       await computeCachedConfig();
 
       expect(processOutput.getStderrOutput()).toContain('Error getting git HEAD hash');
-      await expect(cacheFileExists()).resolves.toBe(true);
+      await expect(doesCacheFileExist()).resolves.toBe(true);
     });
 
     it('is still computed when the git command exits with an error', async () => {
@@ -349,7 +349,7 @@ describe('option: `cacheConfigs`', () => {
 
       await computeCachedConfig();
 
-      await expect(cacheFileExists()).resolves.toBe(true);
+      await expect(doesCacheFileExist()).resolves.toBe(true);
     });
   });
 
@@ -427,7 +427,7 @@ describe('option: `cacheConfigs`', () => {
         {extraConfigs: [{name: 'circular', settings: circularSettings}]},
       );
 
-      await expect(cacheFileExists()).resolves.toBe(false);
+      await expect(doesCacheFileExist()).resolves.toBe(false);
       expect(processOutput.getStderrOutput()).toContain(
         'Could not serialize configs to store in cache',
       );
@@ -441,7 +441,7 @@ describe('option: `cacheConfigs`', () => {
 
       const output = processOutput.getStderrOutput();
 
-      await expect(cacheFileExists()).resolves.toBe(false);
+      await expect(doesCacheFileExist()).resolves.toBe(false);
       expect(output).toContain('unserializable data at paths');
       expect(output).toContain('eslint-config-un/extra-config/unserializable');
       expect(output).toContain('settings.transform');
@@ -456,7 +456,7 @@ describe('option: `cacheConfigs`', () => {
 
       await computeCachedConfig();
 
-      await expect(cacheFileExists()).resolves.toBe(false);
+      await expect(doesCacheFileExist()).resolves.toBe(false);
       expect(processOutput.getStderrOutput()).toContain('Could not determine the cache path');
     });
   });

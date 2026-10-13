@@ -45,7 +45,7 @@ const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) =>
   };
 };
 
-const getIsPackageInstalled = (
+const isPackageInstalled = (
   context: UnConfigContext,
   {packageName, versionRangeToSatisfy}: ReturnType<typeof parsePackageToCheck>,
 ) => {
@@ -101,7 +101,7 @@ function getIsConfigEnabled(
   } else {
     const packagesList = arrayify(defaultConditionOrPackageInstalled).map(parsePackageToCheck);
     enabledBySystem ??= packagesList.some((packageToCheck) => {
-      const isInstalled = getIsPackageInstalled(this, packageToCheck);
+      const isInstalled = isPackageInstalled(this, packageToCheck);
       if (isInstalled) {
         reason ??= `package ${stylePackageName(packageToCheck.packageName)} is installed`;
       }
@@ -156,7 +156,7 @@ const resolveEnabledByCondition = (
     return enabledBy.packages;
   }
   if ('packageAbsent' in enabledBy) {
-    return !getIsPackageInstalled(context, parsePackageToCheck(enabledBy.packageAbsent));
+    return !isPackageInstalled(context, parsePackageToCheck(enabledBy.packageAbsent));
   }
   if ('pathExists' in enabledBy) {
     return findUp.dir(enabledBy.pathExists) != null;
@@ -275,7 +275,7 @@ export const savePackagesToLoadFromConfig = (
   );
 };
 
-export const configRequestsTypeInformation = (config: EslintFlatConfigEntry) => {
+export const doesConfigRequestTypeInformation = (config: EslintFlatConfigEntry) => {
   const parserOptions = config.languageOptions?.['parserOptions'];
   return (
     typeof parserOptions === 'object' &&
