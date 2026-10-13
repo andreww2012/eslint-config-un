@@ -34,7 +34,6 @@ minimumReleaseAgeExclude: # []
   - '@angular-eslint/utils@22.6.0'
   - effect@4.0.3
   - p-queue@9.3.5
-  - zod@4.6.6
   - eslint-plugin-es-x@10.1.0
   - eslint-plugin-unicorn@78.0.0
   - '@typescript-eslint/eslint-plugin@8.71.2'
