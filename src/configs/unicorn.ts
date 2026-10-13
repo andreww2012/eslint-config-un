@@ -951,7 +951,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */
     .addRule('prefer-direct-iteration', ERROR) /** @since 66.0.0 */
-    .addRule('prefer-dispose', ERROR) /** @since 66.0.0 */ // 🔴
+    // TODO should consider enabling by default when `using` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/using
+    .addRule('prefer-dispose', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('prefer-dom-node-append', ERROR) /** @since 7.0.0 */ /** @aka prefer-node-append */
     .addRule('prefer-dom-node-html-methods', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('prefer-dom-node-remove', ERROR) /** @since 8.0.0 */ /** @aka prefer-node-remove */
@@ -1121,7 +1122,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-top-level-await', OFF) /** @since 34.0.0 */
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
     .addRule('prefer-type-literal-last', OFF) /** @since 66.0.0 */
-    .addRule('prefer-uint8array-base64', ERROR) /** @since 66.0.0 */
+    // TODO should consider enabling by default when `Uint8Array#toBase64` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
+    .addRule('prefer-uint8array-base64', OFF) /** @since 66.0.0 */
     // TODO should consider enabling by default when `Uint8Array#toHex` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toHex
     .addRule('prefer-uint8array-hex', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-unary-minus', ERROR) /** @since 68.0.0 */

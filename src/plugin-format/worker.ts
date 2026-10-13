@@ -105,7 +105,6 @@ const loadDprintPlugin = async (source: string) => {
   }
 
   if (source.startsWith('data:')) {
-    // eslint-disable-next-line unicorn/prefer-uint8array-base64 -- not available in Node.js 22
     return Buffer.from(source.slice(source.indexOf(',') + 1), 'base64');
   }
 

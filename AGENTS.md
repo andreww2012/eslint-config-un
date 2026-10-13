@@ -19,18 +19,18 @@ Never statically import at runtime any Config file matching `src/configs/**/*.ts
 
 Keep each call chain on a Config builder (`.addRule(...)`, `.markCategory(...)` and so on) under 250 calls: a longer one overflows the parser's call stack when the file is linted on its own (for example, that crashes ESLint).
 
-Never reference Sub-configs with the `config` prefix: use `scss` in docs, not `configScss`.
+Never reference Sub-configs with the `config` prefix: use `css/scss` or `scss` in docs, never `configScss`.
 
 Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, inline as a property or parameter type, it won't if any operand is a union; as the whole body of a type alias, it still does).
 
 If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.
 Declare the corresponding array using `allUnionMembers` helper.
 
-Don't leave a trailing empty line in .md changeset files.
-
 When referencing rule names in the docs, always wrap it in a link to the rule's docs page if it's available.
 
 Check new or changed links with lychee as [CI](./.github/workflows/check-links.yml) does (local report: `.lychee.report.md`).
+
+Reference rules by their "full name": `<default un plugin prefix>/<rule-name>`, i.e. `unicorn/prefer-dispose`, not just `prefer-dispose`.
 
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
