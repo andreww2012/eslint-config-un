@@ -37,6 +37,17 @@ minimumReleaseAgeExclude: # []
   - zod@4.6.6
   - eslint-plugin-es-x@10.1.0
   - eslint-plugin-unicorn@78.0.0
+  - '@typescript-eslint/eslint-plugin@8.71.2'
+  - '@typescript-eslint/parser@8.71.2'
+  - '@typescript-eslint/project-service@8.71.2'
+  - '@typescript-eslint/scope-manager@8.71.2'
+  - '@typescript-eslint/tsconfig-utils@8.71.2'
+  - '@typescript-eslint/type-utils@8.71.2'
+  - '@typescript-eslint/types@8.71.2'
+  - '@typescript-eslint/typescript-estree@8.71.2'
+  - '@typescript-eslint/utils@8.71.2'
+  - '@typescript-eslint/visitor-keys@8.71.2'
+  - typescript-eslint@8.71.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
