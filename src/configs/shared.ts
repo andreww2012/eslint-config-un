@@ -1,4 +1,5 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
+import {BASELINE_STATUSES, type BaselineFeatureId} from '../baseline.gen';
 import type {UnConfigContext} from '../config-un/shared';
 import {
   ERROR,
@@ -245,6 +246,21 @@ export const noRestrictedHtmlElementsDefault = Object.fromEntries(
 export const generateUseBaselineRuleOptions = (context: UnConfigContext) => {
   const {baselineAvailability} = context.rootOptions;
   return baselineAvailability == null ? {} : {available: baselineAvailability};
+};
+
+/**
+ * Whether the feature meets the `baselineAvailability` root option, decided the same way the
+ * `use-baseline` rules decide it
+ */
+export const isBaselineFeatureAvailable = (
+  context: UnConfigContext,
+  featureId: BaselineFeatureId,
+) => {
+  const {baselineAvailability = 'widely'} = context.rootOptions;
+  const [status, year] = BASELINE_STATUSES[featureId];
+  return typeof baselineAvailability === 'number'
+    ? year != null && year <= baselineAvailability
+    : status === 'high' || (status === 'low' && baselineAvailability === 'newly');
 };
 
 /**

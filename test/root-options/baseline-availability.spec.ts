@@ -78,4 +78,37 @@ describe('option: `baselineAvailability`', () => {
       `"Element '<dialog>' is not a 2021 available baseline feature."`,
     );
   });
+
+  describe('rules suggesting a feature', () => {
+    it('enables `cssicorn/prefer-nesting` rule, as nesting is widely available, by default', async () => {
+      const configResult = await computeEslintConfig('css');
+
+      expect(configResult.getRuleEntrySeverity('css/unicorn', 'cssicorn/prefer-nesting')).toBe(2);
+    });
+
+    it('enables `cssicorn/prefer-light-dark` and `cssicorn/prefer-relative-colors` rules when option is `newly`', async () => {
+      const configResult = await computeEslintConfig('css', {
+        un: {baselineAvailability: 'newly'},
+      });
+
+      expect(configResult.getRuleSeverities('css/unicorn')).toMatchObject({
+        'cssicorn/prefer-light-dark': 2,
+        'cssicorn/prefer-relative-colors': 2,
+      });
+    });
+
+    it('enables only the rules whose feature became newly available in the year or earlier when option is a year', async () => {
+      const configResult = await computeEslintConfig('css', {
+        un: {baselineAvailability: 2022},
+      });
+
+      expect(configResult.getRuleSeverities('css/unicorn')).toMatchObject({
+        'cssicorn/prefer-explicit-viewport-units': 2,
+        'cssicorn/prefer-individual-transform-properties': 2,
+        'cssicorn/prefer-light-dark': 0,
+        'cssicorn/prefer-media-feature-range-syntax': 0,
+        'cssicorn/prefer-nesting': 0,
+      });
+    });
+  });
 });

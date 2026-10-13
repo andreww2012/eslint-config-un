@@ -656,12 +656,22 @@ export interface EslintConfigUnOptions<
    * - `newly`: supported by all the core browsers;
    * - a year: became newly available in that year or earlier.
    *
+   * Rules suggesting a feature that does not meet it are turned off.
+   *
    * Affected rules:
    * - [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md)
    * - [`html/use-baseline`](https://html-eslint.org/docs/rules/use-baseline)
    * - [`html-angular/use-baseline`](https://html-eslint.org/docs/angular-template/rules/use-baseline)
    * - [`html-react/use-baseline`](https://html-eslint.org/docs/react/rules/use-baseline)
    * - [`html-svelte/use-baseline`](https://html-eslint.org/docs/svelte/rules/use-baseline)
+   * - [`cssicorn/prefer-aspect-ratio`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-aspect-ratio.md)
+   * - [`cssicorn/prefer-clamp`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-clamp.md)
+   * - [`cssicorn/prefer-explicit-viewport-units`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-explicit-viewport-units.md)
+   * - [`cssicorn/prefer-individual-transform-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-individual-transform-properties.md)
+   * - [`cssicorn/prefer-light-dark`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-light-dark.md)
+   * - [`cssicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-media-feature-range-syntax.md)
+   * - [`cssicorn/prefer-nesting`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-nesting.md)
+   * - [`cssicorn/prefer-relative-colors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-relative-colors.md)
    * @default 'widely'
    */
   baselineAvailability?: GetRuleOptions<'html', 'use-baseline'>['available'];

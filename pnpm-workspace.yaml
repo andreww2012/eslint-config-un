@@ -48,6 +48,7 @@ minimumReleaseAgeExclude: # []
   - '@typescript-eslint/utils@8.71.2'
   - '@typescript-eslint/visitor-keys@8.71.2'
   - typescript-eslint@8.71.2
+  - eslint-cssicorn@0.2.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -144,6 +145,7 @@ patchedDependencies:
   eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch
+  stylelint-config-clean-order@10.0.0: patches/stylelint-config-clean-order@10.0.0.patch
 
 peerDependencyRules:
   allowedVersions:
@@ -178,3 +180,14 @@ peerDependencyRules:
 
     # Shell completions for `@nuxt/cli`, never run here; cac@7 is what our other dev tools need
     '@bomb.sh/tab@0.0>cac': ^7
+
+packageExtensions:
+  # We only inline their property lists; an installed `stylelint` would also turn off our `css` config
+  stylelint-config-clean-order:
+    peerDependenciesMeta:
+      stylelint: {optional: true}
+      stylelint-order: {optional: true}
+  stylelint-config-recess-order:
+    peerDependenciesMeta:
+      stylelint: {optional: true}
+      stylelint-order: {optional: true}

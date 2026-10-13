@@ -1,4 +1,5 @@
 import type {CSSLanguageOptions} from '@eslint/css';
+import type {BaselineFeatureId} from '../baseline.gen';
 import {
   type CssCustomSyntax,
   type CssCustomSyntaxOption,
@@ -6,8 +7,12 @@ import {
 } from '../config-un/css-syntax';
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
-import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
-import {generateUseBaselineRuleOptions, resolveFilesOption} from './shared';
+import {type MaybeFn, getKeysOfTruthyValues, isNonEmptyArray} from '../utils';
+import {
+  generateUseBaselineRuleOptions,
+  isBaselineFeatureAvailable,
+  resolveFilesOption,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -47,6 +52,50 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       },
     ]
   >;
+}
+
+interface UnicornSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'cssicorn'> {
+  /**
+   * Enforces a consistent order of properties:
+   * - `concentric-css`: [Concentric CSS](https://github.com/brandon-rhodes/Concentric-CSS), from
+   *   positioning through the box model to typography;
+   * - `recess`: the order of
+   *   [`stylelint-config-recess-order`](https://npmx.dev/stylelint-config-recess-order), also used
+   *   by Bootstrap and Biome;
+   * - `clean`: the order of
+   *   [`stylelint-config-clean-order`](https://npmx.dev/stylelint-config-clean-order);
+   * - `alphabetical`;
+   * - an array of property names: the listed ones come first, in this order.
+   *
+   * `true` is the same as `concentric-css`, `false` disables the check.
+   *
+   * With `recess` and `clean`, properties missing from the list go last, and empty lines between
+   * groups are not enforced.
+   *
+   * Affected rule:
+   * - [`cssicorn/consistent-property-order`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/consistent-property-order.md)
+   * @default true
+   */
+  propertyOrder?:
+    | boolean
+    | 'recess'
+    | 'clean'
+    | GetRuleOptions<'cssicorn', 'consistent-property-order'>['order'];
+
+  /**
+   * Custom properties to suggest in place of the literal values they hold, as a map from a
+   * property name to its value, like `{'--brand-color': '#6750a4'}`.
+   * The check is disabled while it's empty.
+   *
+   * Affected rule:
+   * - [`cssicorn/prefer-existing-custom-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-existing-custom-properties.md)
+   */
+  customProperties?: GetRuleOptions<
+    'cssicorn',
+    'prefer-existing-custom-properties'
+  >['customProperties'];
 }
 
 /**
@@ -93,7 +142,7 @@ export interface CssEslintConfigOptions<
    * ([docs](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/readme.md))
    * @default true
    */
-  configUnicorn?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'cssicorn'>;
+  configUnicorn?: boolean | UnicornSubConfigOptions<ExtraPlugins>;
 
   /**
    * From `@eslint/css` plugin docs:
@@ -172,6 +221,23 @@ const DEFAULT_FILES = [GLOB_CSS] as const;
  * baseline yet
  */
 const SCSS_ALLOWED_BASELINE_AT_RULES = ['function'] as const;
+
+// Leaves out the old IE `filter` hacks listed by Recess
+const PROPERTY_NAME_REGEXP = /^[-a-z]+$/;
+
+const loadStylelintPropertyOrder = async (name: 'recess' | 'clean') => {
+  const groups =
+    name === 'recess'
+      ? (await import('stylelint-config-recess-order/groups')).default.map(
+          ({properties}) => properties,
+        )
+      : (await import('stylelint-config-clean-order/property-groups')).propertyGroups;
+  // The rule rejects duplicates
+  const propertyNames = [...new Set(groups.flat())].filter((propertyName) =>
+    PROPERTY_NAME_REGEXP.test(propertyName),
+  );
+  return isNonEmptyArray(propertyNames) && propertyNames;
+};
 
 export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css', {
   enabledBy: {packageAbsent: 'stylelint'},
@@ -321,6 +387,21 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
   // 🔴 - NOT in recommended & unopinionated
   // 🟣 - NOT in unopinionated
 
+  const {propertyOrder, customProperties = {}} = assignDefaults(configUnicorn, {
+    propertyOrder: true,
+  });
+  const propertyOrderResolved =
+    propertyOrder === 'recess' || propertyOrder === 'clean'
+      ? await loadStylelintPropertyOrder(propertyOrder)
+      : propertyOrder === true
+        ? 'concentric-css'
+        : propertyOrder;
+
+  const errorIfBaselineAvailable = (featureId: BaselineFeatureId) =>
+    isBaselineFeatureAvailable(context, featureId) ? ERROR : OFF;
+
+  const hasCustomProperties = Object.keys(customProperties).length > 0;
+
   const configBuilderUnicorn = context.createConfigBuilder(configUnicorn, 'cssicorn');
   configBuilderUnicorn
     ?.addConfig([
@@ -330,17 +411,39 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
         parseWith: 'css',
       },
     ])
+    .addRule('consistent-compound-selector-order', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule('consistent-layer-order', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'consistent-property-order',
+      propertyOrderResolved === false ? OFF : ERROR,
+      propertyOrderResolved === false ? [] : [{order: propertyOrderResolved}],
+    ) /** @since 0.2.0 */ // 🔴
+    .addRule('consistent-value-order', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('lowercase', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-clamped-values', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('no-declarations-after-nested-rules', ERROR) /** @since 0.1.0 */
     .addRule('no-deprecated-features', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-descending-specificity', OFF) /** @since 0.1.0 */ // 🔴
+    .addRule('no-disabled-pinch-zoom', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule('no-duplicate-at-rule-definitions', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('no-duplicate-font-family-names', ERROR) /** @since 0.1.0 */
     .addRule('no-duplicate-properties', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-duplicate-selectors', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-ineffective-keyframe-declarations', ERROR) /** @since 0.2.0 */
+    .addRule('no-ineffective-overrides', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule('no-ineffective-properties', ERROR) /** @since 0.2.0 */
+    .addRule('no-ineffective-selector-properties', ERROR) /** @since 0.2.0 */
+    .addRule('no-ineffective-supports-conditions', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule('no-ineffective-transitions', ERROR) /** @since 0.2.0 */
     .addRule('no-invalid-media-features', ERROR) /** @since 0.1.0 */
+    .addRule('no-invalid-property-references', ERROR) /** @since 0.2.0 */
+    .addRule('no-layout-animations', OFF) /** @since 0.2.0 */ // 🔴
     .addRule('no-nesting-with-mixed-specificity', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-overflow-axis-coercion', ERROR) /** @since 0.2.0 */
+    .addRule('no-redundant-functions', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('no-redundant-longhand-properties', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-redundant-nested-style-rules', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-redundant-nesting-selector', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('no-redundant-shorthand-values', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-self-referencing-custom-properties', ERROR) /** @since 0.1.0 */
     // Keyframes are often defined in another stylesheet
@@ -348,12 +451,40 @@ export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css'
     .addRule('no-unknown-annotations', ERROR) /** @since 0.1.0 */
     .addRule('no-unknown-pseudo-selectors', ERROR) /** @since 0.1.0 */
     .addRule('no-unscoped-nesting-selector', ERROR) /** @since 0.1.0 */
+    .addRule('no-useless-is', ERROR) /** @since 0.2.0 */
     .addRule('no-zero-length-unit', ERROR) /** @since 0.1.0 */ // 🟣
-    .addRule('prefer-explicit-viewport-units', ERROR) /** @since 0.1.0 */ // 🟣
-    .addRule('prefer-media-feature-range-syntax', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-aspect-ratio', errorIfBaselineAvailable('aspect-ratio')) /** @since 0.2.0 */ // 🟣
+    .addRule('prefer-clamp', errorIfBaselineAvailable('min-max-clamp')) /** @since 0.2.0 */
+    .addRule('prefer-current-color', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'prefer-existing-custom-properties',
+      hasCustomProperties ? WARNING : OFF,
+      hasCustomProperties ? [{customProperties}] : [],
+    ) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'prefer-explicit-viewport-units',
+      errorIfBaselineAvailable('viewport-unit-variants'),
+    ) /** @since 0.1.0 */ // 🟣
+    .addRule(
+      'prefer-individual-transform-properties',
+      errorIfBaselineAvailable('individual-transforms'),
+    ) /** @since 0.2.0 */ // 🟣
+    .addRule('prefer-light-dark', errorIfBaselineAvailable('light-dark')) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'prefer-media-feature-range-syntax',
+      errorIfBaselineAvailable('media-query-range-syntax'),
+    ) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-merged-rules', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('prefer-modern-syntax', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-nesting', errorIfBaselineAvailable('nesting')) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'prefer-relative-colors',
+      errorIfBaselineAvailable('relative-color'),
+    ) /** @since 0.2.0 */ // 🟣
     .addRule('prefer-short-hex-color', OFF) /** @since 0.1.0 */ // 🟣
+    .addRule('require-prefers-reduced-motion', OFF) /** @since 0.2.0 */ // 🔴
     .addRule('require-property-descriptors', ERROR) /** @since 0.1.0 */
+    .addRule('require-selector-scope', OFF) /** @since 0.2.0 */ // 🔴
     .enableConfigTesterForPlugin('cssicorn')
     .addOverrides();
 

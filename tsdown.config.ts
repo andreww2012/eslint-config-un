@@ -10,6 +10,8 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
   'eslint-plugin-file-progress', // Patched
   'eslint-plugin-arrow-return-style-x', // Its `@typescript-eslint/utils` dependency is overridden to work with ESLint 10 by the one we declare, so it's not loaded twice with typescript-eslint's
   '@eslint-community/eslint-plugin-eslint-comments', // Inlined code gets a `require` with `cache`, which Yarn PnP doesn't provide: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322
+  'stylelint-config-clean-order', // Patched; only its property list is used, while the package requires `stylelint` as a peer
+  'stylelint-config-recess-order', // Only its property list is used, while the package requires `stylelint` as a peer
 ];
 
 // Inlined plugins spawn these by file path, so they're never part of the main module graph

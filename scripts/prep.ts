@@ -12,6 +12,7 @@ import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {formatTypescript} from './shared/format';
+import {writeBaselineArtifacts} from './src/generation/baseline';
 import {writeConfigArtifacts} from './src/generation/configs';
 import {writeReadmeArtifacts} from './src/generation/readme';
 import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
@@ -34,7 +35,16 @@ const [
     allRulesCode,
     ruleCategoriesCode,
   },
-] = await Promise.all([generateRuleTypes(), fs.mkdir(resolveInOutDir(), {recursive: true})]);
+  ,
+  {featuresCount},
+] = await Promise.all([
+  generateRuleTypes(),
+  fs.mkdir(resolveInOutDir(), {recursive: true}),
+  writeBaselineArtifacts(formatTypescript),
+]);
+console.log(
+  `Generated the Baseline statuses of ${styleText('bold', String(featuresCount))} feature(s)`,
+);
 
 const [allRuleTypesCode, perPluginCode] = await Promise.all([
   formatTypescript(allRuleTypesCodeUnformatted),

@@ -1,0 +1,92 @@
+Expose the property groups on their own, without the `stylelint-order` import of the config they live in, so that they can be inlined.
+They are moved from `dist/config.js` to the new `dist/property-groups.js` (exported as `./property-groups`), which `dist/config.js` re-exports them from.
+
+diff --git a/dist/config.d.ts b/dist/config.d.ts
+index a367b214307124ab04d8238bcea444f7ca0cd297..cc4947501884ea2cd58eb1cc4e1c53cfaae9d828 100644
+--- a/dist/config.d.ts
++++ b/dist/config.d.ts
+@@ -1,4 +1,4 @@
+-export declare const propertyGroups: string[][];
++export { propertyGroups } from "./property-groups.js";
+ export declare function getConfig({ severity }: {
+     severity: 'error' | 'warning';
+ }): {
+diff --git a/dist/config.js b/dist/config.js
+index f2a229f9d6566ead26bf570efe73e9bf70037f1f..f122d4cade06c61a2dee7bc20da78be802aa0300 100644
+--- a/dist/config.js
++++ b/dist/config.js
+@@ -1,24 +1,6 @@
+ import order from 'stylelint-order';
+-import { appearance } from "./groups/appearance.js";
+-import { boxModel } from "./groups/box-model.js";
+-import { interaction } from "./groups/interaction.js";
+-import { layout } from "./groups/layout.js";
+-import { positioning } from "./groups/positioning.js";
+-import { svgPresentation } from "./groups/svg-presentation.js";
+-import { transition } from "./groups/transition.js";
+-import { typography } from "./groups/typography.js";
+-export const propertyGroups = [
+-    ['composes'],
+-    ['all'],
+-    interaction,
+-    positioning,
+-    layout,
+-    boxModel,
+-    typography,
+-    appearance,
+-    svgPresentation,
+-    transition,
+-];
++import { propertyGroups } from "./property-groups.js";
++export { propertyGroups };
+ const propertiesOrder = propertyGroups.map((properties) => ({
+     noEmptyLineBetween: true,
+     emptyLineBefore: 'threshold',
+diff --git a/dist/property-groups.d.ts b/dist/property-groups.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..2a9a59773eec3294002021069a2fc7cdd0a91f1d
+--- /dev/null
++++ b/dist/property-groups.d.ts
+@@ -0,0 +1 @@
++export declare const propertyGroups: string[][];
+diff --git a/dist/property-groups.js b/dist/property-groups.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..f9fa7331b40d81c24e7e061246c6dea1e61f6201
+--- /dev/null
++++ b/dist/property-groups.js
+@@ -0,0 +1,20 @@
++import { appearance } from "./groups/appearance.js";
++import { boxModel } from "./groups/box-model.js";
++import { interaction } from "./groups/interaction.js";
++import { layout } from "./groups/layout.js";
++import { positioning } from "./groups/positioning.js";
++import { svgPresentation } from "./groups/svg-presentation.js";
++import { transition } from "./groups/transition.js";
++import { typography } from "./groups/typography.js";
++export const propertyGroups = [
++    ['composes'],
++    ['all'],
++    interaction,
++    positioning,
++    layout,
++    boxModel,
++    typography,
++    appearance,
++    svgPresentation,
++    transition,
++];
+diff --git a/package.json b/package.json
+index 7483d8d2249b250aa7f37b3c071124779cd55636..0ffe87b888b91e41b24528afef76cb9675791dbd 100644
+--- a/package.json
++++ b/package.json
+@@ -21,6 +21,10 @@
+       "types": "./dist/index.d.ts",
+       "import": "./dist/index.js"
+     },
++    "./property-groups": {
++      "types": "./dist/property-groups.d.ts",
++      "import": "./dist/property-groups.js"
++    },
+     "./error": {
+       "types": "./dist/error.d.ts",
+       "import": "./dist/error.js"

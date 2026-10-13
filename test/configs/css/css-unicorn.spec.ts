@@ -1,7 +1,9 @@
 import {GLOB_CSS} from '../../../src/constants';
 
 const FIXTURES = {
+  colorBeforeDisplay: 'color-before-display.css',
   fullViewportHeight: 'full-viewport-height.css',
+  hexColorLiteral: 'hex-color-literal.css',
 } as const;
 
 describe('css: sub config `unicorn`', () => {
@@ -123,6 +125,207 @@ describe('css: sub config `unicorn`', () => {
       expect(configResult.getRuleSeverities('css/unicorn')).toMatchObject({
         'cssicorn/prefer-explicit-viewport-units': 0,
         'no-console': 0,
+      });
+    });
+  });
+
+  describe('options', () => {
+    describe('option: `propertyOrder`', () => {
+      it('enables `cssicorn/consistent-property-order` rule with `concentric-css` order by default', async () => {
+        const configResult = await computeEslintConfig('css');
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toMatchInlineSnapshot('[2, {"order": "concentric-css"}]');
+      });
+
+      it('enables `cssicorn/consistent-property-order` rule with `concentric-css` order when option is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {propertyOrder: true}},
+        });
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toMatchInlineSnapshot('[2, {"order": "concentric-css"}]');
+      });
+
+      it('disables `cssicorn/consistent-property-order` rule when option is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {propertyOrder: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toBe(0);
+      });
+
+      it('enables `cssicorn/consistent-property-order` rule with `concentric-css` order when option is `concentric-css`', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {propertyOrder: 'concentric-css'}},
+        });
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toMatchInlineSnapshot('[2, {"order": "concentric-css"}]');
+      });
+
+      it('enables `cssicorn/consistent-property-order` rule with `alphabetical` order when option is `alphabetical`', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {propertyOrder: 'alphabetical'}},
+        });
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toMatchInlineSnapshot('[2, {"order": "alphabetical"}]');
+      });
+
+      it('passes a custom order to `cssicorn/consistent-property-order` rule when option is an array', async () => {
+        const ORDER = ['display', 'position'] as const;
+
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {propertyOrder: [...ORDER]}},
+        });
+
+        expect(
+          configResult.getRuleEntryOptions('css/unicorn', 'cssicorn/consistent-property-order'),
+        ).toStrictEqual([{order: ORDER}]);
+      });
+
+      it.each(['recess', 'clean'] as const)(
+        'passes the property list of the stylelint config to `cssicorn/consistent-property-order` rule when option is `%s`',
+        async (propertyOrder) => {
+          const configResult = await computeEslintConfig({css: {configUnicorn: {propertyOrder}}});
+
+          const ruleOptions = configResult.getRuleEntryOptions(
+            'css/unicorn',
+            'cssicorn/consistent-property-order',
+          );
+
+          expect(ruleOptions).toStrictEqual([
+            {order: expect.arrayContaining(['composes', 'all', 'display', 'color']) as unknown},
+          ]);
+          expect(JSON.stringify(ruleOptions)).not.toContain('filter:');
+        },
+      );
+
+      it('`cssicorn/consistent-property-order` rule reports `color` before `display` by default', async () => {
+        const results = await testEslintConfig(
+          'css',
+          FIXTURES.colorBeforeDisplay,
+          import.meta.dirname,
+        );
+
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.colorBeforeDisplay,
+          'cssicorn/consistent-property-order',
+        );
+
+        expect(error?.message).toMatchInlineSnapshot(
+          '"Expected property `display` before `color`."',
+        );
+      });
+
+      it.each(['recess', 'clean'] as const)(
+        '`cssicorn/consistent-property-order` rule reports `color` before `display` when option is `%s`',
+        async (propertyOrder) => {
+          const results = await testEslintConfig(
+            {css: {configUnicorn: {propertyOrder}}},
+            FIXTURES.colorBeforeDisplay,
+            import.meta.dirname,
+          );
+
+          const error = findLintMessageFromLintResults(
+            results,
+            FIXTURES.colorBeforeDisplay,
+            'cssicorn/consistent-property-order',
+          );
+
+          expect(error?.message).toMatchInlineSnapshot(
+            '"Expected property `display` before `color`."',
+          );
+        },
+      );
+
+      it('`cssicorn/consistent-property-order` rule does not report `color` before `display` when option is `alphabetical`', async () => {
+        const results = await testEslintConfig(
+          {css: {configUnicorn: {propertyOrder: 'alphabetical'}}},
+          FIXTURES.colorBeforeDisplay,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.colorBeforeDisplay,
+            'cssicorn/consistent-property-order',
+          ),
+        ).toBeUndefined();
+      });
+    });
+
+    describe('option: `customProperties`', () => {
+      const CUSTOM_PROPERTIES = {'--brand-color': '#6750a4'} as const;
+
+      it('disables `cssicorn/prefer-existing-custom-properties` rule by default', async () => {
+        const configResult = await computeEslintConfig('css');
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'css/unicorn',
+            'cssicorn/prefer-existing-custom-properties',
+          ),
+        ).toBe(0);
+      });
+
+      it('disables `cssicorn/prefer-existing-custom-properties` rule when option is an empty object', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {customProperties: {}}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'css/unicorn',
+            'cssicorn/prefer-existing-custom-properties',
+          ),
+        ).toBe(0);
+      });
+
+      it('enables `cssicorn/prefer-existing-custom-properties` rule as a warning with the custom properties when option is set', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {customProperties: CUSTOM_PROPERTIES}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'css/unicorn',
+            'cssicorn/prefer-existing-custom-properties',
+          ),
+        ).toBe(1);
+        expect(
+          configResult.getRuleEntryOptions(
+            'css/unicorn',
+            'cssicorn/prefer-existing-custom-properties',
+          ),
+        ).toStrictEqual([{customProperties: CUSTOM_PROPERTIES}]);
+      });
+
+      it('`cssicorn/prefer-existing-custom-properties` rule reports a literal value of a custom property when option is set', async () => {
+        const results = await testEslintConfig(
+          {css: {configUnicorn: {customProperties: CUSTOM_PROPERTIES}}},
+          FIXTURES.hexColorLiteral,
+          import.meta.dirname,
+        );
+
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.hexColorLiteral,
+          'cssicorn/prefer-existing-custom-properties',
+        );
+
+        expect(error?.message).toMatchInlineSnapshot(
+          '"Prefer existing custom property `var(--brand-color)` over this literal value."',
+        );
       });
     });
   });

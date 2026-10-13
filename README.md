@@ -695,7 +695,7 @@ The recommended way to specify it is the `engines.node` field of your `package.j
 ```
 
 Other rules read this field too, for example [`node-dependencies/compat-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html).
-It is also the *only* place we look at when deciding whether to enable rules that need a certain Node.js version, such as [`unicorn/prefer-dispose`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dispose.md) (`>=24`) and [`unicorn/prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-import-meta-properties.md) (`>=20.11`).
+It is also the *only* place we look at when deciding whether to turn off rules that need a certain Node.js version: [`unicorn/prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-import-meta-properties.md) (`>=20.11`) and, if you turn it on, [`unicorn/prefer-dispose`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dispose.md) (`>=24`).
 For those we read the `package.json` closest to [the current working directory], not the one closest to each linted file, as the plugin does.
 
 If adding that field is not an option, set the version through the [`plugins.node.settings`][plugins option] root option, which the version-gated rules above do **not** read:
