@@ -34,23 +34,11 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
       | keyof UnFlatConfigEntryBase
       | 'ambiguousWordsForAnchorText'
       | 'customComponents'
+      | 'hoverInHandlersRequiringOnFocus'
+      | 'hoverOutHandlersRequiringOnBlur'
       | 'labelAttributes'
       | 'tabbableRoles'
-    > {
-  /**
-   * Custom components that render the corresponding HTML element, checked by various rules
-   */
-  customComponents?: Pick<
-    JsxA11yEslintConfigOptions['customComponents'] & {},
-    | 'areaElements'
-    | 'headings'
-    | 'imgElements'
-    | 'inputTypeImageElements'
-    | 'inputs'
-    | 'links'
-    | 'objectElements'
-  >;
-}
+    > {}
 
 /**
  * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
