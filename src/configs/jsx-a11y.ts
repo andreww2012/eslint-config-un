@@ -177,8 +177,7 @@ export interface JsxA11yEslintConfigOptions<
    *
    * The default list is `['onMouseOver', 'onMouseEnter', 'onPointerOver', 'onPointerEnter']`.
    *
-   * Using the object syntax, you can disable the default handlers or specify additional ones.
-   * Setting to `false` will disable the rule.
+   * You can disable the default handlers or specify additional ones.
    *
    * Affected rule:
    * - [`jsx-a11y/mouse-events-have-key-events`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/mouse-events-have-key-events.md)
@@ -190,8 +189,7 @@ export interface JsxA11yEslintConfigOptions<
    *
    * The default list is `['onMouseOut', 'onMouseLeave', 'onPointerOut', 'onPointerLeave']`.
    *
-   * Using the object syntax, you can disable the default handlers or specify additional ones.
-   * Setting to `false` will disable the rule.
+   * You can disable the default handlers or specify additional ones.
    *
    * Affected rule:
    * - [`jsx-a11y/mouse-events-have-key-events`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/mouse-events-have-key-events.md)
