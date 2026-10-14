@@ -1,5 +1,6 @@
 const FIXTURES = {
   imgWithoutAlt: 'img-without-alt.ts',
+  imgWithSnapshotAlt: 'img-with-snapshot-alt.ts',
 } as const;
 
 beforeEach(() => {
@@ -43,6 +44,12 @@ describe('lit: sub config `a11y`', () => {
 
     it('does not add `lit-a11y/anchor-has-content` rule (not applicable to Lit)', () => {
       expect(configResult.getRuleEntry('lit-a11y', 'lit-a11y/anchor-has-content')).toBeUndefined();
+    });
+
+    it('does not pass `jsx-a11y` options to `lit-a11y/mouse-events-have-key-events` rule', () => {
+      expect(
+        configResult.getRuleEntry('lit-a11y', 'lit-a11y/mouse-events-have-key-events'),
+      ).toMatchInlineSnapshot('2');
     });
 
     it('`lit-a11y/alt-text` rule fires on image without alt text', async () => {
@@ -133,6 +140,50 @@ describe('lit: sub config `a11y`', () => {
 
         expect(configResult.getConfigByUnPostfix('lit-a11y')?.settings?.['litHtmlSources']).toBe(
           true,
+        );
+      });
+    });
+
+    describe('option: `imageWords`', () => {
+      it('enables `lit-a11y/img-redundant-alt` rule with `warn` severity by default', async () => {
+        const configResult = await computeEslintConfig('lit');
+
+        expect(
+          configResult.getRuleEntry('lit-a11y', 'lit-a11y/img-redundant-alt'),
+        ).toMatchInlineSnapshot('[1, {}]');
+      });
+
+      it('disables `lit-a11y/img-redundant-alt` rule when option is `false`', async () => {
+        const configResult = await computeEslintConfig({lit: {configA11y: {imageWords: false}}});
+
+        expect(configResult.getRuleEntrySeverity('lit-a11y', 'lit-a11y/img-redundant-alt')).toBe(0);
+      });
+
+      it('passes custom words to `lit-a11y/img-redundant-alt` rule as `keywords`', async () => {
+        const configResult = await computeEslintConfig({
+          lit: {configA11y: {imageWords: {words: ['snapshot'], severity: 'error'}}},
+        });
+
+        expect(
+          configResult.getRuleEntry('lit-a11y', 'lit-a11y/img-redundant-alt'),
+        ).toMatchInlineSnapshot('[2, {"keywords": ["snapshot"]}]');
+      });
+
+      it('`lit-a11y/img-redundant-alt` rule fires on a custom word in image alt text', async () => {
+        const results = await testEslintConfig(
+          {lit: {configA11y: {files: ['**/*.ts'], imageWords: {words: ['snapshot']}}}},
+          FIXTURES.imgWithSnapshotAlt,
+          {searchFixturesRelativeToPath: import.meta.dirname},
+        );
+
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.imgWithSnapshotAlt,
+          'lit-a11y/img-redundant-alt',
+        );
+
+        expect(error?.message).toMatchInlineSnapshot(
+          '"<img> alt attribute must be descriptive; it cannot contain the banned word snapshot."',
         );
       });
     });

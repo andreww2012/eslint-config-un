@@ -473,7 +473,7 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
         : ERROR,
       [
         {
-          ...(customComponents.links?.length && {components: customComponents.links}),
+          ...(!isForLit && customComponents.links?.length && {components: customComponents.links}),
           aspects: anchorIsValidFinalCheckedAspects,
         },
       ],
@@ -548,8 +548,11 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
           : WARNING,
       [
         {
-          ...(imageWords && imageWords.words.length > 0 && {words: imageWords.words}),
-          ...(customComponents.imgElements?.length && {components: customComponents.imgElements}),
+          ...(imageWords &&
+            imageWords.words.length > 0 &&
+            (isForLit ? {keywords: imageWords.words} : {words: imageWords.words})),
+          ...(!isForLit &&
+            customComponents.imgElements?.length && {components: customComponents.imgElements}),
         },
       ],
     ) /** @since 1.0.0 */
@@ -578,18 +581,24 @@ export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
       },
     ]) /** @since 5.0.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
-    .addRule(rn('mouse-events-have-key-events'), isForAstro ? OFF : ERROR, [
-      {
-        hoverInHandlers: getKeysOfTruthyValues({
-          ...defaultHoverInHandlersRequiringOnFocus,
-          ...hoverInHandlersRequiringOnFocus,
-        }),
-        hoverOutHandlers: getKeysOfTruthyValues({
-          ...defaultHoverOutHandlersRequiringOnBlur,
-          ...hoverOutHandlersRequiringOnBlur,
-        }),
-      },
-    ]) /** @since 1.0.0 */
+    .addRule(
+      rn('mouse-events-have-key-events'),
+      isForAstro ? OFF : ERROR,
+      isForLit
+        ? []
+        : [
+            {
+              hoverInHandlers: getKeysOfTruthyValues({
+                ...defaultHoverInHandlersRequiringOnFocus,
+                ...hoverInHandlersRequiringOnFocus,
+              }),
+              hoverOutHandlers: getKeysOfTruthyValues({
+                ...defaultHoverOutHandlersRequiringOnBlur,
+                ...hoverOutHandlersRequiringOnBlur,
+              }),
+            },
+          ],
+    ) /** @since 1.0.0 */
     .addRule(rn('no-access-key'), ERROR) /** @since 0.0.1 */
     .addRule(rn('no-aria-hidden-on-focusable'), isForLit ? null : WARNING) /** @since 6.7.1 */ // 🔴
     .addRule('no-aria-slot', isForLit ? ERROR : null)
