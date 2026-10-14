@@ -181,14 +181,14 @@ describe('zod: sub config `core`', () => {
         expect(configResult.getRuleEntrySeverity('zod/core', 'zod-core/consistent-import')).toBe(0);
       });
 
-      it("inherits parent `'named'` value", async () => {
+      it("enables `zod-core/consistent-import` with default options when parent value is `'named'`", async () => {
         const configResult = await computeEslintConfig({
           zod: {enforceConsistentImport: 'named'},
         });
 
         expect(
           configResult.getRuleEntry('zod/core', 'zod-core/consistent-import'),
-        ).toMatchInlineSnapshot('[2, {"syntax": "named"}]');
+        ).toMatchInlineSnapshot('2');
       });
 
       it('overrides parent value when set in sub-config', async () => {
@@ -203,20 +203,20 @@ describe('zod: sub config `core`', () => {
         expect(configResult.getRuleEntrySeverity('zod/core', 'zod-core/consistent-import')).toBe(2);
       });
 
-      it("overrides parent value when set to `'named'` in sub-config", async () => {
+      it("overrides parent value when set to `'namespace'` in sub-config", async () => {
         const configResult = await computeEslintConfig({
           zod: {
-            enforceConsistentImport: 'namespace',
-            configCore: {enforceConsistentImport: 'named'},
+            enforceConsistentImport: 'named',
+            configCore: {enforceConsistentImport: 'namespace'},
           },
         });
 
         expect(configResult.getRuleEntry('zod', 'zod/consistent-import')).toMatchInlineSnapshot(
-          '[2, {"syntax": "namespace"}]',
+          '[2, {"syntax": "named"}]',
         );
         expect(
           configResult.getRuleEntry('zod/core', 'zod-core/consistent-import'),
-        ).toMatchInlineSnapshot('[2, {"syntax": "named"}]');
+        ).toMatchInlineSnapshot('[2, {"syntax": "namespace"}]');
       });
     });
   });

@@ -71,7 +71,9 @@ interface CoreSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   'zod-core'
 > {
   /**
-   * Same as the respective option of the parent config.
+   * Same as the respective option of the parent config, except that only namespace import
+   * (`import * as core from 'zod/v4/core'`) can be enforced, since `zod/v4/core` has no `z` export.
+   * `'named'` inherited from the parent config is treated as `true`.
    *
    * Affected rule:
    * - [`zod-core/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/consistent-import.md)
@@ -154,6 +156,7 @@ export interface ZodEslintConfigOptions<
    *
    * ⚠️ The option value will propagate to the option of the same name in `core` and `mini`
    * sub-configs, unless explicitly overridden there.
+   * `core` sub-config gets `true` instead of `'named'`.
    *
    * Affected rule:
    * - [`zod/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
@@ -200,16 +203,13 @@ export interface ZodEslintConfigOptions<
   schemaVariableName?: boolean | string | GetRuleOptions<'zod', 'consistent-schema-var-name'>;
 }
 
-const resolveConsistentImportOptions = (
-  userOptions: Pick<
-    SetRequired<ZodEslintConfigOptions, 'enforceConsistentImport'>,
-    'enforceConsistentImport'
-  >,
-) => {
+const resolveConsistentImportOptions = <Syntax extends string>(userOptions: {
+  enforceConsistentImport: boolean | Syntax;
+}) => {
   const {enforceConsistentImport} = userOptions;
 
   const severity = enforceConsistentImport === false ? OFF : ERROR;
-  const options: GetRuleOptions<'zod', 'consistent-import', 'all'> =
+  const options: [] | [{syntax: Syntax}] =
     typeof enforceConsistentImport === 'string' ? [{syntax: enforceConsistentImport}] : [];
 
   return [severity, options] as const;
@@ -321,7 +321,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule(
       'consistent-object-schema-type',
       ...resolveConsistentObjectSchemaTypeOptions(optionsResolved),
-    ) /** @since 1.11.0 */ // 🎨
+    ) /** @since 1.11.0 */
     .addRule('consistent-schema-output-type-style', ERROR) /** @since 3.8.0 */ // 🎨
     .addRule(
       'consistent-schema-var-name',
@@ -445,7 +445,11 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addOverrides();
 
   const optionsCoreResolved = assignDefaults(configCore, {
-    enforceConsistentImport: optionsResolved.enforceConsistentImport,
+    // `zod/v4/core` has no `z` export, so the namespace import is the only one to enforce
+    enforceConsistentImport:
+      optionsResolved.enforceConsistentImport === 'named'
+        ? true
+        : optionsResolved.enforceConsistentImport,
   });
 
   const configBuilderCore = context.createConfigBuilder(configCore, 'zod-core');
