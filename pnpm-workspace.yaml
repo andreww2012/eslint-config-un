@@ -84,6 +84,7 @@ minimumReleaseAgeExclude: # []
   - '@oxfmt/binding-win32-x64-msvc@0.73.0'
   - oxfmt@0.73.0
   - eslint-plugin-better-tailwindcss@4.9.1
+  - eslint-plugin-turbo@2.11.8
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
