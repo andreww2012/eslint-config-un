@@ -1,5 +1,7 @@
 const FIXTURES = {
   imgWithoutAlt: 'img-without-alt.vue',
+  vueCodeBlockWithUnknownAriaAttributeAndImgWithoutAlt:
+    'vue-code-block-with-unknown-aria-attribute-and-img-without-alt.md',
 } as const;
 
 beforeEach(() => {
@@ -53,6 +55,29 @@ describe('vue: sub config `a11y`', () => {
         '"img elements must have an alt prop, either with meaningful text, or an empty string for decorative images."',
       );
     });
+
+    it('lints Vue code blocks inside Markdown files, except for the rules disabled in code blocks', async () => {
+      const results = await testEslintConfig(
+        {vue: true, markdown: true},
+        FIXTURES.vueCodeBlockWithUnknownAriaAttributeAndImgWithoutAlt,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.vueCodeBlockWithUnknownAriaAttributeAndImgWithoutAlt,
+          'vuejs-accessibility/aria-props',
+        ),
+      ).toBeDefined();
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.vueCodeBlockWithUnknownAriaAttributeAndImgWithoutAlt,
+          'vuejs-accessibility/alt-text',
+        ),
+      ).toBeUndefined();
+    });
   });
 
   describe('un options', () => {
@@ -73,15 +98,27 @@ describe('vue: sub config `a11y`', () => {
     });
 
     describe('option: `ignores`', () => {
-      it('uses user-provided `ignores` in `vue/a11y` eslint config and merges them with the implicit defaults', async () => {
-        const IGNORES = ['**/fixtures/**'] as const;
+      const IGNORES = ['**/fixtures/**'] as const;
+      const PARENT_IGNORES = ['**/legacy/**'] as const;
 
-        const configResult = await computeEslintConfig({vue: {configA11y: {ignores: IGNORES}}});
+      it('inherits the parent config `ignores` by default', async () => {
+        const configResult = await computeEslintConfig({vue: {ignores: PARENT_IGNORES}});
+
+        expect(configResult.getConfigByUnPostfix('vue/a11y')?.ignores).toIncludeAllMembers(
+          PARENT_IGNORES,
+        );
+      });
+
+      it('uses user-provided `ignores` in `vue/a11y` eslint config instead of the parent config ones', async () => {
+        const configResult = await computeEslintConfig({
+          vue: {ignores: PARENT_IGNORES, configA11y: {ignores: IGNORES}},
+        });
 
         const ignores = configResult.getConfigByUnPostfix('vue/a11y')?.ignores;
 
         expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+        expect(ignores).not.toIncludeAnyMembers(PARENT_IGNORES);
       });
     });
 

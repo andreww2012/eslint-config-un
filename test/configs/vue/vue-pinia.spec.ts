@@ -1,5 +1,7 @@
 const FIXTURES = {
   componentWithMultipleStores: 'component-with-multiple-stores.vue',
+  jsCodeBlockWithTwoStoresAndExportedStoreInstance:
+    'js-code-block-with-two-stores-and-exported-store-instance.md',
 } as const;
 
 beforeEach(() => {
@@ -69,6 +71,29 @@ describe('vue: sub config `pinia`', () => {
       expect(error?.message).toMatchInlineSnapshot(
         '"Only one store definition per file is allowed."',
       );
+    });
+
+    it('lints code blocks inside Markdown files, except for the rules disabled in code blocks', async () => {
+      const results = await testEslintConfig(
+        {vue: {configPinia: true}, markdown: true},
+        FIXTURES.jsCodeBlockWithTwoStoresAndExportedStoreInstance,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.jsCodeBlockWithTwoStoresAndExportedStoreInstance,
+          'pinia/never-export-initialized-store',
+        ),
+      ).toBeDefined();
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.jsCodeBlockWithTwoStoresAndExportedStoreInstance,
+          'pinia/prefer-single-store-per-file',
+        ),
+      ).toBeUndefined();
     });
   });
 

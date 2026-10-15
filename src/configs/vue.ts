@@ -5,7 +5,6 @@ import {
   ERROR,
   GLOB_JS_TS_EXTENSION,
   GLOB_JS_TS_X_EXTENSION,
-  GLOB_MD_X_CODE_BLOCKS,
   GLOB_VUE,
   OFF,
   type RuleSeverity,
@@ -1441,10 +1440,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
       {
         filesDefault: vueFiles,
         parseWith: 'vue',
-        ignoresDefault: [
-          GLOB_MD_X_CODE_BLOCKS,
-          ...resolveIgnoresOption(optionsResolved.ignores, []),
-        ],
+        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
       },
     ])
     .addRule('alt-text', ERROR) /** @since 0.1.0 */ // 🟢
@@ -1478,13 +1474,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   // 🟢 - in recommended
 
   configBuilderPinia
-    ?.addConfig([
-      'pinia',
-      {
-        ignoresDefault: [GLOB_MD_X_CODE_BLOCKS],
-        ignoresDefaultMergedWithUserIgnores: true,
-      },
-    ])
+    ?.addConfig('pinia')
     .addRule('never-export-initialized-store', ERROR) /** @since 0.2.0 */ // 🟢
     .addRule('no-duplicate-store-ids', ERROR) /** @since 0.1.13 */ // 🟢
     .addRule('no-return-global-properties', ERROR) /** @since 0.1.12 */ // 🟢
