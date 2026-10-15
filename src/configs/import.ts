@@ -79,6 +79,9 @@ export interface ImportEslintConfigOptions<
    * - <code>**&#47;*.stories.?([cm])[jt]s?(x)</code>
    * - <code>.storybook&#47;**&#47;*</code>
    *
+   * ⚠️ Will be merged with the user provided `files`. Use the function form of `files` to replace
+   * them instead
+   *
    * Affected rule:
    * - [`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
    * @default true
@@ -389,6 +392,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
           `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
           '.storybook/**/*',
         ],
+        filesDefaultMergedWithUserFiles: true,
       },
     ])
     .disableAnyRule('import', 'no-default-export')

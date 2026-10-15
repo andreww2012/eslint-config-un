@@ -67,11 +67,37 @@ describe('import: sub config `allowDefaultExport`', () => {
 
   describe('un options', () => {
     describe('option: `files`', () => {
-      it('uses user-provided `files` in `import/allow-default-export` eslint config', async () => {
-        const FILES = ['scripts/**/*.ts'] as const;
+      const FILES = ['scripts/**/*.ts'] as const;
 
+      it('uses user-provided `files` in `import/allow-default-export` eslint config and merges them with defaults', async () => {
         const configResult = await computeEslintConfig({
           import: {configAllowDefaultExport: {files: FILES}},
+        });
+
+        expect(
+          configResult.getConfigByUnPostfix('import/allow-default-export')?.files,
+        ).toIncludeAllMembers(['**/*.config.?([cm])[jt]s?(x)', ...FILES]);
+      });
+
+      it('does not report `import/no-default-export` in a config file when user-provided `files` are set', async () => {
+        const results = await testEslintConfig(
+          {import: {configAllowDefaultExport: {files: FILES}}},
+          FIXTURES.defaultExportInConfigFile,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.defaultExportInConfigFile,
+            'import/no-default-export',
+          ),
+        ).toBeUndefined();
+      });
+
+      it('replaces the default `files` when the function form is used', async () => {
+        const configResult = await computeEslintConfig({
+          import: {configAllowDefaultExport: {files: () => [...FILES]}},
         });
 
         expect(
