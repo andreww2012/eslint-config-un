@@ -8,10 +8,9 @@ export default definePluginMetadata('tanstack-start', {
   gitTag: gitTagUnknown,
   suggestedPrefix: ['@tanstack/start', 'more concise and convenient to use; `@` feels redundant'],
   rules: {
-    'no-async-client-component': {requiresTypeInfo: true, disableInCodeBlocks: 'runtimeOnly'},
+    'no-async-client-component': {requiresTypeInfo: true},
     'no-client-code-in-server-component': {
       requiresTypeInfo: true,
-      disableInCodeBlocks: 'runtimeOnly',
     },
   },
 });

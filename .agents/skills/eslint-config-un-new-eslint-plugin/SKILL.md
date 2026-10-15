@@ -144,7 +144,7 @@ Two judgement calls the contract cannot spell out:
 
 - `stylistic`: after fixing the issue reported by the rule, the logic of the program should not change in any way.
   IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.
-- `disableInCodeBlocks`: rules requiring type information are definite candidates, because type information is not available there.
+- `disableInCodeBlocks`: rules that throw without type information are disabled there automatically, because type information is not available there, so `nr prep` rejects an entry on them.
 
 ### Step 5: Documentation
 

@@ -9,7 +9,6 @@ export default definePluginMetadata('safeql', {
     'check-sql': {
       requiresTypeInfo: [true, 'reports every matched query as invalid instead of throwing'],
       requiresNetwork: [true, 'connects to a PostgreSQL server, possibly a remote one'],
-      disableInCodeBlocks: 'typeAware',
     },
   },
 });

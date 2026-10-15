@@ -12,7 +12,9 @@ export type MaybeWithReason<Value> = Value | readonly [value: Value | false, rea
 
 /**
  * Why a rule is meaningless or misleading in an isolated snippet.
- * `processorDefault` means the rule is already disabled by the default markdown processor config
+ * `processorDefault` means the rule is already disabled by the default markdown processor config.
+ * `typeAware` is for the rules that only degrade without type information: the ones that throw are
+ * disabled in code blocks automatically
  */
 type CodeBlocksReason =
   | 'emptiness'

@@ -138,6 +138,16 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
         }
       });
 
+      const typeInfo = readTrait(traits, 'requiresTypeInfo');
+      const throwsWithoutTypeInfo = typeInfo
+        ? typeInfo.value === true
+        : typeAwareRuleNames?.includes(ruleName);
+      if (throwsWithoutTypeInfo && readTrait(traits, 'disableInCodeBlocks')?.value) {
+        errors.push(
+          `${styleRuleName(fullRuleName)} throws without type information, so it is disabled in code blocks already: drop its ${styleTrait('disableInCodeBlocks')} entry`,
+        );
+      }
+
       const autofixDisabled = readTrait(traits, 'autofixDisabled');
       if (autofixDisabled?.value !== true) {
         return;
@@ -236,6 +246,36 @@ const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: Co
   ];
 };
 
+/**
+ * Code blocks never get type information, so the rules that throw without it are disabled there too,
+ * unless an explicit `false` keeps one enabled
+ */
+const withRulesThrowingWithoutTypeInfo = (
+  plugins: readonly DiscoveredPlugin[],
+  codeBlocks: CollectedRules,
+  typeInfo: CollectedRules,
+) => {
+  const keptEnabled = new Set(
+    collectTrait(plugins, 'disableInCodeBlocks', {includeRejections: true}).flatMap(
+      ({fullRuleName, value}) => (value === false ? fullRuleName : []),
+    ),
+  );
+  const listed = new Set(codeBlocks.map(({fullRuleName}) => fullRuleName));
+  const pluginIndexes = new Map(plugins.map(({prefix}, index) => [prefix, index]));
+
+  return [
+    ...codeBlocks,
+    ...typeInfo.filter(
+      ({fullRuleName, value}) =>
+        value === true && !listed.has(fullRuleName) && !keptEnabled.has(fullRuleName),
+    ),
+  ].toSorted(
+    (left, right) =>
+      (pluginIndexes.get(left.prefix) || 0) - (pluginIndexes.get(right.prefix) || 0) ||
+      left.ruleName.localeCompare(right.ruleName),
+  );
+};
+
 const renderTypeInfo = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) =>
   Array.from(
     Map.groupBy(rules, ({prefix}) => prefix),
@@ -271,9 +311,13 @@ const renderPrettierLanguages = (plugins: readonly DiscoveredPlugin[]) =>
     .join('\n');
 
 const renderArtifacts = (plugins: readonly DiscoveredPlugin[]) => {
-  const codeBlocks = collectTrait(plugins, 'disableInCodeBlocks');
+  const typeInfo = withTypeAwareCategories(plugins, collectTrait(plugins, 'requiresTypeInfo'));
+  const codeBlocks = withRulesThrowingWithoutTypeInfo(
+    plugins,
+    collectTrait(plugins, 'disableInCodeBlocks'),
+    typeInfo,
+  );
   const stylistic = withAllStylisticRules(plugins, collectTrait(plugins, 'stylistic'));
-  const typeInfo = collectTrait(plugins, 'requiresTypeInfo');
   const autofix = collectTrait(plugins, 'autofixDisabled');
   const prettier = collectTrait(plugins, 'prettierIncompatible');
   // A rejected rule stays configurable through the config's own options, so it stays in the union
@@ -329,7 +373,7 @@ ${renderPerPlugin(cliFiles, (value) => `'${String(value)}'`)}
 export type CliAdjustedRuleName =${renderUnion(fullRuleNames(cliFiles))};
 
 export const RULES_REQUIRING_TYPE_INFORMATION: Readonly<Partial<Record<string, TypeInfoRequirement>>> = {
-${renderTypeInfo(plugins, withTypeAwareCategories(plugins, typeInfo))}
+${renderTypeInfo(plugins, typeInfo)}
 };
 `;
 };

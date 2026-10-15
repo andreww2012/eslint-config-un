@@ -6,10 +6,10 @@ export default definePluginMetadata('zod-openapi', {
   ruleDocsUrl: (ruleName) =>
     `https://github.com/samchungy/eslint-plugin-zod-openapi/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
-    'prefer-meta-last': {requiresTypeInfo: true, disableInCodeBlocks: 'tooStrict'},
-    'prefer-zod-default': {requiresTypeInfo: true, disableInCodeBlocks: 'tooStrict'},
-    'require-comment': {requiresTypeInfo: true, disableInCodeBlocks: 'tooStrict'},
-    'require-example': {requiresTypeInfo: true, disableInCodeBlocks: 'tooStrict'},
-    'require-meta': {requiresTypeInfo: true, disableInCodeBlocks: 'tooStrict'},
+    'prefer-meta-last': {requiresTypeInfo: true},
+    'prefer-zod-default': {requiresTypeInfo: true},
+    'require-comment': {requiresTypeInfo: true},
+    'require-example': {requiresTypeInfo: true},
+    'require-meta': {requiresTypeInfo: true},
   },
 });

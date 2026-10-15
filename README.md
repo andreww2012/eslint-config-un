@@ -778,6 +778,7 @@ When the `markdown`/`mdx` config is enabled (the default), the rules from the ot
 This works because [`@eslint/markdown`](https://npmx.dev/@eslint/markdown) and [`eslint-mdx`](https://npmx.dev/eslint-mdx) create a virtual file for every code block, with the extension taken from the language after the ``` fence.
 
 Not every rule makes sense there: some are too strict for code that is never executed, and some report problems you cannot fix in a snippet at all, like a missing import.
+The rules that throw without type information are disabled there as well, because code blocks never have it.
 That is why a number of rules are disabled in code blocks by default; the full list shows up as autocompletion for the [`markdownCodeBlocksRules.doNotDisable`](#markdowncodeblocksrulesdonotdisable) option.
 Use the [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option to decide which rules are disabled and which are not.
 
