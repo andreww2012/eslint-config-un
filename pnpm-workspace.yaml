@@ -11,107 +11,9 @@ saveTypes: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - synckit@0.12.3
-  - '@eslint-react/ast@5.26.5'
-  - '@eslint-react/core@5.26.5'
-  - '@eslint-react/eslint-plugin@5.26.5'
-  - '@eslint-react/eslint@5.26.5'
-  - '@eslint-react/jsx@5.26.5'
-  - '@eslint-react/shared@5.26.5'
-  - '@eslint-react/var@5.26.5'
-  - eslint-plugin-react-debug@5.26.5
-  - eslint-plugin-react-dom@5.26.5
-  - eslint-plugin-react-jsx@5.26.5
-  - eslint-plugin-react-naming-convention@5.26.5
-  - eslint-plugin-react-rsc@5.26.5
-  - eslint-plugin-react-web-api@5.26.5
-  - eslint-plugin-react-x@5.26.5
-  - eslint-plugin-jsdoc@65.3.4
-  - '@angular-eslint/bundled-angular-compiler@22.6.0'
-  - '@angular-eslint/eslint-plugin-template@22.6.0'
-  - '@angular-eslint/eslint-plugin@22.6.0'
-  - '@angular-eslint/template-parser@22.6.0'
-  - '@angular-eslint/utils@22.6.0'
-  - effect@4.0.4
-  - eslint-plugin-es-x@10.1.0
-  - eslint-plugin-unicorn@78.0.0
-  - '@typescript-eslint/eslint-plugin@8.71.2'
-  - '@typescript-eslint/parser@8.71.2'
-  - '@typescript-eslint/project-service@8.71.2'
-  - '@typescript-eslint/scope-manager@8.71.2'
-  - '@typescript-eslint/tsconfig-utils@8.71.2'
-  - '@typescript-eslint/type-utils@8.71.2'
-  - '@typescript-eslint/types@8.71.2'
-  - '@typescript-eslint/typescript-estree@8.71.2'
-  - '@typescript-eslint/utils@8.71.2'
-  - '@typescript-eslint/visitor-keys@8.71.2'
-  - typescript-eslint@8.71.2
-  - eslint-cssicorn@0.2.0
-  - '@unhead/eslint-plugin@3.4.3'
-  - unhead@3.4.3
-  - '@effect/platform-node-shared@4.0.4'
-  - '@effect/platform-node@4.0.4'
-  - lefthook-android-arm64@2.2.2
-  - lefthook-darwin-arm64@2.2.2
-  - lefthook-darwin-x64@2.2.2
-  - lefthook-freebsd-arm64@2.2.2
-  - lefthook-freebsd-x64@2.2.2
-  - lefthook-linux-arm64@2.2.2
-  - lefthook-linux-x64@2.2.2
-  - lefthook-openbsd-arm64@2.2.2
-  - lefthook-openbsd-x64@2.2.2
-  - lefthook-windows-arm64@2.2.2
-  - lefthook-windows-x64@2.2.2
-  - lefthook@2.2.2
-  - '@oxfmt/binding-android-arm-eabi@0.73.0'
-  - '@oxfmt/binding-android-arm64@0.73.0'
-  - '@oxfmt/binding-darwin-arm64@0.73.0'
-  - '@oxfmt/binding-darwin-x64@0.73.0'
-  - '@oxfmt/binding-freebsd-x64@0.73.0'
-  - '@oxfmt/binding-linux-arm-gnueabihf@0.73.0'
-  - '@oxfmt/binding-linux-arm-musleabihf@0.73.0'
-  - '@oxfmt/binding-linux-arm64-gnu@0.73.0'
-  - '@oxfmt/binding-linux-arm64-musl@0.73.0'
-  - '@oxfmt/binding-linux-ppc64-gnu@0.73.0'
-  - '@oxfmt/binding-linux-riscv64-gnu@0.73.0'
-  - '@oxfmt/binding-linux-riscv64-musl@0.73.0'
-  - '@oxfmt/binding-linux-s390x-gnu@0.73.0'
-  - '@oxfmt/binding-linux-x64-gnu@0.73.0'
-  - '@oxfmt/binding-linux-x64-musl@0.73.0'
-  - '@oxfmt/binding-openharmony-arm64@0.73.0'
-  - '@oxfmt/binding-win32-arm64-msvc@0.73.0'
-  - '@oxfmt/binding-win32-ia32-msvc@0.73.0'
-  - '@oxfmt/binding-win32-x64-msvc@0.73.0'
-  - oxfmt@0.73.0
-  - eslint-plugin-better-tailwindcss@4.9.1
-  - eslint-plugin-turbo@2.11.8
-  - '@eslint-zod/utils@6.1.0'
-  - eslint-plugin-zod-core@2.1.0
-  - eslint-plugin-zod-mini@2.1.0
-  - eslint-plugin-zod@5.1.0
-  - '@cspell/cspell-bundled-dicts@10.4.0'
-  - '@cspell/cspell-json-reporter@10.4.0'
-  - '@cspell/cspell-performance-monitor@10.4.0'
-  - '@cspell/cspell-pipe@10.4.0'
-  - '@cspell/cspell-resolver@10.4.0'
-  - '@cspell/cspell-service-bus@10.4.0'
-  - '@cspell/cspell-types@10.4.0'
-  - '@cspell/cspell-worker@10.4.0'
-  - '@cspell/dynamic-import@10.4.0'
-  - '@cspell/eslint-plugin@10.4.0'
-  - '@cspell/filetypes@10.4.0'
-  - '@cspell/rpc@10.4.0'
-  - '@cspell/strong-weak-map@10.4.0'
-  - '@cspell/url@10.4.0'
-  - cspell-config-lib@10.4.0
-  - cspell-dictionary@10.4.0
-  - cspell-gitignore@10.4.0
-  - cspell-glob@10.4.0
-  - cspell-grammar@10.4.0
-  - cspell-io@10.4.0
-  - cspell-lib@10.4.0
-  - cspell-trie-lib@10.4.0
-  - cspell@10.4.0
+  - effect@4.0.5
+  - '@effect/platform-node-shared@4.0.5'
+  - '@effect/platform-node@4.0.5'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -155,10 +57,6 @@ audit:
     - GHSA-ggr8-5vv4-36mx # Can't safely override the version resulting in major version number change
     - GHSA-86w9-cpqp-85rv # No patched `node-forge` yet; `listhen` only generates certificates with it, never verifies signatures
     - GHSA-vfj7-8cjw-p6xm # No patched `braces` yet; dev-only, and glob patterns come from trusted configs
-    - GHSA-x6jw-m9v5-85vh # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
-    - GHSA-g4wm-2vf7-vfgr # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
-    - GHSA-858h-whjf-mvg5 # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
-    - GHSA-v5rq-49vh-5v5c # Patched only in `simple-git` v4, which drops the default export `@nuxt/devtools` imports; dev-only, and devtools never runs here
   ignorePrune: true
 
 allowBuilds:
@@ -191,16 +89,12 @@ catalogs:
 overrides:
   # 11 and 12 only break executor helpers and subgraph schema printing, neither used by `@graphql-eslint/eslint-plugin`
   '@graphql-tools/utils@<12.0.1': 12.0.4
-  axios@>=1.13.0 <1.20.0: 1.20.0
   # 6.0.0's only breaking change (separate transfer hosts are opt-in) doesn't affect `get-uri`
   basic-ftp@<6.2.1: 6.2.1
-  brace-expansion@>=5.0.0 <5.0.12: 5.0.12
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
   # 2.0.7 dropped the `.js` files the plugin imports
   eslint-plugin-formatjs>@unicode/unicode-17.0.0: 2.0.6
   handlebars@>=4.0.0 <4.7.10: 4.7.10
-  smol-toml@<=1.7.0: ^1.7.1
-  tinypool@<2.1.2: 2.2.0
   undici@>=7.0.0 <7.29.1: 7.30.0
 
 patchedDependencies:
@@ -228,22 +122,15 @@ peerDependencyRules:
     '@typescript-eslint/utils@5>eslint': '*'
     '@typescript-eslint/utils@7>eslint': '*'
     '@typescript-eslint/utils@8.56>typescript': '*'
-    '@typescript-eslint/parser@8.57.0>typescript': '>=5'
-
-    '@intlify/eslint-plugin-vue-i18n@4.3.0>yaml-eslint-parser': ^2.0.0
 
     '@tanstack/eslint-plugin-start@^0.1>eslint': '>=10'
     eslint-plugin-jest-extended@^3>eslint: '>=10'
     eslint-plugin-react@^7>eslint: '>=10'
 
-    '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
     '@ts-safeql/plugin-utils@5.3>typescript': '>=5'
 
     # Optional peer, unused here; crossws@0.4 comes in via h3@2 (wants ^0.4.1)
     graphql-ws@6>crossws: ^0.4
-
-    # Shell completions for `@nuxt/cli`, never run here; cac@7 is what our other dev tools need
-    '@bomb.sh/tab@0.0>cac': ^7
 
 packageExtensions:
   # We only inline their property lists; an installed `stylelint` would also turn off our `css` config
