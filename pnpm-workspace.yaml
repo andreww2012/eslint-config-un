@@ -15,6 +15,7 @@ minimumReleaseAgeExclude: # []
   - '@effect/platform-node-shared@4.0.5'
   - '@effect/platform-node@4.0.5'
   - import-integrity-lint@1.3.1
+  - '@tanstack/eslint-plugin-query@5.104.3'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
