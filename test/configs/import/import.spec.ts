@@ -1,6 +1,10 @@
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
 import {TESTS_CONFIG_DEFAULT_FILES} from '../../../src/configs/shared';
-import {GLOB_CONFIG_FILES, GLOB_MARKDOWN_ALL_CODE_BLOCKS} from '../../../src/constants';
+import {
+  GLOB_CONFIG_FILES,
+  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  GLOB_MD_X_CODE_BLOCKS,
+} from '../../../src/constants';
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
@@ -31,7 +35,7 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(1);
-    expect(ignores).toIncludeAllMembers([GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MD_X_CODE_BLOCKS, GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
 
     expect(configResult.getLoadedPlugin('import')).toBeDefined();
   });

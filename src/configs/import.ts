@@ -1,13 +1,6 @@
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
 import type {PluginSettings as ImportPluginSettingsWithPrefixes} from 'eslint-plugin-import-x';
-import {
-  ERROR,
-  GLOB_CONFIG_FILES,
-  GLOB_JS_TS_X_EXTENSION,
-  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
-  OFF,
-  WARNING,
-} from '../constants';
+import {ERROR, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {
   type MaybeArray,
@@ -240,11 +233,6 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     ?.addConfig([
       'import',
       {
-        // For some reason running this plugin on fenced code blocks takes a lot of memory
-        // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
-        // TODO investigate that?
-        ignoresDefault: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
-        ignoresDefaultMergedWithUserIgnores: true,
         settings: {
           '': {
             ...(isTypescriptEnabled &&

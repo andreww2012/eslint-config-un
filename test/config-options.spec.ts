@@ -60,7 +60,7 @@ describe('option: `ignores`', () => {
         },
       });
 
-      expect(receivedParams?.ignoresDefault).toMatchInlineSnapshot('["**/*.md/**/*.*"]');
+      expect(receivedParams?.ignoresDefault).toMatchInlineSnapshot('[]');
       expect(receivedParams?.ignoresImplicit).toMatchInlineSnapshot(
         '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
       );
