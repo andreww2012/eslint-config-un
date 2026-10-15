@@ -735,6 +735,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
       },
     ])
     .addRule('class-spacing', ERROR) /** @since 0.58.0 */ // 🟢
+    .addRule('id-naming-convention', OFF) /** @since 0.67.0 */ // 🟢
     .addRule('no-duplicate-class', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-ineffective-attrs', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.58.0 */ // 🟢
@@ -742,7 +743,10 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule('no-obsolete-tags', ERROR) /** @since 0.58.0 */ // 🟢
     .addRule('no-restricted-attr-values', OFF) /** @since 0.66.0 */
     .addRule('no-restricted-attrs', OFF) /** @since 0.66.0 */
+    // With no tags to configure, the default ones would mostly repeat `no-obsolete-tags`
+    .addRule('no-restricted-tags', OFF) /** @since 0.67.0 */ // 🟢
     .addRule('require-attrs', OFF) /** @since 0.66.0 */
+    .addRule('require-li-container', ERROR) /** @since 0.67.0 */ // 🟢
     .addRule('use-baseline', WARNING, [
       generateUseBaselineRuleOptions(context),
     ]) /** @since 0.58.0 */ // 🟡

@@ -1470,6 +1470,7 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
       },
     ])
     .addRule('classname-spacing', ERROR) /** @since 0.57.0 */ // 🟢
+    .addRule('id-naming-convention', OFF) /** @since 0.67.0 */ // 🟢
     .addRule('no-duplicate-classname', ERROR) /** @since 0.57.0 */ // 🟢
     .addRule('no-ineffective-attrs', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-invalid-attr-value', ERROR) /** @since 0.56.0 */ // 🟢
@@ -1477,7 +1478,10 @@ export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
     .addRule('no-obsolete-tags', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('no-restricted-attr-values', OFF) /** @since 0.66.0 */
     .addRule('no-restricted-attrs', OFF) /** @since 0.66.0 */
+    // `react/forbid-elements` covers this and respects `disallowedElements`
+    .addRule('no-restricted-tags', OFF) /** @since 0.67.0 */ // 🟢
     .addRule('require-attrs', OFF) /** @since 0.66.0 */
+    .addRule('require-li-container', ERROR) /** @since 0.67.0 */ // 🟢
     .addRule('use-baseline', WARNING, [
       generateUseBaselineRuleOptions(context),
     ]) /** @since 0.56.0 */ // 🟡
