@@ -1,9 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {
-  type IgnoresAdditionalOptions,
-  TOML_DEFAULT_FILES,
-  generateIgnoresWithAdditional,
-} from './shared';
+import {TOML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -19,15 +15,14 @@ const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
  *
  * 📁 Default `files`: <code>**&#47;*.toml</code>
  *
- * If `ignores` is explicitly specified, it will still be merged with the default ignore list,
- * excluding items specified in `ignoresAdditional`.
+ * ❌ Default `ignores`: <code>**&#47;Cargo.lock</code>
  *
- * The default ignore list: <code>**&#47;Cargo.lock</code>
+ * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to replace
+ * them instead
  */
-export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends
-    UnFlatConfigEntryBase<ExtraPlugins, 'toml'>,
-    IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
+export interface TomlEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'toml'> {
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
    *
@@ -85,18 +80,15 @@ export default defineUnConfig<TomlEslintConfigOptions>('toml', {enabledBy: {grou
   // 🟣 = in standard
 
   configBuilder
-    ?.addConfig(
-      [
-        'toml',
-        {
-          filesDefault: TOML_DEFAULT_FILES,
-          parseWith: 'toml',
-        },
-      ],
+    ?.addConfig([
+      'toml',
       {
-        ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
+        filesDefault: TOML_DEFAULT_FILES,
+        ignoresDefault: CONFIG_DEFAULT_IGNORES,
+        ignoresDefaultMergedWithUserIgnores: true,
+        parseWith: 'toml',
       },
-    )
+    ])
     .markCategory('Base rules')
     .addRule('indent', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('keys-order', ERROR) /** @since 0.1.0 */ // 🟣

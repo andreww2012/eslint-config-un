@@ -109,15 +109,21 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('includes user-provided `ignores` in `toml` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'] as const;
+    const IGNORES = ['**/fixtures/**'] as const;
 
+    it('includes user-provided `ignores` in `toml` eslint config and merges them with defaults', async () => {
       const configResult = await computeEslintConfig({toml: {ignores: IGNORES}});
 
-      const ignores = configResult.getConfigByUnPostfix('toml')?.ignores;
+      expect(configResult.getConfigByUnPostfix('toml')?.ignores).toIncludeAllMembers([
+        '**/Cargo.lock',
+        ...IGNORES,
+      ]);
+    });
 
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    it('replaces the default `ignores` when the function form is used', async () => {
+      const configResult = await computeEslintConfig({toml: {ignores: () => [...IGNORES]}});
+
+      expect(configResult.getConfigByUnPostfix('toml')?.ignores).toStrictEqual(IGNORES);
     });
   });
 
@@ -241,26 +247,6 @@ describe('options', () => {
       expect(configResult.getRuleEntry('toml', 'toml/precision-of-integer')).toMatchInlineSnapshot(
         '[2, {"maxBit": 32}]',
       );
-    });
-  });
-
-  describe('option: `ignoresAdditional`', () => {
-    it('ignores `**/Cargo.lock` by default', async () => {
-      const configResult = await computeEslintConfig('toml');
-
-      expect(configResult.getConfigByUnPostfix('toml')?.ignores).toIncludeAllMembers([
-        '**/Cargo.lock',
-      ]);
-    });
-
-    it('does not ignore `**/Cargo.lock` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        toml: {ignoresAdditional: false},
-      });
-
-      expect(configResult.getConfigByUnPostfix('toml')?.ignores).not.toIncludeAnyMembers([
-        '**/Cargo.lock',
-      ]);
     });
   });
 });

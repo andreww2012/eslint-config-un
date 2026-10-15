@@ -6,9 +6,7 @@ import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {arrayUnique, capitalize} from '../utils';
 import {
-  type IgnoresAdditionalOptions,
   determineRulesDisabledInEmbeddedCodeBlocks,
-  generateIgnoresWithAdditional,
   resolveFilesOption,
   resolveIgnoresOption,
 } from './shared';
@@ -46,7 +44,6 @@ const generateNoMissingLabelRefsOptions = (
 ];
 
 const GLOB_CHANGESETS = '.changeset/**/*.md';
-const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md', GLOB_CHANGESETS] as const;
 
 // Changesets copies the text of a changeset into `CHANGELOG.md` and the release notes
 const RULES_TO_DISABLE_IN_CHANGESETS: readonly UnAllRuleNames[] = [
@@ -136,12 +133,11 @@ export interface MarkdownEslintConfigOptions<
    *
    * 📁 Default `files`: parent config's `files`
    *
-   * ❌ Default `ignores`: parent config's `ignores` merged with the default ignore list.
-   * If `ignores` is explicitly specified, it will still be merged with the default ignore list,
-   * excluding items specified in `ignoresAdditional`.
+   * ❌ Default `ignores`: `LICENSE.md` and <code>.changeset/**&#47;*.md</code> (only if
+   * `@changesets/cli` package is installed)
    *
-   * The default ignore list: `LICENSE.md` and <code>.changeset/**&#47;*.md</code> (only if
-   * `@changesets/cli` package is installed).
+   * ⚠️ Will be merged with the user provided `ignores`, which default to the parent config's
+   * `ignores`. Use the function form of `ignores` to replace them instead
    *
    * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line)
    * ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
@@ -150,14 +146,13 @@ export interface MarkdownEslintConfigOptions<
   configSentencesPerLine?:
     | boolean
     | Prettify<
-        UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> &
-          IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES> & {
-            /**
-             * Options of
-             * [the only rule in this sub-config, `sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md).
-             */
-            options?: GetRuleOptions<'sentences-per-line', 'one'>;
-          }
+        UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> & {
+          /**
+           * Options of
+           * [the only rule in this sub-config, `sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md).
+           */
+          options?: GetRuleOptions<'sentences-per-line', 'one'>;
+        }
       >;
 
   /**
@@ -426,7 +421,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
   }
 
   const configBuilderSentencesPerLine = context.createConfigBuilder(
-    configSentencesPerLine,
+    configSentencesPerLine &&
+      assignDefaults(configSentencesPerLine, {
+        ignores: resolveIgnoresOption(parentConfigIgnores, []),
+      }),
     'sentences-per-line',
   );
 
@@ -434,26 +432,17 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
 
   if (configSentencesPerLine) {
     configBuilderSentencesPerLine
-      ?.addConfig(
-        [
-          'markdown/sentences-per-line',
-          {
-            filesDefault: parentConfigFiles,
-            ignoresInternal: {
-              md: false,
-            },
-          },
-        ],
+      ?.addConfig([
+        'markdown/sentences-per-line',
         {
-          ...generateIgnoresWithAdditional(
-            configSentencesPerLine,
-            resolveIgnoresOption(parentConfigIgnores, []),
-            {
-              [GLOB_CHANGESETS]: isChangesetsCliInstalled,
-            },
-          )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
+          filesDefault: parentConfigFiles,
+          ignoresDefault: ['LICENSE.md', ...(isChangesetsCliInstalled ? [GLOB_CHANGESETS] : [])],
+          ignoresDefaultMergedWithUserIgnores: true,
+          ignoresInternal: {
+            md: false,
+          },
         },
-      )
+      ])
       .addRule('one', ERROR, oneRuleOptions ? [oneRuleOptions] : []) /** @since 0.0.0 */ // 🟢
       .enableConfigTesterForPlugin('sentences-per-line')
       .addOverrides();
