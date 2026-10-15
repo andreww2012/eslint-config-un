@@ -1,5 +1,5 @@
 # Heading
 
 ```json
-{"key": 1, "key": 2}
+{"key": [1, , 2]}
 ```

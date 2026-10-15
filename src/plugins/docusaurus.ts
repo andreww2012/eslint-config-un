@@ -6,5 +6,9 @@ export default definePluginMetadata('docusaurus', {
   ruleDocsUrl: (ruleName) =>
     `https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin/${ruleName}`,
   suggestedPrefix: ['@docusaurus', 'more concise and convenient to use; `@` feels redundant'],
-  rules: {},
+  rules: {
+    'no-html-links': {disableInCodeBlocks: 'tooStrict'},
+    'no-untranslated-text': {disableInCodeBlocks: 'tooStrict'},
+    'prefer-docusaurus-heading': {disableInCodeBlocks: 'tooStrict'},
+  },
 });

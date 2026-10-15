@@ -16,6 +16,7 @@ export default definePluginMetadata('toml', {
     'inline-table-curly-spacing': {stylistic: true, prettierIncompatible: true},
     'inline-table-key-value-newline': {stylistic: true, prettierIncompatible: true},
     'key-spacing': {stylistic: true, prettierIncompatible: true},
+    'no-mixed-type-in-array': {disableInCodeBlocks: 'runtimeOnly'},
     'no-space-dots': {stylistic: true, prettierIncompatible: true},
     'no-unreadable-number-separator': {stylistic: true},
     'padding-line-between-pairs': {stylistic: true},

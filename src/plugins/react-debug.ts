@@ -7,6 +7,7 @@ export default definePluginMetadata('react-debug', {
     'function-component': {stylistic: true},
     hook: {stylistic: true},
     'is-from-react': {stylistic: true},
+    'is-from-ref': {disableInCodeBlocks: 'runtimeOnly'},
     jsx: {stylistic: true},
   },
 });

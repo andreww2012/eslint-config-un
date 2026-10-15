@@ -17,7 +17,7 @@ export default definePluginMetadata('arrow-return-style', {
         false,
         'the plugin sets `requiresTypeChecking`, but the rule never reads the parser services: its `program` is the AST node',
       ],
-      disableInCodeBlocks: 'tooStrict',
+      disableInCodeBlocks: 'fileName',
     },
   },
 });

@@ -6,9 +6,10 @@ export default definePluginMetadata('un', {
     'no-type-assertion': {
       requiresTypeInfo: 'optional',
       stylistic: [false, 'replacing an assertion that narrows the type takes a runtime check'],
-      disableInCodeBlocks: 'tooStrict',
+      disableInCodeBlocks: 'typeStrictness',
     },
     'prefer-array-for-each': {requiresTypeInfo: 'optional', stylistic: true},
     'vue-no-leading-text-whitespace': {stylistic: true},
+    'vue-no-trailing-element-whitespace': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

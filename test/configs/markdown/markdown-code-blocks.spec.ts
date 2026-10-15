@@ -243,10 +243,12 @@ describe('markdown: sub config `codeBlocks`', () => {
 
     it('additionally disables a rule in `markdown/code-blocks` when set via `markdownCodeBlocksRules.additionalDisabledRules`', async () => {
       const configResult = await computeEslintConfig('markdown', {
-        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'default-case': true}}},
+        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'array-callback-return': true}}},
       });
 
-      expect(configResult.getRuleEntrySeverity('markdown/code-blocks', 'default-case')).toBe(0);
+      expect(
+        configResult.getRuleEntrySeverity('markdown/code-blocks', 'array-callback-return'),
+      ).toBe(0);
     });
   });
 });

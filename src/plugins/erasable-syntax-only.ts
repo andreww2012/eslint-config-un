@@ -7,5 +7,11 @@ export default definePluginMetadata('erasable-syntax-only', {
   ruleDocsUrl: (ruleName) =>
     `https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/${ruleName}.md`,
   gitTag: gitTagAsVersion,
-  rules: {},
+  rules: {
+    enums: {disableInCodeBlocks: 'runtimeOnly'},
+    'export-aliases': {disableInCodeBlocks: 'runtimeOnly'},
+    'import-aliases': {disableInCodeBlocks: 'runtimeOnly'},
+    namespaces: {disableInCodeBlocks: 'runtimeOnly'},
+    'parameter-properties': {disableInCodeBlocks: 'runtimeOnly'},
+  },
 });

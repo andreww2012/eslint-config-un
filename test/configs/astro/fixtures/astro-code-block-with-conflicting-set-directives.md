@@ -5,5 +5,5 @@
 const html = '<b>hello</b>';
 ---
 
-<div set:html={html}></div>
+<div set:html={html} set:text={html}></div>
 ```

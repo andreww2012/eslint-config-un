@@ -5,6 +5,7 @@ export default definePluginMetadata('unused-imports', {
   ruleDocsUrl: (ruleName) =>
     `https://github.com/sweepline/eslint-plugin-unused-imports/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
-    'no-unused-imports': {disableInCodeBlocks: 'tooStrict'},
+    'no-unused-imports': {disableInCodeBlocks: 'unused'},
+    'no-unused-vars': {disableInCodeBlocks: 'unused'},
   },
 });

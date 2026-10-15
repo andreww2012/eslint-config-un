@@ -7,6 +7,8 @@ export default definePluginMetadata('expo', {
     `https://github.com/expo/expo/blob/HEAD/packages/eslint-plugin-expo/docs/rules/${ruleName}.md`,
   gitTag: 'https://github.com/expo/expo/blob/HEAD/packages/eslint-plugin-expo/CHANGELOG.md',
   rules: {
-    'use-dom-exports': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-dynamic-env-var': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-env-var-destructuring': {disableInCodeBlocks: 'runtimeOnly'},
+    'use-dom-exports': {disableInCodeBlocks: 'imports'},
   },
 });

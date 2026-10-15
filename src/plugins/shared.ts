@@ -13,18 +13,25 @@ export type MaybeWithReason<Value> = Value | readonly [value: Value | false, rea
 /**
  * Why a rule is meaningless or misleading in an isolated snippet.
  * `processorDefault` means the rule is already disabled by the default markdown processor config.
+ * `fileName` means the rule reads the file name or role, which a snippet takes from its Markdown file.
+ * `alternatives` means the rule reports a snippet showing several ways to do the same thing.
  * `typeAware` is for the rules that only degrade without type information: the ones that throw are
- * disabled in code blocks automatically
+ * disabled in code blocks automatically.
+ * `typeStrictness` means the rule asks for strict or explicit types, which a snippet nobody
+ * type-checks doesn't need
  */
 type CodeBlocksReason =
+  | 'alternatives'
   | 'emptiness'
   | 'eval'
+  | 'fileName'
   | 'imports'
   | 'performance'
   | 'processorDefault'
   | 'runtimeOnly'
   | 'tooStrict'
   | 'typeAware'
+  | 'typeStrictness'
   | 'unused';
 
 export interface RuleMetadata {

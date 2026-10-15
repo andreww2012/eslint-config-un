@@ -10,11 +10,16 @@ export default definePluginMetadata('eslint-comments', {
     'more concise and convenient to use; `@` feels redundant',
   ],
   rules: {
+    'disable-enable-pair': {disableInCodeBlocks: 'tooStrict'},
+    'no-restricted-disable': {disableInCodeBlocks: 'tooStrict'},
     'no-unlimited-disable': {
       disableInCodeBlocks: [
         false,
         'a snippet can skip linting with an `eslint-skip` comment, which stays out of the rendered code',
       ],
     },
+    'no-unused-disable': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-use': {disableInCodeBlocks: 'tooStrict'},
+    'require-description': {disableInCodeBlocks: 'tooStrict'},
   },
 });

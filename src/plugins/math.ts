@@ -70,6 +70,7 @@ export default definePluginMetadata('math', {
         'the dedicated method sums more precisely by design and returns -0 for an empty input',
       ],
       autofixDisabled: [true, 'changes the sum by design'],
+      disableInCodeBlocks: 'runtimeOnly',
     },
     'prefer-math-trunc': {
       stylistic: [false, 'the bitwise forms it reports wrap above 2**31'],

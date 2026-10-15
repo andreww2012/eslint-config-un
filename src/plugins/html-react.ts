@@ -10,5 +10,10 @@ export default definePluginMetadata('html-react', {
   ],
   rules: {
     'classname-spacing': {stylistic: true},
+    'no-restricted-attr-values': {disableInCodeBlocks: 'tooStrict'},
+    'no-restricted-attrs': {disableInCodeBlocks: 'tooStrict'},
+    'require-attrs': {disableInCodeBlocks: 'tooStrict'},
+    'require-li-container': {disableInCodeBlocks: 'tooStrict'},
+    'use-baseline': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

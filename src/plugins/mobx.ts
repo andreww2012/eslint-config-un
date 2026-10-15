@@ -10,6 +10,6 @@ export default definePluginMetadata('mobx', {
     'exhaustive-make-observable': {disableInCodeBlocks: 'runtimeOnly'},
     'missing-make-observable': {disableInCodeBlocks: 'runtimeOnly'},
     'missing-observer': {disableInCodeBlocks: 'runtimeOnly'},
-    'unconditional-make-observable': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-anonymous-observer': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

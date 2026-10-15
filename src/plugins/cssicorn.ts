@@ -16,12 +16,15 @@ export default definePluginMetadata('cssicorn', {
     },
     'consistent-value-order': {stylistic: true},
     lowercase: {stylistic: true},
+    'no-disabled-pinch-zoom': {disableInCodeBlocks: 'runtimeOnly'},
     'no-duplicate-font-family-names': {
       stylistic: [
         false,
         'a duplicate is often a copy-pasted name in place of the intended fallback, and removing the second `monospace` of the `monospace, monospace` hack changes the font size',
       ],
     },
+    'no-duplicate-properties': {disableInCodeBlocks: 'alternatives'},
+    'no-duplicate-selectors': {disableInCodeBlocks: 'alternatives'},
     'no-ineffective-keyframe-declarations': {
       stylistic: [
         false,
@@ -34,6 +37,7 @@ export default definePluginMetadata('cssicorn', {
         'removing a declaration that has no effect keeps the behavior, but the declaration was likely meant to have one',
       ],
     },
+    'no-layout-animations': {disableInCodeBlocks: 'performance'},
     'no-redundant-functions': {stylistic: true},
     'no-redundant-longhand-properties': {
       stylistic: [
@@ -44,13 +48,20 @@ export default definePluginMetadata('cssicorn', {
     'no-redundant-nested-style-rules': {stylistic: true},
     'no-redundant-nesting-selector': {stylistic: true},
     'no-redundant-shorthand-values': {stylistic: true},
+    'no-unknown-animations': {disableInCodeBlocks: 'tooStrict'},
+    'no-unknown-pseudo-selectors': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-is': {stylistic: true},
     'no-zero-length-unit': {stylistic: true},
     'prefer-clamp': {stylistic: true},
+    'prefer-explicit-viewport-units': {disableInCodeBlocks: 'runtimeOnly'},
+    'prefer-light-dark': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-media-feature-range-syntax': {stylistic: true},
     'prefer-merged-rules': {stylistic: true},
     'prefer-modern-syntax': {stylistic: true},
     'prefer-nesting': {stylistic: true},
+    'prefer-relative-colors': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-short-hex-color': {stylistic: true},
+    'require-prefers-reduced-motion': {disableInCodeBlocks: 'runtimeOnly'},
+    'require-selector-scope': {disableInCodeBlocks: 'tooStrict'},
   },
 });

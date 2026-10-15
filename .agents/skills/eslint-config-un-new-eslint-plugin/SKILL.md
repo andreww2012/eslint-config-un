@@ -144,7 +144,10 @@ Two judgement calls the contract cannot spell out:
 
 - `stylistic`: after fixing the issue reported by the rule, the logic of the program should not change in any way.
   IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.
-- `disableInCodeBlocks`: rules that throw without type information are disabled there automatically, because type information is not available there, so `nr prep` rejects an entry on them.
+- `disableInCodeBlocks`: for rules that realistically fire on natural snippets and whose value doesn't carry over to them, since a snippet is never run, type-checked or maintained as part of a codebase.
+  That is, they guard how code behaves when it runs (`runtimeOnly`), ask for strict or explicit types (`typeStrictness`), guard how a codebase is organized or a project's own conventions (`tooStrict`), depend on context a snippet lacks (imports, the file name, declarations elsewhere), flag what examples do on purpose (placeholders, unused values, alternatives in one block), or only concern performance.
+  Rules about how code reads (formatting, ordering, naming, readability limits like `complexity`) and rules catching a mistake visible in the snippet itself stay enabled.
+  Rules that throw without type information are disabled there automatically, because type information is not available there, so `nr prep` rejects an entry on them.
 
 ### Step 5: Documentation
 

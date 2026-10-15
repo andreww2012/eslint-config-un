@@ -10,6 +10,7 @@ export default definePluginMetadata('awscdk', {
     'no-construct-in-interface': {requiresTypeInfo: true},
     'no-construct-in-public-property-of-construct': {requiresTypeInfo: true},
     'no-construct-stack-suffix': {requiresTypeInfo: true},
+    'no-import-private': {disableInCodeBlocks: 'imports'},
     'no-mutable-public-property-of-construct': {requiresTypeInfo: true},
     'no-parent-name-construct-id-match': {requiresTypeInfo: true},
     'no-unused-props': {requiresTypeInfo: true},
@@ -20,5 +21,6 @@ export default definePluginMetadata('awscdk', {
     'props-name-convention': {requiresTypeInfo: true},
     'require-jsdoc': {requiresTypeInfo: true},
     'require-passing-this': {requiresTypeInfo: true},
+    'require-props-default-doc': {disableInCodeBlocks: 'tooStrict'},
   },
 });

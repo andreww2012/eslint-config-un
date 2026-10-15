@@ -11,143 +11,717 @@ export default definePluginMetadata('es', {
     'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
-    'no-array-prototype-at': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-copywithin': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-entries': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-every': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-fill': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-filter': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-find': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-findindex': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-findlast-findlastindex': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-array-prototype-flat': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-foreach': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-includes': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-indexof': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-keys': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-lastindexof': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-map': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-reduce': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-reduceright': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-some': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-toreversed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-array-prototype-tosorted': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-array-prototype-tospliced': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-array-prototype-values': {requiresTypeInfo: 'optional'},
-    'no-array-prototype-with': {requiresTypeInfo: 'optional'},
-    'no-array-string-prototype-at': {requiresTypeInfo: 'optional'},
-    'no-arraybuffer-prototype-transfer': {requiresTypeInfo: 'optional'},
-    'no-dataview-prototype-getfloat16-setfloat16': {requiresTypeInfo: 'optional'}, // cspell:disable-line
+    'no-accessor-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-arbitrary-module-namespace-names': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-from': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-fromasync': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-isarray': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-of': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-at': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-copywithin': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-entries': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-every': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-fill': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-filter': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-find': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-findindex': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-findlast-findlastindex': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-array-prototype-flat': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-foreach': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-includes': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-indexof': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-keys': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-lastindexof': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-map': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-reduce': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-reduceright': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-array-prototype-some': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-toreversed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-array-prototype-tosorted': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-array-prototype-tospliced': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-array-prototype-values': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-prototype-with': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-array-string-prototype-at': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-arraybuffer-prototype-transfer': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-arrow-functions': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-async-functions': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-async-iteration': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-asyncdisposablestack': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-atomics': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-atomics-pause': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-atomics-waitasync': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-bigint': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-binary-numeric-literals': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-block-scoped-functions': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-block-scoped-variables': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-fields': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-instance-fields': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-private-fields': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-private-methods': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-static-block': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-class-static-fields': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-classes': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-computed-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-dataview-prototype-getfloat16-setfloat16': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-date-now': {disableInCodeBlocks: 'runtimeOnly'},
     'no-date-prototype-getyear-setyear': {requiresTypeInfo: 'optional'},
     'no-date-prototype-togmtstring': {requiresTypeInfo: 'optional'},
-    'no-date-prototype-totemporalinstant': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-function-prototype-bind': {requiresTypeInfo: 'optional'},
-    'no-intl-datetimeformat-prototype-formatrange': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-datetimeformat-prototype-formattoparts': {requiresTypeInfo: 'optional'},
-    'no-intl-locale-prototype-firstdayofweek': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-getcalendars': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-getcollations': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-gethourcycles': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-getnumberingsystems': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-gettextinfo': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-gettimezones': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-locale-prototype-getweekinfo': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-numberformat-prototype-formatrange': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-numberformat-prototype-formatrangetoparts': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-intl-numberformat-prototype-formattoparts': {requiresTypeInfo: 'optional'},
-    'no-intl-pluralrules-prototype-selectrange': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-iterator-prototype-chunks': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-drop': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-every': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-filter': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-find': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-flatmap': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-foreach': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-includes': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-join': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-map': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-reduce': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-some': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-take': {requiresTypeInfo: 'optional'},
-    'no-iterator-prototype-toarray': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-iterator-prototype-windows': {requiresTypeInfo: 'optional'},
-    'no-map-prototype-getorinsert': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-map-prototype-getorinsertcomputed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-array-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-arraybuffer-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-asyncdisposablestack-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-bigint-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-boolean-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-dataview-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-date-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-disposablestack-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-finalizationregistry-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-intl-collator-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-datetimeformat-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-displaynames-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-intl-durationformat-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-intl-listformat-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-locale-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-numberformat-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-pluralrules-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-relativetimeformat-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-intl-segmenter-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-iterator-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-map-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-number-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-promise-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-regexp-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-set-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-sharedarraybuffer-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-string-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-symbol-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-temporal-duration-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-temporal-instant-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-temporal-plaindate-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-temporal-plaindatetime-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-temporal-plainmonthday-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-temporal-plaintime-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-temporal-plainyearmonth-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-temporal-zoneddatetime-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-typed-array-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-weakmap-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-nonstandard-weakref-prototype-properties': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-nonstandard-weakset-prototype-properties': {requiresTypeInfo: 'optional'},
-    'no-promise-prototype-finally': {requiresTypeInfo: 'optional'},
+    'no-date-prototype-totemporalinstant': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-default-parameters': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-destructuring': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-disposablestack': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-dynamic-import': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-dynamic-import-options': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-error-cause': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-error-iserror': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-exponential-operators': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-export-ns-from': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-float16array': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-for-of-loops': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-function-prototype-bind': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-generators': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-global-this': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-hashbang': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-import-attributes': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-import-meta': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-datetimeformat-prototype-formatrange': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-datetimeformat-prototype-formattoparts': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-intl-displaynames': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-durationformat': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-getcanonicallocales': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-listformat': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-locale': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-locale-prototype-firstdayofweek': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-getcalendars': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-getcollations': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-gethourcycles': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-getnumberingsystems': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-gettextinfo': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-gettimezones': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-locale-prototype-getweekinfo': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-numberformat-prototype-formatrange': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-numberformat-prototype-formatrangetoparts': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-numberformat-prototype-formattoparts': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-intl-pluralrules': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-pluralrules-prototype-selectrange': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-intl-relativetimeformat': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-segmenter': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-intl-supportedvaluesof': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-iterator': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-iterator-concat': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-iterator-prototype-chunks': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-drop': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-every': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-filter': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-find': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-flatmap': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-foreach': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-includes': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-join': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-map': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-iterator-prototype-reduce': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-some': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-take': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-prototype-toarray': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-iterator-prototype-windows': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-iterator-zip': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-iterator-zipkeyed': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json-israwjson': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json-modules': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json-parse-reviver-context-parameter': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json-rawjson': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-json-superset': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-keyword-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-logical-assignment-operators': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-malformed-template-literals': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-map': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-map-groupby': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-map-prototype-getorinsert': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-map-prototype-getorinsertcomputed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-math-acosh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-asinh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-atanh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-cbrt': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-clz32': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-cosh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-expm1': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-f16round': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-fround': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-hypot': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-imul': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-log10': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-log1p': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-log2': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-sign': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-sinh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-sumprecise': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-tanh': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-math-trunc': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-modules': {disableInCodeBlocks: 'imports'},
+    'no-new-target': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-array-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-array-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-arraybuffer-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-arraybuffer-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-asyncdisposablestack-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-asyncdisposablestack-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-atomics-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-bigint-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-bigint-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-boolean-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-boolean-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-dataview-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-dataview-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-date-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-date-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-disposablestack-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-disposablestack-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-error-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-finalizationregistry-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-finalizationregistry-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-function-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-collator-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-collator-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-datetimeformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-datetimeformat-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-displaynames-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-displaynames-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-intl-durationformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-durationformat-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-intl-listformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-listformat-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-locale-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-locale-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-numberformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-numberformat-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-pluralrules-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-pluralrules-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-relativetimeformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-relativetimeformat-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-intl-segmenter-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-intl-segmenter-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-iterator-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-iterator-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-json-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-map-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-map-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-math-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-number-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-number-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-object-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-promise-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-promise-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-proxy-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-reflect-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-regexp-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-regexp-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-set-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-set-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-sharedarraybuffer-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-sharedarraybuffer-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-string-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-string-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-symbol-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-symbol-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-temporal-duration-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-duration-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-temporal-instant-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-instant-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-temporal-now-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plaindate-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plaindate-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-temporal-plaindatetime-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plaindatetime-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-temporal-plainmonthday-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plainmonthday-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-temporal-plaintime-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plaintime-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-temporal-plainyearmonth-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-plainyearmonth-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-temporal-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-zoneddatetime-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-temporal-zoneddatetime-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-typed-array-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-typed-array-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-weakmap-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-weakmap-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nonstandard-weakref-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-weakref-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-nonstandard-weakset-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-nonstandard-weakset-prototype-properties': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-nullish-coalescing-operators': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-epsilon': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-isfinite': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-isinteger': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-isnan': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-issafeinteger': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-maxsafeinteger': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-minsafeinteger': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-parsefloat': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-number-parseint': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-numeric-separators': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-assign': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-create': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-defineproperties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-defineproperty': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-entries': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-freeze': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-fromentries': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-getownpropertydescriptor': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-getownpropertydescriptors': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-getownpropertynames': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-getownpropertysymbols': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-getprototypeof': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-groupby': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-hasown': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-is': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-isextensible': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-isfrozen': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-issealed': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-keys': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-map-groupby': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-preventextensions': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-seal': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-setprototypeof': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-super-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-object-values': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-octal-numeric-literals': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-optional-catch-binding': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-optional-chaining': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-private-in': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-promise': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-promise-all-settled': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-promise-any': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-promise-prototype-finally': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-promise-try': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-promise-withresolvers': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-property-shorthands': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-proxy': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-reflect': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-d-flag': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-duplicate-named-capturing-groups': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-escape': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-lookbehind-assertions': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-modifiers': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-named-capture-groups': {disableInCodeBlocks: 'runtimeOnly'},
     'no-regexp-prototype-compile': {requiresTypeInfo: 'optional'},
-    'no-regexp-prototype-flags': {requiresTypeInfo: 'optional'},
-    'no-resizable-and-growable-arraybuffers': {requiresTypeInfo: 'optional'},
-    'no-set-prototype-difference': {requiresTypeInfo: 'optional'},
-    'no-set-prototype-intersection': {requiresTypeInfo: 'optional'},
-    'no-set-prototype-isdisjointfrom': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-set-prototype-issubsetof': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-set-prototype-issupersetof': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-set-prototype-symmetricdifference': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-set-prototype-union': {requiresTypeInfo: 'optional'},
+    'no-regexp-prototype-flags': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-s-flag': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-u-flag': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes-2019': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes-2020': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes-2021': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes-2022': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-unicode-property-escapes-2023': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-v-flag': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-regexp-y-flag': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-resizable-and-growable-arraybuffers': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-rest-parameters': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-rest-spread-properties': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-set': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-set-prototype-difference': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-set-prototype-intersection': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-set-prototype-isdisjointfrom': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-set-prototype-issubsetof': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-set-prototype-issupersetof': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-set-prototype-symmetricdifference': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-set-prototype-union': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-shared-array-buffer': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-spread-elements': {disableInCodeBlocks: 'runtimeOnly'},
     'no-string-create-html-methods': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-at': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-codepointat': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-endswith': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-includes': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-iswellformed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-string-prototype-iswellformed-towellformed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-string-prototype-matchall': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-normalize': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-padstart-padend': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-repeat': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-replaceall': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-string-prototype-startswith': {requiresTypeInfo: 'optional'},
+    'no-string-fromcodepoint': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-string-prototype-at': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
+    'no-string-prototype-codepointat': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-endswith': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-includes': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-iswellformed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-string-prototype-iswellformed-towellformed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-string-prototype-matchall': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-normalize': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-padstart-padend': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-repeat': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-string-prototype-replaceall': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-string-prototype-startswith': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
     'no-string-prototype-substr': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-towellformed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-string-prototype-trim': {requiresTypeInfo: 'optional'},
+    'no-string-prototype-towellformed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-string-prototype-trim': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-string-prototype-trimleft-trimright': {requiresTypeInfo: 'optional'},
-    'no-string-prototype-trimstart-trimend': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-symbol-prototype-description': {requiresTypeInfo: 'optional'},
-    'no-uint8array-prototype-setfrombase64': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-uint8array-prototype-setfromhex': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-uint8array-prototype-tobase64': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-uint8array-prototype-tohex': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-weakmap-prototype-getorinsert': {requiresTypeInfo: 'optional'}, // cspell:disable-line
-    'no-weakmap-prototype-getorinsertcomputed': {requiresTypeInfo: 'optional'}, // cspell:disable-line
+    'no-string-prototype-trimstart-trimend': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-string-raw': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-subclassing-builtins': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-suppressederror': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-symbol': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-symbol-asyncdispose': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-symbol-dispose': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-symbol-matchall': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-symbol-prototype-description': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-template-literals': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-temporal': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-top-level-await': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-trailing-commas': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-trailing-dynamic-import-commas': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-trailing-function-commas': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-typed-arrays': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-uint8array-frombase64': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-uint8array-fromhex': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-uint8array-prototype-setfrombase64': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-uint8array-prototype-setfromhex': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-uint8array-prototype-tobase64': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-uint8array-prototype-tohex': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-unicode-codepoint-escapes': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-using-declarations': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-weak-map': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-weak-set': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-weakmap-prototype-getorinsert': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    }, // cspell:disable-line
+    'no-weakmap-prototype-getorinsertcomputed': {
+      requiresTypeInfo: 'optional',
+      disableInCodeBlocks: 'runtimeOnly',
+    },
+    'no-weakrefs': {disableInCodeBlocks: 'runtimeOnly'}, // cspell:disable-line
   },
 });

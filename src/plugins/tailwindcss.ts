@@ -8,5 +8,7 @@ export default definePluginMetadata('tailwindcss', {
   rules: {
     'classnames-order': {stylistic: true},
     'enforces-shorthand': {stylistic: true},
+    'no-arbitrary-value': {disableInCodeBlocks: 'tooStrict'},
+    'no-custom-classname': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

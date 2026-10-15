@@ -7,5 +7,9 @@ export default definePluginMetadata('nx', {
     `https://nx.dev/docs/technologies/eslint/eslint-plugin/guides/${ruleName}`,
   gitTag: gitTagAsVersion,
   suggestedPrefix: ['@nx', 'more concise and convenient to use; `@` feels redundant'],
-  rules: {},
+  rules: {
+    'dependency-checks': {disableInCodeBlocks: 'fileName'},
+    'enforce-module-boundaries': {disableInCodeBlocks: 'imports'},
+    'nx-plugin-checks': {disableInCodeBlocks: 'fileName'},
+  },
 });

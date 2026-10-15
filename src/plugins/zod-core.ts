@@ -10,6 +10,7 @@ export default definePluginMetadata('zod-core', {
     'consistent-schema-output-type-style': {stylistic: true},
     'prefer-validate': {
       stylistic: [false, 'validation stops at the first failure, so later refinements may not run'],
+      disableInCodeBlocks: 'runtimeOnly',
     },
   },
 });

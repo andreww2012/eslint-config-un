@@ -5,5 +5,5 @@ export default definePluginMetadata('headers', {
   docsUrl: 'https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/README.md',
   ruleDocsUrl: (ruleName) =>
     `https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/docs/rules/${ruleName}.md`,
-  rules: {},
+  rules: {'header-format': {disableInCodeBlocks: 'fileName'}},
 });

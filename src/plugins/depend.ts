@@ -6,5 +6,5 @@ export default definePluginMetadata('depend', {
   ruleDocsUrl: (ruleName) =>
     `https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/${ruleName}.md`,
   gitTag: gitTagAsVersion,
-  rules: {},
+  rules: {'ban-dependencies': {disableInCodeBlocks: 'imports'}},
 });

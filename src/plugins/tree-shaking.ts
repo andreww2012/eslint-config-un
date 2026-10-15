@@ -5,5 +5,5 @@ export default definePluginMetadata('tree-shaking', {
   docsUrl: 'https://github.com/lukastaegert/eslint-plugin-tree-shaking/blob/HEAD/README.md',
   ruleDocsUrl: (ruleName) =>
     `https://github.com/lukastaegert/eslint-plugin-tree-shaking/blob/HEAD/docs/rules/${ruleName}.md`,
-  rules: {},
+  rules: {'no-side-effects-in-initialization': {disableInCodeBlocks: 'runtimeOnly'}},
 });

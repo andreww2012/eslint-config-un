@@ -1,6 +1,6 @@
 const FIXTURES = {
   dupKeysJson: 'dup-keys.json',
-  jsonCodeBlockWithDupKeysMd: 'json-code-block-with-dup-keys.md',
+  jsonCodeBlockWithSparseArrayMd: 'json-code-block-with-sparse-array.md',
 } as const;
 
 describe('basic tests', () => {
@@ -87,20 +87,20 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot(`"Duplicate key 'key'."`);
   });
 
-  it('`jsonc/no-dupe-keys` rule fires on a JSON code block with duplicate keys inside a .md file', async () => {
+  it('`jsonc/no-sparse-arrays` rule fires on a JSON code block with a sparse array inside a .md file', async () => {
     const results = await testEslintConfig(
       {jsonc: true, markdown: true},
-      FIXTURES.jsonCodeBlockWithDupKeysMd,
+      FIXTURES.jsonCodeBlockWithSparseArrayMd,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.jsonCodeBlockWithDupKeysMd,
-      'jsonc/no-dupe-keys',
+      FIXTURES.jsonCodeBlockWithSparseArrayMd,
+      'jsonc/no-sparse-arrays',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Duplicate key 'key'."`);
+    expect(error?.message).toMatchInlineSnapshot('"Unexpected comma in middle of array."');
   });
 });
 

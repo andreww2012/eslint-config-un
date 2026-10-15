@@ -227,18 +227,18 @@ describe('mdx: sub config `codeBlocks`', () => {
 
     it('additionally disables a rule in `mdx/code-blocks` when set via `markdownCodeBlocksRules.additionalDisabledRules`', async () => {
       const configResult = await computeEslintConfig('mdx', {
-        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'default-case': true}}},
+        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'array-callback-return': true}}},
       });
 
-      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'default-case')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'array-callback-return')).toBe(0);
     });
 
     it('ignores a rule of `markdownCodeBlocksRules.additionalDisabledRules` set to `false`', async () => {
       const configResult = await computeEslintConfig('mdx', {
-        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'default-case': false}}},
+        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'array-callback-return': false}}},
       });
 
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'default-case')).toBeUndefined();
+      expect(configResult.getRuleEntry('mdx/code-blocks', 'array-callback-return')).toBeUndefined();
     });
   });
 });

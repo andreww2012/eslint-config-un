@@ -11,5 +11,9 @@ export default definePluginMetadata('antfu', {
     'consistent-list-newline': {stylistic: true, prettierIncompatible: true},
     curly: {stylistic: true, prettierIncompatible: true},
     'if-newline': {stylistic: true, prettierIncompatible: true},
+    'no-import-dist': {disableInCodeBlocks: 'imports'},
+    'no-import-node-modules-by-path': {disableInCodeBlocks: 'imports'},
+    'no-top-level-await': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-ts-export-equal': {disableInCodeBlocks: 'imports'},
   },
 });

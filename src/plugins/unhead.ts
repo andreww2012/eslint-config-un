@@ -6,9 +6,11 @@ export default definePluginMetadata('unhead', {
   suggestedPrefix: ['@unhead', 'more concise and convenient to use; `@` feels redundant'],
   rules: {
     'defer-on-module-script': {stylistic: true},
+    'empty-meta-content': {disableInCodeBlocks: 'emptiness'},
     'numeric-tag-priority': {
       stylistic: [false, 'since the suggested aliases resolve to different priorities'],
     },
     'prefer-define-helpers': {stylistic: true},
+    'viewport-user-scalable': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

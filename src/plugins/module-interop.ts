@@ -5,5 +5,9 @@ export default definePluginMetadata('module-interop', {
   docsUrl: 'https://ota-meshi.github.io/eslint-plugin-module-interop',
   ruleDocsUrl: (ruleName) =>
     `https://ota-meshi.github.io/eslint-plugin-module-interop/rules/${ruleName}.html`,
-  rules: {},
+  rules: {
+    'no-import-cjs': {disableInCodeBlocks: 'imports'},
+    'no-require-esm': {disableInCodeBlocks: 'imports'},
+    'prefer-json-modules': {disableInCodeBlocks: 'imports'},
+  },
 });

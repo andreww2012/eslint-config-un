@@ -7,6 +7,7 @@ export default definePluginMetadata('soml', {
     `https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
     format: {stylistic: true},
+    'key-name-casing': {disableInCodeBlocks: 'tooStrict'},
     'no-block-string-edge-blank-lines': {stylistic: true},
     'no-invisible-characters': {
       stylistic: [

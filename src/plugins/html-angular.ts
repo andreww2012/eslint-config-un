@@ -11,5 +11,10 @@ export default definePluginMetadata('html-angular', {
   prettierLanguage: 'html',
   rules: {
     'class-spacing': {stylistic: true, prettierIncompatible: true},
+    'no-restricted-attr-values': {disableInCodeBlocks: 'tooStrict'},
+    'no-restricted-attrs': {disableInCodeBlocks: 'tooStrict'},
+    'require-attrs': {disableInCodeBlocks: 'tooStrict'},
+    'require-li-container': {disableInCodeBlocks: 'tooStrict'},
+    'use-baseline': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

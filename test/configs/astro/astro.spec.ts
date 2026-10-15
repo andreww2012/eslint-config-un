@@ -1,7 +1,8 @@
 import {GLOB_ASTRO} from '../../../src/constants';
 
 const FIXTURES = {
-  astroCodeBlockWithSetHtmlMd: 'astro-code-block-with-set-html.md',
+  astroCodeBlockWithConflictingSetDirectivesMd:
+    'astro-code-block-with-conflicting-set-directives.md',
   divWithSetHtml: 'div-with-set-html.astro',
 } as const;
 
@@ -114,20 +115,20 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot('"`set:html` can lead to XSS attack."');
   });
 
-  it('`astro/no-set-html-directive` rule fires on an Astro code block using `set:html` inside a .md file', async () => {
+  it('`astro/no-conflict-set-directives` rule fires on an Astro code block with conflicting set directives inside a .md file', async () => {
     const results = await testEslintConfig(
       {astro: true, markdown: true},
-      FIXTURES.astroCodeBlockWithSetHtmlMd,
+      FIXTURES.astroCodeBlockWithConflictingSetDirectivesMd,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.astroCodeBlockWithSetHtmlMd,
-      'astro/no-set-html-directive',
+      FIXTURES.astroCodeBlockWithConflictingSetDirectivesMd,
+      'astro/no-conflict-set-directives',
     );
 
-    expect(error?.message).toMatchInlineSnapshot('"`set:html` can lead to XSS attack."');
+    expect(error?.message).toMatchInlineSnapshot(`"'set:html' conflicts with 'set:text'."`);
   });
 });
 

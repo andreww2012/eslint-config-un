@@ -6,6 +6,7 @@ export default definePluginMetadata('remeda', {
   ruleDocsUrl: (ruleName) =>
     `https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
+    'collection-method-value': {disableInCodeBlocks: 'unused'},
     'prefer-constant': {stylistic: true},
     'prefer-do-nothing': {stylistic: true},
     'prefer-find': {stylistic: true},

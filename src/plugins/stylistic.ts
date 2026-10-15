@@ -21,7 +21,7 @@ export default definePluginMetadata('stylistic', {
     'computed-property-spacing': {prettierIncompatible: true},
     'curly-newline': {prettierIncompatible: true},
     'dot-location': {prettierIncompatible: true},
-    'eol-last': {prettierIncompatible: true},
+    'eol-last': {prettierIncompatible: true, disableInCodeBlocks: 'tooStrict'},
     'exp-jsx-props-style': {prettierIncompatible: true},
     'exp-list-style': {prettierIncompatible: true},
     'function-call-argument-newline': {prettierIncompatible: true},
@@ -76,7 +76,7 @@ export default definePluginMetadata('stylistic', {
     'object-property-newline': {prettierIncompatible: true},
     'one-var-declaration-per-line': {prettierIncompatible: true},
     'operator-linebreak': {prettierIncompatible: true},
-    'padded-blocks': {prettierIncompatible: true},
+    'padded-blocks': {prettierIncompatible: true, disableInCodeBlocks: 'tooStrict'},
     'quote-props': {prettierIncompatible: true},
     quotes: {
       prettierIncompatible: [
