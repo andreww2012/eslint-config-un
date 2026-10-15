@@ -15,6 +15,7 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnAllRuleNames,
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
@@ -44,11 +45,23 @@ const generateNoMissingLabelRefsOptions = (
   },
 ];
 
-const CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS = '.changeset/**/*.md';
-const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = [
-  'LICENSE.md',
-  CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS,
-] as const;
+const GLOB_CHANGESETS = '.changeset/**/*.md';
+const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md', GLOB_CHANGESETS] as const;
+
+// Changesets copies the text of a changeset into `CHANGELOG.md` and the release notes
+const RULES_TO_DISABLE_IN_CHANGESETS: readonly UnAllRuleNames[] = [
+  // Check links against the changeset file, which is never where the text is read
+  'markdown/no-missing-link-fragments',
+  'markdown-links/no-missing-fragments',
+  'markdown-links/no-missing-path',
+  'unicorn/no-missing-local-resource',
+  // All the changesets in the changelog share one set of link definition labels
+  'markdown-preferences/prefer-link-reference-definitions',
+  // A wrapped line shows up as a line break in the release notes
+  'markdown-preferences/max-len',
+  // The front matter only lists the bumped packages
+  'unicorn/require-frontmatter-fields',
+];
 
 /**
  * Markdown related rules.
@@ -58,6 +71,28 @@ const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = [
 export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown'> {
+  /**
+   * Turns off the rules that misjudge [changesets](https://github.com/changesets/changesets), the
+   * text of which ends up in `CHANGELOG.md` and the release notes:
+   * - the rules checking links against the changeset file, which is never where the text is read:
+   *   [`markdown/no-missing-link-fragments`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-link-fragments.md),
+   *   [`markdown-links/no-missing-fragments`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-fragments.html),
+   *   [`markdown-links/no-missing-path`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-path.html)
+   *   and
+   *   [`unicorn/no-missing-local-resource`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-missing-local-resource.md);
+   * - [`markdown-preferences/prefer-link-reference-definitions`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-link-reference-definitions.html):
+   *   all the changesets in the changelog share one set of link definition labels, so a label
+   *   defined twice silently links to the first definition;
+   * - [`markdown-preferences/max-len`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/max-len.html):
+   *   a wrapped line shows up as a line break in the release notes;
+   * - [`unicorn/require-frontmatter-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-frontmatter-fields.md):
+   *   the front matter of a changeset only lists the bumped packages.
+   *
+   * 📁 Default `files`: <code>.changeset/**&#47;*.md</code>
+   * @default true <=> `@changesets/cli` package is installed
+   */
+  configChangesets?: boolean | UnFlatConfigEntryBase<ExtraPlugins>;
+
   /**
    * Lint fenced code blocks (\```lang ... ```) inside Markdown files.
    *
@@ -195,7 +230,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
   context,
   optionsRaw,
 ) => {
+  const isChangesetsCliInstalled = context.packagesInfo['@changesets/cli'] != null;
+
   const optionsResolved = assignDefaults(optionsRaw, {
+    configChangesets: isChangesetsCliInstalled,
     configCodeBlocks: true,
     configSentencesPerLine: false,
     lintMarkdown: true,
@@ -209,6 +247,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     files: parentConfigFiles,
     ignores: parentConfigIgnores,
 
+    configChangesets,
     configCodeBlocks,
     configSentencesPerLine,
 
@@ -410,8 +449,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
             configSentencesPerLine,
             resolveIgnoresOption(parentConfigIgnores, []),
             {
-              [CONFIG_SENTENCES_PER_LINE_IGNORE_CHANGESETS]:
-                context.packagesInfo['@changesets/cli'] != null,
+              [GLOB_CHANGESETS]: isChangesetsCliInstalled,
             },
           )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
         },
@@ -420,4 +458,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
       .enableConfigTesterForPlugin('sentences-per-line')
       .addOverrides();
   }
+
+  context
+    .createConfigBuilder(configChangesets, null)
+    ?.addConfig(['markdown/changesets', {filesDefault: [GLOB_CHANGESETS], ignoresInternal: false}])
+    .disableBulkRules(RULES_TO_DISABLE_IN_CHANGESETS)
+    .addOverrides();
 });

@@ -304,13 +304,6 @@ export default eslintConfig({
       },
     },
     {
-      files: ['.changeset/**/*.md'],
-      rules: {
-        // Changesets copies the text into the changelog, where link definitions don't carry over
-        'markdown-preferences/prefer-link-reference-definitions': 0,
-      },
-    },
-    {
       files: ['README.md/2_2.ts'],
       rules: {
         'ts/consistent-type-definitions': 0,
