@@ -258,6 +258,16 @@ describe('options', () => {
         '[2, {"syntax": "namespace"}]',
       );
     });
+
+    it("sets `zod/consistent-import` rule options respectively when set to `'default'`", async () => {
+      const configResult = await computeEslintConfig({
+        zod: {enforceConsistentImport: 'default'},
+      });
+
+      expect(configResult.getRuleEntry('zod', 'zod/consistent-import')).toMatchInlineSnapshot(
+        '[2, {"syntax": "default"}]',
+      );
+    });
   });
 
   describe('option: `schemaCompiler`', () => {

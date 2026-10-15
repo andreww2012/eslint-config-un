@@ -37,7 +37,8 @@ interface MiniSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   allowedObjectSchemaTypes?: ArrayOrBooleanRecord<ZodObjectSchemaType>;
 
   /**
-   * Same as the respective option of the parent config.
+   * Same as the respective option of the parent config, except that default import can't be
+   * enforced: `'default'` inherited from the parent config is treated as `true`.
    *
    * Affected rule:
    * - [`zod-mini/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/consistent-import.md)
@@ -73,7 +74,7 @@ interface CoreSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   /**
    * Same as the respective option of the parent config, except that only namespace import
    * (`import * as core from 'zod/v4/core'`) can be enforced, since `zod/v4/core` has no `z` export.
-   * `'named'` inherited from the parent config is treated as `true`.
+   * `'named'` and `'default'` inherited from the parent config are treated as `true`.
    *
    * Affected rule:
    * - [`zod-core/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/consistent-import.md)
@@ -149,14 +150,15 @@ export interface ZodEslintConfigOptions<
   configMini?: boolean | MiniSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enforces either namespace import of zod (`import * as z from 'zod'`) or named import
-   * (`import { z } from 'zod'`).
+   * Enforces either namespace import of zod (`import * as z from 'zod'`), named import
+   * (`import { z } from 'zod'`) or default import (`import z from 'zod'`).
    *
    * By default, namespace import is enforced.
    *
    * ⚠️ The option value will propagate to the option of the same name in `core` and `mini`
    * sub-configs, unless explicitly overridden there.
-   * `core` sub-config gets `true` instead of `'named'`.
+   * `mini` sub-config gets `true` instead of `'default'`, and `core` sub-config gets `true` instead
+   * of `'named'` and `'default'`.
    *
    * Affected rule:
    * - [`zod/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
@@ -378,7 +380,11 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addOverrides();
 
   const optionsMiniResolved = assignDefaults(configMini, {
-    enforceConsistentImport: optionsResolved.enforceConsistentImport,
+    // `zod-mini/consistent-import` has no `default` syntax
+    enforceConsistentImport:
+      optionsResolved.enforceConsistentImport === 'default'
+        ? true
+        : optionsResolved.enforceConsistentImport,
   });
   optionsMiniResolved.allowedObjectSchemaTypes ??= optionsResolved.allowedObjectSchemaTypes;
   const miniSchemaVariableName =
@@ -447,9 +453,8 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
   const optionsCoreResolved = assignDefaults(configCore, {
     // `zod/v4/core` has no `z` export, so the namespace import is the only one to enforce
     enforceConsistentImport:
-      optionsResolved.enforceConsistentImport === 'named'
-        ? true
-        : optionsResolved.enforceConsistentImport,
+      typeof optionsResolved.enforceConsistentImport === 'string' ||
+      optionsResolved.enforceConsistentImport,
   });
 
   const configBuilderCore = context.createConfigBuilder(configCore, 'zod-core');

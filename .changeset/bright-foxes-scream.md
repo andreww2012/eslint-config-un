@@ -1,7 +1,8 @@
 ---
-"eslint-config-un": patch
+"eslint-config-un": minor
 ---
 
-zod: updated [`eslint-plugin-zod` from v5.0.0 to v5.1.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@5.0.0...eslint-plugin-zod@5.1.0), [`eslint-plugin-zod-mini` from v2.0.0 to v2.1.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@2.0.0...eslint-plugin-zod-mini@2.1.0) and [`eslint-plugin-zod-core` from v2.0.0 to v2.1.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@2.0.0...eslint-plugin-zod-core@2.1.0):
+zod: updated [`eslint-plugin-zod` from v5.0.0 to v5.2.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@5.0.0...eslint-plugin-zod@5.2.0), [`eslint-plugin-zod-mini` from v2.0.0 to v2.1.1](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@2.0.0...eslint-plugin-zod-mini@2.1.1) and [`eslint-plugin-zod-core` from v2.0.0 to v2.1.1](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@2.0.0...eslint-plugin-zod-core@2.1.1):
 
+- `enforceConsistentImport` option now also accepts `'default'` to enforce default import (`import z from 'zod'`) in [`zod/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md) rule; ⚙️ `mini` and `core` sub-configs, whose rules don't support it, treat it as `true`
 - ⚙️ `core` sub-config: [`zod-core/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/consistent-import.md) rule now enforces namespace import if `enforceConsistentImport` option of the parent config is `'named'`, since the rule no longer supports `named` syntax

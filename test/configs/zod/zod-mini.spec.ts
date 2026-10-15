@@ -190,6 +190,14 @@ describe('zod: sub config `mini`', () => {
         ).toMatchInlineSnapshot('[2, {"syntax": "named"}]');
       });
 
+      it("enables `zod-mini/consistent-import` with default options when parent value is `'default'`", async () => {
+        const configResult = await computeEslintConfig({zod: {enforceConsistentImport: 'default'}});
+
+        expect(
+          configResult.getRuleEntry('zod/mini', 'zod-mini/consistent-import'),
+        ).toMatchInlineSnapshot('2');
+      });
+
       it('overrides parent value when set in sub-config', async () => {
         const configResult = await computeEslintConfig({
           zod: {

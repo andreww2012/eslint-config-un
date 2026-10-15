@@ -191,6 +191,16 @@ describe('zod: sub config `core`', () => {
         ).toMatchInlineSnapshot('2');
       });
 
+      it("enables `zod-core/consistent-import` with default options when parent value is `'default'`", async () => {
+        const configResult = await computeEslintConfig({
+          zod: {enforceConsistentImport: 'default'},
+        });
+
+        expect(
+          configResult.getRuleEntry('zod/core', 'zod-core/consistent-import'),
+        ).toMatchInlineSnapshot('2');
+      });
+
       it('overrides parent value when set in sub-config', async () => {
         const configResult = await computeEslintConfig({
           zod: {
