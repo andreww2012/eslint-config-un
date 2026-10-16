@@ -35,6 +35,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-zod-mini@2.1.1
   - eslint-plugin-zod@5.2.0
   - eslint-plugin-jsdoc@65.3.6
+  - '@eslint/css-tree@4.1.2'
+  - '@eslint/css@2.0.1'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
