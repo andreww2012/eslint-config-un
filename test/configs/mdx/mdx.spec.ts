@@ -1,17 +1,19 @@
+import path from 'node:path';
 import {GLOB_MDX} from '../../../src/constants';
 
 const FIXTURES = {
+  basic: 'basic.mdx',
   unclosedJsxTag: 'unclosed-jsx-tag.mdx',
 } as const;
 
 describe('basic tests', () => {
-  it('creates `mdx/{mdx,setup/code-blocks-processor}` eslint configs and loads `mdx` plugin if set to `true`', async () => {
+  it('creates `mdx/mdx` eslint config with a processor and loads `mdx` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('mdx');
 
     const config = configResult.getConfigByUnPostfix('mdx/mdx');
 
     expect(config).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeDefined();
+    expect(config?.processor).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot('["**/*.mdx"]');
 
     const ignores = config?.ignores;
@@ -22,7 +24,7 @@ describe('basic tests', () => {
     expect(configResult.getLoadedPlugin('mdx')).toBeDefined();
   });
 
-  it('does not create `mdx/{mdx,setup/code-blocks-processor}` eslint configs and does not load `mdx` plugin if set to `false`', async () => {
+  it('does not create `mdx/{mdx,code-blocks-processor}` eslint configs and does not load `mdx` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({mdx: false});
 
     expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
@@ -89,6 +91,48 @@ describe('rules', async () => {
       '["Preprocessing error: Expected a closing tag for `<p>` (3:1-3:4) before the end of `paragraph`"]',
     );
   });
+
+  describe('`mdx/remark` reports are made readable', () => {
+    const PARSING_WITH_REMARK_CONFIG = {
+      mdx: {
+        languageOptions: {
+          parserOptions: {
+            remarkConfigPath: path.join(
+              import.meta.dirname,
+              'fixtures',
+              'remark-config-with-reporting-plugin.mjs',
+            ),
+          },
+        },
+      },
+    } as const;
+
+    it('makes `mdx/remark` reports readable by default', async () => {
+      const results = await testEslintConfig('mdx', FIXTURES.basic, {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {parsing: PARSING_WITH_REMARK_CONFIG},
+      });
+
+      expect(
+        results.flatMap(({messages}) => messages.map(({ruleId, message}) => [ruleId, message])),
+      ).toMatchInlineSnapshot('[["fixture-report-every-file", "Reported by a remark plugin"]]');
+    });
+
+    it('makes `mdx/remark` reports readable in files whose code blocks are not linted', async () => {
+      const results = await testEslintConfig(
+        {mdx: {configCodeBlocks: {ignores: ['**/fixtures/**']}}},
+        FIXTURES.basic,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {parsing: PARSING_WITH_REMARK_CONFIG},
+        },
+      );
+
+      expect(
+        results.flatMap(({messages}) => messages.map(({ruleId, message}) => [ruleId, message])),
+      ).toMatchInlineSnapshot('[["fixture-report-every-file", "Reported by a remark plugin"]]');
+    });
+  });
 });
 
 describe('un options', () => {
@@ -101,11 +145,11 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('mdx/mdx')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `mdx/{mdx,setup/code-blocks-processor}` eslint configs, but not the sub-configs, when set to empty array', async () => {
+    it('disables `mdx/mdx` eslint config, but not the sub-configs, when set to empty array', async () => {
       const configResult = await computeEslintConfig({mdx: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
-      expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeDefined();
       expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
     });
   });

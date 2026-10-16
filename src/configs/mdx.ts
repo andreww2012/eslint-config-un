@@ -2,11 +2,7 @@ import {GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
-import {
-  determineRulesDisabledInEmbeddedCodeBlocks,
-  resolveFilesOption,
-  resolveIgnoresOption,
-} from './shared';
+import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -77,14 +73,10 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
 
   const configBuilderCodeBlocks = context.createConfigBuilder(configCodeBlocks, null);
 
-  const {
-    files: codeBlocksFilesOption,
-    ignores: codeBlocksIgnoresOption,
-    ignoredLanguages: codeBlocksIgnoredLanguages,
-    impliedStrictMode,
-  } = assignDefaults(configCodeBlocks, {impliedStrictMode: true});
-  const codeBlocksFiles = resolveFilesOption(codeBlocksFilesOption, []);
-  const codeBlocksIgnores = resolveIgnoresOption(codeBlocksIgnoresOption, []);
+  const {ignoredLanguages: codeBlocksIgnoredLanguages, impliedStrictMode} = assignDefaults(
+    configCodeBlocks,
+    {impliedStrictMode: true},
+  );
 
   // Legend:
   // 🟢 - in recommended
@@ -107,6 +99,13 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
         },
       ],
       {
+        // Turns `mdx/remark` reports into readable ones, so it must run wherever the rule does
+        ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
+          valueTransformFn: {
+            fn: ({eslintPluginMdx}) =>
+              eslintPluginMdx.createRemarkProcessor({lintCodeBlocks: false}),
+          },
+        }),
         languageOptions: {
           globals: {
             React: false,
@@ -118,29 +117,20 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     .enableConfigTesterForPlugin('mdx')
     .addOverrides();
 
-  // The processor is also what post-processes `mdx/remark` reports, hence it is always added
-  configBuilder?.addConfig(
+  // Comes after `mdx/mdx`, so its processor wins. It also passes the MDX text on, which needs parsing
+  configBuilderCodeBlocks?.addConfig(
     [
       'mdx/code-blocks-processor',
       {
-        applyUserFilesAndIgnores: false,
-        filesDefault: codeBlocksFiles.length > 0 ? codeBlocksFiles : DEFAULT_FILES,
-        ignoresDefault: codeBlocksIgnores,
-        parsingIgnoresInheritedFrom: ['mdx'],
+        filesDefault: DEFAULT_FILES,
+        parseWith: 'mdx',
       },
     ],
     // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
     {
       ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
         valueTransformFn: {
-          scope: {
-            isConfigBuilderCodeBlocksPresent: configBuilderCodeBlocks != null,
-          },
-          fn({eslintPluginMdx}) {
-            return eslintPluginMdx.createRemarkProcessor({
-              lintCodeBlocks: this.isConfigBuilderCodeBlocksPresent,
-            });
-          },
+          fn: ({eslintPluginMdx}) => eslintPluginMdx.createRemarkProcessor({lintCodeBlocks: true}),
         },
       }),
     },

@@ -4,8 +4,13 @@ const FIXTURES = {
 
 describe('mdx: sub config `codeBlocks`', () => {
   describe('basic tests', () => {
-    it('creates `mdx/code-blocks` eslint config by default', async () => {
+    it('creates `mdx/{code-blocks-processor,code-blocks}` eslint configs by default', async () => {
       const configResult = await computeEslintConfig('mdx');
+
+      const processorConfig = configResult.getConfigByUnPostfix('mdx/code-blocks-processor');
+
+      expect(processorConfig?.processor).toBeDefined();
+      expect(processorConfig?.files).toMatchInlineSnapshot('["**/*.mdx"]');
 
       const config = configResult.getConfigByUnPostfix('mdx/code-blocks');
 
@@ -16,9 +21,10 @@ describe('mdx: sub config `codeBlocks`', () => {
       expect(config?.ignores).toBeUndefined();
     });
 
-    it('does not create `mdx/code-blocks` eslint config when set to `false`', async () => {
+    it('does not create `mdx/{code-blocks-processor,code-blocks}` eslint configs when set to `false`', async () => {
       const configResult = await computeEslintConfig({mdx: {configCodeBlocks: false}});
 
+      expect(configResult.getConfigByUnPostfix('mdx/code-blocks-processor')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeUndefined();
     });
 
@@ -81,6 +87,21 @@ describe('mdx: sub config `codeBlocks`', () => {
     it('does not extract fenced code blocks when set to `false`', async () => {
       const results = await testEslintConfig(
         {mdx: {configCodeBlocks: false}},
+        FIXTURES.codeBlockWithConsoleCall,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {extraConfigs: [...EXTRA_CONFIGS]},
+        },
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.codeBlockWithConsoleCall, 'no-console'),
+      ).toBeUndefined();
+    });
+
+    it('does not extract fenced code blocks when the function form of `files` returns an empty array', async () => {
+      const results = await testEslintConfig(
+        {mdx: {configCodeBlocks: {files: () => []}}},
         FIXTURES.codeBlockWithConsoleCall,
         {
           searchFixturesRelativeToPath: import.meta.dirname,
