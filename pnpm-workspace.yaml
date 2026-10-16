@@ -109,6 +109,7 @@ overrides:
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
+  eslint-plugin-html@8.2.1: patches/eslint-plugin-html@8.2.1.patch
   eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch

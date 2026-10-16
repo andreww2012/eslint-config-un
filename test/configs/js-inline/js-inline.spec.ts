@@ -94,6 +94,21 @@ describe('rules', async () => {
 
     expect(error?.message).toMatchInlineSnapshot('"`eval` can be harmful."');
   });
+
+  it('correctly processes inline JS in HTML files when `html` config is enabled and autofix of its rules is disabled', async () => {
+    const results = await testEslintConfig(
+      {jsInline: true, js: true, html: true},
+      FIXTURES.withEval,
+      {
+        searchFixturesRelativeToPath: import.meta.dirname,
+        un: {autofixDisabledGloballyFor: {rules: {'html/head-order': true}}},
+      },
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.withEval, 'no-eval')?.message,
+    ).toMatchInlineSnapshot('"`eval` can be harmful."');
+  });
 });
 
 describe('un options', () => {
