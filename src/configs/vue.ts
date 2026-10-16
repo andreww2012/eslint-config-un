@@ -1371,43 +1371,37 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   }
 
   configBuilder
-    ?.addConfig(
-      [
-        'vue/allow-single-word-component-names',
-        {applyUserFilesAndIgnores: false, parseWith: 'vue'},
-      ],
-      {
-        files: [
-          ...new Set(
-            [
-              resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
-              resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
-              configNuxt &&
-                nuxtLayers.flatMap((layer) => [
-                  joinPaths(layer.app, layer.pages, '**/*.vue'),
-                  joinPaths(layer.app, layer.layouts, '**/*.vue'),
-                  joinPaths(layer.app, 'app.vue'),
-                  joinPaths(layer.app, 'error.vue'),
-                ]),
+    ?.addConfig(['vue/allow-single-word-component-names', {applyUserFilesAndIgnores: false}], {
+      files: [
+        ...new Set(
+          [
+            resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
+            resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
+            configNuxt &&
+              nuxtLayers.flatMap((layer) => [
+                joinPaths(layer.app, layer.pages, '**/*.vue'),
+                joinPaths(layer.app, layer.layouts, '**/*.vue'),
+                joinPaths(layer.app, 'app.vue'),
+                joinPaths(layer.app, 'error.vue'),
+              ]),
 
-              optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
-            ]
-              .flat()
-              .filter((v) => typeof v === 'string'),
-          ),
-        ],
-      },
-    )
+            optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
+          ]
+            .flat()
+            .filter((v) => typeof v === 'string'),
+        ),
+      ],
+    })
     .addRule('multi-word-component-names', OFF);
 
   configBuilder
-    ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
+    ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false}], {
       files: nuxtLayers.map((layer) => joinPaths(layer.app, layer.layouts, '**/*.vue')),
     })
     .addRule('require-explicit-slots', configNuxt ? OFF : null);
 
   configBuilder
-    ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false, parseWith: 'vue'}], {
+    ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false}], {
       files: [
         ...DEFAULT_VUE_FILES,
         configNuxt &&

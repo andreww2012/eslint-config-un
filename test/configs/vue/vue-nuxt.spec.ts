@@ -28,6 +28,14 @@ describe('vue: sub config `nuxt`', () => {
       expect(configResult.getConfigByUnPostfix('vue/nuxt')).toBeUndefined();
     });
 
+    it('does not make the Vue parser parse the other files of nuxt directories', async () => {
+      const configResult = await computeEslintConfig('vue');
+
+      expect(configResult.getConfigByUnPostfix('parsing/vue')?.files).toMatchInlineSnapshot(
+        '["**/*.vue"]',
+      );
+    });
+
     it('creates `vue/nuxt` eslint config when set to `true`, regardless of `nuxt` installation', async () => {
       setInstalledPackages({});
 
