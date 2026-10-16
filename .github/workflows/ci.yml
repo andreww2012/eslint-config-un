@@ -76,6 +76,15 @@ jobs:
       - uses: ./.github/actions/prepare
       - run: pnpm check:type-info
 
+  release-notes:
+    name: Release notes size
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/prepare
+      - run: pnpm check:release-notes
+
   check-links:
     name: Check links
     needs: install
@@ -142,7 +151,17 @@ jobs:
 
   release-main:
     name: Create release PR _OR_ Publish on merge
-    needs: [knip, spellcheck, formatting, typecheck, eslint, check-links, test, e2e, build]
+    needs:
+      - knip
+      - spellcheck
+      - formatting
+      - typecheck
+      - eslint
+      - release-notes
+      - check-links
+      - test
+      - e2e
+      - build
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:

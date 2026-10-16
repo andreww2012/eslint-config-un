@@ -21,6 +21,9 @@ pre-push:
     peers:
       glob: '{package.json,pnpm-lock.yaml,pnpm-workspace.yaml}'
       run: nr check:deps:peers
+    release-notes:
+      glob: '.changeset/**/*.{md,json}'
+      run: nr check:release-notes
 
 post-merge: &install-on-lockfile-change
   commands:

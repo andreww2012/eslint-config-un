@@ -402,6 +402,12 @@ importers:
       '@changesets/cli':
         specifier: 3.0.3
         version: 3.0.3
+      '@changesets/pre':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@changesets/read':
+        specifier: 1.0.1
+        version: 1.0.1
       '@changesets/write':
         specifier: 1.0.1
         version: 1.0.1
