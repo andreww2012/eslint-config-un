@@ -2,6 +2,7 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   elementWithRepeatedAttribute: 'element-with-repeated-attribute.html',
+  textWithRepeatedSpaces: 'text-with-repeated-spaces.html',
 } as const;
 
 describe('basic tests', () => {
@@ -110,6 +111,23 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(`"The attribute 'id' is duplicated."`);
+  });
+
+  it('`html/no-extra-spacing-text` does not report the elements whose whitespace is content', async () => {
+    const results = await testEslintConfig(
+      'html',
+      FIXTURES.textWithRepeatedSpaces,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.textWithRepeatedSpaces,
+        'html/no-extra-spacing-text',
+        {all: true},
+      ).map(({line}) => line),
+    ).toStrictEqual([7]);
   });
 });
 

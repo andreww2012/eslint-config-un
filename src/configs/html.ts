@@ -173,7 +173,7 @@ export default defineUnConfig<HtmlEslintConfigOptions>('html', {
     .addRule('no-extra-spacing-tags', ERROR, [
       {disallowMissing: true, disallowInAssignment: true},
     ]) /** @since 0.60.0 */ // 🟢💅
-    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}]) /** @since 0.27.0 */
+    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre', 'textarea']}]) /** @since 0.27.0 */
     .addRule('no-multiple-empty-lines', WARNING) /** @since 0.11.0 */
     .addRule('no-trailing-spaces', WARNING) /** @since 0.15.0 */
     .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) /** @since 0.5.0 */ // 🟢
