@@ -163,6 +163,21 @@ export class ConfigEntryBuilder<
     return metadata;
   }
 
+  private genConfigName(configName: string) {
+    return genFlatConfigEntryName(
+      `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
+    );
+  }
+
+  /**
+   * Adds a
+   * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores),
+   * which {@link addConfig} is not able to create.
+   */
+  addGlobalIgnores(configName: string, ignores: string[]) {
+    this.addFlatConfig({name: this.genConfigName(configName), ignores});
+  }
+
   setConfigMetadataForRule(
     configNameOrMetadata: string | FlatConfigMetadata,
     {
@@ -204,7 +219,8 @@ export class ConfigEntryBuilder<
   /**
    * Note: `rules` will **always** be added to the resulting config, meaning that this method is not
    * able to create a
-   * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores).
+   * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores):
+   * use {@link addGlobalIgnores} for that.
    *
    * `rules` and `name` keys cannot be overridden.
    */
@@ -408,9 +424,7 @@ export class ConfigEntryBuilder<
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
-      name: genFlatConfigEntryName(
-        `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
-      ),
+      name: this.genConfigName(configName),
       rules: {},
       ...(() => {
         const {settings: settingsRaw} = internalOptions;

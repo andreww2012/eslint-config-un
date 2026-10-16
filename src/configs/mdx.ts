@@ -170,11 +170,9 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     .addOverrides();
 
   if (codeBlocksIgnoredLanguages?.length) {
-    configBuilderCodeBlocks?.addConfig(
-      ['mdx/code-blocks/ignore', {applyUserFilesAndIgnores: false}],
-      {
-        ignores: [`**/*.mdx/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
-      },
+    configBuilderCodeBlocks?.addGlobalIgnores(
+      'mdx/code-blocks/ignore',
+      codeBlocksIgnoredLanguages.map((ignoredLanguage) => `**/*.mdx/**/*.${ignoredLanguage}`),
     );
   }
 });

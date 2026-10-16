@@ -106,8 +106,8 @@ export interface MarkdownEslintConfigOptions<
         UnFlatConfigEntryBase<ExtraPlugins> & {
           /**
            * Note that these languages will be ignored regardless of the specified `files` and
-           * `ignores`, i.e. this option will create a config ignoring by
-           * <code>\*\*&#47;*.md/\*\*&#47;\*.{extensions}</code> pattern.
+           * `ignores`, i.e. this option will create a "global ignores" config with a
+           * <code>\*\*&#47;*.md/\*\*&#47;\*.&lt;extension&gt;</code> pattern for each language.
            *
            * [Markdown only] Since some language codes
            * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`),
@@ -412,11 +412,9 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
     .addOverrides();
 
   if (codeBlocksIgnoredLanguages?.length) {
-    configBuilderCodeBlocks?.addConfig(
-      ['markdown/code-blocks/ignore', {applyUserFilesAndIgnores: false}],
-      {
-        ignores: [`**/*.md/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
-      },
+    configBuilderCodeBlocks?.addGlobalIgnores(
+      'markdown/code-blocks/ignore',
+      codeBlocksIgnoredLanguages.map((ignoredLanguage) => `**/*.md/**/*.${ignoredLanguage}`),
     );
   }
 

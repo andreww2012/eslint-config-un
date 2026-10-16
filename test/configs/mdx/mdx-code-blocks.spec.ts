@@ -167,14 +167,38 @@ describe('mdx: sub config `codeBlocks`', () => {
         expect(configResult.getConfigByUnPostfix('mdx/code-blocks/ignore')).toBeUndefined();
       });
 
-      it('creates `mdx/code-blocks/ignore` with correct ignores when array is provided', async () => {
+      it('creates `mdx/code-blocks/ignore` global ignores eslint config when array is provided', async () => {
         const configResult = await computeEslintConfig({
           mdx: {configCodeBlocks: {ignoredLanguages: ['python', 'ruby']}},
         });
 
+        expect(configResult.getConfigByUnPostfix('mdx/code-blocks/ignore')).toMatchInlineSnapshot(
+          '{"ignores": ["**/*.mdx/**/*.python", "**/*.mdx/**/*.ruby"], "name": "eslint-config-un/mdx/code-blocks/ignore"}',
+        );
+      });
+
+      it('does not lint fenced code blocks in an ignored language', async () => {
+        const results = await testEslintConfig(
+          {mdx: {configCodeBlocks: {ignoredLanguages: ['js'], overrides: {'no-console': 2}}}},
+          FIXTURES.codeBlockWithConsoleCall,
+          import.meta.dirname,
+        );
+
         expect(
-          configResult.getConfigByUnPostfix('mdx/code-blocks/ignore')?.ignores,
-        ).toMatchInlineSnapshot('["**/*.mdx/**/*.{python,ruby}"]');
+          findLintMessageFromLintResults(results, FIXTURES.codeBlockWithConsoleCall, 'no-console'),
+        ).toBeUndefined();
+      });
+
+      it('lints fenced code blocks in a language that is not ignored', async () => {
+        const results = await testEslintConfig(
+          {mdx: {configCodeBlocks: {ignoredLanguages: ['ts'], overrides: {'no-console': 2}}}},
+          FIXTURES.codeBlockWithConsoleCall,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(results, FIXTURES.codeBlockWithConsoleCall, 'no-console'),
+        ).toBeDefined();
       });
     });
 
