@@ -445,38 +445,64 @@ export interface EslintConfigUnOptions<
    * If you set `plugins.<pluginName>: true`, all the fixable plugin's rules will stop being
    * autofixable, except for the ones set to `false` in `rules`.
    *
-   * `rules` object will be merged with the following default value:
-   * ```ts
-   * {
-   *   'case-police/string-check': true,
-   *   'github-actions/action-name-casing': true,
-   *   'jest/prefer-lowercase-title': true,
-   *   'jest/valid-title': true,
-   *   'markdown-preferences/heading-casing': true,
-   *   'markdown-preferences/table-header-casing': true,
-   *   'math/abs': true,
-   *   'math/prefer-math-cbrt': true,
-   *   'math/prefer-math-hypot': true,
-   *   'math/prefer-math-log10': true,
-   *   'math/prefer-math-log10e': true,
-   *   'math/prefer-math-log2': true,
-   *   'math/prefer-math-sqrt': true,
-   *   'math/prefer-math-sqrt1-2': true,
-   *   'math/prefer-math-sum-precise': true,
-   *   'math/prefer-number-is-integer': true,
-   *   'ts/method-signature-style': true,
-   *   'ts/no-unnecessary-type-arguments': true,
-   *   'unicorn/catch-error-name': true,
-   *   'unicorn/consistent-existence-index-check': true,
-   *   'unicorn/explicit-length-check': true,
-   *   'unicorn/no-useless-undefined': true,
-   *   'unicorn/prefer-private-class-fields': true,
-   *   'unicorn/prefer-spread': true,
-   *   'unicorn/prefer-string-raw': true,
-   *   'vitest/prefer-lowercase-title': true,
-   *   'vitest/valid-title': true,
-   * }
-   * ```
+   * `rules` object will be merged with the default value, which disables autofix for these rules:
+   * - [`case-police/string-check`](https://github.com/antfu/case-police/blob/HEAD/README.md)
+   * - [`e18e/prefer-array-at`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-array-from-map`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-array-some`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-array-to-reversed`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-array-to-sorted`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-includes-over-regex-test`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-nullish-coalescing`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-spread-syntax`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`e18e/prefer-timer-args`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
+   * - [`github-actions/action-name-casing`](https://eslint-plugin-github-action.ntnyq.com/rules/action-name-casing)
+   * - [`html/head-order`](https://html-eslint.org/docs/rules/head-order)
+   * - [`jest/prefer-lowercase-title`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-lowercase-title.md)
+   * - [`jest/prefer-mock-promise-shorthand`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-mock-promise-shorthand.md)
+   * - [`jest/prefer-mock-return-shorthand`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-mock-return-shorthand.md)
+   * - [`jest/valid-title`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-title.md)
+   * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
+   * - [`markdown-preferences/thematic-break-character-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/thematic-break-character-style.html)
+   * - [`markdown/no-missing-atx-heading-space`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-atx-heading-space.md)
+   * - [`markdown/no-space-in-emphasis`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-space-in-emphasis.md)
+   * - [`math/abs`](https://ota-meshi.github.io/eslint-plugin-math/rules/abs.html)
+   * - [`math/prefer-exponentiation-operator`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-exponentiation-operator.html)
+   * - [`math/prefer-math-cbrt`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-cbrt.html)
+   * - [`math/prefer-math-hypot`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-hypot.html)
+   * - [`math/prefer-math-log10`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-log10.html)
+   * - [`math/prefer-math-log10e`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-log10e.html)
+   * - [`math/prefer-math-log2`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-log2.html)
+   * - [`math/prefer-math-sqrt`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-sqrt.html)
+   * - [`math/prefer-math-sqrt1-2`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-sqrt1-2.html)
+   * - [`math/prefer-math-sum-precise`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-math-sum-precise.html)
+   * - [`math/prefer-number-is-integer`](https://ota-meshi.github.io/eslint-plugin-math/rules/prefer-number-is-integer.html)
+   * - [`playwright/prefer-lowercase-title`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/prefer-lowercase-title.md)
+   * - [`playwright/valid-title`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/valid-title.md)
+   * - [`promise/prefer-catch`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/prefer-catch.md)
+   * - [`react/function-component-definition`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/function-component-definition.md)
+   * - [`ts/method-signature-style`](https://typescript-eslint.io/rules/method-signature-style)
+   * - [`ts/no-unnecessary-type-arguments`](https://typescript-eslint.io/rules/no-unnecessary-type-arguments)
+   * - [`unicorn/catch-error-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/catch-error-name.md)
+   * - [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-existence-index-check.md)
+   * - [`unicorn/explicit-length-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/explicit-length-check.md)
+   * - [`unicorn/no-useless-spread`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-spread.md)
+   * - [`unicorn/no-useless-undefined`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md)
+   * - [`unicorn/prefer-at`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-at.md)
+   * - [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-min-max.md)
+   * - [`unicorn/prefer-modern-dom-apis`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-modern-dom-apis.md)
+   * - [`unicorn/prefer-modern-math-apis`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-modern-math-apis.md)
+   * - [`unicorn/prefer-private-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-private-class-fields.md)
+   * - [`unicorn/prefer-spread`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-spread.md)
+   * - [`unicorn/prefer-string-raw`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-raw.md)
+   * - [`unicorn/prefer-string-starts-ends-with`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-starts-ends-with.md)
+   * - [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
+   * - [`vitest/prefer-lowercase-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-lowercase-title.md)
+   * - [`vitest/prefer-mock-promise-shorthand`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-mock-promise-shorthand.md)
+   * - [`vitest/prefer-mock-return-shorthand`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-mock-return-shorthand.md)
+   * - [`vitest/valid-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/valid-title.md)
+   * - [`yaml/plain-scalar`](https://ota-meshi.github.io/eslint-plugin-yml/rules/plain-scalar.html)
    *
    * Other special values:
    * - `true`: autofix will be disabled for all the fixable rules in all the plugins.

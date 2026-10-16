@@ -378,6 +378,46 @@ ${renderTypeInfo(plugins, typeInfo)}
 `;
 };
 
+const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIR, 'src/config-un/shared.ts');
+
+const AUTOFIX_DEFAULTS_JSDOC_INTRO =
+  '`rules` object will be merged with the default value, which disables autofix for these rules:\n';
+const JSDOC_EMPTY_LINE = '   *\n';
+
+/**
+ * A plugin documenting its rules on a single page has no per-rule URL
+ */
+const getRuleDocsUrl = ({metadata}: DiscoveredPlugin, ruleName: string) =>
+  metadata.ruleDocsUrl?.(ruleName) ||
+  (typeof metadata.docsUrl === 'string' ? metadata.docsUrl : metadata.docsUrl?.url);
+
+/**
+ * The JSDoc of the root option lists the rules too, so that it shows up on hover
+ */
+const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) => {
+  const source = await fs.readFile(CONFIG_UN_SHARED_PATH, 'utf8');
+  const intro = source.indexOf(AUTOFIX_DEFAULTS_JSDOC_INTRO);
+  const listEnd = intro === -1 ? -1 : source.indexOf(JSDOC_EMPTY_LINE, intro);
+  if (listEnd === -1) {
+    throw new Error(
+      `The list of rules with autofix disabled by default is missing from the JSDoc in ${CONFIG_UN_SHARED_PATH}`,
+    );
+  }
+
+  const pluginsByPrefix = new Map(plugins.map((plugin) => [plugin.prefix, plugin]));
+  const list = collectTrait(plugins, 'autofixDisabled')
+    .map(({prefix, ruleName, fullRuleName}) => {
+      const plugin = pluginsByPrefix.get(prefix);
+      const url = plugin && getRuleDocsUrl(plugin, ruleName);
+      return `   * - ${url ? `[\`${fullRuleName}\`](${url})` : `\`${fullRuleName}\``}\n`;
+    })
+    .join('');
+  await fs.writeFile(
+    CONFIG_UN_SHARED_PATH,
+    `${source.slice(0, intro + AUTOFIX_DEFAULTS_JSDOC_INTRO.length)}${list}${source.slice(listEnd)}`,
+  );
+};
+
 export const writePluginMetadataArtifacts = async (format: (code: string) => Promise<string>) => {
   const plugins = await readPluginMetadata();
 
@@ -387,7 +427,10 @@ export const writePluginMetadataArtifacts = async (format: (code: string) => Pro
   }
 
   const code = await format(renderArtifacts(plugins));
-  await fs.writeFile(pathe.join(ROOT_DIR, 'src/plugins.gen.ts'), code);
+  await Promise.all([
+    fs.writeFile(pathe.join(ROOT_DIR, 'src/plugins.gen.ts'), code),
+    writeAutofixDefaultsJsdoc(plugins),
+  ]);
 
   return {pluginsCount: plugins.length, warnings};
 };
