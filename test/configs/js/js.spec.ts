@@ -3,10 +3,12 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML, GLOB_TS_X, GLOB_YML_YAML} from '../.
 const FIXTURES = {
   typescriptSyntax: 'typescript-syntax.ts',
   usedConsoleLog: 'used-console-log.js',
+  useStrictDirectiveCjs: 'use-strict-directive.cjs',
+  useStrictDirectiveJs: 'use-strict-directive.js',
 } as const;
 
 describe('basic tests', () => {
-  it('creates `js`, `js/stylistic_spaced-comment` and `js/disable-in-ts-files` eslint configs if set to `true`', async () => {
+  it('creates `js`, `js/stylistic_spaced-comment`, `js/disable-in-ts-files` and `js/commonjs` eslint configs if set to `true`', async () => {
     const configResult = await computeEslintConfig('js');
 
     const config = configResult.getConfigByUnPostfix('js');
@@ -17,6 +19,9 @@ describe('basic tests', () => {
     expect(
       configResult.getConfigByUnPostfix('js/disable-in-ts-files')?.files,
     ).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+    expect(configResult.getConfigByUnPostfix('js/commonjs')?.files).toMatchInlineSnapshot(
+      '["**/*.c[jt]s?(x)"]',
+    );
 
     const ignores = config?.ignores;
 
@@ -28,12 +33,13 @@ describe('basic tests', () => {
     ).toIncludeAllMembers([...(ignores || []), GLOB_YML_YAML, GLOB_HTM_HTML]);
   });
 
-  it('does not create `js`, `js/stylistic_spaced-comment` and `js/disable-in-ts-files` eslint configs if set to `false`', async () => {
+  it('does not create `js`, `js/stylistic_spaced-comment`, `js/disable-in-ts-files` and `js/commonjs` eslint configs if set to `false`', async () => {
     const configResult = await computeEslintConfig({js: false});
 
     expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
     expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeUndefined();
     expect(configResult.getConfigByUnPostfix('js/disable-in-ts-files')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('js/commonjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -122,6 +128,36 @@ describe('rules', async () => {
       );
 
       expect(results[0]?.messages.map(({ruleId}) => ruleId)).toStrictEqual([]);
+    });
+  });
+
+  describe('in CommonJS files', () => {
+    it('turns off `strict`', () => {
+      expect(configResult.getRuleSeverities('js/commonjs')).toMatchObject({strict: 0});
+    });
+
+    it('does not report the `use strict` directive', async () => {
+      const results = await testEslintConfig(
+        'js',
+        FIXTURES.useStrictDirectiveCjs,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.useStrictDirectiveCjs, 'strict'),
+      ).toBeUndefined();
+    });
+
+    it('still reports the `use strict` directive in modules', async () => {
+      const results = await testEslintConfig(
+        'js',
+        FIXTURES.useStrictDirectiveJs,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.useStrictDirectiveJs, 'strict')?.message,
+      ).toMatchInlineSnapshot(`"'use strict' is unnecessary inside of modules."`);
     });
   });
 });

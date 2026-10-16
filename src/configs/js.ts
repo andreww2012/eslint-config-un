@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TS_X, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_CJS_CTS_X, GLOB_TS_X, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -357,6 +357,13 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
       ...CORE_RULES_HANDLED_BY_TS_COMPILER,
       ...CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
     ]);
+
+  // Linted as modules, but run as scripts: dropping the directive turns sloppy mode on
+  configBuilder
+    ?.addConfig(['js/commonjs', {applyUserFilesAndIgnores: false}], {
+      files: [GLOB_CJS_CTS_X],
+    })
+    .addRule('strict', OFF);
 
   // TODO possible to do anything with this?
   // Note: do not exclude YAML or HTML files from ignore-list. This rule is triggered
