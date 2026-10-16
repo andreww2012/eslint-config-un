@@ -18,7 +18,13 @@ export default definePluginMetadata('vitest', {
     'no-hooks': {disableInCodeBlocks: 'tooStrict'},
     'no-identical-title': {disableInCodeBlocks: 'alternatives'},
     'no-import-node-test': {disableInCodeBlocks: 'imports'},
-    'no-importing-vitest-globals': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-importing-vitest-globals': {
+      autofixDisabled: [
+        true,
+        "removing the imports breaks the tests unless Vitest's `globals` option is on, which it is not by default",
+      ],
+      disableInCodeBlocks: 'runtimeOnly',
+    },
     'no-interpolation-in-snapshots': {stylistic: true},
     'no-restricted-matchers': {disableInCodeBlocks: 'tooStrict'},
     'no-restricted-vi-methods': {disableInCodeBlocks: 'tooStrict'},
@@ -51,8 +57,20 @@ export default definePluginMetadata('vitest', {
       stylistic: [false, 'titles name snapshots and are matched by test filters'],
       autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
     },
-    'prefer-mock-promise-shorthand': {stylistic: true},
-    'prefer-mock-return-shorthand': {stylistic: true},
+    'prefer-mock-promise-shorthand': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'the resolved value is computed once when the mock is set up instead of on every call',
+      ],
+    },
+    'prefer-mock-return-shorthand': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'the returned value is read once when the mock is set up instead of on every call, so returned objects are shared between calls',
+      ],
+    },
     'prefer-snapshot-hint': {disableInCodeBlocks: 'tooStrict'},
     'prefer-to-be': {stylistic: true},
     'prefer-to-contain': {stylistic: true},

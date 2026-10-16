@@ -51,7 +51,7 @@ You can change any of that without rewriting the defaults by hand.
   Configs come with [options of their own](#custom-options) which are often simpler and can cover several rules at once: one `jest` option sets up all the `jest/padding-around-*` rules.
 - **A rule whose autofix you don't trust has to be turned off entirely.**
   ESLint has [no way to turn off the autofix of a single rule](https://github.com/eslint/rfcs/pull/125), so this config [does it for you](#disabling-rule-autofix), either for a rule as a whole or per file.
-  A few autofixes are [already disabled](#autofixdisabledgloballyfor) by default, and you can turn them back on.
+  Autofixes that are known to be unsafe are [already disabled](#autofixdisabledgloballyfor) by default, and you can turn them back on.
 - **Limiting a rule to certain files means writing another config block.**
   Every [rule entry](#rule-entry-unruleentry-interface) accepts its own `files` and `ignores`.
 - **Rules requiring type information need a config and a parser of their own.**

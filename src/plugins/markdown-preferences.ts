@@ -20,7 +20,13 @@ export default definePluginMetadata('markdown-preferences', {
     'emoji-notation': {stylistic: true},
     'emphasis-delimiters-style': {stylistic: true, prettierIncompatible: true},
     'hard-linebreak-style': {stylistic: true},
-    'heading-casing': {autofixDisabled: [true, 'may change the meaning of the text']},
+    'heading-casing': {
+      autofixDisabled: [
+        true,
+        // Reported: https://github.com/ota-meshi/eslint-plugin-markdown-preferences/issues/239
+        'may change the meaning of the text',
+      ],
+    },
     indent: {stylistic: true, prettierIncompatible: true},
     'level1-heading-style': {stylistic: true},
     'level2-heading-style': {stylistic: true},
@@ -52,7 +58,13 @@ export default definePluginMetadata('markdown-preferences', {
     'setext-heading-underline-length': {stylistic: true},
     'sort-definitions': {stylistic: true},
     'strikethrough-delimiters-style': {stylistic: true, prettierIncompatible: true},
-    'table-header-casing': {autofixDisabled: [true, 'may change the meaning of the text']},
+    'table-header-casing': {
+      autofixDisabled: [
+        true,
+        // Reported: https://github.com/ota-meshi/eslint-plugin-markdown-preferences/issues/239
+        'may change the meaning of the text',
+      ],
+    },
     'table-leading-trailing-pipes': {
       stylistic: true,
       prettierIncompatible: [false, 'agrees with Prettier on alignment'],
@@ -68,7 +80,15 @@ export default definePluginMetadata('markdown-preferences', {
       stylistic: true,
       prettierIncompatible: [false, 'agrees with Prettier on alignment'],
     },
-    'thematic-break-character-style': {stylistic: true, prettierIncompatible: true},
+    'thematic-break-character-style': {
+      stylistic: true,
+      prettierIncompatible: true,
+      autofixDisabled: [
+        true,
+        // Reported: https://github.com/ota-meshi/eslint-plugin-markdown-preferences/issues/326
+        'a `---` line right after a paragraph turns the paragraph into a heading',
+      ],
+    },
     'thematic-break-length': {stylistic: true, prettierIncompatible: true},
     'thematic-break-sequence-pattern': {stylistic: true, prettierIncompatible: true},
   },

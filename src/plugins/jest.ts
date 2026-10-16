@@ -46,8 +46,21 @@ export default definePluginMetadata('jest', {
       stylistic: [false, 'titles name snapshots and are matched by test filters'],
       autofixDisabled: [true, "strings/symbols shouldn't be changed by autofix"],
     },
-    'prefer-mock-promise-shorthand': {stylistic: true},
-    'prefer-mock-return-shorthand': {stylistic: true},
+    'prefer-mock-promise-shorthand': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'the resolved value is computed once when the mock is set up instead of on every call',
+      ],
+    },
+    'prefer-mock-return-shorthand': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        // Partly fixed: https://github.com/jest-community/eslint-plugin-jest/issues/1907
+        'the returned value is read once when the mock is set up instead of on every call, so returned objects are shared between calls',
+      ],
+    },
     'prefer-snapshot-hint': {disableInCodeBlocks: 'tooStrict'},
     'prefer-to-be': {stylistic: true},
     'prefer-to-contain': {stylistic: true},

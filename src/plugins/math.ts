@@ -10,7 +10,13 @@ export default definePluginMetadata('math', {
       requiresTypeInfo: 'optional',
       autofixDisabled: [true, 'the ternary form it rewrites keeps -0, the method returns +0'],
     },
-    'prefer-exponentiation-operator': {stylistic: true},
+    'prefer-exponentiation-operator': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'shifts the result by a digit for three or more factors, and throws for BigInt operands',
+      ],
+    },
     'prefer-math-cbrt': {
       stylistic: [false, 'a negative input gives NaN before the fix and a real root after it'],
       autofixDisabled: [true, 'changes NaN into a real root for negative input'],

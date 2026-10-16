@@ -34,7 +34,14 @@ export default definePluginMetadata('yaml', {
     'no-multiple-empty-lines': {stylistic: true, prettierIncompatible: true},
     'no-trailing-spaces': {stylistic: true, prettierIncompatible: true},
     'no-trailing-zeros': {stylistic: true, prettierIncompatible: true},
-    'plain-scalar': {stylistic: true},
+    'plain-scalar': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        // Won't fix by default, YAML 1.1 is opt-in: https://github.com/ota-meshi/eslint-plugin-yml/issues/174
+        'unquoted `yes`, `on`, `no` and dates are booleans and timestamps to YAML 1.1 parsers, like the ones Kubernetes and Ansible use',
+      ],
+    },
     quotes: {stylistic: true, prettierIncompatible: true},
     'require-string-key': {stylistic: true},
     'sort-keys': {stylistic: true},

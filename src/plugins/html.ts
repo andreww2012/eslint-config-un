@@ -11,7 +11,14 @@ export default definePluginMetadata('html', {
     'class-spacing': {stylistic: true, prettierIncompatible: true},
     'css-no-empty-blocks': {disableInCodeBlocks: 'emptiness'},
     'element-newline': {stylistic: true, prettierIncompatible: true},
-    'head-order': {stylistic: true},
+    'head-order': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        // Reported: https://github.com/yeonjuan/html-eslint/issues/709
+        'moving stylesheets and sync scripts past each other changes which styles win and when the scripts run',
+      ],
+    },
     indent: {stylistic: true, prettierIncompatible: true},
     lowercase: {stylistic: true},
     'no-accesskey-attrs': {disableInCodeBlocks: 'runtimeOnly'},

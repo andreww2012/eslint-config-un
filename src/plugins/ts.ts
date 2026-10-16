@@ -32,6 +32,7 @@ export default definePluginMetadata('ts', {
     'method-signature-style': {
       autofixDisabled: [
         true,
+        // Won't fix, documented instead: https://github.com/typescript-eslint/typescript-eslint/issues/11806
         'a property signature checks its parameters more strictly than a method one, so the fix can break existing assignments',
       ],
       disableInCodeBlocks: 'typeStrictness',
@@ -65,7 +66,11 @@ export default definePluginMetadata('ts', {
     'no-unnecessary-template-expression': {stylistic: true},
     'no-unnecessary-type-arguments': {
       stylistic: true,
-      autofixDisabled: [true, 'could remove type aliases'],
+      autofixDisabled: [
+        true,
+        // Won't fix: https://github.com/typescript-eslint/typescript-eslint/issues/12196
+        'dropping an argument that equals the default lets inference pick a narrower type, which can break type checking',
+      ],
     },
     'no-unnecessary-type-assertion': {
       stylistic: [

@@ -9,7 +9,12 @@ export default definePluginMetadata('github-actions', {
     'consistent with the platform name (and `eslint-plugin-github-actions` looks unmaintained)',
   ],
   rules: {
-    'action-name-casing': {autofixDisabled: [true, 'may break the name']},
+    'action-name-casing': {
+      autofixDisabled: [
+        true,
+        'mangles acronyms and punctuation, like `Deploy to AWS (CI)` into `Deploy To Aws Ci`, and other workflows match a workflow by its name',
+      ],
+    },
     'prefer-file-extension': {stylistic: true},
   },
 });

@@ -11,7 +11,14 @@ export default definePluginMetadata('promise', {
     'no-native': {disableInCodeBlocks: 'runtimeOnly'},
     'no-promise-in-callback': {disableInCodeBlocks: 'runtimeOnly'},
     'param-names': {stylistic: true},
-    'prefer-catch': {disableInCodeBlocks: 'runtimeOnly'},
+    'prefer-catch': {
+      autofixDisabled: [
+        true,
+        // Reported: https://github.com/eslint-community/eslint-plugin-promise/issues/613
+        '`then(a, b)` becomes `catch(b).then(a)`, so `a` also runs after `b` recovers',
+      ],
+      disableInCodeBlocks: 'runtimeOnly',
+    },
     'spec-only': {disableInCodeBlocks: 'runtimeOnly'},
     'valid-params': {disableInCodeBlocks: 'emptiness'},
   },

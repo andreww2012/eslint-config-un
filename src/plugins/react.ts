@@ -15,7 +15,13 @@ export default definePluginMetadata('react', {
     'forbid-dom-props': {disableInCodeBlocks: 'tooStrict'},
     'forbid-foreign-prop-types': {disableInCodeBlocks: 'runtimeOnly'},
     'forbid-prop-types': {disableInCodeBlocks: 'typeStrictness'},
-    'function-component-definition': {stylistic: true},
+    'function-component-definition': {
+      stylistic: true,
+      autofixDisabled: [
+        true,
+        'an arrow function is not hoisted, so a component used above its declaration throws on load',
+      ],
+    },
     'hook-use-state': {stylistic: true},
     'iframe-missing-sandbox': {disableInCodeBlocks: 'runtimeOnly'},
     'jsx-boolean-value': {stylistic: true},
