@@ -164,6 +164,8 @@ export interface MarkdownEslintConfigOptions<
   /**
    * Choose a Markdown language dialect globally or per specific files.
    * For each array item, a separate config entry will be created.
+   * Its `files` default to the `files` of this config, and the `ignores` of this config are always
+   * applied on top of its own.
    * `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
    *
    * If `gfm` syntax is used, the affected rule will be enabled and have its `allowLabels` option
@@ -332,15 +334,15 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
       .addOverrides();
 
     if (Array.isArray(language)) {
-      language.forEach((markdownLanguageSettings, i) => {
-        const dialect = markdownLanguageSettings.language;
+      const parentConfigIgnoresResolved = resolveIgnoresOption(parentConfigIgnores, []);
+      language.forEach(({language: dialect, files, ignores}, i) => {
         configBuilder
           ?.addConfig([
             `markdown/language-override/${i}`,
             {
               applyUserFilesAndIgnores: false,
-              filesDefault: markdownLanguageSettings.files,
-              ignoresDefault: markdownLanguageSettings.ignores,
+              filesDefault: files?.length ? files : parentConfigFiles,
+              ignoresDefault: [...parentConfigIgnoresResolved, ...(ignores || [])],
               parseWith: ['markdown', dialect],
             },
           ])

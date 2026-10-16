@@ -212,6 +212,35 @@ describe('options', () => {
       ).toStrictEqual(FILES);
     });
 
+    it('uses the `files` of the config in `markdown/language-override/{i}` eslint config when the item has none', async () => {
+      const FILES = ['docs/**/*.md'] as const;
+
+      const configResult = await computeEslintConfig({
+        markdown: {files: FILES, language: [{language: 'commonmark'}]},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('markdown/language-override/0')?.files,
+      ).toStrictEqual(FILES);
+    });
+
+    it('applies the `ignores` of the config to `markdown/language-override/{i}` eslint config along with the item ones', async () => {
+      const IGNORES = ['CHANGELOG.md'] as const;
+      const ITEM_IGNORES = ['legacy/**'] as const;
+
+      const configResult = await computeEslintConfig({
+        markdown: {
+          ignores: IGNORES,
+          language: [{language: 'commonmark', files: ['**/*.md'], ignores: [...ITEM_IGNORES]}],
+        },
+      });
+
+      const ignores = configResult.getConfigByUnPostfix('markdown/language-override/0')?.ignores;
+
+      expect(ignores).toIncludeAllMembers([...IGNORES, ...ITEM_IGNORES]);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length + ITEM_IGNORES.length);
+    });
+
     it('does not create language override configs when `language` is a string', async () => {
       const configResult = await computeEslintConfig({
         markdown: {language: 'commonmark'},
