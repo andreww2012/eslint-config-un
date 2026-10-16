@@ -61,7 +61,7 @@ export default definePluginMetadata('e18e', {
     'prefer-charcode-at-in-loop': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'performance',
-    }, // cspell:disable-line
+    },
     'prefer-date-now': {stylistic: true},
     'prefer-exponentiation-operator': {stylistic: true},
     'prefer-flatmap-over-map-flat': {stylistic: true},

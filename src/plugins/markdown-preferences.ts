@@ -38,7 +38,6 @@ export default definePluginMetadata('markdown-preferences', {
     'link-title-style': {stylistic: true, prettierIncompatible: true},
     'list-marker-alignment': {stylistic: true, prettierIncompatible: true},
     'max-len': {prettierIncompatible: true},
-    // cspell:disable-next-line
     'no-laziness-blockquotes': {stylistic: true},
     'no-multi-spaces': {stylistic: true, prettierIncompatible: true},
     'no-multiple-empty-lines': {stylistic: true, prettierIncompatible: true},
@@ -50,11 +49,9 @@ export default definePluginMetadata('markdown-preferences', {
     'ordered-list-marker-style': {stylistic: true, prettierIncompatible: true},
     'padded-custom-containers': {stylistic: true},
     'padding-line-between-blocks': {stylistic: true},
-    // cspell:disable-next-line
     'prefer-autolinks': {stylistic: true},
     'prefer-fenced-code-blocks': {stylistic: true},
     'prefer-link-reference-definitions': {stylistic: true},
-    // cspell:disable-next-line
     'setext-heading-underline-length': {stylistic: true},
     'sort-definitions': {stylistic: true},
     'strikethrough-delimiters-style': {stylistic: true, prettierIncompatible: true},

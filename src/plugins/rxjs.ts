@@ -35,13 +35,13 @@ export default definePluginMetadata('rxjs', {
     'no-subject-value': {requiresTypeInfo: true},
     'no-subscribe-handlers': {requiresTypeInfo: true},
     'no-tap': {disableInCodeBlocks: 'tooStrict'},
-    'no-topromise': {requiresTypeInfo: true}, // cspell:disable-line
+    'no-topromise': {requiresTypeInfo: true},
     'no-unbound-methods': {requiresTypeInfo: true},
     'no-unsafe-catch': {requiresTypeInfo: true},
     'no-unsafe-first': {requiresTypeInfo: true},
     'no-unsafe-subject-next': {requiresTypeInfo: true},
-    'no-unsafe-switchmap': {requiresTypeInfo: true}, // cspell:disable-line
-    'no-unsafe-takeuntil': {requiresTypeInfo: true}, // cspell:disable-line
+    'no-unsafe-switchmap': {requiresTypeInfo: true},
+    'no-unsafe-takeuntil': {requiresTypeInfo: true},
     'prefer-observer': {requiresTypeInfo: true},
     'suffix-subjects': {requiresTypeInfo: true, stylistic: true},
     'throw-error': {requiresTypeInfo: true},

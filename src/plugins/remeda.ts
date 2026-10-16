@@ -11,7 +11,6 @@ export default definePluginMetadata('remeda', {
     'prefer-do-nothing': {stylistic: true},
     'prefer-find': {stylistic: true},
     'prefer-flat-map': {stylistic: true},
-    // cspell:disable-next-line
     'prefer-has-atleast': {stylistic: true},
     'prefer-is-empty': {stylistic: true},
     'prefer-is-nullish': {stylistic: true},

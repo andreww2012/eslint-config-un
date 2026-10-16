@@ -1,4 +1,28 @@
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 import type {CSpellSettings} from 'cspell';
+
+const ROOT_DIR = import.meta.dirname || process.cwd();
+
+// TODO drop once cspell reads it itself: https://github.com/streetsidesoftware/cspell/issues/2709
+const readGitExcludePatterns = () => {
+  try {
+    // eslint-disable-next-line sonar/no-os-command-from-path
+    const excludeFilePath = execFileSync('git', ['rev-parse', '--git-path', 'info/exclude'], {
+      cwd: ROOT_DIR,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return fs
+      .readFileSync(path.resolve(ROOT_DIR, excludeFilePath), 'utf8')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith('#'));
+  } catch {
+    return [];
+  }
+};
 
 export default {
   useGitignore: true,
@@ -19,6 +43,7 @@ export default {
     '.all-contributorsrc',
     '.changeset/*.json',
     '.agents/guidelines.md',
+    ...readGitExcludePatterns(),
   ],
   dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
@@ -140,5 +165,12 @@ export default {
     'strikethrough',
     'unexpressible',
     'cooldown',
+  ],
+  overrides: [
+    {
+      // Rule names come from the plugins, and the metadata generator rejects unknown ones
+      filename: 'src/plugins/*.ts',
+      ignoreRegExpList: [String.raw`/^\s*(?:'[\w@/-]+'|\w+)(?=:)/gm`],
+    },
   ],
 } satisfies CSpellSettings;

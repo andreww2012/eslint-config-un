@@ -1,4 +1,3 @@
-// cspell:ignore disposablestack plaindate
 import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('es', {
@@ -37,7 +36,7 @@ export default definePluginMetadata('es', {
     'no-array-prototype-findlast-findlastindex': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-array-prototype-flat': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-array-prototype-foreach': {
       requiresTypeInfo: 'optional',
@@ -66,15 +65,15 @@ export default definePluginMetadata('es', {
     'no-array-prototype-toreversed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-array-prototype-tosorted': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-array-prototype-tospliced': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-array-prototype-values': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-array-prototype-with': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-array-string-prototype-at': {
@@ -107,14 +106,14 @@ export default definePluginMetadata('es', {
     'no-dataview-prototype-getfloat16-setfloat16': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-date-now': {disableInCodeBlocks: 'runtimeOnly'},
     'no-date-prototype-getyear-setyear': {requiresTypeInfo: 'optional'},
     'no-date-prototype-togmtstring': {requiresTypeInfo: 'optional'},
     'no-date-prototype-totemporalinstant': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-default-parameters': {disableInCodeBlocks: 'runtimeOnly'},
     'no-destructuring': {disableInCodeBlocks: 'runtimeOnly'},
     'no-disposablestack': {disableInCodeBlocks: 'runtimeOnly'},
@@ -138,7 +137,7 @@ export default definePluginMetadata('es', {
     'no-intl-datetimeformat-prototype-formatrange': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-datetimeformat-prototype-formattoparts': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
@@ -151,43 +150,43 @@ export default definePluginMetadata('es', {
     'no-intl-locale-prototype-firstdayofweek': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-getcalendars': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-getcollations': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-gethourcycles': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-getnumberingsystems': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-gettextinfo': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-gettimezones': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-locale-prototype-getweekinfo': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-numberformat-prototype-formatrange': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-numberformat-prototype-formatrangetoparts': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-numberformat-prototype-formattoparts': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
@@ -196,7 +195,7 @@ export default definePluginMetadata('es', {
     'no-intl-pluralrules-prototype-selectrange': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-intl-relativetimeformat': {disableInCodeBlocks: 'runtimeOnly'},
     'no-intl-segmenter': {disableInCodeBlocks: 'runtimeOnly'},
     'no-intl-supportedvaluesof': {disableInCodeBlocks: 'runtimeOnly'},
@@ -254,7 +253,7 @@ export default definePluginMetadata('es', {
     'no-iterator-prototype-toarray': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-iterator-prototype-windows': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
@@ -275,11 +274,11 @@ export default definePluginMetadata('es', {
     'no-map-prototype-getorinsert': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-map-prototype-getorinsertcomputed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-math-acosh': {disableInCodeBlocks: 'runtimeOnly'},
     'no-math-asinh': {disableInCodeBlocks: 'runtimeOnly'},
     'no-math-atanh': {disableInCodeBlocks: 'runtimeOnly'},
@@ -315,7 +314,7 @@ export default definePluginMetadata('es', {
     'no-nonstandard-asyncdisposablestack-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-atomics-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-bigint-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-bigint-prototype-properties': {
@@ -347,7 +346,7 @@ export default definePluginMetadata('es', {
     'no-nonstandard-finalizationregistry-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-function-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-intl-collator-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-intl-collator-prototype-properties': {
@@ -363,12 +362,12 @@ export default definePluginMetadata('es', {
     'no-nonstandard-intl-displaynames-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-intl-durationformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-intl-durationformat-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-intl-listformat-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-intl-listformat-prototype-properties': {
       requiresTypeInfo: 'optional',
@@ -470,28 +469,28 @@ export default definePluginMetadata('es', {
     'no-nonstandard-temporal-plaindatetime-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-temporal-plainmonthday-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-temporal-plainmonthday-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-temporal-plaintime-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-temporal-plaintime-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-temporal-plainyearmonth-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-temporal-plainyearmonth-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-temporal-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-temporal-zoneddatetime-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-temporal-zoneddatetime-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-typed-array-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-typed-array-prototype-properties': {
       requiresTypeInfo: 'optional',
@@ -506,7 +505,7 @@ export default definePluginMetadata('es', {
     'no-nonstandard-weakref-prototype-properties': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-nonstandard-weakset-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-nonstandard-weakset-prototype-properties': {
       requiresTypeInfo: 'optional',
@@ -600,19 +599,19 @@ export default definePluginMetadata('es', {
     'no-set-prototype-isdisjointfrom': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-set-prototype-issubsetof': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-set-prototype-issupersetof': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-set-prototype-symmetricdifference': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-set-prototype-union': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-shared-array-buffer': {disableInCodeBlocks: 'runtimeOnly'},
     'no-spread-elements': {disableInCodeBlocks: 'runtimeOnly'},
@@ -634,11 +633,11 @@ export default definePluginMetadata('es', {
     'no-string-prototype-iswellformed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-string-prototype-iswellformed-towellformed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-string-prototype-matchall': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
@@ -658,7 +657,7 @@ export default definePluginMetadata('es', {
     'no-string-prototype-replaceall': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-string-prototype-startswith': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
@@ -667,13 +666,13 @@ export default definePluginMetadata('es', {
     'no-string-prototype-towellformed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-string-prototype-trim': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'no-string-prototype-trimleft-trimright': {requiresTypeInfo: 'optional'},
     'no-string-prototype-trimstart-trimend': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-string-raw': {disableInCodeBlocks: 'runtimeOnly'},
     'no-subclassing-builtins': {disableInCodeBlocks: 'runtimeOnly'},
     'no-suppressederror': {disableInCodeBlocks: 'runtimeOnly'},
@@ -697,19 +696,19 @@ export default definePluginMetadata('es', {
     'no-uint8array-prototype-setfrombase64': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-uint8array-prototype-setfromhex': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-uint8array-prototype-tobase64': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-uint8array-prototype-tohex': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-unicode-codepoint-escapes': {disableInCodeBlocks: 'runtimeOnly'},
     'no-using-declarations': {disableInCodeBlocks: 'runtimeOnly'},
     'no-weak-map': {disableInCodeBlocks: 'runtimeOnly'},
@@ -717,11 +716,11 @@ export default definePluginMetadata('es', {
     'no-weakmap-prototype-getorinsert': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
-    }, // cspell:disable-line
+    },
     'no-weakmap-prototype-getorinsertcomputed': {
       requiresTypeInfo: 'optional',
       disableInCodeBlocks: 'runtimeOnly',
     },
-    'no-weakrefs': {disableInCodeBlocks: 'runtimeOnly'}, // cspell:disable-line
+    'no-weakrefs': {disableInCodeBlocks: 'runtimeOnly'},
   },
 });

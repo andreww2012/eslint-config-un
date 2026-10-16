@@ -69,7 +69,6 @@ export default definePluginMetadata('stylistic', {
     'no-tabs': {prettierIncompatible: true},
     'no-trailing-spaces': {prettierIncompatible: true},
     'no-whitespace-before-property': {prettierIncompatible: true},
-    // cspell:disable-next-line
     'nonblock-statement-body-position': {prettierIncompatible: true},
     'object-curly-newline': {prettierIncompatible: true},
     'object-curly-spacing': {prettierIncompatible: true},

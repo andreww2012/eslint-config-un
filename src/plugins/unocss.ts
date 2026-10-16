@@ -10,7 +10,6 @@ export default definePluginMetadata('unocss', {
     blocklist: {disableInCodeBlocks: 'runtimeOnly'},
     'enforce-class-compile': {disableInCodeBlocks: 'runtimeOnly'},
     order: {stylistic: true},
-    // cspell:disable-next-line
     'order-attributify': {stylistic: true},
   },
 });
