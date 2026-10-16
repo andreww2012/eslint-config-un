@@ -28,6 +28,7 @@ minimumReleaseAgeExclude: # []
   - '@eslint/css-tree@4.1.2'
   - '@eslint/css@2.0.1'
   - '@next/eslint-plugin-next@16.4.2'
+  - eslint-plugin-jsdoc@65.3.8
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
