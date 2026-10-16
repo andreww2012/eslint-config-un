@@ -5,7 +5,6 @@ import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {mapKeys} from '../utils';
-import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -217,13 +216,6 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
   // https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
   // Might crash on HTML files (if receives a comment node with `CommentContent` type)
   configBuilder
-    ?.addConfig([
-      'stylistic/spaced-comment',
-      {
-        applyUserFilesAndIgnores: false,
-        filesDefault: resolveFilesOption(optionsResolved.files, []),
-        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
-      },
-    ])
+    ?.addConfig(['stylistic/spaced-comment', {ignoresInternalAlwaysApplied: true}])
     .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));
 });

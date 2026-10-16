@@ -1034,8 +1034,8 @@ export default defineUnConfig<
         ];
 
   const configBuilderTypeAware = context.createConfigBuilder(
-    // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
-    userFiles.length > 0 && configTypeAware,
+    // Unlike other Sub-configs, also disabled by the parent's empty `files`; its own are resolved by hand, so checked here too
+    userFiles.length > 0 && userFilesTypeAware.length > 0 && configTypeAware,
     'ts',
   );
 

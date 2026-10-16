@@ -96,6 +96,14 @@ describe('ts: sub config `typeAware`', () => {
         expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
         expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')).toBeDefined();
       });
+
+      it('disables `ts/type-aware/rules` eslint config when the function form returns an empty array', async () => {
+        const configResult = await computeEslintConfig({
+          ts: {configTypeAware: {files: () => []}},
+        });
+
+        expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
+      });
     });
 
     describe('option: `ignores`', () => {

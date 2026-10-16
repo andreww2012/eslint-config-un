@@ -51,6 +51,7 @@ import type {
 import {
   arrayMap,
   arrayPartition,
+  arrayUnique,
   findArrayInversions,
   mapGetOrInsert,
   objectEntriesUnsafe,
@@ -292,6 +293,13 @@ export class ConfigEntryBuilder<
               | Partial<Record<ImplicitlyIgnoredFileTypeUnlessParsed, boolean>>;
 
             /**
+             * Keeps the patterns of `ignoresInternal` even when the function form of the user's
+             * `ignores` replaces them.
+             * For rules that crash or misreport on these file types.
+             */
+            ignoresInternalAlwaysApplied?: boolean;
+
+            /**
              * The language this config's rules expect the target files to be written for.
              *
              * Setting this option contributes to the final list of files that will be parsed
@@ -408,11 +416,18 @@ export class ConfigEntryBuilder<
         ...(ignoresFromUser || []),
       ];
 
+      const ignoresWhenFn =
+        typeof ignoresOption === 'function'
+          ? ignoresOption({ignoresDefault: [...ignoresDefault], ignoresImplicit: ignoresInternal})
+          : undefined;
+
       return [
         filesWhenFn || filesWhenArrayResolved,
-        (typeof ignoresOption === 'function'
-          ? ignoresOption({ignoresDefault: [...ignoresDefault], ignoresImplicit: ignoresInternal})
-          : undefined) || ignoresBeforeUserFn,
+        ignoresWhenFn
+          ? internalOptions.ignoresInternalAlwaysApplied
+            ? arrayUnique([...ignoresInternal, ...ignoresWhenFn])
+            : ignoresWhenFn
+          : ignoresBeforeUserFn,
         filesWhenFn?.length === 0,
       ] as const;
     })();

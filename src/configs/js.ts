@@ -4,8 +4,6 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   CORE_RULES_HANDLED_BY_TS_COMPILER,
   CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES,
-  resolveFilesOption,
-  resolveIgnoresOption,
 } from './shared';
 import {
   type ExtraPluginsType,
@@ -65,7 +63,6 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {arrowFunctionBodyStyle} = optionsResolved;
-  const userFiles = resolveFilesOption(optionsResolved.files, []);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
@@ -371,14 +368,7 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
   // https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
   // and it might crash on HTML files (if receives a comment node with `CommentContent` type)
   configBuilder
-    ?.addConfig([
-      'js/stylistic_spaced-comment',
-      {
-        applyUserFilesAndIgnores: false,
-        filesDefault: userFiles,
-        ignoresDefault: resolveIgnoresOption(optionsResolved.ignores, []),
-      },
-    ])
+    ?.addConfig(['js/stylistic_spaced-comment', {ignoresInternalAlwaysApplied: true}])
     .addAnyRule('stylistic', 'spaced-comment', ERROR, [
       'always',
       {

@@ -180,6 +180,13 @@ describe('un options', () => {
 
       expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
     });
+
+    it('disables `js` and `js/stylistic_spaced-comment` eslint configs when the function form returns an empty array', async () => {
+      const configResult = await computeEslintConfig({js: {files: () => []}});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeUndefined();
+    });
   });
 
   it('does not apply user-provided `files` and `ignores` to `js/disable-in-ts-files` eslint config', async () => {
@@ -212,6 +219,17 @@ describe('un options', () => {
 
       expect(ignoresFromStylisticNoSpacedComment).toIncludeAllMembers(IGNORES);
       expect(ignoresFromStylisticNoSpacedComment?.length).toBeGreaterThan(IGNORES.length);
+    });
+
+    it('keeps ignoring YAML and HTML files in `js/stylistic_spaced-comment` eslint config when the function form replaces the implicit ignores', async () => {
+      const IGNORES = ['**/fixtures/**'] as const;
+
+      const configResult = await computeEslintConfig({js: {ignores: () => [...IGNORES]}});
+
+      expect(configResult.getConfigByUnPostfix('js')?.ignores).toStrictEqual(IGNORES);
+      expect(
+        configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores,
+      ).toIncludeAllMembers([...IGNORES, GLOB_YML_YAML, GLOB_HTM_HTML]);
     });
   });
 
