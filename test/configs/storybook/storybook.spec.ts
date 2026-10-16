@@ -195,4 +195,18 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('storybook', 'storybook/default-exports')).toBe(0);
     expect(configResult.getRuleEntrySeverity('storybook', 'no-console')).toBe(0);
   });
+
+  it('respects `overrides` and `overridesAny` in `storybook/main` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      storybook: {
+        overrides: {'storybook/no-uninstalled-addons': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(
+      configResult.getRuleEntrySeverity('storybook/main', 'storybook/no-uninstalled-addons'),
+    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('storybook/main', 'no-console')).toBe(0);
+  });
 });
