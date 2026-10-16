@@ -202,7 +202,6 @@ describe('cascade order', () => {
       eslint-config-un/zod-openapi/@type-information
       eslint-config-un/ts/non-type-aware/rules
       eslint-config-un/ts/disable-handled-by-ts-compiler-rules
-      eslint-config-un/ts/overrides
       eslint-config-un/ts/type-aware/rules
       eslint-config-un/ts/dts
       eslint-config-un/angular/general

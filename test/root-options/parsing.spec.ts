@@ -381,11 +381,11 @@ describe('option: `parsing`', () => {
       );
 
       // Leaving these on would lint files nothing can parse
-      (
-        ['ts/non-type-aware/rules', 'ts/type-aware/rules', 'ts/overrides', 'jsdoc/ts'] as const
-      ).forEach((configName) => {
-        expect(configResult.getConfigByUnPostfix(configName)?.ignores).toContain('**/*');
-      });
+      (['ts/non-type-aware/rules', 'ts/type-aware/rules', 'jsdoc/ts'] as const).forEach(
+        (configName) => {
+          expect(configResult.getConfigByUnPostfix(configName)?.ignores).toContain('**/*');
+        },
+      );
     });
 
     it('leaves the configs merely running on top of the language alone', async () => {

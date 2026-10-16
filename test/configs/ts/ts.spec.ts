@@ -1,4 +1,5 @@
 const FIXTURES = {
+  doubleNegation: 'double-negation.ts',
   explicitAny: 'explicit-any.ts',
 } as const;
 
@@ -121,6 +122,28 @@ describe('rules', () => {
 
     expect(error?.message).toMatchInlineSnapshot('"Unexpected any. Specify a different type."');
   });
+
+  it('`no-implicit-coercion` rule fires on a file with `!!`', async () => {
+    const results = await testEslintConfig('ts', FIXTURES.doubleNegation, import.meta.dirname);
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.doubleNegation,
+      'no-implicit-coercion',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Unexpected implicit coercion encountered. Use `Boolean(value)` instead."',
+    );
+  });
+
+  it('allows the template literal shorthand in `no-implicit-coercion` rule', async () => {
+    const configResult = await computeEslintConfig('ts');
+
+    expect(
+      configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'no-implicit-coercion'),
+    ).toMatchObject([{disallowTemplateShorthand: false}]);
+  });
 });
 
 describe('un options', () => {
@@ -193,6 +216,18 @@ describe('un options', () => {
       'ts/no-dynamic-delete': 0,
       'no-console': 0,
     });
+  });
+
+  it('lets `overridesAny` turn off `no-implicit-coercion` rule, which `ts/non-type-aware/rules` eslint config sets up for TypeScript', async () => {
+    const results = await testEslintConfig(
+      {ts: {overridesAny: {'no-implicit-coercion': 0}}},
+      FIXTURES.doubleNegation,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.doubleNegation, 'no-implicit-coercion'),
+    ).toBeUndefined();
   });
 });
 

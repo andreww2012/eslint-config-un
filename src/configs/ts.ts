@@ -838,6 +838,16 @@ export default defineUnConfig<
           },
         ];
 
+  const noImplicitCoercionBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['no-implicit-coercion'] ?? ERROR,
+  );
+  noImplicitCoercionBaseUnEntry[1][0] = {
+    ...noImplicitCoercionBaseUnEntry[1][0],
+    // Might be useful for transforming values to strings: `const test = `${someCondition ? 1 : 0}``
+    // This rule would suggest replacing template literal with `String` here, which breaks types
+    disallowTemplateShorthand: false,
+  };
+
   // Legend:
   // 🟣 - in strict
   // 💅 - in stylistic
@@ -848,6 +858,7 @@ export default defineUnConfig<
     ?.addConfig(['ts/non-type-aware/rules', {parseWith: 'ts'}])
     // Unlike in the `js` config, also turned off in the framework files this config lints
     .disableBulkRules(CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES)
+    .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry)
     .markCategory('Strict')
     .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
     .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
@@ -1212,22 +1223,6 @@ export default defineUnConfig<
       files: allTypescriptFiles,
     })
     .disableBulkRules(CORE_RULES_HANDLED_BY_TS_COMPILER);
-
-  const noImplicitCoercionBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
-    vanillaFinalFlatConfigRules['no-implicit-coercion'] ?? ERROR,
-  );
-  noImplicitCoercionBaseUnEntry[1][0] = {
-    ...noImplicitCoercionBaseUnEntry[1][0],
-    // Might be useful for transforming values to strings: `const test = `${someCondition ? 1 : 0}``
-    // This rule would suggest replacing template literal with `String` here, which breaks types
-    disallowTemplateShorthand: false,
-  };
-
-  configBuilderNONTypeAware
-    ?.addConfig(['ts/overrides', {applyUserFilesAndIgnores: false, parseWith: 'ts'}], {
-      files: allTypescriptFiles,
-    })
-    .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry);
 
   const configBuilderDisableNoUnsafe = context.createConfigBuilder(configDisableNoUnsafe, 'ts');
   configBuilderDisableNoUnsafe
