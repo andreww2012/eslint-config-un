@@ -116,6 +116,19 @@ describe('rules', async () => {
       '"Expected @param names to be "a, b". Got "wrongName, anotherWrong"."',
     );
   });
+
+  it('enables `jsdoc/no-unnecessary-type-assertion` rule only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('jsdoc', {
+      internalOptions: {},
+    });
+
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('jsdoc')).not.toHaveProperty(
+      'jsdoc/no-unnecessary-type-assertion',
+    );
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('jsdoc/@type-information'),
+    ).toStrictEqual({'jsdoc/no-unnecessary-type-assertion': 2});
+  });
 });
 
 describe('un options', () => {

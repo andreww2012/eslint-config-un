@@ -20,7 +20,9 @@ export default definePluginMetadata('jsdoc', {
     'no-multi-asterisks': {stylistic: true},
     'no-restricted-syntax': {disableInCodeBlocks: 'tooStrict'},
     'no-undefined-types': {disableInCodeBlocks: 'tooStrict'},
-    'no-unnecessary-type-assertion': {requiresTypeInfo: 'optional'},
+    'no-unnecessary-type-assertion': {
+      requiresTypeInfo: [true, 'prints a warning and reports nothing instead of throwing'],
+    },
     'prefer-import-tag': {stylistic: true},
     'reject-any-type': {disableInCodeBlocks: 'typeStrictness'},
     'reject-function-type': {disableInCodeBlocks: 'typeStrictness'},
