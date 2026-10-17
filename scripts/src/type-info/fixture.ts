@@ -10,6 +10,7 @@ export const FIXTURE_FILES: Readonly<Record<string, string>> = {
     {
       compilerOptions: {
         allowJs: true,
+        emitDecoratorMetadata: true,
         experimentalDecorators: true,
         jsx: 'preserve',
         lib: ['ESNext', 'DOM', 'DOM.Iterable'],
@@ -46,6 +47,9 @@ export class Repository<T extends {id: number}> {
   toString() { return this.label }
 }
 
+/**
+ * Reads the users
+ */
 export async function main(): Promise<void> {
   const data = await readFile('a.txt', 'utf8');
   const parsed = JSON.parse(data) as User[];
@@ -87,7 +91,7 @@ export async function main(): Promise<void> {
   const largest = numbers.sort((left, right) => right - left)[0];
   const trimmed = joined.trimLeft().trimRight();
   const starts = joined.substring(0, 3) === 'abc';
-  const interpolated = \\\`\\\${joined}-\\\${parsedNumber}\\\`;
+  const interpolated = \`\${joined}-\${parsedNumber}\`;
   const optional = found?.tags?.length ?? 0;
   const dictionary: Record<string, unknown> = {a: 1};
   const read = dictionary['a'];
@@ -98,7 +102,10 @@ export async function main(): Promise<void> {
   const bound = repository.toString.bind(repository);
   const awaited = async () => { await readFile('e') };
   const chained = 1 < parsedNumber && parsedNumber < 10;
-  console.log({data, parsed, found, names, total, sorted, reversed, joined, sliced, replaced, indexed, included, flattened, byId, fromEntries, last, coerced, asserted, merged, collected, matched, now, decoded, absolute, largest, trimmed, starts, interpolated, optional, read, present, removed, mapped, bound, awaited, chained, counter, Color});
+  const castInJsdoc = /** @type {string} */ (joined);
+  const onLiterals = [[3, 1].filter(Boolean), [3, 1].indexOf(1), 'abc'.substr(1), ' a'.trimLeft(), main.bind(null)];
+  [3, 1].forEach((value) => console.log(value));
+  console.log({data, parsed, found, names, total, sorted, reversed, joined, sliced, replaced, indexed, included, flattened, byId, fromEntries, last, coerced, asserted, merged, collected, matched, now, decoded, absolute, largest, trimmed, starts, interpolated, optional, read, present, removed, mapped, bound, awaited, chained, castInJsdoc, onLiterals, counter, Color});
 }
 
 export function documentInteractions(element: HTMLElement, event: KeyboardEvent) {

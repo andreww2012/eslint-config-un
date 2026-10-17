@@ -76,11 +76,14 @@ const describeError = (error: unknown) => (error instanceof Error ? error.messag
  * Enabling every rule of every plugin at once makes a good number of them announce a missing
  * dependency, a deprecation or an absent setting. None of it is about the rule being probed
  */
-const withSilencedOutput = <Result>(run: () => Result) => {
+const withSilencedOutput = <Result>(run: () => Result, onOutput: () => void) => {
   const streams = [process.stdout, process.stderr];
   const originalWrites = streams.map((stream) => stream.write.bind(stream));
   streams.forEach((stream) => {
-    stream.write = () => true;
+    stream.write = () => {
+      onOutput();
+      return true;
+    };
   });
 
   try {
@@ -116,7 +119,8 @@ const doesRunOnJavascript = (rule: NonNullable<EslintPlugin['rules']>[string]) =
 
 /**
  * Lints the fixture with every rule enabled at once, recording which rules read the type information
- * members of the parser services, and which ones throw when there are none
+ * members of the parser services, which ones throw when there are none, and which ones register
+ * listeners, report or write to the console
  */
 export const probeRules = async (
   plugins: Record<string, EslintPlugin>,
@@ -124,6 +128,9 @@ export const probeRules = async (
 ) => {
   const accessed = new Map<string, Set<string>>();
   const threw = new Map<string, string>();
+  const registeredListeners = new Set<string>();
+  const reported = new Set<string>();
+  const wroteOutput = new Set<string>();
   const failures: string[] = [];
   let currentRuleName: string | null = null;
 
@@ -216,7 +223,13 @@ export const probeRules = async (
                   create: (context: unknown) =>
                     withCurrentRule(
                       fullRuleName,
-                      () => wrapVisitor(fullRuleName, create(context)),
+                      () => {
+                        const visitor = wrapVisitor(fullRuleName, create(context));
+                        if (Object.keys(visitor).length > 0) {
+                          registeredListeners.add(fullRuleName);
+                        }
+                        return visitor;
+                      },
                       {},
                     ),
                 },
@@ -247,29 +260,43 @@ export const probeRules = async (
     .filter(([name]) => SOURCE_FILE_REGEX.test(name))
     .forEach(([name, source]) => {
       try {
-        withSilencedOutput(() =>
-          linter.verify(
-            source,
-            {
-              files: ['**/*.ts', '**/*.tsx'],
-              linterOptions: {noInlineConfig: true, reportUnusedDisableDirectives: 'off'},
-              languageOptions: {
-                parser: spyingParser,
-                parserOptions: {
-                  ecmaFeatures: {jsx: true},
-                  ...(withTypeInfo && {
-                    project: pathe.join(fixtureDirectory, 'tsconfig.json'),
-                    tsconfigRootDir: fixtureDirectory,
-                  }),
+        const messages = withSilencedOutput(
+          () =>
+            linter.verify(
+              source,
+              {
+                files: ['**/*.ts', '**/*.tsx'],
+                linterOptions: {noInlineConfig: true, reportUnusedDisableDirectives: 'off'},
+                languageOptions: {
+                  parser: spyingParser,
+                  parserOptions: {
+                    ecmaFeatures: {jsx: true},
+                    ...(withTypeInfo && {
+                      project: pathe.join(fixtureDirectory, 'tsconfig.json'),
+                      tsconfigRootDir: fixtureDirectory,
+                    }),
+                  },
+                  sourceType: 'module',
                 },
-                sourceType: 'module',
+                plugins: wrappedPlugins,
+                rules: rulesToEnable,
               },
-              plugins: wrappedPlugins,
-              rules: rulesToEnable,
-            },
-            {filename: pathe.join(fixtureDirectory, name)},
-          ),
+              {filename: pathe.join(fixtureDirectory, name)},
+            ),
+          () => {
+            if (currentRuleName != null) {
+              wroteOutput.add(currentRuleName);
+            }
+          },
         );
+
+        messages.forEach(({ruleId, fatal, message}) => {
+          if (ruleId != null) {
+            reported.add(ruleId);
+          } else if (fatal) {
+            failures.push(`${name}: ${message}`);
+          }
+        });
       } catch (error) {
         failures.push(`${name}: ${describeError(error)}`);
       }
@@ -277,7 +304,7 @@ export const probeRules = async (
 
   await fs.rm(fixtureDirectory, {force: true, recursive: true});
 
-  return {accessed, threw, failures};
+  return {accessed, threw, registeredListeners, reported, wroteOutput, failures};
 };
 
 const collectJsFiles = async (directory: string, into: string[]) => {

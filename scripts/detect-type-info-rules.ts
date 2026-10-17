@@ -6,7 +6,13 @@ import {RULE_CATEGORIES_PER_PLUGIN} from '../src/eslint-rule-categories.gen';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {RULES_REQUIRING_TYPE_INFORMATION} from '../src/plugins.gen';
-import {readAndParseJson, stylePluginPrefix, styleRuleName, styleText} from '../src/utils';
+import {
+  arrayPartition,
+  readAndParseJson,
+  stylePluginPrefix,
+  styleRuleName,
+  styleText,
+} from '../src/utils';
 import {readPluginMetadata} from './shared/plugin-metadata';
 import {
   detectViaMeta,
@@ -40,7 +46,7 @@ const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES: ReadonlySet<string> = new Set(
 );
 
 const CAVEAT =
-  'Every line above is a candidate, not a verdict. The probe only proves what it saw: a rule whose type-aware branch the fixture never reaches leaves no trace, and one that bails out of a guarded helper looks like it degrades even when a later call would throw. The trace resolves an imported name to a file, so a helper module mixing checker-backed and AST-only exports over-reports. Read the plugin source before changing the metadata.';
+  'Every line above is a candidate, not a verdict. The probe only proves what it saw: a rule whose type-aware branch the fixture never reaches leaves no trace, one that bails out of a guarded helper looks like it degrades even when a later call would throw, and one reporting only with type information may just find nothing else to report in the fixture. The trace resolves an imported name to a file, so a helper module mixing checker-backed and AST-only exports over-reports. Read the plugin source before changing the metadata.';
 
 type Requirement = true | 'optional';
 
@@ -129,7 +135,7 @@ const main = async () => {
       probe: {
         type: Boolean,
         description:
-          'Lint a fixture with every rule enabled to see which ones read the parser services, and which ones throw without them',
+          'Lint a fixture with every rule enabled to see which ones read the parser services, and which ones throw or do nothing without them',
         default: true,
       },
       trace: {
@@ -197,10 +203,10 @@ const main = async () => {
         .map(({prefix, plugin}) => [prefix, plugin]),
     );
 
-    const [typed, untyped] = await Promise.all([
-      probeRules(probeInput, {withTypeInfo: true}),
-      probeRules(probeInput, {withTypeInfo: false}),
-    ]);
+    // One after another, typed first: a rule warning once per process must not have its warning
+    // credited to the untyped pass when it warns in both
+    const typed = await probeRules(probeInput, {withTypeInfo: true});
+    const untyped = await probeRules(probeInput, {withTypeInfo: false});
 
     [...typed.failures, ...untyped.failures].forEach((failure) => {
       logger.warn(`The probe could not finish a fixture file: ${failure}`);
@@ -213,14 +219,36 @@ const main = async () => {
       // path that asks for a type. Reaching the services in both passes is weak evidence that it does
       const doesDegradeGracefully =
         untyped.accessed.has(fullRuleName) && !untyped.threw.has(fullRuleName);
+      // Bailing out with nothing more than a warning is no better than throwing
+      const signsOfSilence = untyped.threw.has(fullRuleName)
+        ? []
+        : [
+            ...(typed.registeredListeners.has(fullRuleName) &&
+            !untyped.registeredListeners.has(fullRuleName)
+              ? ['probe: registers no listeners without type information']
+              : []),
+            ...(typed.reported.has(fullRuleName) && !untyped.reported.has(fullRuleName)
+              ? ['probe: reports only with type information']
+              : []),
+            ...(untyped.wroteOutput.has(fullRuleName) && !typed.wroteOutput.has(fullRuleName)
+              ? ['probe: writes to the console only without type information']
+              : []),
+          ];
+      const isSilentWithoutTypeInfo = signsOfSilence.length > 0;
 
       // Reading only the AST node maps is how a rule detects the TypeScript parser, not
       // a question about a type
-      if (doesThrowWithoutTypeInfo || [...keys].some((key) => !key.endsWith('NodeMap'))) {
+      if (
+        doesThrowWithoutTypeInfo ||
+        isSilentWithoutTypeInfo ||
+        [...keys].some((key) => !key.endsWith('NodeMap'))
+      ) {
         addDetection(
           fullRuleName,
-          `probe: read ${[...keys].toSorted().join(', ')}`,
-          doesThrowWithoutTypeInfo || (doesDegradeGracefully ? 'optional' : undefined),
+          [`probe: read ${[...keys].toSorted().join(', ')}`, ...signsOfSilence].join(' | '),
+          doesThrowWithoutTypeInfo ||
+            isSilentWithoutTypeInfo ||
+            (doesDegradeGracefully ? 'optional' : undefined),
         );
       }
     });
@@ -302,11 +330,21 @@ const main = async () => {
       styleText('yellow', String(declared)),
     );
 
+    const [declaredTrue, declaredOptional] = arrayPartition(
+      contradicted,
+      ({declared}) => declared === true,
+    );
+    const describeReasons = ({reasons}: Finding) => reasons.join(' | ');
+
     report(
       'Declared `true`, but observed to degrade instead of throwing',
-      contradicted,
-      ({declared, requirement, reasons}) =>
-        `declared ${styleText('yellow', String(declared))}, observed ${styleText('yellow', String(requirement))} ${reasons.join(' | ')}`,
+      declaredTrue,
+      describeReasons,
+    );
+    report(
+      "Declared `'optional'`, but observed to throw or do nothing without type information",
+      declaredOptional,
+      describeReasons,
     );
 
     console.log(`\n${styleText('dim', CAVEAT)}`);
