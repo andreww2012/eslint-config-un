@@ -66,7 +66,9 @@ export default definePluginMetadata('ember', {
     'template-no-bare-strings': {disableInCodeBlocks: 'tooStrict'},
     'template-no-builtin-form-components': {disableInCodeBlocks: 'tooStrict'},
     'template-no-curly-component-invocation': {stylistic: true},
-    'template-no-deprecated': {requiresTypeInfo: 'optional'},
+    'template-no-deprecated': {
+      requiresTypeInfo: [true, 'does nothing without it instead of throwing'],
+    },
     'template-no-duplicate-landmark-elements': {disableInCodeBlocks: 'runtimeOnly'},
     'template-no-element-event-actions': {disableInCodeBlocks: 'tooStrict'},
     'template-no-empty-headings': {disableInCodeBlocks: 'runtimeOnly'},

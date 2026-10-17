@@ -114,6 +114,20 @@ describe('rules', async () => {
       '"Review this usage of "strings" as it can only be empty here."',
     );
   });
+
+  it('enables `sonar/no-ignored-return` and `sonar/strings-comparison` rules only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('sonar', {
+      internalOptions: {},
+    });
+
+    const baseConfigRules = configResultWithTypeInfoSplit.getRuleSeverities('sonar');
+
+    expect(baseConfigRules).not.toHaveProperty('sonar/no-ignored-return');
+    expect(baseConfigRules).not.toHaveProperty('sonar/strings-comparison');
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('sonar/@type-information'),
+    ).toMatchObject({'sonar/no-ignored-return': 2, 'sonar/strings-comparison': 1});
+  });
 });
 
 describe('un options', () => {

@@ -60,7 +60,9 @@ export default definePluginMetadata('svelte', {
     'no-top-level-browser-globals': {disableInCodeBlocks: 'runtimeOnly'},
     'no-trailing-spaces': {stylistic: true, prettierIncompatible: true},
     'no-unused-class-name': {disableInCodeBlocks: 'tooStrict'},
-    'no-unused-props': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'unused'},
+    'no-unused-props': {
+      requiresTypeInfo: [true, 'does nothing without it instead of throwing'],
+    },
     'no-unused-svelte-ignore': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-attribute-interpolation': {stylistic: true},
     'prefer-class-directive': {stylistic: true},
@@ -74,7 +76,10 @@ export default definePluginMetadata('svelte', {
       ],
     },
     'require-event-dispatcher-types': {disableInCodeBlocks: 'typeStrictness'},
-    'require-event-prefix': {requiresTypeInfo: 'optional', stylistic: true},
+    'require-event-prefix': {
+      requiresTypeInfo: [true, 'does nothing without it instead of throwing'],
+      stylistic: true,
+    },
     'require-optimized-style-attribute': {disableInCodeBlocks: 'performance'},
     'require-store-callbacks-use-set-param': {
       requiresTypeInfo: [

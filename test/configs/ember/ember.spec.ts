@@ -127,6 +127,19 @@ describe('rules', async () => {
       '"update-able variables are not supported in templates, reference a const variable"',
     );
   });
+
+  it('enables `ember/template-no-deprecated` rule only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('ember', {
+      internalOptions: {},
+    });
+
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('ember')).not.toHaveProperty(
+      'ember/template-no-deprecated',
+    );
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('ember/@type-information'),
+    ).toMatchObject({'ember/template-no-deprecated': 2});
+  });
 });
 
 describe('un options', () => {

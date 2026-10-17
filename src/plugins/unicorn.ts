@@ -145,7 +145,9 @@ export default definePluginMetadata('unicorn', {
         'the imported number check is AST-only; its checker-backed sibling is a different export',
       ],
     },
-    'no-non-function-verb-prefix': {requiresTypeInfo: 'optional'},
+    'no-non-function-verb-prefix': {
+      requiresTypeInfo: [true, 'does nothing without it instead of throwing'],
+    },
     'no-nonstandard-builtin-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-null': {stylistic: true},
     'no-object-methods-with-collections': {requiresTypeInfo: 'optional'},
@@ -165,7 +167,13 @@ export default definePluginMetadata('unicorn', {
     'no-this-outside-of-class': {disableInCodeBlocks: 'runtimeOnly'},
     'no-top-level-assignment-in-function': {disableInCodeBlocks: 'runtimeOnly'},
     'no-top-level-side-effects': {disableInCodeBlocks: 'runtimeOnly'},
-    'no-transition-all': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
+    'no-transition-all': {
+      requiresTypeInfo: [
+        'optional',
+        'does nothing in JS files without it, but CSS files never have it and work fine',
+      ],
+      disableInCodeBlocks: 'performance',
+    },
     'no-typeof-undefined': {stylistic: true},
     'no-uncalled-method': {requiresTypeInfo: ['optional', 'indirect']},
     'no-undeclared-class-members': {disableInCodeBlocks: 'tooStrict'},

@@ -22,8 +22,7 @@ export default definePluginMetadata('nestjs', {
     'api-property-should-have-api-extra-models': {disableInCodeBlocks: 'tooStrict'},
     'controllers-should-supply-api-tags': {disableInCodeBlocks: 'tooStrict'},
     'forward-ref-injection-should-use-wrapper-type': {
-      requiresTypeInfo: 'optional',
-      disableInCodeBlocks: 'imports',
+      requiresTypeInfo: [true, 'does nothing without the compiler options instead of throwing'],
     },
     'injectable-should-be-provided': {disableInCodeBlocks: 'imports'},
     'sort-module-metadata-arrays': {stylistic: true},

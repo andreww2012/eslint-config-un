@@ -51,6 +51,7 @@ describe('cascade order', () => {
       eslint-config-un/e18e/performance-improvements/@type-information
       eslint-config-un/ember/glimmer-templates
       eslint-config-un/ember
+      eslint-config-un/ember/@type-information
       eslint-config-un/ember/tests
       eslint-config-un/ember/no-only-tests
       eslint-config-un/erasable-syntax-only
@@ -82,6 +83,7 @@ describe('cascade order', () => {
       eslint-config-un/js/commonjs
       eslint-config-un/js/stylistic_spaced-comment
       eslint-config-un/jsdoc
+      eslint-config-un/jsdoc/@type-information
       eslint-config-un/jsdoc/ts
       eslint-config-un/js-inline
       eslint-config-un/js-inline/js-inside-html-inside-markdown
@@ -114,6 +116,7 @@ describe('cascade order', () => {
       eslint-config-un/ngrx
       eslint-config-un/ngrx/@type-information
       eslint-config-un/unicorn
+      eslint-config-un/unicorn/@type-information
       eslint-config-un/unicorn/any-language
       eslint-config-un/unicorn/css
       eslint-config-un/unicorn/html
@@ -161,6 +164,7 @@ describe('cascade order', () => {
       eslint-config-un/solid
       eslint-config-un/soml
       eslint-config-un/sonar
+      eslint-config-un/sonar/@type-information
       eslint-config-un/sql
       eslint-config-un/storybook
       eslint-config-un/storybook/main
@@ -216,6 +220,7 @@ describe('cascade order', () => {
       eslint-config-un/graphql
       eslint-config-un/svelte/system
       eslint-config-un/svelte
+      eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
       eslint-config-un/svelte/html
       eslint-config-un/vue

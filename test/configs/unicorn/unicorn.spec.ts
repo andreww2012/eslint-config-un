@@ -172,6 +172,19 @@ describe('rules', async () => {
 
     expect(error).toBeUndefined();
   });
+
+  it('enables `unicorn/no-non-function-verb-prefix` rule only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('unicorn', {
+      internalOptions: {},
+    });
+
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('unicorn')).not.toHaveProperty(
+      'unicorn/no-non-function-verb-prefix',
+    );
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('unicorn/@type-information'),
+    ).toMatchObject({'unicorn/no-non-function-verb-prefix': 2});
+  });
 });
 
 describe('un options', () => {

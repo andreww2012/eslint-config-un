@@ -331,14 +331,12 @@ describe('rules requiring type information', () => {
 
     it('does not create a separate config if all rules requiring type information only partially work without it', async () => {
       const configResult = await computeEslintConfig(
-        {ts: true, unicorn: true},
+        {ts: true, regexp: true},
         {internalOptions: {}},
       );
 
-      expect(
-        configResult.getRuleEntrySeverity('unicorn', 'unicorn/no-negated-array-predicate'),
-      ).toBe(2);
-      expect(configResult.getConfigByUnPostfix('unicorn/@type-information')).toBeUndefined();
+      expect(configResult.getRuleEntrySeverity('regexp', 'regexp/no-legacy-features')).toBe(2);
+      expect(configResult.getConfigByUnPostfix('regexp/@type-information')).toBeUndefined();
     });
 
     it.each(FRAMEWORKS)(

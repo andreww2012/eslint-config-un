@@ -115,6 +115,20 @@ describe('rules', async () => {
       '"Unexpected mustache interpolation with a string literal value."',
     );
   });
+
+  it('enables `svelte/no-unused-props` and `svelte/require-event-prefix` rules only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('svelte', {
+      internalOptions: {},
+    });
+
+    const baseConfigRules = configResultWithTypeInfoSplit.getRuleSeverities('svelte');
+
+    expect(baseConfigRules).not.toHaveProperty('svelte/no-unused-props');
+    expect(baseConfigRules).not.toHaveProperty('svelte/require-event-prefix');
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('svelte/@type-information'),
+    ).toMatchObject({'svelte/no-unused-props': 2, 'svelte/require-event-prefix': 2});
+  });
 });
 
 describe('un options', () => {

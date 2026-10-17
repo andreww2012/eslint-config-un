@@ -112,6 +112,19 @@ describe('rules', async () => {
       '"You have listed the same decorator more than once. Was this intentional?"',
     );
   });
+
+  it('enables `nestjs/forward-ref-injection-should-use-wrapper-type` rule only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('nestJs', {
+      internalOptions: {},
+    });
+
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('nest-js')).not.toHaveProperty(
+      'nestjs/forward-ref-injection-should-use-wrapper-type',
+    );
+    expect(
+      configResultWithTypeInfoSplit.getRuleSeverities('nest-js/@type-information'),
+    ).toMatchObject({'nestjs/forward-ref-injection-should-use-wrapper-type': 2});
+  });
 });
 
 describe('un options', () => {
