@@ -695,7 +695,7 @@ export class ConfigEntryBuilder<
 
             const plugin =
               plugins[pluginPrefixToTest] ||
-              (pluginPrefixToTest === '' && eslintPluginVanillaRules);
+              (pluginPrefixToTest.length === 0 && eslintPluginVanillaRules);
             if (!plugin) {
               return `${commonErrorMessagePrefix} Plugin not loaded`;
             }

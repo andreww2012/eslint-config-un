@@ -84,7 +84,7 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
       );
     }
 
-    if (prefix === '') {
+    if (prefix.length === 0) {
       if (metadata.configs != null) {
         errors.push('the pseudo-plugin holding the rules of ESLint itself serves no Config');
       }

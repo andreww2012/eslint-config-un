@@ -10,7 +10,7 @@ index ffb5b1745e38a7de0cd86daecc1870c1e305a15c..e50dafe0a729dda72fc69bf72fcece11
 -				compatSourceCode[sourceCodeMethodName].bind(compatSourceCode);
 +			const sourceCodeMethod = compatSourceCode[sourceCodeMethodName];
 +
-+			// Non-JS source code (JSON/YAML/…) lacks these JS-only `SourceCode` methods; skip them
++			// Non-JS source code (JSON/YAML/...) lacks these JS-only `SourceCode` methods; skip them
 +			// instead of throwing during setup so the rule can still run on such files.
 +			if (typeof sourceCodeMethod === "function") {
 +				compatContext[contextMethodName] =
@@ -31,7 +31,7 @@ index 5e5eb0cdb0ce215b7a8471882cc9c91e11335792..81e6dfec9722666d9b975a47c51582c2
 -				compatSourceCode[sourceCodeMethodName].bind(compatSourceCode);
 +			const sourceCodeMethod = compatSourceCode[sourceCodeMethodName];
 +
-+			// Non-JS source code (JSON/YAML/…) lacks these JS-only `SourceCode` methods; skip them
++			// Non-JS source code (JSON/YAML/...) lacks these JS-only `SourceCode` methods; skip them
 +			// instead of throwing during setup so the rule can still run on such files.
 +			if (typeof sourceCodeMethod === "function") {
 +				compatContext[contextMethodName] =

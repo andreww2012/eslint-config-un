@@ -381,7 +381,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   );
   const newPluginPrefixes = pluginRenames.map(([, newPrefix]) => newPrefix);
   const occupiedPluginPrefixes = new Set<string>(
-    PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPluginPrefixes.has(prefix)),
+    PLUGIN_PREFIXES_LIST.filter(
+      (prefix) => prefix.length === 0 || !renamedPluginPrefixes.has(prefix),
+    ),
   );
   const badPluginRenames = new Set<string>();
   newPluginPrefixes.forEach((newName) => {

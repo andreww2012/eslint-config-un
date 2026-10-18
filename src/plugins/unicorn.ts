@@ -262,7 +262,7 @@ export default definePluginMetadata('unicorn', {
       autofixDisabled: [
         true,
         // Fixed, not released yet: https://github.com/sindresorhus/eslint-plugin-unicorn/commit/7c5243b9
-        'dropping the copy a `for…of` loop iterates changes the loop when its body changes the collection, like a live `NodeList`',
+        'dropping the copy a `for...of` loop iterates changes the loop when its body changes the collection, like a live `NodeList`',
       ],
     },
     'no-useless-template-literals': {requiresTypeInfo: 'optional', stylistic: true},

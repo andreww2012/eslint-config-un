@@ -133,7 +133,7 @@ describe('rules', async () => {
     );
   });
 
-  it('`un/prefer-array-for-each` rule fires on a `for…of` loop over an array when enabled', async () => {
+  it('`un/prefer-array-for-each` rule fires on a `for...of` loop over an array when enabled', async () => {
     const results = await testEslintConfig(
       {un: {overrides: {'un/prefer-array-for-each': 'error'}}},
       FIXTURES.forOfLoopOverArray,
@@ -146,7 +146,7 @@ describe('rules', async () => {
       'un/prefer-array-for-each',
     );
 
-    expect(error?.message).toMatchInlineSnapshot('"Use `.forEach(…)` instead of this loop."');
+    expect(error?.message).toMatchInlineSnapshot('"Use `.forEach(...)` instead of this loop."');
   });
 
   it('`un/no-type-assertion` rule fires on type assertions when enabled', async () => {

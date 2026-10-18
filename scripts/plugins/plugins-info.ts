@@ -14,21 +14,21 @@ import {
 
 const STATS_THROTTLE_INTERVAL_MS = 3000;
 
-let lastStatsFetchTime = 0;
+let lastStatsFetchTimeMs = 0;
 
 const statsSemaphore = Semaphore.makeUnsafe(1);
 
 const throttleStats = Effect.gen(function* () {
   const now = Date.now();
-  const timeSinceLastFetch = now - lastStatsFetchTime;
-  const waitTime = STATS_THROTTLE_INTERVAL_MS - timeSinceLastFetch;
+  const timeSinceLastFetchMs = now - lastStatsFetchTimeMs;
+  const waitTimeMs = STATS_THROTTLE_INTERVAL_MS - timeSinceLastFetchMs;
 
-  if (waitTime > 0) {
-    yield* Effect.sleep(Duration.millis(waitTime));
+  if (waitTimeMs > 0) {
+    yield* Effect.sleep(Duration.millis(waitTimeMs));
   }
 
   // eslint-disable-next-line require-atomic-updates
-  lastStatsFetchTime = Date.now();
+  lastStatsFetchTimeMs = Date.now();
 });
 
 export class PackageMissingError extends Data.TaggedError('PackageMissingError')<{

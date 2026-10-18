@@ -1,12 +1,7 @@
 // @ts-check
-import fs from 'node:fs';
-import path from 'node:path';
-import {defineConfig} from 'npm-check-updates';
-import {satisfies, tryParse} from 'verkit';
+import {ncuConfig} from '@andreww2012/npm-check-updates-config';
+import {tryParse} from 'verkit';
 import packageJson from './package.json' with {type: 'json'};
-
-const CACHE_DIRECTORY = path.join(import.meta.dirname, 'node_modules/.cache/npm-check-updates');
-fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
 /** @type {ReadonlySet<string>} */
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
@@ -48,101 +43,67 @@ const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-css
 /** @type {ReadonlySet<string>} */
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
-/**
- * Blocks *updating to* any version matching the given semver range for a package
- * (it does not restrict the version we update *from*).
- * Use to skip a known-broken release until a fix ships.
- * Each entry should document why it is blocked
- * @type {Readonly<Record<string, string>>}
- */
-const IGNORED_PACKAGE_RANGES_TO_UPDATE = {};
-
+// Unlike real package names, aliases can't be given a target
 /** @type {ReadonlySet<string>} */
-const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
-  '@types/node',
+const ALIASES_WITH_PINNED_MAJOR_VERSION = new Set([
   'angular-eslint-plugin-template15',
   'angular-eslint-plugin-template17',
   'angular-eslint-plugin18',
-  'eslint',
 ]);
 
-/** @type {ReadonlySet<string>} */
-const PACKAGES_ON_PRERELEASE_CHANNEL = new Set([
-  '@effect/platform-node',
-  'all-contributors-cli',
-  'effect',
-]);
+const ALL_DEPENDENCY_NAMES = Object.keys({
+  ...packageJson.dependencies,
+  ...packageJson.devDependencies,
+  ...packageJson.peerDependencies,
+});
 
-const PACKAGE_GROUPS = Object.freeze(
-  Object.entries({
-    'Package manager': {packages: ['pnpm'], nonEslint: true},
-    tsgo: {packages: ['@typescript/native-preview'], nonEslint: true},
-    '@commitlint': {packages: [], nonEslint: true},
-    '@effect': {packages: ['effect'], nonEslint: true},
-    '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin'], nonEslint: true},
+const ESLINT_GROUP = Object.freeze({icon: '🟡', priority: 3});
+const NON_ESLINT_GROUP = Object.freeze({icon: '✨', priority: null});
 
-    '@typescript-eslint': {packages: ['typescript-eslint']},
-    '@angular-eslint': {packages: []},
-    '@eslint-react': {packages: ['eslint-plugin-react-debug']},
-    '@html-eslint': {packages: []},
-    '@jest': {packages: []},
-    '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
-    '@tsrx': {packages: []},
-    'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
-    'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
-    'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
-  }).reduce((result, [groupName, {packages: packagesInGroup, ...groupMeta}]) => {
-    const groupInfo = {
-      groupName,
-      ...groupMeta,
-    };
+/** @param {string} packageName Real package name, not an alias */
+const isEslintPlugin = (packageName) => {
+  const [nameScope, nameWithoutScope = ''] = packageName.split('/', 2);
+  return (
+    packageName.startsWith('eslint-plugin-') ||
+    nameWithoutScope.startsWith('eslint-plugin') ||
+    (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope)) ||
+    ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES.has(packageName)
+  );
+};
 
-    const packagesInCurrentGroup = Object.fromEntries([
-      [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupInfo],
-      ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupInfo]),
-    ]);
+/**
+ * A scope group would also take in the scope's plugins, which are reviewed one by one
+ * @param {string} scope Like `@eslint`
+ * @param {string[]} packages Extra packages of the group
+ */
+const getScopePackagesWithoutPlugins = (scope, ...packages) => [
+  ...packages,
+  ...ALL_DEPENDENCY_NAMES.filter(
+    (packageName) => packageName.startsWith(`${scope}/`) && !isEslintPlugin(packageName),
+  ),
+];
 
-    return Object.assign(result, packagesInCurrentGroup);
-  }, {}),
-);
+export default ncuConfig({
+  cwd: import.meta.dirname,
 
-export default defineConfig({
-  cache: true,
-  cacheExpiration: 30,
-  cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
+  // `@latest` fixes https://github.com/raineorshine/npm-check-updates/blob/55ee69bc7a9d7a786537b3359924af9784a112ae/CHANGELOG.md#how-to-opt-out-of-the-new-behavior
+  target: '@latest',
+  targets: {
+    eslint: 'minor',
 
-  // Updates pnpm catalogs too
-  workspaces: true,
-  // The root is listed as a workspace package and would be checked twice
-  root: false,
-
-  target: (packageName) => {
-    if (PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName)) {
-      return 'minor';
-    }
-
-    // `@latest` fixes https://github.com/raineorshine/npm-check-updates/blob/55ee69bc7a9d7a786537b3359924af9784a112ae/CHANGELOG.md#how-to-opt-out-of-the-new-behavior
-    return PACKAGES_ON_PRERELEASE_CHANNEL.has(packageName) ? 'greatest' : '@latest';
+    // Prerelease channel
+    '@effect/platform-node': 'greatest',
+    'all-contributors-cli': 'greatest',
+    effect: 'greatest',
   },
+  blockedVersions: {},
 
-  filterResults: (
-    packageName,
-    {currentVersion: currentVersionRaw, upgradedVersion: upgradedVersionRaw},
-  ) => {
-    const [currentVersion, upgradedVersion] = [currentVersionRaw, upgradedVersionRaw].map((v) =>
-      v.split('@').at(-1),
-    );
-
-    const blockedVersionRange = IGNORED_PACKAGE_RANGES_TO_UPDATE[packageName];
-    if (blockedVersionRange && satisfies(upgradedVersion || '', blockedVersionRange)) {
-      return false;
-    }
-
+  filterResults: (packageName, {currentVersion, upgradedVersion}) => {
     const [currentVersionSemver, upgradedVersionSemver] = [currentVersion, upgradedVersion].map(
-      (v = '') => tryParse(v),
+      (version) => tryParse(version.split('@').at(-1) || ''),
     );
     return (
-      (!PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
+      (!ALIASES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
         currentVersionSemver?.major === upgradedVersionSemver?.major) &&
       (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection */
         .has(packageName) ||
@@ -158,32 +119,36 @@ export default defineConfig({
     );
   },
 
-  format: ['group'],
-  interactive: true,
-  groupFunction: (fullName) => {
-    const [nameScope, nameWithoutScope = ''] = fullName.split('/', 2);
+  groups: {
+    '@cspell': false,
+    '@eslint': false,
+    '@vitest': false,
+    cspell: {...NON_ESLINT_GROUP, packages: getScopePackagesWithoutPlugins('@cspell', 'cspell')},
+    vitest: {...NON_ESLINT_GROUP, packages: getScopePackagesWithoutPlugins('@vitest', 'vitest')},
+    tsgo: {...NON_ESLINT_GROUP, packages: ['@typescript/native-preview']},
+    '@commitlint': NON_ESLINT_GROUP,
+    '@effect': {...NON_ESLINT_GROUP, packages: ['effect']},
 
-    let knownGroup = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
-    if (knownGroup?.excludePackages?.includes(nameWithoutScope)) {
-      knownGroup = null;
-    }
-
-    if (knownGroup) {
-      return knownGroup.nonEslint
-        ? `✨ ${knownGroup.groupName}`
-        : `3. ${knownGroup.groupName} (🟡 ESLint related)`;
-    }
-
-    const isPlugin =
-      fullName.startsWith('eslint-plugin-') ||
-      nameWithoutScope.startsWith('eslint-plugin') ||
-      (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope)) ||
-      ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES.has(fullName);
-    const isParser = fullName.endsWith('-eslint-parser') || fullName.endsWith('-eslint/parser');
+    ESLint: {...ESLINT_GROUP, packages: getScopePackagesWithoutPlugins('@eslint', 'eslint')},
+    '@typescript-eslint': {...ESLINT_GROUP, packages: ['typescript-eslint']},
+    '@angular-eslint': ESLINT_GROUP,
+    '@eslint-react': {...ESLINT_GROUP, packages: ['eslint-plugin-react-debug']},
+    '@html-eslint': ESLINT_GROUP,
+    '@jest': ESLINT_GROUP,
+    '@sveltejs': {...ESLINT_GROUP, packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
+    '@tsrx': ESLINT_GROUP,
+    'eslint-plugin-vue': {...ESLINT_GROUP, packages: ['vue-eslint-parser']},
+    'eslint-plugin-astro': {...ESLINT_GROUP, packages: ['astro-eslint-parser']},
+    'eslint-plugin-ember': {...ESLINT_GROUP, packages: ['ember-eslint-parser']},
+  },
+  groupFunction: (packageName) => {
+    const isPlugin = isEslintPlugin(packageName);
+    const isParser =
+      packageName.endsWith('-eslint-parser') || packageName.endsWith('-eslint/parser');
     const isPublishedFromMonorepoWithPackagesUnrelatedToEslint =
-      PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(fullName);
+      PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(packageName);
 
-    const groupNamePluginSuffix = `${isPlugin || isParser ? '(🟢 ESLint plugins/parsers)' : fullName.includes('eslint') || ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES.has(fullName) ? '🔵 (ESLint related)' : '(⚪️ non-ESLint related)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (⚠️ monorepo release)' : ''}`;
+    const groupNamePluginSuffix = `${isPlugin || isParser ? '(🟢 ESLint plugins/parsers)' : packageName.includes('eslint') || ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES.has(packageName) ? '🔵 (ESLint related)' : '(⚪️ non-ESLint related)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (⚠️ monorepo release)' : ''}`;
 
     /**
      * @param {number} base Base group number
@@ -192,9 +157,10 @@ export default defineConfig({
     const generateGroupName = (base, name) =>
       `${base + 3 * (isPlugin ? 0 : 1) + (isPlugin ? -1 : 0)}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? '.1' : ''} ${name} ${groupNamePluginSuffix}`;
 
-    return fullName in packageJson.devDependencies && !(fullName in packageJson.peerDependencies)
+    return packageName in packageJson.devDependencies &&
+      !(packageName in packageJson.peerDependencies)
       ? generateGroupName(3, 'Dev dependencies')
-      : fullName in packageJson.peerDependencies
+      : packageName in packageJson.peerDependencies
         ? generateGroupName(2, 'Peer dependencies')
         : generateGroupName(1, 'Direct dependencies');
   },

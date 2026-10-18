@@ -268,7 +268,7 @@ const validate = (
       if (text === deriveEnabledByCondition(manifest.enabledBy)) {
         report(key, '`enabledBy.text` repeats the generated text, please remove it');
       }
-      if (textAddendum?.trim() === '') {
+      if (textAddendum?.trim().length === 0) {
         report(key, '`enabledBy.textAddendum` adds nothing, please remove it');
       }
     }

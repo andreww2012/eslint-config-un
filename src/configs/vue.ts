@@ -1332,7 +1332,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
     const sharedDirs = nuxtLayers.map((layer) => layer.shared);
     const isInsideAppDir = (directory: string) =>
       appDirs.some(
-        (appDir) => appDir === '' || appDir === '.' || directory.startsWith(`${appDir}/`),
+        (appDir) => appDir.length === 0 || appDir === '.' || directory.startsWith(`${appDir}/`),
       );
 
     (

@@ -1,18 +1,15 @@
-# `ncu` only updates catalogs in workspace mode, which needs this
-packages:
-  - ./
-
 nodeLinker: hoisted
 packageImportMethod: clone-or-copy
 saveExact: true
 autoDedupe: true
 saveTypes: true
+lockfile:
+  # Records `autoDedupe`, so that installs don't resolve the lockfile again
+  includeResolutionSettings: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: # []
-  - eslint-plugin-jsdoc@65.3.11
-  - eslint-plugin-awscdk@4.4.4
+minimumReleaseAgeExclude: []
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -77,10 +74,6 @@ allowBuilds:
 
 dedupePeers: true
 strictPeerDependencies: false
-
-catalogs:
-  format:
-    oxfmt: 0.73.0
 
 overrides:
   # 11 and 12 only break executor helpers and subgraph schema printing, neither used by `@graphql-eslint/eslint-plugin`

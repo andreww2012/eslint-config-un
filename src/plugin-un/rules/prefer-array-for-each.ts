@@ -196,7 +196,7 @@ const getTypeArrayState = (type: ts.Type, checker: ts.TypeChecker): ArrayState =
   const constraint = checker.getBaseConstraintOfType(type) || type;
   if (constraint.isUnion()) {
     const memberStates = constraint.types.flatMap((member) =>
-      // `for…of` and `forEach` throw on nullish values alike
+      // `for...of` and `forEach` throw on nullish values alike
       [checker.getNullType().flags, checker.getUndefinedType().flags].includes(member.flags)
         ? []
         : getTypeArrayState(member, checker),
@@ -300,15 +300,15 @@ const rule: Eslint.Rule.RuleModule = {
     type: 'suggestion',
     docs: {
       description:
-        'Prefer `Array#forEach()` over the `for` and `for…of` loops it can replace without a change in behavior',
+        'Prefer `Array#forEach()` over the `for` and `for...of` loops it can replace without a change in behavior',
     },
     fixable: 'code',
     hasSuggestions: true,
     schema: [],
     messages: {
-      preferForEach: 'Use `.forEach(…)` instead of this loop.',
+      preferForEach: 'Use `.forEach(...)` instead of this loop.',
       replaceWithForEach:
-        'Replace the loop with `.forEach(…)`. Only do this if the iterated value is an array.',
+        'Replace the loop with `.forEach(...)`. Only do this if the iterated value is an array.',
     },
   },
 

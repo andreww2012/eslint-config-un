@@ -159,15 +159,13 @@ snapshots:
 lockfileVersion: '9.0'
 
 settings:
+  autoDedupe: true
   autoInstallPeers: true
+  dedupeInjectedDeps: true
+  dedupePeerDependents: true
   dedupePeers: true
   excludeLinksFromLockfile: false
-
-catalogs:
-  format:
-    oxfmt:
-      specifier: 0.73.0
-      version: 0.73.0
+  linkWorkspacePackages: false
 
 overrides:
   '@graphql-tools/utils@<12.0.1': 12.1.0
@@ -179,7 +177,7 @@ overrides:
 packageExtensionsChecksum: sha256-viRUJkqQHSHoPzf5szskuSZb6Q7/PwkBbjO6LfpaHYk=
 
 patchedDependencies:
-  '@eslint/compat': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
+  '@eslint/compat': a785b12535665a353a71d6b12eb6814ea28abb9f654e5a9f9bca32f3afa35d6e
   eslint-plugin-file-progress@4.0.0: 5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05
   eslint-plugin-html@8.2.1: c82f3c679a87e4d9d4ca4ee1e63abb28b162b4b873ad23547ca692a637cbe95b
   eslint-typegen: ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b
@@ -381,6 +379,9 @@ importers:
       '@2captcha/captcha-solver':
         specifier: 1.3.9
         version: 1.3.9
+      '@andreww2012/npm-check-updates-config':
+        specifier: 0.1.0
+        version: 0.1.0(npm-check-updates@23.1.1)
       '@angular-eslint/eslint-plugin':
         specifier: 22.6.0
         version: 22.6.0(@typescript-eslint/utils@8.71.2)(@typescript/typescript6@6.0.2)(eslint@10.13.0)
@@ -449,7 +450,7 @@ importers:
         version: 5.28.0(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
       '@eslint/compat':
         specifier: 2.1.1
-        version: 2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.13.0)
+        version: 2.1.1(patch_hash=a785b12535665a353a71d6b12eb6814ea28abb9f654e5a9f9bca32f3afa35d6e)(eslint@10.13.0)
       '@eslint/config-inspector':
         specifier: 3.5.0
         version: 3.5.0(crossws@0.4.15)(eslint@10.13.0)(srvx@1.0.5)
@@ -868,7 +869,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(@babel/plugin-proposal-decorators@7.29.7)(@babel/plugin-syntax-jsx@7.29.7)(@babel/plugin-syntax-typescript@7.29.7)(@oxc-project/types@0.153.0)(@parcel/watcher@2.6.0)(@types/node@22.20.5)(@typescript/typescript6@6.0.2)(@vue/compiler-sfc@3.5.44)(acorn@8.19.0)(confbox@0.3.1)(db0@0.3.4)(dotenv@17.4.2)(esbuild@0.28.2)(eslint@10.13.0)(giget@3.3.1)(ioredis@5.11.1)(lightningcss@1.33.0)(mlly@1.8.2)(optionator@0.9.4)(oxc-parser@0.153.0)(rolldown@1.2.14)(rollup-plugin-visualizer@7.1.1)(rollup@4.64.7)(srvx@1.0.5)(supports-color@7.2.0)(terser@5.51.2)(tsx@4.23.15)(vite@8.3.4)(yaml@2.9.1)
       oxfmt:
-        specifier: catalog:format
+        specifier: 0.73.0
         version: 0.73.0(@astrojs/compiler-rs@0.5.2)(svelte@5.57.2)
       p-queue:
         specifier: 10.0.0
@@ -963,6 +964,15 @@ packages:
 
   '@andrewbranch/untar.js@1.0.4':
     resolution: {integrity: sha512-pVXSwPsLuw8IGLo2Di0EaOfsk+ntVvpkk942J/sHYIkwvtKUakEcPh7HBgZ6tuimgzKSEHgCvO4XgQ05DEbwDw==}
+
+  '@andreww2012/npm-check-updates-config@0.1.0':
+    resolution: {integrity: sha512-aMUlavNlRpuZcrYQAy7HIX20UQ7ucsZRh+uAw0Vp+CfSXM+QMuvDWteTjyfHUGyR6m0ObwekIgeH0K2uIHRfRg==}
+    engines: {node: ^22.23.1 || ^24.18.0 || >=26.4.0}
+    peerDependencies:
+      npm-check-updates: '>=19.0.0'
+    peerDependenciesMeta:
+      npm-check-updates:
+        optional: true
 
   '@andreww2012/unutils@0.2.0':
     resolution: {integrity: sha512-ZkqhMC8N7yyo9sseFu1SAFamEDxngyTOvJDOxFevmBQohbYyEv2tQ/hsCWmOR/nLr3tX+oqhOyIpSShprVxhXQ==}
@@ -13305,6 +13315,13 @@ snapshots:
 
   '@andrewbranch/untar.js@1.0.4': {}
 
+  '@andreww2012/npm-check-updates-config@0.1.0(npm-check-updates@23.1.1)':
+    dependencies:
+      verkit: 0.5.0
+      yaml: 2.9.1
+    optionalDependencies:
+      npm-check-updates: 23.1.1(patch_hash=8ed4ba9ff51af1bee728d2969332f8fb4256b3f93e0bdfc2189feca6bc4d7300)
+
   '@andreww2012/unutils@0.2.0': {}
 
   '@angular-eslint/bundled-angular-compiler@15.2.1': {}
@@ -15240,7 +15257,7 @@ snapshots:
       '@typescript-eslint/types': 8.71.2
       esquery: 1.7.0
 
-  '@eslint/compat@2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.13.0)':
+  '@eslint/compat@2.1.1(patch_hash=a785b12535665a353a71d6b12eb6814ea28abb9f654e5a9f9bca32f3afa35d6e)(eslint@10.13.0)':
     dependencies:
       '@eslint/core': 1.2.1
     optionalDependencies:
@@ -20368,7 +20385,7 @@ snapshots:
 
   eslint-config-flat-gitignore@2.4.0(eslint@10.13.0):
     dependencies:
-      '@eslint/compat': 2.1.1(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@10.13.0)
+      '@eslint/compat': 2.1.1(patch_hash=a785b12535665a353a71d6b12eb6814ea28abb9f654e5a9f9bca32f3afa35d6e)(eslint@10.13.0)
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
 
   eslint-cssicorn@0.2.0(@eslint/css@2.0.1)(eslint@10.13.0):
