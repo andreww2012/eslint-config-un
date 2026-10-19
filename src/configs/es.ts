@@ -353,11 +353,11 @@ export interface EsEslintConfigOptions<
  * The `cloudfrontFunctions` Config reuses these rules under its own prefix, so the builder is
  * exposed separately from the Config's own `setup`
  */
-export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
-  context: Readonly<UnConfigContext<ExtraPlugins>>,
+export const buildEsConfigs = (
+  context: Readonly<UnConfigContext>,
   optionsRawFromParameters:
     | boolean
-    | OmitStrict<EsEslintConfigOptions<ExtraPlugins>, 'overrides' | 'overridesAny'>
+    | OmitStrict<EsEslintConfigOptions, 'overrides' | 'overridesAny'>
     | undefined,
   customConfig?: {
     prefix: string;

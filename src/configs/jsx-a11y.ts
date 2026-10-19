@@ -347,11 +347,11 @@ export interface JsxA11yEslintConfigOptions<
  * The `astro` and `lit` Configs reuse these rules under their own plugin prefix, so the builder is
  * exposed separately from the Config's own `setup`
  */
-export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
-  context: Readonly<UnConfigContext<ExtraPlugins>>,
+export const buildJsxA11yConfigs = (
+  context: Readonly<UnConfigContext>,
   optionsRawFromParameters:
     | boolean
-    | OmitStrict<JsxA11yEslintConfigOptions<ExtraPlugins>, 'overrides' | 'overridesAny'>
+    | OmitStrict<JsxA11yEslintConfigOptions, 'overrides' | 'overridesAny'>
     | undefined,
   customConfig?: {
     prefix: 'astro' | 'lit';

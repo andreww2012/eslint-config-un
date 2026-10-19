@@ -81,13 +81,13 @@ import {
   processUnOrFlatConfig,
 } from './shared';
 
-export function createConfigBuilder<
-  ExtraPlugins extends ExtraPluginsType,
-  P extends PluginPrefix | null,
->(
-  this: UnConfigContext<ExtraPlugins>,
+export function createConfigBuilder<P extends PluginPrefix | null>(
+  this: UnConfigContext,
   options: NoInfer<
-    | UnFlatConfigEntryBase<ExtraPlugins, P extends null ? OmitIndexSignature<UnRulesConfig> : P>
+    | UnFlatConfigEntryBase<
+        ExtraPluginsType,
+        P extends null ? OmitIndexSignature<UnRulesConfig> : P
+      >
     | boolean
   >,
   rulesPrefix: P,
@@ -102,7 +102,7 @@ export function createConfigBuilder<
   ) {
     return null;
   }
-  const configBuilder = new ConfigEntryBuilder<ExtraPlugins, P>(
+  const configBuilder = new ConfigEntryBuilder<ExtraPluginsType, P>(
     rulesPrefix,
     // eslint-disable-next-line ts/no-unnecessary-condition
     options && typeof options === 'object' ? options : {},

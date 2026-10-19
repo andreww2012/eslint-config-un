@@ -1,6 +1,6 @@
 import type eslintPluginStylistic from '@stylistic/eslint-plugin';
 import {ERROR, OFF, type RuleSeverity} from '../constants';
-import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
+import type {EslintRuleEntry} from '../eslint/eslint-types';
 import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
@@ -50,7 +50,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'stylistic');
 
-  let configProducedByCustomize: EslintFlatConfigEntry['rules'] | undefined;
+  let configProducedByCustomize: Partial<Record<string, EslintRuleEntry>> | undefined;
   if (customizeOptions) {
     const {customize} = await pluginsLoaders.stylistic(context).then(({module}) => module.configs);
     configProducedByCustomize = mapKeys(

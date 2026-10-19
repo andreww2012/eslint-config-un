@@ -19,6 +19,8 @@ Never statically import at runtime any Config file matching `src/configs/**/*.ts
 
 Keep each call chain on a Config builder (`.addRule(...)`, `.markCategory(...)` and so on) under 250 calls: a longer one overflows the parser's call stack when the file is linted on its own (for example, that crashes ESLint).
 
+Keep typechecking fast.
+
 Never reference Sub-configs with the `config` prefix: use `css/scss` or `scss` in docs, never `configScss`.
 
 Wrap type intersections in `Prettify`, but only where it actually flattens in the editor hover (for example, inline as a property or parameter type, it won't if any operand is a union; as the whole body of a type alias, it still does).

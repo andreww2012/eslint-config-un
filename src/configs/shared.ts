@@ -122,11 +122,11 @@ export interface NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins extends Extr
   configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;
 }
 
-export const generateConfigNoOnlyTests = <ExtraPlugins extends ExtraPluginsType>(
-  context: UnConfigContext<ExtraPlugins>,
+export const generateConfigNoOnlyTests = (
+  context: UnConfigContext,
   prefix: string,
-  configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>['configNoOnlyTests'] & {},
-  parentConfig: boolean | UnFlatConfigEntryBase<ExtraPlugins>,
+  configNoOnlyTests: ConfigNoOnlyTests,
+  parentConfig: boolean | UnFlatConfigEntryBase,
   {
     filesDefault,
   }: {

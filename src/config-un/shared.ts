@@ -989,7 +989,11 @@ export const processUnOrFlatConfig = (
   context: UnConfigContext,
   config: SetRequired<EslintFlatConfigEntry | UnFlagConfigEntry, 'name'>,
   overrides: Record<string, UnFlatConfigEntryOverridesEntry | undefined> | undefined,
-  configBuilderToModify?: ConfigEntryBuilder,
+  // Not the whole builder: relating a builder to it would compare their (huge) `options` types
+  configBuilderToModify?: Pick<
+    ConfigEntryBuilder,
+    'addFlatConfig' | 'getConfig' | 'setConfigMetadataForRule'
+  >,
 ) => {
   const extraConfigs: SetRequired<EslintFlatConfigEntry, 'name'>[] = [];
   const removedRules: string[] = [];
@@ -1107,7 +1111,7 @@ export const processUnOrFlatConfig = (
                 : ruleEntryRaw.files || config.files,
           }),
           ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
-            ignores: (ruleEntryRaw.ignores?.length ? ruleEntryRaw : config).ignores,
+            ignores: ruleEntryRaw.ignores?.length ? ruleEntryRaw.ignores : config.ignores,
           }),
           rules: Object.fromEntries(newRuleEntries),
         };
@@ -1134,7 +1138,11 @@ export const processUnOrFlatConfig = (
   );
 
   if (configBuilderToModify) {
-    Object.assign((config.rules ||= {}), overridesResolved);
+    // Not `||=`: its result type compares the two huge `rules` types of the union, taking seconds
+    if (!config.rules) {
+      config.rules = {};
+    }
+    Object.assign(config.rules, overridesResolved);
     removedRules.forEach((removedRule) => {
       config.rules && Reflect.deleteProperty(config.rules, removedRule);
     });

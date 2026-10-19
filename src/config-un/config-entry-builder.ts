@@ -594,7 +594,15 @@ export class ConfigEntryBuilder<
           throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
         }
         /* v8 ignore stop */
-        return addRule(this.pluginPrefix, ruleName, severity, ruleOptions, options);
+        // Inferred type arguments make TS compare the options of every rule, taking seconds, so
+        // we're setting them manually
+        return addRule<DefaultPrefix & PluginPrefix, N>(
+          this.pluginPrefix,
+          ruleName,
+          severity,
+          ruleOptions,
+          options,
+        );
       },
 
       addAnyRule: <

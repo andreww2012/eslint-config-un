@@ -4,7 +4,7 @@ import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {LoadablePluginPrefix} from '../loaders';
 import type {MaybePromise, NonEmptyTuple, ObjectValues} from '../types';
 import {allUnionMembers} from '../utils';
-import type {ExtraPluginsType, UnConfigContext} from './shared';
+import type {UnConfigContext} from './shared';
 
 export type PackageToCheck = `${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`;
 
@@ -96,10 +96,8 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
  * The config builders it creates are recorded by the context it is given, in creation order.
  * Only a Config declaring a `Result` returns anything: `null` means it has nothing to report
  */
-export type UnConfigSetup<Options, Needs extends readonly ConfigKey[] = [], Result = never> = <
-  ExtraPlugins extends ExtraPluginsType,
->(
-  context: Readonly<UnConfigContext<ExtraPlugins>>,
+export type UnConfigSetup<Options, Needs extends readonly ConfigKey[] = [], Result = never> = (
+  context: Readonly<UnConfigContext>,
   configOptions:
     | boolean
     // eslint-disable-next-line ts/no-restricted-types -- some configs don't have the omitted properties
@@ -116,8 +114,8 @@ export type UnConfigSetup<Options, Needs extends readonly ConfigKey[] = [], Resu
  */
 export interface AnyConfigManifest extends ConfigManifest<readonly ConfigKey[]> {
   // eslint-disable-next-line ts/method-signature-style -- see the note above
-  setup<ExtraPlugins extends ExtraPluginsType>(
-    context: Readonly<UnConfigContext<ExtraPlugins>>,
+  setup(
+    context: Readonly<UnConfigContext>,
     configOptions: boolean | object | undefined,
     resolved: UnConfigResults,
   ): MaybePromise<void> | MaybePromise<ObjectValues<UnConfigResults>>;
