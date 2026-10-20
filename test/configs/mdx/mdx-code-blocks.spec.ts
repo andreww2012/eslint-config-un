@@ -16,7 +16,7 @@ describe('mdx: sub config `codeBlocks`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
+        '["**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.mdx/**/*.md?(x)"]',
       );
       expect(config?.ignores).toBeUndefined();
     });

@@ -1,4 +1,9 @@
-import {GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
+import {
+  GLOB_MDX,
+  GLOB_MDX_MD_X_CODE_BLOCKS,
+  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
+  WARNING,
+} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
@@ -55,7 +60,10 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
     Pick<MarkdownEslintConfigOptions, 'configCodeBlocks'> {}
 
 const DEFAULT_FILES = [GLOB_MDX] as const;
-const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS] as const;
+const DEFAULT_FILES_FOR_CODE_BLOCKS = [
+  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
+  GLOB_MDX_MD_X_CODE_BLOCKS,
+] as const;
 
 export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   context,

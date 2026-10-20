@@ -6,6 +6,8 @@ export default definePluginMetadata('markdown-links', {
   ruleDocsUrl: (ruleName) =>
     `https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/${ruleName}.html`,
   rules: {
-    'no-dead-urls': {requiresNetwork: true},
+    'no-dead-urls': {requiresNetwork: true, disableInCodeBlocks: 'emptiness'},
+    'no-missing-fragments': {disableInCodeBlocks: 'fragment'},
+    'no-missing-path': {disableInCodeBlocks: 'imports'},
   },
 });

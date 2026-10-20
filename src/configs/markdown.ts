@@ -1,6 +1,12 @@
 import type {MarkdownLanguageOptions} from '@eslint/markdown';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
-import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
+import {
+  ERROR,
+  GLOB_MARKDOWN,
+  GLOB_MARKDOWN_MD_X_CODE_BLOCKS,
+  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+  OFF,
+} from '../constants';
 import type {UnFilesAndIgnoresPatterns} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
@@ -24,7 +30,10 @@ type MarkdownDialect = 'commonmark' | 'gfm';
 type CodeBlockLanguage = ShikiLanguageCodesList | (string & {});
 
 const DEFAULT_FILES = [GLOB_MARKDOWN] as const;
-const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS] as const;
+const DEFAULT_FILES_FOR_CODE_BLOCKS = [
+  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+  GLOB_MARKDOWN_MD_X_CODE_BLOCKS,
+] as const;
 
 const GFM_ALERTS_TYPES = ['note', 'tip', 'important', 'warning', 'caution'] as const;
 

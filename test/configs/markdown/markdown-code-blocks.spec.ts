@@ -1,5 +1,6 @@
 const FIXTURES = {
   codeBlockWithConsoleCall: 'code-block-with-console-call.md',
+  nestedMarkdownCodeBlock: 'nested-markdown-code-block.md',
 } as const;
 
 describe('markdown: sub config `codeBlocks`', () => {
@@ -16,7 +17,7 @@ describe('markdown: sub config `codeBlocks`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
+        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.md/**/*.md?(x)"]',
       );
       expect(config?.ignores).toBeUndefined();
     });
@@ -66,6 +67,31 @@ describe('markdown: sub config `codeBlocks`', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot('"Unexpected console statement."');
+    });
+
+    it('lints a nested Markdown code block without the rules misjudging a fragment of a document, like `markdown/heading-increment`', async () => {
+      const results = await testEslintConfig(
+        'markdown',
+        FIXTURES.nestedMarkdownCodeBlock,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.nestedMarkdownCodeBlock,
+          'markdown/heading-increment',
+        ),
+      ).toBeUndefined();
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.nestedMarkdownCodeBlock,
+        'markdown/no-empty-links',
+      );
+
+      expect(error?.line).toBe(8);
+      expect(error?.message).toMatchInlineSnapshot('"Unexpected empty link found."');
     });
   });
 
