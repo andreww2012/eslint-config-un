@@ -5,8 +5,15 @@ export default definePluginMetadata('angular', {
   isMainPlugin: true,
   docsUrl:
     'https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/README.md',
-  ruleDocsUrl: (ruleName) =>
-    `https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/${ruleName}.md`,
+  ruleDocsUrl: (ruleName, ref = 'HEAD') =>
+    `https://github.com/angular-eslint/angular-eslint/blob/${ref}/packages/eslint-plugin/docs/rules/${ruleName}.md`,
+  // Removed rules
+  ruleDocsRefs: {
+    'no-conflicting-lifecycle': 'v21.4.0',
+    'no-host-metadata-property': 'v18.4.3',
+    'prefer-standalone-component': 'v18.4.3',
+    'sort-ngmodule-metadata-arrays': 'v18.4.3',
+  },
   suggestedPrefix: ['@angular-eslint', 'more concise and convenient to use; `@` feels redundant'],
   rules: {
     'component-class-suffix': {stylistic: true},

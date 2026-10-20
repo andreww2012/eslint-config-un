@@ -3,7 +3,16 @@ import {definePluginMetadata} from './shared';
 export default definePluginMetadata('boundaries', {
   configs: ['boundaries'],
   docsUrl: 'https://www.jsboundaries.dev',
-  ruleDocsUrl: (ruleName) => `https://jsboundaries.dev/docs/rules/${ruleName}`,
+  ruleDocsUrl: (ruleName, ref) =>
+    ref
+      ? `https://github.com/javierbrea/eslint-plugin-boundaries/blob/${ref}/docs/rules/${ruleName}.md`
+      : `https://jsboundaries.dev/docs/rules/${ruleName}`,
+  // Deprecated rules
+  ruleDocsRefs: {
+    'element-types': 'v7.2.0',
+    'no-ignored': 'v6.0.2',
+    'no-unknown': 'v6.0.2',
+  },
   rules: {
     dependencies: {disableInCodeBlocks: 'imports'},
     'element-types': {disableInCodeBlocks: 'imports'},

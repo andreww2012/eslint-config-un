@@ -1,8 +1,12 @@
 import {definePluginMetadata} from './shared';
 
+// `x-` rules are aliases documented on the page of the rule they alias
+const ALIAS_PREFIX_REGEX = /^x-/;
+
 export default definePluginMetadata('eslint-react', {
   configs: ['react'],
-  ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
+  ruleDocsUrl: (ruleName) =>
+    `https://eslint-react.xyz/docs/rules/${ruleName.replace(ALIAS_PREFIX_REGEX, '')}`,
   suggestedPrefix: [
     '@eslint-react',
     'more concise and convenient to use; `@` feels redundant; `react` is already taken by `eslint-plugin-react`',

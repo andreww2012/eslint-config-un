@@ -3,8 +3,31 @@ import {definePluginMetadata} from './shared';
 export default definePluginMetadata('unicorn', {
   configs: ['unicorn'],
   docsUrl: 'https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/readme.md',
-  ruleDocsUrl: (ruleName) =>
-    `https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/${ruleName}.md`,
+  ruleDocsUrl: (ruleName, ref = 'HEAD') =>
+    `https://github.com/sindresorhus/eslint-plugin-unicorn/blob/${ref}/docs/rules/${ruleName}.md`,
+  // Deprecated rules
+  ruleDocsRefs: {
+    'better-regex': 'v64.0.0',
+    'no-array-push-push': 'v58.0.0',
+    'no-deprecated-css-features': 'v76.0.0',
+    'no-duplicate-css-selectors': 'v76.0.0',
+    'no-duplicate-font-family-names': 'v76.0.0',
+    'no-hex-escape': 'v65.0.1',
+    'no-instanceof-array': 'v56.0.1',
+    'no-invalid-media-features': 'v76.0.0',
+    'no-length-as-slice-end': 'v58.0.0',
+    'no-nesting-with-mixed-specificity': 'v76.0.0',
+    'no-redundant-nested-style-rules': 'v76.0.0',
+    'no-unknown-css-annotations': 'v76.0.0',
+    'no-unknown-pseudo-selectors': 'v76.0.0',
+    'no-unscoped-css-nesting-selector': 'v76.0.0',
+    'no-unused-array-method-return': 'v74.0.0',
+    'prefer-dom-node-dataset': 'v64.0.0',
+    'prefer-explicit-viewport-units': 'v76.0.0',
+    'prefer-json-parse-buffer': 'v64.0.0',
+    'prefer-media-feature-range-syntax': 'v76.0.0',
+    'prevent-abbreviations': 'v67.0.0',
+  },
   prettierLanguage: 'js',
   rules: {
     'better-dom-traversing': {stylistic: true},

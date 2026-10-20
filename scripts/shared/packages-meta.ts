@@ -1,7 +1,7 @@
 import {objectFromEntriesUnsafe} from '@andreww2012/unutils';
 import type {UnConfigs} from '../../src/configs';
 import {type LoadablePluginPrefix, pluginsLoaders} from '../../src/loaders';
-import {readPluginMetadata} from './plugin-metadata';
+import {getRuleDocsUrl, readPluginMetadata} from './plugin-metadata';
 
 const versionAsIs = (version: string) => version;
 
@@ -9,7 +9,7 @@ type GitTagResult = string | {url: string};
 
 interface PackageMeta {
   configs: (keyof UnConfigs)[];
-  ruleDocsUrl: ((ruleName: string) => string) | null;
+  ruleDocsUrl: ((ruleName: string) => string | undefined) | null;
   gitTag?: string | ((version: string) => GitTagResult);
 
   /**
@@ -48,7 +48,9 @@ export const PLUGIN_PACKAGES_META: Readonly<Record<string, PluginPackageMeta>> =
         {
           configs: metadata.configs || [],
           pluginPrefix: prefix,
-          ruleDocsUrl: metadata.ruleDocsUrl || null,
+          ruleDocsUrl: metadata.ruleDocsUrl
+            ? (ruleName) => getRuleDocsUrl(metadata, ruleName)
+            : null,
           ...(metadata.gitTag != null && {gitTag: metadata.gitTag}),
           ...(metadata.isMainPlugin && {isMainPlugin: metadata.isMainPlugin}),
           ...(metadata.docsUrl != null && {pluginDocsUrl: metadata.docsUrl}),

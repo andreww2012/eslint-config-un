@@ -92,7 +92,18 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
 
   docsUrl?: string | {label: string; url: string};
 
-  ruleDocsUrl?: (ruleName: string) => string;
+  /**
+   * `ref` is the rule's entry in `ruleDocsRefs`, `undefined` for a rule documented on the default
+   * branch
+   */
+  ruleDocsUrl?: (ruleName: string, ref: string | undefined) => string;
+
+  /**
+   * Rules whose docs page is gone from the default branch: the git ref of the last release that had
+   * it.
+   * `null` for a rule that never had a page of its own, which then links to `docsUrl`
+   */
+  ruleDocsRefs?: Partial<Record<GetRuleNamesInPlugin<Prefix>, string | null>>;
 
   gitTag?: string | ((version: string) => string | {url: string});
 
@@ -167,6 +178,7 @@ export const PLUGIN_METADATA_KEY_ORDER = allUnionMembers<
   'isMainPlugin',
   'docsUrl',
   'ruleDocsUrl',
+  'ruleDocsRefs',
   'gitTag',
   'suggestedPrefix',
   'prettierLanguage',
@@ -188,3 +200,18 @@ export const gitTagAsVersion = (version: string) => version;
  * The tagging scheme of a package could not be worked out
  */
 export const gitTagUnknown = () => '';
+
+const HTML_ESLINT_RULES_WITHOUT_FRAMEWORK_PAGE: ReadonlySet<string> = new Set([
+  'id-naming-convention',
+  'no-restricted-tags',
+  'require-li-container',
+]);
+
+/**
+ * The docs of the html-eslint framework plugins have no pages for some rules, so those link to the
+ * page of the same rule of the HTML plugin
+ */
+export const htmlEslintFrameworkRuleDocsUrl = (framework: string) => (ruleName: string) =>
+  HTML_ESLINT_RULES_WITHOUT_FRAMEWORK_PAGE.has(ruleName)
+    ? `https://html-eslint.org/docs/rules/${ruleName}`
+    : `https://html-eslint.org/docs/${framework}/rules/${ruleName}`;

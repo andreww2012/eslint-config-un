@@ -1,9 +1,21 @@
 import {definePluginMetadata} from './shared';
 
+// Experimental `exp-` rules are documented under the name without the prefix
+const EXPERIMENTAL_PREFIX_REGEX = /^exp-/;
+
 export default definePluginMetadata('stylistic', {
   configs: ['stylistic'],
   docsUrl: 'https://eslint.style',
-  ruleDocsUrl: (ruleName) => `https://eslint.style/rules/${ruleName}`,
+  ruleDocsUrl: (ruleName, ref) =>
+    ref
+      ? `https://github.com/eslint-stylistic/eslint-stylistic/blob/${ref}/packages/eslint-plugin/rules/${ruleName}/README.md`
+      : `https://eslint.style/rules/${ruleName.replace(EXPERIMENTAL_PREFIX_REGEX, '')}`,
+  // Deprecated rules
+  ruleDocsRefs: {
+    'jsx-indent': 'v5.10.0',
+    'jsx-props-no-multi-spaces': 'v5.10.0',
+    'jsx-sort-props': 'v5.10.0',
+  },
   suggestedPrefix: ['@stylistic', 'more concise and convenient to use; `@` feels redundant'],
   prettierLanguage: 'js',
   allRulesStylistic: true,

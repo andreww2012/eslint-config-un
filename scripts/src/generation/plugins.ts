@@ -10,7 +10,11 @@ import {
   type RuleMetadata,
 } from '../../../src/plugins/shared';
 import {stylePluginPrefix, styleRuleName, styleText} from '../../../src/utils';
-import {type DiscoveredPlugin, readPluginMetadata} from '../../shared/plugin-metadata';
+import {
+  type DiscoveredPlugin,
+  getRuleDocsUrl,
+  readPluginMetadata,
+} from '../../shared/plugin-metadata';
 
 const ROOT_DIR = pathe.join(import.meta.dirname, '../../..');
 type Trait = keyof RuleMetadata;
@@ -385,13 +389,6 @@ const AUTOFIX_DEFAULTS_JSDOC_INTRO =
 const JSDOC_EMPTY_LINE = '   *\n';
 
 /**
- * A plugin documenting its rules on a single page has no per-rule URL
- */
-const getRuleDocsUrl = ({metadata}: DiscoveredPlugin, ruleName: string) =>
-  metadata.ruleDocsUrl?.(ruleName) ||
-  (typeof metadata.docsUrl === 'string' ? metadata.docsUrl : metadata.docsUrl?.url);
-
-/**
  * The JSDoc of the root option lists the rules too, so that it shows up on hover
  */
 const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) => {
@@ -408,7 +405,7 @@ const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) =
   const list = collectTrait(plugins, 'autofixDisabled')
     .map(({prefix, ruleName, fullRuleName}) => {
       const plugin = pluginsByPrefix.get(prefix);
-      const url = plugin && getRuleDocsUrl(plugin, ruleName);
+      const url = plugin && getRuleDocsUrl(plugin.metadata, ruleName);
       return `   * - ${url ? `[\`${fullRuleName}\`](${url})` : `\`${fullRuleName}\``}\n`;
     })
     .join('');

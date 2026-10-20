@@ -2,8 +2,19 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('angular-template', {
   configs: ['angular'],
-  ruleDocsUrl: (ruleName) =>
-    `https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/${ruleName}.md`,
+  ruleDocsUrl: (ruleName, ref = 'HEAD') =>
+    `https://github.com/angular-eslint/angular-eslint/blob/${ref}/packages/eslint-plugin-template/docs/rules/${ruleName}.md`,
+  // Old names of the renamed accessibility rules
+  ruleDocsRefs: {
+    'accessibility-alt-text': 'v15.2.1',
+    'accessibility-elements-content': 'v15.2.1',
+    'accessibility-interactive-supports-focus': 'v15.2.1',
+    'accessibility-label-for': 'v15.2.1',
+    'accessibility-label-has-associated-control': 'v15.2.1',
+    'accessibility-role-has-required-aria': 'v15.2.1',
+    'accessibility-table-scope': 'v15.2.1',
+    'accessibility-valid-aria': 'v15.2.1',
+  },
   suggestedPrefix: [
     '@angular-eslint/template',
     'more concise and convenient to use; `@` feels redundant',

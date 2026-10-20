@@ -16,6 +16,19 @@ export interface DiscoveredPlugin {
 }
 
 /**
+ * Falls back to `docsUrl` for a rule without a page of its own, or a plugin documenting all its
+ * rules on a single page
+ */
+export const getRuleDocsUrl = (metadata: PluginMetadata, ruleName: string) => {
+  const ruleDocsRefs: Partial<Record<string, string | null>> = metadata.ruleDocsRefs || {};
+  const ref = ruleDocsRefs[ruleName];
+  return (
+    (ref !== null && metadata.ruleDocsUrl?.(ruleName, ref)) ||
+    (typeof metadata.docsUrl === 'string' ? metadata.docsUrl : metadata.docsUrl?.url)
+  );
+};
+
+/**
  * Loads every plugin metadata module.
  * They are never imported statically, so that nothing they carry for the tooling only ends up in
  * the published package
