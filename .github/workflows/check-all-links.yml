@@ -32,8 +32,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml`
+      # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml` and the rule docs URLs
       - uses: ./.github/actions/prepare
+      # Rule docs URLs are built by functions in the plugin metadata, so no file holds them
+      - name: List rule docs URLs
+        run: node --import tsx/esm scripts/list-rule-docs-urls.ts > "${RUNNER_TEMP}/rule-docs-urls.md"
       # The cache is deliberately not restored, so every link is checked from scratch
       - name: Check links
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
@@ -42,3 +45,4 @@ jobs:
             --config node_modules/lychee-config-nick2bad4u/lychee.toml
             --config lychee.toml
             .
+            ${{ runner.temp }}/rule-docs-urls.md

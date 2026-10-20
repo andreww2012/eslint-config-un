@@ -19,28 +19,45 @@ jobs:
       # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml` and the
       # changed files filtering script below
       - uses: ./.github/actions/prepare
-      - name: Collect changed files
-        id: changed-files
+      - name: Resolve base commit
+        id: base
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha ||
             github.event.before }}
         run: |
+          # `github.event.before` is all zeroes for a newly pushed branch and may
+          # point at a commit dropped by a force push. Compare against the empty tree
+          # in that case, which checks every file in the repo and every rule docs URL
+          if git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "ref=${BASE_SHA}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=$(git hash-object -t tree /dev/null)" >> "$GITHUB_OUTPUT"
+          fi
+      # Rule docs URLs are built by functions in the plugin metadata, so no file holds them
+      - name: List rule docs URLs of changed plugins
+        env:
+          BASE: ${{ steps.base.outputs.ref }}
+        run: |
+          node --import tsx/esm scripts/list-rule-docs-urls.ts --changed-since "${BASE}" \
+            > "${RUNNER_TEMP}/rule-docs-urls.md"
+          echo "Rule docs URLs of changed plugins:"
+          cat "${RUNNER_TEMP}/rule-docs-urls.md"
+      - name: Collect changed files
+        id: changed-files
+        env:
+          BASE: ${{ steps.base.outputs.ref }}
+        run: |
           # Neither half of the pipeline below may fail silently
           set -o pipefail
-          # `github.event.before` is all zeroes for a newly pushed branch and may
-          # point at a commit dropped by a force push. Diff against the empty tree
-          # in that case, which checks every file in the repo
-          if git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
-            base="${BASE_SHA}"
-          else
-            base=$(git hash-object -t tree /dev/null)
-          fi
           # Explicitly listed inputs bypass lychee's `extensions` allowlist,
           # so we're intersecting them with the same allowlist
-          git diff --name-only --diff-filter=ACMR "${base}" HEAD |
+          git diff --name-only --diff-filter=ACMR "${BASE}" HEAD |
             node scripts/filter-lychee-inputs.ts \
               node_modules/lychee-config-nick2bad4u/lychee.toml lychee.toml \
             > "${RUNNER_TEMP}/changed-files.txt"
+          if [ -s "${RUNNER_TEMP}/rule-docs-urls.md" ]; then
+            echo "${RUNNER_TEMP}/rule-docs-urls.md" >> "${RUNNER_TEMP}/changed-files.txt"
+          fi
           echo "Changed files:"
           cat "${RUNNER_TEMP}/changed-files.txt"
           echo "count=$(wc -l < "${RUNNER_TEMP}/changed-files.txt")" >> "$GITHUB_OUTPUT"
