@@ -180,6 +180,18 @@ describe('rules', async () => {
       Prefer using \`"""\` for multiline, or \`"\` for a single line description."
     `);
   });
+
+  it('does not run JS-only rules of other Configs on `.graphql` files', async () => {
+    const results = await testEslintConfig(
+      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA, js: true, security: true, unicorn: true},
+      FIXTURES.typeWithCommentDescription,
+      {searchFixturesRelativeToPath: import.meta.dirname},
+    );
+
+    expect(results.flatMap(({messages}) => messages.map(({ruleId}) => ruleId))).toStrictEqual([
+      'graphql/no-hashtag-description',
+    ]);
+  });
 });
 
 describe('un options', () => {

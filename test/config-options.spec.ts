@@ -62,7 +62,7 @@ describe('option: `ignores`', () => {
 
       expect(receivedParams?.ignoresDefault).toMatchInlineSnapshot('[]');
       expect(receivedParams?.ignoresImplicit).toMatchInlineSnapshot(
-        '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
+        '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
       );
       expect(configResult.getConfigByUnPostfix('import')?.ignores).toStrictEqual(
         (await computeEslintConfig('import')).getConfigByUnPostfix('import')?.ignores,
@@ -244,7 +244,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        '{"files": [["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
+        '{"files": [["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 

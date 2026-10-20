@@ -13,7 +13,7 @@ describe('basic tests', () => {
     expect(config?.files).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
 
     expect(config?.ignores).toMatchInlineSnapshot(
-      '["**/*.css", "**/*.scss", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
+      '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
     );
 
     expect(configResult.getLoadedPlugin('jsonc')).toBeDefined();

@@ -163,7 +163,7 @@ describe('un options', () => {
       const configResult = await computeEslintConfig('astro');
 
       expect(configResult.getConfigByUnPostfix('astro')?.ignores).toMatchInlineSnapshot(
-        '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
+        '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
       );
     });
 

@@ -56,6 +56,7 @@ import {
  */
 export type ImplicitlyIgnoredFileTypeUnlessParsed =
   | 'css'
+  | 'graphql'
   | 'html'
   | 'json'
   | 'json5'
@@ -307,6 +308,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       graphql: {
         mechanism: {parser: 'graphql-eslint-parser'},
         filesDefault: [GLOB_GRAPHQL],
+        ignoresExclusions: ['graphql'],
       },
     },
     dialectDefault: 'graphql',

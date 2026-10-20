@@ -3,6 +3,7 @@ import {
   ERROR,
   GLOB_CIVET_COMPILED,
   GLOB_CSS,
+  GLOB_GRAPHQL,
   GLOB_HTM_HTML,
   GLOB_JSON,
   GLOB_JSON5,
@@ -83,6 +84,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonl
   Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>
 > = {
   css: [GLOB_CSS],
+  graphql: [GLOB_GRAPHQL],
   scss: [GLOB_SCSS],
   json: [GLOB_JSON],
   jsonc: [GLOB_JSONC],
