@@ -17,22 +17,42 @@ const RULE_OPTIONS_SCHEMA = {
 
 type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
+type ElementChild = AST.VElement['children'][number];
+
 // Vue treats only these characters as whitespace
 const WHITESPACE_ONLY_REGEX = /^[\t\n\f\r ]*$/;
-const TRAILING_WHITESPACE_REGEX = /(?<![\t\n\f\r ])[\t\n\f\r ]+$/;
+// The source of joined text still has the comments
+const TRAILING_WHITESPACE_REGEX =
+  /(?<![\t\n\f\r ])[\t\n\f\r ](?:[\t\n\f\r ]|<!--(?:(?!-->)[\s\S])*-->)*$/;
 const NEWLINE_REGEX = /[\n\r]/;
 
 // Elements with these directives may render nothing or be hidden
 const OPTIONAL_ELEMENT_DIRECTIVES: ReadonlySet<string> = new Set(['else-if', 'for', 'if', 'show']);
 
-const isWhitespaceOnly = (node: AST.VElement['children'][number]) =>
+const isWhitespaceOnly = (node: ElementChild) =>
   node.type === 'VText' && WHITESPACE_ONLY_REGEX.test(node.value);
 
-const isOptionalElement = (node: AST.VElement['children'][number]) =>
+const isOptionalElement = (node: ElementChild) =>
   node.type === 'VElement' &&
   node.startTag.attributes.some(
     (attribute) => attribute.directive && OPTIONAL_ELEMENT_DIRECTIVES.has(attribute.key.name.name),
   );
+
+// The parser splits text at comments, but Vue drops them in production builds and joins the text
+const joinTexts = (children: readonly ElementChild[]) =>
+  children.reduce<ElementChild[]>((acc, child) => {
+    const previous = acc.at(-1);
+    if (previous?.type === 'VText' && child.type === 'VText') {
+      acc[acc.length - 1] = {
+        ...previous,
+        value: previous.value + child.value,
+        range: [previous.range[0], child.range[1]],
+      };
+    } else {
+      acc.push(child);
+    }
+    return acc;
+  }, []);
 
 const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
   meta: {
@@ -68,7 +88,8 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
       });
     };
 
-    return defineElementVisitor(context, options?.ignoredElements, ({children}) => {
+    return defineElementVisitor(context, options?.ignoredElements, (element) => {
+      const children = joinTexts(element.children);
       // Anything after the last content that is always rendered may render nothing
       const lastIndex = children.findLastIndex(
         (child) => !isWhitespaceOnly(child) && !isOptionalElement(child),

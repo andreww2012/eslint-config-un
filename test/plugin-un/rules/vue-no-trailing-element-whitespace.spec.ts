@@ -23,6 +23,8 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
       '<p>\n  {{ label }}\n  <i v-if="isShown"></i>\n  <b v-else></b>\n</p>',
       '<p>\n  {{ label }}<i v-if="isShown"> (optional)</i>\n</p>',
       '<p>\n  <i v-if="isShown"></i>\n  Loading…</p>',
+      '<p>\n  <!-- Comment -->\n  <b v-if="isShown"></b>\n</p>',
+      '<p>\n  <i></i>\n  <!-- Comment -->\n  <b v-if="isShown"></b>\n</p>',
       '<p>Total:&#32;</p>',
       '<p>Total:&nbsp;</p>',
       '<p>\n  \n</p>',
@@ -63,6 +65,14 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
         error: {messageId: 'trailing', line: 2, column: 11, endLine: 3, endColumn: 3},
       },
       {
+        template: '<p>\n  Loading…\n  <!-- Comment -->\n</p>',
+        error: {messageId: 'trailing', line: 2, column: 11, endLine: 4, endColumn: 1},
+      },
+      {
+        template: '<p>\n  Loading…<!-- Comment -->\n</p>',
+        error: {messageId: 'trailing', line: 2, column: 27, endLine: 3, endColumn: 1},
+      },
+      {
         template: '<p>\n  {{ label }}\n  <i v-if="isShown"></i>\n</p>',
         error: {messageId: 'beforeOptional', line: 2, column: 14, endLine: 3, endColumn: 3},
       },
@@ -77,6 +87,10 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
       {
         template: '<p><b v-if="isShown"></b> <i v-else-if="isVisible"></i></p>',
         error: {messageId: 'beforeOptional', line: 1, column: 36, endLine: 1, endColumn: 37},
+      },
+      {
+        template: '<p><i></i> <!-- Comment --> <b v-if="isShown"></b></p>',
+        error: {messageId: 'beforeOptional', line: 1, column: 21, endLine: 1, endColumn: 39},
       },
     ].map(({template, error}) => ({...toTestCase(template), errors: [error]})),
     {
