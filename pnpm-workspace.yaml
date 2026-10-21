@@ -30,6 +30,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-react-rsc@5.28.4
   - eslint-plugin-react-web-api@5.28.4
   - eslint-plugin-react-x@5.28.4
+  - '@boundaries/elements@3.1.2'
+  - eslint-plugin-boundaries@7.2.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -110,7 +112,6 @@ overrides:
   # 6.0.0's only breaking change (separate transfer hosts are opt-in) doesn't affect `get-uri`
   basic-ftp@<6.2.1: 6.2.1
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
-  handlebars@>=4.0.0 <4.7.10: 4.7.10
   undici@>=7.0.0 <7.29.1: 7.30.0
 
 patchedDependencies:
