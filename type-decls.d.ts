@@ -120,8 +120,3 @@ declare module 'eslint-plugin-civet' {
   const value: CivetPlugin;
   export default value;
 }
-
-declare module 'stylelint-config-recess-order/groups' {
-  const value: {properties: string[]}[];
-  export default value;
-}

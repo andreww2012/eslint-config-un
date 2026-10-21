@@ -936,8 +936,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(patch_hash=f6fcffea902e63f4455a20d37a8d475c69d6f6dc3b02021deb85caa680b1ce0b)
       stylelint-config-recess-order:
-        specifier: 7.8.0
-        version: 7.8.0
+        specifier: 7.8.2
+        version: 7.8.2
       svelte:
         specifier: 5.57.2
         version: 5.57.2(@typescript-eslint/types@8.72.0)
@@ -12117,8 +12117,8 @@ packages:
       stylelint-order:
         optional: true
 
-  stylelint-config-recess-order@7.8.0:
-    resolution: {integrity: sha512-ObYusdkXavm8ulgb5xvmU1l8wgCdveNYG12hOTUEdjS8bNhSRggl4or0mE0JaOnQz+Ve2xZemVpwqERCgJbntg==}
+  stylelint-config-recess-order@7.8.2:
+    resolution: {integrity: sha512-IIRCTkrGiynshEapnjdc53Nq/EaoqdWr/5U0Kk42b9O026+CmgBu4BHQPraWdV98E/U/XsotAhWZXs5gS7/7Zw==}
     peerDependencies:
       stylelint: ^16.18.0 || ^17.0.0
       stylelint-order: ^7.0.0 || ^8.0.0
@@ -26243,7 +26243,7 @@ snapshots:
 
   stylelint-config-clean-order@10.0.0(patch_hash=f6fcffea902e63f4455a20d37a8d475c69d6f6dc3b02021deb85caa680b1ce0b): {}
 
-  stylelint-config-recess-order@7.8.0: {}
+  stylelint-config-recess-order@7.8.2: {}
 
   supports-color@10.2.2: {}
 
