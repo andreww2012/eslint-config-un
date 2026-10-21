@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import type {GitignoreSourcesOptions} from 'gitignore-reader-x';
 import {resolveGitignore} from '../../src/config-un/gitignore';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore');
@@ -11,6 +12,25 @@ const createTemporaryDirectory = async () => {
   onTestFinished(() => fs.rm(directory, {recursive: true, force: true}));
 
   return directory;
+};
+
+/** A repository with `$XDG_CONFIG_HOME/git/ignore`, where git looks for it by default */
+const createRepositoryWithGlobalIgnoreFile = async () => {
+  const directory = await createTemporaryDirectory();
+  await Promise.all([
+    fs.mkdir(path.join(directory, '.git')),
+    fs.mkdir(path.join(directory, 'config', 'git'), {recursive: true}),
+  ]);
+  await fs.writeFile(path.join(directory, 'config', 'git', 'ignore'), '*.global', 'utf8');
+
+  return {
+    cwd: directory,
+    env: {
+      HOME: directory,
+      XDG_CONFIG_HOME: path.join(directory, 'config'),
+      GIT_CONFIG_NOSYSTEM: '1',
+    },
+  };
 };
 
 /** The option resolves against the real working directory unless it is given one of its own */
@@ -25,6 +45,13 @@ const getGitignoreIgnores = async (
   (await computeEslintConfig({}, {un: {gitignore}})).getConfigByUnPostfix(
     'global-setup/ignores/gitignore',
   )?.ignores;
+
+/** Keeps the ignore files outside of the fixture directory out of the results */
+const getFixtureGitignoreOptions = (directory: string, sources?: GitignoreSourcesOptions) => ({
+  cwd: directory,
+  root: directory,
+  sources: {files: ['example.gitignore'], infoExclude: false, ...sources},
+});
 
 describe('option: `gitignore`', () => {
   it('derives the ignores from the `.gitignore` of the current working directory by default', async () => {
@@ -43,23 +70,19 @@ describe('option: `gitignore`', () => {
 
   it('passes the object form to the underlying config as options', async () => {
     await expect(
-      getGitignoreIgnores({cwd: FIXTURES_DIR, files: ['example.gitignore']}),
+      getGitignoreIgnores(getFixtureGitignoreOptions(FIXTURES_DIR)),
     ).resolves.toStrictEqual(['**/ignored-dir/', '**/*.ignored']);
   });
 
   it('respects nested `.gitignore` files by default', async () => {
     await expect(
-      getGitignoreIgnores({cwd: RECURSIVE_FIXTURES_DIR, files: ['example.gitignore']}),
+      getGitignoreIgnores(getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIR)),
     ).resolves.toStrictEqual(['**/root-ignored-dir/', 'nested/**/*.nested-ignored']);
   });
 
-  it('does not respect nested `.gitignore` files when `recursive` is set to `false`', async () => {
+  it('does not respect nested `.gitignore` files when `sources.nested` is set to `false`', async () => {
     await expect(
-      getGitignoreIgnores({
-        cwd: RECURSIVE_FIXTURES_DIR,
-        files: ['example.gitignore'],
-        recursive: false,
-      }),
+      getGitignoreIgnores(getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIR, {nested: false})),
     ).resolves.toStrictEqual(['**/root-ignored-dir/']);
   });
 
@@ -85,21 +108,67 @@ describe('option: `gitignore`', () => {
 
   it('is derived from `.gitmodules` alone when no ignore file exists', async () => {
     const directory = await createTemporaryDirectory();
+    await fs.mkdir(path.join(directory, '.git'));
     await fs.writeFile(
       path.join(directory, '.gitmodules'),
       '[submodule "vendor"]\n\tpath = vendor\n',
       'utf8',
     );
-    stubWorkingDirectory(directory);
 
-    await expect(resolveGitignore(undefined)).resolves.toHaveProperty('ignores', ['vendor/**']);
+    await expect(resolveGitignore({cwd: directory})).resolves.toHaveProperty('ignores', [
+      'vendor/',
+    ]);
   });
 
-  it('warns and creates no config when the options point at a missing directory', async () => {
+  it('respects parent `.gitignore` files and `.git/info/exclude`', async () => {
+    const directory = await createTemporaryDirectory();
+    await Promise.all([
+      fs.mkdir(path.join(directory, '.git', 'info'), {recursive: true}),
+      fs.mkdir(path.join(directory, 'package')),
+    ]);
+    await Promise.all([
+      fs.writeFile(path.join(directory, '.git', 'info', 'exclude'), '*.excluded', 'utf8'),
+      fs.writeFile(path.join(directory, '.gitignore'), '*.ignored', 'utf8'),
+    ]);
+
+    await expect(resolveGitignore({cwd: path.join(directory, 'package')})).resolves.toHaveProperty(
+      'ignores',
+      ['**/*.excluded', '**/*.ignored'],
+    );
+  });
+
+  describe('global ignore file', () => {
+    it('is not respected by default', async () => {
+      await expect(
+        resolveGitignore(await createRepositoryWithGlobalIgnoreFile()),
+      ).resolves.toBeNull();
+    });
+
+    it('is not respected when other `sources` are passed', async () => {
+      await expect(
+        resolveGitignore({
+          ...(await createRepositoryWithGlobalIgnoreFile()),
+          sources: {nested: false},
+        }),
+      ).resolves.toBeNull();
+    });
+
+    it('is respected when `sources.excludesFile` is set to `true`', async () => {
+      await expect(
+        resolveGitignore({
+          ...(await createRepositoryWithGlobalIgnoreFile()),
+          sources: {excludesFile: true},
+        }),
+      ).resolves.toHaveProperty('ignores', ['**/*.global']);
+    });
+  });
+
+  it('warns and creates no config when the options are invalid', async () => {
     const processOutput = spyOnProcessOutput();
+    const directory = await createTemporaryDirectory();
 
     await expect(
-      getGitignoreIgnores({cwd: path.join(await createTemporaryDirectory(), 'does-not-exist')}),
+      getGitignoreIgnores({cwd: directory, root: path.join(directory, 'nested')}),
     ).resolves.toBeUndefined();
 
     expect(processOutput.getStderrOutput()).toContain(

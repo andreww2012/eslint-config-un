@@ -1,6 +1,6 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type {ConsolaInstance} from 'consola';
-import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
+import type {ReadGitignoreOptions} from 'gitignore-reader-x';
 import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
@@ -727,15 +727,14 @@ export interface EslintConfigUnOptions<
   /**
    * Automatically add gitignore'd files to the global `ignores` array.
    *
-   * Nested `.gitignore` files are respected as well, i.e. the `recursive` option of the underlying
-   * package defaults to `true`.
+   * Every source git reads counts: `.gitignore` files in [the current working directory](https://nodejs.org/api/process.html#processcwd), its subdirectories and its parents up to the repository root, `.git/info/exclude`, submodules and nested repositories.
+   * The only exception is the global ignore file (`core.excludesFile`), since it differs between
+   * machines: set `sources.excludesFile` to `true` to read it.
    *
-   * Passed options will be merged with the defaults.
-   *
-   * Every source the underlying package reads counts, be it a nested `.gitignore`, one in [the current working directory](https://nodejs.org/api/process.html#processcwd) or above it, `.gitmodules`, or `.git/info/exclude`.
+   * Passed options are handed to [`gitignore-reader-x`](https://npmx.dev/gitignore-reader-x).
    * @default true <=> at least one ignore pattern could be derived
    */
-  gitignore?: boolean | FlatGitignoreOptions;
+  gitignore?: boolean | ReadGitignoreOptions;
 
   /**
    * Tells where ESLint is being run: in CI, within an editor, or in neither of these environments

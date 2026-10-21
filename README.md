@@ -1155,12 +1155,12 @@ Keys are the canonical package names, values are the names the packages are inst
 
 ### `gitignore`
 
-**Type**: `boolean | EslintConfigFlatGitignoreOptions`
+**Type**: `boolean | ReadGitignoreOptions`
 
-By default, the patterns from `.gitignore` (read starting at [the current working directory]) are added to the global [`ignores`][ignores option] list.
-Nested `.gitignore` files are picked up too (`recursive` defaults to `true`).
+By default, the files git ignores are added to the global [`ignores`][ignores option] list.
+The rules are read for [the current working directory] from every source git reads them from: `.gitignore` files in it, its subdirectories and its parents up to the repository root, `.git/info/exclude`, submodules and nested repositories.
 Set this option to `false` to turn that off.
-You can also pass an object, which is handed to [eslint-config-flat-gitignore](https://npmx.dev/eslint-config-flat-gitignore), the package that does the actual work.
+You can also pass an object, which is handed to [gitignore-reader-x](https://npmx.dev/gitignore-reader-x), the package that does the actual work.
 
 ### `environment`
 

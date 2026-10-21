@@ -16,6 +16,7 @@ minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list 
 minimumReleaseAgeExclude: # []
   - eslint-plugin-n@18.5.0
   - eslint-plugin-jsdoc@65.3.12
+  - gitignore-reader-x@0.0.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
