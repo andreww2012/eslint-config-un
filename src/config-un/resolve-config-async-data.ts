@@ -5,7 +5,9 @@ import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {EslintFlatConfigEntry, EslintPlugin} from '../eslint/eslint-types';
 import {
   disableAutofixForAllRulesInPlugin,
+  disableRuleAutofix,
   getRuleNameAndPluginPrefixByFullName,
+  mapPluginRules,
   removeRuleLanguagesFromPlugin,
   resolvePluginPrefix,
 } from '../eslint/eslint-utils';
@@ -461,19 +463,16 @@ ${styleText(
             return [pluginPrefix, plugin];
           }
 
-          const fixablePluginRules = Object.entries(
-            /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
-            plugin.rules || {},
-          )
-            .filter(([, {meta: ruleMeta}]) => ruleMeta?.fixable)
-            .map(([ruleName]) => ruleName);
-
           const isAutofixDisabledForAllPluginRulesByDefault =
             autofixDisabledGloballyFor === true ||
             (typeof autofixDisabledGloballyFor === 'object' &&
               autofixDisabledGloballyFor.plugins?.[pluginPrefixCanonical]) ||
             false;
-          const rulesToDisableAutofixFor = fixablePluginRules.filter(
+          // Selected by name: checking `meta.fixable` here would load every lazily loaded rule
+          const rulesToDisableAutofixFor = Object.keys(
+            /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
+            plugin.rules || {},
+          ).filter(
             (ruleName) =>
               pluginRulesAutofixDisabledStatuses[ruleName] ??
               isAutofixDisabledForAllPluginRulesByDefault,
@@ -483,28 +482,23 @@ ${styleText(
             return [pluginPrefix, plugin];
           }
 
-          const rulesCountWithAutofixNotDisabled =
-            fixablePluginRules.length - rulesToDisableAutofixFor.length;
-          if (rulesCountWithAutofixNotDisabled > 0) {
-            const areMostAutofixesDisabled =
-              rulesCountWithAutofixNotDisabled < fixablePluginRules.length / 2;
-            debug(
-              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin except for` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
-            );
-          } else {
-            debug(
-              `Globally disabling autofix for ${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin`,
-            );
-          }
+          const rulesWithAutofixKept = Object.keys(pluginRulesAutofixDisabledStatuses).filter(
+            (ruleName) => !pluginRulesAutofixDisabledStatuses[ruleName],
+          );
+          debug(
+            `Globally disabling autofix for ${isAutofixDisabledForAllPluginRulesByDefault ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin${rulesWithAutofixKept.length > 0 ? ` except for: ${rulesWithAutofixKept.map(styleRuleName).join(', ')}` : ''}` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules: ${rulesToDisableAutofixFor.map(styleRuleName).join(', ')}`}`,
+          );
 
           return [
             pluginPrefix,
             {
               ...plugin,
-              rules: disableAutofixForAllRulesInPlugin('', plugin, {
-                includeRulesWithoutAutofix: true,
-                onlyRules: rulesToDisableAutofixFor,
-              }),
+              rules: mapPluginRules(
+                /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
+                plugin.rules || {},
+                rulesToDisableAutofixFor,
+                (rule) => (rule.meta?.fixable ? disableRuleAutofix(rule) : rule),
+              ),
             } satisfies typeof plugin,
           ];
         }),

@@ -3,7 +3,7 @@ import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
 import type {Nullable} from '../types';
-import {arrayIncludes, cloneDeep, isKeyIn} from '../utils';
+import {arrayIncludes, isKeyIn, omit} from '../utils';
 import type {
   EslintFlatConfigEntry,
   EslintPlugin,
@@ -12,9 +12,15 @@ import type {
   EslintSeverity,
 } from './eslint-types';
 
-function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModule {
+type EslintPluginRules = NonNullable<EslintPlugin['rules']>;
+type EslintPluginRule = EslintPluginRules[string];
+
+const isDefinedAsGetter = (descriptor: PropertyDescriptor) => 'get' in descriptor;
+
+export function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModule {
   return {
     ...rule,
+    ...(rule.meta && {meta: omit(rule.meta, ['fixable'])}),
     create: (context: Eslint.Rule.RuleContext): Eslint.Rule.RuleListener => {
       const patchedContext = Object.create(context, {
         report: {
@@ -136,65 +142,92 @@ export const genFlatConfigEntryName = (name: string, {isGlobalSetup = false} = {
 export const isUnFlatConfigEntry = (flatConfigEntry: EslintFlatConfigEntry) =>
   (flatConfigEntry.name || '').startsWith(FLAT_CONFIG_UN_NAME_PREFIX);
 
+/**
+ * Copies the rules, replacing the given ones with what `mapRule` returns for them.
+ * Rules defined as getters, like typescript-eslint's, are mapped on first access to keep them
+ * lazily loaded
+ */
+export const mapPluginRules = (
+  rules: EslintPluginRules,
+  ruleNamesToMap: readonly string[],
+  mapRule: (rule: EslintPluginRule) => EslintPluginRule,
+): EslintPluginRules => {
+  const descriptors: PropertyDescriptorMap = Object.getOwnPropertyDescriptors(rules);
+  ruleNamesToMap.forEach((ruleName) => {
+    const descriptor = descriptors[ruleName];
+    if (descriptor && isDefinedAsGetter(descriptor)) {
+      let mappedRule: EslintPluginRule | undefined;
+      descriptors[ruleName] = {
+        enumerable: descriptor.enumerable,
+        configurable: true,
+        get: () => {
+          if (!mappedRule) {
+            const rule = rules[ruleName];
+            /* v8 ignore next - The getter returns a rule */
+            mappedRule = rule && mapRule(rule);
+          }
+          return mappedRule;
+        },
+      };
+      return;
+    }
+    const rule = rules[ruleName];
+    /* v8 ignore else - Only the names of existing rules are passed */
+    if (descriptor && rule) {
+      descriptor.value = mapRule(rule);
+    }
+  });
+  return Object.defineProperties({}, descriptors);
+};
+
+const doesRuleDeclareLanguages = (rule: EslintPluginRule | undefined) =>
+  rule?.meta != null && 'languages' in rule.meta;
+
 export const removeRuleLanguagesFromPlugin = <Plugin extends EslintPlugin>(
   plugin: Plugin,
 ): Plugin => {
-  const rulesWithLanguages = Object.entries(plugin.rules || {}).filter(
-    ([, {meta}]) => meta != null && 'languages' in meta,
-  );
+  const rules = plugin.rules || {};
+  // Whether a lazily loaded rule declares languages is only known once it's loaded
+  const ruleNamesToPatch = Object.entries(Object.getOwnPropertyDescriptors(rules))
+    .filter(
+      ([ruleName, descriptor]) =>
+        isDefinedAsGetter(descriptor) || doesRuleDeclareLanguages(rules[ruleName]),
+    )
+    .map(([ruleName]) => ruleName);
 
-  if (rulesWithLanguages.length === 0) {
+  if (ruleNamesToPatch.length === 0) {
     return plugin;
   }
 
   return {
     ...plugin,
-    rules: {
-      ...plugin.rules,
-      ...Object.fromEntries(
-        rulesWithLanguages.map(([ruleName, rule]) => {
-          const meta: EslintRuleMetaWithLanguages = {...rule.meta};
-          delete meta.languages;
-          return [ruleName, {...rule, meta}];
-        }),
-      ),
-    },
+    rules: mapPluginRules(rules, ruleNamesToPatch, (rule) => {
+      if (!doesRuleDeclareLanguages(rule)) {
+        return rule;
+      }
+      const meta: EslintRuleMetaWithLanguages = {...rule.meta};
+      delete meta.languages;
+      return {...rule, meta};
+    }),
   };
 };
 
 export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   pluginNamespace: string,
   plugin: Plugin,
-  {
-    includeRulesWithoutAutofix,
-    onlyRules,
-    invertOnlyRules = false,
-  }: {includeRulesWithoutAutofix?: boolean; onlyRules?: string[]; invertOnlyRules?: boolean} = {},
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
     Object.entries(
-      cloneDeep(
-        /* v8 ignore next - A plugin whose autofixes are disabled always has rules */ plugin.rules ||
-          {},
-      ),
-    )
-      .map(([ruleId, ruleImplementation]): [string, Eslint.Rule.RuleModule] | null => {
-        const fullRuleName = `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`;
-        const isFixable = Boolean(ruleImplementation.meta?.fixable);
-        if (
-          includeRulesWithoutAutofix &&
-          (!isFixable || invertOnlyRules === onlyRules?.includes(fullRuleName))
-        ) {
-          return [fullRuleName, ruleImplementation];
-        }
-
-        if (!isFixable && !includeRulesWithoutAutofix) {
-          return null;
-        }
-
-        const ruleImplementationWithAutofixDisabled = disableRuleAutofix(ruleImplementation);
-        delete ruleImplementationWithAutofixDisabled.meta?.fixable;
-        return [fullRuleName, ruleImplementationWithAutofixDisabled];
-      })
-      .filter((v) => v != null),
+      /* v8 ignore next - A plugin whose autofixes are disabled always has rules */ plugin.rules ||
+        {},
+    ).flatMap(([ruleId, ruleImplementation]) =>
+      ruleImplementation.meta?.fixable
+        ? [
+            [
+              `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`,
+              disableRuleAutofix(ruleImplementation),
+            ] as const,
+          ]
+        : [],
+    ),
   );
