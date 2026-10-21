@@ -33,6 +33,10 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-boundaries@7.2.1
   - '@dprint/markdown@0.27.1'
   - actions-up@2.0.0
+  - '@eslint-zod/utils@6.3.0'
+  - eslint-plugin-zod-core@2.1.2
+  - eslint-plugin-zod-mini@2.1.2
+  - eslint-plugin-zod@5.2.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
