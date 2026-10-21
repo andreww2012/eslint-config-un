@@ -1,5 +1,5 @@
-// cspell:ignore scandir
 /* eslint-disable check-file/filename-naming-convention */
+// cspell:ignore scandir
 import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
