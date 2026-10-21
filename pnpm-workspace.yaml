@@ -14,7 +14,6 @@ lockfile:
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-n@18.5.0
   - gitignore-reader-x@0.0.1
   - '@eslint-react/ast@5.28.4'
   - '@eslint-react/core@5.28.4'
