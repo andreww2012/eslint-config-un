@@ -142,8 +142,6 @@ peerDependencyRules:
     eslint-plugin-jest-extended@^3>eslint: '>=10'
     eslint-plugin-react@^7>eslint: '>=10'
 
-    '@ts-safeql/plugin-utils@5.3>typescript': '>=5'
-
 packageExtensions:
   # We only inline their property lists; an installed `stylelint` would also turn off our `css` config
   stylelint-config-clean-order:
