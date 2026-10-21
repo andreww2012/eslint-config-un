@@ -196,7 +196,7 @@
     "@docusaurus/eslint-plugin": "3.10.2",
     "@dprint/formatter": "0.6.0",
     "@dprint/markdown": "0.26.0",
-    "@effect/language-service": "0.87.4",
+    "@effect/language-service": "0.87.5",
     "@effect/platform-node": "4.0.5",
     "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",
     "@eslint-react/eslint-plugin": "5.28.4",
