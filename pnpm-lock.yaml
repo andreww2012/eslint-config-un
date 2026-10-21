@@ -960,8 +960,8 @@ importers:
         specifier: npm:typescript@7.0.2
         version: typescript@7.0.2
       unstorage:
-        specifier: 1.17.6
-        version: 1.17.6(db0@0.3.4)(ioredis@5.11.1)
+        specifier: 2.0.0-beta.0
+        version: 2.0.0-beta.0
       validate-npm-package-name:
         specifier: 8.0.0
         version: 8.0.0
@@ -12561,6 +12561,9 @@ packages:
         optional: true
       uploadthing:
         optional: true
+
+  unstorage@2.0.0-beta.0:
+    resolution: {integrity: sha512-VeTY+zQ3ozrNtIFBRQRuSwanHdpuRH+4t/ZzchZIVQO8/oKq2xl7fJ9c+z76tWJDW/BEXSEuzpHOxqoAl6B64A==}
 
   untun@0.2.2:
     resolution: {integrity: sha512-+NnOJcSiEtYsVgJmXUzQbJeRAFXJC4yPJYuh6kF9B0Rm6zunXcs/3GZOTllyocSbUDIxD6Bj7e/4ATw7sph1Sw==}
@@ -26457,6 +26460,8 @@ snapshots:
     optionalDependencies:
       db0: 0.3.4
       ioredis: 5.11.1(supports-color@7.2.0)
+
+  unstorage@2.0.0-beta.0: {}
 
   untun@0.2.2: {}
 
