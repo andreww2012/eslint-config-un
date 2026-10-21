@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   unsortedIntersectionType: 'unsorted-intersection-type.ts',
 } as const;
@@ -20,7 +18,6 @@ describe('perfectionist: sub config `sortIntersectionTypes`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-intersection-types` eslint config by default', async () => {

@@ -358,7 +358,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | `perfectionist/sort*`          | ❌                                          | ^                                                                                                                              | Since v1.0.0<br>One sub-config per `sort-*` rule (e.g. `sortObjects`), all off by default. See [Perfectionist](#perfectionist)                                                                                                          |
 | `deMorgan`                     | ❌                                          | [eslint-plugin-de-morgan](https://npmx.dev/eslint-plugin-de-morgan) (`de-morgan`)                                              | Since v0.5.0                                                                                                                                                                                                                            |
 | `es`                           | ❌                                          | [eslint-plugin-es-x](https://npmx.dev/eslint-plugin-es-x) (`es`)                                                               | Since v0.10.0                                                                                                                                                                                                                           |
-| `jsInline`                     | ✅                                          | [eslint-plugin-html] (`html-processor`)                                                                                        | Since v0.10.0<br>For linting inlined JS in HTML files                                                                                                                                                                                   |
+| `htmlScripts`                  | ✅                                          | Built-in `eslint-plugin-un-html-scripts` (`html-scripts`)                                                                      | Since v0.10.0<br>For linting inlined JS in HTML files. See [HTML](#html)                                                                                                                                                                |
 | `math`                         | ✅                                          | [eslint-plugin-math](https://npmx.dev/eslint-plugin-math) (`math`)                                                             | Since v1.0.0                                                                                                                                                                                                                            |
 | `erasableSyntaxOnly`           | ❌                                          | [eslint-plugin-erasable-syntax-only](https://npmx.dev/eslint-plugin-erasable-syntax-only) (`erasable-syntax-only`)             | Since v1.0.0                                                                                                                                                                                                                            |
 | `unnecessaryAbstractions`      | ✅                                          | [eslint-plugin-unnecessary-abstractions](https://npmx.dev/eslint-plugin-unnecessary-abstractions) (`unnecessary-abstractions`) | Since v1.0.0                                                                                                                                                                                                                            |
@@ -579,7 +579,6 @@ To rename those back, or to rename any other plugin, set `plugins.<canonical pre
 | [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css)                                                     | `css`                               | `css-in-js`          | Conflicts with [`@eslint/css`](https://npmx.dev/@eslint/css), and our prefix describes the plugin better   |
 | [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml)                                                     | `yml`                               | `yaml`               | Consistent with the official language name (and `eslint-plugin-yaml` is far less popular)                  |
 | [`eslint-plugin-github-action`](https://npmx.dev/eslint-plugin-github-action)                                 | `github-action`                     | `github-actions`     | Consistent with the platform name (and `eslint-plugin-github-actions` looks unmaintained)                  |
-| [`eslint-plugin-html`][eslint-plugin-html]                                                                    | `html`                              | `html-processor`     | Frees up `html` for `@html-eslint`; this plugin only provides a processor (it has no rules)                |
 | [`eslint-plugin-sonarjs`](https://npmx.dev/eslint-plugin-sonarjs)                                             | `sonarjs`                           | `sonar`              | More concise and convenient to use                                                                         |
 | [`@eslint-react/eslint-plugin`][@eslint-react/eslint-plugin]                                                  | `@eslint-react`                     | `eslint-react`       | More concise and convenient to use; `@` feels redundant; `react` is already taken by `eslint-plugin-react` |
 
@@ -771,6 +770,16 @@ We lint React code with rules from several plugins.
 Two of them, `@eslint-react/eslint-plugin` and `eslint-plugin-react`, implement a number of the same rules, and the `react` config's `pluginX` option decides which implementation wins.
 `prefer`, the default, takes the `@eslint-react` one; `avoid` takes the `eslint-plugin-react` one; `only` and `never` drop one of the two plugins entirely.
 The JSDoc of that option lists every rule the two plugins both implement.
+
+### HTML
+
+The `htmlScripts` config lints each `<script>` tag of `.htm(l)` files as a *virtual* file named after the HTML file: `index.html/0_script-0.js` for a classic script (one without `type="module"`), or `index.html/1_script-1.mjs` for a module one.
+`GLOB_HTML_SCRIPTS` from the [`globs` entrypoint](#globs-entrypoint) matches all of them, which is handy in [`extraConfigs`][extraConfigs option].
+
+Every config that lints `.js` files lints them too, except `node` (they run in browsers), `format` (it formats them only as a part of the HTML file) and `checkFile`.
+To parse them with another parser, set it in `parserOptions.parser`: replacing `parser` itself breaks the sharing of global variables between classic scripts, which the `html-scripts/scope-sharing` rule reports.
+
+To skip scripts, for example ones with template syntax, put `<!-- eslint-disable-next-script -->` before one, or `<!-- eslint-disable -->` and `<!-- eslint-enable -->` around several.
 
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### Markdown/MDX
@@ -1462,11 +1471,10 @@ Install the `globals` package as a dev dependency.
 
 ### Some dependencies are inlined into the package code
 
-If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these four, whose code is inlined into the published package:
+If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these three, whose code is inlined into the published package:
 
 | Package name                                                                                         | Reason                                                                                                                   |
 | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [`eslint-plugin-html`][eslint-plugin-html]                                                           | Silently skips `<script>` tags under Yarn Plug'n'Play otherwise                                                          |
 | [`eslint-plugin-file-progress`][eslint-plugin-file-progress]                                         | Patched by us so that it doesn't leave the terminal cursor hidden or erase the end of ESLint's output                    |
 | [`eslint-plugin-arrow-return-style-x`][eslint-plugin-arrow-return-style-x]                           | Its `@typescript-eslint/utils` dependency is overridden to a version that works with ESLint 10                           |
 | [`@eslint-community/eslint-plugin-eslint-comments`][@eslint-community/eslint-plugin-eslint-comments] | [Crashes](https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322) under Yarn Plug'n'Play otherwise |
@@ -1484,7 +1492,7 @@ To keep major bumps meaningful and rare, we follow standard SemVer with the clar
 - Raising the minimum ESLint or Node.js version
 - A config that was enabled by default becoming disabled by default
 - A plugin moving from a direct dependency to an optional peer dependency
-- Removing or renaming a rule of the built-in `eslint-plugin-un` or `eslint-plugin-un-format`, or changing its default options or schema in an incompatible way
+- Removing or renaming a rule of the built-in `eslint-plugin-un`, `eslint-plugin-un-format` or `eslint-plugin-un-html-scripts`, or changing its default options or schema in an incompatible way
 
 **Not breaking:**
 
@@ -1563,7 +1571,6 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
 [environment option]: #environment
 [extraConfigs option]: #providing-user-defined-flat-configs
 [ignores option]: #ignores
-[eslint-plugin-html]: https://npmx.dev/eslint-plugin-html
 [eslint-plugin-file-progress]: https://npmx.dev/eslint-plugin-file-progress
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg

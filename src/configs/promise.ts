@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -28,12 +28,7 @@ export default defineUnConfig<PromiseEslintConfigOptions>(
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig([
-      'promise',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
+    ?.addConfig('promise')
     .addRule('always-return', ERROR, [{ignoreLastCallback: true}]) /** @since 1.0.0 */ // 🟢
     .addRule('avoid-new', OFF) /** @since 3.4.0 */
     .addRule('catch-or-return', ERROR, [

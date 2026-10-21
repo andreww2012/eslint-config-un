@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   duplicateDisjunctions: 'duplicate-disjunctions.js',
   duplicateDisjunctionsInsideHtml: 'duplicate-disjunctions-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('regexp')).toBeDefined();
   });
@@ -97,9 +94,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`regexp/no-dupe-disjunctions` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`regexp/no-dupe-disjunctions` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {regexp: true, jsInline: true},
+      {regexp: true, htmlScripts: true},
       FIXTURES.duplicateDisjunctionsInsideHtml,
       import.meta.dirname,
     );

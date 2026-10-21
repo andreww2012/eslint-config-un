@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   fetchApi: 'fetch-api.js',
   fetchApiInsideHtml: 'fetch-api-inside-html.html',
@@ -18,7 +16,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('compat')).toBeDefined();
   });
@@ -100,9 +97,9 @@ describe('rules', async () => {
     expect(error).toBeUndefined();
   });
 
-  it('`compat/compat` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`compat/compat` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const result = await testEslintConfig(
-      {compat: true, jsInline: true},
+      {compat: true, htmlScripts: true},
       FIXTURES.fetchApiInsideHtml,
       {
         searchFixturesRelativeToPath: import.meta.dirname,

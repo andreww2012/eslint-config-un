@@ -68,6 +68,14 @@ describe('cascade order', () => {
       eslint-config-un/header
       eslint-config-un/headers
       eslint-config-un/html
+      eslint-config-un/js
+      eslint-config-un/js/disable-in-ts-files
+      eslint-config-un/js/commonjs
+      eslint-config-un/js/stylistic_spaced-comment
+      eslint-config-un/html-scripts
+      eslint-config-un/html-scripts/all
+      eslint-config-un/html-scripts/classic
+      eslint-config-un/html-scripts/inside-markdown
       eslint-config-un/i18next
       eslint-config-un/i18next/vue
       eslint-config-un/import
@@ -78,15 +86,9 @@ describe('cascade order', () => {
       eslint-config-un/jest/ts
       eslint-config-un/jest/extended
       eslint-config-un/jest-dom
-      eslint-config-un/js
-      eslint-config-un/js/disable-in-ts-files
-      eslint-config-un/js/commonjs
-      eslint-config-un/js/stylistic_spaced-comment
       eslint-config-un/jsdoc
       eslint-config-un/jsdoc/@type-information
       eslint-config-un/jsdoc/ts
-      eslint-config-un/js-inline
-      eslint-config-un/js-inline/js-inside-html-inside-markdown
       eslint-config-un/json/json
       eslint-config-un/json/jsonc
       eslint-config-un/json/json5
@@ -125,7 +127,7 @@ describe('cascade order', () => {
       eslint-config-un/unicorn/soml
       eslint-config-un/unicorn/toml
       eslint-config-un/unicorn/yaml
-      eslint-config-un/unicorn/inline-js
+      eslint-config-un/unicorn/html-scripts
       eslint-config-un/node
       eslint-config-un/node-dependencies
       eslint-config-un/no-only-tests
@@ -255,6 +257,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/markdown/commonmark
       eslint-config-un/parsing/markdown/gfm
       eslint-config-un/parsing/html
+      eslint-config-un/parsing/html/html-scripts
       eslint-config-un/parsing/mdx
       eslint-config-un/parsing/vue
       eslint-config-un/parsing/svelte
@@ -264,6 +267,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/tsrx
       eslint-config-un/parsing/civet/ts
       eslint-config-un/parsing/angularTemplate
+      eslint-config-un/parsing/angularTemplate/html-scripts
       eslint-config-un/config-files
       eslint-config-un/cli
       eslint-config-un/tests

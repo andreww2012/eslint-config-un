@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 describe('basic tests', () => {
   it('creates `perfectionist` eslint config and does not load `perfectionist` plugin (all rules are `OFF`) when set to `true`', async () => {
     const configResult = await computeEslintConfig('perfectionist');
@@ -12,7 +10,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('perfectionist')).toBeUndefined();
   });

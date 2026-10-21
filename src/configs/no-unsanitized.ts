@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS} from '../constants';
+import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -28,12 +28,7 @@ export default defineUnConfig<NoUnsanitizedEslintConfigOptions>(
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig([
-      'no-unsanitized',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
+    ?.addConfig('no-unsanitized')
     .addRule('method', ERROR) /** @since 1.1.0 */
     .addRule('property', ERROR) /** @since 1.1.0 */
     .enableConfigTesterForPlugin('no-unsanitized')

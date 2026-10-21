@@ -1,4 +1,4 @@
-import {CHECKED_LODASH_METHODS, GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+import {CHECKED_LODASH_METHODS} from '../../../src/constants';
 
 const FIXTURES = {
   lodashMapUsage: 'lodash-map-usage.js',
@@ -21,7 +21,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('you-dont-need-lodash-underscore')).toBeDefined();
   });
@@ -179,9 +178,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`you-dont-need-lodash-underscore/map` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`you-dont-need-lodash-underscore/map` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {youDontNeedLodashUnderscore: true, jsInline: true},
+      {youDontNeedLodashUnderscore: true, htmlScripts: true},
       FIXTURES.lodashMapUsageInsideHtml,
       import.meta.dirname,
     );

@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   newDateGetTime: 'new-date-get-time.ts',
   newDateGetTimeInsideHtml: 'new-date-get-time-inside-html.html',
@@ -18,7 +16,6 @@ describe('e18e: sub config `performanceImprovements`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `e18e/performance-improvements` eslint config when disabled', async () => {
@@ -58,9 +55,9 @@ describe('e18e: sub config `performanceImprovements`', () => {
       );
     });
 
-    it('`e18e/prefer-date-now` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    it('`e18e/prefer-date-now` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
       const results = await testEslintConfig(
-        {e18e: true, jsInline: true},
+        {e18e: true, htmlScripts: true},
         FIXTURES.newDateGetTimeInsideHtml,
         {
           searchFixturesRelativeToPath: import.meta.dirname,

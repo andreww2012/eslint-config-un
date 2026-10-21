@@ -373,8 +373,10 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
     expect(messagesByFileName.get('README.md')?.map(({ruleId}) => ruleId)).toContain(
       'format/prettier',
     );
-    // The inlined `eslint-plugin-html` has to find and patch the project's own ESLint
-    expect(messagesByFileName.get('index.html')?.map(({ruleId}) => ruleId)).toContain('no-eval');
+    // The `htmlScripts` processor loads its dependencies, and passes the markup on to `html` rules
+    expect(messagesByFileName.get('index.html')?.map(({ruleId}) => ruleId)).toStrictEqual(
+      expect.arrayContaining(['no-eval', 'html/require-img-alt']),
+    );
     // The inlined `eslint-plugin-file-progress` prints through its inlined dependencies
     expect(lintResult.stderr).toContain('Processing:');
     // Fatal errors, like parsing ones, have no rule

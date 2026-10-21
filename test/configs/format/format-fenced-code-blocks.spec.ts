@@ -1,4 +1,4 @@
-import {GLOB_MD_X_CODE_BLOCKS} from '../../../src/constants';
+import {GLOB_HTML_SCRIPTS, GLOB_MD_X_CODE_BLOCKS} from '../../../src/constants';
 
 const FIXTURES = {
   unformattedMarkdownCodeBlock: 'unformatted-code-block.md',
@@ -22,7 +22,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
       expect(config?.files).toMatchInlineSnapshot(
         '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}"]',
       );
-      expect(config?.ignores).toBeUndefined();
+      expect(config?.ignores).toMatchInlineSnapshot('["**/*.*/+([0-9])_script-+([0-9]).?(m)js"]');
     });
 
     it('does not create `format/prettier/fenced-code-blocks` eslint config by default', async () => {
@@ -123,7 +123,10 @@ describe('format: sub config `fencedCodeBlocks`', () => {
           format: {configFencedCodeBlocks: {ignores: IGNORES}},
         });
 
-        expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)?.ignores).toStrictEqual(IGNORES);
+        expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)?.ignores).toStrictEqual([
+          GLOB_HTML_SCRIPTS,
+          ...IGNORES,
+        ]);
       });
     });
 
@@ -214,15 +217,17 @@ describe('format: sub config `fencedCodeBlocks`', () => {
     it('formats fenced code blocks in the parent config by default', async () => {
       const configResult = await computeEslintConfig('format');
 
-      expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toMatchInlineSnapshot(
+        '["**/*.*/+([0-9])_script-+([0-9]).?(m)js"]',
+      );
     });
 
     it('stops formatting fenced code blocks in the parent config when the sub-config is enabled', async () => {
       const configResult = await computeEslintConfig({format: {configFencedCodeBlocks: true}});
 
-      expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toStrictEqual([
-        GLOB_MD_X_CODE_BLOCKS,
-      ]);
+      expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toMatchInlineSnapshot(
+        '["**/*.*/+([0-9])_script-+([0-9]).?(m)js", "**/*.md?(x)/**/*.*"]',
+      );
     });
 
     it('keeps fenced code blocks out of the parent config with user-provided `ignores`', async () => {
@@ -233,6 +238,7 @@ describe('format: sub config `fencedCodeBlocks`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toStrictEqual([
+        GLOB_HTML_SCRIPTS,
         GLOB_MD_X_CODE_BLOCKS,
         ...IGNORES,
       ]);

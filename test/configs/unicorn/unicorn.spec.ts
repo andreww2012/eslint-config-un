@@ -1,4 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
@@ -25,7 +24,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('unicorn')).toBeDefined();
   });
@@ -105,9 +103,9 @@ describe('rules', async () => {
     );
   });
 
-  it('triggers `unicorn/no-lonely-if` inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('triggers `unicorn/no-lonely-if` inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {unicorn: true, jsInline: true},
+      {unicorn: true, htmlScripts: true},
       FIXTURES.nestedIfWithoutElseInsideHtml,
       import.meta.dirname,
     );

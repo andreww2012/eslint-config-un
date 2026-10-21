@@ -1,6 +1,6 @@
 // cspell:ignore findlast formatrange displaynames durationformat groupby finalizationregistry weakref subclassing asyncdisposablestack disposablestack plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
 import type {UnConfigContext} from '../config-un/shared';
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
+import {ERROR, OFF} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
 import {isKeyIn, memoize} from '../utils';
 import {
@@ -400,7 +400,6 @@ export const buildEsConfigs = (
   const mainConfig = configBuilder?.addConfig([
     customConfig?.prefix || 'es',
     {
-      ignoresInternal: KEEP_LINTING_INLINE_JS,
       settings: {
         'es-x': pluginSettings,
       },

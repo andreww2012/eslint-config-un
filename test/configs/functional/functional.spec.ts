@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   letDeclaration: 'let-declaration.ts',
   letDeclarationInsideHtml: 'let-declaration-inside-html.html',
@@ -19,7 +17,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 
   it('does not create `functional` eslint config and does not load `functional` plugin if set to `false`', async () => {
@@ -102,9 +99,9 @@ describe('rules', () => {
     expect(error?.message).toMatchInlineSnapshot('"Unexpected let, use const instead."');
   });
 
-  it('`functional/no-let` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`functional/no-let` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {functional: true, jsInline: true},
+      {functional: true, htmlScripts: true},
       FIXTURES.letDeclarationInsideHtml,
       {
         searchFixturesRelativeToPath: import.meta.dirname,

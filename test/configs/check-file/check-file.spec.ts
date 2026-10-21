@@ -1,8 +1,10 @@
+import {GLOB_HTML_SCRIPTS} from '../../../src/constants';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
   pascalCasedFilename: 'pascal-cased-filename/MyBadFile.js',
   pascalCasedJsonFilename: 'pascal-cased-filename/MyBadFile.json',
+  pascalCasedHtmlFilename: 'pascal-cased-filename/MyBadPage.html',
   pascalCasedFolder: 'pascal-cased-folder/MyBadFolder/index.js',
 } as const;
 
@@ -14,7 +16,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores).toBeUndefined();
+    expect(config?.ignores).toMatchInlineSnapshot('["**/*.*/+([0-9])_script-+([0-9]).?(m)js"]');
 
     expect(configResult.getLoadedPlugin('check-file')).toBeUndefined();
   });
@@ -105,6 +107,23 @@ describe('rules', async () => {
     );
   });
 
+  it('`check-file/filename-naming-convention` rule fires on an HTML file, but not once per `<script>` tag', async () => {
+    const results = await testEslintConfig(
+      {checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}}, html: true, htmlScripts: true},
+      FIXTURES.pascalCasedHtmlFilename,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.pascalCasedHtmlFilename,
+        'check-file/filename-naming-convention',
+        {all: true},
+      ).map(({line}) => line),
+    ).toMatchInlineSnapshot('[1, 1]');
+  });
+
   it('`check-file/filename-naming-convention` rule fires on a file of a non-JS language', async () => {
     const results = await testEslintConfig(
       {checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}}, json: true},
@@ -156,8 +175,11 @@ describe('un options', () => {
 
       const configResult = await computeEslintConfig({checkFile: {ignores: IGNORES}});
 
-      // No implicit ignores here: the config intentionally applies to every file type
-      expect(configResult.getConfigByUnPostfix('check-file')?.ignores).toStrictEqual(IGNORES);
+      // The config intentionally applies to every file type, but the scripts of HTML files are not files
+      expect(configResult.getConfigByUnPostfix('check-file')?.ignores).toStrictEqual([
+        GLOB_HTML_SCRIPTS,
+        ...IGNORES,
+      ]);
     });
   });
 

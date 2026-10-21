@@ -167,6 +167,27 @@ settings:
   excludeLinksFromLockfile: false
   linkWorkspacePackages: false
 
+catalogs:
+  html-scripts:
+    '@eslint/plugin-kit':
+      specifier: 0.7.3
+      version: 0.7.3
+    css-selector-parser:
+      specifier: 3.3.0
+      version: 3.3.0
+    eslint-scope:
+      specifier: 9.1.2
+      version: 9.1.2
+    eslint-visitor-keys:
+      specifier: 5.0.1
+      version: 5.0.1
+    espree:
+      specifier: 11.2.0
+      version: 11.2.0
+    htmlparser2:
+      specifier: 12.0.0
+      version: 12.0.0
+
 overrides:
   '@graphql-tools/utils@<12.0.1': 12.1.0
   basic-ftp@<6.2.1: 6.2.1
@@ -179,7 +200,6 @@ packageExtensionsChecksum: sha256-viRUJkqQHSHoPzf5szskuSZb6Q7/PwkBbjO6LfpaHYk=
 patchedDependencies:
   '@eslint/compat': a785b12535665a353a71d6b12eb6814ea28abb9f654e5a9f9bca32f3afa35d6e
   eslint-plugin-file-progress@4.0.0: 5b5e7d2960cb26dfd778734f8e96be338cf0d66e514ebb1835b36333a3f1de05
-  eslint-plugin-html@8.2.1: c82f3c679a87e4d9d4ca4ee1e63abb28b162b4b873ad23547ca692a637cbe95b
   eslint-typegen: ebd39b0f44205f9d5a716a188490ea964114ca3b2245ec95d9e4f4a24707437b
   import-meta-resolve: dfa83f679ce19524e882eb2295b452983e89264bf98ae1a62e1bd3dbdc6fac79
   npm-check-updates: 8ed4ba9ff51af1bee728d2969332f8fb4256b3f93e0bdfc2189feca6bc4d7300
@@ -210,6 +230,9 @@ importers:
       '@eslint/markdown':
         specifier: 8.0.3
         version: 8.0.3(supports-color@7.2.0)
+      '@eslint/plugin-kit':
+        specifier: catalog:html-scripts
+        version: 0.7.3
       '@html-eslint/eslint-plugin':
         specifier: 0.67.0
         version: 0.67.0(eslint@10.13.0)
@@ -243,6 +266,9 @@ importers:
       console-table-printer:
         specifier: 2.16.1
         version: 2.16.1
+      css-selector-parser:
+        specifier: catalog:html-scripts
+        version: 3.3.0
       empathic:
         specifier: 2.1.0
         version: 2.1.0
@@ -342,9 +368,21 @@ importers:
       eslint-plugin-yml:
         specifier: 3.9.0
         version: 3.9.0(eslint@10.13.0)
+      eslint-scope:
+        specifier: catalog:html-scripts
+        version: 9.1.2
+      eslint-visitor-keys:
+        specifier: catalog:html-scripts
+        version: 5.0.1
+      espree:
+        specifier: catalog:html-scripts
+        version: 11.2.0
       globals:
         specifier: 17.13.0
         version: 17.13.0
+      htmlparser2:
+        specifier: catalog:html-scripts
+        version: 12.0.0
       is-in-editor:
         specifier: 0.4.0
         version: 0.4.0
@@ -679,9 +717,6 @@ importers:
       eslint-plugin-headers:
         specifier: 1.3.4
         version: 1.3.4(eslint@10.13.0)
-      eslint-plugin-html:
-        specifier: 8.2.1
-        version: 8.2.1(patch_hash=c82f3c679a87e4d9d4ca4ee1e63abb28b162b4b873ad23547ca692a637cbe95b)
       eslint-plugin-i18next:
         specifier: 6.1.5
         version: 6.1.5
@@ -6894,6 +6929,9 @@ packages:
   css-select@6.0.0:
     resolution: {integrity: sha512-rZZVSLle8v0+EY8QAkDWrKhpgt6SA5OtHsgBnsj6ZaLb5dmDVOWUDtQitd9ydxxvEjhewNudS6eTVU7uOyzvXw==}
 
+  css-selector-parser@3.3.0:
+    resolution: {integrity: sha512-Y2asgMGFqJKF4fq4xHDSlFYIkeVfRsm69lQC1q9kbEsH5XtnINTMrweLkjYMeaUgiXBy/uvKeO/a1JHTNnmB2g==}
+
   css-tree@2.2.1:
     resolution: {integrity: sha512-OA0mILzGc1kCOCSJerOeqDxDQ4HOh+G8NbOJFOTgOCzpw7fCBubk0fEyxp8AgOL/jvLgYA/uV0cMbe43ElF1JA==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
@@ -7154,6 +7192,10 @@ packages:
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
 
+  dom-serializer@3.1.1:
+    resolution: {integrity: sha512-4MEa38/QexBob6gFNwu+EGdWvhJ1OKuNwdYY3Y3NyeWDQfnGeDYQUDfIRzWu5B5gsv03so2Uxd28YC6zrsx3Lw==}
+    engines: {node: '>=20.19.0'}
+
   dom5@3.0.1:
     resolution: {integrity: sha512-JPFiouQIr16VQ4dX6i0+Hpbg3H2bMKPmZ+WZgBOSSvOPx9QHwwY8sPzeM2baUtViESYto6wC2nuZOMC/6gulcA==}
 
@@ -7174,6 +7216,10 @@ packages:
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
+
+  domutils@4.0.2:
+    resolution: {integrity: sha512-qI4JLRKnSzqFqr7hAlS5xQDusBCjKSEG4t4+7aNrIQMHBcsC2TGEhuyABJdYkgSewL57PNLYEiibY2iPKhKpaA==}
+    engines: {node: '>=20.19.0'}
 
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
@@ -7867,10 +7913,6 @@ packages:
     engines: {node: ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
-
-  eslint-plugin-html@8.2.1:
-    resolution: {integrity: sha512-Xn6QOifC3niiqDojZ/hgGRCj+YOefDHtT6ShwM65/+goFCNFcTTXUoXcjht+gvuds2I6r3tmM5XWQuTOOF5lhw==}
-    engines: {node: '>=16.0.0'}
 
   eslint-plugin-i18next@6.1.5:
     resolution: {integrity: sha512-xCTfstbK9ZpQ6UFT5S1s6zbZMhKn2o2jRSQYiU2UkV7wt8y1m3WjkUYGkGlipgRdFInYI9+LAqE+JQU/L73HmA==}
@@ -9092,8 +9134,9 @@ packages:
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
 
-  htmlparser2@10.1.0:
-    resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+  htmlparser2@12.0.0:
+    resolution: {integrity: sha512-Tz7u1i95/g2x2jz81+x0FBVhBhY5aRTvD3tXXdFaljuNdzDLJ8UGNRrTcj2cgQvAg3iW/h77Fz15nLW0L0CrZw==}
+    engines: {node: '>=20.19.0'}
 
   http-cache-semantics@4.3.0:
     resolution: {integrity: sha512-M5t5LlJpS1UHMjvwRQVdFHvPISGeLAxNcrWuJkeGh0KxsqCHZ1O3NXZU/8x7cD0BDcGW8kapxMKTvwlqrNkHkA==}
@@ -19744,6 +19787,8 @@ snapshots:
       domutils: 3.2.2
       nth-check: 2.1.1
 
+  css-selector-parser@3.3.0: {}
+
   css-tree@2.2.1:
     dependencies:
       mdn-data: 2.0.28
@@ -19988,6 +20033,12 @@ snapshots:
       domhandler: 5.0.3
       entities: 4.5.0
 
+  dom-serializer@3.1.1:
+    dependencies:
+      domelementtype: 3.0.0
+      domhandler: 6.0.1
+      entities: 8.1.0
+
   dom5@3.0.1:
     dependencies:
       '@types/parse5': 2.2.34
@@ -20011,6 +20062,12 @@ snapshots:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
+
+  domutils@4.0.2:
+    dependencies:
+      dom-serializer: 3.1.1
+      domelementtype: 3.0.0
+      domhandler: 6.0.1
 
   dot-case@3.0.4:
     dependencies:
@@ -20790,10 +20847,6 @@ snapshots:
   eslint-plugin-headers@1.3.4(eslint@10.13.0):
     dependencies:
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
-
-  eslint-plugin-html@8.2.1(patch_hash=c82f3c679a87e4d9d4ca4ee1e63abb28b162b4b873ad23547ca692a637cbe95b):
-    dependencies:
-      htmlparser2: 10.1.0
 
   eslint-plugin-i18next@6.1.5:
     dependencies:
@@ -22279,12 +22332,12 @@ snapshots:
 
   html-void-elements@3.0.0: {}
 
-  htmlparser2@10.1.0:
+  htmlparser2@12.0.0:
     dependencies:
-      domelementtype: 2.3.0
-      domhandler: 5.0.3
-      domutils: 3.2.2
-      entities: 7.0.1
+      domelementtype: 3.0.0
+      domhandler: 6.0.1
+      domutils: 4.0.2
+      entities: 8.1.0
 
   http-cache-semantics@4.3.0: {}
 

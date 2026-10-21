@@ -2,6 +2,7 @@ import type {FormatConfig as OxfmtOptions} from 'oxfmt';
 import type {Options as PrettierOptions} from 'prettier';
 import {
   ERROR,
+  GLOB_HTML_SCRIPTS,
   GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
   GLOB_MDX_SUPPORTED_CODE_BLOCKS,
   GLOB_MD_X_CODE_BLOCKS,
@@ -173,10 +174,11 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
         `format/${parentFormatter.formatterName}`,
         {
           ignoresInternal: false,
-          ...(configFencedCodeBlocks && {
-            ignoresDefault: [GLOB_MD_X_CODE_BLOCKS],
-            ignoresDefaultMergedWithUserIgnores: true,
-          }),
+          ignoresDefault: [
+            GLOB_HTML_SCRIPTS, // Formatted as a part of the HTML file
+            ...(configFencedCodeBlocks ? [GLOB_MD_X_CODE_BLOCKS] : []),
+          ],
+          ignoresDefaultMergedWithUserIgnores: true,
           ...(usePlainParser && {
             parseWith: 'plain',
           }),
@@ -213,6 +215,8 @@ export default defineUnConfig<FormatEslintConfigOptions>('format', {
         {
           filesDefault: defaultFilesForFencedCodeBlocks,
           ignoresInternal: false,
+          ignoresDefault: [GLOB_HTML_SCRIPTS], // Formatted as a part of the HTML code block
+          ignoresDefaultMergedWithUserIgnores: true,
         },
       ])
       .addRule(

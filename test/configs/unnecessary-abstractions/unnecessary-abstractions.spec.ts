@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   ternaryOfParameters: 'ternary-of-parameters.js',
   ternaryOfParametersInsideHtml: 'ternary-of-parameters-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('unnecessary-abstractions')).toBeDefined();
   });
@@ -122,9 +119,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`unnecessary-abstractions/no-ternary-wrappers` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`unnecessary-abstractions/no-ternary-wrappers` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {unnecessaryAbstractions: true, jsInline: true},
+      {unnecessaryAbstractions: true, htmlScripts: true},
       FIXTURES.ternaryOfParametersInsideHtml,
       import.meta.dirname,
     );

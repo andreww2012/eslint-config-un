@@ -1,3 +1,7 @@
+# Makes npm-check-updates update the catalogs too
+packages:
+  - ./
+
 nodeLinker: hoisted
 packageImportMethod: clone-or-copy
 saveExact: true
@@ -77,6 +81,15 @@ allowBuilds:
 dedupePeers: true
 strictPeerDependencies: false
 
+catalogs:
+  html-scripts:
+    '@eslint/plugin-kit': 0.7.3
+    css-selector-parser: 3.3.0
+    eslint-scope: 9.1.2
+    eslint-visitor-keys: 5.0.1
+    espree: 11.2.0
+    htmlparser2: 12.0.0
+
 overrides:
   # 11 and 12 only break executor helpers and subgraph schema printing, neither used by `@graphql-eslint/eslint-plugin`
   '@graphql-tools/utils@<12.0.1': 12.1.0
@@ -89,7 +102,6 @@ overrides:
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
-  eslint-plugin-html@8.2.1: patches/eslint-plugin-html@8.2.1.patch
   eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch

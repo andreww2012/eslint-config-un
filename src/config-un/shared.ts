@@ -40,6 +40,7 @@ import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '..
 import {
   type MaybeArray,
   type MaybeFn,
+  arrayify,
   castToWritableUnsafe,
   type fetchPackageInfo,
   maybeCall,
@@ -975,14 +976,10 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
 
 export const intersectParentConfigFilesWithProvidedFiles = (
   parentConfigFiles: EslintFlatConfigEntry['files'] & {},
-  files: string[],
+  files: EslintFlatConfigEntry['files'] & {},
 ) =>
   parentConfigFiles.flatMap((configFilesEntry) =>
-    Array.from(files, (ourFileEntry) =>
-      typeof configFilesEntry === 'string'
-        ? [configFilesEntry, ourFileEntry]
-        : [...configFilesEntry, ourFileEntry],
-    ),
+    files.map((ourFileEntry) => [...arrayify(configFilesEntry), ...arrayify(ourFileEntry)]),
   );
 
 export const processUnOrFlatConfig = (

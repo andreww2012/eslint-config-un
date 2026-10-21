@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   consecutiveSpaces: 'consecutive-spaces.js',
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
@@ -21,7 +19,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('un')).toBeDefined();
   });
@@ -175,9 +172,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {un: true, jsInline: true},
+      {un: true, htmlScripts: true},
       FIXTURES.consecutiveSpacesInsideHtml,
       import.meta.dirname,
     );

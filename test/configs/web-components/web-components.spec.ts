@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   customElementNameWithoutDash: 'custom-element-name-without-dash/index.js',
   customElementNameWithoutDashInsideHtml: 'custom-element-name-without-dash-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('wc')).toBeDefined();
   });
@@ -107,9 +104,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`wc/no-invalid-element-name` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`wc/no-invalid-element-name` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {webComponents: true, jsInline: true},
+      {webComponents: true, htmlScripts: true},
       FIXTURES.customElementNameWithoutDashInsideHtml,
       import.meta.dirname,
     );

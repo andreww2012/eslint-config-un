@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
+import {ERROR, OFF} from '../constants';
 import type {Prettify, SetRequired} from '../types';
 import {
   type ExtraPluginsType,
@@ -377,7 +377,6 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     ?.addConfig([
       'perfectionist',
       {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           perfectionist: pluginSettings,
         },
@@ -438,12 +437,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
   ).forEach(([ruleName, ruleSubConfig]) => {
     const configBuilderForRule = context.createConfigBuilder(ruleSubConfig, 'perfectionist');
     configBuilderForRule
-      ?.addConfig([
-        `perfectionist/${ruleName}`,
-        {
-          ignoresInternal: KEEP_LINTING_INLINE_JS,
-        },
-      ])
+      ?.addConfig(`perfectionist/${ruleName}`)
       .addRule(
         ruleName,
         ERROR,

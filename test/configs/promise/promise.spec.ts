@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   promiseRejectParameterNamedDone: 'promise-reject-parameter-named-done.js',
   promiseRejectParameterNamedDoneInsideHtml: 'promise-reject-parameter-named-done-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('promise')).toBeDefined();
   });
@@ -97,9 +94,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`promise/param-names` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`promise/param-names` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {promise: true, jsInline: true},
+      {promise: true, htmlScripts: true},
       FIXTURES.promiseRejectParameterNamedDoneInsideHtml,
       import.meta.dirname,
     );

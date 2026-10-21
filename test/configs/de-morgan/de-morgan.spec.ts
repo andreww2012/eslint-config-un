@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   notOfLogicalAndExpression: 'not-of-logical-and-expression.js',
   notOfLogicalAndExpressionInsideHtml: 'not-of-logical-and-expression-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('de-morgan')).toBeDefined();
   });
@@ -96,9 +93,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`de-morgan/no-negated-conjunction` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`de-morgan/no-negated-conjunction` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {deMorgan: true, jsInline: true},
+      {deMorgan: true, htmlScripts: true},
       FIXTURES.notOfLogicalAndExpressionInsideHtml,
       import.meta.dirname,
     );

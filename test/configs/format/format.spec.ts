@@ -2,6 +2,7 @@ const FIXTURES = {
   doubleQuotes: 'double-quotes.js',
   doubleQuotesNextToPrettierConfig: 'prettier-config/double-quotes.js',
   markdownListWithAsterisk: 'markdown-list-with-asterisk.md',
+  scriptWithDoubleQuotes: 'script-with-double-quotes.html',
   unclosedCssBlock: 'unclosed-block.css',
   xml: 'element.xml',
 } as const;
@@ -23,7 +24,8 @@ describe('basic tests', () => {
       ),
     ).toBeEmpty();
     expect(config?.files).toBeUndefined();
-    expect(config?.ignores).toBeUndefined();
+    // The formatter formats them as a part of the HTML file
+    expect(config?.ignores).toMatchInlineSnapshot('["**/*.*/+([0-9])_script-+([0-9]).?(m)js"]');
 
     expect(configResult.getLoadedPlugin('format')).toBeDefined();
   });
@@ -120,6 +122,25 @@ describe('rules', () => {
     const error = findLintMessageFromLintResults(results, FIXTURES.doubleQuotes, 'format/prettier');
 
     expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
+  });
+
+  it('`format/prettier` rule reports the code of a `<script>` tag once, as a part of the HTML file', async () => {
+    const results = await testEslintConfig(
+      {format: {formatter: ['prettier', {singleQuote: true}]}, html: true, htmlScripts: true},
+      FIXTURES.scriptWithDoubleQuotes,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.scriptWithDoubleQuotes,
+      'format/prettier',
+      {all: true},
+    );
+
+    expect(errors.map(({line, message}) => `${line}: ${message}`)).toMatchInlineSnapshot(
+      `["8: Replace \`"hello"\` with \`'hello'\`"]`,
+    );
   });
 
   it('`format/prettier` rule reads the Prettier config applying to the file', async () => {

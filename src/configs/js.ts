@@ -1,4 +1,4 @@
-import {ERROR, GLOB_CJS_CTS_X, GLOB_TS_X, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_CJS_CTS_X, GLOB_TS_X, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -79,12 +79,7 @@ export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
   // 🟢 - in recommended
 
   const config = configBuilder
-    ?.addConfig([
-      'js',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
+    ?.addConfig('js')
     .markCategory('Possible Problems')
     .addRule('array-callback-return', ERROR, [{checkForEach: true}]) /** @since 2.0.0-alpha-1 */
     .addRule('constructor-super', ERROR) /** @since 0.24.0 */ // 🟢

@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -27,12 +27,7 @@ export default defineUnConfig<SecurityEslintConfigOptions>('security', {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig([
-      'security',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
+    ?.addConfig('security')
     .addRule('detect-bidi-characters', ERROR) /** @since 1.6.0 */ // 🟡
     .addRule('detect-buffer-noassert', ERROR) /** @since 1.0.0 */ // 🟡
     .addRule('detect-child-process', WARNING) /** @since 1.0.0 */ // 🟡

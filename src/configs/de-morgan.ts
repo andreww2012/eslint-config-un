@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS} from '../constants';
+import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -25,12 +25,7 @@ export default defineUnConfig<DeMorganEslintConfigOptions>(
   const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
 
   configBuilder
-    ?.addConfig([
-      'de-morgan',
-      {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
-      },
-    ])
+    ?.addConfig('de-morgan')
     .addRule('no-negated-conjunction', ERROR) /** @since 1.0.0 */
     .addRule('no-negated-disjunction', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('de-morgan')

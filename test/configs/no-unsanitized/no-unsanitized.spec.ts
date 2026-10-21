@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   unsafeProperty: 'unsafe-property.js',
   unsafePropertyInsideHtml: 'unsafe-property-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('no-unsanitized')).toBeDefined();
   });
@@ -104,9 +101,9 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot('"Unsafe assignment to innerHTML"');
   });
 
-  it('`no-unsanitized/property` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`no-unsanitized/property` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {noUnsanitized: true, jsInline: true},
+      {noUnsanitized: true, htmlScripts: true},
       FIXTURES.unsafePropertyInsideHtml,
       import.meta.dirname,
     );

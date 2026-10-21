@@ -447,8 +447,10 @@ export interface ParsingRequest {
    * - `splitOff` - follows the config it was split off from
    * - `runsOn` - only follows the `ignores`: another language may parse the same files
    * - `setUpOnly` - lints nothing, so it neither widens the files nor reacts to `false`
+   * - `augments` - emits an entry of its own (so it needs a name suffix) on top of every entry the
+   *   language emits for other reasons, without setting the language up by itself
    */
-  kind: 'writtenFor' | 'splitOff' | 'runsOn' | 'setUpOnly';
+  kind: 'writtenFor' | 'splitOff' | 'runsOn' | 'setUpOnly' | 'augments';
 
   /** The config to propagate the `ignores` to. A `setUpOnly` request should have none */
   config?: EslintFlatConfigEntry;
@@ -471,7 +473,7 @@ export interface ParsingRequest {
   nameSuffix?: string;
 
   /** Defaults to the files the language parses. Only read alongside a name suffix */
-  files?: string[];
+  files?: EslintFlatConfigEntry['files'];
 
   /** Only read alongside a name suffix */
   ignores?: string[];
@@ -568,8 +570,11 @@ const resolveEntriesForLanguage = (
     mapGetOrInsert(requestsByDialect, dialect, []).push(request);
   });
 
-  const layersOfDialect = (dialect: string) =>
-    (requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix != null);
+  const augmentingLayers = requests.filter(({kind}) => kind === 'augments');
+  const layersOfDialect = (dialect: string) => [
+    ...(requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix != null),
+    ...augmentingLayers,
+  ];
 
   const requestersOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || [])

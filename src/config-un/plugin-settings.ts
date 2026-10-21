@@ -12,7 +12,6 @@ import type {HtmlPluginSettings} from '../configs/html';
 import type {ImportPluginSettings} from '../configs/import';
 import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 import type {JestPluginSettings} from '../configs/jest';
-import type {HtmlProcessorPluginSettings} from '../configs/js-inline';
 import type {JsdocPluginSettings} from '../configs/jsdoc';
 import type {JsonSchemaValidatorPluginSettings} from '../configs/json-schema-validator';
 import type {JsxA11yPluginSettings} from '../configs/jsx-a11y';
@@ -64,7 +63,6 @@ export interface PluginSettingsMap {
   formatjs: FormatjsPluginSettings;
   functional: FunctionalPluginSettings;
   html: HtmlPluginSettings;
-  'html-processor': HtmlProcessorPluginSettings;
   import: ImportPluginSettings;
   'import-integrity': ImportIntegrityPluginSettings;
   jest: JestPluginSettings;

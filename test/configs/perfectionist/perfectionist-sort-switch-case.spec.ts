@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   switchWithUnsortedCases: 'switch-with-unsorted-cases.js',
 } as const;
@@ -17,7 +15,6 @@ describe('perfectionist: sub config `sortSwitchCase`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-switch-case` eslint config by default', async () => {

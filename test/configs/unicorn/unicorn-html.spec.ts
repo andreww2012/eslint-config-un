@@ -69,7 +69,7 @@ describe('unicorn: sub config `html`', () => {
       expect(configResult.getRuleEntry('unicorn/html', 'unicorn/no-lonely-if')).toBeUndefined();
     });
 
-    // The `unicorn` eslint config does reach HTML files, but only to lint the JS inside `<script>`
+    // The `unicorn` eslint config only lints the JS inside `<script>`, as separate virtual files
     it('reports no `unicorn` rules other than the HTML ones on an HTML document', async () => {
       const results = await testEslintConfig(
         {unicorn: true, html: true},

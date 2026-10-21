@@ -1,4 +1,4 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML, GLOB_TS_X, GLOB_YML_YAML} from '../../../src/constants';
+import {GLOB_HTM_HTML, GLOB_TS_X, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
   typescriptSyntax: 'typescript-syntax.ts',
@@ -26,7 +26,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(
       configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores,

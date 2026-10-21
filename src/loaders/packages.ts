@@ -79,6 +79,12 @@ export const packagesLoaders = {
   eslintPluginMdx: genInferredModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
+  htmlScriptsParser: genInferredModuleLoader('htmlScriptsParser', '', () =>
+    import('../plugin-html-scripts').then(({parser}) => parser),
+  ),
+  htmlScriptsProcessorFactory: genInferredModuleLoader('htmlScriptsProcessorFactory', '', () =>
+    import('../plugin-html-scripts').then(({createProcessor}) => createProcessor),
+  ),
   importResolverTypescript: genInferredModuleLoader(
     'importResolverTypescript',
     'eslint-import-resolver-typescript',

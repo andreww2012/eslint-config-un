@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   classWithUnsortedMembers: 'class-with-unsorted-members.js',
 } as const;
@@ -17,7 +15,6 @@ describe('perfectionist: sub config `sortClasses`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-classes` eslint config by default', async () => {

@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   evalWithExpression: 'eval-with-expression.js',
   evalWithExpressionInsideHtml: 'eval-with-expression-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('security')).toBeDefined();
   });
@@ -95,9 +92,9 @@ describe('rules', async () => {
     expect(error?.message).toMatchInlineSnapshot('"eval with argument of type Identifier"');
   });
 
-  it('`security/detect-eval-with-expression` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`security/detect-eval-with-expression` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {security: true, jsInline: true},
+      {security: true, htmlScripts: true},
       FIXTURES.evalWithExpressionInsideHtml,
       import.meta.dirname,
     );

@@ -1,5 +1,5 @@
 // cspell:ignore canparse charcode
-import {ERROR, GLOB_PACKAGE_JSON, KEEP_LINTING_INLINE_JS, OFF} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Prettify} from '../types';
 import {arrayIncludes} from '../utils';
@@ -87,12 +87,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
 
   if (configModernization) {
     configBuilderModernization
-      ?.addConfig([
-        'e18e/modernization',
-        {
-          ignoresInternal: KEEP_LINTING_INLINE_JS,
-        },
-      ])
+      ?.addConfig('e18e/modernization')
       .addRule('prefer-array-at', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-fill', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-to-reversed', ERROR) /** @since 0.0.1 */
@@ -149,12 +144,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
 
   if (configPerformanceImprovements) {
     configBuilderPerformanceImprovements
-      ?.addConfig([
-        'e18e/performance-improvements',
-        {
-          ignoresInternal: KEEP_LINTING_INLINE_JS,
-        },
-      ])
+      ?.addConfig('e18e/performance-improvements')
       .addRule('no-delete-property', OFF) /** @since 0.5.0 */ // 🔴
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴
       .addRule('no-spread-in-reduce', ERROR) /** @since 0.5.0 */ // 🔴

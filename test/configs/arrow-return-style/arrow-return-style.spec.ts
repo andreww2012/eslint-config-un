@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   anonymousArrowDefaultExport: 'anonymous-arrow-default-export.js',
   anonymousArrowDefaultExportInsideHtml: 'anonymous-arrow-default-export-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('arrow-return-style')).toBeDefined();
   });
@@ -111,9 +108,9 @@ describe('rules', () => {
     );
   });
 
-  it('`arrow-return-style/no-export-default-arrow` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`arrow-return-style/no-export-default-arrow` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {arrowReturnStyle: true, jsInline: true},
+      {arrowReturnStyle: true, htmlScripts: true},
       FIXTURES.anonymousArrowDefaultExportInsideHtml,
       import.meta.dirname,
     );

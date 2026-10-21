@@ -1,5 +1,4 @@
 import {DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE} from '../../../src/configs/jsdoc';
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 import {objectKeysUnsafe} from '../../../src/utils';
 
 const FIXTURES = {
@@ -19,7 +18,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('jsdoc')).toBeDefined();
   });
@@ -99,9 +97,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`jsdoc/check-param-names` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`jsdoc/check-param-names` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {jsdoc: true, jsInline: true},
+      {jsdoc: true, htmlScripts: true},
       FIXTURES.wrongParamNamesInsideHtml,
       import.meta.dirname,
     );

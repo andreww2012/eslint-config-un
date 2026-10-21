@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   hasOwnPropertyCall: 'has-own-property-call.ts',
   hasOwnPropertyCallInsideHtml: 'has-own-property-call-inside-html.html',
@@ -18,7 +16,6 @@ describe('e18e: sub config `modernization`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `e18e/modernization` eslint config when set to `false`', async () => {
@@ -56,9 +53,9 @@ describe('e18e: sub config `modernization`', () => {
       );
     });
 
-    it('`e18e/prefer-object-has-own` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    it('`e18e/prefer-object-has-own` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
       const results = await testEslintConfig(
-        {e18e: true, jsInline: true},
+        {e18e: true, htmlScripts: true},
         FIXTURES.hasOwnPropertyCallInsideHtml,
         {
           searchFixturesRelativeToPath: import.meta.dirname,

@@ -149,7 +149,7 @@ export default eslintConfig({
       },
     },
     vitest: {
-      additionalAssertions: ['expectConfigState'],
+      additionalAssertions: ['expectConfigState', 'expectExtraction'],
     },
 
     // False positives:

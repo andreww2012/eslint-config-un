@@ -22,6 +22,10 @@ describe('basic tests', () => {
     const config = configResult.getConfigByUnPostfix('node');
 
     expect(config).toBeDefined();
+    // They run in browsers
+    expect(config?.ignores).toMatchInlineSnapshot(
+      '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml", "**/*.*/+([0-9])_script-+([0-9]).?(m)js"]',
+    );
 
     const globals = await import('globals');
 

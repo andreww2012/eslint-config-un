@@ -1,4 +1,4 @@
-import {ERROR, OFF} from '../constants';
+import {ERROR, GLOB_HTML_SCRIPTS, OFF} from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import {
@@ -73,7 +73,15 @@ export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
 
   configBuilder
     // TODO reports twice on HTML files (via `@html-eslint/parser`): the plugin visits both `Program` and its `Document` child
-    ?.addConfig(['check-file', {ignoresInternal: false}])
+    ?.addConfig([
+      'check-file',
+      {
+        ignoresInternal: false,
+        // Not files of their own, so they would report the name of the HTML file once per script
+        ignoresDefault: [GLOB_HTML_SCRIPTS],
+        ignoresDefaultMergedWithUserIgnores: true,
+      },
+    ])
     .addRule('filename-blocklist', OFF) /** @since 2.0.0 */
     .addRule(
       'filename-naming-convention',

@@ -1,4 +1,4 @@
-import {ERROR, KEEP_LINTING_INLINE_JS, OFF, WARNING} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
@@ -50,7 +50,6 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     ?.addConfig([
       'regexp',
       {
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
         settings: {
           regexp: pluginSettings,
         },

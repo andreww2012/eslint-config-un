@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   importWithUnsortedAttributes: 'import-with-unsorted-attributes.js',
 } as const;
@@ -19,7 +17,6 @@ describe('perfectionist: sub config `sortImportAttributes`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-import-attributes` eslint config by default', async () => {

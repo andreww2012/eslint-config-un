@@ -1,6 +1,7 @@
 import {
   ERROR,
   GLOB_CSS,
+  GLOB_HTML_SCRIPTS,
   GLOB_HTM_HTML,
   GLOB_JSON,
   GLOB_JSON5,
@@ -10,7 +11,6 @@ import {
   GLOB_SOML,
   GLOB_TOML,
   GLOB_YML_YAML,
-  KEEP_LINTING_INLINE_JS,
   OFF,
   WARNING,
 } from '../constants';
@@ -648,12 +648,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
   // 🟣 - NOT in unopinionated
   // 🟡 - only making sense for plain JS (functionality ~fully covered by TS)
 
-  const mainConfig = configBuilder?.addConfig([
-    'unicorn',
-    {
-      ignoresInternal: KEEP_LINTING_INLINE_JS,
-    },
-  ]);
+  const mainConfig = configBuilder?.addConfig('unicorn');
 
   mainConfig
     ?.addRule('better-dom-traversing', ERROR) /** @since 65.0.0 */
@@ -1427,18 +1422,16 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     })
     .addOverrides();
 
-  // Every `<script>` block is linted as a separate file, so an empty one would be reported as an
-  // empty file. Must come last to also win over the `unicorn/html` Sub-config
-  const configBuilderInlineJs = context.createConfigBuilder(
-    configsMeta.jsInline.enabled,
+  // Each `<script>` tag is linted as a file of its own, so an empty one would be reported
+  const configBuilderHtmlScripts = context.createConfigBuilder(
+    configsMeta.htmlScripts.enabled,
     'unicorn',
   );
-  configBuilderInlineJs
+  configBuilderHtmlScripts
     ?.addConfig([
-      'unicorn/inline-js',
+      'unicorn/html-scripts',
       {
-        filesDefault: [GLOB_HTM_HTML],
-        ignoresInternal: KEEP_LINTING_INLINE_JS,
+        filesDefault: [GLOB_HTML_SCRIPTS],
       },
     ])
     .addRule('no-empty-file', OFF);

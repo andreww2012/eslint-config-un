@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   plainFunction: 'plain-function.js',
   plainFunctionInsideHtml: 'plain-function-inside-html.html',
@@ -17,7 +15,6 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
 
     expect(configResult.getLoadedPlugin('prefer-arrow-functions')).toBeDefined();
   });
@@ -110,9 +107,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`prefer-arrow-functions/prefer-arrow-functions` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+  it('`prefer-arrow-functions/prefer-arrow-functions` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
     const results = await testEslintConfig(
-      {preferArrowFunctions: true, jsInline: true},
+      {preferArrowFunctions: true, htmlScripts: true},
       FIXTURES.plainFunctionInsideHtml,
       import.meta.dirname,
     );

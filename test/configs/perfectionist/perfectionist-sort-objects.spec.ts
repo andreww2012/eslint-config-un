@@ -1,5 +1,3 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
-
 const FIXTURES = {
   unsortedObject: 'unsorted-object.js',
   unsortedObjectInsideHtml: 'unsorted-object-inside-html.html',
@@ -18,7 +16,6 @@ describe('perfectionist: sub config `sortObjects`', () => {
       const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `perfectionist/sort-objects` eslint config by default', async () => {
@@ -65,9 +62,9 @@ describe('perfectionist: sub config `sortObjects`', () => {
       expect(error?.message).toMatchInlineSnapshot('"Expected "a" to come before "b"."');
     });
 
-    it('`perfectionist/sort-objects` rule fires inside a `<script>` tag when `js-inline` config is enabled', async () => {
+    it('`perfectionist/sort-objects` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
       const results = await testEslintConfig(
-        {perfectionist: {configSortObjects: true}, jsInline: true},
+        {perfectionist: {configSortObjects: true}, htmlScripts: true},
         FIXTURES.unsortedObjectInsideHtml,
         import.meta.dirname,
       );
