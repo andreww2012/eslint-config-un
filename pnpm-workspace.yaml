@@ -33,6 +33,7 @@ minimumReleaseAgeExclude: # []
   - '@boundaries/elements@3.1.2'
   - eslint-plugin-boundaries@7.2.1
   - '@dprint/markdown@0.27.1'
+  - actions-up@2.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
