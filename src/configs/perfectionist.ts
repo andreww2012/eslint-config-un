@@ -90,6 +90,32 @@ export interface PerfectionistEslintConfigOptions<
   configSortClasses?: RuleSubConfig<ExtraPlugins, 'sort-classes'>;
 
   /**
+   * Enforces sorted constructor parameters in the classes matched by the `useConfigurationIf` rule
+   * option.
+   * The option is required, since reordering parameters is only safe where callers don't depend on
+   * their order, for example in classes created by a dependency injection container.
+   *
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-constructor-parameters`](https://perfectionist.dev/rules/sort-constructor-parameters)
+   * @default false
+   */
+  configSortConstructorParameters?:
+    | false
+    | Prettify<
+        UnFlatConfigEntryBase<
+          ExtraPlugins,
+          Pick<UnRulesConfigPartial<'perfectionist'>, 'perfectionist/sort-constructor-parameters'>
+        > & {
+          /**
+           * Options of the rule this sub-config enables
+           */
+          options: GetRuleOptions<'perfectionist', 'sort-constructor-parameters'>;
+        }
+      >;
+
+  /**
    * Enforces sorted decorators.
    *
    * 📁 Default `files`: all files
@@ -318,6 +344,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     configSortArrayIncludes: false,
     configSortArrays: false,
     configSortClasses: false,
+    configSortConstructorParameters: false,
     configSortDecorators: false,
     configSortEnums: false,
     configSortExports: false,
@@ -347,6 +374,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     configSortArrayIncludes,
     configSortArrays,
     configSortClasses,
+    configSortConstructorParameters,
     configSortDecorators,
     configSortEnums,
     configSortExportAttributes,
@@ -385,6 +413,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
     .addRule('sort-array-includes', OFF) /** @since 0.5.0 */
     .addRule('sort-arrays', OFF) /** @since 5.8.0 */
     .addRule('sort-classes', OFF) /** @since 0.11.0 */
+    .addRule('sort-constructor-parameters', OFF) /** @since 5.13.0 */
     .addRule('sort-decorators', OFF) /** @since 4.0.0 */
     .addRule('sort-enums', OFF) /** @since 0.8.0 */
     .addRule('sort-export-attributes', OFF) /** @since 5.0.0 */
@@ -413,6 +442,7 @@ export default defineUnConfig<PerfectionistEslintConfigOptions>(
       ['sort-array-includes', configSortArrayIncludes],
       ['sort-arrays', configSortArrays],
       ['sort-classes', configSortClasses],
+      ['sort-constructor-parameters', configSortConstructorParameters],
       ['sort-decorators', configSortDecorators],
       ['sort-enums', configSortEnums],
       ['sort-export-attributes', configSortExportAttributes],
