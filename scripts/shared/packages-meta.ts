@@ -135,6 +135,22 @@ export const PACKAGES_META: Readonly<Record<string, PackageMeta>> = {
     gitTag: versionAsIs,
     ruleDocsUrl: null,
   },
+  'is-immutable-type': {
+    configs: ['functional'],
+    ruleDocsUrl: null,
+  },
+  shiki: {
+    configs: ['markdown'],
+    ruleDocsUrl: null,
+  },
+  'stylelint-config-clean-order': {
+    configs: ['css'],
+    ruleDocsUrl: null,
+  },
+  'stylelint-config-recess-order': {
+    configs: ['css'],
+    ruleDocsUrl: null,
+  },
   'svelte-eslint-parser': {
     configs: ['svelte'],
     ruleDocsUrl: null,

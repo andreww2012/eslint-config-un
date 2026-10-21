@@ -38,7 +38,15 @@ const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set([
 ]);
 
 /** @type {ReadonlySet<string>} */
-const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-csstree']);
+const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set([
+  '@humanwhocodes/scsstree',
+  'browserslist',
+  'is-immutable-type',
+  'shiki',
+  'stylelint-config-clean-order',
+  'stylelint-config-recess-order',
+  'tailwind-csstree',
+]);
 
 /** @type {ReadonlySet<string>} */
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
