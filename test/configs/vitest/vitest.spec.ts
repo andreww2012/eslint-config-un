@@ -249,28 +249,28 @@ describe('options', () => {
   });
 
   describe('option: `vitestGlobalsImporting`', () => {
-    it('disallows importing vitest globals by default', async () => {
+    it('enforces importing vitest globals by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(
         configResult.getRuleEntrySeverity('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toBe(2);
+      ).toBe(0);
       expect(
         configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toBe(0);
+      ).toBe(2);
     });
 
-    it('enforces importing vitest globals when set to `enforce`', async () => {
+    it('disallows importing vitest globals when set to `disallow`', async () => {
       const configResult = await computeEslintConfig({
-        vitest: {vitestGlobalsImporting: 'enforce'},
+        vitest: {vitestGlobalsImporting: 'disallow'},
       });
 
       expect(
         configResult.getRuleEntrySeverity('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toBe(0);
+      ).toBe(2);
       expect(
         configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toBe(2);
+      ).toBe(0);
     });
 
     it('allows both styles when set to `any`', async () => {

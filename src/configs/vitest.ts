@@ -238,11 +238,12 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Enforces whether importing [Vitest globals](https://vitest.dev/config/globals) is required or
    * disallowed.
+   * The default follows Vitest, which requires importing them unless its `globals` option is on.
    *
    * Affected rules:
    * - [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
    * - [`vitest/prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
-   * @default 'disallow'
+   * @default 'enforce'
    */
   vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';
 }
@@ -277,7 +278,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     configTypescript: isTsConfigEnabled,
     enforceEachOrFor: 'each',
     enforceToBeCalledStyle: 'once',
-    vitestGlobalsImporting: 'disallow',
+    vitestGlobalsImporting: 'enforce',
     paddingAround: true,
   });
 
