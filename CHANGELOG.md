@@ -1,5 +1,95 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.6
+
+### Minor Changes
+
+- [`b724f6a`](https://github.com/andreww2012/eslint-config-un/commit/b724f6a7ce625937a579c4ea90777e021a203156) - [**BREAKING**] htmlScripts: the `jsInline` config was renamed to `htmlScripts`, `eslint-plugin-html` was replaced by the built-in `html-scripts` plugin, and its `html-processor` plugin settings by the `indent`, `reportBadIndent`, `scriptTags` and `xmlExtensions` options. Each `<script>` tag is now linted as a virtual JS file, matched by `GLOB_HTML_SCRIPTS` rather than HTML file globs, by every config linting JS files except `node`, `format` and `checkFile`, and classic scripts (the ones without `type="module"`) are parsed as scripts sharing their global variables
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`145870a`](https://github.com/andreww2012/eslint-config-un/commit/145870a0597df25412bde225c7cbc1f217540c32) - markdown, mdx: ⚙️ `markdown/codeBlocks` and ⚙️ `mdx/codeBlocks` sub-configs now also apply to nested Markdown code blocks (`md`, `mdx`), and 20 rules that misjudge a part of a document or what an example shows on purpose are now disabled in code blocks
+  
+  <details>
+  <summary>Rules now disabled in embedded code blocks (20)</summary>
+  
+  - [`markdown/fenced-code-meta`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/fenced-code-meta.md)
+  - [`markdown/heading-increment`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/heading-increment.md)
+  - [`markdown/no-bare-urls`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-bare-urls.md)
+  - [`markdown/no-duplicate-headings`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-headings.md)
+  - [`markdown/no-html`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-html.md)
+  - [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md)
+  - [`markdown/no-missing-link-fragments`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-link-fragments.md)
+  - [`markdown/no-multiple-h1`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-multiple-h1.md)
+  - [`markdown/no-unused-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-unused-definitions.md)
+  - [`markdown/require-alt-text`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/require-alt-text.md)
+  - [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html)
+  - [`markdown-links/no-missing-fragments`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-fragments.html)
+  - [`markdown-links/no-missing-path`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-path.html)
+  - [`markdown-preferences/definitions-last`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/definitions-last.html)
+  - [`markdown-preferences/prefer-autolinks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-autolinks.html) <!-- cspell:disable-line -->
+  - [`markdown-preferences/prefer-fenced-code-blocks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-fenced-code-blocks.html)
+  - [`markdown-preferences/prefer-inline-code-words`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-inline-code-words.html)
+  - [`markdown-preferences/prefer-linked-words`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-linked-words.html)
+  - [`unicorn/no-missing-local-resource`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-missing-local-resource.md)
+  - [`unicorn/require-frontmatter-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-frontmatter-fields.md)
+  
+  </details>
+
+- [`c441d17`](https://github.com/andreww2012/eslint-config-un/commit/c441d17a0d049b2dbbf64fb398d0f01880cbd18c) - perfectionist: updated [`eslint-plugin-perfectionist` from v5.12.1 to v5.13.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.12.1...v5.13.0):
+  
+  - 🔴 not enabled [`perfectionist/sort-constructor-parameters`](https://perfectionist.dev/rules/sort-constructor-parameters) rule, added the corresponding ⚙️ `perfectionist/sortConstructorParameters` sub-config, which requires `options` with the rule's `useConfigurationIf` option
+
+- [`55d317f`](https://github.com/andreww2012/eslint-config-un/commit/55d317facbd2cac4576c63848206ba80301e1b43) - [**BREAKING**] `gitignore` root option now uses [`gitignore-reader-x`](https://npmx.dev/gitignore-reader-x) instead of `eslint-config-flat-gitignore`, and its object form now takes the options of the former. The ignores now match what git ignores and come from every source git reads, including parent `.gitignore` files and `.git/info/exclude`, except the global ignore file, which differs between machines (set `sources.excludesFile` to `true` to read it)
+
+### Patch Changes
+
+- [`96949b2`](https://github.com/andreww2012/eslint-config-un/commit/96949b2c24059ea4d320d058411a6c985f5e4481) - storybook: updated [`eslint-plugin-storybook` from v10.6.2 to v10.6.3](https://github.com/storybookjs/storybook/compare/v10.6.2...v10.6.3)
+
+- [`516d88e`](https://github.com/andreww2012/eslint-config-un/commit/516d88e1d0773b2cbb50feb6d5b5825c181fffa1) - css: updated [`stylelint-config-recess-order` from v7.8.0 to v7.8.2](https://github.com/stormwarning/stylelint-config-recess-order/compare/v7.8.0...v7.8.2), which adds the `border-block-{color,style,width}` and `border-inline-{color,style,width}` properties to the `recess` property order of ⚙️ `css/unicorn` sub-config
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`8e7cc16`](https://github.com/andreww2012/eslint-config-un/commit/8e7cc162e87bcd3bc20e95f8e05c09faff90407b) - turbo: updated [`eslint-plugin-turbo` from v2.11.8 to v2.11.10](https://github.com/vercel/turborepo/compare/v2.11.8...v2.11.10)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`0357f8f`](https://github.com/andreww2012/eslint-config-un/commit/0357f8f33efeeb115e846e948084ad612aeb81aa) - awsCdk: updated [`eslint-plugin-awscdk` from v4.4.3 to v4.4.4](https://github.com/ren-yamanashi/awscdk-lint/compare/eslint-plugin-awscdk@4.4.3...eslint-plugin-awscdk@4.4.4)
+
+- [`160ef01`](https://github.com/andreww2012/eslint-config-un/commit/160ef01e57186fdc9dd70b42d1acdfc6e3b97e83) - safeql: updated [`@ts-safeql/eslint-plugin` from v5.4.1 to v5.4.2](https://github.com/ts-safeql/safeql/compare/@ts-safeql/eslint-plugin@5.4.1...@ts-safeql/eslint-plugin@5.4.2)
+
+- [`b644482`](https://github.com/andreww2012/eslint-config-un/commit/b64448279a9a403efa49bb5590aa32949140bf49) - un: `un/vue-no-trailing-element-whitespace` now treats the whitespace around HTML comments like Vue does in production builds, where comments are removed: it no longer reports the whitespace between a comment and an element that may not render, and now reports the whitespace after a comment at the end of an element
+
+- [`5ffe012`](https://github.com/andreww2012/eslint-config-un/commit/5ffe012f14b4f733f1d2a35242b6853c71f37600) - react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.28.0 to v5.28.4](https://github.com/Rel1cx/eslint-react/compare/v5.28.0...v5.28.4)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`bb16ebe`](https://github.com/andreww2012/eslint-config-un/commit/bb16ebe7bf8eb551f8ad9d80005118a949043407) - jsdoc: [`jsdoc/no-unnecessary-type-assertion`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-unnecessary-type-assertion.md) is now only enabled in files with type information, so it no longer prints a warning for other files
+
+- [`0445673`](https://github.com/andreww2012/eslint-config-un/commit/044567374e04dd1e87ab70382cb0923f9e45832e) - compat: updated [`browserslist` from v4.29.3 to v4.29.4](https://github.com/browserslist/browserslist/compare/4.29.3...4.29.4)
+
+- [`e2440ef`](https://github.com/andreww2012/eslint-config-un/commit/e2440ef9ae8488a416e944a4668331b3cce7898b) - [**BREAKING**] vitest: `vitestGlobalsImporting` option now defaults to `enforce` to match Vitest, which requires importing globals unless its [`globals`](https://vitest.dev/config/globals) option is on. Set it to `disallow` to keep the previous behavior
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`900fca8`](https://github.com/andreww2012/eslint-config-un/commit/900fca8a2f7d59e124f475e934d60eb74ba57f35) - jsdoc: updated [`eslint-plugin-jsdoc` from v65.3.8 to v65.4.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v65.3.8...v65.4.0)
+
+- [`b67a1d6`](https://github.com/andreww2012/eslint-config-un/commit/b67a1d6d9f80099a022ec5d97bf239f459f0396c) - ts: updated [`typescript-eslint` from v8.71.2 to v8.72.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.71.2...v8.72.0)
+
+- [`8580999`](https://github.com/andreww2012/eslint-config-un/commit/8580999c856f74d6e2123d98777f84c3831c28fd) - Generating the config no longer loads all the rules of `typescript-eslint` (which loads them on demand) and all ESLint core rules, so ESLint starts a bit faster
+
+- [`3f4d9f5`](https://github.com/andreww2012/eslint-config-un/commit/3f4d9f5d6d3fcbe3545597e4b84a82d457f010fc) - ember: updated [`eslint-plugin-ember` from v13.6.1 to v13.7.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.6.1...v13.7.0) and [`ember-eslint-parser` from v0.14.9 to v0.15.0](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.14.9...v0.15.0)
+
+- [`e6e0f0c`](https://github.com/andreww2012/eslint-config-un/commit/e6e0f0c3edc9d4e5722a53d954d97b849c5e4177) - mdx: updated [`eslint-plugin-mdx` from v3.8.1 to v3.8.2](https://github.com/mdx-js/eslint-mdx/compare/eslint-plugin-mdx@3.8.1...eslint-plugin-mdx@3.8.2)
+
+- [`cf1145f`](https://github.com/andreww2012/eslint-config-un/commit/cf1145f7bc2f810beaa86d520e31a0aa995b7e59) - formatJs: updated [`eslint-plugin-formatjs` from v8.1.1 to v8.1.2](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@8.1.1...eslint-plugin-formatjs@8.1.2)
+
+- [`b1f9fd1`](https://github.com/andreww2012/eslint-config-un/commit/b1f9fd19b3c508c98eaaad523ec1a97aee10629f) - betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.9.1 to v4.10.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.9.1...v4.10.0)
+
+- [`e6e0f0c`](https://github.com/andreww2012/eslint-config-un/commit/e6e0f0c3edc9d4e5722a53d954d97b849c5e4177) - mdx: updated [`eslint-mdx` from v3.8.1 to v3.8.2](https://github.com/mdx-js/eslint-mdx/compare/eslint-mdx@3.8.1...eslint-mdx@3.8.2)
+
+- [`aaba253`](https://github.com/andreww2012/eslint-config-un/commit/aaba2531200000bd0e7af5de00fa7c3f425ae8dc) - mobx: updated [`eslint-plugin-mobx` from v0.1.0 to v0.1.1](https://github.com/mobxjs/mobx/compare/eslint-plugin-mobx@0.1.0...eslint-plugin-mobx@0.1.1)
+
+- [`a544229`](https://github.com/andreww2012/eslint-config-un/commit/a544229ed6c23d40eff921f6065671063b8a90b4) - boundaries: updated [`eslint-plugin-boundaries` from v7.2.0 to v7.2.1](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.2.0...v7.2.1)
+
+- [`1c64c4c`](https://github.com/andreww2012/eslint-config-un/commit/1c64c4cf6c88452b00ada497f912711c6f75e701) - tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.104.3 to v5.104.5](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.104.3...@tanstack/eslint-plugin-query@5.104.5)
+
+- [`f8d086e`](https://github.com/andreww2012/eslint-config-un/commit/f8d086ee01407029f97254e7fa7fb2402380a2cd) - zod: updated [`eslint-plugin-zod` from v5.2.0 to v5.2.1](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@5.2.0...eslint-plugin-zod@5.2.1), [`eslint-plugin-zod-mini` from v2.1.1 to v2.1.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@2.1.1...eslint-plugin-zod-mini@2.1.2) and [`eslint-plugin-zod-core` from v2.1.1 to v2.1.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@2.1.1...eslint-plugin-zod-core@2.1.2)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`cc080d1`](https://github.com/andreww2012/eslint-config-un/commit/cc080d1dfe45e37d7c630e8e821699a320333ea7) - node: updated [`eslint-plugin-n` from v18.4.1 to v18.5.0](https://github.com/eslint-community/eslint-plugin-n/compare/v18.4.1...v18.5.0)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`c60fbe6`](https://github.com/andreww2012/eslint-config-un/commit/c60fbe6b8e5451474e1523a8bc7613ab5f189fc2) - ember, nestJs, sonar, svelte, unicorn: 43 rules that do nothing without type information are now only enabled in files with it
+
 ## 1.0.0-rc.5
 
 ### Minor Changes
