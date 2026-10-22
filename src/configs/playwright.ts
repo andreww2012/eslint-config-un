@@ -27,12 +27,12 @@ export interface PlaywrightPluginSettings {
     /**
      * The names `test` is imported under
      */
-    test?: string[];
+    test?: readonly string[];
 
     /**
      * The names `expect` is imported under
      */
-    expect?: string[];
+    expect?: readonly string[];
   };
 
   /**
@@ -62,7 +62,7 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
    * Affected rule:
    * - [`playwright/expect-expect`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/expect-expect.md)
    */
-  customAssertFunctionNames?: string[];
+  customAssertFunctionNames?: readonly string[];
 
   /**
    * Names of the custom `expect` matchers which return a promise and so must be awaited

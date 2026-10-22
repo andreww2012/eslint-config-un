@@ -7,7 +7,7 @@ export type CssCustomSyntax = Extract<CSSLanguageOptions['customSyntax'], Record
 
 export type CssCustomSyntaxOption = MaybeFn<
   CssCustomSyntax,
-  [
+  readonly [
     {
       /**
        * Default CSS syntax provided by `@eslint/css`, which in turn comes from

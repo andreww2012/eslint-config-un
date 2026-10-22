@@ -66,27 +66,27 @@ interface ImportIntegrityPackagePluginSettings {
    * Defaults to Next.js values if it's detected.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#externallyimportedfiles
    */
-  externallyImportedFiles?: string[];
+  externallyImportedFiles?: readonly string[];
 
   /**
    * A list of files to exclude from the analysis.
    * Uses the format used by `.gitignore`.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignorepatterns
    */
-  ignorePatterns?: string[];
+  ignorePatterns?: readonly string[];
 
   /**
    * A list of files to negate the `ignorePatterns`.
    * Uses the format used by `.gitignore`.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignoreoverridepatterns
    */
-  ignoreOverridePatterns?: string[];
+  ignoreOverridePatterns?: readonly string[];
 
   /**
    * Allows you to remove certain entries from the default ignore list.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#defaultignoreoverrides
    */
-  defaultIgnoreOverrides?: string[];
+  defaultIgnoreOverrides?: readonly string[];
 
   /**
    * A list of files that are considered "test" files.
@@ -94,7 +94,7 @@ interface ImportIntegrityPackagePluginSettings {
    * Will be merged with the default list.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#testfilepatterns
    */
-  testFilePatterns?: string[];
+  testFilePatterns?: readonly string[];
 }
 
 /**

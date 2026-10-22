@@ -18,7 +18,7 @@ export interface CssInJsPluginSettings {
    * Specifies the attribute name or pattern that uses the style object.
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-attributes
    */
-  attributes?: string[];
+  attributes?: readonly string[];
 
   /**
    * Specifies the function paths that use the style object.
@@ -27,7 +27,7 @@ export interface CssInJsPluginSettings {
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
    * @example {'@emotion/react': [['css'], ['default', 'css']]}
    */
-  defineFunctions?: Record<string, MaybeArray<string>[]>;
+  defineFunctions?: Record<string, readonly MaybeArray<string>[]>;
 }
 
 /**

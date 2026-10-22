@@ -54,7 +54,10 @@ interface UnFlatConfigEntryFilesOnly {
    * Called for every ESLint config this config generates, as well as whenever the patterns are
    * resolved earlier, e.g. when they are passed to another config.
    */
-  files?: MaybeFn<string[] | undefined, [params: {readonly filesDefault: readonly string[]}]>;
+  files?: MaybeFn<
+    string[] | undefined,
+    readonly [params: {readonly filesDefault: readonly string[]}]
+  >;
 }
 
 /**
@@ -73,7 +76,7 @@ export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFiles
    */
   ignores?: MaybeFn<
     string[] | undefined,
-    [
+    readonly [
       params: {
         readonly ignoresDefault: readonly string[];
         readonly ignoresImplicit: readonly string[];
@@ -112,7 +115,7 @@ export type UnFlatConfigEntryOverridesEntry<
           ? DisabledAutofixOption
           : unknown)
     >,
-  [severity: EslintSeverity & number, options?: Options]
+  readonly [severity: EslintSeverity & number, options?: Options]
 >;
 
 export type UnFlatConfigEntryOverridesType<T> = {
@@ -194,7 +197,7 @@ export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknow
   Options>;
 
 export type EslintRuleMetaWithLanguages = Prettify<
-  NonNullable<NonNullable<EslintPlugin['rules']>[string]['meta']> & {languages?: string[]}
+  NonNullable<NonNullable<EslintPlugin['rules']>[string]['meta']> & {languages?: readonly string[]}
 >;
 
 export type PluginTypedByEslintCoreOrTsEslint = EslintPlugin | TSESLint.FlatConfig.Plugin;
@@ -238,7 +241,7 @@ export type GetRuleOptions<
   Index extends 'all'
     ? _AllOptions & unknown[]
     : Index extends 'allUnwrapped'
-      ? Prettify<_AllOptions & unknown[]>
+      ? Prettify<_AllOptions & readonly unknown[]>
       : _AllOptions extends readonly unknown[]
         ? Index extends keyof _AllOptions & number
           ? _AllOptions[Index]

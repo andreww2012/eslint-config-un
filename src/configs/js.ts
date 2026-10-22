@@ -56,7 +56,7 @@ export interface JsConfigResult {
   finalFlatConfigRules: Partial<UnRulesConfig>;
 }
 
-export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
+export default defineUnConfig<JsEslintConfigOptions, readonly [], JsConfigResult>(
   'js',
   true,
 )((context, optionsRaw) => {

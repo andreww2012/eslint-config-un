@@ -167,7 +167,7 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
         reportMixedSpaces: true,
         ignorePatterns: [],
       },
-    ] satisfies [RuleOptions],
+    ] satisfies readonly [RuleOptions],
     messages: {
       noMultipleConsecutiveSpaces:
         'Multiple consecutive spaces in a string or template literal are not allowed.',

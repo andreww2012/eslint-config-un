@@ -23,7 +23,7 @@ interface WordsListAndOptionalSeverity {
   /**
    * The words themselves
    */
-  words: string[];
+  words: readonly string[];
 
   /**
    * The severity the affected rule is reported with
@@ -95,7 +95,7 @@ export interface JsxA11yPluginSettings {
     /**
      * Attribute names to treat as the `for` attribute of a `<label>`
      */
-    for?: string[];
+    for?: readonly string[];
   };
 
   /**
@@ -115,7 +115,7 @@ export interface JsxA11yPluginSettings {
   /**
    * See `polymorphicPropName` docs.
    */
-  polymorphicAllowList?: string[];
+  polymorphicAllowList?: readonly string[];
 }
 
 /**
@@ -169,7 +169,7 @@ export interface JsxA11yEslintConfigOptions<
    */
   ambiguousWordsForAnchorText?: MaybeFn<
     false | WordsListAndOptionalSeverity,
-    [defaultWords: string[]]
+    readonly [defaultWords: readonly string[]]
   >;
 
   /**
@@ -222,7 +222,7 @@ export interface JsxA11yEslintConfigOptions<
    * - [`jsx-a11y/control-has-associated-label`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/control-has-associated-label.md)
    * - [`jsx-a11y/label-has-associated-control`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/label-has-associated-control.md)
    */
-  labelAttributes?: string[];
+  labelAttributes?: readonly string[];
 
   /**
    * The list of roles that will be checked.
@@ -248,7 +248,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/alt-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/alt-text.md)
      */
-    areaElements?: string[];
+    areaElements?: readonly string[];
 
     /**
      * List of components that render an `<audio>` element.
@@ -256,7 +256,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/media-has-caption`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/media-has-caption.md)
      */
-    audioElements?: string[];
+    audioElements?: readonly string[];
 
     /**
      * List of components that render a control (an interactive element).
@@ -265,7 +265,7 @@ export interface JsxA11yEslintConfigOptions<
      * - [`jsx-a11y/control-has-associated-label`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/control-has-associated-label.md)
      * - [`jsx-a11y/label-has-associated-control`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/label-has-associated-control.md)
      */
-    controls?: string[];
+    controls?: readonly string[];
 
     /**
      * List of components that render a heading (`<h1>`, `<h2>`, etc.).
@@ -273,7 +273,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/heading-has-content`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/heading-has-content.md)
      */
-    headings?: string[];
+    headings?: readonly string[];
 
     /**
      * List of components that render an `<img>` element.
@@ -282,7 +282,7 @@ export interface JsxA11yEslintConfigOptions<
      * - [`jsx-a11y/alt-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/alt-text.md)
      * - [`jsx-a11y/img-redundant-alt`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/img-redundant-alt.md)
      */
-    imgElements?: string[];
+    imgElements?: readonly string[];
 
     /**
      * List of components that render an `<input>` element with `type="image"`.
@@ -290,7 +290,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/alt-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/alt-text.md)
      */
-    inputTypeImageElements?: string[];
+    inputTypeImageElements?: readonly string[];
 
     /**
      * List of components that render an `<input>` element which accepts text input.
@@ -298,7 +298,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/autocomplete-valid`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/autocomplete-valid.md)
      */
-    inputs?: string[];
+    inputs?: readonly string[];
 
     /**
      * List of components that render a `<label>` element.
@@ -306,7 +306,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/label-has-associated-control`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/label-has-associated-control.md)
      */
-    labels?: string[];
+    labels?: readonly string[];
 
     /**
      * List of components that render a link.
@@ -315,7 +315,7 @@ export interface JsxA11yEslintConfigOptions<
      * - [`jsx-a11y/anchor-is-valid`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/anchor-is-valid.md)
      * - [`jsx-a11y/anchor-has-content`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/anchor-has-content.md)
      */
-    links?: string[];
+    links?: readonly string[];
 
     /**
      * List of components that render an `<object>` element.
@@ -323,7 +323,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/alt-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/alt-text.md)
      */
-    objectElements?: string[];
+    objectElements?: readonly string[];
 
     /**
      * List of components that render a `<track>` element.
@@ -331,7 +331,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/media-has-caption`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/media-has-caption.md)
      */
-    trackElements?: string[];
+    trackElements?: readonly string[];
 
     /**
      * List of components that render a `<video>` element.
@@ -339,7 +339,7 @@ export interface JsxA11yEslintConfigOptions<
      * Affected rule:
      * - [`jsx-a11y/media-has-caption`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/media-has-caption.md)
      */
-    videoElements?: string[];
+    videoElements?: readonly string[];
   };
 }
 

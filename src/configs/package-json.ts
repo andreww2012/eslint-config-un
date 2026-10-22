@@ -189,7 +189,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * - [`package-json/restrict-private-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
    * @default false
    */
-  disallowUnnecessaryPropertiesInPrivatePackages?: boolean | string[];
+  disallowUnnecessaryPropertiesInPrivatePackages?: boolean | readonly string[];
 
   /**
    * Disallow certain top-level properties in package.json.

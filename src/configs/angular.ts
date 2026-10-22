@@ -328,7 +328,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
         '@angular-eslint/eslint-plugin-template',
       ],
       [context.packagesInfo['@angular-eslint/template-parser'], '@angular-eslint/template-parser'],
-    ] satisfies [Awaited<ReturnType<typeof fetchPackageInfo>>, string][]
+    ] satisfies readonly (readonly [Awaited<ReturnType<typeof fetchPackageInfo>>, string])[]
   ).forEach(([packageInfo, packageName]) => {
     if (packageInfo?.versions.major != null && packageInfo.versions.major !== angularVersion) {
       context.logger.warn(

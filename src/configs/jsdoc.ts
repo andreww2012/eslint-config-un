@@ -170,13 +170,13 @@ export interface JsdocPluginSettings {
        * Whether the tag accepts a type, or the list of the types it accepts
        * @default true
        */
-      type?: boolean | string[];
+      type?: boolean | readonly string[];
 
       /**
        * The parts of the tag that must be present
        * @default []
        */
-      required?: ('name' | 'type' | 'typeOrNameRequired')[];
+      required?: readonly ('name' | 'type' | 'typeOrNameRequired')[];
     }
   >;
 
@@ -184,7 +184,7 @@ export interface JsdocPluginSettings {
    * Can be used as the default for any rules with a `contexts` property option
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#contexts
    */
-  contexts?: (
+  contexts?: readonly (
     | string
     | {
         /**
@@ -210,7 +210,7 @@ export interface JsdocPluginSettings {
         /**
          * The tags the rule looks at within the matched comments
          */
-        tags?: string[];
+        tags?: readonly string[];
 
         /**
          * What a disallowed name is replaced with

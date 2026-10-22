@@ -26,7 +26,7 @@ export interface MochaPluginSettings {
   /**
    * Wrappers around the Mocha functions that the rules must recognize as those functions
    */
-  additionalCustomNames?: {
+  additionalCustomNames?: readonly {
     /**
      * The name of the wrapper, which may be a member expression such as `describe.only`
      */

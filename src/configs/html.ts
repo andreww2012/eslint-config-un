@@ -30,12 +30,12 @@ export interface HtmlPluginSettings {
     /**
      * Regular expressions of the tag names marking a template literal as HTML
      */
-    tags?: string[];
+    tags?: readonly string[];
 
     /**
      * Regular expressions of the leading comments marking a template literal as HTML
      */
-    comments?: string[];
+    comments?: readonly string[];
   };
 }
 

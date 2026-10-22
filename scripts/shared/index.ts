@@ -44,11 +44,11 @@ export const generateAngularPluginsWithOldRules = async () => {
 };
 
 export const generateEslintPluginsRulesPresence = (
-  loadedPlugins: (({plugin: EslintPlugin} | {error: string}) & {
+  loadedPlugins: readonly (({plugin: EslintPlugin} | {error: string}) & {
     version: string;
   })[],
 ) => {
-  const ruleVersions = new Map<string, {version: string; deprecated?: boolean}[]>();
+  const ruleVersions = new Map<string, readonly {version: string; deprecated?: boolean}[]>();
 
   loadedPlugins.forEach((pluginInfo) => {
     if ('error' in pluginInfo) {

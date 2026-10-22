@@ -66,7 +66,7 @@ function getIsConfigEnabled(
   {
     preCondition,
   }: {
-    preCondition?: [condition: boolean, description: string];
+    preCondition?: readonly [condition: boolean, description: string];
   } = {},
 ): boolean {
   const {configs = {}, defaultConfigsStatus} = this.rootOptions;

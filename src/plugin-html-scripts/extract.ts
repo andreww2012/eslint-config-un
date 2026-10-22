@@ -267,7 +267,7 @@ export const extract = (html: string, options: ExtractOptions) => {
   const badIndentationLines: number[] = [];
   const scripts: ExtractedScript[] = [];
   let previousHtml = '';
-  let htmlLineStarts: number[] | undefined;
+  let htmlLineStarts: readonly number[] | undefined;
 
   const {chunks, directiveComments} = parseHtml(html, options);
 

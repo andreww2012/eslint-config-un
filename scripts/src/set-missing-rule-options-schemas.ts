@@ -4,7 +4,7 @@ import type {PluginPrefix} from '../../src/loaders';
 import {cloneDeep, interopDefault, objectEntriesUnsafe} from '../../src/utils';
 
 const PLUGIN_OPTIONS_SCHEMAS: Readonly<
-  Partial<Record<PluginPrefix, Record<string, JSONSchema[]>>>
+  Partial<Record<PluginPrefix, Record<string, readonly JSONSchema[]>>>
 > = {
   header: {
     header: [

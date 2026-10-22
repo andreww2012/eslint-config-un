@@ -81,7 +81,7 @@ type EslintSeverityNoWarn = Exclude<EslintSeverity, 1 | 'warn'>;
 type StripWarnSeverity<Severity> = Exclude<Severity, 1 | 'warn'>;
 
 type StripWarnRuleEntry<Entry> = Entry extends readonly [infer Severity, ...infer Rest]
-  ? [StripWarnSeverity<Severity>, ...Rest]
+  ? readonly [StripWarnSeverity<Severity>, ...Rest]
   : StripWarnSeverity<Entry>;
 
 type StripWarnOverrideEntryValue<Value> = Value extends {severity: EslintSeverity}
@@ -96,7 +96,7 @@ type StripWarnRulesRecord<RulesRecord> = RulesRecord extends object
   ? {[RuleName in keyof RulesRecord]: StripWarnOverrideEntry<RulesRecord[RuleName]>}
   : RulesRecord;
 
-type StripWarnConfigDepth = [never, 0, 1, 2, 3, 4];
+type StripWarnConfigDepth = readonly [never, 0, 1, 2, 3, 4];
 
 type StripWarnFromConfig<Config, Depth extends number = 4> = Config extends (
   ...args: never[]
@@ -221,7 +221,7 @@ export interface EslintConfigUnOptions<
         /**
          * The patterns themselves
          */
-        files: string[];
+        files: readonly string[];
 
         /**
          * Use only these patterns instead of merging them with ours
@@ -308,7 +308,10 @@ export interface EslintConfigUnOptions<
    * eslint-config-un's configs, and before the config which disables Prettier incompatible rules
    * for all files.
    */
-  extraConfigs?: MaybeStripWarningSeverity<UnFlagConfigEntry<ExtraPlugins>, TypeAffectingOptions>[];
+  extraConfigs?: readonly MaybeStripWarningSeverity<
+    UnFlagConfigEntry<ExtraPlugins>,
+    TypeAffectingOptions
+  >[];
 
   /**
    * This option overrides if certain configs are enabled or disabled by default.
@@ -430,7 +433,7 @@ export interface EslintConfigUnOptions<
          * This can be useful if you enable certain plugin rules only by using
          * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
          */
-        alwaysLoad: LoadablePluginPrefix[];
+        alwaysLoad: readonly LoadablePluginPrefix[];
       };
 
   // #endregion
@@ -661,7 +664,7 @@ export interface EslintConfigUnOptions<
         /**
          * Glob patterns excluded from type-aware linting
          */
-        ignores?: string[];
+        ignores?: readonly string[];
 
         /**
          * A shortcut for
@@ -755,7 +758,7 @@ export interface EslintConfigUnOptions<
    * It can also be set by assigning `ESLINT_CONFIG_UN_ENVIRONMENT` environment variable one of the
    * accepted values, but the explicitly passed value takes precedence.
    */
-  environment?: MaybeFn<Nullable<Environment>, [detected: Environment]>;
+  environment?: MaybeFn<Nullable<Environment>, readonly [detected: Environment]>;
 
   /**
    * Globally disables all the rules that may perform network requests for validation.
@@ -831,7 +834,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    */
   typeInfoRulesResolved: {
     mode: TypeInfoMode;
-    ignores?: string[];
+    ignores?: readonly string[];
 
     /**
      * Normalized global parser options (the `allowDefaultProject` shortcut is folded into
@@ -846,8 +849,8 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
      * Set after that config is loaded, and only if it is enabled
      */
     typeAwareParsing?: {
-      files: string[];
-      ignores: string[];
+      files: readonly string[];
+      ignores: readonly string[];
     };
   };
 
@@ -855,7 +858,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    * NOTE: mutable.
    * Rule names must be UNprefixed
    */
-  disabledAutofixes: Partial<Record<PluginPrefix, string[]>>;
+  disabledAutofixes: Partial<Record<PluginPrefix, readonly string[]>>;
 
   /**
    * Maps canonical plugin prefix → unprefixed rule name → whether the rule supports autofix.
@@ -956,7 +959,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   isTestMode: boolean;
   tests: MaybeFn<
     MaybeArray<string | {message: string; severity: 'error' | 'warn'}> | null,
-    [
+    readonly [
       data: {
         plugins: Partial<Record<PluginPrefix, EslintPlugin>>;
       },
@@ -1032,7 +1035,7 @@ export const processUnOrFlatConfig = (
         typeof ruleEntryRaw === 'object' &&
         'severity' in ruleEntryRaw; /* `!Array.isArray(...)` doesn't work */
 
-      const newRuleEntries: [ruleEntryName: string, ruleEntry: EslintRuleEntry][] = [];
+      const newRuleEntries: (readonly [ruleEntryName: string, ruleEntry: EslintRuleEntry])[] = [];
 
       const ruleEntryPrimary: EslintRuleEntry = isRuleEntryRawObject
         ? ruleEntryRaw.options == null

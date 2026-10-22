@@ -34,7 +34,7 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    */
   customSyntax?: MaybeFn<
     CssCustomSyntax,
-    [
+    readonly [
       {
         /**
          * Default CSS syntax provided by [`@eslint/css`](https://npmx.dev/@eslint/css), which in
@@ -239,7 +239,7 @@ const loadStylelintPropertyOrder = async (name: 'recess' | 'clean') => {
   return isNonEmptyArray(propertyNames) && propertyNames;
 };
 
-export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css', {
+export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResult>('css', {
   enabledBy: {packageAbsent: 'stylelint'},
 })(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {

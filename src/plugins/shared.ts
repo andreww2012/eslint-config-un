@@ -75,8 +75,8 @@ export interface RuleMetadata {
  */
 export interface TypeInfoRequirement {
   rules: Partial<Record<string, true | 'optional'>>;
-  extraPatterns?: string[];
-  extraFileExtensions?: `.${string}`[];
+  extraPatterns?: readonly string[];
+  extraFileExtensions?: readonly `.${string}`[];
 }
 
 export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
@@ -84,7 +84,7 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
    * The Configs this plugin serves.
    * Only the pseudo-plugin holding the rules of ESLint itself serves none
    */
-  configs?: ConfigKey[];
+  configs?: readonly ConfigKey[];
 
   /**
    * Only meaningful for a plugin serving a Config several plugins serve: says which of them the
@@ -143,8 +143,8 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
    * Extends the reach of the generated type-aware config beyond TypeScript files
    */
   typeInfo?: {
-    extraPatterns?: string[];
-    extraFileExtensions?: `.${string}`[];
+    extraPatterns?: readonly string[];
+    extraFileExtensions?: readonly `.${string}`[];
   };
 
   rules: Partial<Record<GetRuleNamesInPlugin<Prefix>, RuleMetadata>>;

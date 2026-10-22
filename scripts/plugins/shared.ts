@@ -109,8 +109,8 @@ export type ExecuteAnyEslintPluginWorkerOutput = Extract<
 export const getEslintPluginInfo = (
   module: unknown,
 ): {
-  keys: string[];
-  customRules: string[];
+  keys: readonly string[];
+  customRules: readonly string[];
 } | null => {
   if (typeof module !== 'object' || module == null) {
     return null;

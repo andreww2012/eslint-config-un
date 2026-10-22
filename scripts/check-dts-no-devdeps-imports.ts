@@ -31,7 +31,7 @@ function* walkDeclarations(dir: string, skipDir: string): Generator<string> {
  * Extract bare-specifier imports from a declaration file using the TypeScript AST.
  * Covers `import ... from 'pkg'`, `export ... from 'pkg'`, and `import 'pkg'`.
  */
-function extractBareImports(filePath: string, content: string): string[] {
+function extractBareImports(filePath: string, content: string): readonly string[] {
   const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.ESNext, true);
   const specs = new Set<string>();
 
@@ -73,7 +73,7 @@ const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
  * Handles npm aliases: `"alias": "npm:actual-pkg@version"` → adds both the alias and the resolved
  * package name, since TypeScript imports use the real name.
  */
-function resolveAllowedPackages(pkg: PackageJson): Set<string> {
+function resolveAllowedPackages(pkg: PackageJson): ReadonlySet<string> {
   const allowed = new Set<string>();
   (['dependencies', 'peerDependencies'] as const).forEach((section) => {
     Object.entries(pkg[section] || {}).forEach(([name, version]) => {
@@ -88,7 +88,7 @@ function resolveAllowedPackages(pkg: PackageJson): Set<string> {
 }
 
 /** Collect package names that are inlined into `dist/node_modules/`. */
-function collectInlinedPackages(distDir: string): Set<string> {
+function collectInlinedPackages(distDir: string): ReadonlySet<string> {
   const nmDir = path.join(distDir, 'node_modules');
   const inlined = new Set<string>();
   if (!fs.existsSync(nmDir)) {
@@ -121,7 +121,7 @@ const allowed = resolveAllowedPackages(pkg);
 const inlined = collectInlinedPackages(DIST_DIR);
 const inlinedDir = path.join(DIST_DIR, 'node_modules');
 
-const leaks = new Map<string, Set<string>>(); // file → leaked specifiers
+const leaks = new Map<string, ReadonlySet<string>>(); // file → leaked specifiers
 
 walkDeclarations(DIST_DIR, inlinedDir).forEach((file) => {
   const content = fs.readFileSync(file, 'utf8');

@@ -85,7 +85,7 @@ const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Readonly<
 
 const generateInstallationCommand = (
   packageManager: UnConfigContext['meta']['usedPackageManager'],
-  packageNames: string[],
+  packageNames: readonly string[],
   isExact = false,
 ) => {
   const {
@@ -111,7 +111,7 @@ const PACKAGE_REQUESTER_RENDERERS = {
   option: (optionNames) =>
     `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} option${optionNames.length === 1 ? '' : 's'}`,
   package: (packageNames) => `a dependency of ${packageNames.map(stylePackageName).join(', ')}`,
-} as const satisfies Record<string, (names: string[]) => string>;
+} as const satisfies Record<string, (names: readonly string[]) => string>;
 
 /**
  * Turns the requesters of a single package into the reason it is needed, such as
@@ -137,9 +137,9 @@ const renderPackageRequesters = (
 };
 
 interface ResolveConfigAsyncDataOptions {
-  usedPluginPrefixes: string[];
-  usedParserPrefixes: ParserPrefix[];
-  usedPackagesPrefixes: LoadablePackagePrefix[];
+  usedPluginPrefixes: readonly string[];
+  usedParserPrefixes: readonly ParserPrefix[];
+  usedPackagesPrefixes: readonly LoadablePackagePrefix[];
 }
 
 export const resolveConfigAsyncData = async (
@@ -289,7 +289,7 @@ export const resolveConfigAsyncData = async (
 
   // Must be read only after the modules above were loaded: any of them might have failed to
   // resolve a dependency of its own. Nothing is cached when missing packages are found
-  (cacheData ? new Map<string, Set<string>>() : context.missingPackages).forEach(
+  (cacheData ? new Map<string, ReadonlySet<string>>() : context.missingPackages).forEach(
     (packagesFailedToLoadIt, missingPackage) => {
       mapGetOrInsert(packagesToManuallyInstallOrUpdate, missingPackage, {versionRange: ''});
 

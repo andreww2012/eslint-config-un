@@ -4,7 +4,7 @@ const FIXTURES = {
 
 const getRulesWithLanguages = (
   configResult: Awaited<ReturnType<typeof computeEslintConfig>>,
-): string[] =>
+): readonly string[] =>
   Object.entries(configResult.getConfigByUnPostfix('global-setup/plugins')?.plugins || {}).flatMap(
     ([pluginPrefix, plugin]) =>
       Object.entries(plugin.rules || {})

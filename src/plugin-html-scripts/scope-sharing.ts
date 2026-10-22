@@ -31,7 +31,7 @@ interface FileScript {
 }
 
 interface FileState {
-  scripts: FileScript[];
+  scripts: readonly FileScript[];
   parseOptions: ParseOptions | undefined;
   hasReportedParserNotUsed: boolean;
 }

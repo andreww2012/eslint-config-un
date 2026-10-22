@@ -67,8 +67,9 @@ const NAMESPACE_IMPORT_NAME = '*';
  */
 const OPAQUE_MODULE_NAMES: ReadonlySet<string> = new Set(['index.js', 'utils.js']);
 
-const isVisitorListener = (value: unknown): value is (...listenerArguments: unknown[]) => unknown =>
-  typeof value === 'function';
+const isVisitorListener = (
+  value: unknown,
+): value is (...listenerArguments: readonly unknown[]) => unknown => typeof value === 'function';
 
 const describeError = (error: unknown) => (error instanceof Error ? error.message : inspect(error));
 
@@ -192,7 +193,7 @@ export const probeRules = async (
           ? [
               [
                 key,
-                (...listenerArguments: unknown[]) =>
+                (...listenerArguments: readonly unknown[]) =>
                   withCurrentRule(ruleName, () => listener(...listenerArguments), undefined),
               ] as const,
             ]
@@ -417,9 +418,9 @@ export const traceRulesUsingTypeInfo = async (packageRoot: string, ruleDirectory
     return [...imports, ...requires];
   };
 
-  const reExportsOf = new Map<string, Map<string, {file: string; name: string}>>();
-  const starExportsOf = new Map<string, string[]>();
-  const localExportsOf = new Map<string, Set<string>>();
+  const reExportsOf = new Map<string, ReadonlyMap<string, {file: string; name: string}>>();
+  const starExportsOf = new Map<string, readonly string[]>();
+  const localExportsOf = new Map<string, ReadonlySet<string>>();
 
   files.forEach((file) => {
     const code = sourceOf(file);

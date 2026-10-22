@@ -78,7 +78,7 @@ export interface ReactPluginSettings {
    * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`.
    * If this isn't set, any `propTypes` wrapped in a function will be skipped.
    */
-  propWrapperFunctions?: (
+  propWrapperFunctions?: readonly (
     | string
     | {
         /**
@@ -102,7 +102,7 @@ export interface ReactPluginSettings {
    * The name of any function used to wrap components, e.g. Mobx `observer` function.
    * If this isn't set, components wrapped by these functions will be skipped.
    */
-  componentWrapperFunctions?: (
+  componentWrapperFunctions?: readonly (
     | string
     | {
         /**
@@ -120,7 +120,7 @@ export interface ReactPluginSettings {
   /**
    * Components used as alternatives to `<form>` for forms, e.g. `<Form endpoint={ url } />`
    */
-  formComponents?: (
+  formComponents?: readonly (
     | string
     | {
         /**
@@ -131,14 +131,14 @@ export interface ReactPluginSettings {
         /**
          * The prop that plays the role of the `action` attribute
          */
-        formAttribute: string | string[];
+        formAttribute: string | readonly string[];
       }
   )[];
 
   /**
    * Components used as alternatives to `<a>` for linking, e.g. `<Link to={ url } />`
    */
-  linkComponents?: (
+  linkComponents?: readonly (
     | string
     | {
         /**
@@ -149,7 +149,7 @@ export interface ReactPluginSettings {
         /**
          * The prop that plays the role of the `href` attribute
          */
-        linkAttribute: string | string[];
+        linkAttribute: string | readonly string[];
       }
   )[];
 }
@@ -325,7 +325,7 @@ interface RefreshSubConfigOptions<
    * Affected rule:
    * - [`react-refresh/only-export-components`](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/blob/HEAD/README.md#options)
    */
-  allowExportNames?: string[];
+  allowExportNames?: readonly string[];
 
   /**
    * Other rule's options.
@@ -661,7 +661,7 @@ const REACT_ORIGINAL_DOM_RULES: ReadonlySet<string> = new Set([
   'no-render-return-value',
   'no-unknown-property',
   'void-dom-elements-no-children',
-] satisfies GetRuleNamesInPlugin<'react'>[]);
+] satisfies readonly GetRuleNamesInPlugin<'react'>[]);
 
 const REACT_X_TYPE_AWARE_RULES: ReadonlySet<string> = new Set(
   allUnionMembers<ReactXTypeAwareRules>()([
@@ -670,12 +670,12 @@ const REACT_X_TYPE_AWARE_RULES: ReadonlySet<string> = new Set(
     'no-implicit-ref',
     'no-leaked-conditional-rendering',
     'no-unused-props',
-  ] satisfies GetRuleNamesInPlugin<'eslint-react'>[]),
+  ] satisfies readonly GetRuleNamesInPlugin<'eslint-react'>[]),
 );
 
 const DEFAULT_FILES = [GLOB_JS_TS_X] as const;
 
-export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
+export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react', {
   enabledBy: {package: 'react'},
   needs: ['ts'],
 })((context, optionsRaw, {ts: tsConfigResult}) => {

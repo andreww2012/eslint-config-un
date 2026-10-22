@@ -20,7 +20,7 @@ const COMPARISON_OPERATORS_SET: ReadonlySet<string> = new Set([
   '===',
   '!=',
   '!==',
-] satisfies ESTree.BinaryOperator[]);
+] satisfies readonly ESTree.BinaryOperator[]);
 
 const DEFAULT_ALLOWED_LITERAL_VALUES_SET: ReadonlySet<string> = new Set(['undefined']);
 

@@ -132,29 +132,29 @@ const resolveCacheFilePath = (context: UnConfigContext): string | undefined => {
 
 export interface CacheDataInFs<Serialized extends boolean = true> {
   configs: EslintFlatConfigEntry[];
-  usedPlugins: string[];
+  usedPlugins: readonly string[];
   packageRequesters: Serialized extends true
-    ? Record<string /* Package name */, PackageRequester[]>
-    : Map<string /* Package name */, Set<PackageRequester>>;
+    ? Record<string /* Package name */, readonly PackageRequester[]>
+    : ReadonlyMap<string /* Package name */, ReadonlySet<PackageRequester>>;
   usedParsers: Serialized extends true
-    ? Partial<Record<ParserPrefix, string[] /* Config names */>>
-    : Map<ParserPrefix, string[] /* Config names */>;
+    ? Partial<Record<ParserPrefix, readonly string[] /* Config names */>>
+    : ReadonlyMap<ParserPrefix, readonly string[] /* Config names */>;
   usedPackages: Serialized extends true
     ? Partial<
         Record<
           LoadablePackagePrefix,
-          Prettify<
+          readonly Prettify<
             {configName: string} & SetFieldType<
               PackageToLoadInfo,
               'valueTransformFn',
-              [functionSource: string, scope?: unknown] | undefined
+              readonly [functionSource: string, scope?: unknown] | undefined
             >
           >[]
         >
       >
-    : Map<
+    : ReadonlyMap<
         LoadablePackagePrefix,
-        Prettify<{configName: string; path: string} & PackageToLoadInfo>[]
+        readonly Prettify<{configName: string; path: string} & PackageToLoadInfo>[]
       >;
 }
 
@@ -206,7 +206,7 @@ export const saveCacheToFs = async (
     return false;
   }
 
-  const unserializablePaths: [path: PropertyKey[], value: unknown][] = [];
+  const unserializablePaths: (readonly [path: readonly PropertyKey[], value: unknown])[] = [];
   traverseForEach(dataToStore.configs, ({path: valuePath}, value: unknown) => {
     const isUnserializable =
       // eslint-disable-next-line ts/no-unnecessary-condition

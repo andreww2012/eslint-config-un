@@ -221,7 +221,7 @@ const DEFAULT_NPM_PACKAGE_OVERRIDE = 'npm:-';
 const PNPM_INSTALL_NOISE_LINE_REGEX = /^(?:Progress: |\s+WARN\s+)/;
 
 const mergeRulesPresenceResults = (
-  results: ReturnType<typeof generateEslintPluginsRulesPresence>[],
+  results: readonly ReturnType<typeof generateEslintPluginsRulesPresence>[],
 ): ReturnType<typeof generateEslintPluginsRulesPresence> => {
   const ruleMap = new Map<string, {versions: string[]; deprecatedVersions: string[]}>();
 
@@ -262,7 +262,7 @@ const run = async ({
   batchSize,
 }: ReturnType<typeof main> & {}) => {
   const projectDir = path.join(import.meta.dirname, 'temp', packageName);
-  const generatePathInProject = (...paths: string[]) => path.join(projectDir, ...paths);
+  const generatePathInProject = (...paths: readonly string[]) => path.join(projectDir, ...paths);
 
   await fs.mkdir(projectDir, {recursive: true});
 
@@ -410,7 +410,7 @@ const run = async ({
 
   const extraDepth = [...packageName.matchAll(/\//g)].length;
 
-  const generateRunnerScriptSource = (allBatches: (typeof versionsSorted)[]) => `
+  const generateRunnerScriptSource = (allBatches: readonly (typeof versionsSorted)[]) => `
 import {createRequire} from 'module';
 import PQueue from 'p-queue';
 import {interopDefault} from '${'../'.repeat(3 + extraDepth)}src/utils';
@@ -566,7 +566,7 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
 
     const headerRow = [...(hasDeprecated ? ['  '] : []), 'Rule name', 'Min version', 'Max version'];
 
-    const table: string[][] = [headerRow, ...dataRows];
+    const table: readonly (readonly string[])[] = [headerRow, ...dataRows];
 
     const maxColumnWidths = table.map((_, rowIndex) =>
       Math.max(...table.map((row) => row[rowIndex]?.length || 0)),

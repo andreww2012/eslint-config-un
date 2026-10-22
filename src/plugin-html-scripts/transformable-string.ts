@@ -36,7 +36,7 @@ export const indexToLocation = (index: number, lineStarts: readonly number[]) =>
 export class TransformableString {
   readonly #original: string;
   readonly #removedRanges: Range[] = [];
-  #cache: {text: string; lineStarts: number[]} | undefined;
+  #cache: {text: string; lineStarts: readonly number[]} | undefined;
 
   constructor(original: string) {
     this.#original = original;

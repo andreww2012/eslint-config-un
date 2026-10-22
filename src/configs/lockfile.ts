@@ -21,7 +21,7 @@ import {
 const LOCKFILE_RULES_FOR_PACKAGE_JSON = [
   'no-weakening-config',
   'tracked',
-] as const satisfies GetRuleNamesInPlugin<'lockfile'>[];
+] as const satisfies readonly GetRuleNamesInPlugin<'lockfile'>[];
 
 const LOCKFILE_RULES_FOR_PACKAGE_JSON_SET: ReadonlySet<string> = new Set(
   LOCKFILE_RULES_FOR_PACKAGE_JSON,
@@ -145,7 +145,7 @@ const LOCKFILE_LANGUAGES = {
 const LOCKFILES_INFO_MAP: Readonly<
   Record<
     SupportedPackageManagers,
-    [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: string[]]
+    readonly [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: readonly string[]]
   >
 > = {
   npm: ['json', ['package-lock.json', 'npm-shrinkwrap.json']],
@@ -186,7 +186,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       {
         filesDefault: LOCKFILES_INFO.flatMap(([, [, lockfiles]]) =>
           lockfiles.map((lockfile) => `**/${lockfile}`),
-        ) satisfies string[],
+        ) satisfies readonly string[],
         parsingIgnoresInheritedFrom: ['jsonc', 'yaml'],
       },
     ])

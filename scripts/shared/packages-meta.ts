@@ -8,7 +8,7 @@ const versionAsIs = (version: string) => version;
 type GitTagResult = string | {url: string};
 
 interface PackageMeta {
-  configs: (keyof UnConfigs)[];
+  configs: readonly (keyof UnConfigs)[];
   ruleDocsUrl: ((ruleName: string) => string | undefined) | null;
   gitTag?: string | ((version: string) => GitTagResult);
 

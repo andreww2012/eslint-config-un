@@ -117,5 +117,7 @@ const remapMessage = (
   };
 };
 
-export const remapMessages = (messages: Eslint.Linter.LintMessage[], context: RemapContext) =>
-  messages.map((message) => remapMessage(message, context));
+export const remapMessages = (
+  messages: readonly Eslint.Linter.LintMessage[],
+  context: RemapContext,
+) => messages.map((message) => remapMessage(message, context));

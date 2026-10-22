@@ -26,7 +26,7 @@ export type DprintOptions = Prettify<
           /**
            * A file is formatted by the first plugin matching it
            */
-          plugins: {
+          plugins: readonly {
             /**
              * Name of the `@dprint/*` package installed in the project, or a file path or URL to
              * the WASM binary of the plugin

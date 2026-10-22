@@ -24,7 +24,7 @@ const isReadonlyArray = (value: unknown): value is readonly unknown[] => Array.i
  * that an earlier list added by setting its value to a falsy value
  */
 export const mergeArrayOrBooleanRecords = (
-  ...sources: (ArrayOrBooleanRecord | readonly string[] | Falsy)[]
+  ...sources: readonly (ArrayOrBooleanRecord | readonly string[] | Falsy)[]
 ): string[] => {
   const result = new Set<string>();
 

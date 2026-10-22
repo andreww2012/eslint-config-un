@@ -67,7 +67,7 @@ export interface JestPluginSettings {
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#aliased-jest-globals
    * @example {describe: ['context']}
    */
-  globalAliases?: Record<string, string[]>;
+  globalAliases?: Record<string, readonly string[]>;
 
   /**
    * Tell the plugin to treat a different package as the source of Jest globals.
@@ -243,13 +243,13 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * - [`jest/valid-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md)
    * @default [1, 1]
    */
-  minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
+  minAndMaxExpectArgs?: readonly [min: number | undefined, max: number | undefined];
 }
 
 const JEST_RULES_FOR_TYPESCRIPT_FILES = [
   ...RULE_CATEGORIES_PER_PLUGIN.jest.typeAware,
   'no-untyped-mock-factory', // Needs TypeScript syntax, but no type information
-] as const satisfies GetRuleNamesInPlugin<'jest'>[];
+] as const satisfies readonly GetRuleNamesInPlugin<'jest'>[];
 
 const JEST_RULES_FOR_TYPESCRIPT_FILES_SET: ReadonlySet<string> = new Set(
   JEST_RULES_FOR_TYPESCRIPT_FILES,

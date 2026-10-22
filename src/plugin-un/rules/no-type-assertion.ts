@@ -136,7 +136,7 @@ const rule: JsRuleDefinitionWithNodes<TypeAssertion, [RuleOptions?]> = {
         allowedTypes: ['PropType'],
         allowWidening: false,
       },
-    ] satisfies [RuleOptions],
+    ] satisfies readonly [RuleOptions],
     messages: {
       noTypeAssertion:
         'Type assertions are not allowed, because TypeScript does not check that they are correct. Narrow the type with a runtime check, or use a type annotation or `satisfies T as T` instead.',

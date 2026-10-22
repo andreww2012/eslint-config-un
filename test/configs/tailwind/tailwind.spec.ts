@@ -177,7 +177,7 @@ describe('options', () => {
       });
 
       it('derives `functions` from defaults when provided as a function', async () => {
-        let finalFunctions: string[] = [];
+        let finalFunctions: readonly string[] = [];
         const configResult = await computeEslintConfig('tailwind', {
           un: {
             plugins: {
@@ -214,7 +214,7 @@ describe('options', () => {
       });
 
       it('derives `ignoredKeys` from defaults when provided as a function', async () => {
-        let finalIgnoredKeys: string[] = [];
+        let finalIgnoredKeys: readonly string[] = [];
         const configResult = await computeEslintConfig('tailwind', {
           un: {
             plugins: {
@@ -251,7 +251,7 @@ describe('options', () => {
       });
 
       it('derives `attributes` from defaults when provided as a function', async () => {
-        let finalAttributes: string[] = [];
+        let finalAttributes: readonly string[] = [];
         const configResult = await computeEslintConfig('tailwind', {
           un: {
             plugins: {

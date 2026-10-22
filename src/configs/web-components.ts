@@ -17,7 +17,7 @@ export interface WebComponentsPluginSettings {
    * Recognize the following classes as custom element base classes.
    * @example ['LitElement']
    */
-  elementBaseClasses?: string[];
+  elementBaseClasses?: readonly string[];
 }
 
 /**

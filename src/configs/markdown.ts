@@ -122,7 +122,7 @@ export interface MarkdownEslintConfigOptions<
            * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`),
            * specifying `javascript` instead of `js` won't have any effect.
            */
-          ignoredLanguages?: CodeBlockLanguage[];
+          ignoredLanguages?: readonly CodeBlockLanguage[];
 
           /**
            * Lint fenced code blocks as if their code is assumed to be running in JavaScript's
@@ -205,7 +205,7 @@ export interface MarkdownEslintConfigOptions<
    * - [`markdown/no-html`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-html.md)
    * @default true
    */
-  allowHtmlTags?: boolean | string[];
+  allowHtmlTags?: boolean | readonly string[];
 
   /**
    * Only these language codes are allowed in fenced code blocks (\```lang ... ```).
@@ -223,7 +223,9 @@ export interface MarkdownEslintConfigOptions<
    * @default all languages are allowed, including no language
    * @example ['js', 'ts', 'vue']
    */
-  codeBlocksAllowedLanguages?: [CodeBlockLanguage, ...CodeBlockLanguage[]] | 'any-lang-required';
+  codeBlocksAllowedLanguages?:
+    | readonly [CodeBlockLanguage, ...CodeBlockLanguage[]]
+    | 'any-lang-required';
 
   /**
    * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.
@@ -301,7 +303,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
         [
           {
             ...(allowedFencedCodeBlocksLanguages && {
-              required: arrayUnique(codeBlocksAllowedLanguages satisfies string[]),
+              required: arrayUnique(codeBlocksAllowedLanguages satisfies readonly string[]),
             }),
           },
         ],

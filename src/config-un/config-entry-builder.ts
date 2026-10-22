@@ -86,7 +86,7 @@ export type ConfigEntryBuilderOptions<
 > = UnFlatConfigEntryBase<ExtraPlugins, DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix>;
 
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonly<
-  Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>
+  Record<ImplicitlyIgnoredFileTypeUnlessParsed, readonly [string, ...string[]]>
 > = {
   css: [GLOB_CSS],
   graphql: [GLOB_GRAPHQL],
@@ -136,12 +136,12 @@ interface ConfigEntryChain<DefaultPrefix extends PluginPrefix | null> {
     options?: {
       includeDeprecated?: boolean | 'allow';
       allowUnsorted?: boolean;
-      rulesToSkipInConfig?: string[] | ((ruleName: string) => boolean);
+      rulesToSkipInConfig?: readonly string[] | ((ruleName: string) => boolean);
     },
   ) => ConfigEntryChain<DefaultPrefix>;
 }
 
-const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
+const styleRuleNames = (ruleNames: readonly string[]) => ruleNames.map(styleRuleName).join(', ');
 
 const TYPE_AWARE_PARSING_DEFAULT = {
   files: [GLOB_TS_X],
@@ -190,7 +190,7 @@ export class ConfigEntryBuilder<
 
   private readonly configs = new Map<
     string,
-    [config: EslintFlatConfigEntry, metadata: FlatConfigMetadata]
+    readonly [config: EslintFlatConfigEntry, metadata: FlatConfigMetadata]
   >();
 
   addFlatConfig(config: SetRequired<EslintFlatConfigEntry, 'name'>) {
@@ -268,7 +268,7 @@ export class ConfigEntryBuilder<
   addConfig(
     nameAndMaybeOptions:
       | string
-      | [
+      | readonly [
           name: string,
           options: {
             /**
@@ -360,7 +360,7 @@ export class ConfigEntryBuilder<
              * Primarily meant for configs running on files of a language their rules
              * were not written for (for example, `unicorn/{json,markdown}`).
              */
-            parsingIgnoresInheritedFrom?: ParsingLanguages[];
+            parsingIgnoresInheritedFrom?: readonly ParsingLanguages[];
 
             /**
              * Specifies plugin shared settings on the specified property.
@@ -494,10 +494,12 @@ export class ConfigEntryBuilder<
           Object.assign(
             settings,
             Object.fromEntries(
-              Reflect.ownKeys(directlyMappedSettings).map((settingKey): [PropertyKey, unknown] => [
-                settingKey,
-                Reflect.get(directlyMappedSettings, settingKey),
-              ]),
+              Reflect.ownKeys(directlyMappedSettings).map(
+                (settingKey): readonly [PropertyKey, unknown] => [
+                  settingKey,
+                  Reflect.get(directlyMappedSettings, settingKey),
+                ],
+              ),
             ),
           );
         }
@@ -684,7 +686,7 @@ export class ConfigEntryBuilder<
             rules.flatMap((ruleName) => {
               const {pluginPrefixCanonical, ruleNameUnprefixed} =
                 getRuleNameAndPluginPrefixByFullName(this.context, ruleName);
-              const entries: [string, typeof OFF][] = [[ruleName, OFF]];
+              const entries: (readonly [string, typeof OFF])[] = [[ruleName, OFF]];
               if (this.context.fixableRulesPerPlugin[pluginPrefixCanonical]?.[ruleNameUnprefixed]) {
                 entries.push([`${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`, OFF]);
               }
@@ -732,9 +734,9 @@ export class ConfigEntryBuilder<
 
             const errorMessages: Exclude<
               (typeof this.context.tests)[number],
-              (...args: unknown[]) => unknown
+              (...args: readonly unknown[]) => unknown
             > &
-              unknown[] = [];
+              readonly unknown[] = [];
 
             if (includeDeprecated === false) {
               const includedDeprecatedRules = addedRulesForPlugin.filter(([addedRuleName]) =>

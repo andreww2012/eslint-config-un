@@ -31,7 +31,7 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
       {
         ignoredElements: [],
       },
-    ] satisfies [RuleOptions],
+    ] satisfies readonly [RuleOptions],
     messages: {
       leading: 'Start the text right after the opening tag.',
     },

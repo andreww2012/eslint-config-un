@@ -30,7 +30,7 @@ export interface SolidPluginSettings {
    * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
    * @default []
    */
-  moduleSources?: string[];
+  moduleSources?: readonly string[];
 
   /**
    * Version of Solid the linted code targets.

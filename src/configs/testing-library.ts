@@ -43,13 +43,13 @@ export interface TestingLibraryPluginSettings {
    * The names of the functions that count as custom renders.
    * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-renders
    */
-  customRenders?: string[] | 'off';
+  customRenders?: readonly string[] | 'off';
 
   /**
    * The names or the patterns of the custom queries.
    * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-queries
    */
-  customQueries?: string[] | 'off';
+  customQueries?: readonly string[] | 'off';
 }
 
 interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<

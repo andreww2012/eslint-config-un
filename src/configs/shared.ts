@@ -130,7 +130,7 @@ export const generateConfigNoOnlyTests = (
   {
     filesDefault,
   }: {
-    filesDefault?: string[];
+    filesDefault?: readonly string[];
   } = {},
 ) => {
   const configBuilderNoOnlyTests = context.createConfigBuilder(

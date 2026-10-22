@@ -53,7 +53,7 @@ export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor, {readonly: true}>(
   'userExtraConfigs',
 ]);
 
-export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
+export interface ConfigManifest<Needs extends readonly ConfigKey[] = readonly []> {
   /**
    * What turns the Config on, and what the generated `@default` line of its docs says
    * @default true
@@ -96,7 +96,11 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
  * The config builders it creates are recorded by the context it is given, in creation order.
  * Only a Config declaring a `Result` returns anything: `null` means it has nothing to report
  */
-export type UnConfigSetup<Options, Needs extends readonly ConfigKey[] = [], Result = never> = (
+export type UnConfigSetup<
+  Options,
+  Needs extends readonly ConfigKey[] = readonly [],
+  Result = never,
+> = (
   context: Readonly<UnConfigContext>,
   configOptions:
     | boolean
@@ -126,7 +130,7 @@ export interface ConfigModuleLoader extends ConfigManifest<readonly ConfigKey[]>
 }
 
 export const defineUnConfig =
-  <Options, const Needs extends readonly ConfigKey[] = [], Result = never>(
+  <Options, const Needs extends readonly ConfigKey[] = readonly [], Result = never>(
     key: ConfigKey,
     manifest: boolean | ConfigManifest<Needs>,
   ) =>

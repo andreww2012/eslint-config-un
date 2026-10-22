@@ -98,11 +98,11 @@ export default defineUnConfig<HeaderEslintConfigOptions>(
                 options.commentStyle ?? 'block',
                 options.comment,
                 ...(options.numberOfNewlinesAfterHeader == null && options.lineEndings == null
-                  ? ([] satisfies [])
+                  ? ([] satisfies readonly [])
                   : ([
                       options.numberOfNewlinesAfterHeader ?? 1,
                       ...(options.lineEndings == null
-                        ? ([] satisfies [])
+                        ? ([] satisfies readonly [])
                         : ([{lineEndings: options.lineEndings}] satisfies NonEmptyTuple)),
                     ] satisfies NonEmptyTuple)),
               ]

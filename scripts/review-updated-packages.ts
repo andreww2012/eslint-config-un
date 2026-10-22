@@ -330,7 +330,9 @@ const EXTENSIONS_TO_SKIP_IN_DIFF: ReadonlySet<string> = new Set([
   'mts',
   'tsbuildinfo',
 ]);
-const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<Record<string, string[]>> = {
+const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<
+  Record<string, readonly string[]>
+> = {
   // For packages distributed as ESM+CJS (for example: eslint-plugin-zod-x@2.0.0)
   cjs: ['js', 'mjs'],
   cts: ['ts', 'mts'],

@@ -23,7 +23,7 @@ export interface LitA11yPluginSettings {
    * If you're importing `lit-html` from a package that re-exports `lit-html`, for example
    * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
    */
-  litHtmlSources?: boolean | string[];
+  litHtmlSources?: boolean | readonly string[];
 }
 
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -49,7 +49,7 @@ export interface LitPluginSettings {
   /**
    * Instructs rules to recognize the following classes as sub-classes of `LitElement`
    */
-  elementBaseClasses?: string[];
+  elementBaseClasses?: readonly string[];
 }
 
 /**

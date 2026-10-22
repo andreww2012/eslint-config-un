@@ -37,7 +37,7 @@ export interface CloudfrontFunctionsEslintConfigOptions<
 const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
   `${syntax} ${isPlural ? 'are' : 'is'} not allowed in CloudFront functions`;
 
-const getAllowedImports = (isV2 = true): string[] =>
+const getAllowedImports = (isV2 = true): readonly string[] =>
   ['querystring', 'crypto', isV2 && 'cloudfront'].filter((v) => typeof v === 'string');
 
 // Turning Node.js globals off makes `no-undef` report the ones missing in CloudFront
@@ -64,7 +64,7 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
     [
       [1, optionsResolved.configV1 || {}],
       [2, optionsResolved],
-    ] satisfies [1 | 2, UnFlatConfigEntryBase][]
+    ] satisfies readonly (readonly [1 | 2, UnFlatConfigEntryBase])[]
   ).forEach(([runtimeVersion, options]) => {
     const isV2 = runtimeVersion === 2;
 

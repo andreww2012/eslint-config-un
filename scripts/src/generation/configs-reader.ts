@@ -66,7 +66,7 @@ export interface DiscoveredConfig {
   /**
    * Property names of the manifest object literal, `null` if the boolean shorthand was used
    */
-  manifestProperties: string[] | null;
+  manifestProperties: readonly string[] | null;
   optionsInterfaceName: string;
 
   /**
@@ -80,8 +80,8 @@ export interface DiscoveredConfig {
   /**
    * Doc comment lines of the options interface, `*` decorations stripped
    */
-  prose: string[];
-  subConfigs: string[];
+  prose: readonly string[];
+  subConfigs: readonly string[];
 }
 
 const getJsDocLines = (declaration: ts.Node) => {
@@ -207,7 +207,7 @@ export const readDocumentedMiscGroupConfigs = async () => {
   ).map((line) => line.match(MISC_GROUP_BULLET_REGEXP)?.[1] || '');
 };
 
-const collectConfigModulePaths = async (directory: string): Promise<string[]> => {
+const collectConfigModulePaths = async (directory: string): Promise<readonly string[]> => {
   const entries = await fs.readdir(directory, {withFileTypes: true});
   const nested = await Promise.all(
     entries.map(async (entry) => {

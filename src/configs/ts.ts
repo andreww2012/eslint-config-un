@@ -64,7 +64,7 @@ const TS_PLUGIN_NO_UNSAFE_RULES_SET: ReadonlySet<string> = new Set(
     'no-unsafe-member-access',
     'no-unsafe-return',
     'no-unsafe-type-assertion',
-  ] satisfies GetRuleNamesInPlugin<'ts'>[]),
+  ] satisfies readonly GetRuleNamesInPlugin<'ts'>[]),
 );
 
 type NoUnsafeRulesWithPrefixes = Pick<UnRulesConfigPartial<'ts'>, `ts/${TsPluginNoUnsafeRules}`>;
@@ -221,7 +221,7 @@ export const TSCONFIG_COMPILER_OPTIONS_KEYS = {
   outputFormatting: ['noErrorTruncation', 'preserveWatchOutput', 'pretty'],
   completeness: ['skipDefaultLibCheck', 'skipLibCheck'],
   watchOptions: ['assumeChangesOnlyAffectDirectDependencies'],
-} as const satisfies Record<string, string[]>;
+} as const satisfies Record<string, readonly string[]>;
 type TsconfigCompilerOptionsGroups = keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS;
 type TsconfigCompilerOptionsKeys = ObjectValues<typeof TSCONFIG_COMPILER_OPTIONS_KEYS>[number];
 
@@ -356,7 +356,7 @@ export const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
     /* If your code runs/doesn't run in the DOM: */
     'lib',
   ],
-} as const satisfies Record<string, TsconfigCompilerOptionsKeys[]>;
+} as const satisfies Record<string, readonly TsconfigCompilerOptionsKeys[]>;
 
 interface SortTsconfigKeysSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -397,7 +397,7 @@ interface SortTsconfigKeysSubConfigOptions<
         /**
          * Unless overridden, order from `antfu` preset will be used *within* groups.
          */
-        order: (TsconfigCompilerOptionsGroups | (string & {}))[];
+        order: readonly (TsconfigCompilerOptionsGroups | (string & {}))[];
 
         /**
          * The order of the options within a specific group
@@ -405,7 +405,7 @@ interface SortTsconfigKeysSubConfigOptions<
         orderWithinGroup?: {
           [Group in TsconfigCompilerOptionsGroups | (string & {})]?:
             | 'alphabetical'
-            | (Group extends keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
+            | readonly (Group extends keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
                 ? (typeof TSCONFIG_COMPILER_OPTIONS_KEYS)[Group][number] | (string & {})
                 : string)[];
         };
@@ -419,7 +419,7 @@ interface SortTsconfigKeysSubConfigOptions<
         /**
          * The order of the options
          */
-        order: (TsconfigCompilerOptionsKeys | (string & {}))[];
+        order: readonly (TsconfigCompilerOptionsKeys | (string & {}))[];
       };
 
   /**
@@ -427,7 +427,7 @@ interface SortTsconfigKeysSubConfigOptions<
    * [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
    * that will be appended to the resulting config array.
    */
-  extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
+  extraSortKeysConfigs?: readonly (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
 }
 
 /**
@@ -518,13 +518,13 @@ export interface TsEslintConfigOptions<
    * we recommend using the separate `allowDefaultProject` option instead.
    * @see https://typescript-eslint.io/packages/parser#configuration
    */
-  parserOptions?: MaybeFn<TsEslintParserOptions, [isForTypeAwareConfig: boolean]>;
+  parserOptions?: MaybeFn<TsEslintParserOptions, readonly [isForTypeAwareConfig: boolean]>;
 
   /**
    * Do not put `.` (dot) before an extension
    * @example ['vue']
    */
-  extraFileExtensions?: string[];
+  extraFileExtensions?: readonly string[];
 
   /**
    * Which special variable types should be removed by the autofix if unused.
@@ -568,21 +568,21 @@ const mergeParserOptions = (
 };
 
 export interface TsConfigResult {
-  filesTypeAware: string[];
-  ignoresTypeAware: string[];
+  filesTypeAware: readonly string[];
+  ignoresTypeAware: readonly string[];
 
   /**
    * Where the project service is set up, which can be wider than where the type-aware rules run
    */
   typeAwareParsing: {
-    files: string[];
-    ignores: string[];
+    files: readonly string[];
+    ignores: readonly string[];
   };
 }
 
 export default defineUnConfig<
   TsEslintConfigOptions,
-  ['js', 'astro', 'vue', 'svelte'],
+  readonly ['js', 'astro', 'vue', 'svelte'],
   TsConfigResult
 >('ts', {
   enabledBy: {package: 'typescript'},
@@ -628,11 +628,11 @@ export default defineUnConfig<
   const vueTsConfig = vueResolvedOptions?.configEnforceTypescriptInScriptSection;
   const vueTypescriptRules = typeof vueTsConfig === 'object' ? vueTsConfig.typescriptRules : null;
 
-  type ConfigsWithExtraExtensionsHandledByTs = [
+  type ConfigsWithExtraExtensionsHandledByTs = readonly [
     language: 'astro' | 'svelte' | 'vue',
     config: Nullable<UnFlatConfigEntryBase> | boolean,
     options?: {
-      filesDefault?: string[];
+      filesDefault?: readonly string[];
       additionalCondition?: boolean;
       doNotTreatFilesAsTypeAware?: boolean;
     },
@@ -654,7 +654,7 @@ export default defineUnConfig<
           doNotTreatFilesAsTypeAware: vueTypescriptRules === 'only-non-type-aware',
         },
       ],
-    ] satisfies ConfigsWithExtraExtensionsHandledByTs[] as ConfigsWithExtraExtensionsHandledByTs[]
+    ] satisfies readonly ConfigsWithExtraExtensionsHandledByTs[] as readonly ConfigsWithExtraExtensionsHandledByTs[]
   ).forEach(([language, config, options = {}]) => {
     const {filesDefault, additionalCondition, doNotTreatFilesAsTypeAware} = options;
     if (
@@ -1277,7 +1277,7 @@ export default defineUnConfig<
         ? [...DEFAULT_TSCONFIG_TOP_LEVEL_ORDER]
         : [];
 
-    const compilerOptionsOrder: string[] =
+    const compilerOptionsOrder: readonly string[] =
       typeof orderCompilerOptions === 'object'
         ? 'preset' in orderCompilerOptions
           ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS[orderCompilerOptions.preset]

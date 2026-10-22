@@ -20,12 +20,12 @@ export interface FormatjsPluginSettings {
    * Allows you to specify additional function names to check besides `formatMessage` &
    * `$formatMessage`.
    */
-  additionalFunctionNames?: string[];
+  additionalFunctionNames?: readonly string[];
 
   /**
    * Allows you to specify additional component names to check besides `FormattedMessage`.
    */
-  additionalComponentNames?: string[];
+  additionalComponentNames?: readonly string[];
 
   /**
    * Skips the message descriptors declared via `defineMessage(s)` calls, only checking the ones

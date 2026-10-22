@@ -23,7 +23,7 @@ export interface SonarPluginSettings {
    * - `sonar/prefer-cypress-should`
    * @default ['.js', '.mjs', '.cjs', '.jsx', '.vue', '.ts', '.mts', '.cts', '.tsx']
    */
-  testFileExtensions?: string[];
+  testFileExtensions?: readonly string[];
 
   /**
    * The names of the globals the rules must treat as already defined, in addition to the ones they
@@ -32,7 +32,7 @@ export interface SonarPluginSettings {
    * Affected rule:
    * - `sonar/declarations-in-global-scope`
    */
-  predefinedGlobals?: string[];
+  predefinedGlobals?: readonly string[];
 
   /**
    * The module type of every linted file.

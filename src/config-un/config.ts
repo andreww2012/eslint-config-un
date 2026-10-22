@@ -531,7 +531,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy
   >;
 
-  const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<ConfigUnresolved>[]> = {
+  const cascadeAnchorEntries: Record<CascadeAnchor, readonly MaybePromise<ConfigUnresolved>[]> = {
     globalSetup: [
       (files?.length || 0) > 0 && {
         name: genFlatConfigEntryName('files', {isGlobalSetup: true}),

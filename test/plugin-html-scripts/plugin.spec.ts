@@ -80,7 +80,7 @@ const createESLint = (eslintOptions: eslint.ESLint.Options) =>
     ...eslintOptions,
   });
 
-const getSingleResult = ([result]: eslint.ESLint.LintResult[]) => {
+const getSingleResult = ([result]: readonly eslint.ESLint.LintResult[]) => {
   if (!result) {
     throw new Error('Nothing was linted');
   }
@@ -139,7 +139,7 @@ const isHtmlEslintRule = (name: string) => name.startsWith('@html-eslint/');
 const pickRules = (rules: Linter.RulesRecord, isPicked: (name: string) => boolean) =>
   Object.fromEntries(Object.entries(rules).filter(([name]) => isPicked(name)));
 
-const toLocatedMessages = (messages: Linter.LintMessage[]) =>
+const toLocatedMessages = (messages: readonly Linter.LintMessage[]) =>
   messages.map(({ruleId, line, column, message}) => `${line}:${column} ${ruleId} ${message}`);
 
 it('should extract and remap messages', async () => {
@@ -402,7 +402,7 @@ describe('processor reports bad indent', () => {
     expect(messages[2]?.column).toBe(1);
   });
 
-  it.each<[HtmlProcessorOptions['reportBadIndent'], number[]]>([
+  it.each<readonly [HtmlProcessorOptions['reportBadIndent'], readonly number[]]>([
     ['off', []],
     ['warn', [1]],
     ['error', [2]],

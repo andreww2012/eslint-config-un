@@ -157,7 +157,7 @@ describe('isNonEmptyArray', () => {
   });
 
   it('returns `false` for `undefined`', () => {
-    const value: string[] | undefined = undefined;
+    const value: readonly string[] | undefined = undefined;
 
     expect(isNonEmptyArray(value)).toBe(false);
   });

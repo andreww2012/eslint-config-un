@@ -74,7 +74,7 @@ const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {
 
 const PLUGINS_BY_CONFIG_KEY: ReadonlyMap<
   string,
-  {configKey: string; meta: PluginPackageMeta; packageName: string}[]
+  readonly {configKey: string; meta: PluginPackageMeta; packageName: string}[]
 > = Map.groupBy(
   Object.entries(PLUGIN_PACKAGES_META).flatMap(([packageName, meta]) =>
     meta.configs.map((configKey) => ({configKey, meta, packageName})),
@@ -124,7 +124,7 @@ const renderMainPluginLines = (configKey: string) => {
   ];
 };
 
-const renderJsDoc = (lines: string[], indent: string) =>
+const renderJsDoc = (lines: readonly string[], indent: string) =>
   [
     `${indent}/**`,
     ...lines.map((line) => `${indent} *${line ? ` ${line}` : ''}`),
@@ -139,10 +139,10 @@ const topologicallySort = <T>(
   const itemsByKey = new Map(items.map((item) => [getKey(item), item]));
   const visited = new Set<string>();
   const inProgress = new Set<string>();
-  const cycles: string[][] = [];
+  const cycles: (readonly string[])[] = [];
   const sorted: T[] = [];
 
-  const visit = (key: string, trail: string[]) => {
+  const visit = (key: string, trail: readonly string[]) => {
     if (visited.has(key)) {
       return;
     }

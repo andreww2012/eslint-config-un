@@ -56,7 +56,7 @@ export interface AstroConfigResult {
   optionsResolved: AstroEslintConfigOptions;
 }
 
-export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('astro', {
+export default defineUnConfig<AstroEslintConfigOptions, readonly [], AstroConfigResult>('astro', {
   enabledBy: {package: 'astro'},
   phase: 'late',
   after: ['ts'],

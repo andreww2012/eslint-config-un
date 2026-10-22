@@ -79,8 +79,11 @@ export interface NodePluginSettings {
    * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
    */
   typescriptExtensionMap?:
-    | Exclude<GetRuleOptions<'node', 'no-missing-import'>['typescriptExtensionMap'], unknown[]>
-    | [string, string][];
+    | Exclude<
+        GetRuleOptions<'node', 'no-missing-import'>['typescriptExtensionMap'],
+        readonly unknown[]
+      >
+    | readonly (readonly [string, string])[];
 
   /**
    * Supported node version range

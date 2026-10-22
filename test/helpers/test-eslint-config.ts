@@ -185,9 +185,9 @@ export const testEslintConfig = async <
       },
 ): Promise<
   FixturePaths extends string
-    ? ESLint.LintResult[]
+    ? readonly ESLint.LintResult[]
     : {
-        [K in keyof FixturePaths]: ESLint.LintResult[];
+        [K in keyof FixturePaths]: readonly ESLint.LintResult[];
       }
 > => {
   // See the comment in `computeEslintConfig` for why this is a dynamic import.

@@ -69,7 +69,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     ruleName: RuleName,
     severity: RuleSeverity = OFF,
     options?: NoInfer<_RuleOptions>,
-  ): [RuleName, RuleSeverity, _RuleOptions] => {
+  ): readonly [RuleName, RuleSeverity, _RuleOptions] => {
     const customizedRuleEntry = configProducedByCustomize?.[ruleName];
     const severityFinal =
       customizedRuleEntry == null

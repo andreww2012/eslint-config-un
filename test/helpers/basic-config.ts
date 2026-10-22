@@ -37,7 +37,7 @@ const CONFIG_MODE_OPTIONS: Readonly<Record<ConfigMode, ComputeOptions>> = {
 export const expectConfigState = async (
   configs: Parameters<typeof computeEslintConfig>[0],
   postfixOrPostfixes: string | readonly string[],
-  state: boolean | [configName: keyof UnConfigs, action: boolean],
+  state: boolean | readonly [configName: keyof UnConfigs, action: boolean],
   modeOrComputeOptions?: ConfigMode | Prettify<ComputeOptions & {mode?: ConfigMode}>,
 ): Promise<ConfigResultType> => {
   using stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);

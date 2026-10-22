@@ -343,7 +343,7 @@ ${Array.from(
   };
 }
 
-function resolveInOutDir(...paths: string[]) {
+function resolveInOutDir(...paths: readonly string[]) {
   return path.join(__dirname, '../temp/eslint-types', ...paths);
 }
 

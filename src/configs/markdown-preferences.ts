@@ -225,7 +225,7 @@ export interface MarkdownPreferencesConfigResult {
 
 export default defineUnConfig<
   MarkdownPreferencesEslintConfigOptions,
-  [],
+  readonly [],
   MarkdownPreferencesConfigResult
 >(
   'markdownPreferences',

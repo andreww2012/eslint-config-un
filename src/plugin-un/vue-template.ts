@@ -16,7 +16,7 @@ export const IGNORED_ELEMENTS_OPTION_SCHEMA = {
 
 export const defineElementVisitor = (
   context: Eslint.Rule.RuleContext,
-  ignoredElements: string[] | undefined,
+  ignoredElements: readonly string[] | undefined,
   visitElement: (element: AST.VElement) => void,
 ) => {
   // eslint-disable-next-line ts/no-unsafe-assignment -- ESLint types parser services as `any`

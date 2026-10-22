@@ -102,7 +102,7 @@ const replaceBetweenMarkers = (readme: string, marker: string, content: string) 
 };
 
 export const writeReadmeArtifacts = async () => {
-  const rows = (await readPluginMetadata()).flatMap(({prefix, metadata}): RenameRow[] => {
+  const rows = (await readPluginMetadata()).flatMap(({prefix, metadata}): readonly RenameRow[] => {
     const packageName = PLUGIN_LOADERS[prefix]?.packageName;
     if (packageName == null || !metadata.suggestedPrefix) {
       return [];

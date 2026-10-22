@@ -67,7 +67,7 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
         whitespace: 'condense',
         ignoredElements: [],
       },
-    ] satisfies [RuleOptions],
+    ] satisfies readonly [RuleOptions],
     messages: {
       trailing:
         'Vue keeps this whitespace at the end of the element, and some browsers show it when the text is selected. Remove it.',

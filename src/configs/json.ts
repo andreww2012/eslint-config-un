@@ -35,7 +35,7 @@ export interface JsonEslintConfigOptions<
 }
 
 const JSON_SUB_CONFIGS_FILES: Readonly<
-  Record<keyof (typeof PARSING_LANGUAGES)['json']['dialects'], string[]>
+  Record<keyof (typeof PARSING_LANGUAGES)['json']['dialects'], readonly string[]>
 > = {
   json: [GLOB_JSON],
   jsonc: [GLOB_JSONC],

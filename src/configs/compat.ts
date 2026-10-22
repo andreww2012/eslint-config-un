@@ -18,7 +18,7 @@ export interface CompatPluginSettings {
    * Mark which features are polyfilled and should not be reported.
    * @see https://github.com/amilajack/eslint-plugin-compat#adding-polyfills
    */
-  polyfills?: string[];
+  polyfills?: readonly string[];
 
   /**
    * "This plugin also supports linting the compatibility of ES APIs in addition to Web APIs.
@@ -45,12 +45,12 @@ export interface CompatPluginSettings {
   /**
    * The browsers to check the compatibility against, overriding the `browserslist` resolution
    */
-  targets?: string[];
+  targets?: readonly string[];
 
   /**
    * An alias of `targets`
    */
-  browsers?: string[];
+  browsers?: readonly string[];
 }
 
 /**

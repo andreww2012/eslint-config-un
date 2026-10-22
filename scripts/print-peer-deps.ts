@@ -4,7 +4,7 @@ import {arrayUnique} from '@andreww2012/unutils';
 import packageJson from '../package.json' with {type: 'json'};
 import {fetchPackageInfo} from '../src/utils';
 
-const dependenciesUnique: {
+const dependenciesUnique: readonly {
   packageName: string;
   isDev?: boolean;
 }[] = arrayUnique(
@@ -30,7 +30,7 @@ const DEPENDENCIES_TO_SKIP: ReadonlySet<string> = new Set([
   'eslint',
   'eslint-typegen',
   '@eslint/config-inspector',
-] satisfies (keyof typeof packageJson.devDependencies)[]);
+] satisfies readonly (keyof typeof packageJson.devDependencies)[]);
 
 const WELL_KNOWN_PEER_DEPENDENCIES: ReadonlySet<string> = new Set([
   'eslint',

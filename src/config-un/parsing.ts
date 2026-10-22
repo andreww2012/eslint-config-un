@@ -70,7 +70,7 @@ export type ImplicitlyIgnoredFileTypeUnlessParsed =
 
 type ParsingMechanism =
   | {
-      language: [plugin: Exclude<PluginPrefix, ''>, languageName: string];
+      language: readonly [plugin: Exclude<PluginPrefix, ''>, languageName: string];
     }
   | {
       parser: ParserPrefix;
@@ -91,7 +91,7 @@ type ParsingMechanism =
 interface ParsingDialectDefinition {
   mechanism: ParsingMechanism;
   filesDefault: string[];
-  ignoresExclusions?: ImplicitlyIgnoredFileTypeUnlessParsed[];
+  ignoresExclusions?: readonly ImplicitlyIgnoredFileTypeUnlessParsed[];
 
   /**
    * How the dialect is parsed unless a Config or the `parsing` option says otherwise.
@@ -379,7 +379,7 @@ export type ParsingLanguages = keyof typeof PARSING_LANGUAGES;
 export type ParsingLanguagesWithDialects = ObjectValues<{
   [Key in ParsingLanguages]:
     | Key
-    | [language: Key, dialect: keyof (typeof PARSING_LANGUAGES)[Key]['dialects']];
+    | readonly [language: Key, dialect: keyof (typeof PARSING_LANGUAGES)[Key]['dialects']];
 }>;
 
 interface ParsingLanguageCustomOptions {
@@ -476,7 +476,7 @@ export interface ParsingRequest {
   files?: EslintFlatConfigEntry['files'];
 
   /** Only read alongside a name suffix */
-  ignores?: string[];
+  ignores?: readonly string[];
 
   /** Filled in by the context the request came through */
   requestedBy?: PackageRequester;
@@ -497,7 +497,7 @@ interface ResolvedParsingEntry {
   entryProperties?: object;
 
   /** Requests asking for an entry of their own on top of this one */
-  layers?: ParsingRequest[];
+  layers?: readonly ParsingRequest[];
 
   /**
    * The entry only carries the `ignores` to propagate: no config entry is emitted for it
@@ -548,8 +548,8 @@ const resolveEntriesForLanguage = (
   // Indexing with the whole key union drops the per-language narrowing, gone once the language
   // stops being a literal
   option: ParsingOptions[ParsingLanguages],
-  requests: ParsingRequest[],
-): ResolvedParsingEntry[] => {
+  requests: readonly ParsingRequest[],
+): readonly ResolvedParsingEntry[] => {
   const definition: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
 
   if (option === false) {
@@ -687,8 +687,8 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
   // The `ignores` are propagated only once every language has said which files it parses
   const resolved: {
     language: ParsingLanguages;
-    requests: ParsingRequest[];
-    entries: ResolvedParsingEntry[];
+    requests: readonly ParsingRequest[];
+    entries: readonly ResolvedParsingEntry[];
   }[] = [];
 
   objectKeysUnsafe(PARSING_LANGUAGES).forEach((language) => {

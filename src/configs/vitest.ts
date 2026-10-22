@@ -45,7 +45,7 @@ export interface VitestPluginSettings {
    * Tell the plugin about any global methods you have aliased.
    * @example {describe: ['context']}
    */
-  globalAliases?: Record<string, string[]>;
+  globalAliases?: Record<string, readonly string[]>;
 
   /**
    * The modules re-exporting the Vitest API, such as the ones defining custom fixtures.
@@ -53,7 +53,7 @@ export interface VitestPluginSettings {
    * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md#custom-fixtures
    * @example ['@/tests/fixtures', /test-extend$/]
    */
-  vitestImports?: (string | RegExp)[];
+  vitestImports?: readonly (string | RegExp)[];
 }
 
 /**
@@ -75,7 +75,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * Affected rule:
    * - [`vitest/expect-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/expect-expect.md)
    */
-  additionalAssertions?: string[];
+  additionalAssertions?: readonly string[];
 
   /**
    * Allows specifying which matchers return promises, and so should be considered async when

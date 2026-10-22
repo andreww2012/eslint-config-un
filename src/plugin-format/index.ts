@@ -108,7 +108,7 @@ type FormatRule<RuleOptions extends unknown[]> = Eslint.JSRuleDefinition<{
 
 const createFormatRule = <RuleOptions extends unknown[]>(
   description: string,
-  schema: JSONSchema4[],
+  schema: readonly JSONSchema4[],
   createRequest: (context: Parameters<FormatRule<RuleOptions>['create']>[0]) => FormatRequest,
 ): FormatRule<RuleOptions> => ({
   meta: {

@@ -102,7 +102,7 @@ const parseIndent = (indent: HtmlProcessorOptions['indent']) => {
  * directives, which `--fix` would even empty
  */
 const omitDirectiveCommentMessages = (
-  messages: Eslint.Linter.LintMessage[],
+  messages: readonly Eslint.Linter.LintMessage[],
   {
     directiveComments,
     htmlLineStarts,

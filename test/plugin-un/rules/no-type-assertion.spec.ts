@@ -428,7 +428,7 @@ vueRuleTester.run(`${RULE_NAME} (Vue)`, noTypeAssertion, {
         ['{{ value as string }}', 12, 21],
         ['{{ <string>value }}', 6, 14],
         ['<Item v-for="item in (items as Item[])" :key="item.id" />', 31, 40],
-      ] satisfies [code: string, column: number, endColumn: number][]
+      ] satisfies readonly (readonly [code: string, column: number, endColumn: number])[]
     ).map(([code, column, endColumn]) =>
       toVueTestCase({code, errors: [{messageId: MESSAGE_ID, line: 5, column, endColumn}]}),
     ),

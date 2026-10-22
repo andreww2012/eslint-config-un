@@ -16,7 +16,7 @@ declare module 'vitest' {
 
 const REPO_ROOT = path.join(import.meta.dirname, '..', '..');
 
-const run = async (command: string, args: string[], cwd: string) => {
+const run = async (command: string, args: readonly string[], cwd: string) => {
   // Keeps macOS `tar` from adding AppleDouble files to the archive
   const result = await exec(command, args, {nodeOptions: {cwd, env: {COPYFILE_DISABLE: '1'}}});
   if (result.exitCode !== 0) {

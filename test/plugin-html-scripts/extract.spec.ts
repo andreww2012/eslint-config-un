@@ -30,11 +30,11 @@ const expectExtraction = ({
   badIndentationLines = [],
 }: {
   input: string;
-  expected: string[];
+  expected: readonly string[];
   isXml?: boolean;
   indent?: IndentDescriptor;
   match?: (node: TagNode) => boolean;
-  badIndentationLines?: number[];
+  badIndentationLines?: readonly number[];
 }) => {
   const result = extract(dedent(input), {
     isXml,

@@ -11,8 +11,8 @@ export type CategorizeRule<CategoryId extends string> = (ruleToCategorize: {
   rule: {meta?: EslintRuleMetaWithLanguages};
   ruleName: string;
 }) => {
-  categories: CategoryId[];
-  errors: string[];
+  categories: readonly CategoryId[];
+  errors: readonly string[];
 };
 
 export type PluginRuleCategorizations = MaybeArray<RuleCategorization<string>>;

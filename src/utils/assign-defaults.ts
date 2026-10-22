@@ -66,7 +66,7 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
 
       const value: unknown = Reflect.get(source, key);
       if (value != null) {
-        result[key] = Array.isArray(value) ? [...castToSafe<unknown[]>(value)] : value;
+        result[key] = Array.isArray(value) ? [...castToSafe<readonly unknown[]>(value)] : value;
       }
     });
   }

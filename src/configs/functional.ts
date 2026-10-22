@@ -40,7 +40,7 @@ export interface FunctionalPluginSettings {
    * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed.
    */
   overrides?:
-    | OverridesSetting[]
+    | readonly OverridesSetting[]
     | {
         /**
          * Keep the default overrides instead of replacing them
@@ -50,7 +50,7 @@ export interface FunctionalPluginSettings {
         /**
          * The overrides themselves
          */
-        values?: OverridesSetting[];
+        values?: readonly OverridesSetting[];
       };
 }
 

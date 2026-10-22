@@ -70,7 +70,7 @@ const CHILD_PROCESS_ENV = {
   ),
 } as const;
 
-const getPnpmFiles = (extraSettings: string[] = []) => ({
+const getPnpmFiles = (extraSettings: readonly string[] = []) => ({
   'pnpm-workspace.yaml': [
     'minimumReleaseAge: 0',
     // Dependencies' build scripts aren't needed, and an empty store reports them as an error

@@ -81,23 +81,26 @@ export {
 } from './utils/array-or-boolean-record';
 export {assignDefaults} from './utils/assign-defaults';
 
-export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
+export const isNonEmptyArray = <T>(value?: readonly T[] | null): value is [T, ...T[]] =>
   arrayHasMinElements(value || [], 1);
 
-export function findArrayInversions<T>(array: T[], compareFn: (a: T, b: T) => number): [T, T][];
 export function findArrayInversions<T>(
-  array: T[],
+  array: readonly T[],
+  compareFn: (a: T, b: T) => number,
+): readonly (readonly [T, T])[];
+export function findArrayInversions<T>(
+  array: readonly T[],
   compareFn: (a: T, b: T) => number,
   // eslint-disable-next-line unicorn/consistent-boolean-name
   group: true,
-): Map<T, T[]>;
+): ReadonlyMap<T, readonly T[]>;
 export function findArrayInversions<T>(
-  array: T[],
+  array: readonly T[],
   compareFn: (a: T, b: T) => number,
   // eslint-disable-next-line unicorn/consistent-boolean-name
   group?: boolean,
-): [T, T][] | Map<T, T[]> {
-  const result: [T, T][] = [];
+): readonly (readonly [T, T])[] | ReadonlyMap<T, readonly T[]> {
+  const result: (readonly [T, T])[] = [];
   const addedPairsCompoundIndexes = new Set<`${number}-${number}`>();
 
   array
@@ -152,7 +155,7 @@ export const sha256 = (input: string | Buffer) => {
 };
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
-export const joinPaths = (...paths: (string | Falsy)[]) =>
+export const joinPaths = (...paths: readonly (string | Falsy)[]) =>
   path.posix.join(...arrayWithoutFalsy(paths));
 
 export const readAndParseJson = async <T>(filePath: string | URL | undefined): Promise<T | null> =>

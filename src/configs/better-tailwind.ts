@@ -164,10 +164,13 @@ export interface BetterTailwindEslintConfigOptions<
   restrictedClasses?: string[];
 }
 
-export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('betterTailwind', {
-  enabledBy: {package: 'tailwindcss'},
-  needs: ['css'],
-})((context, optionsRaw, {css}) => {
+export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css']>(
+  'betterTailwind',
+  {
+    enabledBy: {package: 'tailwindcss'},
+    needs: ['css'],
+  },
+)((context, optionsRaw, {css}) => {
   const cssResolvedOptions = css?.optionsResolved;
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',

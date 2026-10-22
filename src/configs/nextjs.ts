@@ -18,7 +18,7 @@ export interface NextJsPluginSettings {
    * (such as a monorepo), you can tell the plugin where to find your Next.js application.
    * Path can be relative or absolute, or a glob (i.e. packages/*\/).
    */
-  rootDir?: string | string[];
+  rootDir?: string | readonly string[];
 }
 
 /**

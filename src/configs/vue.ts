@@ -533,7 +533,7 @@ export interface VueEslintConfigOptions<
    * Affected rule:
    * - [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html)
    */
-  doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
+  doNotRequireComponentNamesToBeMultiWordForPatterns?: string | readonly string[];
 
   /**
    * By default, all deprecated or non-standard HTML tags are disallowed.
@@ -593,7 +593,7 @@ export interface VueConfigResult {
   optionsResolved: VueEslintConfigOptions;
 }
 
-export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('vue', {
+export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfigResult>('vue', {
   enabledBy: {package: 'vue'},
   phase: 'late',
   after: ['ts'],
@@ -1322,7 +1322,7 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
   }
 
   if (nuxtAutoImports) {
-    const codeFilesIn = (directories: string[]) =>
+    const codeFilesIn = (directories: readonly string[]) =>
       directories.flatMap((directory) => [
         joinPaths(directory, `**/*.${GLOB_JS_TS_X_EXTENSION}`),
         joinPaths(directory, '**/*.vue'),
@@ -1348,11 +1348,11 @@ export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('
         ],
         ['server', codeFilesIn(serverDirs)],
         ['shared', codeFilesIn(sharedDirs)],
-      ] satisfies [
+      ] satisfies readonly (readonly [
         globalsContext: keyof NuxtAutoImports['globals'],
-        files: string[],
-        ignores?: string[],
-      ][]
+        files: readonly string[],
+        ignores?: readonly string[],
+      ])[]
     ).forEach(([globalsContext, files, ignores]) => {
       const autoImportedNames = nuxtAutoImports.globals[globalsContext];
       if (autoImportedNames.length > 0) {

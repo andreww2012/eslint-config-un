@@ -44,13 +44,13 @@ const relativeDirectoryWithin = (from: string, to: string) => {
 type NuxtComponentsOption =
   | boolean
   | string
-  | {path?: string; dirs?: (string | {path?: string})[]}
+  | {path?: string; dirs?: readonly (string | {path?: string})[]}
   | NuxtComponentsOption[]
   | null
   | undefined;
 
 /** Mirrors how Nuxt collects the component directories of a layer */
-const collectNuxtComponentDirs = (option: NuxtComponentsOption): string[] => {
+const collectNuxtComponentDirs = (option: NuxtComponentsOption): readonly string[] => {
   if (Array.isArray(option)) {
     return option.flatMap((item) => collectNuxtComponentDirs(item));
   }
@@ -153,7 +153,7 @@ export interface NuxtLayerDirs {
   shared: string;
 
   // Relative to `app` instead, so that the ones of the project move along with `vueOrNuxtProjectDir`
-  components: string[];
+  components: readonly string[];
   layouts: string;
   middleware: string;
   pages: string;
@@ -190,7 +190,7 @@ export interface NuxtAutoImports {
    * Nuxt exposes a different set of auto-imports to app code, to Nitro server code and to the
    * `shared` directory, so that a binding available in one context is still undefined in another
    */
-  globals: Record<'app' | 'server' | 'shared', string[]>;
+  globals: Record<'app' | 'server' | 'shared', readonly string[]>;
 
   /**
    * Whether the build directory holds the generated artifacts at all, telling a project Nuxt has
@@ -198,10 +198,10 @@ export interface NuxtAutoImports {
    */
   isBuildDirGenerated: boolean;
 
-  componentNames: string[];
+  componentNames: readonly string[];
 
   /** Each directive under both the name as written and its kebab-cased form */
-  directiveNames: string[];
+  directiveNames: readonly string[];
 
   /**
    * Hash of everything that was read, for the resolved config cache to be keyed on: adding or

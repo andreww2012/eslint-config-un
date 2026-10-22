@@ -47,8 +47,8 @@ const ESLINT_TO_UN_SEVERITY: Readonly<Record<EslintSeverity, RuleSeverity>> = {
 
 export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
   entry: Eslint.Linter.RuleEntry<Options>,
-  severityOrOptionsOverride?: [RuleSeverity?, Options?],
-): [severity: RuleSeverity, options: Options | []] => {
+  severityOrOptionsOverride?: readonly [RuleSeverity?, Options?],
+): readonly [severity: RuleSeverity, options: Options | []] => {
   const severityRaw = Array.isArray(entry) ? entry[0] : entry;
   const severity = severityOrOptionsOverride?.[0] ?? ESLINT_TO_UN_SEVERITY[severityRaw];
   return [

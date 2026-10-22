@@ -76,7 +76,7 @@ function createModuleLoader<T, N extends string>(
         packageName,
       };
     } catch (error) {
-      const ignoredErrorsFinal: string[] = [
+      const ignoredErrorsFinal: readonly string[] = [
         ...arrayify(ignoredErrors),
         ...(isPluginOptionalPeerDependency ? MODULE_NOT_FOUND_ERROR_CODES : []),
       ];

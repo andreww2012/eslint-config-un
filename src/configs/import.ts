@@ -46,7 +46,7 @@ interface ExtraneousDependenciesCheckOptions {
    * Package names that are never reported.
    * Use case: you're linting a library code and some packages are bundled.
    */
-  whitelist?: string[];
+  whitelist?: readonly string[];
 }
 
 /**
@@ -125,7 +125,7 @@ export interface ImportEslintConfigOptions<
     | boolean
     | ExtraneousDependenciesCheckOptions
     | GetRuleOptions<'import', 'no-extraneous-dependencies', 'all'>,
-    [defaultIgnorePatterns: string[]]
+    readonly [defaultIgnorePatterns: string[]]
   >;
 
   /**
@@ -148,7 +148,7 @@ export interface ImportEslintConfigOptions<
    * Affected rule:
    * - [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md)
    */
-  importPatternsToIgnoreWhenTryingToResolve?: string | string[];
+  importPatternsToIgnoreWhenTryingToResolve?: string | readonly string[];
 
   /**
    * - `false` - never require extensions

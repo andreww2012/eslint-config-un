@@ -33,7 +33,7 @@ export interface SveltePluginSettings {
    * positives" -
    * plugin docs
    */
-  ignoreWarnings?: string[];
+  ignoreWarnings?: readonly string[];
 
   /**
    * "Specifies options for Svelte compilation.
@@ -165,12 +165,15 @@ export interface SvelteConfigResult {
   optionsResolved: SvelteEslintConfigOptions;
 }
 
-export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>('svelte', {
-  enabledBy: {package: 'svelte'},
-  requires: {pluginLoadable: 'svelte'},
-  phase: 'late',
-  after: ['ts'],
-})((context, optionsRaw) => {
+export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConfigResult>(
+  'svelte',
+  {
+    enabledBy: {package: 'svelte'},
+    requires: {pluginLoadable: 'svelte'},
+    phase: 'late',
+    after: ['ts'],
+  },
+)((context, optionsRaw) => {
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
   const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
 
