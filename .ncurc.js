@@ -1,6 +1,6 @@
 // @ts-check
 import {ncuConfig} from '@andreww2012/npm-check-updates-config';
-import {tryParse} from 'verkit';
+import {isLessThan, tryParse} from 'verkit';
 import packageJson from './package.json' with {type: 'json'};
 
 /** @type {ReadonlySet<string>} */
@@ -111,6 +111,12 @@ export default ncuConfig({
       (version) => tryParse(version.split('@').at(-1) || ''),
     );
     return (
+      // `latest` may point below a prerelease we use, like a TypeScript beta
+      !(
+        currentVersionSemver &&
+        upgradedVersionSemver &&
+        isLessThan(upgradedVersionSemver, currentVersionSemver)
+      ) &&
       (!ALIASES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
         currentVersionSemver?.major === upgradedVersionSemver?.major) &&
       (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection */

@@ -80,6 +80,11 @@ export type FlatConfigEntryForBuilder = OmitStrict<
   'name' | 'rules' | 'language' | 'settings'
 >;
 
+export type ConfigEntryBuilderOptions<
+  ExtraPlugins extends ExtraPluginsType,
+  DefaultPrefix extends PluginPrefix | null,
+> = UnFlatConfigEntryBase<ExtraPlugins, DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix>;
+
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonly<
   Record<ImplicitlyIgnoredFileTypeUnlessParsed, [string, ...string[]]>
 > = {
@@ -98,6 +103,43 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonl
 };
 
 type AddRuleInternalOptions = EmptyObject;
+
+interface ConfigEntryChain<DefaultPrefix extends PluginPrefix | null> {
+  config: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'>;
+  addRule: <N extends GetRuleNamesInPlugin<DefaultPrefix>>(
+    ruleName: N,
+    severity: RuleSeverity | null,
+    ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N, 'all'>>,
+    options?: AddRuleInternalOptions,
+  ) => ConfigEntryChain<DefaultPrefix>;
+  addAnyRule: <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
+    prefix: P,
+    ruleName: N,
+    severity: RuleSeverity | null,
+    ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
+    options?: AddRuleInternalOptions,
+  ) => ConfigEntryChain<DefaultPrefix>;
+  disableAnyRule: <P extends PluginPrefix>(
+    plugin: P,
+    ruleNameUnprefixed: GetRuleNamesInPlugin<P>,
+  ) => ConfigEntryChain<DefaultPrefix>;
+  addOverrides: (options?: {onlyAny?: boolean}) => ConfigEntryChain<DefaultPrefix>;
+  addBulkRules: (rules: Prettify<UnRulesConfig> | Falsy) => ConfigEntryChain<DefaultPrefix>;
+  disableBulkRules: (
+    rules: readonly (UnAllRuleNames | (string & {}))[] | Falsy,
+  ) => ConfigEntryChain<DefaultPrefix>;
+  markCategory: <const CategoryName extends string>(
+    name: NonEmptyString<CategoryName>,
+  ) => ConfigEntryChain<DefaultPrefix>;
+  enableConfigTesterForPlugin: (
+    pluginPrefixToTest: DefaultPrefix & {},
+    options?: {
+      includeDeprecated?: boolean | 'allow';
+      allowUnsorted?: boolean;
+      rulesToSkipInConfig?: string[] | ((ruleName: string) => boolean);
+    },
+  ) => ConfigEntryChain<DefaultPrefix>;
+}
 
 const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
 
@@ -131,18 +173,14 @@ export class ConfigEntryBuilder<
   DefaultPrefix extends PluginPrefix | null = any,
 > {
   private readonly pluginPrefix: DefaultPrefix;
-  private readonly options: UnFlatConfigEntryBase<
-    ExtraPlugins,
-    DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix
-  > & {[configIndexProperty]?: number};
+  private readonly options: ConfigEntryBuilderOptions<ExtraPlugins, DefaultPrefix> & {
+    [configIndexProperty]?: number;
+  };
   private readonly context: UnConfigContext;
 
   constructor(
     rulesPrefix: DefaultPrefix,
-    options: UnFlatConfigEntryBase<
-      ExtraPlugins,
-      DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix
-    >,
+    options: ConfigEntryBuilderOptions<ExtraPlugins, DefaultPrefix>,
     context: UnConfigContext,
   ) {
     this.pluginPrefix = rulesPrefix;
@@ -518,13 +556,11 @@ export class ConfigEntryBuilder<
       : null;
     /* v8 ignore stop */
 
-    const addRule = <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
-      plugin: P,
-      ruleNameUnprefixed: N,
-      severity: RuleSeverity | null,
-      ruleOptions?: GetRuleOptions<P, N, 'all'>,
-      // eslint-disable-next-line ts/no-unused-vars
-      options?: AddRuleInternalOptions,
+    const addAnyRule: ConfigEntryChain<DefaultPrefix>['addAnyRule'] = (
+      plugin,
+      ruleNameUnprefixed,
+      severity,
+      ruleOptions,
     ) => {
       if (severity == null || isConfigDisabled) {
         // eslint-disable-next-line ts/no-use-before-define
@@ -582,15 +618,10 @@ export class ConfigEntryBuilder<
       return result;
     };
 
-    const result = {
+    const result: ConfigEntryChain<DefaultPrefix> = {
       config: configFinal,
 
-      addRule: <N extends GetRuleNamesInPlugin<DefaultPrefix>, Severity extends RuleSeverity>(
-        ruleName: N,
-        severity: Severity | null,
-        ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N, 'all'>>,
-        options?: AddRuleInternalOptions,
-      ) => {
+      addRule: (ruleName, severity, ruleOptions) => {
         /* v8 ignore start */
         if (this.pluginPrefix == null) {
           throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
@@ -598,31 +629,17 @@ export class ConfigEntryBuilder<
         /* v8 ignore stop */
         // Inferred type arguments make TS compare the options of every rule, taking seconds, so
         // we're setting them manually
-        return addRule<DefaultPrefix & PluginPrefix, N>(
+        return addAnyRule<DefaultPrefix & PluginPrefix, typeof ruleName>(
           this.pluginPrefix,
           ruleName,
           severity,
           ruleOptions,
-          options,
         );
       },
 
-      addAnyRule: <
-        P extends PluginPrefix,
-        N extends GetRuleNamesInPlugin<P>,
-        Severity extends RuleSeverity,
-      >(
-        prefix: P,
-        ruleName: N,
-        severity: Severity | null,
-        ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
-        options?: AddRuleInternalOptions,
-      ) => addRule(prefix, ruleName, severity, ruleOptions, options),
+      addAnyRule,
 
-      disableAnyRule: <P extends PluginPrefix>(
-        plugin: P,
-        ruleNameUnprefixed: GetRuleNamesInPlugin<P>,
-      ) => {
+      disableAnyRule: (plugin, ruleNameUnprefixed) => {
         if (isConfigDisabled) {
           return result;
         }
@@ -637,7 +654,7 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      addOverrides: ({onlyAny = false}: {onlyAny?: boolean} = {}) => {
+      addOverrides: (options) => {
         if (isConfigDisabled) {
           return result;
         }
@@ -645,14 +662,14 @@ export class ConfigEntryBuilder<
         processUnOrFlatConfig(
           this.context,
           configFinal,
-          onlyAny ? {} : this.options.overrides,
+          options?.onlyAny ? {} : this.options.overrides,
           this,
         );
         processUnOrFlatConfig(this.context, configFinal, this.options.overridesAny, this);
         return result;
       },
 
-      addBulkRules: (rules: Prettify<UnRulesConfig> | Falsy) => {
+      addBulkRules: (rules) => {
         if (isConfigDisabled) {
           return result;
         }
@@ -661,7 +678,7 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      disableBulkRules: (rules: readonly (UnAllRuleNames | (string & {}))[] | Falsy) => {
+      disableBulkRules: (rules) => {
         if (!isConfigDisabled && rules && rules.length > 0) {
           const newRuleEntries = Object.fromEntries(
             rules.flatMap((ruleName) => {
@@ -681,23 +698,13 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      markCategory: <const CategoryName extends string>(name: NonEmptyString<CategoryName>) => {
+      markCategory: (name) => {
         currentCategory = name;
         return result;
       },
 
-      enableConfigTesterForPlugin: (
-        pluginPrefixToTest: DefaultPrefix & {},
-        {
-          includeDeprecated = false,
-          allowUnsorted,
-          rulesToSkipInConfig,
-        }: {
-          includeDeprecated?: boolean | 'allow';
-          allowUnsorted?: boolean;
-          rulesToSkipInConfig?: string[] | ((ruleName: string) => boolean);
-        } = {},
-      ) => {
+      enableConfigTesterForPlugin: (pluginPrefixToTest, options = {}) => {
+        const {includeDeprecated = false, allowUnsorted, rulesToSkipInConfig} = options;
         /* v8 ignore start */
         if (!isConfigDisabled && this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {

@@ -15,11 +15,7 @@ import {
   PACKAGES_TO_GET_INFO_FOR,
   WARNING,
 } from '../constants';
-import type {
-  EslintFlatConfigEntry,
-  UnFlatConfigEntryBase,
-  UnRulesConfig,
-} from '../eslint/eslint-types';
+import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import {genFlatConfigEntryName, isUnFlatConfigEntry} from '../eslint/eslint-utils';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
@@ -28,14 +24,7 @@ import {
   pluginsLoaders,
 } from '../loaders';
 import {RULES_TO_DISABLE_IN_OFFLINE_MODE} from '../plugins.gen';
-import type {
-  Falsy,
-  MaybePromise,
-  OmitIndexSignature,
-  OmitStrict,
-  PartialDeep,
-  Prettify,
-} from '../types';
+import type {Falsy, MaybePromise, OmitStrict, PartialDeep, Prettify} from '../types';
 import {
   type MaybeArray,
   arrayIncludes,
@@ -58,7 +47,11 @@ import {
   saveCacheToFs,
   saveCacheToMemory,
 } from './cache';
-import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
+import {
+  ConfigEntryBuilder,
+  type ConfigEntryBuilderOptions,
+  configIndexProperty,
+} from './config-entry-builder';
 import {
   getIsConfigEnabledByManifest,
   getPluginSettings,
@@ -83,13 +76,7 @@ import {
 
 export function createConfigBuilder<P extends PluginPrefix | null>(
   this: UnConfigContext,
-  options: NoInfer<
-    | UnFlatConfigEntryBase<
-        ExtraPluginsType,
-        P extends null ? OmitIndexSignature<UnRulesConfig> : P
-      >
-    | boolean
-  >,
+  options: NoInfer<ConfigEntryBuilderOptions<ExtraPluginsType, P> | boolean>,
   rulesPrefix: P,
   isDisabledIfEmptyFiles = true,
 ) {

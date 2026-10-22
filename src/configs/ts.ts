@@ -655,29 +655,28 @@ export default defineUnConfig<
         },
       ],
     ] satisfies ConfigsWithExtraExtensionsHandledByTs[] as ConfigsWithExtraExtensionsHandledByTs[]
-  ).forEach(
-    ([language, config, {filesDefault, additionalCondition, doNotTreatFilesAsTypeAware} = {}]) => {
-      if (
-        typeof config !== 'object' ||
-        !config ||
-        additionalCondition === false ||
-        context.rootOptions.parsing?.[language] === false
-      ) {
-        return;
-      }
+  ).forEach(([language, config, options = {}]) => {
+    const {filesDefault, additionalCondition, doNotTreatFilesAsTypeAware} = options;
+    if (
+      typeof config !== 'object' ||
+      !config ||
+      additionalCondition === false ||
+      context.rootOptions.parsing?.[language] === false
+    ) {
+      return;
+    }
 
-      const extraTsFiles = resolveFilesOption(config.files, filesDefault || []);
-      const extraTsIgnores = resolveIgnoresOption(config.ignores, []);
+    const extraTsFiles = resolveFilesOption(config.files, filesDefault || []);
+    const extraTsIgnores = resolveIgnoresOption(config.ignores, []);
 
-      extraFilesNONTypeAware.push(...extraTsFiles);
-      if (!doNotTreatFilesAsTypeAware) {
-        extraFilesTypeAware.push(...extraTsFiles);
-      }
+    extraFilesNONTypeAware.push(...extraTsFiles);
+    if (!doNotTreatFilesAsTypeAware) {
+      extraFilesTypeAware.push(...extraTsFiles);
+    }
 
-      extraIgnoresNONTypeAware.push(...extraTsIgnores);
-      extraIgnoresTypeAware.push(...extraTsIgnores);
-    },
-  );
+    extraIgnoresNONTypeAware.push(...extraTsIgnores);
+    extraIgnoresTypeAware.push(...extraTsIgnores);
+  });
 
   const userFiles = resolveFilesOption(optionsResolved.files, TS_FILES_DEFAULT);
   const userIgnores = resolveIgnoresOption(optionsResolved.ignores, []);
