@@ -346,7 +346,7 @@
     "pathe": "2.0.3",
     "prettier": "3.9.10",
     "publint": "0.3.25",
-    "puppeteer": "25.15.0",
+    "puppeteer": "25.16.0",
     "release-it": "21.1.1",
     "shiki": "4.5.0",
     "smol-toml": "1.9.1",
