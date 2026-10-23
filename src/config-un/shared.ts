@@ -37,14 +37,8 @@ import type {
 } from '../loaders';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../plugins.gen';
 import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
-import {
-  type MaybeArray,
-  type MaybeFn,
-  arrayify,
-  castToWritableUnsafe,
-  type fetchPackageInfo,
-  maybeCall,
-} from '../utils';
+import {type MaybeArray, type MaybeFn, arrayify, castToWritableUnsafe, maybeCall} from '../utils';
+import type {fetchPackageInfo} from '../utils/package-detection';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {getPluginSettings, recordPackageRequester, registerUsedPlugin} from './config-utils';
@@ -715,11 +709,12 @@ export interface EslintConfigUnOptions<
    * `typescript` or `prettier`) to decide whether certain configs, sub-configs or rules should be
    * enabled by default.
    *
-   * By default, the packages are looked up by their canonical npm names.
-   * If you install some of them under a different name using
-   * [npm aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases), for example
-   * `"vue3": "npm:vue@^3.5.0"`, use this option to specify the names to look for instead of the
-   * canonical ones.
+   * A package declared under a different name, for example with an
+   * [npm alias](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases) like
+   * `"vue3": "npm:vue@^3.5.0"`, is found automatically, unless the project also declares it under
+   * its canonical name.
+   * Use this option to say which name to look for instead, for example `vue3` when the project
+   * has both `vue` and `vue3`.
    *
    * Note that this option is not applicable to ESLint plugins: they are loaded by their canonical
    * names; use `plugins.<pluginName>.plugin` to provide a plugin installed under an alias.

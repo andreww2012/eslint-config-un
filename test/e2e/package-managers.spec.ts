@@ -50,9 +50,14 @@ const YARN_BERRY = '@yarnpkg/cli-dist@4.18.0';
 const AUBE = '@endevco/aube@2.2.4';
 
 const FIXTURE_DEPENDENCIES = {
+  '@tanstack/eslint-plugin-query': packageJson.devDependencies['@tanstack/eslint-plugin-query'],
+  // Brings in `@tanstack/query-core`, which enables the `tanstackQuery` config, and `react` as a peer,
+  // which must not enable anything, as it isn't declared
+  '@tanstack/react-query': '5.104.5',
   // Its `exports` don't expose `package.json`
   clsx: '2.1.1',
   eslint: packageJson.devDependencies.eslint,
+  // Its `remeda` dependency, which flat layouts hoist, must not enable the `remeda` config
   'eslint-plugin-clsx': packageJson.devDependencies['eslint-plugin-clsx'],
   // Makes the inlined plugins and the `format` config spawn their Prettier workers
   prettier: packageJson.devDependencies.prettier,
@@ -339,6 +344,10 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
     expect(enabledRuleNames).not.toContain('no-unused-vars');
     // `clsx` is detected and its optional peer plugin is loaded
     expect(enabledRuleNames.filter((ruleName) => ruleName.startsWith('clsx/'))).not.toHaveLength(0);
+    // `@tanstack/query-core` is detected through `@tanstack/react-query`
+    expect(
+      enabledRuleNames.filter((ruleName) => ruleName.startsWith('tanstack-query/')),
+    ).not.toHaveLength(0);
 
     const lintResult = await run([
       ...eslint,

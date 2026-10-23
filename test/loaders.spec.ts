@@ -157,8 +157,8 @@ describe('module loaders', () => {
 
     // aube's global virtual store may hoist another project's copy where the import would find it
     it('does not import an optional peer dependency that is not linked next to it', async () => {
-      // The mock from the setup file would keep serving the utilities evaluated outside the store
-      vi.doUnmock(import('../src/utils'));
+      // The mock from the setup file would keep serving the package lookup evaluated outside the store
+      vi.doUnmock(import('../src/utils/package-detection'));
       vi.resetModules();
       vi.doMock(import('empathic/package'), async (importOriginal) => ({
         ...(await importOriginal()),

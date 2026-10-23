@@ -12,6 +12,7 @@ import {
   DISABLE_AUTOFIX,
   ERROR,
   GLOB_CONFIG_FILES,
+  PACKAGES_INSTALLED_THROUGH,
   PACKAGES_TO_GET_INFO_FOR,
   WARNING,
 } from '../constants';
@@ -30,7 +31,6 @@ import {
   arrayIncludes,
   arrayify,
   assignDefaults,
-  fetchPackageInfo,
   isInCi,
   isInEditor,
   maybeCall,
@@ -41,6 +41,7 @@ import {
   styleRuleName,
   styleText,
 } from '../utils';
+import {fetchProjectPackagesInfo} from '../utils/package-detection';
 import {
   restoreCacheFromFs,
   restoreCacheFromMemory,
@@ -319,13 +320,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ),
   ];
 
-  const [packagesInfoRaw, loadablePluginsRaw] = await Promise.all([
-    Promise.all(
-      PACKAGES_TO_GET_INFO_FOR.map(
-        async (name) =>
-          [name, await fetchPackageInfo(optionsResolved.packageAliases?.[name] || name)] as const,
-      ),
-    ),
+  const [packagesInfo, loadablePluginsRaw] = await Promise.all([
+    fetchProjectPackagesInfo(PACKAGES_TO_GET_INFO_FOR, {
+      aliases: optionsResolved.packageAliases,
+      installedThrough: PACKAGES_INSTALLED_THROUGH,
+    }),
     Promise.all(
       requiredPluginPrefixes.map(async (pluginPrefix) => {
         const {packageName, module} = await pluginsLoaders[pluginPrefix](context);
@@ -336,8 +335,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const loadablePlugins = new Map(loadablePluginsRaw);
 
-  // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
-  const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
 
   const {

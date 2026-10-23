@@ -2,15 +2,8 @@ import type * as Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
-import {
-  Mutex,
-  arrayify,
-  interopDefault,
-  isKeyIn,
-  isOwnCopyImportable,
-  mapGetOrInsert,
-  maybeCall,
-} from '../utils';
+import {Mutex, arrayify, interopDefault, isKeyIn, mapGetOrInsert, maybeCall} from '../utils';
+import {isOwnCopyImportable} from '../utils/package-detection';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
 export type EslintParser = Eslint.Linter.Parser;

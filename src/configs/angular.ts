@@ -1,7 +1,8 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, Prettify} from '../types';
-import {arrayIncludes, arrayLast, type fetchPackageInfo} from '../utils';
+import {arrayIncludes, arrayLast} from '../utils';
+import type {fetchPackageInfo} from '../utils/package-detection';
 import {generateUseBaselineRuleOptions, resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,

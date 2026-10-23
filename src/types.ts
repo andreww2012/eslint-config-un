@@ -10,9 +10,13 @@ export interface PackageJson {
   name?: string;
   version?: string;
   engines?: {node?: string};
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  optionalDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
   peerDependenciesMeta?: Record<string, {optional?: boolean}>;
   repository?: string | {type?: string; url?: string};
+  workspaces?: string[] | {packages?: string[]};
 }
 
 export type {

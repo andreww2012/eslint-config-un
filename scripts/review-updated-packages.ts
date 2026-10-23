@@ -10,7 +10,8 @@ import * as z from 'zod';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import type {PackageJson} from '../src/types';
-import {fetchPackageInfo, readAndParseJson} from '../src/utils';
+import {readAndParseJson} from '../src/utils';
+import {fetchPackageInfo} from '../src/utils/package-detection';
 import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 
 // =============================================================================

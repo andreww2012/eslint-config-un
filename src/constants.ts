@@ -1,3 +1,4 @@
+// cspell:ignore nuxtjs
 import ourPackageJson from '../package.json' with {type: 'json'};
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
 import type {Branded} from './types';
@@ -334,3 +335,61 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'vue-i18n',
   'zod-compiler',
 ] as const;
+
+/**
+ * Packages that projects often get only as a dependency or a peer of another package, mapped to
+ * those packages.
+ * A package the project doesn't declare counts as installed if one of them is installed and depends
+ * on it, so the ones listed here may themselves come through other packages
+ */
+export const PACKAGES_INSTALLED_THROUGH: Readonly<Record<string, readonly string[]>> = {
+  '@angular-eslint/eslint-plugin': ['angular-eslint'],
+  '@angular-eslint/eslint-plugin-template': ['angular-eslint'],
+  '@angular-eslint/template-parser': ['angular-eslint'],
+  '@angular/build': ['@angular-devkit/build-angular'],
+  '@formatjs/icu-messageformat-parser': [
+    '@formatjs/intl',
+    'intl-messageformat',
+    'react-intl',
+    'vue-intl',
+  ],
+  '@tanstack/query-core': [
+    '@tanstack/angular-query-experimental',
+    '@tanstack/lit-query',
+    '@tanstack/preact-query',
+    '@tanstack/react-query',
+    '@tanstack/solid-query',
+    '@tanstack/svelte-query',
+    '@tanstack/vue-query',
+  ],
+  '@testing-library/dom': [
+    '@marko/testing-library',
+    '@solidjs/testing-library',
+    '@testing-library/angular',
+    '@testing-library/preact',
+    '@testing-library/react',
+    '@testing-library/svelte',
+    '@testing-library/user-event',
+    '@testing-library/vue',
+  ],
+  '@tsrx/core': ['@tsrx/preact', '@tsrx/react', '@tsrx/solid', '@tsrx/vue'],
+  '@unhead/vue': ['nuxt'],
+  jest: ['react-scripts'],
+  pinia: ['@pinia/nuxt'],
+  playwright: ['@playwright/test'],
+  'relay-runtime': ['react-relay'],
+  sass: ['@angular/build'],
+  tailwindcss: [
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
+    '@tailwindcss/cli',
+    '@tailwindcss/postcss',
+    '@tailwindcss/vite',
+  ],
+  unhead: ['@unhead/angular', '@unhead/react', '@unhead/solid-js', '@unhead/svelte', '@unhead/vue'],
+  unocss: ['@unocss/nuxt'],
+  // Only the `react` config checks it, so only the frameworks running React on Vite are listed
+  vite: ['astro'],
+  vue: ['nuxt', 'vitepress'],
+  'vue-i18n': ['@nuxtjs/i18n'],
+};

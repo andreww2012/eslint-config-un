@@ -27,7 +27,6 @@ import {
   arrayPartition,
   arrayify,
   capitalize,
-  fetchPackageInfo,
   getByPath,
   isKeyIn,
   mapGetOrInsert,
@@ -41,6 +40,7 @@ import {
   styleRuleName,
   styleText,
 } from '../utils';
+import {fetchPackageInfo} from '../utils/package-detection';
 import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
 import type {EslintConfigUnOptions, PackageRequester, UnConfigContext} from './shared';

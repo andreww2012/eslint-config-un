@@ -2,14 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
 import type {NuxtOptions} from 'nuxt/schema';
-import {
-  describeError,
-  isOwnCopyImportable,
-  readFileSafe,
-  resolveFromProject,
-  sha256,
-  toKebabCase,
-} from '../utils';
+import {describeError, readFileSafe, sha256, toKebabCase} from '../utils';
+import {isOwnCopyImportable, resolveFromProject} from '../utils/package-detection';
 
 const NUXT_CONFIG_FILE_NAMES = Object.freeze(
   ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map((extension) => `nuxt.config.${extension}`),

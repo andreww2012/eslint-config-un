@@ -765,8 +765,8 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     });
 
     it('does not fall back to the Nuxt of another project when installed in a store shared between projects', async () => {
-      // The mock from the setup file would keep serving the utilities evaluated outside the store
-      vi.doUnmock(import('../../../src/utils'));
+      // The mock from the setup file would keep serving the package lookup evaluated outside the store
+      vi.doUnmock(import('../../../src/utils/package-detection'));
       vi.resetModules();
       vi.doMock(import('empathic/package'), async (importOriginal) => ({
         ...(await importOriginal()),

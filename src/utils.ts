@@ -1,7 +1,4 @@
-// cspell:ignore pnpapi
 import crypto from 'node:crypto';
-import {existsSync} from 'node:fs';
-import {createRequire} from 'node:module';
 import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
@@ -13,11 +10,8 @@ import {
 } from '@andreww2012/unutils';
 import {readFileSafe} from '@andreww2012/unutils/server';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
-import * as packageUtils from 'empathic/package';
-import {resolve as resolvePackage} from 'import-meta-resolve';
-import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {isInEditor as isInEditorOriginal} from 'is-in-editor';
-import type {Falsy, MaybePromise, Nullable, PackageJson} from './types';
+import type {Falsy, MaybePromise, Nullable} from './types';
 
 export {
   allUnionMembers,
@@ -29,6 +23,7 @@ export {
   arrayMap,
   arrayPartition,
   arrayUnique,
+  arrayWithoutFalsy,
   capitalize,
   castToSafe,
   castToWritableUnsafe,
@@ -39,6 +34,7 @@ export {
   isPlainObject,
   jsonParseSafe,
   mapGetOrInsert,
+  mapGetOrInsertComputed,
   mapKeys,
   type MaybeArray,
   type MaybeFn,
@@ -47,6 +43,7 @@ export {
   Mutex,
   objectKeysUnsafe,
   omit,
+  once,
   pick,
   regexEscape,
   setByPath,
@@ -164,131 +161,6 @@ export const readAndParseJson = async <T>(filePath: string | URL | undefined): P
         await readFileSafe(typeof filePath === 'string' ? filePath : url.fileURLToPath(filePath)),
       )
     : null;
-
-// Yarn PnP has no `node_modules` for `import-meta-resolve` to traverse
-// eslint-disable-next-line ts/no-unsafe-assignment -- `pnpapi` has no bundled types
-const pnpApi: {resolveToUnqualified: (request: string, issuer: string) => string | null} | null =
-  process.versions['pnp'] ? createRequire(import.meta.url)('pnpapi') : null;
-
-const ownPackageDir = path.dirname(
-  packageUtils.up({cwd: import.meta.dirname}) || import.meta.dirname,
-);
-
-// Where our own dependencies and peers are linked for us
-const ownDependenciesDir = `${path.dirname(ownPackageDir)}${path.sep}`;
-
-// A project's `node_modules` sits next to its `package.json`, unlike the one of a store shared between projects
-const isInstalledInSharedStore = (() => {
-  const pathSegments = ownPackageDir.split(path.sep);
-  const nodeModulesIndex = pathSegments.indexOf('node_modules');
-  return (
-    !pnpApi &&
-    nodeModulesIndex !== -1 &&
-    !existsSync(
-      path.join(pathSegments.slice(0, nodeModulesIndex).join(path.sep) || path.sep, 'package.json'),
-    )
-  );
-})();
-
-const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
-  try {
-    // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
-    // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
-    resolvePackage(packageName, parentUrl);
-    return getLastResolvedPackageJsonUrl();
-  } catch {
-    // If module is not resolved, the error is thrown
-    return null;
-  }
-};
-
-// aube's global virtual store hoists the packages of every project above ours, so only what is linked next to us is ours
-const resolveOwnPackageJsonUrl = (packageName: string) => {
-  const packageJsonUrl = resolvePackageJsonUrl(packageName, import.meta.url);
-  return packageJsonUrl &&
-    (!isInstalledInSharedStore || url.fileURLToPath(packageJsonUrl).startsWith(ownDependenciesDir))
-    ? packageJsonUrl
-    : null;
-};
-
-/** Whether importing the package from our own code loads the copy installed for us */
-export const isOwnCopyImportable = (packageName: string) =>
-  !isInstalledInSharedStore || resolveOwnPackageJsonUrl(packageName) != null;
-
-/** Resolves the module the way the project itself would, which importing it from our own code may not */
-export const resolveFromProject = (specifier: string, projectDir: string) => {
-  try {
-    return resolvePackage(specifier, url.pathToFileURL(`${projectDir}${path.sep}`).href);
-  } catch {
-    return null;
-  }
-};
-
-const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
-  try {
-    // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
-    return pnpApi?.resolveToUnqualified(`${packageName}/package.json`, issuer) || null;
-  } catch {
-    return null;
-  }
-};
-
-const resolvePackageJsonPath = (packageName: string) => {
-  // In stores shared between projects or in Yarn PnP workspaces, we only reach our own dependencies
-  const projectDir = `${process.cwd()}${path.sep}`;
-
-  if (pnpApi) {
-    return (
-      resolvePackageJsonPathWithPnp(packageName, import.meta.filename) ||
-      resolvePackageJsonPathWithPnp(packageName, projectDir)
-    );
-  }
-
-  return (
-    resolveOwnPackageJsonUrl(packageName) ||
-    resolvePackageJsonUrl(packageName, url.pathToFileURL(projectDir).href)
-  );
-};
-
-export const fetchPackageInfo = async (
-  packageName: string,
-): Promise<{
-  info: PackageJson;
-  versions: {
-    full: string;
-    major: number | null;
-    majorAndMinor: number | null;
-  };
-} | null> => {
-  const packageJsonPath = resolvePackageJsonPath(packageName);
-
-  const packageInfo = packageJsonPath ? await readAndParseJson<PackageJson>(packageJsonPath) : null;
-  if (!packageInfo) {
-    return null;
-  }
-
-  /* v8 ignore next - No package in `node_modules` declares a missing or non-numeric version */
-  const fullVersion = packageInfo.version || '';
-
-  const majorVersionRaw = Number.parseInt(fullVersion, 10);
-  /* v8 ignore next */
-  const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
-
-  const majorAndMinorVersionRaw = Number.parseFloat(fullVersion);
-  /* v8 ignore next */
-  const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
-    ? null
-    : majorAndMinorVersionRaw;
-
-  return {
-    info: packageInfo,
-    versions: {
-      full: fullVersion,
-      major: majorVersion,
-      majorAndMinor: majorAndMinorVersion,
-    },
-  };
-};
 
 export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>): Promise<T> => {
   const resolvedModule = await module;

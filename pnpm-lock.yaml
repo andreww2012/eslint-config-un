@@ -409,6 +409,9 @@ importers:
       verkit:
         specifier: 0.5.0
         version: 0.5.0
+      yaml:
+        specifier: 2.9.1
+        version: 2.9.1
     devDependencies:
       '@11ty/gray-matter':
         specifier: 3.0.0
@@ -974,9 +977,6 @@ importers:
       web-features:
         specifier: 3.43.0
         version: 3.43.0
-      yaml:
-        specifier: 2.9.1
-        version: 2.9.1
       zod:
         specifier: 4.6.7
         version: 4.6.7

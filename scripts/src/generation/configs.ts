@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
+import {PACKAGES_INSTALLED_THROUGH} from '../../../src/constants';
 import {PLUGIN_PACKAGES_META, type PluginPackageMeta} from '../../shared/packages-meta';
 import {
   CASCADE_LAYOUT,
@@ -17,16 +18,45 @@ const CONFIG_KEY_REGEXP = /^[a-z][\dA-Za-z]*$/;
 
 const npmxLink = (packageName: string) => `[\`${packageName}\`](https://npmx.dev/${packageName})`;
 
-const renderPackageCondition = (packageNameAndMaybeRange: string) => {
+const joinWithOr = (items: readonly string[]) =>
+  [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' or ');
+
+const parsePackageCondition = (packageNameAndMaybeRange: string) => {
   const versionDelimiterIndex = packageNameAndMaybeRange.lastIndexOf('@');
   const hasVersionRange = versionDelimiterIndex > 0;
-  const packageName = hasVersionRange
-    ? packageNameAndMaybeRange.slice(0, versionDelimiterIndex)
-    : packageNameAndMaybeRange;
-  const versionRange = hasVersionRange
-    ? packageNameAndMaybeRange.slice(versionDelimiterIndex + 1)
-    : null;
+  return {
+    packageName: hasVersionRange
+      ? packageNameAndMaybeRange.slice(0, versionDelimiterIndex)
+      : packageNameAndMaybeRange,
+    versionRange: hasVersionRange
+      ? packageNameAndMaybeRange.slice(versionDelimiterIndex + 1)
+      : null,
+  };
+};
+
+const renderPackageCondition = (packageNameAndMaybeRange: string) => {
+  const {packageName, versionRange} = parsePackageCondition(packageNameAndMaybeRange);
   return `${npmxLink(packageName)}${versionRange ? ` matching \`${versionRange}\`` : ''}`;
+};
+
+// Also the packages bringing those in, and so on
+const getPackagesInstalledThrough = (packageName: string): string[] =>
+  (PACKAGES_INSTALLED_THROUGH[packageName] || []).flatMap((name) => [
+    name,
+    ...getPackagesInstalledThrough(name),
+  ]);
+
+/** The packages bringing in the given ones, like "(also through `@playwright/test`)" */
+const renderIndirectInstallations = (packageNamesAndMaybeRanges: readonly string[]) => {
+  const notes = packageNamesAndMaybeRanges.flatMap((packageNameAndMaybeRange) => {
+    const {packageName} = parsePackageCondition(packageNameAndMaybeRange);
+    const subject = packageNamesAndMaybeRanges.length > 1 ? `${npmxLink(packageName)} ` : '';
+    const packagesInstalledThrough = getPackagesInstalledThrough(packageName);
+    return packagesInstalledThrough.length > 0
+      ? `${subject}also through ${joinWithOr(packagesInstalledThrough.map(npmxLink))}`
+      : [];
+  });
+  return notes.length > 0 ? ` (${notes.join('; ')})` : '';
 };
 
 /**
@@ -38,11 +68,10 @@ const deriveEnabledByCondition = (enabledBy: ConfigEnabledBy): string | null => 
     return null;
   }
   if ('package' in enabledBy) {
-    return `${renderPackageCondition(enabledBy.package)} package is installed`;
+    return `${renderPackageCondition(enabledBy.package)} package is installed${renderIndirectInstallations([enabledBy.package])}`;
   }
   if ('packages' in enabledBy) {
-    const conditions = enabledBy.packages.map(renderPackageCondition);
-    return `${[conditions.slice(0, -1).join(', '), conditions.at(-1)].filter(Boolean).join(' or ')} package is installed`;
+    return `${joinWithOr(enabledBy.packages.map(renderPackageCondition))} package is installed${renderIndirectInstallations(enabledBy.packages)}`;
   }
   if ('packageAbsent' in enabledBy) {
     return `${renderPackageCondition(enabledBy.packageAbsent)} package is NOT installed`;

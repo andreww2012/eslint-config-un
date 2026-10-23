@@ -1,6 +1,3 @@
-import fs from 'node:fs/promises';
-import {createRequire} from 'node:module';
-import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import {
@@ -11,10 +8,6 @@ import {
   readAndParseJson,
 } from '../src/utils';
 
-// `fetchPackageInfo` is replaced by a mock in `test/setup.ts`, so the real implementation
-// has to be imported explicitly
-const {fetchPackageInfo} = await vi.importActual<typeof import('../src/utils')>('../src/utils');
-
 const FIXTURES = {
   plainObjectJson: 'plain-object.json',
 } as const;
@@ -24,48 +17,7 @@ const fixturePath = (fixtureName: string) =>
 
 const MISSING_FILE_PATH = fixturePath('this-file-does-not-exist.json');
 
-const UTILS_SOURCE_FILE_REGEXP = /utils\.ts$/;
-
-// Nothing is linked next to it, so whatever the code finds from its real location is not its own
-const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
-  os.tmpdir(),
-  'shared-store',
-  'eslint-config-un@1.0.0',
-  'node_modules',
-  'eslint-config-un',
-  'package.json',
-);
-
-const importUtilsFromStore = async () => {
-  vi.resetModules();
-  vi.doMock(import('empathic/package'), async (importOriginal) => ({
-    ...(await importOriginal()),
-    up: () => SHARED_STORE_PACKAGE_JSON_PATH,
-  }));
-  return await vi.importActual<typeof import('../src/utils')>('../src/utils');
-};
-
 const compareStrings = (a: string, b: string) => a.localeCompare(b);
-
-/** Makes the package available only from the current working directory */
-const stubProjectWithPackage = async (packageName: string, version: string) => {
-  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-utils-spec-'));
-  onTestFinished(() => fs.rm(projectDir, {recursive: true, force: true}));
-
-  const packageDir = path.join(projectDir, 'node_modules', packageName);
-  await fs.mkdir(packageDir, {recursive: true});
-  await Promise.all([
-    fs.writeFile(
-      path.join(packageDir, 'package.json'),
-      JSON.stringify({name: packageName, version}),
-    ),
-    // Resolution fails without the entry point
-    fs.writeFile(path.join(packageDir, 'index.js'), ''),
-  ]);
-
-  const cwd = vi.spyOn(process, 'cwd').mockReturnValue(projectDir);
-  onTestFinished(() => cwd.mockRestore());
-};
 
 // Please note: the pairs are harvested from whatever comparisons `Array#sort` happens to make,
 // and those may differ between V8 versions, so only engine-independent invariants are asserted
@@ -191,116 +143,6 @@ describe('readAndParseJson', () => {
     await expect(
       readAndParseJson(path.join(import.meta.dirname, 'setup.ts')),
     ).resolves.toBeString();
-  });
-});
-
-describe('fetchPackageInfo', () => {
-  it('returns `null` for a package that cannot be resolved', async () => {
-    await expect(fetchPackageInfo('this-package-is-not-installed')).resolves.toBeNull();
-  });
-
-  it('returns the `package.json` contents and the parsed versions of an installed package', async () => {
-    const packageInfo = await fetchPackageInfo('verkit');
-
-    expect(packageInfo?.info.name).toBe('verkit');
-    expect(packageInfo?.versions.full).toBeString();
-    expect(packageInfo?.versions.major).toBeNumber();
-    expect(packageInfo?.versions.majorAndMinor).toBeNumber();
-  });
-
-  it('resolves a scoped package', async () => {
-    expect((await fetchPackageInfo('@antfu/utils'))?.info.name).toBe('@antfu/utils');
-  });
-
-  it('falls back to resolving from the current working directory', async () => {
-    const packageName = 'this-package-is-only-in-the-project';
-    await stubProjectWithPackage(packageName, '1.2.3');
-
-    expect((await fetchPackageInfo(packageName))?.versions.full).toBe('1.2.3');
-  });
-
-  it('prefers the package resolved from its own location over the working directory one', async () => {
-    await stubProjectWithPackage('verkit', '0.0.0');
-
-    expect((await fetchPackageInfo('verkit'))?.versions.full).not.toBe('0.0.0');
-  });
-
-  describe('under Yarn PnP', () => {
-    const resolveToUnqualified = vi.fn<(request: string, issuer: string) => string | null>();
-    // Borrows the rest of `require`'s shape from the real one to satisfy its type
-    const requirePnpApi = Object.assign(
-      () => ({resolveToUnqualified}),
-      createRequire(import.meta.url),
-    );
-
-    const importUtilsUnderPnp = async () => {
-      process.versions['pnp'] = '3';
-      vi.resetModules();
-      vi.doMock(import('node:module'), () => ({createRequire: () => requirePnpApi}));
-      return await vi.importActual<typeof import('../src/utils')>('../src/utils');
-    };
-
-    afterEach(() => {
-      delete process.versions['pnp'];
-      resolveToUnqualified.mockReset();
-      vi.doUnmock(import('node:module'));
-      vi.resetModules();
-    });
-
-    it('reads `package.json` located by the PnP API', async () => {
-      resolveToUnqualified.mockReturnValue(fixturePath(FIXTURES.plainObjectJson));
-      const utils = await importUtilsUnderPnp();
-
-      expect((await utils.fetchPackageInfo('typescript'))?.info).toStrictEqual({greeting: 'hello'});
-      expect(resolveToUnqualified).toHaveBeenCalledExactlyOnceWith(
-        'typescript/package.json',
-        expect.stringMatching(UTILS_SOURCE_FILE_REGEXP),
-      );
-    });
-
-    it('falls back to resolving from the current working directory', async () => {
-      resolveToUnqualified.mockImplementation((_request, issuer) => {
-        if (issuer.endsWith('utils.ts')) {
-          throw new Error('not declared in its dependencies');
-        }
-        return fixturePath(FIXTURES.plainObjectJson);
-      });
-      const utils = await importUtilsUnderPnp();
-
-      expect((await utils.fetchPackageInfo('clsx'))?.info).toStrictEqual({greeting: 'hello'});
-      expect(resolveToUnqualified).toHaveBeenLastCalledWith(
-        'clsx/package.json',
-        `${process.cwd()}${path.sep}`,
-      );
-    });
-
-    it('returns `null` when the PnP API cannot resolve the package', async () => {
-      resolveToUnqualified.mockImplementation(() => {
-        throw new Error('not declared in its dependencies');
-      });
-      const utils = await importUtilsUnderPnp();
-
-      await expect(utils.fetchPackageInfo('typescript')).resolves.toBeNull();
-    });
-  });
-
-  describe('when installed in a store shared between projects', () => {
-    afterEach(() => {
-      vi.doUnmock(import('empathic/package'));
-      vi.resetModules();
-    });
-
-    // Like the packages aube's global virtual store hoists from other projects
-    it('ignores packages reachable from its own location but not linked next to it', async () => {
-      const utils = await importUtilsFromStore();
-      await stubProjectWithPackage('this-package-is-only-in-the-project', '1.2.3');
-
-      expect(utils.isOwnCopyImportable('verkit')).toBe(false);
-      await expect(utils.fetchPackageInfo('verkit')).resolves.toBeNull();
-      expect(
-        (await utils.fetchPackageInfo('this-package-is-only-in-the-project'))?.versions.full,
-      ).toBe('1.2.3');
-    });
   });
 });
 

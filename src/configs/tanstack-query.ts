@@ -16,10 +16,7 @@ export interface TanstackQueryEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tanstack-query'> {}
 
 export default defineUnConfig<TanstackQueryEslintConfigOptions>('tanstackQuery', {
-  enabledBy: {
-    package: '@tanstack/query-core',
-    textAddendum: '(dependency of all `@tanstack/*-query` packages)',
-  },
+  enabledBy: {package: '@tanstack/query-core'},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 

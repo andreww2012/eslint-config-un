@@ -43,13 +43,13 @@ export default eslintConfig({
   defaultConfigsStatus: 'misc-enabled',
   configs: {
     barrelFiles: true,
+    casePolice: true,
     checkFile: {
       ignores: ['src/plugins/@.ts'],
       fileNamingConventions: {
         '{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE',
       },
     },
-    casePolice: true,
     command: true,
     e18e: {
       configModuleReplacements: {
@@ -92,6 +92,7 @@ export default eslintConfig({
         'jsdoc/no-undefined-types': [2, {definedTypes: ['ReadonlySet']}],
       },
     },
+    jsxA11y: false,
     lockfile: {
       overrides: {
         // TODO fetch full registry metadata of every locked package, which exhausts the heap in CI
@@ -135,6 +136,7 @@ export default eslintConfig({
         ignores: ['src/loaders/{index,shared}.ts'],
       },
     },
+    svelte: false, // Only installed for the tests
     ts: {
       configSortTsconfigKeys: {
         orderCompilerOptions: {
@@ -152,18 +154,6 @@ export default eslintConfig({
       additionalAssertions: ['expectConfigState', 'expectExtraction'],
       vitestGlobalsImporting: 'disallow',
     },
-
-    // False positives:
-    betterTailwind: false,
-    clsx: false,
-    formatJs: false,
-    graphql: false,
-    jsxA11y: false,
-    nx: false,
-    rxjs: false,
-    svelte: false,
-    turbo: false,
-    youDontNeedLodashUnderscore: false,
   },
 
   extraConfigs: [

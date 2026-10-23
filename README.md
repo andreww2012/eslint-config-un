@@ -218,10 +218,9 @@ When both conditions hold, a separate flat config item is created with:
 In the following tables, Sub-configs have `/` in their names.
 Configs mentioning `misc-enabled` in the second column are disabled by default and can all be enabled at once by setting the [`defaultConfigsStatus`](#defaultconfigsstatus) option to that value.
 
-> [!WARNING]
-> Many configs are enabled automatically when a certain package is installed.
-> That check is done by the [`import-meta-resolve` package](https://npmx.dev/import-meta-resolve) and can produce false positives.
-> [Read more about this below](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed).
+> [!NOTE]
+> Many configs are enabled automatically when your project uses a certain package.
+> [Read more about how that is checked below](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed).
 
 ### Most popular and well known
 
@@ -1145,8 +1144,8 @@ It is passed as the `available` option to [`css/use-baseline`](https://github.co
 eslint-config-un checks whether certain packages are installed, and which version they are, to decide which configs, sub-configs and rules are enabled by default.
 The full list of those packages is the `PACKAGES_TO_GET_INFO_FOR` constant in `src/constants.ts`, and it includes `vue`, `typescript` and `prettier`, among others.
 
-They are looked up by their canonical npm names.
-If you install one of them under a different name with an [npm alias](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases), for example `"vue3": "npm:vue@^3.5.0"`, use this option to say which name to look for instead.
+A package declared under a different name, for example with an [npm alias](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases) like `"vue3": "npm:vue@^3.5.0"`, is found automatically, unless the project also declares it under its canonical name.
+Use this option to say which name to look for instead, for example `vue3` when the project has both `vue` and `vue3`.
 Keys are the canonical package names, values are the names the packages are installed under.
 
 > [!NOTE]
@@ -1323,16 +1322,12 @@ Every config lives in the `src/configs` directory.
 
 ### How exactly does eslint-config-un know if some package is installed?
 
-We use the [`import-meta-resolve`](https://npmx.dev/import-meta-resolve) package to check whether a package is installed and to resolve the path to its `package.json`.
+A package counts as installed if it's declared, under any name, in one of these `package.json` (or `deno.json`) files and can be resolved from there: the one closest to [the current working directory], the ones above it and, in a monorepo root, the ones of the workspace packages.
+A few packages also count if a declared package depends on them, like `@tanstack/query-core`, which comes with `@tanstack/react-query` (you can see the full list in the source, look for `PACKAGES_INSTALLED_THROUGH`).
 
-> [!WARNING]
-> That package repeats the Node.js resolution algorithm, so detection can produce false positives
-> whenever your setup lets you resolve packages you did not install yourself.
-> With a flat `node_modules` layout, the dependencies of your own dependencies are the usual source
-> of those.
->
-> None of the packages we check for is reachable through eslint-config-un's own dependencies, so we
-> never enable a config because of something *we* pulled in.
+> [!IMPORTANT]
+> Nuxt and Astro starters don't declare `typescript`, so the `ts` config stays disabled and `.ts` files fail with `Parsing error: Unexpected token :`.
+> Add `typescript` to `devDependencies` to fix that.
 
 ### How do I see which configs are enabled, which rules have their autofix disabled, and so on?
 
@@ -1412,7 +1407,7 @@ The config is built every time ESLint starts, and some of the things it is built
 - The [`environment`][environment option] (CI, an editor or neither): you can switch rules on and off depending on it, and we use it for a few defaults of our own.
 - The [`offlineMode`] option: the rules that make network requests are turned off.
 - The installed packages: a config needs its packages installed, and the detected framework version decides which of its rules are on.
-  An install without dev dependencies changes the result, and so does the `node_modules` layout: depending on the package manager and its settings, the dependencies of your dependencies may end up next to your own, and are then [detected as installed](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed) too.
+  An install without dev dependencies changes the result, since a [declared](#how-exactly-does-eslint-config-un-know-if-some-package-is-installed) package that isn't installed doesn't count.
 - The [`cacheConfigs`](#cacheconfigs) option, on by default in editors: an earlier config is reused for up to an hour, and not every input is part of the cache key.
 
 `eslint-disable` comments suffer from this the most.

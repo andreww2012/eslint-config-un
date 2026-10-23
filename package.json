@@ -172,7 +172,8 @@
     "synckit": "0.12.3",
     "tinyexec": "1.3.1",
     "typescript-eslint": "8.72.0",
-    "verkit": "0.5.0"
+    "verkit": "0.5.0",
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@11ty/gray-matter": "3.0.0",
@@ -363,7 +364,6 @@
     "vitest": "5.0.5",
     "vue-eslint-parser": "10.4.1",
     "web-features": "3.43.0",
-    "yaml": "2.9.1",
     "zod": "4.6.7",
     "zod-package-json": "2.1.0"
   },

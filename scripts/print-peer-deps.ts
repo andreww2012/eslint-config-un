@@ -2,7 +2,7 @@
 import {styleText} from 'node:util';
 import {arrayUnique} from '@andreww2012/unutils';
 import packageJson from '../package.json' with {type: 'json'};
-import {fetchPackageInfo} from '../src/utils';
+import {fetchPackageInfo} from '../src/utils/package-detection';
 
 const dependenciesUnique: readonly {
   packageName: string;
