@@ -1,6 +1,8 @@
 const FIXTURES = {
   thisGetCall: 'this-get-call/test.js',
   templateReferencesLetVariable: 'template-references-let-variable/test.gjs',
+  templateUsesEqKeyword: 'template-uses-eq-keyword/test.gjs',
+  trackedBuiltInsImport: 'tracked-built-ins-import/test.js',
 } as const;
 
 beforeEach(() => {
@@ -189,6 +191,102 @@ describe('un options', () => {
 });
 
 describe('options', () => {
+  describe('option: `settings`', () => {
+    const SETTINGS = {version: '7.3.0'} as const;
+
+    it('does not set ember settings by default', async () => {
+      const configResult = await computeEslintConfig('ember');
+
+      expect(configResult.getConfigByUnPostfix('ember')?.settings?.['ember']).toBeUndefined();
+    });
+
+    it('sets ember settings when `settings` is provided', async () => {
+      const configResult = await computeEslintConfig('ember', {
+        un: {plugins: {ember: {settings: SETTINGS}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('ember')?.settings?.['ember']).toStrictEqual(
+        SETTINGS,
+      );
+    });
+
+    it('does not pass `emberSourceVersion` parser option to `parsing/ember` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('ember');
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/ember')?.languageOptions,
+      ).not.toHaveProperty(['parserOptions', 'emberSourceVersion']);
+    });
+
+    it('passes `version` as `emberSourceVersion` parser option to `parsing/ember` eslint config', async () => {
+      const configResult = await computeEslintConfig('ember', {
+        un: {plugins: {ember: {settings: SETTINGS}}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('parsing/ember')?.languageOptions).toMatchObject({
+        parserOptions: {emberSourceVersion: SETTINGS.version},
+      });
+    });
+
+    it('lets the ember parser treat Ember 7.1 template keywords as defined only when `version` is set to 7.1 or newer', async () => {
+      const EMBER_CONFIG = {ember: {overridesAny: {'no-undef': 2}}} as const;
+
+      const [resultsWithoutVersion, resultsWithVersion] = await Promise.all([
+        testEslintConfig(EMBER_CONFIG, FIXTURES.templateUsesEqKeyword, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+        }),
+        testEslintConfig(EMBER_CONFIG, FIXTURES.templateUsesEqKeyword, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {plugins: {ember: {settings: SETTINGS}}},
+        }),
+      ]);
+
+      expect(
+        findLintMessageFromLintResults(
+          resultsWithoutVersion,
+          FIXTURES.templateUsesEqKeyword,
+          'no-undef',
+        )?.message,
+      ).toMatchInlineSnapshot(`"'eq' is not defined."`);
+      expect(
+        findLintMessageFromLintResults(
+          resultsWithVersion,
+          FIXTURES.templateUsesEqKeyword,
+          'no-undef',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('`ember/no-tracked-built-ins` rule fires on a `tracked-built-ins` import only when `version` is set to 6.8 or newer', async () => {
+      const [resultsWithoutVersion, resultsWithVersion] = await Promise.all([
+        testEslintConfig('ember', FIXTURES.trackedBuiltInsImport, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+        }),
+        testEslintConfig('ember', FIXTURES.trackedBuiltInsImport, {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {plugins: {ember: {settings: SETTINGS}}},
+        }),
+      ]);
+
+      expect(
+        findLintMessageFromLintResults(
+          resultsWithoutVersion,
+          FIXTURES.trackedBuiltInsImport,
+          'ember/no-tracked-built-ins',
+        ),
+      ).toBeUndefined();
+      expect(
+        findLintMessageFromLintResults(
+          resultsWithVersion,
+          FIXTURES.trackedBuiltInsImport,
+          'ember/no-tracked-built-ins',
+        )?.message,
+      ).toMatchInlineSnapshot(
+        '"Use imports from `@ember/reactive/collections` instead of `tracked-built-ins`."',
+      );
+    });
+  });
+
   describe('option: `enforceGlimmerComponents`', () => {
     it('enables `ember/no-classic-components` rule by default', async () => {
       const configResult = await computeEslintConfig('ember');

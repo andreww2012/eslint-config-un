@@ -113,4 +113,20 @@ describe('ember: sub config `testFiles`', () => {
       expect(configResult.getRuleEntrySeverity('ember/tests', 'no-console')).toBe(0);
     });
   });
+
+  describe('options', () => {
+    describe('option: `settings`', () => {
+      it('sets ember settings in `ember/tests` eslint config when `settings` is provided', async () => {
+        const SETTINGS = {version: '7.3.0'} as const;
+
+        const configResult = await computeEslintConfig('ember', {
+          un: {plugins: {ember: {settings: SETTINGS}}},
+        });
+
+        expect(configResult.getConfigByUnPostfix('ember/tests')?.settings?.['ember']).toStrictEqual(
+          SETTINGS,
+        );
+      });
+    });
+  });
 });

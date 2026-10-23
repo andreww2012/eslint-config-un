@@ -16,6 +16,23 @@ import {
 } from './index';
 
 /**
+ * [`eslint-plugin-ember`](https://npmx.dev/eslint-plugin-ember) plugin
+ * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
+ * that will be assigned to the `ember` property of the `settings` flat config option.
+ */
+export interface EmberPluginSettings {
+  /**
+   * The `ember-source` version, like `7.3.0`, that the rules and the parser assume instead of the
+   * installed one.
+   * Some rules only report when this version supports their fix, and the parser only treats the
+   * Ember 7.1 template keywords (such as `eq` and `on`) as defined from 7.1 on.
+   * The parser gets it as its `emberSourceVersion` option.
+   * @see https://github.com/ember-cli/eslint-plugin-ember#3-set-your-ember-version-optional
+   */
+  version?: string;
+}
+
+/**
  * [Ember](https://emberjs.com) specific rules.
  *
  * 📁 Default `files`:
@@ -76,6 +93,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
   const {configTestFiles, enforceGettersInComputedProperties, enforceGlimmerComponents} =
     optionsResolved;
 
+  const pluginSettings = context.getPluginSettings('ember');
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ember');
 
   configBuilder?.addConfig([
@@ -98,6 +117,9 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
       {
         filesDefault: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
         parsingIgnoresInheritedFrom: ['ember'],
+        settings: {
+          ember: pluginSettings,
+        },
       },
     ])
     .markCategory('Accessibility')
@@ -391,6 +413,9 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
       'ember/tests',
       {
         filesDefault: configTestsFilesFallback,
+        settings: {
+          ember: pluginSettings,
+        },
       },
     ])
     .addRule('no-current-route-name', ERROR) /** @since 10.1.0 */

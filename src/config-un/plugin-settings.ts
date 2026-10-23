@@ -3,6 +3,7 @@ import type {BoundariesPluginSettings} from '../configs/boundaries';
 import type {ClsxPluginSettings} from '../configs/clsx';
 import type {CompatPluginSettings} from '../configs/compat';
 import type {CssInJsPluginSettings} from '../configs/css-in-js';
+import type {EmberPluginSettings} from '../configs/ember';
 import type {EsPluginSettings} from '../configs/es';
 import type {EslintPluginPluginSettings} from '../configs/eslint-plugin';
 import type {FileProgressPluginSettings} from '../configs/file-progress';
@@ -56,6 +57,7 @@ export interface PluginSettingsMap {
   clsx: ClsxPluginSettings;
   compat: CompatPluginSettings;
   'css-in-js': CssInJsPluginSettings;
+  ember: EmberPluginSettings;
   es: EsPluginSettings;
   'eslint-plugin': EslintPluginPluginSettings;
   'eslint-react': ReactXPluginSettings;

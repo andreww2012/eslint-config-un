@@ -319,6 +319,11 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       ember: {
         mechanism: {parser: 'ember-eslint-parser'},
         filesDefault: [GLOB_EMBER_GLIMMER],
+        // ESLint doesn't pass `settings` to parsers, so the version goes in as a parser option
+        languageOptionsDefault: (context) => {
+          const version = context.getPluginSettings('ember')?.version;
+          return version == null ? null : {parserOptions: {emberSourceVersion: version}};
+        },
       },
     },
     dialectDefault: 'ember',
