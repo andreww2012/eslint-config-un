@@ -23,6 +23,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-boundaries@7.3.0
   - eslint-plugin-de-morgan@2.3.0
   - '@next/eslint-plugin-next@16.4.3'
+  - ember-eslint-parser@0.16.1
+  - eslint-plugin-ember@13.9.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

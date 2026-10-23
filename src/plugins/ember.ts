@@ -123,6 +123,8 @@ export default definePluginMetadata('ember', {
     'template-sort-invocations': {stylistic: true},
     'template-style-concatenation': {disableInCodeBlocks: 'tooStrict'},
     'template-table-groups': {disableInCodeBlocks: 'runtimeOnly'},
+    'template-tag-position': {stylistic: true},
+    'template-tag-spacing': {stylistic: true},
     'template-template-length': {stylistic: true},
     'use-brace-expansion': {stylistic: true},
     'use-ember-get-and-set': {disableInCodeBlocks: 'tooStrict'},

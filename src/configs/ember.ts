@@ -259,6 +259,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     // "This rule is not in the recommended configuration because of the risk of false positives"
     .addRule('no-array-prototype-extensions', ERROR) /** @since 10.6.0 */
     .addRule('no-at-ember-render-modifiers', ERROR) /** @since 11.10.0 */ // 🟢
+    // Without it, the deprecations the used Ember version doesn't have yet are reported too
+    .addRule('no-deprecated-imports', ERROR, [{reportAll: false}]) /** @since 13.9.0 */
     .addRule('no-deprecated-router-transition-methods', ERROR) /** @since 11.4.0 */ // 🟢
     .addRule('no-function-prototype-extensions', ERROR) /** @since 2.0.0 */ // 🟢
     .addRule('no-implicit-injections', ERROR) /** @since 11.4.0 */ // 🟢
@@ -369,6 +371,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('template-modifier-name-case', ERROR) /** @since 13.0.0 */
     .addRule('template-no-only-default-slot', ERROR) /** @since 13.0.0 */
     .addRule('template-quotes', ERROR) /** @since 13.0.0 */
+    .addRule('template-tag-position', ERROR) /** @since 13.9.0 */
+    .addRule('template-tag-spacing', ERROR) /** @since 13.9.0 */
     .addRule('template-template-length', OFF) /** @since 13.0.0 */
     .markCategory('Testing')
     .addRule('no-test-support-import', ERROR) /** @since 9.2.0 */ // 🟢
