@@ -22,6 +22,7 @@ minimumReleaseAgeExclude: # []
   - '@boundaries/elements@3.2.0'
   - eslint-plugin-boundaries@7.3.0
   - eslint-plugin-de-morgan@2.3.0
+  - '@next/eslint-plugin-next@16.4.3'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
