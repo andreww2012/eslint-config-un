@@ -19,6 +19,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-jsdoc@65.4.2
   - tsdown@0.23.2
   - eslint-plugin-antfu@3.3.1
+  - '@boundaries/elements@3.2.0'
+  - eslint-plugin-boundaries@7.3.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
