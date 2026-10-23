@@ -351,7 +351,7 @@
     "shiki": "4.5.0",
     "smol-toml": "1.9.1",
     "stylelint-config-clean-order": "10.0.0",
-    "stylelint-config-recess-order": "7.8.2",
+    "stylelint-config-recess-order": "7.9.0",
     "svelte": "5.57.2",
     "svelte-eslint-parser": "1.10.0",
     "tailwind-csstree": "0.4.1",
