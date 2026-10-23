@@ -18,6 +18,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-unicorn@79.0.0
   - eslint-plugin-jsdoc@65.4.2
   - tsdown@0.23.2
+  - eslint-plugin-antfu@3.3.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

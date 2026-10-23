@@ -15,5 +15,6 @@ export default definePluginMetadata('antfu', {
     'no-import-node-modules-by-path': {disableInCodeBlocks: 'imports'},
     'no-top-level-await': {disableInCodeBlocks: 'runtimeOnly'},
     'no-ts-export-equal': {disableInCodeBlocks: 'imports'},
+    'reasonable-newline': {stylistic: true, prettierIncompatible: true},
   },
 });

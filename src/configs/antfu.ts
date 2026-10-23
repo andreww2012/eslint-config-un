@@ -45,6 +45,7 @@ export default defineUnConfig<AntfuEslintConfigOptions>(
     .addRule('no-import-node-modules-by-path', OFF) /** @since 0.40.0 */
     .addRule('no-top-level-await', OFF) /** @since 2.7.0 */
     .addRule('no-ts-export-equal', OFF) /** @since 0.39.0 */
+    .addRule('reasonable-newline', OFF) /** @since 3.3.0 */
     .addRule('top-level-function', OFF) /** @since 0.38.0 */
     .enableConfigTesterForPlugin('antfu')
     .addOverrides();
