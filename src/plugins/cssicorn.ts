@@ -7,6 +7,12 @@ export default definePluginMetadata('cssicorn', {
     `https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/${ruleName}.md`,
   rules: {
     'consistent-compound-selector-order': {stylistic: true},
+    'consistent-custom-property-fallbacks': {
+      stylistic: [
+        false,
+        'changing a fallback changes the styles applied while the custom property is not set',
+      ],
+    },
     'consistent-layer-order': {stylistic: true},
     'consistent-property-order': {
       stylistic: [
@@ -50,11 +56,18 @@ export default definePluginMetadata('cssicorn', {
     'no-redundant-shorthand-values': {stylistic: true},
     'no-unknown-animations': {disableInCodeBlocks: 'tooStrict'},
     'no-unknown-pseudo-selectors': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-unknown-type-selectors': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-is': {stylistic: true},
     'no-zero-length-unit': {stylistic: true},
     'prefer-clamp': {stylistic: true},
     'prefer-explicit-viewport-units': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-light-dark': {disableInCodeBlocks: 'runtimeOnly'},
+    'prefer-longhand-overrides': {
+      stylistic: [
+        false,
+        'a shorthand also resets the components it omits, which another matching rule may set',
+      ],
+    },
     'prefer-media-feature-range-syntax': {stylistic: true},
     'prefer-merged-rules': {stylistic: true},
     'prefer-modern-syntax': {stylistic: true},

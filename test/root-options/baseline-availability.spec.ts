@@ -108,6 +108,7 @@ describe('option: `baselineAvailability`', () => {
         'cssicorn/prefer-light-dark': 0,
         'cssicorn/prefer-media-feature-range-syntax': 0,
         'cssicorn/prefer-nesting': 0,
+        'cssicorn/prefer-subgrid': 0,
       });
     });
   });

@@ -125,6 +125,7 @@ export default {
 
     // Misc
     'multicol',
+    'subgrid',
     'bgsound',
     'noembed',
     'scopedslots',

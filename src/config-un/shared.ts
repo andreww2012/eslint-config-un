@@ -696,6 +696,7 @@ export interface EslintConfigUnOptions<
    * - [`cssicorn/prefer-media-feature-range-syntax`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-media-feature-range-syntax.md)
    * - [`cssicorn/prefer-nesting`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-nesting.md)
    * - [`cssicorn/prefer-relative-colors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-relative-colors.md)
+   * - [`cssicorn/prefer-subgrid`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-subgrid.md)
    * @default 'widely'
    */
   baselineAvailability?: GetRuleOptions<'html', 'use-baseline'>['available'];

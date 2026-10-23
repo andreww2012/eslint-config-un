@@ -128,7 +128,7 @@
     "css-selector-parser": "catalog:html-scripts",
     "empathic": "2.1.0",
     "enhanced-resolve": "5.26.0",
-    "eslint-cssicorn": "0.2.0",
+    "eslint-cssicorn": "0.3.0",
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-mdx": "3.8.2",
     "eslint-merge-processors": "2.0.0",

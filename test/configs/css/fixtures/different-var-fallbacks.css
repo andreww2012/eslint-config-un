@@ -1,0 +1,7 @@
+a {
+  color: var(--brand-color, purple);
+}
+
+p {
+  color: var(--brand-color, blue);
+}

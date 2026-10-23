@@ -275,8 +275,8 @@ importers:
         specifier: 5.26.0
         version: 5.26.0
       eslint-cssicorn:
-        specifier: 0.2.0
-        version: 0.2.0(@eslint/css@2.0.1)(eslint@10.13.0)
+        specifier: 0.3.0
+        version: 0.3.0(@eslint/css@2.0.1)(eslint@10.13.0)
       eslint-import-resolver-typescript:
         specifier: 4.4.5
         version: 4.4.5(eslint-plugin-import-x@4.17.1)(eslint@10.13.0)(supports-color@7.2.0)
@@ -7628,8 +7628,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-cssicorn@0.2.0:
-    resolution: {integrity: sha512-T34TK+4yuEsoa+cTsB62Zuzt0x5aGBlIZ7IgA6AU5BzTuBiLmmMlRCuxp/7jOhX8NsIrJijEVOgmmxUhcm3NUw==}
+  eslint-cssicorn@0.3.0:
+    resolution: {integrity: sha512-j1P4fqs2+Fn0Y6Xw3cNy3ImCQ9disLkvwZf+aG0tFq7sSxeRuJi4SXso5av4gEb4uzRAyfTHgsQ5p+NCJmkA2Q==}
     engines: {node: '>=22'}
     peerDependencies:
       '@eslint/css': '>=2'
@@ -20306,11 +20306,13 @@ snapshots:
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
       semver: 7.8.5
 
-  eslint-cssicorn@0.2.0(@eslint/css@2.0.1)(eslint@10.13.0):
+  eslint-cssicorn@0.3.0(@eslint/css@2.0.1)(eslint@10.13.0):
     dependencies:
       '@eslint/css': 2.0.1
       '@eslint/css-tree': 4.1.2
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
+      html-tags: 5.1.0
+      svg-tags: 1.0.0
 
   eslint-fix-utils@0.4.4(@types/estree@1.0.9)(eslint@10.13.0):
     dependencies:

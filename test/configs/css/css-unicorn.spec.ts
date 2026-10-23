@@ -2,8 +2,10 @@ import {GLOB_CSS} from '../../../src/constants';
 
 const FIXTURES = {
   colorBeforeDisplay: 'color-before-display.css',
+  differentVarFallbacks: 'different-var-fallbacks.css',
   fullViewportHeight: 'full-viewport-height.css',
   hexColorLiteral: 'hex-color-literal.css',
+  nonstandardElementSelector: 'nonstandard-element-selector.css',
 } as const;
 
 describe('css: sub config `unicorn`', () => {
@@ -267,28 +269,24 @@ describe('css: sub config `unicorn`', () => {
     describe('option: `customProperties`', () => {
       const CUSTOM_PROPERTIES = {'--brand-color': '#6750a4'} as const;
 
-      it('disables `cssicorn/prefer-existing-custom-properties` rule by default', async () => {
+      it('disables `cssicorn/consistent-custom-property-fallbacks` and `cssicorn/prefer-existing-custom-properties` rules by default', async () => {
         const configResult = await computeEslintConfig('css');
 
-        expect(
-          configResult.getRuleEntrySeverity(
-            'css/unicorn',
-            'cssicorn/prefer-existing-custom-properties',
-          ),
-        ).toBe(0);
+        expect(configResult.getRuleSeverities('css/unicorn')).toMatchObject({
+          'cssicorn/consistent-custom-property-fallbacks': 0,
+          'cssicorn/prefer-existing-custom-properties': 0,
+        });
       });
 
-      it('disables `cssicorn/prefer-existing-custom-properties` rule when option is an empty object', async () => {
+      it('disables `cssicorn/consistent-custom-property-fallbacks` and `cssicorn/prefer-existing-custom-properties` rules when option is an empty object', async () => {
         const configResult = await computeEslintConfig({
           css: {configUnicorn: {customProperties: {}}},
         });
 
-        expect(
-          configResult.getRuleEntrySeverity(
-            'css/unicorn',
-            'cssicorn/prefer-existing-custom-properties',
-          ),
-        ).toBe(0);
+        expect(configResult.getRuleSeverities('css/unicorn')).toMatchObject({
+          'cssicorn/consistent-custom-property-fallbacks': 0,
+          'cssicorn/prefer-existing-custom-properties': 0,
+        });
       });
 
       it('enables `cssicorn/prefer-existing-custom-properties` rule as a warning with the custom properties when option is set', async () => {
@@ -310,6 +308,25 @@ describe('css: sub config `unicorn`', () => {
         ).toStrictEqual([{customProperties: CUSTOM_PROPERTIES}]);
       });
 
+      it('enables `cssicorn/consistent-custom-property-fallbacks` rule with the custom property names when option is set', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {customProperties: CUSTOM_PROPERTIES}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'css/unicorn',
+            'cssicorn/consistent-custom-property-fallbacks',
+          ),
+        ).toBe(2);
+        expect(
+          configResult.getRuleEntryOptions(
+            'css/unicorn',
+            'cssicorn/consistent-custom-property-fallbacks',
+          ),
+        ).toStrictEqual([{customProperties: Object.keys(CUSTOM_PROPERTIES)}]);
+      });
+
       it('`cssicorn/prefer-existing-custom-properties` rule reports a literal value of a custom property when option is set', async () => {
         const results = await testEslintConfig(
           {css: {configUnicorn: {customProperties: CUSTOM_PROPERTIES}}},
@@ -326,6 +343,88 @@ describe('css: sub config `unicorn`', () => {
         expect(error?.message).toMatchInlineSnapshot(
           '"Prefer existing custom property `var(--brand-color)` over this literal value."',
         );
+      });
+
+      it('`cssicorn/consistent-custom-property-fallbacks` rule reports a different fallback of a custom property when option is set', async () => {
+        const results = await testEslintConfig(
+          {css: {configUnicorn: {customProperties: CUSTOM_PROPERTIES}}},
+          FIXTURES.differentVarFallbacks,
+          import.meta.dirname,
+        );
+
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.differentVarFallbacks,
+          'cssicorn/consistent-custom-property-fallbacks',
+        );
+
+        expect(error?.message).toMatchInlineSnapshot(
+          '"Fallback for custom property `--brand-color` differs from its first fallback."',
+        );
+      });
+    });
+
+    describe('option: `knownElementNames`', () => {
+      it('does not pass `allow` option to `cssicorn/no-unknown-type-selectors` rule by default', async () => {
+        const configResult = await computeEslintConfig('css');
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/no-unknown-type-selectors'),
+        ).toMatchInlineSnapshot('2');
+      });
+
+      it('does not pass `allow` option to `cssicorn/no-unknown-type-selectors` rule when option is an empty array', async () => {
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {knownElementNames: []}},
+        });
+
+        expect(
+          configResult.getRuleEntry('css/unicorn', 'cssicorn/no-unknown-type-selectors'),
+        ).toMatchInlineSnapshot('2');
+      });
+
+      it('passes the names as `allow` option to `cssicorn/no-unknown-type-selectors` rule when option is set', async () => {
+        const KNOWN_ELEMENT_NAMES = ['_', /^legacy-/] as const;
+
+        const configResult = await computeEslintConfig({
+          css: {configUnicorn: {knownElementNames: KNOWN_ELEMENT_NAMES}},
+        });
+
+        expect(
+          configResult.getRuleEntryOptions('css/unicorn', 'cssicorn/no-unknown-type-selectors'),
+        ).toStrictEqual([{allow: KNOWN_ELEMENT_NAMES}]);
+      });
+
+      it('`cssicorn/no-unknown-type-selectors` rule reports a nonstandard element name by default', async () => {
+        const results = await testEslintConfig(
+          'css',
+          FIXTURES.nonstandardElementSelector,
+          import.meta.dirname,
+        );
+
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.nonstandardElementSelector,
+          'cssicorn/no-unknown-type-selectors',
+        );
+
+        expect(error?.message).toMatchInlineSnapshot(`"Unknown type selector 'widget'."`);
+      });
+
+      it('`cssicorn/no-unknown-type-selectors` rule does not report a nonstandard element name matching a regular expression from the option', async () => {
+        const results = await testEslintConfig(
+          {css: {configUnicorn: {knownElementNames: [/^widg/]}}},
+          FIXTURES.nonstandardElementSelector,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.nonstandardElementSelector,
+            'cssicorn/no-unknown-type-selectors',
+          ),
+        ).toBeUndefined();
       });
     });
   });

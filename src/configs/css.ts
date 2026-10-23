@@ -87,15 +87,29 @@ interface UnicornSubConfigOptions<
   /**
    * Custom properties to suggest in place of the literal values they hold, as a map from a
    * property name to its value, like `{'--brand-color': '#6750a4'}`.
-   * The check is disabled while it's empty.
+   * Within a file, all the `var()` fallbacks of each of them must also match.
+   * The checks are disabled while it's empty.
    *
-   * Affected rule:
+   * Affected rules:
+   * - [`cssicorn/consistent-custom-property-fallbacks`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/consistent-custom-property-fallbacks.md)
    * - [`cssicorn/prefer-existing-custom-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-existing-custom-properties.md)
    */
   customProperties?: GetRuleOptions<
     'cssicorn',
     'prefer-existing-custom-properties'
   >['customProperties'];
+
+  /**
+   * Element names allowed in type selectors in addition to the HTML, SVG and MathML ones and the
+   * valid custom element names.
+   * A string matches the name exactly and case-sensitively, a regular expression is tested against
+   * it.
+   *
+   * Affected rule:
+   * - [`cssicorn/no-unknown-type-selectors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-type-selectors.md)
+   * @example ['_', /^legacy-/]
+   */
+  knownElementNames?: readonly (string | RegExp)[];
 }
 
 /**
@@ -387,7 +401,11 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
   // 🔴 - NOT in recommended & unopinionated
   // 🟣 - NOT in unopinionated
 
-  const {propertyOrder, customProperties = {}} = assignDefaults(configUnicorn, {
+  const {
+    propertyOrder,
+    customProperties = {},
+    knownElementNames = [],
+  } = assignDefaults(configUnicorn, {
     propertyOrder: true,
   });
   const propertyOrderResolved =
@@ -412,6 +430,11 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
       },
     ])
     .addRule('consistent-compound-selector-order', ERROR) /** @since 0.2.0 */ // 🟣
+    .addRule(
+      'consistent-custom-property-fallbacks',
+      hasCustomProperties ? ERROR : OFF,
+      hasCustomProperties ? [{customProperties: Object.keys(customProperties)}] : [],
+    ) /** @since 0.3.0 */ // 🟣
     .addRule('consistent-layer-order', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule(
       'consistent-property-order',
@@ -440,6 +463,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
     .addRule('no-layout-animations', OFF) /** @since 0.2.0 */ // 🔴
     .addRule('no-nesting-with-mixed-specificity', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-overflow-axis-coercion', ERROR) /** @since 0.2.0 */
+    .addRule('no-overridden-animation-properties', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule('no-redundant-functions', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('no-redundant-longhand-properties', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-redundant-nested-style-rules', ERROR) /** @since 0.1.0 */ // 🟣
@@ -450,6 +474,12 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
     .addRule('no-unknown-animations', OFF) /** @since 0.1.0 */ // 🔴
     .addRule('no-unknown-annotations', ERROR) /** @since 0.1.0 */
     .addRule('no-unknown-pseudo-selectors', ERROR) /** @since 0.1.0 */
+    .addRule(
+      'no-unknown-type-selectors',
+      ERROR,
+      // @ts-expect-error too strict type: the rule's JSON schema can only describe a `RegExp` as a plain object
+      knownElementNames.length > 0 ? [{allow: [...knownElementNames]}] : [],
+    ) /** @since 0.3.0 */
     .addRule('no-unscoped-nesting-selector', ERROR) /** @since 0.1.0 */
     .addRule('no-useless-is', ERROR) /** @since 0.2.0 */
     .addRule('no-zero-length-unit', ERROR) /** @since 0.1.0 */ // 🟣
@@ -470,6 +500,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
       errorIfBaselineAvailable('individual-transforms'),
     ) /** @since 0.2.0 */ // 🟣
     .addRule('prefer-light-dark', errorIfBaselineAvailable('light-dark')) /** @since 0.2.0 */ // 🟣
+    .addRule('prefer-longhand-overrides', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule(
       'prefer-media-feature-range-syntax',
       errorIfBaselineAvailable('media-query-range-syntax'),
@@ -482,6 +513,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
       errorIfBaselineAvailable('relative-color'),
     ) /** @since 0.2.0 */ // 🟣
     .addRule('prefer-short-hex-color', OFF) /** @since 0.1.0 */ // 🟣
+    .addRule('prefer-subgrid', errorIfBaselineAvailable('subgrid')) /** @since 0.3.0 */ // 🟣
     .addRule('require-prefers-reduced-motion', OFF) /** @since 0.2.0 */ // 🔴
     .addRule('require-property-descriptors', ERROR) /** @since 0.1.0 */
     .addRule('require-selector-scope', OFF) /** @since 0.2.0 */ // 🔴
