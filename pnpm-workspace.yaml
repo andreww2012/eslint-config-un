@@ -21,6 +21,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-antfu@3.3.1
   - '@boundaries/elements@3.2.0'
   - eslint-plugin-boundaries@7.3.0
+  - eslint-plugin-de-morgan@2.3.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
