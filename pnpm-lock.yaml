@@ -474,8 +474,8 @@ importers:
         specifier: 0.6.0
         version: 0.6.0
       '@dprint/markdown':
-        specifier: 0.27.1
-        version: 0.27.1
+        specifier: 0.28.0
+        version: 0.28.0
       '@effect/language-service':
         specifier: 0.87.5
         version: 0.87.5
@@ -2306,8 +2306,8 @@ packages:
   '@dprint/formatter@0.6.0':
     resolution: {integrity: sha512-otnYh2jmGWbekYkAd4xiF416lpdZwNCbhkDrLQcAanvvutp0PhTNSJrwJ4DKBEu6xtP36NUX70t9YQw3oC/ONg==}
 
-  '@dprint/markdown@0.27.1':
-    resolution: {integrity: sha512-WrWYer/dUHz1u3SaYsvECteaN1/fqxiEyOwwdVAk4XHKO+zjL4yLkFt5ZU1Q6dQVwt6JAscrbzFVW7+Zp8KmHA==}
+  '@dprint/markdown@0.28.0':
+    resolution: {integrity: sha512-JK8RPPd1ie+iTgO10faxk1kbzmulhkQxgf9tZjOiyngLA/6PZWmV+HAgruLL3f+P12P3MPkMRIqIr3/jL9+l/g==}
 
   '@dual-bundle/import-meta-resolve@4.2.1':
     resolution: {integrity: sha512-id+7YRUgoUX6CgV0DtuhirQWodeeA7Lf4i2x71JS/vtA5pRb/hIGWlw+G6MeXvsM+MXrz0VAydTGElX1rAfgPg==}
@@ -14798,7 +14798,7 @@ snapshots:
 
   '@dprint/formatter@0.6.0': {}
 
-  '@dprint/markdown@0.27.1': {}
+  '@dprint/markdown@0.28.0': {}
 
   '@dual-bundle/import-meta-resolve@4.2.1': {}
 
