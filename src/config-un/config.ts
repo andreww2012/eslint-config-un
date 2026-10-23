@@ -514,7 +514,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       files: [...GLOB_CONFIG_FILES],
     })
     .disableAnyRule('node', 'no-unpublished-require')
-    // Reports the `export default defineConfig(...)` most config files consist of
+    // Tools load config files only to run them, so global mutations there are intended
     .disableAnyRule('unicorn', 'no-top-level-side-effects');
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores

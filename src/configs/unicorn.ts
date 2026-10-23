@@ -629,7 +629,6 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
             {
               ...(replacementsArray.length > 0 && {
                 replacements: Object.fromEntries(
-                  // eslint-disable-next-line unicorn/prefer-default-parameters -- an empty string means no replacement
                   replacementsArray.map(([key, value]) => [key, value || false]),
                 ),
               }),
@@ -844,7 +843,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-this-assignment', ERROR) /** @since 27.0.0 */
     .addRule('no-this-outside-of-class', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('no-top-level-assignment-in-function', OFF) /** @since 67.0.0 */ // 🟣
-    .addRule('no-top-level-side-effects', ERROR) /** @since 66.0.0 */
+    .addRule('no-top-level-side-effects', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-transition-all', ERROR) /** @since 72.0.0 */
     .addRule('no-typeof-undefined', ERROR) /** @since 45.0.0 */
     .addRule('no-uncalled-method', ERROR) /** @since 67.0.0 */ // 🟣

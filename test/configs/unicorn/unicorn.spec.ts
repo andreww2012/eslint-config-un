@@ -8,8 +8,8 @@ const FIXTURES = {
   textEncodingWithoutDash: 'text-encoding-without-dash.js',
   booleanWithoutPrefix: 'boolean-without-prefix.js',
   booleanRefAndBooleanVariable: 'boolean-ref-and-boolean-variable.ts',
-  defaultExportedCall: 'default-exported-call.js',
-  defaultExportedCallInConfigFile: 'default-exported-call.config.js',
+  globalMutation: 'global-mutation.js',
+  globalMutationInConfigFile: 'global-mutation.config.js',
 } as const;
 
 describe('basic tests', () => {
@@ -137,34 +137,30 @@ describe('rules', async () => {
     expect(error).toBeUndefined();
   });
 
-  it('triggers `unicorn/no-top-level-side-effects` for a default-exported call', async () => {
-    const results = await testEslintConfig(
-      'unicorn',
-      FIXTURES.defaultExportedCall,
-      import.meta.dirname,
-    );
+  it('triggers `unicorn/no-top-level-side-effects` for a global mutation', async () => {
+    const results = await testEslintConfig('unicorn', FIXTURES.globalMutation, import.meta.dirname);
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.defaultExportedCall,
+      FIXTURES.globalMutation,
       'unicorn/no-top-level-side-effects',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"Do not use top-level side effects in exported modules."',
+      '"Do not modify global state when the module is imported."',
     );
   });
 
-  it('does not trigger `unicorn/no-top-level-side-effects` for a default-exported call in a config file', async () => {
+  it('does not trigger `unicorn/no-top-level-side-effects` for a global mutation in a config file', async () => {
     const results = await testEslintConfig(
       'unicorn',
-      FIXTURES.defaultExportedCallInConfigFile,
+      FIXTURES.globalMutationInConfigFile,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.defaultExportedCallInConfigFile,
+      FIXTURES.globalMutationInConfigFile,
       'unicorn/no-top-level-side-effects',
     );
 

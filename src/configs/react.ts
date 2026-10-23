@@ -27,16 +27,6 @@ import {
   defineUnConfig,
 } from './index';
 
-/**
- * These are read from the root of the `settings` object by the plugin, unlike the rest which are
- * read from its `react` property
- */
-type ReactRootPluginSettingName =
-  | 'componentWrapperFunctions'
-  | 'formComponents'
-  | 'linkComponents'
-  | 'propWrapperFunctions';
-
 export interface ReactPluginSettings {
   /**
    * Regex for Component Factory to use, defaults to `createReactClass`
@@ -762,6 +752,16 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
   const getXRuleSeverity = (severity: RuleSeverity) => (isReactXEnabled ? severity : OFF);
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
+
+  /**
+   * These are read from the root of the `settings` object by the plugin, unlike the rest which are
+   * read from its `react` property
+   */
+  type ReactRootPluginSettingName =
+    | 'componentWrapperFunctions'
+    | 'formComponents'
+    | 'linkComponents'
+    | 'propWrapperFunctions';
 
   const {
     componentWrapperFunctions,

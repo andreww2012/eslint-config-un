@@ -347,7 +347,6 @@ ${styleText(
   'cyan',
   generateInstallationCommand(
     usedPackageManager,
-    // eslint-disable-next-line unicorn/prefer-default-parameters -- the range may be an empty string
     packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`),
   ),
 )}
@@ -517,7 +516,6 @@ ${styleText(
               return null;
             }
 
-            type ValueTransformFn = PackageToLoadInfo['valueTransformFn'] & {};
             return {
               config,
               path: property, // serialized `property` contains the full path
@@ -526,6 +524,8 @@ ${styleText(
                 property,
                 ...(valueTransformFn &&
                   (() => {
+                    type ValueTransformFn = PackageToLoadInfo['valueTransformFn'] & {};
+
                     const functionBodyRaw = valueTransformFn[0];
                     const isStartsWithPropertyName = functionBodyRaw.startsWith(
                       `${'fn' satisfies keyof ValueTransformFn}(`,

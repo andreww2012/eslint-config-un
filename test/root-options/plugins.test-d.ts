@@ -1,8 +1,6 @@
 import type {EslintConfigUnOptions} from '../../src/config-un/shared';
 import {createNoRestrictedSyntaxRule} from '../../src/snippets';
 
-type PluginsOption = EslintConfigUnOptions['plugins'] & {};
-
 const tsEslintTypedPlugin = createNoRestrictedSyntaxRule({
   name: 'no-foo',
   message: 'Do not use `foo`',
@@ -10,6 +8,8 @@ const tsEslintTypedPlugin = createNoRestrictedSyntaxRule({
 });
 
 describe('option: `plugins`', () => {
+  type PluginsOption = EslintConfigUnOptions['plugins'] & {};
+
   describe('`plugin`', () => {
     it('accepts a plugin typed with `typescript-eslint` types if the built-in one is loosely typed', () => {
       ({

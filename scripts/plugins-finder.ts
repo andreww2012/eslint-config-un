@@ -45,7 +45,7 @@ if (!captchaSolverApiKey) {
 }
 const captchaSolver = new CaptchaSolver(captchaSolverApiKey);
 
-// eslint-disable-next-line ts/no-unnecessary-type-conversion, unicorn/no-useless-coercion
+// eslint-disable-next-line ts/no-unnecessary-type-conversion
 const isValidJson = (value: unknown) => Boolean(isValidJsonInternal(value));
 
 const ResponseSchemaZod = z.looseObject({

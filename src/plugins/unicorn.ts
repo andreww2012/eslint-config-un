@@ -48,14 +48,7 @@ export default definePluginMetadata('unicorn', {
     'consistent-conditional-object-spread': {stylistic: true},
     'consistent-date-clone': {stylistic: true},
     'consistent-destructuring': {stylistic: true},
-    'consistent-existence-index-check': {
-      stylistic: true,
-      autofixDisabled: [
-        true,
-        // Reported: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3896
-        'the fix swaps the operator without adding parentheses, so `expected === index < 0` turns into a different comparison',
-      ],
-    },
+    'consistent-existence-index-check': {stylistic: true},
     'consistent-export-decorator-position': {stylistic: true},
     'consistent-function-scoping': {disableInCodeBlocks: 'performance'},
     'consistent-template-literal-escape': {stylistic: true},
@@ -281,14 +274,7 @@ export default definePluginMetadata('unicorn', {
     'no-useless-re-export': {disableInCodeBlocks: 'alternatives'},
     'no-useless-recursion': {disableInCodeBlocks: 'runtimeOnly'},
     'no-useless-set-construction': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
-    'no-useless-spread': {
-      requiresTypeInfo: ['optional', 'indirect'],
-      autofixDisabled: [
-        true,
-        // Fixed, not released yet: https://github.com/sindresorhus/eslint-plugin-unicorn/commit/7c5243b9
-        'dropping the copy a `for...of` loop iterates changes the loop when its body changes the collection, like a live `NodeList`',
-      ],
-    },
+    'no-useless-spread': {requiresTypeInfo: ['optional', 'indirect']},
     'no-useless-template-literals': {requiresTypeInfo: 'optional', stylistic: true},
     'no-useless-undefined': {
       autofixDisabled: [
@@ -395,7 +381,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-identifier-import-export-specifiers': {stylistic: true},
     'prefer-import-meta-properties': {stylistic: true},
     'prefer-includes': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
-    'prefer-includes-over-repeated-comparisons': {stylistic: true},
+    'prefer-includes-over-repeated-comparisons': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-iterable-in-constructor': {stylistic: true},
     'prefer-iterator-concat': {
       requiresTypeInfo: ['optional', 'indirect'],
@@ -426,36 +412,24 @@ export default definePluginMetadata('unicorn', {
       requiresTypeInfo: ['optional', 'indirect'],
       stylistic: true,
     },
-    'prefer-math-min-max': {
-      requiresTypeInfo: ['optional', 'indirect'],
-      stylistic: true,
-      autofixDisabled: [
-        true,
-        // Won't fix: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2562
-        'without type information, it also rewrites comparisons of strings and dates, which the `Math` methods turn into numbers',
-      ],
-    },
+    'prefer-math-abs': {requiresTypeInfo: ['optional', 'indirect']},
+    'prefer-math-min-max': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-math-trunc': {stylistic: [false, 'the bitwise forms it reports wrap above 2**31']},
     'prefer-minimal-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
-    'prefer-modern-dom-apis': {
-      requiresTypeInfo: 'optional',
-      stylistic: true,
-      autofixDisabled: [
-        true,
-        'without type information, `insertBefore()` with a reference node that may be `null` becomes a call that throws on it',
-      ],
-    },
+    'prefer-modern-dom-apis': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-modern-math-apis': {
       stylistic: [
         false,
         'the dedicated methods disagree with the arithmetic they replace in the last digit, and at the extremes',
       ],
-      autofixDisabled: [
-        true,
-        'shifts the result by a digit on many inputs and changes results at the extremes where the squared sum overflows',
-      ],
     },
-    'prefer-module': {disableInCodeBlocks: 'imports'},
+    'prefer-module': {
+      requiresTypeInfo: [
+        false,
+        'only checks whether the file was parsed by a TypeScript parser to add parentheses in a suggestion',
+      ],
+      disableInCodeBlocks: 'imports',
+    },
     'prefer-native-coercion-functions': {stylistic: true},
     'prefer-negative-index': {stylistic: true},
     'prefer-node-protocol': {stylistic: true},
@@ -469,7 +443,7 @@ export default definePluginMetadata('unicorn', {
       stylistic: true,
     },
     'prefer-object-define-properties': {stylistic: true},
-    'prefer-object-from-entries': {stylistic: true},
+    'prefer-object-from-entries': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-object-iterable-methods': {stylistic: true},
     'prefer-observer-apis': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
     'prefer-optional-catch-binding': {disableInCodeBlocks: 'emptiness'},
@@ -523,13 +497,7 @@ export default definePluginMetadata('unicorn', {
       ],
     },
     'prefer-string-pad-start-end': {requiresTypeInfo: ['optional', 'indirect']},
-    'prefer-string-raw': {
-      stylistic: true,
-      autofixDisabled: [
-        true,
-        'transforms strings to `String.raw` expressions, which may cause type errors',
-      ],
-    },
+    'prefer-string-raw': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-string-repeat': {stylistic: true},
     'prefer-string-replace-all': {
       requiresTypeInfo: ['optional', 'indirect'],
@@ -598,6 +566,7 @@ export default definePluginMetadata('unicorn', {
     'require-frontmatter-fields': {disableInCodeBlocks: 'fragment'},
     'require-module-specifiers': {disableInCodeBlocks: 'emptiness'},
     'require-passive-events': {disableInCodeBlocks: 'performance'},
+    'require-post-message-target-origin': {requiresTypeInfo: 'optional'},
     'single-line-block-comment-style': {stylistic: true},
     'switch-case-braces': {stylistic: true},
     'template-indent': {
@@ -609,5 +578,6 @@ export default definePluginMetadata('unicorn', {
       disableInTestFiles: [true, 'triggered on inline snapshots'],
     },
     'text-encoding-identifier-case': {stylistic: true},
+    'throw-new-error': {requiresTypeInfo: 'optional'},
   },
 });

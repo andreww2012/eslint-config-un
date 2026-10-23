@@ -340,13 +340,11 @@ const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<
 };
 
 const FILE_HEADER_IN_DIFF_REGEXP = regexTyped('^diff --git a/(.+) b/(.+)$');
-// eslint-disable-next-line unicorn/prefer-string-raw
 const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regexTyped('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
 
 // CSS, which wraps the comment into `/* */` instead of using `//`
 const EXTENSION_WITH_INLINE_SOURCE_MAPS_REGEXP = /^(?:[cm]?[jt]sx?|css)$/;
 const INLINE_SOURCE_MAP_LINE_REGEXP = regexTyped(
-  // eslint-disable-next-line unicorn/prefer-string-raw
   '^(?<before>[-+]\\s*(?://|/\\*)[#@]\\s*sourceMappingURL=)data:\\S+?(?<after>\\s*(?:\\*/)?\\s*)$',
 );
 

@@ -68,11 +68,6 @@ interface ScriptChunk extends Range {
   cdataRanges: Range[];
 }
 
-type DedentAction =
-  | {type: 'dedent'; range: Range; isFirstNonEmptyLine: boolean}
-  | {type: 'empty'; range: Range | undefined}
-  | {type: 'badIndent'; range: Range | undefined; index: number};
-
 const parseHtml = (
   html: string,
   {isXml, scriptMatchers}: Pick<ExtractOptions, 'isXml' | 'scriptMatchers'>,
@@ -212,6 +207,11 @@ const getBlankTagLineStart = (slice: string, chunk: ScriptChunk) => {
 };
 
 const dedent = (indent: string, slice: string, blankTagLineStart: number | undefined) => {
+  type DedentAction =
+    | {type: 'dedent'; range: Range; isFirstNonEmptyLine: boolean}
+    | {type: 'empty'; range: Range | undefined}
+    | {type: 'badIndent'; range: Range | undefined; index: number};
+
   const actions: DedentAction[] = [];
   let hasNonEmptyLine = false;
   let lastIndex = 0;

@@ -76,7 +76,6 @@ export const getActualDependencyNames = (
           return parsedSpecifier.subSpec.name;
         }
         if (
-          // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons
           parsedSpecifier.type === 'range' ||
           parsedSpecifier.type === 'tag' ||
           parsedSpecifier.type === 'version'

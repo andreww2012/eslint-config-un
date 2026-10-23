@@ -45,13 +45,13 @@ class PackageFetchUnknownError extends Data.TaggedError('PackageFetchUnknownErro
   cause: unknown;
 }> {}
 
-type PackageFetchError =
-  | PackageMissingError
-  | PackageVersionNotFoundError
-  | PackageFetchUnknownError;
-
 export const fetchPackageMetadata = (packageName: string) =>
   Effect.gen(function* () {
+    type PackageFetchError =
+      | PackageMissingError
+      | PackageVersionNotFoundError
+      | PackageFetchUnknownError;
+
     const logger = yield* LoggerTag;
     const styledName = styleText('blueBright', packageName);
 

@@ -204,24 +204,22 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;
 }
 
-type ModuleConfigOptions = PickKeysStartingWith<
-  OmitStrict<TestingLibraryEslintConfigOptions, 'configNoOnlyTests'>,
-  'config'
->;
-
-type SupportedModules = keyof {
-  [
-    K in keyof ModuleConfigOptions as K extends `config${infer ModuleName}`
-      ? Lowercase<ModuleName>
-      : never
-  ]: unknown;
-};
-
-type AllPossibleModuleOptions = ObjectValues<ModuleConfigOptions> & {};
-
 export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary', {
   enabledBy: {package: '@testing-library/dom'},
 })((context, optionsRaw) => {
+  type ModuleConfigOptions = PickKeysStartingWith<
+    OmitStrict<TestingLibraryEslintConfigOptions, 'configNoOnlyTests'>,
+    'config'
+  >;
+  type SupportedModules = keyof {
+    [
+      K in keyof ModuleConfigOptions as K extends `config${infer ModuleName}`
+        ? Lowercase<ModuleName>
+        : never
+    ]: unknown;
+  };
+  type AllPossibleModuleOptions = ObjectValues<ModuleConfigOptions> & {};
+
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
     configMarko: context.packagesInfo.marko != null,
@@ -251,7 +249,6 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
     }
 
     const isForFramework = module !== 'dom';
-    // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons
     const isFireEventAsync = module === 'marko' || module === 'svelte' || module === 'vue';
 
     const moduleOptionsResolved = assignDefaults(options, {
@@ -339,7 +336,6 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
       .addRule('no-global-regexp-flag-in-query', ERROR) /** @since 5.2.0 */ // 🩷
       .addRule(
         'no-manual-cleanup',
-        // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons
         module === 'react' || module === 'svelte' || module === 'vue' ? ERROR : OFF,
       ) /** @since 2.1.0 */ // 🔵🟠🟢
       .addRule('no-node-access', ERROR, [{allowContainerFirstChild}]) /** @since 4.0.0-alpha.0 */ // 🩷

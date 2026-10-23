@@ -29,45 +29,48 @@ declare module 'vitest' {
 
 type PackageDetectionModule = typeof import('../src/utils/package-detection');
 
-const createFetchPackageInfoMock = vi.hoisted(() =>
-  // eslint-disable-next-line unicorn/consistent-function-scoping -- must be placed inside `vi.hosted`
-  (installedPackages: Record<string, string>, mod: PackageDetectionModule): PackageDetectionModule => {
-    const fetchPackageInfo: PackageDetectionModule['fetchPackageInfo'] = (packageName) => {
-      const version = installedPackages[packageName];
-      if (version == null) {
-        return Promise.resolve(null);
-      }
+const createFetchPackageInfoMock = vi.hoisted(
+  () =>
+    (
+      installedPackages: Record<string, string>,
+      mod: PackageDetectionModule,
+    ): PackageDetectionModule => {
+      const fetchPackageInfo: PackageDetectionModule['fetchPackageInfo'] = (packageName) => {
+        const version = installedPackages[packageName];
+        if (version == null) {
+          return Promise.resolve(null);
+        }
 
-      const majorVersionRaw = Number.parseInt(version, 10);
-      const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
-      const majorAndMinorVersionRaw = Number.parseFloat(version);
-      const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
-        ? null
-        : majorAndMinorVersionRaw;
-      return Promise.resolve({
-        info: {name: packageName, version},
-        versions: {full: version, major: majorVersion, majorAndMinor: majorAndMinorVersion},
-      });
-    };
+        const majorVersionRaw = Number.parseInt(version, 10);
+        const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
+        const majorAndMinorVersionRaw = Number.parseFloat(version);
+        const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
+          ? null
+          : majorAndMinorVersionRaw;
+        return Promise.resolve({
+          info: {name: packageName, version},
+          versions: {full: version, major: majorVersion, majorAndMinor: majorAndMinorVersion},
+        });
+      };
 
-    return {
-      ...mod,
-      fetchPackageInfo,
-      fetchProjectPackagesInfo: async (packageNames, options) => {
-        const entries = await Promise.all(
-          packageNames.map(async (packageName) => [
-            packageName,
-            await fetchPackageInfo(options?.aliases?.[packageName] || packageName),
-          ]),
-        );
-        // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
-        return Object.fromEntries(entries) as Record<
-          (typeof packageNames)[number],
-          Awaited<ReturnType<typeof fetchPackageInfo>>
-        >;
-      },
-    };
-  },
+      return {
+        ...mod,
+        fetchPackageInfo,
+        fetchProjectPackagesInfo: async (packageNames, options) => {
+          const entries = await Promise.all(
+            packageNames.map(async (packageName) => [
+              packageName,
+              await fetchPackageInfo(options?.aliases?.[packageName] || packageName),
+            ]),
+          );
+          // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
+          return Object.fromEntries(entries) as Record<
+            (typeof packageNames)[number],
+            Awaited<ReturnType<typeof fetchPackageInfo>>
+          >;
+        },
+      };
+    },
 );
 
 /**

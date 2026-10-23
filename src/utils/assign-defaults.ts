@@ -10,38 +10,12 @@ import {castToSafe, isObject} from '../utils';
 // eslint-disable-next-line ts/no-explicit-any
 type AssignDefaultsInput = Record<PropertyKey, any>;
 
-// TODO void required?
-// eslint-disable-next-line ts/no-invalid-void-type
-type NullishOrVoid = null | undefined | void;
-
 type SourceObjectShape<S> = Extract<Exclude<S, readonly unknown[]>, AssignDefaultsInput>;
-
-type SourceMaybeAbsent<S> = [Exclude<S, AssignDefaultsInput>] extends [never] ? false : true;
-
-type MutableShallow<T> = T extends readonly (infer U)[] ? U[] : T;
 
 type ValidateDefaults<S, D> = [SourceObjectShape<S>] extends [never]
   ? unknown
   : (D extends Partial<SourceObjectShape<S>> ? unknown : Partial<SourceObjectShape<S>>) &
       Record<Exclude<keyof D, keyof SourceObjectShape<S>>, never>;
-
-type MergeValue<SValue, DValue> = [Extract<SValue, NullishOrVoid>] extends [never]
-  ? SValue
-  : [MutableShallow<Exclude<DValue, NullishOrVoid>>] extends [Exclude<SValue, NullishOrVoid>]
-    ? // `DValue` is structurally a subset of `SValue` (e.g. `{}` default for an object option,
-      // or `never[]` default for an array option) — drop it so accessing keys on the result
-      // doesn't have to deal with the empty-literal arm of the union.
-      Exclude<SValue, NullishOrVoid>
-    : Exclude<SValue, NullishOrVoid> | MutableShallow<Exclude<DValue, NullishOrVoid>>;
-
-type MergeShallow<S extends AssignDefaultsInput, D extends AssignDefaultsInput> = S extends D
-  ? S
-  : // eslint-disable-next-line ts/no-restricted-types
-    Omit<D, keyof S & keyof D> &
-      // eslint-disable-next-line ts/no-restricted-types
-      Omit<S, keyof S & keyof D> & {
-        -readonly [K in keyof S & keyof D]: MergeValue<S[K], D[K]>;
-      };
 
 /**
  * Shallow-merge user-provided options with defaults: each defined top-level key in `source`
@@ -56,6 +30,35 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   source: S,
   defaults: D & ValidateDefaults<S, D>,
 ) => {
+  // TODO void required?
+  // eslint-disable-next-line ts/no-invalid-void-type
+  type NullishOrVoid = null | undefined | void;
+
+  type MutableShallow<T> = T extends readonly (infer U)[] ? U[] : T;
+
+  type MergeValue<SValue, DValue> = [Extract<SValue, NullishOrVoid>] extends [never]
+    ? SValue
+    : [MutableShallow<Exclude<DValue, NullishOrVoid>>] extends [Exclude<SValue, NullishOrVoid>]
+      ? // `DValue` is structurally a subset of `SValue` (e.g. `{}` default for an object option,
+        // or `never[]` default for an array option) — drop it so accessing keys on the result
+        // doesn't have to deal with the empty-literal arm of the union.
+        Exclude<SValue, NullishOrVoid>
+      : Exclude<SValue, NullishOrVoid> | MutableShallow<Exclude<DValue, NullishOrVoid>>;
+
+  type SourceMaybeAbsent = [Exclude<S, AssignDefaultsInput>] extends [never] ? false : true;
+
+  type MergeShallow<
+    Source extends AssignDefaultsInput,
+    Defaults extends AssignDefaultsInput,
+  > = Source extends Defaults
+    ? Source
+    : // eslint-disable-next-line ts/no-restricted-types
+      Omit<Defaults, keyof Source & keyof Defaults> &
+        // eslint-disable-next-line ts/no-restricted-types
+        Omit<Source, keyof Source & keyof Defaults> & {
+          -readonly [K in keyof Source & keyof Defaults]: MergeValue<Source[K], Defaults[K]>;
+        };
+
   const result: Record<PropertyKey, unknown> = {...defaults};
 
   if (isObject(source)) {
@@ -76,7 +79,7 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
     [SourceObjectShape<S>] extends [never]
       ? D
       : MergeShallow<
-          SourceMaybeAbsent<S> extends true ? Partial<SourceObjectShape<S>> : SourceObjectShape<S>,
+          SourceMaybeAbsent extends true ? Partial<SourceObjectShape<S>> : SourceObjectShape<S>,
           D
         >
   >;

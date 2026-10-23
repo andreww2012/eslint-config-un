@@ -1,8 +1,8 @@
 import type {BetterTailwindPluginSettings} from '../../../src/configs/better-tailwind';
 
-type Settings = BetterTailwindPluginSettings;
-
 describe('`plugins.better-tailwindcss.settings`', () => {
+  type Settings = BetterTailwindPluginSettings;
+
   it('allows using only `entryPoint`', () => {
     ({entryPoint: 'src/index.css'}) satisfies Settings;
   });
