@@ -1,0 +1,6 @@
+{
+  "name": "package-with-graphql-config",
+  "graphql": {
+    "schema": "schema.graphql"
+  }
+}

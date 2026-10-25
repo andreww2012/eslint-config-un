@@ -1,42 +1,46 @@
+import path from 'node:path';
 import type {IGraphQLConfig} from '@graphql-eslint/eslint-plugin';
+import {any as findUpAny} from 'empathic/find';
+import {up as findUpPackageJson} from 'empathic/package';
 import {GLOB_GRAPHQL} from '../../../src/constants';
 
 const FIXTURES = {
   graphqlCodeBlockWithHashtagDescriptionMd: 'graphql-code-block-with-hashtag-description.md',
+  packageJsonWithGraphqlConfig: 'package-with-graphql-config/package.json',
   typeWithCommentDescription: 'type-with-comment-description.graphql',
 } as const;
 
-const GRAPHQL_JS_VALIDATION_RULES = [
-  'executable-definitions',
-  'fields-on-correct-type',
-  'fragments-on-composite-type',
-  'known-argument-names',
-  'known-directives',
-  'known-type-names',
-  'lone-anonymous-operation',
-  'lone-schema-definition',
-  'no-fragment-cycles',
-  'one-field-subscriptions',
-  'overlapping-fields-can-be-merged',
-  'possible-fragment-spread',
-  'possible-type-extension',
-  'provided-required-arguments',
-  'scalar-leafs',
-  'unique-argument-names',
-  'unique-directive-names',
-  'unique-directive-names-per-location',
-  'unique-field-definition-names',
-  'unique-input-field-names',
-  'unique-operation-types',
-  'unique-type-names',
-  'unique-variable-names',
-  'value-literals-of-correct-type',
-  'variables-are-input-types',
-  'variables-in-allowed-position',
-] as const;
+vi.mock(import('empathic/find'), async (importOriginal) => {
+  const original = await importOriginal();
+  return {...original, any: vi.fn<typeof original.any>(original.any)};
+});
+
+vi.mock(import('empathic/package'), async (importOriginal) => {
+  const original = await importOriginal();
+  return {...original, up: vi.fn<typeof original.up>(original.up)};
+});
+
+const {any: findUpAnyOriginal} =
+  await vi.importActual<typeof import('empathic/find')>('empathic/find');
+
+const {up: findUpPackageJsonOriginal} =
+  await vi.importActual<typeof import('empathic/package')>('empathic/package');
+
+const mockGraphqlConfigFile = () => {
+  vi.mocked(findUpAny).mockImplementation((names, options) =>
+    names.includes('graphql.config.ts')
+      ? '/project/graphql.config.ts'
+      : findUpAnyOriginal(names, options),
+  );
+};
 
 beforeEach(() => {
   addInstalledPackages({graphql: '16.11.0'});
+});
+
+afterEach(() => {
+  vi.mocked(findUpAny).mockImplementation(findUpAnyOriginal);
+  vi.mocked(findUpPackageJson).mockImplementation(findUpPackageJsonOriginal);
 });
 
 describe('basic tests', () => {
@@ -136,29 +140,18 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('graphql');
 
   // TODO possible to test without these constraints?
-  const GRAPHQL_OPTIONS_WITHOUT_SCHEMA = {
-    disableRulesRequiringSchema: true,
-    disableRulesRequiringOperations: true,
-    // All 📦 (graphql-js validation wrapper) rules call `requireGraphQLSchema` and crash without schema
-    overrides: Object.fromEntries(
-      GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
-    ),
-  } as const;
-
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('graphql')).toMatchObject({
       'graphql/no-anonymous-operations': 2,
-      'graphql/no-deprecated': 1,
+      'graphql/require-deprecation-reason': 1,
       'graphql/alphabetize': 0,
     });
   });
 
   it('`graphql/no-hashtag-description` rule fires on a type with hashtag description', async () => {
-    const results = await testEslintConfig(
-      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA},
-      FIXTURES.typeWithCommentDescription,
-      {searchFixturesRelativeToPath: import.meta.dirname},
-    );
+    const results = await testEslintConfig('graphql', FIXTURES.typeWithCommentDescription, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+    });
 
     const error = findLintMessageFromLintResults(
       results,
@@ -174,7 +167,7 @@ describe('rules', async () => {
 
   it('`graphql/no-hashtag-description` rule fires on a GraphQL code block with hashtag description inside a .md file', async () => {
     const results = await testEslintConfig(
-      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA, markdown: true},
+      {graphql: true, markdown: true},
       FIXTURES.graphqlCodeBlockWithHashtagDescriptionMd,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );
@@ -193,7 +186,7 @@ describe('rules', async () => {
 
   it('does not run JS-only rules of other Configs on `.graphql` files', async () => {
     const results = await testEslintConfig(
-      {graphql: GRAPHQL_OPTIONS_WITHOUT_SCHEMA, js: true, security: true, unicorn: true},
+      {graphql: true, js: true, security: true, unicorn: true},
       FIXTURES.typeWithCommentDescription,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );
@@ -249,10 +242,18 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `disableRulesRequiringOperations`', () => {
-    it('enables rules requiring operations by default', async () => {
+    it('disables rules requiring operations by default if there is no GraphQL config', async () => {
       const configResult = await computeEslintConfig('graphql');
 
-      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/known-fragment-names')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/unique-operation-name')).toBe(0);
+    });
+
+    it('enables rules requiring operations by default if there is a GraphQL config file', async () => {
+      mockGraphqlConfigFile();
+
+      const configResult = await computeEslintConfig('graphql');
+
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/unique-operation-name')).toBe(2);
     });
 
     it('enables rules requiring operations when set to `false`', async () => {
@@ -260,7 +261,7 @@ describe('options', () => {
         graphql: {disableRulesRequiringOperations: false},
       });
 
-      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/known-fragment-names')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/unique-operation-name')).toBe(2);
     });
 
     it('disables rules requiring operations when set to `true`', async () => {
@@ -277,8 +278,37 @@ describe('options', () => {
   });
 
   describe('option: `disableRulesRequiringSchema`', () => {
-    it('enables rules requiring schema by default', async () => {
+    it('disables rules requiring schema by default if there is no GraphQL config', async () => {
       const configResult = await computeEslintConfig('graphql');
+
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/fields-on-correct-type')).toBe(
+        0,
+      );
+    });
+
+    it('enables rules requiring schema by default if there is a GraphQL config file', async () => {
+      mockGraphqlConfigFile();
+
+      const configResult = await computeEslintConfig('graphql');
+
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(2);
+    });
+
+    it('enables rules requiring schema by default if the closest `package.json` has a GraphQL config', async () => {
+      vi.mocked(findUpPackageJson).mockReturnValue(
+        path.join(import.meta.dirname, 'fixtures', FIXTURES.packageJsonWithGraphqlConfig),
+      );
+
+      const configResult = await computeEslintConfig('graphql');
+
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(2);
+    });
+
+    it('enables rules requiring schema by default if `graphqlConfig` option is set', async () => {
+      const configResult = await computeEslintConfig({
+        graphql: {graphqlConfig: {schema: './schema.graphql'}},
+      });
 
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(2);
     });
@@ -299,6 +329,9 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(0);
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/strict-id-in-types')).toBe(0);
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-deprecated')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('graphql', 'graphql/fields-on-correct-type')).toBe(
+        0,
+      );
     });
   });
 
@@ -384,6 +417,7 @@ describe('options', () => {
 
     it('enables relay rules when `relay-runtime` is installed', async () => {
       addInstalledPackages({'relay-runtime': '18.0.0'});
+      mockGraphqlConfigFile();
 
       const configResult = await computeEslintConfig('graphql');
 

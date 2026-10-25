@@ -1,4 +1,7 @@
+// cspell:ignore graphqlrc graphqlconfig
 import type {IGraphQLConfig} from '@graphql-eslint/eslint-plugin';
+import * as findUp from 'empathic/find';
+import * as packageUtils from 'empathic/package';
 import {
   ERROR,
   GLOB_ASTRO,
@@ -14,7 +17,7 @@ import {
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {isNonEmptyArray, objectKeysUnsafe, pick} from '../utils';
+import {isNonEmptyArray, objectKeysUnsafe, pick, readAndParseJson} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -48,7 +51,7 @@ export interface GraphqlEslintConfigOptions<
 
   /**
    * Disable all the rules requiring GraphQL Operations specified in GraphQL config (via `documents`
-   * option) in order to work:
+   * option) in order to work, as they crash ESLint without them:
    * - [`graphql/known-fragment-names`](https://the-guild.dev/graphql/eslint/rules/known-fragment-names)
    * - [`graphql/no-one-place-fragments`](https://the-guild.dev/graphql/eslint/rules/no-one-place-fragments)
    * - [`graphql/no-undefined-variables`](https://the-guild.dev/graphql/eslint/rules/no-undefined-variables)
@@ -60,13 +63,15 @@ export interface GraphqlEslintConfigOptions<
    * - [`graphql/selection-set-depth`](https://the-guild.dev/graphql/eslint/rules/selection-set-depth)
    * - [`graphql/unique-fragment-name`](https://the-guild.dev/graphql/eslint/rules/unique-fragment-name)
    * - [`graphql/unique-operation-name`](https://the-guild.dev/graphql/eslint/rules/unique-operation-name)
-   * @default false
+   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set, otherwise
+   * `false`
    */
   disableRulesRequiringOperations?: boolean;
 
   /**
    * Disable all the rules requiring GraphQL Schema specified in GraphQL config (via `schema`
-   * option) in order to work:
+   * option) in order to work, as they crash ESLint without it.
+   * Besides most of the rules wrapping `graphql-js` validation functions, these are:
    * - [`graphql/no-deprecated`](https://the-guild.dev/graphql/eslint/rules/no-deprecated)
    * - [`graphql/no-root-type`](https://the-guild.dev/graphql/eslint/rules/no-root-type)
    * - [`graphql/no-scalar-result-type-on-mutation`](https://the-guild.dev/graphql/eslint/rules/no-scalar-result-type-on-mutation)
@@ -78,7 +83,8 @@ export interface GraphqlEslintConfigOptions<
    * - [`graphql/require-nullable-result-in-root`](https://the-guild.dev/graphql/eslint/rules/require-nullable-result-in-root)
    * - [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections)
    * - [`graphql/strict-id-in-types`](https://the-guild.dev/graphql/eslint/rules/strict-id-in-types)
-   * @default false
+   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set, otherwise
+   * `false`
    */
   disableRulesRequiringSchema?: boolean;
 
@@ -107,17 +113,36 @@ export interface GraphqlEslintConfigOptions<
   >;
 }
 
+// The places `graphql-config` looks for its config in, except `package.json`
+const GRAPHQL_CONFIG_FILE_NAMES: readonly string[] = [
+  ...['graphql.config', '.graphqlrc'].flatMap((name) =>
+    ['ts', 'cts', 'mts', 'js', 'cjs', 'mjs', 'json', 'yaml', 'yml', 'toml'].map(
+      (extension) => `${name}.${extension}`,
+    ),
+  ),
+  '.graphqlrc',
+  '.graphqlconfig',
+  '.graphqlconfig.json',
+  '.graphqlconfig.yaml',
+  '.graphqlconfig.yml',
+];
+
 export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
   // The plugin imports what older versions don't export
   enabledBy: {package: 'graphql@>=16'},
   phase: 'late',
-})((context, optionsRaw) => {
+})(async (context, optionsRaw) => {
   const isRelayInstalled = context.packagesInfo['relay-runtime'] != null;
+
+  const hasGraphqlConfig =
+    (typeof optionsRaw === 'object' && optionsRaw.graphqlConfig != null) ||
+    findUp.any([...GRAPHQL_CONFIG_FILE_NAMES]) != null ||
+    (await readAndParseJson<{graphql?: unknown}>(packageUtils.up()))?.graphql != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsProcessor: true,
-    disableRulesRequiringOperations: false,
-    disableRulesRequiringSchema: false,
+    disableRulesRequiringOperations: !hasGraphqlConfig,
+    disableRulesRequiringSchema: !hasGraphqlConfig,
   });
 
   const {
@@ -188,15 +213,21 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     )
     .addRule('alphabetize', OFF) /** @since 2.3.0 */
     .addRule('description-style', OFF) /** @since 0.2.0 */ // 🟢
-    .addRule('executable-definitions', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('fields-on-correct-type', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('fragments-on-composite-type', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('executable-definitions', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule('fields-on-correct-type', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule(
+      'fragments-on-composite-type',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🔵📦📃
     .addRule('input-name', OFF) /** @since 0.2.0 */
-    .addRule('known-argument-names', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
-    .addRule('known-directives', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
-    .addRule('known-fragment-names', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
-    .addRule('known-type-names', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
-    .addRule('lone-anonymous-operation', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('known-argument-names', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🟢🔵📦📃
+    .addRule('known-directives', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🟢🔵📦📃
+    .addRule(
+      'known-fragment-names',
+      getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
+    ) /** @since 0.6.0 */ // 🔵📦🖥️📃
+    .addRule('known-type-names', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🟢🔵📦📃
+    .addRule('lone-anonymous-operation', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
     .addRule(
       'lone-executable-definition',
       ERROR,
@@ -259,7 +290,7 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     .addRule('no-anonymous-operations', ERROR) /** @since 0.3.0 */ // 🔵
     .addRule('no-deprecated', getRuleRequiresSchemaSeverity(WARNING)) /** @since 0.7.0 */ // 🔵📃
     .addRule('no-duplicate-fields', ERROR) /** @since 3.0.0 */ // 🔵
-    .addRule('no-fragment-cycles', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('no-fragment-cycles', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
     .addRule('no-hashtag-description', ERROR) /** @since 0.7.0 */ // 🟢
     .addRule(
       'no-one-place-fragments',
@@ -271,19 +302,34 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
       getRuleRequiresSchemaSeverity(ERROR),
     ) /** @since 3.0.0 */ // 📃
     .addRule('no-typename-prefix', ERROR) /** @since 3.0.0 */ // 🟢
-    .addRule('no-undefined-variables', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
+    .addRule(
+      'no-undefined-variables',
+      getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
+    ) /** @since 0.6.0 */ // 🔵📦🖥️📃
     .addRule('no-unreachable-types', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.7.2 */ // 🟢📃
     .addRule(
       'no-unused-fields',
       getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(WARNING)),
     ) /** @since 1.0.2 */ // 🖥️📃
-    .addRule('no-unused-fragments', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
-    .addRule('no-unused-variables', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
-    .addRule('one-field-subscriptions', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('overlapping-fields-can-be-merged', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('possible-fragment-spread', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('possible-type-extension', ERROR) /** @since 0.6.0 */ // 🟢📦
-    .addRule('provided-required-arguments', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule(
+      'no-unused-fragments',
+      getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
+    ) /** @since 0.6.0 */ // 🔵📦🖥️📃
+    .addRule(
+      'no-unused-variables',
+      getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
+    ) /** @since 0.6.0 */ // 🔵📦🖥️📃
+    .addRule('one-field-subscriptions', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule(
+      'overlapping-fields-can-be-merged',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule('possible-fragment-spread', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule('possible-type-extension', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🟢📦📃
+    .addRule(
+      'provided-required-arguments',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🟢🔵📦📃
     .addRule('relay-arguments', getRelaySeverity(ERROR)) /** @since 3.10.0 */
     .addRule('relay-connection-types', getRelaySeverity(ERROR)) /** @since 3.10.0 */
     .addRule(
@@ -318,14 +364,17 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
       getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
     ) /** @since 0.3.0 */ /** @aka require-id-when-available */ // 🔵🖥️📃
     .addRule('require-type-pattern-with-oneof', OFF) /** @since 3.14.0 */
-    .addRule('scalar-leafs', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('scalar-leafs', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
     .addRule('selection-set-depth', getRuleRequiresOperationsSeverity(ERROR), [
       {maxDepth: 7},
     ]) /** @since 0.7.0 */ // 🔵🖥️
     .addRule('strict-id-in-types', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.9.0 */ // 🟢📃
-    .addRule('unique-argument-names', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('unique-argument-names', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
     .addRule('unique-directive-names', ERROR) /** @since 0.6.0 */ // 🟢📦
-    .addRule('unique-directive-names-per-location', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule(
+      'unique-directive-names-per-location',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🟢🔵📦📃
     .addRule('unique-enum-value-names', ERROR) /** @since 0.6.0 */ // 🟢
     .addRule('unique-field-definition-names', ERROR) /** @since 0.6.0 */ // 🟢📦
     .addRule('unique-fragment-name', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵🖥️
@@ -333,10 +382,16 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     .addRule('unique-operation-name', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵🖥️
     .addRule('unique-operation-types', ERROR) /** @since 0.6.0 */ // 🟢📦
     .addRule('unique-type-names', ERROR) /** @since 0.6.0 */ // 🟢📦
-    .addRule('unique-variable-names', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('value-literals-of-correct-type', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('variables-are-input-types', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('variables-in-allowed-position', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('unique-variable-names', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule(
+      'value-literals-of-correct-type',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule('variables-are-input-types', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦📃
+    .addRule(
+      'variables-in-allowed-position',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 0.6.0 */ // 🔵📦📃
     .enableConfigTesterForPlugin('graphql')
     .addOverrides();
 });
