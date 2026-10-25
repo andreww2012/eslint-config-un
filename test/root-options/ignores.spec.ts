@@ -1,3 +1,4 @@
+import {ESLint} from 'eslint';
 import {DEFAULT_GLOBAL_IGNORES} from '../../src/constants';
 
 const IGNORES = ['**/coverage', '**/temp'] as const;
@@ -15,6 +16,32 @@ describe('option: `ignores`', () => {
     expect(config).toStrictEqual({
       name: expect.any(String) as unknown,
       ignores: [...DEFAULT_GLOBAL_IGNORES],
+    });
+  });
+
+  it('ignores snapshots and the bundles Yarn Berry recommends committing by default', async () => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: {ignores: await getGlobalIgnores(undefined)},
+    });
+
+    const ignoredPaths = await Promise.all(
+      [
+        'src/index.js',
+        'dist/index.js',
+        'test/__snapshots__/output.js',
+        '.yarn/releases/yarn-4.4.1.cjs',
+        'test/fixtures/app/.yarn/sdks/eslint/bin/eslint.js',
+      ].map(async (filePath) => [filePath, await eslint.isPathIgnored(filePath)] as const),
+    );
+
+    expect(Object.fromEntries(ignoredPaths)).toStrictEqual({
+      'src/index.js': false,
+      // Usually gitignored, so left to the `gitignore` option
+      'dist/index.js': false,
+      'test/__snapshots__/output.js': true,
+      '.yarn/releases/yarn-4.4.1.cjs': true,
+      'test/fixtures/app/.yarn/sdks/eslint/bin/eslint.js': true,
     });
   });
 

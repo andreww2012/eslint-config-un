@@ -190,7 +190,13 @@ export const GLOB_MD_X_CODE_BLOCKS = '**/*.md?(x)/**/*.*' as const;
 
 /* Misc */
 
-export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
+// Only files that are generated (or that nobody wants linted) and usually committed: the
+// `gitignore` root option already covers the rest
+// TODO research more generated files tools tell to commit
+export const DEFAULT_GLOBAL_IGNORES = [
+  '**/__snapshots__',
+  '**/.yarn/{plugins,releases,sdks}',
+] as const;
 
 export const CHECKED_LODASH_METHODS = [
   'assign',
