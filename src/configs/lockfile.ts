@@ -32,12 +32,12 @@ type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, st
 /**
  * An ESLint plugin to lint npm ecosystem lockfiles for security and consistency issues.
  *
- * 📁 Default `files`: <code>**&#47;package-lock.json</code>, <code>**&#47;yarn.lock</code>,
- * <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
- * <code>**&#47;vlt-lock.json</code>
+ * 📁 Default `files`: <code>**&#47;package-lock.json</code>, <code>**&#47;npm-shrinkwrap.json</code>,
+ * <code>**&#47;yarn.lock</code>, <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
+ * <code>**&#47;bun.lockb</code>, <code>**&#47;vlt-lock.json</code>
  *
  * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding parser
- * configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
+ * configs (named `lockfile/parser/{json,jsonc,plain,yaml}`) will be created for matched entries.
  */
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -140,22 +140,37 @@ const LOCKFILE_LANGUAGES = {
   json: ['jsonc', 'json'],
   jsonc: ['jsonc', 'jsonc'],
   yaml: 'yaml',
+  plain: 'plain',
 } as const satisfies Record<string, ParsingLanguagesWithDialects>;
 
 const LOCKFILES_INFO_MAP: Readonly<
   Record<
     SupportedPackageManagers,
-    readonly [languageOrParser: keyof typeof LOCKFILE_LANGUAGES, lockfileNames: readonly string[]]
+    Readonly<Record<string /* Lockfile name */, keyof typeof LOCKFILE_LANGUAGES>>
   >
 > = {
-  npm: ['json', ['package-lock.json', 'npm-shrinkwrap.json']],
-  yarn: ['yaml', ['yarn.lock']],
-  pnpm: ['yaml', ['pnpm-lock.yaml']],
-  bun: ['jsonc', ['bun.lock', 'bun.lockb']],
-  vlt: ['json', ['vlt-lock.json']],
+  npm: {
+    'package-lock.json': 'json',
+    'npm-shrinkwrap.json': 'json',
+  },
+  yarn: {
+    'yarn.lock': 'yaml',
+  },
+  pnpm: {
+    'pnpm-lock.yaml': 'yaml',
+  },
+  bun: {
+    'bun.lock': 'jsonc',
+    'bun.lockb': 'plain',
+  },
+  vlt: {
+    'vlt-lock.json': 'json',
+  },
 };
 
-const LOCKFILES_INFO = Object.freeze(objectEntriesUnsafe(LOCKFILES_INFO_MAP));
+const LOCKFILE_LANGUAGE_BY_NAME = Object.freeze(
+  Object.values(LOCKFILES_INFO_MAP).flatMap((lockfiles) => objectEntriesUnsafe(lockfiles)),
+);
 
 export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
   enabledBy: {group: 'misc'},
@@ -184,9 +199,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
     ?.addConfig([
       'lockfile',
       {
-        filesDefault: LOCKFILES_INFO.flatMap(([, [, lockfiles]]) =>
-          lockfiles.map((lockfile) => `**/${lockfile}`),
-        ) satisfies readonly string[],
+        filesDefault: LOCKFILE_LANGUAGE_BY_NAME.map(([lockfile]) => `**/${lockfile}`),
         parsingIgnoresInheritedFrom: ['jsonc', 'yaml'],
       },
     ])
@@ -228,16 +241,13 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
     .addOverrides().config;
 
   objectEntriesUnsafe(
-    Object.groupBy(lockfileEslintConfig?.files?.flat() || [], (fileGlob) => {
-      for (const [, [parserConfigName, lockfileNames]] of LOCKFILES_INFO) {
-        if (lockfileNames.some((lockfile) => fileGlob.includes(lockfile))) {
-          return parserConfigName;
-        }
-      }
-      return '';
-    }),
-  ).forEach(([parserConfigName, globs = []]) => {
-    if (!parserConfigName) {
+    Object.groupBy(
+      lockfileEslintConfig?.files?.flat() || [],
+      (fileGlob) =>
+        LOCKFILE_LANGUAGE_BY_NAME.find(([lockfile]) => fileGlob.endsWith(lockfile))?.[1] || '',
+    ),
+  ).forEach(([languageName, globs = []]) => {
+    if (!languageName) {
       context.logger.warn(
         `The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${globs.join(
           ', ',
@@ -246,11 +256,8 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       return;
     }
 
-    // eslint-disable-next-line ts/no-non-null-assertion
-    const [languageName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
-
     configBuilder?.addConfig([
-      `lockfile/parser/${parserConfigName}`,
+      `lockfile/parser/${languageName}`,
       {
         applyUserFilesAndIgnores: false,
         filesDefault: globs,

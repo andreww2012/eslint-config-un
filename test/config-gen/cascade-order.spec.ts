@@ -104,6 +104,7 @@ describe('cascade order', () => {
       eslint-config-un/lockfile/parser/json
       eslint-config-un/lockfile/parser/yaml
       eslint-config-un/lockfile/parser/jsonc
+      eslint-config-un/lockfile/parser/plain
       eslint-config-un/lockfile/package.json
       eslint-config-un/markdown-links
       eslint-config-un/markdown-preferences
@@ -268,6 +269,8 @@ describe('cascade order', () => {
       eslint-config-un/parsing/civet/ts
       eslint-config-un/parsing/angularTemplate
       eslint-config-un/parsing/angularTemplate/html-scripts
+      eslint-config-un/parsing/plain
+      eslint-config-un/parsing/plain/html-scripts
       eslint-config-un/config-files
       eslint-config-un/cli
       eslint-config-un/tests

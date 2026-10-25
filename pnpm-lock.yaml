@@ -289,6 +289,9 @@ importers:
       eslint-no-restricted:
         specifier: 0.1.2
         version: 0.1.2(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
+      eslint-parser-plain:
+        specifier: 0.1.1
+        version: 0.1.1
       eslint-plugin-css:
         specifier: 0.12.0
         version: 0.12.0(eslint@10.13.0)
@@ -626,9 +629,6 @@ importers:
       eslint:
         specifier: 10.13.0
         version: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
-      eslint-parser-plain:
-        specifier: 0.1.1
-        version: 0.1.1
       eslint-plugin-antfu:
         specifier: 3.3.1
         version: 3.3.1(eslint@10.13.0)

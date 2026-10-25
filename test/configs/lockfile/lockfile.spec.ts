@@ -6,11 +6,12 @@ const FIXTURES = {
   yarnLock: 'yarn/yarn.lock',
   pnpmLockYaml: 'pnpm/pnpm-lock.yaml',
   bunLock: 'bun/bun.lock',
+  bunLockb: 'bun-binary/bun.lockb',
   vltLockJson: 'vlt/vlt-lock.json',
 } as const;
 
 // eslint-disable-next-line unicorn/no-array-sort
-const ENABLED_PARSERS: readonly string[] = ['json', 'jsonc', 'yaml'].sort();
+const ENABLED_PARSERS: readonly string[] = ['json', 'jsonc', 'plain', 'yaml'].sort();
 
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
@@ -215,7 +216,7 @@ describe('un options', () => {
       ).toStrictEqual(['json']);
     });
 
-    it('only enables `jsonc` parser config when `files` only match bun.lockb', async () => {
+    it('only enables `plain` parser config when `files` only match bun.lockb', async () => {
       const configResult = await computeEslintConfig({lockfile: {files: ['**/bun.lockb']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
@@ -225,7 +226,7 @@ describe('un options', () => {
       expect(
         // eslint-disable-next-line unicorn/no-array-sort
         allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
-      ).toStrictEqual(['jsonc']);
+      ).toStrictEqual(['plain']);
     });
 
     it('prints a warning if some glob pattern does not match a known lockfile', async () => {
@@ -423,6 +424,13 @@ describe('linting lockfiles', () => {
 
   it('does not crash when linting `bun.lock`', async () => {
     const results = await testEslintConfig('lockfile', FIXTURES.bunLock, import.meta.dirname);
+
+    expect(results).toHaveLength(1);
+    expect(results[0]?.fatalErrorCount).toBe(0);
+  });
+
+  it('does not crash when linting binary `bun.lockb`', async () => {
+    const results = await testEslintConfig('lockfile', FIXTURES.bunLockb, import.meta.dirname);
 
     expect(results).toHaveLength(1);
     expect(results[0]?.fatalErrorCount).toBe(0);
