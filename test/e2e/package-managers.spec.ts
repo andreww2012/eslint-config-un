@@ -14,7 +14,12 @@ const LintResultsZod = z
   .object({
     filePath: z.string(),
     messages: z
-      .object({ruleId: z.string().nullable(), messageId: z.string().optional(), line: z.number()})
+      .object({
+        ruleId: z.string().nullable(),
+        messageId: z.string().optional(),
+        message: z.string(),
+        line: z.number(),
+      })
       .array(),
   })
   .array();
@@ -367,6 +372,10 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
       .filter(({ruleId}) => ruleId === 'arrow-return-style/arrow-return-style')
       .map(({line, messageId}) => ({line, messageId}));
 
+    // `import-x` finds the TS parser to parse the imported TS module with, even in strict layouts
+    expect(exampleMessages.map(({message}) => message)).not.toContainEqual(
+      expect.stringContaining('Parse errors in imported module'),
+    );
     // Type information is available
     expect(exampleMessages.map(({ruleId}) => ruleId)).toContain('ts/no-unnecessary-condition');
     // Only Prettier running in the worker knows these don't fit, otherwise the rule falls back to

@@ -1,3 +1,4 @@
+import {createRequire} from 'node:module';
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
 import type {PluginSettings as ImportPluginSettingsWithPrefixes} from 'eslint-plugin-import-x';
 import {ERROR, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
@@ -20,6 +21,8 @@ import {
   assignDefaults,
   defineUnConfig,
 } from './index';
+
+const TS_FILE_EXTENSIONS = ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'] as const;
 
 interface ExtraneousDependenciesCheckOptions {
   /**
@@ -268,7 +271,10 @@ export default defineUnConfig<ImportEslintConfigOptions>(
             ),
             ...(isTypescriptEnabled && {
               'import-x/parsers': {
-                '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
+                // The plugin resolves a package name from ESLint and the linted file, which can't
+                // see our dependencies in strict layouts like Yarn PnP, so it gets our copy's path
+                [createRequire(import.meta.url).resolve('@typescript-eslint/parser')]:
+                  TS_FILE_EXTENSIONS,
               },
             }),
             ...Object.fromEntries(

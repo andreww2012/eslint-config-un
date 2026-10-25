@@ -1,3 +1,4 @@
+import {createRequire} from 'node:module';
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
 import {TESTS_CONFIG_DEFAULT_FILES} from '../../../src/configs/shared';
 import {
@@ -136,6 +137,16 @@ describe('rules', async () => {
         expect.objectContaining({name: 'eslint-import-resolver-typescript'}),
       ]);
       expect(resolvers).toHaveLength(2); // Should still include node resolver
+    });
+
+    it('makes the plugin parse TS files with `@typescript-eslint/parser` resolved from this package when typescript is enabled', async () => {
+      const configResult = await computeEslintConfig({import: true, ts: true});
+
+      expect(
+        Object.keys(
+          configResult.getConfigByUnPostfix('import')?.settings?.['import-x/parsers'] || {},
+        ),
+      ).toStrictEqual([createRequire(import.meta.url).resolve('@typescript-eslint/parser')]);
     });
 
     it('does not include typescript resolver in `resolver-next` settings when typescript is disabled', async () => {

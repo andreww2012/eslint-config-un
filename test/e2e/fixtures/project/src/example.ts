@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import * as constants from './constants.js';
 
 export const orderBy = <T>(items: T[], getKey: (item: T) => number) =>
   items.toSorted((a, b) => getKey(a) - getKey(b));
@@ -14,3 +15,6 @@ const sum = (first: number, second: number) => {
 };
 
 export const three = sum(1, 2);
+
+// Makes `import/namespace` parse the imported TS module
+export const answer = constants.ANSWER;
