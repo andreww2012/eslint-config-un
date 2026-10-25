@@ -175,7 +175,7 @@ describe('css: sub config `scss`', () => {
 
     it('allows the `@function` at-rule in `css/use-baseline`', () => {
       expect(configResult.getRuleEntry('css/scss', 'css/use-baseline')).toMatchInlineSnapshot(
-        '[1, {"allowAtRules": ["function"]}]',
+        '[1, {"allowAtRules": ["function"], "available": "widely"}]',
       );
     });
 
@@ -185,7 +185,7 @@ describe('css: sub config `scss`', () => {
       });
 
       expect(scssConfigResult.getRuleEntry('css/scss', 'css/use-baseline')).toMatchInlineSnapshot(
-        '[1, {"allowAtRules": ["function", "layer"]}]',
+        '[1, {"allowAtRules": ["function", "layer"], "available": "widely"}]',
       );
     });
   });

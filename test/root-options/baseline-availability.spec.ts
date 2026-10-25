@@ -1,5 +1,6 @@
 const FIXTURES = {
   dialogElement: 'dialog-element.html',
+  popoverAttribute: 'popover-attribute.html',
 } as const;
 
 const USE_BASELINE_RULES = [
@@ -16,10 +17,12 @@ const USE_BASELINE_RULES = [
 
 describe('option: `baselineAvailability`', () => {
   describe.each(USE_BASELINE_RULES)('`$ruleName`', ({configName, eslintConfigName, ruleName}) => {
-    it('does not set `available` rule option by default', async () => {
+    it('sets `available` rule option to `widely` by default', async () => {
       const configResult = await computeEslintConfig(configName);
 
-      expect(configResult.getRuleEntryOptions(eslintConfigName, ruleName)).toStrictEqual([{}]);
+      expect(configResult.getRuleEntryOptions(eslintConfigName, ruleName)).toStrictEqual([
+        {available: 'widely'},
+      ]);
     });
 
     it('sets `available` rule option when option is `newly`', async () => {
@@ -60,6 +63,20 @@ describe('option: `baselineAvailability`', () => {
     expect(
       findLintMessageFromLintResults(result, FIXTURES.dialogElement, 'html/use-baseline'),
     ).toBeUndefined();
+  });
+
+  it('`html/use-baseline` rule fires on an attribute that is only newly available by default', async () => {
+    const result = await testEslintConfig('html', FIXTURES.popoverAttribute, import.meta.dirname);
+
+    const error = findLintMessageFromLintResults(
+      result,
+      FIXTURES.popoverAttribute,
+      'html/use-baseline',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Attribute 'popover' is not a widely available baseline feature."`,
+    );
   });
 
   it('`html/use-baseline` rule fires on an element that became Baseline after the year the option is set to', async () => {

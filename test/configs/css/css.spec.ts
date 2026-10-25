@@ -354,7 +354,9 @@ describe('options', () => {
     it('has no extra allowed features in `css/use-baseline` rule by default', async () => {
       const configResult = await computeEslintConfig('css');
 
-      expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot('[1, {}]');
+      expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot(
+        '[1, {"available": "widely"}]',
+      );
     });
 
     it('sets `allowAtRules` in `css/use-baseline` rule when `atRules` is provided', async () => {
@@ -363,7 +365,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot(
-        '[1, {"allowAtRules": ["layer"]}]',
+        '[1, {"allowAtRules": ["layer"], "available": "widely"}]',
       );
     });
 
@@ -373,7 +375,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot(
-        '[1, {"allowProperties": ["grid-template"]}]',
+        '[1, {"allowProperties": ["grid-template"], "available": "widely"}]',
       );
     });
 
@@ -383,7 +385,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot(
-        '[1, {"allowSelectors": ["has"]}]',
+        '[1, {"allowSelectors": ["has"], "available": "widely"}]',
       );
     });
   });

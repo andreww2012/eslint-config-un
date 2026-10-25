@@ -193,10 +193,9 @@ export const noRestrictedHtmlElementsDefault = Object.fromEntries(
   INVALID_HTML_TAGS.map((tag) => [tag, true]),
 );
 
-export const generateUseBaselineRuleOptions = (context: UnConfigContext) => {
-  const {baselineAvailability} = context.rootOptions;
-  return baselineAvailability == null ? {} : {available: baselineAvailability};
-};
+export const generateUseBaselineRuleOptions = (context: UnConfigContext) => ({
+  available: context.rootOptions.baselineAvailability ?? 'widely',
+});
 
 /**
  * Whether the feature meets the `baselineAvailability` root option, decided the same way the
