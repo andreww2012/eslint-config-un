@@ -88,6 +88,16 @@ describe('basic tests', () => {
       await expectConfigState('graphql', 'graphql', ['graphql', true], 'default');
     });
 
+    describe('`graphql` v15 is installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({graphql: '15.10.1'});
+      });
+
+      it('does not create `graphql` eslint config', async () => {
+        await expectConfigState({}, 'graphql', false, 'default');
+      });
+    });
+
     describe('`graphql` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});

@@ -108,7 +108,8 @@ export interface GraphqlEslintConfigOptions<
 }
 
 export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
-  enabledBy: {package: 'graphql'},
+  // The plugin imports what older versions don't export
+  enabledBy: {package: 'graphql@>=16'},
   phase: 'late',
 })((context, optionsRaw) => {
   const isRelayInstalled = context.packagesInfo['relay-runtime'] != null;

@@ -17,7 +17,8 @@ export interface UnheadEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unhead'> {}
 
 export default defineUnConfig<UnheadEslintConfigOptions>('unhead', {
-  enabledBy: {package: 'unhead'},
+  // The plugin imports from `unhead/validate`, which older versions lack
+  enabledBy: {package: 'unhead@>=3.4.3'},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 

@@ -3,7 +3,7 @@ const FIXTURES = {
 } as const;
 
 beforeEach(() => {
-  addInstalledPackages({unhead: '3.2.3'});
+  addInstalledPackages({unhead: '3.4.3'});
 });
 
 describe('basic tests', () => {
@@ -48,6 +48,16 @@ describe('basic tests', () => {
 
       it('does not create `unhead` eslint config if explicitly disabled', async () => {
         await expectConfigState({unhead: false}, 'unhead', false, 'default');
+      });
+    });
+
+    describe('`unhead` older than v3.4.3 is installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({unhead: '2.0.14'});
+      });
+
+      it('does not create `unhead` eslint config', async () => {
+        await expectConfigState({}, 'unhead', false, 'default');
       });
     });
 
