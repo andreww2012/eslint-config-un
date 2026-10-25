@@ -20,7 +20,7 @@ describe('basic tests', () => {
     const ignores = config?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).toIncludeAllMembers(['**/yarn.lock', '**/pnpm-lock.yaml']);
+    expect(ignores).toIncludeAllMembers(['**/yarn.lock', '**/pnpm-lock.yaml', '**/aube-lock.yaml']);
     expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
 
     expect(configResult.getLoadedPlugin('yaml')).toBeDefined();

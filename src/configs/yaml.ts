@@ -8,7 +8,7 @@ import {
   defineUnConfig,
 } from './index';
 
-const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'] as const;
+const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml', '**/aube-lock.yaml'] as const;
 
 /**
  * [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml) plugin
@@ -30,7 +30,7 @@ export interface YamlPluginSettings {
  *
  * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
  *
- * ❌ Default `ignores`: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
+ * ❌ Default `ignores`: <code>**&#47;{aube-lock.yaml,pnpm-lock.yaml,yarn.lock}</code>
  *
  * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to replace
  * them instead
