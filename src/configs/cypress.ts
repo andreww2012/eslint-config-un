@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {pluginsLoaders} from '../loaders';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTests,
@@ -25,7 +26,9 @@ export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
 
 export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
   enabledBy: {package: 'cypress'},
-})((context, optionsRaw) => {
+})(async (context, optionsRaw) => {
+  const eslintPluginCypress = await pluginsLoaders.cypress(context).then(({module}) => module);
+
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
   });
@@ -42,12 +45,17 @@ export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig([
-      'cypress',
+    ?.addConfig(
+      [
+        'cypress',
+        {
+          filesDefault: configFilesFallback,
+        },
+      ],
       {
-        filesDefault: configFilesFallback,
+        languageOptions: eslintPluginCypress?.configs.globals.languageOptions,
       },
-    ])
+    )
     .addRule('assertion-before-screenshot', WARNING) /** @since 2.2.0 */
     .addRule('no-and', ERROR) /** @since 6.3.0 */
     .addRule('no-assigning-return-values', ERROR) /** @since 2.1.0 */ // 🟢

@@ -139,7 +139,7 @@ export const pluginsLoaders = {
   cssicorn: genModuleLoader('cssicorn', 'eslint-cssicorn', () =>
     interopDefault(import('eslint-cssicorn')),
   ),
-  cypress: genModuleLoader('cypress', 'eslint-plugin-cypress', () =>
+  cypress: genInferredModuleLoader('cypress', 'eslint-plugin-cypress', () =>
     interopDefault(import('eslint-plugin-cypress')),
   ),
   'de-morgan': genModuleLoader('de-morgan', 'eslint-plugin-de-morgan', () =>

@@ -96,6 +96,18 @@ describe('rules', async () => {
     });
   });
 
+  it('defines the globals of Cypress tests', async () => {
+    const results = await testEslintConfig(
+      {cypress: true, js: true},
+      FIXTURES.cyWaitWithNumber,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.cyWaitWithNumber, 'no-undef'),
+    ).toBeUndefined();
+  });
+
   it('`cypress/no-unnecessary-waiting` rule fires on a test with `cy.wait(number)`', async () => {
     const results = await testEslintConfig(
       'cypress',
