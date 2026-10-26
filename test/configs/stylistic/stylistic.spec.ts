@@ -4,6 +4,8 @@ const FIXTURES = {
   normalImportBlankLineNormalImport: 'normal-import-blank-line-normal-import.js',
   sideEffectImportBlankLineNormalImport: 'side-effect-import-blank-line-normal-import.js',
   normalImportBlankLineSideEffectImport: 'normal-import-blank-line-side-effect-import.js',
+  licenseAndBundlerAnnotationComments: 'license-and-bundler-annotation-comments.js',
+  commentWithoutSpace: 'comment-without-space.js',
 } as const;
 
 describe('basic tests', () => {
@@ -116,6 +118,42 @@ describe('rules', async () => {
     expect(
       configResult.getRuleEntrySeverity('stylistic/spaced-comment', 'stylistic/spaced-comment'),
     ).toBe(2);
+  });
+
+  describe('`stylistic/spaced-comment` rule behavior', () => {
+    it('reports a comment without a space after its start', async () => {
+      const results = await testEslintConfig(
+        'stylistic',
+        FIXTURES.commentWithoutSpace,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.commentWithoutSpace,
+        'stylistic/spaced-comment',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Expected space or tab after '/*' in comment."`,
+      );
+    });
+
+    it('does not report license comments and bundler annotations', async () => {
+      const results = await testEslintConfig(
+        'stylistic',
+        FIXTURES.licenseAndBundlerAnnotationComments,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.licenseAndBundlerAnnotationComments,
+          'stylistic/spaced-comment',
+        ),
+      ).toBeUndefined();
+    });
   });
 
   describe('`stylistic/padding-line-between-statements` rule behavior', () => {

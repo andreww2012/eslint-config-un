@@ -217,5 +217,22 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
   // Might crash on HTML files (if receives a comment node with `CommentContent` type)
   configBuilder
     ?.addConfig(['stylistic/spaced-comment', {ignoresInternalAlwaysApplied: true}])
-    .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));
+    .addRule(
+      ...setupRule('spaced-comment', ERROR, [
+        'always',
+        {
+          block: {
+            balanced: true,
+            // License comments, which minification keeps, and bundler annotations
+            markers: [
+              '!',
+              '#__PURE__',
+              '@__PURE__',
+              '#__NO_SIDE_EFFECTS__',
+              '@__NO_SIDE_EFFECTS__',
+            ],
+          },
+        },
+      ]),
+    );
 });
