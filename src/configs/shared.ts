@@ -59,11 +59,14 @@ export const generateDefaultTestFiles = <T extends string>(
     includeCypressTests,
     includeVitestBenchmarkFiles,
     includeStorybookStories,
+    includeTestDirectories,
   }: {
     includeRegularSpecFiles?: boolean;
     includeCypressTests?: boolean;
     includeStorybookStories?: boolean;
     includeVitestBenchmarkFiles?: boolean;
+    // Where Mocha and AVA look for tests by default
+    includeTestDirectories?: boolean;
   } = {},
 ) => [
   ...(includeRegularSpecFiles
@@ -75,6 +78,7 @@ export const generateDefaultTestFiles = <T extends string>(
         `**/__test?(s)__/**/*.${extensions}` as const, // tests: 513k, test: 26.6k
       ]
     : []),
+  ...(includeTestDirectories ? [`**/test?(s)/**/*.${extensions}` as const] : []),
   ...(includeVitestBenchmarkFiles ? [`**/*.{bench,benchmark}.${extensions}` as const] : []), // 10.9k (1k)
   ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []), // 107k
   ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}` as const] : []), // 115k, 2.2k

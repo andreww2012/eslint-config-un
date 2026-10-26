@@ -1,5 +1,6 @@
 const FIXTURES = {
   arrowFunctions: 'arrow-functions/test.spec.js',
+  testInTestDirectory: 'test/app.js',
 } as const;
 
 beforeEach(() => {
@@ -14,7 +15,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(config?.files).toMatchInlineSnapshot(
-      '["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      '["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/test?(s)/**/*.?([cm])[jt]s?(x)"]',
     );
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
@@ -91,6 +92,18 @@ describe('basic tests', () => {
 
 describe('rules', async () => {
   const configResult = await computeEslintConfig('mocha');
+
+  it('applies to the files in `test` directories, where Mocha looks for tests by default', async () => {
+    const results = await testEslintConfig(
+      {mocha: true, js: true},
+      FIXTURES.testInTestDirectory,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.testInTestDirectory, 'no-undef'),
+    ).toBeUndefined();
+  });
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('mocha')).toMatchObject({

@@ -18,6 +18,7 @@ import {
  * 📁 Default `files`:
  * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
  * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;test?(s)/*\*&#47;\*.?([cm])[jt]s?(x)</code>
  */
 export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
@@ -73,7 +74,9 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ava');
 
-  const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
+  const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+    includeTestDirectories: true,
+  });
 
   // Legend:
   // 🟢 - in recommended
