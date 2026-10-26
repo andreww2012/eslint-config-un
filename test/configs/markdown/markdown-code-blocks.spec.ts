@@ -1,6 +1,7 @@
 const FIXTURES = {
   codeBlockWithConsoleCall: 'code-block-with-console-call.md',
   nestedMarkdownCodeBlock: 'nested-markdown-code-block.md',
+  yamlCodeBlock: 'yaml-code-block.md',
 } as const;
 
 describe('markdown: sub config `codeBlocks`', () => {
@@ -17,9 +18,44 @@ describe('markdown: sub config `codeBlocks`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,soml,htm?(l),css,scss,astro,svelte,graphql,gql,gjs,gts}", "**/*.md/**/*.md?(x)"]',
+        '["**/*.md/**/*.?([cm])[jt]s?(x)", "**/*.md/**/*.md"]',
       );
       expect(config?.ignores).toBeUndefined();
+    });
+
+    it('creates `markdown/code-blocks` eslint config for the code blocks of the languages parsed by enabled Configs or `parsing` root option', async () => {
+      const configResult = await computeEslintConfig(
+        {markdown: true, yaml: true},
+        {un: {parsing: {graphql: true}}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('markdown/code-blocks')?.files,
+      ).toMatchInlineSnapshot(
+        '["**/*.md/**/*.?([cm])[jt]s?(x)", "**/*.md/**/*.{y?(a)ml,md,graphql,gql}"]',
+      );
+    });
+
+    it('creates `markdown/code-blocks` eslint config for JSON code blocks if they are parsed by `jsonc` Config', async () => {
+      const configResult = await computeEslintConfig({markdown: true, jsonc: true});
+
+      expect(
+        configResult.getConfigByUnPostfix('markdown/code-blocks')?.files,
+      ).toMatchInlineSnapshot(
+        '["**/*.md/**/*.?([cm])[jt]s?(x)", "**/*.md/**/*.{json,jsonc,json5,md}"]',
+      );
+    });
+
+    it('does not parse code blocks of the languages without a parser set up', async () => {
+      const results = await testEslintConfig(
+        {markdown: true, js: true},
+        FIXTURES.yamlCodeBlock,
+        import.meta.dirname,
+      );
+
+      expect(results.flatMap(({messages}) => messages.filter(({fatal}) => fatal))).toStrictEqual(
+        [],
+      );
     });
 
     it('does not create `markdown/{setup/code-blocks-processor,code-blocks}` eslint configs when set to `false`', async () => {

@@ -1,9 +1,4 @@
-import {
-  GLOB_MDX,
-  GLOB_MDX_MD_X_CODE_BLOCKS,
-  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
-  WARNING,
-} from '../constants';
+import {GLOB_JS_TS_X_EXTENSION, GLOB_MDX, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
@@ -60,10 +55,8 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
     Pick<MarkdownEslintConfigOptions, 'configCodeBlocks'> {}
 
 const DEFAULT_FILES = [GLOB_MDX] as const;
-const DEFAULT_FILES_FOR_CODE_BLOCKS = [
-  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
-  GLOB_MDX_MD_X_CODE_BLOCKS,
-] as const;
+// The blocks of the other languages are added once it's known which ones are parsed
+const DEFAULT_FILES_FOR_CODE_BLOCKS = [`${GLOB_MDX}/**/*.${GLOB_JS_TS_X_EXTENSION}`] as const;
 
 export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
   context,
@@ -144,7 +137,7 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     },
   );
 
-  configBuilderCodeBlocks
+  const configCodeBlocksEntry = configBuilderCodeBlocks
     ?.addConfig(
       [
         'mdx/code-blocks',
@@ -165,7 +158,10 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
       },
     )
     .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
-    .addOverrides();
+    .addOverrides().config;
+  if (configCodeBlocksEntry) {
+    context.codeBlocksConfigs.push({config: configCodeBlocksEntry, documentsGlob: GLOB_MDX});
+  }
 
   if (codeBlocksIgnoredLanguages?.length) {
     configBuilderCodeBlocks?.addGlobalIgnores(

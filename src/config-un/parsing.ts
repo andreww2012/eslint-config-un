@@ -684,6 +684,8 @@ const resolveEntriesForLanguage = (
 
 const configNameCollator = new Intl.Collator('en');
 
+const EXTENSION_GLOB_REGEX = /^\*\*\/\*\.([^./{}]+|\{[^./{}]+\})$/u;
+
 /** This must be the only place a language, a parser or a processor is ever assigned */
 export const resolveParsingConfigs = (context: UnConfigContext) => {
   const parsingOptions = context.rootOptions.parsing || {};
@@ -809,6 +811,21 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
   });
 
   const filesParsedByAnyLanguage = new Set(resultConfigs.flatMap(({files}) => files || []));
+
+  // A code block is a virtual file named after its language, so only an extension glob matches it
+  const extensionsParsed = arrayUnique(
+    [...filesParsedByAnyLanguage].flatMap((glob) => {
+      const extension = typeof glob === 'string' ? EXTENSION_GLOB_REGEX.exec(glob)?.[1] : undefined;
+      return extension?.startsWith('{') ? extension.slice(1, -1).split(',') : extension || [];
+    }),
+  );
+  if (extensionsParsed.length > 0) {
+    const extensionsGlob =
+      extensionsParsed.length > 1 ? `{${extensionsParsed.join(',')}}` : extensionsParsed[0];
+    context.codeBlocksConfigs.forEach(({config, documentsGlob}) => {
+      config.files = [...(config.files || []), `${documentsGlob}/**/*.${extensionsGlob}`];
+    });
+  }
 
   resolved.forEach(({language, requests, entries}) => {
     const ignoresToPropagate = arrayUnique(entries.flatMap((entry) => entry.ignores || []));

@@ -257,6 +257,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     missingPackages: new Map(),
     parsingRequests,
     requestParsing: createRequestParsing(parsingRequests),
+    codeBlocksConfigs: [],
     meta: {usedPackageManager, environment},
     nuxtAutoImports,
     gitignore,

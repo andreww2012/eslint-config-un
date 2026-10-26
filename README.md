@@ -835,7 +835,7 @@ Reports you may see:
 
 - *Parsing error* in a block whose language needs its own parser, like Vue, Svelte or GraphQL.
   Blocks are ordinary files for ESLint, so such a language needs a parser set up for its extension, and the `files` patterns do not have to mention Markdown: `**/*.vue` covers `README.md/0_0.vue` as well.
-  If the Config of that language is enabled, it is already done; if not, set the parser up with the [`parsing`](#parsing) root option (`parsing: {graphql: true}`), or leave such blocks out of linting with the [`ignores`][ignores option] root option (`ignores: ['**/*.md/**/*.graphql']`).
+  Such blocks are only linted if a parser is set up for their extension, by an enabled Config or the [`parsing`](#parsing) root option (`parsing: {graphql: true}`), so this error means that the parser fails on the block itself; leave it out of linting with the [`ignores`][ignores option] root option (`ignores: ['**/*.md/**/*.graphql']`).
 - *Unused eslint-disable directive*: the comment before a block also counts as a directive for the Markdown file itself, where it is almost always unused.
   You also see this report when the rule is already disabled in code blocks by default.
   Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.

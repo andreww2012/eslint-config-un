@@ -921,6 +921,14 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   requestParsing: (language: ParsingLanguages, request: ParsingRequest) => void;
 
   /**
+   * The configs linting the code blocks of the documents matched by `documentsGlob`.
+   * Once every language has said which files it parses, their `files` get the blocks it parses too
+   *
+   * NOTE: mutable
+   */
+  codeBlocksConfigs: {config: EslintFlatConfigEntry; documentsGlob: string}[];
+
+  /**
    * NOTE: mutable
    */
   usedPackages: Map<
