@@ -7,7 +7,7 @@ import {
 } from '../config-un/css-syntax';
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
-import {type MaybeFn, getKeysOfTruthyValues, isNonEmptyArray} from '../utils';
+import {type MaybeFn, arrayUnique, getKeysOfTruthyValues, isNonEmptyArray} from '../utils';
 import {
   generateUseBaselineRuleOptions,
   isBaselineFeatureAvailable,
@@ -247,7 +247,7 @@ const loadStylelintPropertyOrder = async (name: 'recess' | 'clean') => {
         )
       : (await import('stylelint-config-clean-order/property-groups')).propertyGroups;
   // The rule rejects duplicates
-  const propertyNames = [...new Set(groups.flat())].filter((propertyName) =>
+  const propertyNames = arrayUnique(groups.flat()).filter((propertyName) =>
     PROPERTY_NAME_REGEXP.test(propertyName),
   );
   return isNonEmptyArray(propertyNames) && propertyNames;

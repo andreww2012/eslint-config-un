@@ -2,7 +2,15 @@ import type * as Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
-import {Mutex, arrayify, interopDefault, isKeyIn, mapGetOrInsert, maybeCall} from '../utils';
+import {
+  Mutex,
+  arrayify,
+  interopDefault,
+  isKeyIn,
+  isNodeError,
+  mapGetOrInsert,
+  maybeCall,
+} from '../utils';
 import {isOwnCopyImportable} from '../utils/package-detection';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
@@ -50,7 +58,7 @@ function createModuleLoader<T, N extends string>(
       const providedPlugin = plugins && isKeyIn(property, plugins) && plugins[property]?.plugin;
       const overriddenPluginModule = providedPlugin
         ? // eslint-disable-next-line un/no-type-assertion -- the user is trusted to provide the right module
-          await interopDefault(maybeCall(providedPlugin) as T)
+          ((await interopDefault(maybeCall(providedPlugin))) as T)
         : null;
 
       // Otherwise the import could load another project's copy, which is not installed for us
@@ -65,7 +73,8 @@ function createModuleLoader<T, N extends string>(
       }
 
       return {
-        module: overriddenPluginModule || (await interopDefault(module())),
+        // eslint-disable-next-line un/no-type-assertion -- `T` is the module or its default export
+        module: overriddenPluginModule || ((await interopDefault(module())) as T),
         packageName,
       };
     } catch (error) {
@@ -75,13 +84,7 @@ function createModuleLoader<T, N extends string>(
       ];
       if (
         options?.throwIfNotFound ||
-        !(
-          error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          typeof error.code === 'string' &&
-          ignoredErrorsFinal.includes(error.code)
-        )
+        !(isNodeError(error) && ignoredErrorsFinal.includes(error.code))
       ) {
         throw error;
       }
@@ -89,11 +92,7 @@ function createModuleLoader<T, N extends string>(
       // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load,
       // might not be
       /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
-      if (
-        MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
-        'message' in error &&
-        typeof error.message === 'string'
-      ) {
+      if (MODULE_NOT_FOUND_ERROR_CODES.includes(error.code)) {
         const missingPackageNameMatch = error.message.match(MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP);
         const missingPackageName = missingPackageNameMatch?.[1];
         if (

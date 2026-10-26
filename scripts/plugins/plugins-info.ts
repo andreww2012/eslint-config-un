@@ -3,8 +3,8 @@ import {styleText} from 'node:util';
 import {Worker} from 'node:worker_threads';
 import {Data, DateTime, Duration, Effect, Semaphore} from 'effect';
 import {HttpClient, HttpClientError, HttpClientRequest} from 'effect/http';
-import type {Ms} from 'ms-ts';
 import * as packageFetcher from 'package-json';
+import type {Ms} from 'utilery';
 import * as z from 'zod';
 import {
   type ExecuteAnyEslintPluginWorkerInitialData,

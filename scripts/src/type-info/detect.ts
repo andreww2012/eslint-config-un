@@ -4,6 +4,7 @@ import {inspect} from 'node:util';
 import * as tsParser from '@typescript-eslint/parser';
 import {Linter} from 'eslint';
 import pathe from 'pathe';
+import {getErrorMessage, mapValues} from 'utilery';
 import type {EslintPlugin} from '../../../src/eslint/eslint-types';
 import {FIXTURE_FILES} from './fixture';
 
@@ -71,7 +72,7 @@ const isVisitorListener = (
   value: unknown,
 ): value is (...listenerArguments: readonly unknown[]) => unknown => typeof value === 'function';
 
-const describeError = (error: unknown) => (error instanceof Error ? error.message : inspect(error));
+const describeError = (error: unknown) => getErrorMessage(error, '') || inspect(error);
 
 /**
  * Enabling every rule of every plugin at once makes a good number of them announce a missing
@@ -201,45 +202,40 @@ export const probeRules = async (
       ),
     );
 
-  const wrappedPlugins = Object.fromEntries(
-    Object.entries(plugins).map(([prefix, plugin]) => [
-      prefix,
-      {
-        rules: Object.fromEntries(
-          Object.entries(plugin.rules || {})
-            .filter(([, rule]) => doesRunOnJavascript(rule))
-            .map(([ruleName, rule]) => {
-              const fullRuleName = `${prefix}/${ruleName}`;
-              // eslint-disable-next-line un/no-type-assertion -- the probe only calls `create` and reads what it returns
-              const {create} = rule as unknown as {
-                create: (context: unknown) => Record<string, unknown> | null | undefined;
-              };
-              return [
-                ruleName,
-                {
-                  ...rule,
-                  // Options are never passed, so a schema requiring them would fail config
-                  // validation before the rule ever runs
-                  meta: {...rule.meta, languages: undefined, schema: false as const},
-                  create: (context: unknown) =>
-                    withCurrentRule(
-                      fullRuleName,
-                      () => {
-                        const visitor = wrapVisitor(fullRuleName, create(context));
-                        if (Object.keys(visitor).length > 0) {
-                          registeredListeners.add(fullRuleName);
-                        }
-                        return visitor;
-                      },
-                      {},
-                    ),
-                },
-              ];
-            }),
-        ),
-      },
-    ]),
-  );
+  const wrappedPlugins = mapValues(plugins, (plugin, prefix) => ({
+    rules: Object.fromEntries(
+      Object.entries(plugin.rules || {})
+        .filter(([, rule]) => doesRunOnJavascript(rule))
+        .map(([ruleName, rule]) => {
+          const fullRuleName = `${prefix}/${ruleName}`;
+          // eslint-disable-next-line un/no-type-assertion -- the probe only calls `create` and reads what it returns
+          const {create} = rule as unknown as {
+            create: (context: unknown) => Record<string, unknown> | null | undefined;
+          };
+          return [
+            ruleName,
+            {
+              ...rule,
+              // Options are never passed, so a schema requiring them would fail config
+              // validation before the rule ever runs
+              meta: {...rule.meta, languages: undefined, schema: false as const},
+              create: (context: unknown) =>
+                withCurrentRule(
+                  fullRuleName,
+                  () => {
+                    const visitor = wrapVisitor(fullRuleName, create(context));
+                    if (Object.keys(visitor).length > 0) {
+                      registeredListeners.add(fullRuleName);
+                    }
+                    return visitor;
+                  },
+                  {},
+                ),
+            },
+          ];
+        }),
+    ),
+  }));
 
   const rulesToEnable: Linter.RulesRecord = Object.fromEntries(
     Object.entries(wrappedPlugins).flatMap(([prefix, {rules}]) =>

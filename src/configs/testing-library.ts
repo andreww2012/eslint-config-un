@@ -6,7 +6,7 @@ import type {
   Prettify,
   PrettifyDeep,
 } from '../types';
-import {objectEntriesUnsafe, toKebabCase} from '../utils';
+import {mapKeys, objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTests,
@@ -293,11 +293,9 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
         {
           filesDefault: configFilesFallback,
           settings: {
-            '': Object.fromEntries(
-              objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-                `testing-library/${toKebabCase(settingName)}`,
-                settingValue,
-              ]),
+            '': mapKeys(
+              pluginSettings || {},
+              (_, settingName) => `testing-library/${toKebabCase(settingName)}`,
             ),
           },
         },

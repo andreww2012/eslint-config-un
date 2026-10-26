@@ -11,6 +11,7 @@ import eslintPluginHtmlScripts, {
   parser as eslintPluginHtmlScriptsParser,
 } from '../../src/plugin-html-scripts';
 import {deleteFileScripts, setFileScripts} from '../../src/plugin-html-scripts/scope-sharing';
+import {pick} from '../../src/utils';
 
 const FIXTURES = {
   crlfNewlines: 'crlf-newlines.html',
@@ -137,7 +138,7 @@ const getScopeSharingConfig = (rules: Linter.RulesRecord) => [
 const isHtmlEslintRule = (name: string) => name.startsWith('@html-eslint/');
 
 const pickRules = (rules: Linter.RulesRecord, isPicked: (name: string) => boolean) =>
-  Object.fromEntries(Object.entries(rules).filter(([name]) => isPicked(name)));
+  pick(rules, (_, name) => isPicked(name));
 
 const toLocatedMessages = (messages: readonly Linter.LintMessage[]) =>
   messages.map(({ruleId, line, column, message}) => `${line}:${column} ${ruleId} ${message}`);

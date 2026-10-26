@@ -2,6 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {styleText} from 'node:util';
 import ts from 'typescript';
+import {parseNpmPackageSpecifier} from 'utilery';
+import {pathExistsSync, readFilesInDirectorySafe} from 'utilery/server';
+import ourPackageJson from '../package.json' with {type: 'json'};
 
 const ROOT = process.cwd();
 const DIST_DIR = path.join(ROOT, 'temp', 'dist');
@@ -9,22 +12,6 @@ const DIST_DIR = path.join(ROOT, 'temp', 'dist');
 interface PackageJson {
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
-}
-
-// eslint-disable-next-line jsdoc/require-yields
-/** Walk all `.d.mts` files under `dir`, skipping `skipDir`. */
-function* walkDeclarations(dir: string, skipDir: string): Generator<string> {
-  for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (full === skipDir) {
-        continue;
-      }
-      yield* walkDeclarations(full, skipDir);
-    } else if (entry.isFile() && entry.name.endsWith('.d.mts')) {
-      yield full;
-    }
-  }
 }
 
 /**
@@ -59,13 +46,6 @@ function extractBareImports(filePath: string, content: string): readonly string[
   return [...specs];
 }
 
-/** Normalize a module specifier to its npm package name. */
-function toPkgName(specifier: string): string {
-  return specifier.startsWith('@')
-    ? specifier.split('/').slice(0, 2).join('/')
-    : (specifier.split('/', 1)[0] ?? specifier);
-}
-
 const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
 
 /**
@@ -91,7 +71,7 @@ function resolveAllowedPackages(pkg: PackageJson): ReadonlySet<string> {
 function collectInlinedPackages(distDir: string): ReadonlySet<string> {
   const nmDir = path.join(distDir, 'node_modules');
   const inlined = new Set<string>();
-  if (!fs.existsSync(nmDir)) {
+  if (!pathExistsSync(nmDir)) {
     return inlined;
   }
   fs.readdirSync(nmDir, {withFileTypes: true})
@@ -110,23 +90,24 @@ function collectInlinedPackages(distDir: string): ReadonlySet<string> {
   return inlined;
 }
 
-if (!fs.existsSync(DIST_DIR)) {
+const declarationFiles = await readFilesInDirectorySafe(DIST_DIR, {
+  recursive: true,
+  extensions: '.d.mts',
+  filter: (relativePath) => !relativePath.startsWith('node_modules/'),
+});
+if (!declarationFiles) {
   console.error(styleText('red', `✗ ${DIST_DIR} not found — run 'build:code:test' first`));
   process.exit(1);
 }
 
-// eslint-disable-next-line ts/no-unsafe-assignment
-const pkg: PackageJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-const allowed = resolveAllowedPackages(pkg);
+const allowed = resolveAllowedPackages(ourPackageJson);
 const inlined = collectInlinedPackages(DIST_DIR);
-const inlinedDir = path.join(DIST_DIR, 'node_modules');
 
 const leaks = new Map<string, ReadonlySet<string>>(); // file → leaked specifiers
 
-walkDeclarations(DIST_DIR, inlinedDir).forEach((file) => {
-  const content = fs.readFileSync(file, 'utf8');
-  const leakedSpecifiers = extractBareImports(file, content).filter((specifier) => {
-    const packageName = toPkgName(specifier);
+declarationFiles.forEach(({path: file, contents}) => {
+  const leakedSpecifiers = extractBareImports(file, contents).filter((specifier) => {
+    const packageName = parseNpmPackageSpecifier(specifier)?.name || specifier;
     return !allowed.has(packageName) && !inlined.has(packageName);
   });
   if (leakedSpecifiers.length > 0) {

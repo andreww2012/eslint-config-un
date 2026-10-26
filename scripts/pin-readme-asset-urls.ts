@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
 import {cli} from 'cleye';
+import {arrayUnique} from 'utilery';
 import packageJson from '../package.json' with {type: 'json'};
 
 const REPOSITORY_SLUG_REGEXP = /github\.com\/([^/]+\/[^./]+)/;
@@ -40,7 +41,7 @@ const [searchValue, replaceValue] = isUnpinning
 const readme = await fs.readFile(README_PATH, 'utf8');
 
 if (!isUnpinning) {
-  const referencedAssets = [...new Set(readme.match(REFERENCED_ASSET_REGEXP))];
+  const referencedAssets = arrayUnique(readme.match(REFERENCED_ASSET_REGEXP) || []);
   const trackedAssets = new Set(
     // eslint-disable-next-line sonar/no-os-command-from-path
     execFileSync('git', ['ls-files', '--', ...referencedAssets], {encoding: 'utf8'}).split('\n'),

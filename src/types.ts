@@ -26,6 +26,7 @@ export type {
   Falsy,
   MaybePromise,
   MergeObjects,
+  Ms,
   NonEmptyString,
   NonEmptyTuple,
   Nullable,
@@ -41,4 +42,4 @@ export type {
   SetRequired,
   ToCamelCase,
   UnionToIntersection,
-} from '@andreww2012/unutils';
+} from 'utilery';

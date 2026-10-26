@@ -1,4 +1,4 @@
-import type {MaybeArray, MaybePromise} from '@andreww2012/unutils';
+import type {MaybeArray, MaybePromise} from 'utilery';
 import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../../../src/eslint/eslint-types';
 
 /**

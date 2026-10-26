@@ -3,6 +3,7 @@ import type {IGraphQLConfig} from '@graphql-eslint/eslint-plugin';
 import {any as findUpAny} from 'empathic/find';
 import {up as findUpPackageJson} from 'empathic/package';
 import {GLOB_GRAPHQL} from '../../../src/constants';
+import {objectFromKeys} from '../../../src/utils';
 
 const FIXTURES = {
   graphqlCodeBlockWithHashtagDescriptionMd: 'graphql-code-block-with-hashtag-description.md',
@@ -383,7 +384,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         graphql: {
           requireSeparateFilesFor: {
-            ...Object.fromEntries(IGNORED_DEFINITION_KINDS.map((kind) => [kind, false] as const)),
+            ...objectFromKeys(IGNORED_DEFINITION_KINDS, () => false),
             query: true,
           },
         },

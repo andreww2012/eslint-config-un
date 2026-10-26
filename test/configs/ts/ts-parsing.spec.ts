@@ -1,4 +1,5 @@
 import {GLOB_CIVET_COMPILED, GLOB_MD_X_CODE_BLOCKS} from '../../../src/constants';
+import {arrayUnique} from '../../../src/utils';
 
 describe('ts: how the files it lints are parsed', () => {
   describe('`parsing/ts`', () => {
@@ -90,7 +91,7 @@ describe('ts: how the files it lints are parsed', () => {
         .map(({name}) => name)
         .filter((name) => name?.includes('parsing/ts'));
 
-      expect(names).toStrictEqual([...new Set(names)]);
+      expect(names).toStrictEqual(arrayUnique(names));
     });
 
     it('follows the `ignores` of the framework files it took on, which no program covers either', async () => {

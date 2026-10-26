@@ -1,7 +1,7 @@
 import {satisfies} from 'verkit';
 import {ERROR, OFF, WARNING} from '../constants';
 import type {SetRequired} from '../types';
-import {allUnionMembers, getKeysOfTruthyValues} from '../utils';
+import {allUnionMembers, getKeysOfTruthyValues, objectFromKeys} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -224,11 +224,9 @@ const resolveConsistentObjectSchemaTypeOptions = (
 
   const allowedObjectSchemaTypes = getKeysOfTruthyValues(
     Array.isArray(allowedObjectSchemaTypesRaw)
-      ? Object.fromEntries(
-          Array.from(new Set(allowedObjectSchemaTypesRaw), (method) => [method, true]),
-        )
+      ? objectFromKeys(allowedObjectSchemaTypesRaw, () => true)
       : {
-          ...Object.fromEntries(ALL_ZOD_OBJECT_SCHEMA_TYPES.map((method) => [method, true])),
+          ...objectFromKeys(ALL_ZOD_OBJECT_SCHEMA_TYPES, () => true),
           ...(!Array.isArray(allowedObjectSchemaTypesRaw) && allowedObjectSchemaTypesRaw),
         },
     'nonEmptyArray',

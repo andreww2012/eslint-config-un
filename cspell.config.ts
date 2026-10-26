@@ -76,7 +76,7 @@ export default {
     'tsgo',
     'tinyexec',
     'cleye',
-    'unutils',
+    'utilery',
     'verkit',
     'knip',
     'tsdown',

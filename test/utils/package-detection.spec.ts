@@ -122,7 +122,7 @@ describe('fetchPackageInfo', () => {
   });
 
   it('resolves a scoped package', async () => {
-    expect((await fetchPackageInfo('@antfu/utils'))?.info.name).toBe('@antfu/utils');
+    expect((await fetchPackageInfo('@eslint/plugin-kit'))?.info.name).toBe('@eslint/plugin-kit');
   });
 
   it('falls back to resolving from the current working directory', async () => {

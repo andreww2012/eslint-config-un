@@ -2,16 +2,17 @@ import crypto from 'node:crypto';
 import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
+import {isInEditor as isInEditorOriginal} from 'is-in-editor';
 import {
   arrayHasMinElements,
   arrayWithoutFalsy,
   jsonParseSafe,
   mapGetOrInsert,
-} from '@andreww2012/unutils';
-import {readFileSafe} from '@andreww2012/unutils/server';
-import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
-import {isInEditor as isInEditorOriginal} from 'is-in-editor';
-import type {Falsy, MaybePromise, Nullable} from './types';
+  objectEntriesUnsafe,
+  objectFromKeys,
+} from 'utilery';
+import {readFileSafe} from 'utilery/server';
+import type {Falsy, Nullable} from './types';
 
 export {
   allUnionMembers,
@@ -22,6 +23,7 @@ export {
   arrayLast,
   arrayMap,
   arrayPartition,
+  arrayUnion,
   arrayUnique,
   arrayWithoutFalsy,
   capitalize,
@@ -29,31 +31,38 @@ export {
   castToWritableUnsafe,
   cloneDeep,
   getByPath,
+  getErrorMessage,
   identity,
+  interopDefault,
   isKeyIn,
   isPlainObject,
   jsonParseSafe,
   mapGetOrInsert,
   mapGetOrInsertComputed,
   mapKeys,
+  mapValues,
   type MaybeArray,
   type MaybeFn,
   maybeCall,
   memoize,
   Mutex,
+  objectEntriesUnsafe,
+  objectFromKeys,
   objectKeysUnsafe,
   omit,
   once,
+  parseNpmPackageSpecifier,
   pick,
-  regexEscape,
   setByPath,
+  substringAfter,
+  substringAfterLast,
+  substringBefore,
+  toForwardSlashes,
   toKebabCase,
   traverseForEach,
-} from '@andreww2012/unutils';
+} from 'utilery';
 
-export {readFileSafe} from '@andreww2012/unutils/server';
-
-export {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
+export {exec, isNodeError, pathExists, readFileSafe, writeJsonFile} from 'utilery/server';
 
 export const isInEditor = () => isInEditorOriginal({mode: 'strict'});
 
@@ -138,9 +147,6 @@ export function findArrayInversions<T>(
   return result;
 }
 
-export const describeError = (error: unknown) =>
-  error instanceof Error ? error.message : typeof error === 'string' ? error : 'unknown error';
-
 export const sha256 = (input: string | Buffer) => {
   const hashInstance = crypto.createHash('sha256');
   if (typeof input === 'string') {
@@ -162,15 +168,6 @@ export const readAndParseJson = async <T>(filePath: string | URL | undefined): P
       )
     : null;
 
-export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>): Promise<T> => {
-  const resolvedModule = await module;
-  // TODO report?
-  // eslint-disable-next-line ts/no-unnecessary-condition
-  return resolvedModule && typeof resolvedModule === 'object' && 'default' in resolvedModule
-    ? resolvedModule.default
-    : resolvedModule;
-};
-
 export function getKeysOfTruthyValues<
   T extends string[] | Partial<Record<string, boolean | string>>,
 >(objectOrArray: Nullable<T>): (keyof T & string)[];
@@ -191,7 +188,7 @@ export function getKeysOfTruthyValues<
       ? undefined
       : // eslint-disable-next-line un/no-typeof-like-comparisons
         mode === 'object'
-        ? Object.fromEntries(objectOrArray.map((key) => [key, true]))
+        ? objectFromKeys(objectOrArray, () => true)
         : objectOrArray;
   }
 

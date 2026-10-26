@@ -2,10 +2,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {jsonParseSafe as jsonParse, mapGetOrInsert} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
 import {exec} from 'tinyexec';
+import {jsonParseSafe as jsonParse, mapGetOrInsert} from 'utilery';
+import {pathExists, writeJsonFile} from 'utilery/server';
 import {
   compare as compareVersions,
   isValidRange,
@@ -199,12 +200,6 @@ const getNpmPackageInfo = async (packageName: string) => {
     : {error: `${response.status} ${response.statusText}`};
 };
 
-const doesFileExist = async (fullPath: string) =>
-  await fs
-    .access(fullPath, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
-
 const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
   | string
   | [override: string, version: string]
@@ -268,7 +263,7 @@ const run = async ({
 
   const packageJsonPath = generatePathInProject('package.json');
 
-  if (!overwriteIfExists && (await doesFileExist(packageJsonPath))) {
+  if (!overwriteIfExists && (await pathExists(packageJsonPath))) {
     logger.error(
       `Project's package.json already exists at ${packageJsonPath}. Use --no-overwrite to skip overwriting it.`,
     );
@@ -355,17 +350,14 @@ const run = async ({
   const pnpmWorkspaceYamlPath = generatePathInProject('pnpm-workspace.yaml');
 
   await Promise.all([
-    fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8'),
+    writeJsonFile(packageJsonPath, generatedPackageJson),
     fs.writeFile(pnpmWorkspaceYamlPath, pnpmWorkspaceYamlContent, 'utf8'),
   ]);
 
   const nodeModulesPath = generatePathInProject('node_modules');
   const areDepsInstalled = await Promise.all(
-    Object.keys(generatedPackageJson.dependencies || {}).map((name) =>
-      fs
-        .access(path.join(nodeModulesPath, name))
-        .then(() => true)
-        .catch(() => false),
+    Object.keys(generatedPackageJson.dependencies || {}).map(
+      async (name) => await pathExists(path.join(nodeModulesPath, name)),
     ),
   ).then((results) => results.every(Boolean));
 
@@ -442,7 +434,7 @@ const queue = new PQueue({concurrency: ${concurrency}});
 const modules = await Promise.all(
   batchVersions.map(([name, version]) =>
     queue.add(() =>
-      interopDefault<EslintPlugin>(import(name))
+      interopDefault<Promise<EslintPlugin>>(import(name))
         .then((plugin) => ({plugin, version}))
         .catch((error: unknown) => ({error: JSON.stringify(error, Object.getOwnPropertyNames(error)), version})),
     ),
@@ -600,11 +592,11 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
   const issuesPath = generatePathInProject('issues.md');
 
   await Promise.all([
-    fs.writeFile(
-      rulesInfoPath,
-      JSON.stringify({plugin: packageName, rules: rulesInfo, errors: pluginLoadingErrors}, null, 2),
-      'utf8',
-    ),
+    writeJsonFile(rulesInfoPath, {
+      plugin: packageName,
+      rules: rulesInfo,
+      errors: pluginLoadingErrors,
+    }),
     fs.writeFile(rulesOverviewSortingNamePath, mdHeading + generateOverview('ruleName'), 'utf8'),
     fs.writeFile(rulesOverviewSortingVersionPath, mdHeading + generateOverview('version'), 'utf8'),
     fs.writeFile(issuesPath, mdHeading + issuesContents, 'utf8'),

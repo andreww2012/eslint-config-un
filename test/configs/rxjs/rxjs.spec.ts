@@ -1,3 +1,5 @@
+import {objectFromKeys} from '../../../src/utils';
+
 const FIXTURES = {
   importFromInternal: 'import-from-internal.ts',
 } as const;
@@ -166,7 +168,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-observables')).toStrictEqual([
-        Object.fromEntries(BANNED_OBSERVABLES.map((name) => [name, true])),
+        objectFromKeys(BANNED_OBSERVABLES, () => true),
       ]);
     });
 
@@ -222,7 +224,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-operators')).toStrictEqual([
-        Object.fromEntries(BANNED_OPERATORS.map((name) => [name, true])),
+        objectFromKeys(BANNED_OPERATORS, () => true),
       ]);
     });
 

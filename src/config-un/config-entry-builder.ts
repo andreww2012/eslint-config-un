@@ -948,7 +948,7 @@ export class ConfigEntryBuilder<
               ...(shouldConfigureParser && {
                 ...globalParserOptions,
                 ...(splitExtraFileExtensions.length > 0 && {
-                  extraFileExtensions: [...new Set(splitExtraFileExtensions)],
+                  extraFileExtensions: arrayUnique(splitExtraFileExtensions),
                 }),
                 ...(!doesGlobalSetUpProjectService && {projectService: true}),
               }),

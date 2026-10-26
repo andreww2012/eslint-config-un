@@ -1,11 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import matter from '@11ty/gray-matter';
-import {jsonParseSafe, regexTyped} from '@andreww2012/unutils';
-import {styleText} from '@andreww2012/unutils/server';
 import {writeChangeset} from '@changesets/write';
 import {cli} from 'cleye';
 import {exec} from 'tinyexec';
+import {jsonParseSafe, regexTyped} from 'utilery';
+import {isNodeError, styleText} from 'utilery/server';
 import * as z from 'zod';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
@@ -292,9 +292,7 @@ const checkLinksWithLychee = async (changesetPath: string) => {
       console.log(outputLines.map((line) => `  ${line}`).join('\n'));
     }
   } catch (error) {
-    const isLycheeMissing =
-      error != null && typeof error === 'object' && 'code' in error && error.code === 'ENOENT';
-    if (isLycheeMissing) {
+    if (isNodeError(error, 'ENOENT')) {
       console.log(
         `  ${styleText('yellow', 'Link check skipped: lychee (https://lychee.cli.rs) is not installed')}`,
       );

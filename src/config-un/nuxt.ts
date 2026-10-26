@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
 import type {NuxtOptions} from 'nuxt/schema';
-import {describeError, readFileSafe, sha256, toKebabCase} from '../utils';
+import {getErrorMessage, readFileSafe, sha256, toForwardSlashes, toKebabCase} from '../utils';
 import {isOwnCopyImportable, resolveFromProject} from '../utils/package-detection';
 
 const NUXT_CONFIG_FILE_NAMES = Object.freeze(
@@ -32,7 +32,7 @@ const relativeDirectoryWithin = (from: string, to: string) => {
   // No ESLint pattern can reach outside the directory it is resolved against
   return relativePath.startsWith('..') || path.isAbsolute(relativePath)
     ? null
-    : relativePath.replaceAll(path.sep, '/');
+    : toForwardSlashes(relativePath);
 };
 
 type NuxtComponentsOption =
@@ -87,7 +87,7 @@ export const resolveNuxtLayerDirs = (
   resolveIn: (base: string, directory: string) => string,
 ) => {
   const relativeToSrcDir = (directory: string) =>
-    path.relative(srcDir, resolveIn(srcDir, directory)).replaceAll(path.sep, '/');
+    toForwardSlashes(path.relative(srcDir, resolveIn(srcDir, directory)));
 
   return {
     app: srcDir,
@@ -240,7 +240,7 @@ const loadNuxtOptions = async (cwd: string) => {
     const options = await loadNuxtConfig({cwd, dotenv: false, overrides: {dev: true}});
     return {options, layers: resolveNuxtLayers(cwd, options, resolveAlias)};
   } catch (error) {
-    return {error: describeError(error)};
+    return {error: getErrorMessage(error)};
   }
 };
 
@@ -292,7 +292,7 @@ export const resolveNuxtAutoImports = async ({
     readFileSafe(path.join(buildDir, 'components.d.ts')),
     // Anything other than a missing file, such as a directory that cannot be read, would otherwise
     // take the whole ESLint config down with it
-  ]).catch((error: unknown) => describeError(error));
+  ]).catch((error: unknown) => getErrorMessage(error));
 
   if (typeof sources === 'string') {
     return {error: sources, cacheKey: sha256(sources)};

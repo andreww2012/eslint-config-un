@@ -254,7 +254,7 @@ export default eslintConfig({
                   klona: true,
                   defu: true,
                   destr: true,
-                  '@andreww2012/unutils': true,
+                  utilery: true,
                 },
                 message:
                   'Please do not use this package directly, import utilities from `utils.ts` or `types.ts` instead',

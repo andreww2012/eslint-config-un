@@ -1,7 +1,7 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {ConditionalKeys, NonEmptyTuple} from '../types';
-import {allUnionMembers, arrayIncludes, getKeysOfTruthyValues} from '../utils';
+import {allUnionMembers, arrayIncludes, getKeysOfTruthyValues, objectFromKeys} from '../utils';
 import {generateDefaultTestFiles} from './shared';
 import {
   type ArrayOrBooleanRecord,
@@ -209,11 +209,8 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       schemaCompletenessChecksEnabled.size > 0
         ? [
             {
-              checks: Object.fromEntries(
-                SCHEMA_COMPLETENESS_CHECKS.map((check) => [
-                  check,
-                  schemaCompletenessChecksEnabled.has(check),
-                ]),
+              checks: objectFromKeys(SCHEMA_COMPLETENESS_CHECKS, (check) =>
+                schemaCompletenessChecksEnabled.has(check),
               ),
             },
           ]

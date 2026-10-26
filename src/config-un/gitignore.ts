@@ -1,5 +1,5 @@
 import type {ReadGitignoreOptions} from 'gitignore-reader-x';
-import {describeError, sha256} from '../utils';
+import {getErrorMessage, sha256} from '../utils';
 
 export interface ResolvedGitignore {
   /** Absent if the patterns could not be generated at all */
@@ -29,7 +29,7 @@ export const resolveGitignore = async (
     ).toEslintIgnores();
     return ignores.length > 0 ? {ignores, cacheKey: sha256(JSON.stringify(ignores))} : null;
   } catch (error) {
-    const errorMessage = describeError(error);
+    const errorMessage = getErrorMessage(error);
     return {error: errorMessage, cacheKey: sha256(errorMessage)};
   }
 };

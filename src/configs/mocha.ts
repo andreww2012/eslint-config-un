@@ -1,5 +1,6 @@
 import globals from 'globals';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {mapKeys} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTests,
@@ -111,14 +112,7 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
         {
           filesDefault: configFilesFallback,
           settings: {
-            '': {
-              ...Object.fromEntries(
-                Object.entries(pluginSettings || {}).map(([name, value]) => [
-                  `mocha/${name}`,
-                  value,
-                ]),
-              ),
-            },
+            '': mapKeys(pluginSettings || {}, (_, name) => `mocha/${name}`),
           },
         },
       ],

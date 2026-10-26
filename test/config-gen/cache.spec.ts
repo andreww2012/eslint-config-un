@@ -3,11 +3,10 @@ import os from 'node:os';
 import path from 'node:path';
 import * as packageUtils from 'empathic/package';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import {exec} from 'tinyexec';
 import type {CacheDataInFs} from '../../src/config-un/cache';
 import type {Environment} from '../../src/config-un/shared';
 import type {Prettify} from '../../src/types';
-import {jsonParseSafe} from '../../src/utils';
+import {exec, jsonParseSafe, mapValues} from '../../src/utils';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -19,7 +18,7 @@ vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
   return {...mod, detect: vi.fn<typeof mod.detect>(mod.detect)};
 });
 
-vi.mock(import('tinyexec'), async (importOriginal) => {
+vi.mock(import('../../src/utils'), async (importOriginal) => {
   const mod = await importOriginal();
   return {...mod, exec: vi.fn<typeof mod.exec>(mod.exec)};
 });
@@ -342,9 +341,12 @@ describe('option: `cacheConfigs`', () => {
     });
 
     it('is still computed when the git command exits with an error', async () => {
-      const {exec: execActual} = await vi.importActual<typeof import('tinyexec')>('tinyexec');
+      const {exec: execActual} =
+        await vi.importActual<typeof import('../../src/utils')>('../../src/utils');
       vi.mocked(exec).mockReturnValueOnce(
-        execActual('git', ['rev-parse', '--verify', 'not-a-real-revision']),
+        execActual('git', ['rev-parse', '--verify', 'not-a-real-revision'], {
+          throwOnNonZeroExitCode: false,
+        }),
       );
 
       await computeCachedConfig();
@@ -391,14 +393,11 @@ describe('option: `cacheConfigs`', () => {
         CACHE_FILE_PATH,
         JSON.stringify({
           ...cacheFile,
-          usedPackages: Object.fromEntries(
-            Object.entries(cacheFile.usedPackages).map(([packagePrefix, packageUses]) => [
-              packagePrefix,
-              packageUses.map((packageUse) => ({
-                ...packageUse,
-                configName: 'eslint-config-un/no-longer-generated',
-              })),
-            ]),
+          usedPackages: mapValues(cacheFile.usedPackages, (packageUses) =>
+            packageUses?.map((packageUse) => ({
+              ...packageUse,
+              configName: 'eslint-config-un/no-longer-generated',
+            })),
           ),
         }),
         'utf8',

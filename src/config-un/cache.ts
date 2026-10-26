@@ -2,13 +2,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
 import * as packageUtils from 'empathic/package';
-import type {Ms} from 'ms-ts';
 import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector/constants';
-import {exec} from 'tinyexec';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
-import type {Prettify, SetFieldType} from '../types';
+import type {Ms, Prettify, SetFieldType} from '../types';
 import {
+  exec,
   isObject,
   isPlainObject,
   omit,
@@ -67,14 +66,10 @@ const computeCacheKey = async (context: UnConfigContext) => {
   );
 
   const [gitHeadHashResult, ...filesToHash] = await Promise.all([
-    // eslint-disable-next-line promise/prefer-catch -- does not implement `catch`
-    exec('git', ['rev-parse', 'HEAD']).then(
-      (v) => v,
-      (error: unknown) => {
-        context.logger.warn('Error getting git HEAD hash:', error);
-        return null;
-      },
-    ),
+    exec('git', ['rev-parse', 'HEAD'], {throwOnNonZeroExitCode: false}).catch((error: unknown) => {
+      context.logger.warn('Error getting git HEAD hash:', error);
+      return null;
+    }),
     packageJsonPath && readFileSafe(packageJsonPath, true),
     Promise.all(
       // eslint-disable-next-line ts/await-thenable

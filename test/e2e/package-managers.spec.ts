@@ -5,6 +5,7 @@ import {exec} from 'tinyexec';
 import {inject} from 'vitest';
 import * as z from 'zod';
 import packageJson from '../../package.json' with {type: 'json'};
+import {objectFromKeys, pathExists, substringAfterLast} from '../../src/utils';
 
 type CommandLine = readonly [command: string, ...args: string[]];
 
@@ -67,16 +68,15 @@ const FIXTURE_DEPENDENCIES = {
   // Makes the inlined plugins and the `format` config spawn their Prettier workers
   prettier: packageJson.devDependencies.prettier,
   // Our own `typescript` dev dependency is an npm alias, so only its version is reusable
-  typescript: packageJson.devDependencies.typescript.split('@').at(-1),
+  typescript: substringAfterLast(packageJson.devDependencies.typescript, '@'),
 } as const;
 
 // Scripts receive the config of the package manager running them through these variables, which
 // would override the fixture's `.npmrc`
 const CHILD_PROCESS_ENV = {
-  ...Object.fromEntries(
-    Object.keys(process.env)
-      .filter((name) => NPM_ENV_VARIABLE_REGEXP.test(name))
-      .map((name) => [name, undefined]),
+  ...objectFromKeys(
+    Object.keys(process.env).filter((name) => NPM_ENV_VARIABLE_REGEXP.test(name)),
+    () => undefined,
   ),
 } as const;
 
@@ -212,7 +212,7 @@ const SELECTED_PACKAGE_MANAGER_ID = process.env['E2E_PACKAGE_MANAGER'];
 const installPackageManager = async (npmPackage: string) => {
   const installDir = path.join(PACKAGE_MANAGERS_INSTALL_DIR, npmPackage.replaceAll('/', '+'));
   const binDir = path.join(installDir, 'node_modules', '.bin');
-  if (await fs.stat(installDir).catch(() => null)) {
+  if (await pathExists(installDir)) {
     return binDir;
   }
 

@@ -1,12 +1,12 @@
 // cspell:ignore headful millis
 import {styleText} from 'node:util';
 import {Solver as CaptchaSolver} from '@2captcha/captcha-solver';
-import {isJson as isValidJsonInternal} from '@andreww2012/unutils';
 import {NodeFileSystem} from '@effect/platform-node';
 import {cli} from 'cleye';
 import consola from 'consola';
 import {Data, Effect, Ref} from 'effect';
 import puppeteer, {type Browser, type Page} from 'puppeteer';
+import {isJson as isValidJsonInternal} from 'utilery';
 import checkNpmPackageNameValidity from 'validate-npm-package-name';
 import * as z from 'zod';
 import {

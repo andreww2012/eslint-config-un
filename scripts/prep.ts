@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {toSafeString as normalizeIdentifier} from 'json-schema-to-typescript/dist/src/utils.js';
+import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from 'utilery';
+import {readFileSafe} from 'utilery/server';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
@@ -55,8 +56,8 @@ await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
 const derivedAllRuleTypesCode = `// Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
 // of every rule's option type into the TypeScript program
-import type {UnionToIntersection} from '@andreww2012/unutils';
 import type {Linter} from 'eslint';
+import type {UnionToIntersection} from 'utilery';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 
 type _RuleOptionsRaw = UnionToIntersection<
@@ -369,14 +370,7 @@ async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: s
   const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDir())).sort().at(-1);
   let diffString = '';
   if (mostRecentRuleTypesFileName) {
-    const mostRecentRuleTypes = await fs
-      .readFile(resolveInOutDir(mostRecentRuleTypesFileName), 'utf8')
-      .catch((error: unknown) => {
-        if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-          return null;
-        }
-        throw error;
-      });
+    const mostRecentRuleTypes = await readFileSafe(resolveInOutDir(mostRecentRuleTypesFileName));
     if (mostRecentRuleTypes) {
       diffString =
         mostRecentRuleTypes === currentRuleTypes

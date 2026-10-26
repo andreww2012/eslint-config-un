@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import http from 'node:http';
 import https from 'node:https';
 import {pipeline} from 'node:stream/promises';
+import {omit} from '../../src/utils';
 
 const UPSTREAM_REGISTRY_URL = 'https://registry.npmjs.org';
 
@@ -20,7 +21,7 @@ const HOP_BY_HOP_HEADERS: ReadonlySet<string> = new Set([
 ]);
 
 const omitHopByHopHeaders = (headers: http.IncomingHttpHeaders) =>
-  Object.fromEntries(Object.entries(headers).filter(([name]) => !HOP_BY_HOP_HEADERS.has(name)));
+  omit(headers, (_, name) => HOP_BY_HOP_HEADERS.has(name));
 
 /**
  * Serves a single package version from the given tarball and proxies every other request to the

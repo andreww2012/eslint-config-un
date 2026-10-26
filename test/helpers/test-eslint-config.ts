@@ -9,7 +9,7 @@ import type {
 } from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
 import type {NonEmptyTuple, OmitStrict, Prettify} from '../../src/types';
-import {arrayify} from '../../src/utils';
+import {arrayify, mapValues} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
@@ -138,11 +138,8 @@ export const computeEslintConfig = async (
   };
 
   const getRuleSeverities = (configName: string) =>
-    Object.fromEntries(
-      Object.entries(getConfigByUnPostfix(configName)?.rules || {}).map(([ruleName, ruleEntry]) => [
-        ruleName,
-        getRuleSeverityFromEslintRuleEntry(ruleEntry),
-      ]),
+    mapValues(getConfigByUnPostfix(configName)?.rules || {}, (ruleEntry) =>
+      getRuleSeverityFromEslintRuleEntry(ruleEntry),
     );
 
   const getRuleEntryOptions = (configName: string, ruleName: string) => {

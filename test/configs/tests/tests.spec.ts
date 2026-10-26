@@ -1,3 +1,5 @@
+import {objectFromKeys} from '../../../src/utils';
+
 const FIXTURES = {
   emptyFunctionInTestFile: 'empty-function.spec.js',
   emptyFunction: 'empty-function.js',
@@ -89,7 +91,7 @@ describe('rules', async () => {
 
   it('disables every rule that is noisy in test files', () => {
     expect(configResult.getRuleSeverities('tests')).toMatchObject(
-      Object.fromEntries(DISABLED_RULES.map((rule) => [rule, 0])),
+      objectFromKeys(DISABLED_RULES, () => 0),
     );
   });
 

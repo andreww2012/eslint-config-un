@@ -1,4 +1,4 @@
-import {type ObjectValues, isKeyIn, objectValuesUnsafe} from '@andreww2012/unutils';
+import {type ObjectValues, isKeyIn, objectValuesUnsafe} from 'utilery';
 import type {CategorizeRule, RuleCategorization} from './shared';
 
 const UNICORN_LANGUAGES_TO_CATEGORIES = {

@@ -10,6 +10,7 @@ import {
   isNonEmptyArray,
   maybeCall,
   objectEntriesUnsafe,
+  objectFromKeys,
   toKebabCase,
 } from '../utils';
 import {TESTS_CONFIG_DEFAULT_FILES, resolveFilesOption} from './shared';
@@ -299,9 +300,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
       {
         checkTypeImports: true,
         ...(requireModuleExtensions === true &&
-          Object.fromEntries(
-            ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'].map((ext) => [ext, 'always']),
-          )),
+          objectFromKeys(['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'], () => 'always')),
         ...(typeof requireModuleExtensions === 'object' && requireModuleExtensions),
       },
     ]) /** @since 1.6.0 */

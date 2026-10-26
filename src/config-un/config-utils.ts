@@ -18,6 +18,7 @@ import {
   type MaybeArray,
   arrayify,
   mapGetOrInsert,
+  parseNpmPackageSpecifier,
   styleConfigName,
   stylePackageName,
   styleText,
@@ -29,19 +30,16 @@ import type {PackageRequester, UnConfigContext} from './shared';
 
 const MISC_GROUP_CONFIGS_SET: ReadonlySet<keyof UnConfigs> = new Set(MISC_GROUP_CONFIGS);
 
-const parsePackageToCheck = (packageNameAndMaybeVersionRange: PackageToCheck) => {
-  const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
-  const hasVersionRange = versionDelimiterIndex > 0;
-  const packageName = hasVersionRange
-    ? packageNameAndMaybeVersionRange.slice(0, versionDelimiterIndex)
-    : packageNameAndMaybeVersionRange;
+const parsePackageToCheck = (packageToCheck: PackageToCheck) => {
+  const {name, version} = parseNpmPackageSpecifier(packageToCheck) || {
+    name: packageToCheck,
+    version: undefined,
+  };
 
   return {
     // eslint-disable-next-line un/no-type-assertion -- the part before the version range is the package name
-    packageName: packageName as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
-    ...(hasVersionRange && {
-      versionRangeToSatisfy: packageNameAndMaybeVersionRange.slice(versionDelimiterIndex + 1),
-    }),
+    packageName: name as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+    ...(version && {versionRangeToSatisfy: version}),
   };
 };
 

@@ -7,7 +7,7 @@ import {
   objectKeysUnsafe,
   objectValuesUnsafe,
   regexTyped,
-} from '@andreww2012/unutils';
+} from 'utilery';
 import type {RuleCategorization} from './shared';
 
 const E18E_README_HEADINGS_TO_CATEGORIES = {

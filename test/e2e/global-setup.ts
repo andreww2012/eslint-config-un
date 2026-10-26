@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+// eslint-disable-next-line import/no-extraneous-dependencies -- unlike `utilery`'s, runs Windows `.cmd` shims like `pnpm`
 import {exec} from 'tinyexec';
 import type {TestProject} from 'vitest/node';
 import packageJson from '../../package.json' with {type: 'json'};
-import {isPlainObject} from '../../src/utils';
+import {isPlainObject, readAndParseJson, writeJsonFile} from '../../src/utils';
 import {startRegistry} from './registry-server';
 
 declare module 'vitest' {
@@ -46,12 +47,12 @@ export const setup = async (project: TestProject) => {
   // Package managers cache tarballs by name and version, so a stable version would get a stale build
   const version = `${packageJson.version}${packageJson.version.includes('-') ? '.' : '-'}e2e.${Date.now()}`;
   const manifestPath = path.join(workDir, 'package', 'package.json');
-  const packedManifest: unknown = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  const packedManifest = await readAndParseJson(manifestPath);
   if (!isPlainObject(packedManifest)) {
     throw new Error(`${manifestPath} does not contain an object`);
   }
   const manifest = {...packedManifest, version};
-  await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 2));
+  await writeJsonFile(manifestPath, manifest);
 
   const tarballPath = path.join(workDir, 'repacked.tgz');
   await run('tar', ['-czf', tarballPath, 'package'], workDir);

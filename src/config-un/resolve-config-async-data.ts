@@ -32,6 +32,7 @@ import {
   mapGetOrInsert,
   maybeCall,
   objectEntriesUnsafe,
+  objectFromKeys,
   objectKeysUnsafe,
   setByPath,
   styleConfigName,
@@ -39,6 +40,8 @@ import {
   stylePluginPrefix,
   styleRuleName,
   styleText,
+  substringAfter,
+  substringBefore,
 } from '../utils';
 import {fetchPackageInfo} from '../utils/package-detection';
 import type {CacheDataInFs} from './cache';
@@ -122,12 +125,12 @@ const renderPackageRequesters = (
   collator: Intl.Collator,
 ) => {
   const requestersByType = Object.groupBy(requesters || [], (requester) =>
-    requester.slice(0, requester.indexOf(':')),
+    substringBefore(requester, ':'),
   );
 
   const reasons = objectKeysUnsafe(PACKAGE_REQUESTER_RENDERERS).flatMap((requesterType) => {
     const names = (requestersByType[requesterType] || [])
-      .map((requester) => requester.slice(requesterType.length + 1))
+      .map((requester) => substringAfter(requester, ':'))
       .toSorted((nameA, nameB) => collator.compare(nameA, nameB));
     return names.length > 0 ? PACKAGE_REQUESTER_RENDERERS[requesterType](names) : [];
   });
@@ -556,8 +559,9 @@ ${styleText(
   configModifyFns.push(() => {
     allPackageUses.forEach(
       ({config, path: fullPath, info: {valueTransformFn, package: packagesToLoad}}) => {
-        const loadedPackagesForConfig = Object.fromEntries(
-          arrayify(packagesToLoad).map((packageId) => [packageId, loadedPackagesMap[packageId]]),
+        const loadedPackagesForConfig = objectFromKeys(
+          arrayify(packagesToLoad),
+          (packageId) => loadedPackagesMap[packageId],
         );
 
         setByPath(

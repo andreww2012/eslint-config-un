@@ -19,7 +19,6 @@ import {
   getKeysOfTruthyValues,
   joinPaths,
   mergeArrayOrBooleanRecords,
-  regexEscape,
 } from '../utils';
 import {
   type ValidAndInvalidHtmlTags,
@@ -50,6 +49,12 @@ type WellKnownSfcBlocks =
   | 'style[scoped]';
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
+
+const REGEX_SYNTAX_CHARACTER_REGEXP = /[$()*+.?[\\\]^{|}]/g;
+
+// Unlike `RegExp.escape`, keeps the first letter, so users can disable `^Name$` spelled as is
+const escapeComponentName = (name: string) =>
+  name.replaceAll(REGEX_SYNTAX_CHARACTER_REGEXP, String.raw`\$&`);
 
 interface EnforceTypescriptInScriptionSectionConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
@@ -757,7 +762,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
   const knownComponentNames = mergeArrayOrBooleanRecords(
     VUE_KNOWN_COMPONENT_NAME_PATTERNS,
     configNuxt && NUXT_KNOWN_COMPONENT_NAME_PATTERNS,
-    nuxtAutoImports?.componentNames.map((name) => `^${regexEscape(name)}$`),
+    nuxtAutoImports?.componentNames.map((name) => `^${escapeComponentName(name)}$`),
     optionsResolved.knownComponentNames,
   );
   const knownDirectiveNames = mergeArrayOrBooleanRecords(

@@ -1,4 +1,5 @@
 import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../../src/eslint/eslint-types';
+import {mapValues, objectFromKeys} from '../../src/utils';
 
 // Its autofix is disabled by default
 const RULE_WITH_AUTOFIX_DISABLED = 'string-check';
@@ -10,32 +11,25 @@ const RULE_WITH_AUTOFIX_KEPT = 'other-rule';
  */
 const createLazilyLoadedPlugin = () => {
   const loadedRuleNames: string[] = [];
-  const rules = Object.fromEntries(
-    [RULE_WITH_AUTOFIX_DISABLED, RULE_WITH_AUTOFIX_KEPT].map((ruleName) => {
-      const meta: EslintRuleMetaWithLanguages = {
-        type: 'layout',
-        fixable: 'code',
-        schema: [],
-        languages: ['js/js'],
-      };
-      return [ruleName, {meta, create: () => ({})}];
-    }),
-  );
+  const rules = objectFromKeys([RULE_WITH_AUTOFIX_DISABLED, RULE_WITH_AUTOFIX_KEPT], () => {
+    const meta: EslintRuleMetaWithLanguages = {
+      type: 'layout',
+      fixable: 'code',
+      schema: [],
+      languages: ['js/js'],
+    };
+    return {meta, create: () => ({})};
+  });
   const plugin: EslintPlugin = {
     rules: Object.defineProperties(
       {},
-      Object.fromEntries(
-        Object.entries(rules).map(([ruleName, rule]) => [
-          ruleName,
-          {
-            enumerable: true,
-            get: () => {
-              loadedRuleNames.push(ruleName);
-              return rule;
-            },
-          },
-        ]),
-      ),
+      mapValues(rules, (rule, ruleName) => ({
+        enumerable: true,
+        get: () => {
+          loadedRuleNames.push(ruleName);
+          return rule;
+        },
+      })),
     ),
   };
   return {plugin, rules, loadedRuleNames};

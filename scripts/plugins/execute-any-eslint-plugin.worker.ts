@@ -6,6 +6,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {parentPort, workerData} from 'node:worker_threads';
 import {exec} from 'tinyexec';
+import {isNodeError, writeJsonFile} from 'utilery/server';
 import {interopDefault} from '../../src/utils';
 import {
   ExecuteAnyEslintPluginWorkerInitialDataZod,
@@ -23,12 +24,9 @@ const sendMessageToParent = (message: ExecuteAnyEslintPluginWorkerOutput) => {
 
 const tempDirectoryPath = path.join(import.meta.dirname, 'temp', packageName);
 try {
-  await fs.mkdir(tempDirectoryPath, {recursive: true});
-  await fs.writeFile(
-    path.join(tempDirectoryPath, 'package.json'),
-    JSON.stringify({name: `${packageName}__playground`}, null, 2),
-    'utf8',
-  );
+  await writeJsonFile(path.join(tempDirectoryPath, 'package.json'), {
+    name: `${packageName}__playground`,
+  });
 
   const {stdout, stderr, exitCode} = await exec('pnpm', ['--ignore-workspace', 'i', packageName], {
     nodeOptions: {cwd: tempDirectoryPath},
@@ -59,14 +57,7 @@ try {
 } catch (error) {
   sendMessageToParent({
     error: {
-      code:
-        typeof error === 'object' &&
-        error &&
-        'code' in error &&
-        typeof error.code === 'string' &&
-        error.code
-          ? `UNEXPECTED:${error.code}`
-          : 'UNEXPECTED',
+      code: isNodeError(error) && error.code ? `UNEXPECTED:${error.code}` : 'UNEXPECTED',
       cause:
         error instanceof Error
           ? JSON.stringify(error, ['message', 'code', 'stack'])

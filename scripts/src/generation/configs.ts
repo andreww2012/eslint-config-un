@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {parseNpmPackageSpecifier} from 'utilery';
 import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
 import {PACKAGES_INSTALLED_THROUGH} from '../../../src/constants';
 import {PLUGIN_PACKAGES_META, type PluginPackageMeta} from '../../shared/packages-meta';
@@ -21,21 +22,15 @@ const npmxLink = (packageName: string) => `[\`${packageName}\`](https://npmx.dev
 const joinWithOr = (items: readonly string[]) =>
   [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' or ');
 
-const parsePackageCondition = (packageNameAndMaybeRange: string) => {
-  const versionDelimiterIndex = packageNameAndMaybeRange.lastIndexOf('@');
-  const hasVersionRange = versionDelimiterIndex > 0;
-  return {
-    packageName: hasVersionRange
-      ? packageNameAndMaybeRange.slice(0, versionDelimiterIndex)
-      : packageNameAndMaybeRange,
-    versionRange: hasVersionRange
-      ? packageNameAndMaybeRange.slice(versionDelimiterIndex + 1)
-      : null,
+const parsePackageCondition = (packageNameAndMaybeRange: string) =>
+  parseNpmPackageSpecifier(packageNameAndMaybeRange) || {
+    name: packageNameAndMaybeRange,
+    version: undefined,
   };
-};
 
 const renderPackageCondition = (packageNameAndMaybeRange: string) => {
-  const {packageName, versionRange} = parsePackageCondition(packageNameAndMaybeRange);
+  const {name: packageName, version: versionRange} =
+    parsePackageCondition(packageNameAndMaybeRange);
   return `${npmxLink(packageName)}${versionRange ? ` matching \`${versionRange}\`` : ''}`;
 };
 
@@ -49,7 +44,7 @@ const getPackagesInstalledThrough = (packageName: string): string[] =>
 /** The packages bringing in the given ones, like "(also through `@playwright/test`)" */
 const renderIndirectInstallations = (packageNamesAndMaybeRanges: readonly string[]) => {
   const notes = packageNamesAndMaybeRanges.flatMap((packageNameAndMaybeRange) => {
-    const {packageName} = parsePackageCondition(packageNameAndMaybeRange);
+    const {name: packageName} = parsePackageCondition(packageNameAndMaybeRange);
     const subject = packageNamesAndMaybeRanges.length > 1 ? `${npmxLink(packageName)} ` : '';
     const packagesInstalledThrough = getPackagesInstalledThrough(packageName);
     return packagesInstalledThrough.length > 0

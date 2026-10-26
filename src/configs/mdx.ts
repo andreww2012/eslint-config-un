@@ -1,6 +1,6 @@
 import {GLOB_JS_TS_X_EXTENSION, GLOB_MDX, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
-import {objectEntriesUnsafe, toKebabCase} from '../utils';
+import {mapKeys, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
@@ -90,11 +90,9 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
           filesDefault: DEFAULT_FILES,
           parseWith: 'mdx',
           settings: {
-            '': Object.fromEntries(
-              objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-                `mdx/${toKebabCase(settingName)}`,
-                settingValue,
-              ]),
+            '': mapKeys(
+              pluginSettings || {},
+              (_, settingName) => `mdx/${toKebabCase(settingName)}`,
             ),
           },
         },

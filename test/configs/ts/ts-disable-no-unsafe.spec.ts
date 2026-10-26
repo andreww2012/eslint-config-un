@@ -1,3 +1,5 @@
+import {objectFromKeys} from '../../../src/utils';
+
 const NO_UNSAFE_RULES = [
   'ts/no-unsafe-argument',
   'ts/no-unsafe-assignment',
@@ -47,7 +49,7 @@ describe('ts: sub config `disableNoUnsafe`', () => {
       const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: true}});
 
       expect(configResult.getRuleSeverities('ts/disable-no-unsafe')).toMatchObject(
-        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 0])),
+        objectFromKeys(NO_UNSAFE_RULES, () => 0),
       );
     });
   });
@@ -94,7 +96,7 @@ describe('ts: sub config `disableNoUnsafe`', () => {
       });
 
       expect(configResult.getRuleSeverities('ts/disable-no-unsafe')).toMatchObject({
-        ...Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 0])),
+        ...objectFromKeys(NO_UNSAFE_RULES, () => 0),
         'ts/no-unsafe-call': 2,
       });
     });

@@ -1,7 +1,7 @@
 import type {JSONSchema} from 'json-schema-to-ts';
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import type {PluginPrefix} from '../../src/loaders';
-import {cloneDeep, interopDefault, objectEntriesUnsafe} from '../../src/utils';
+import {cloneDeep, interopDefault, mapValues, objectEntriesUnsafe} from '../../src/utils';
 
 const PLUGIN_OPTIONS_SCHEMAS: Readonly<
   Partial<Record<PluginPrefix, Record<string, readonly JSONSchema[]>>>
@@ -70,21 +70,19 @@ export const addMissingRuleOptionsSchemas = async () => {
   objectEntriesUnsafe(plugins).forEach(([pluginPrefix, plugin]) => {
     plugins[pluginPrefix] = {
       ...plugin,
-      rules: Object.fromEntries(
-        objectEntriesUnsafe(cloneDeep(plugin.rules || {})).map(([ruleId, ruleImplementation]) => {
-          const suggestedSchema = PLUGIN_OPTIONS_SCHEMAS[pluginPrefix]?.[ruleId];
-          if (suggestedSchema) {
-            if (ruleImplementation.meta?.schema) {
-              throw new Error(`${pluginPrefix}/${ruleId}: rule already has a schema`);
-            }
-            ruleImplementation.meta = {
-              ...ruleImplementation.meta,
-              schema: suggestedSchema,
-            };
+      rules: mapValues(cloneDeep(plugin.rules || {}), (ruleImplementation, ruleId) => {
+        const suggestedSchema = PLUGIN_OPTIONS_SCHEMAS[pluginPrefix]?.[ruleId];
+        if (suggestedSchema) {
+          if (ruleImplementation.meta?.schema) {
+            throw new Error(`${pluginPrefix}/${ruleId}: rule already has a schema`);
           }
-          return [ruleId, ruleImplementation];
-        }),
-      ),
+          ruleImplementation.meta = {
+            ...ruleImplementation.meta,
+            schema: suggestedSchema,
+          };
+        }
+        return ruleImplementation;
+      }),
     };
   });
 

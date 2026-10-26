@@ -16,6 +16,7 @@ import {
   type MaybeFn,
   allUnionMembers,
   arrayIncludes,
+  arrayUnion,
   arrayUnique,
   isKeyIn,
   maybeCall,
@@ -556,12 +557,12 @@ const mergeParserOptions = (
     merged.projectService = {...lower.projectService, ...higher.projectService};
   }
 
-  const mergedExtraFileExtensions = [
-    ...(lower.extraFileExtensions || []),
-    ...(higher.extraFileExtensions || []),
-  ];
+  const mergedExtraFileExtensions = arrayUnion(
+    lower.extraFileExtensions || [],
+    higher.extraFileExtensions || [],
+  );
   if (mergedExtraFileExtensions.length > 0) {
-    merged.extraFileExtensions = [...new Set(mergedExtraFileExtensions)];
+    merged.extraFileExtensions = mergedExtraFileExtensions;
   }
 
   return merged;

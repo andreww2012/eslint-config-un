@@ -1,5 +1,5 @@
 import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
-import {getKeysOfTruthyValues} from '../utils';
+import {getKeysOfTruthyValues, objectFromKeys} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -366,7 +366,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
   const multilineCommentsStartingWithToIgnore = getKeysOfTruthyValues({
     ...DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE,
     ...(Array.isArray(extraMultilineCommentsStartingWithToIgnore)
-      ? Object.fromEntries(extraMultilineCommentsStartingWithToIgnore.map((name) => [name, true]))
+      ? objectFromKeys(extraMultilineCommentsStartingWithToIgnore, () => true)
       : extraMultilineCommentsStartingWithToIgnore),
   });
 

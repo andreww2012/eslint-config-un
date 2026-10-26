@@ -1,7 +1,7 @@
 import type {Settings as EslintPluginBoundariesSettingsWithPrefixes} from 'eslint-plugin-boundaries';
 import {ERROR, OFF} from '../constants';
 import type {ToCamelCase} from '../types';
-import {objectEntriesUnsafe, toKebabCase} from '../utils';
+import {mapKeys, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -60,11 +60,9 @@ export default defineUnConfig<BoundariesEslintConfigOptions>(
       'boundaries',
       {
         settings: {
-          '': Object.fromEntries(
-            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-              `boundaries/${toKebabCase(settingName)}`,
-              settingValue,
-            ]),
+          '': mapKeys(
+            pluginSettings || {},
+            (_, settingName) => `boundaries/${toKebabCase(settingName)}`,
           ),
         },
       },

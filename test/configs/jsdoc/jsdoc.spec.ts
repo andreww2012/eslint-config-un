@@ -1,5 +1,5 @@
 import {DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE} from '../../../src/configs/jsdoc';
-import {objectKeysUnsafe} from '../../../src/utils';
+import {objectFromKeys, objectKeysUnsafe} from '../../../src/utils';
 
 const FIXTURES = {
   wrongParamNames: 'wrong-param-names.js',
@@ -267,10 +267,9 @@ describe('options', () => {
     it('passes no options to `jsdoc/no-bad-blocks` rule when every default entry is disabled', async () => {
       const configResult = await computeEslintConfig({
         jsdoc: {
-          extraMultilineCommentsStartingWithToIgnore: Object.fromEntries(
-            objectKeysUnsafe(DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE).map(
-              (entry) => [entry, false] as const,
-            ),
+          extraMultilineCommentsStartingWithToIgnore: objectFromKeys(
+            objectKeysUnsafe(DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE),
+            () => false,
           ),
         },
       });

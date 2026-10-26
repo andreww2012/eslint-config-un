@@ -11,6 +11,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
   '@eslint-community/eslint-plugin-eslint-comments', // Inlined code gets a `require` with `cache`, which Yarn PnP doesn't provide: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322
   'stylelint-config-clean-order', // Patched; only its property list is used, while the package requires `stylelint` as a peer
   'stylelint-config-recess-order', // Only its property list is used, while the package requires `stylelint` as a peer
+  'utilery', // Its entrypoints load every utility, while we only use a few
 ];
 
 // Inlined plugins spawn these by file path, so they're never part of the main module graph

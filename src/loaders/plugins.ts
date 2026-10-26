@@ -3,7 +3,7 @@ import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin, PluginTypedByEslintCoreOrTsEslint} from '../eslint/eslint-types';
 import type {Prettify} from '../types';
-import {interopDefault, objectKeysUnsafe} from '../utils';
+import {interopDefault, mapValues, objectKeysUnsafe} from '../utils';
 import {
   type EslintParser,
   type EslintProcessor,
@@ -15,20 +15,16 @@ import {
 
 const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
   ...m,
-  rules: Object.fromEntries(
-    Object.entries(/* v8 ignore next -- every plugin passed here has rules */ m.rules || {}).map(
-      ([name, rule]) => [
-        name,
-        {
-          ...rule,
-          meta: {
-            ...rule.meta,
-            // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
-            schema: rule.meta?.schema ?? false,
-          },
-        },
-      ],
-    ),
+  rules: mapValues(
+    /* v8 ignore next -- every plugin passed here has rules */ m.rules || {},
+    (rule) => ({
+      ...rule,
+      meta: {
+        ...rule.meta,
+        // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
+        schema: rule.meta?.schema ?? false,
+      },
+    }),
   ),
 });
 

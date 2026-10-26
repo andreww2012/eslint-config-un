@@ -1,4 +1,4 @@
-import {objectFromEntriesUnsafe} from '@andreww2012/unutils';
+import {objectFromEntriesUnsafe} from 'utilery';
 import type {UnConfigs} from '../../src/configs';
 import {type LoadablePluginPrefix, pluginsLoaders} from '../../src/loaders';
 import {getRuleDocsUrl, readPluginMetadata} from './plugin-metadata';
