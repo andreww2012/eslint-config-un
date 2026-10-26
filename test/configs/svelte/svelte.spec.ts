@@ -1,6 +1,7 @@
 import {GLOB_SVELTE} from '../../../src/constants';
 
 const FIXTURES = {
+  browserGlobals: 'browser-globals.svelte',
   stringLiteralInSvelteExpression: 'string-literal-in-svelte-expression.svelte',
 } as const;
 
@@ -96,6 +97,18 @@ describe('rules', async () => {
       'svelte/derived-has-same-inputs-outputs': 1,
       'svelte/no-target-blank': 0,
     });
+  });
+
+  it('defines browser globals', async () => {
+    const results = await testEslintConfig(
+      {svelte: true, js: true},
+      FIXTURES.browserGlobals,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.browserGlobals, 'no-undef'),
+    ).toBeUndefined();
   });
 
   it('`svelte/no-useless-mustaches` rule fires on a mustache with a string literal', async () => {

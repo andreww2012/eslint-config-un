@@ -1,3 +1,4 @@
+import globals from 'globals';
 import type {SvelteConfig} from 'svelte-eslint-parser';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import type {EslintSeverity} from '../eslint/eslint-types';
@@ -217,6 +218,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
   context.requestParsing('svelte', {
     kind: 'setUpOnly',
     languageOptions: {
+      // Components and runes modules run in browsers too
+      globals: globals.browser,
       parserOptions: {
         ...(isTypescriptEnabled &&
           generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
