@@ -1,3 +1,6 @@
+import type {AgentName} from 'package-manager-detector';
+import {coerce, satisfies} from 'verkit';
+import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -95,6 +98,28 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
   wireit: 'Wireit', // cspell:disable-line
   xo: 'XO',
 } as const;
+
+const PACKAGE_MANAGER_VERSIONS_SUPPORTING_DEV_ENGINES: Readonly<
+  Partial<Record<AgentName, string>>
+> = {
+  aube: '>=1.19.0',
+  npm: '>=10.9.0',
+  nub: '*',
+  pnpm: '>=11.0.0',
+};
+
+// The version is only known if the project declares it, and the latest versions support the field
+const isDevEnginesSupportedByPackageManager = (
+  packageManager: UnConfigContext['meta']['usedPackageManager'],
+) => {
+  const supportedVersions =
+    packageManager && PACKAGE_MANAGER_VERSIONS_SUPPORTING_DEV_ENGINES[packageManager.name];
+  if (!supportedVersions) {
+    return false;
+  }
+  const version = packageManager.version && coerce(packageManager.version);
+  return !version || satisfies(version, supportedVersions);
+};
 
 /**
  * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
@@ -223,6 +248,25 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * @default true
    */
   allowedDistTags?: boolean | string[] | GetRuleOptions<'package-json', 'restrict-dist-tags'>;
+
+  /**
+   * Where the package manager should be declared: in `packageManager` or in
+   * `devEngines.packageManager`.
+   *
+   * Possible values:
+   * - `true`: enforce `devEngines` if the detected package manager reads
+   *   `devEngines.packageManager` (npm 10.9.0+, pnpm 11+, [aube](https://aube.sh) 1.19.0+ or
+   *   [Nub](https://nubjs.com)), otherwise disable the rule.
+   * - `false`: disable the rule.
+   * - `'devEngines'` or `'packageManager'`: enforce the specified field.
+   *
+   * Affected rule:
+   * - [`package-json/consistent-package-manager-declaration`](https://eslint-plugin-package-json.dev/rules/consistent-package-manager-declaration)
+   * @default true
+   */
+  packageManagerDeclaration?:
+    | boolean
+    | GetRuleOptions<'package-json', 'consistent-package-manager-declaration'>['prefer'];
 }
 
 export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
@@ -233,6 +277,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     repositoryShorthand: 'object',
     publishable: false,
     allowedDistTags: true,
+    packageManagerDeclaration: true,
   });
 
   const {
@@ -244,7 +289,13 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     banTopLevelProperties: banTopLevelPropertiesRaw,
     allowedDistTags,
     requireFields,
+    packageManagerDeclaration: packageManagerDeclarationRaw,
   } = optionsResolved;
+
+  const packageManagerDeclaration =
+    packageManagerDeclarationRaw === true
+      ? isDevEnginesSupportedByPackageManager(context.meta.usedPackageManager) && 'devEngines'
+      : packageManagerDeclarationRaw;
 
   const pluginSettings = context.getPluginSettings('package-json');
 
@@ -274,8 +325,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 
   // Legend:
-  // 🟢 - in recommended and recommended-publishable
-  // 📦 - in recommended-publishable, but not in recommended
+  // 🟢 - in recommended
   // 🎨 - in stylistic
 
   configBuilder
@@ -290,6 +340,12 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
       },
     ])
     .addRule('bin-name-casing', ERROR) /** @since 0.64.0 */ // 🎨
+    .addRule(
+      'consistent-package-manager-declaration',
+      packageManagerDeclaration ? ERROR : OFF,
+      packageManagerDeclaration ? [{prefer: packageManagerDeclaration}] : [],
+    ) /** @since 1.11.0 */
+    .addRule('consistent-property-aliases', ERROR) /** @since 1.11.0 */
     .addRule('exports-subpaths-style', ERROR) /** @since 0.59.0 */ // 🎨
     .addRule(
       'no-empty-fields',
@@ -305,12 +361,12 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('no-local-dependencies', ERROR) /** @since 1.3.0 */
     .addRule('no-redundant-files', ERROR) /** @since 0.20.0 */ // 🟢
     .addRule('no-redundant-publishConfig', ERROR) /** @since 0.65.0 */ // 🟢
-    .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🟢
+    .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🎨
     .addRule('prefer-rolling-workspace-spec', OFF) /** @since 1.8.0 */
     .addRule('repository-shorthand', ERROR, [
       {form: repositoryShorthand},
     ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
-    .addRule('require-attribution', publishable ? ERROR : OFF) /** @since 0.81.0 */ // 📦
+    .addRule('require-attribution', publishable ? ERROR : OFF) /** @since 0.81.0 */ // 🟢
     .addRule('require-author', OFF) /** @since 0.22.0 */
     .addRule('require-bin', OFF) /** @since 0.90.1 */
     .addRule('require-browser', OFF) /** @since 1.0.0 */
@@ -325,14 +381,14 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('require-devEngines', OFF) /** @since 0.90.1 */
     .addRule('require-directories', OFF) /** @since 0.90.1 */
     .addRule('require-engines', OFF) /** @since 0.28.0 */
-    .addRule('require-exports', publishable ? ERROR : OFF) /** @since 0.80.0 */ // 📦
-    .addRule('require-files', publishable ? ERROR : OFF) /** @since 0.26.0 */ // 📦
+    .addRule('require-exports', publishable ? ERROR : OFF) /** @since 0.80.0 */ // 🟢
+    .addRule('require-files', publishable ? ERROR : OFF) /** @since 0.26.0 */ // 🟢
     .addRule('require-funding', OFF) /** @since 0.90.1 */
     .addRule('require-gypfile', OFF) /** @since 1.0.0 */
     .addRule('require-homepage', OFF) /** @since 0.87.1 */
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
     .addRule('require-libc', OFF) /** @since 1.0.0 */
-    .addRule('require-license', publishable ? ERROR : OFF) /** @since 0.57.0 */
+    .addRule('require-license', publishable ? ERROR : OFF) /** @since 0.57.0 */ // 🟢
     .addRule('require-main', OFF) /** @since 0.89.4 */
     .addRule('require-man', OFF) /** @since 0.90.1 */
     .addRule('require-module', OFF) /** @since 0.91.0 */
@@ -345,9 +401,9 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('require-peerDependenciesMeta', OFF) /** @since 1.1.0 */
     .addRule('require-private', OFF) /** @since 0.89.4 */
     .addRule('require-publishConfig', OFF) /** @since 0.89.4 */
-    .addRule('require-repository', publishable ? ERROR : OFF) /** @since 0.88.0 */ // 📦
+    .addRule('require-repository', publishable ? ERROR : OFF) /** @since 0.88.0 */ // 🟢
     .addRule('require-scripts', OFF) /** @since 0.88.1 */
-    .addRule('require-sideEffects', publishable ? ERROR : OFF) /** @since 0.82.0 */ // 📦
+    .addRule('require-sideEffects', publishable ? ERROR : OFF) /** @since 0.82.0 */ // 🟢
     .addRule('require-type', publishable ? ERROR : OFF) /** @since 0.33.0 */ // 🟢
     .addRule('require-types', OFF) /** @since 0.29.0 */
     .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢

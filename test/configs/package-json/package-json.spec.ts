@@ -1,7 +1,22 @@
+import {detect as detectPackageManager} from 'package-manager-detector/detect';
+
 const FIXTURES = {
   distTagDependency: 'dist-tag-dependency/package.json',
+  packageManagerField: 'package-manager-field/package.json',
   redundantFiles: 'redundant-files/package.json',
 } as const;
+
+const DETECTED_PACKAGE_MANAGER = {name: 'pnpm', agent: 'pnpm', version: '11.0.0'} as const;
+
+vi.mock(import('package-manager-detector/detect'));
+
+// Set at module load too (not just in `beforeEach`), so the package manager is also detected
+// during collection, when the describe-level `computeEslintConfig` calls run
+vi.mocked(detectPackageManager).mockResolvedValue(DETECTED_PACKAGE_MANAGER);
+
+beforeEach(() => {
+  vi.mocked(detectPackageManager).mockResolvedValue(DETECTED_PACKAGE_MANAGER);
+});
 
 describe('basic tests', () => {
   it('creates `package-json` eslint config and loads `package-json` plugin if set to `true`', async () => {
@@ -553,6 +568,112 @@ describe('options', () => {
 
       expect(error?.message).toMatchInlineSnapshot(
         '"The "latest" dist-tag is not allowed for dependencies."',
+      );
+    });
+  });
+
+  describe('option: `packageManagerDeclaration`', () => {
+    const RULE_NAME = 'package-json/consistent-package-manager-declaration';
+
+    it('enforces `devEngines` in `package-json/consistent-package-manager-declaration` rule by default', async () => {
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntry('package-json', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"prefer": "devEngines"}]',
+      );
+    });
+
+    it('enforces `devEngines` in `package-json/consistent-package-manager-declaration` rule by default when the version of the detected package manager is unknown', async () => {
+      vi.mocked(detectPackageManager).mockResolvedValue({name: 'npm', agent: 'npm'});
+
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntry('package-json', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"prefer": "devEngines"}]',
+      );
+    });
+
+    it('disables `package-json/consistent-package-manager-declaration` rule by default when the version of the detected package manager does not support `devEngines.packageManager`', async () => {
+      vi.mocked(detectPackageManager).mockResolvedValue({
+        name: 'npm',
+        agent: 'npm',
+        version: '10.8.2',
+      });
+
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntrySeverity('package-json', RULE_NAME)).toBe(0);
+    });
+
+    it('disables `package-json/consistent-package-manager-declaration` rule by default when the detected package manager does not support `devEngines.packageManager`', async () => {
+      vi.mocked(detectPackageManager).mockResolvedValue({
+        name: 'yarn',
+        agent: 'yarn@berry',
+        version: 'berry',
+      });
+
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntrySeverity('package-json', RULE_NAME)).toBe(0);
+    });
+
+    it('disables `package-json/consistent-package-manager-declaration` rule by default when no package manager is detected', async () => {
+      vi.mocked(detectPackageManager).mockResolvedValue(null);
+
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntrySeverity('package-json', RULE_NAME)).toBe(0);
+    });
+
+    it('disables `package-json/consistent-package-manager-declaration` rule when option is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {packageManagerDeclaration: false},
+      });
+
+      expect(configResult.getRuleEntrySeverity('package-json', RULE_NAME)).toBe(0);
+    });
+
+    it('enforces `devEngines` in `package-json/consistent-package-manager-declaration` rule when option is `devEngines`, even if the detected package manager does not support it', async () => {
+      vi.mocked(detectPackageManager).mockResolvedValue({
+        name: 'yarn',
+        agent: 'yarn@berry',
+        version: 'berry',
+      });
+
+      const configResult = await computeEslintConfig({
+        packageJson: {packageManagerDeclaration: 'devEngines'},
+      });
+
+      expect(configResult.getRuleEntry('package-json', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"prefer": "devEngines"}]',
+      );
+    });
+
+    it('enforces `packageManager` in `package-json/consistent-package-manager-declaration` rule when option is `packageManager`', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {packageManagerDeclaration: 'packageManager'},
+      });
+
+      expect(configResult.getRuleEntry('package-json', RULE_NAME)).toMatchInlineSnapshot(
+        '[2, {"prefer": "packageManager"}]',
+      );
+    });
+
+    it('reports the `packageManager` field by default', async () => {
+      const results = await testEslintConfig(
+        'packageJson',
+        FIXTURES.packageManagerField,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.packageManagerField,
+        RULE_NAME,
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Declare the package manager in `devEngines.packageManager` instead of `packageManager`."',
       );
     });
   });
