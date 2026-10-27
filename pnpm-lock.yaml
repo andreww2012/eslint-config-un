@@ -528,8 +528,8 @@ importers:
         specifier: 1.0.22
         version: 1.0.22(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
       '@tanstack/eslint-plugin-query':
-        specifier: 5.104.5
-        version: 5.104.5(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
+        specifier: 5.105.0
+        version: 5.105.0(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
       '@tanstack/eslint-plugin-router':
         specifier: 1.162.0
         version: 1.162.0(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
@@ -5020,8 +5020,8 @@ packages:
     peerDependencies:
       acorn: ^8.9.0
 
-  '@tanstack/eslint-plugin-query@5.104.5':
-    resolution: {integrity: sha512-rUAV00UdfhUAn5qSzsO6IaE/rMG/K+qvYbQZh8Sm1Uc71H8f3jgYXFYHPL30mz+JadwmvqEBHhG5Q6gm08o1dA==}
+  '@tanstack/eslint-plugin-query@5.105.0':
+    resolution: {integrity: sha512-nQTKJa7RMzhHAl03fVchPDDgt341Onxj7MmZTNt754awyQzjCLKLM+Ki36Y6gwq8UBz8M/xDxEg8it/JOTWifQ==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: ^5.6.0 || ^6.0.0 || ^7.0.0
@@ -17610,7 +17610,7 @@ snapshots:
     dependencies:
       acorn: 8.19.0
 
-  '@tanstack/eslint-plugin-query@5.104.5(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)':
+  '@tanstack/eslint-plugin-query@5.105.0(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/utils': 8.72.1(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
