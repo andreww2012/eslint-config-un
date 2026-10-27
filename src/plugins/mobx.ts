@@ -11,7 +11,6 @@ export default definePluginMetadata('mobx', {
   gitTag: (tag) => `eslint-plugin-mobx@${tag}`,
   rules: {
     'exhaustive-make-observable': {disableInCodeBlocks: 'runtimeOnly'},
-    'missing-make-observable': {disableInCodeBlocks: 'runtimeOnly'},
     'missing-observer': {disableInCodeBlocks: 'runtimeOnly'},
     'no-anonymous-observer': {disableInCodeBlocks: 'runtimeOnly'},
   },

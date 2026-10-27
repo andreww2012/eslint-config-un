@@ -147,13 +147,13 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `mobx` eslint config', async () => {
     const configResult = await computeEslintConfig({
       mobx: {
-        overrides: {'mobx/missing-make-observable': 0},
+        overrides: {'mobx/unconditional-make-observable': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
     expect(configResult.getRuleSeverities('mobx')).toMatchObject({
-      'mobx/missing-make-observable': 0,
+      'mobx/unconditional-make-observable': 0,
       'no-console': 0,
     });
   });

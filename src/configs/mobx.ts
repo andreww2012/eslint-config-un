@@ -30,7 +30,6 @@ export default defineUnConfig<MobxEslintConfigOptions>('mobx', {enabledBy: {pack
   configBuilder
     ?.addConfig(['mobx', {filesDefault: [GLOB_JS_TS_X]}])
     .addRule('exhaustive-make-observable', OFF) /** @since 0.0.2 */ // 🟡
-    .addRule('missing-make-observable', ERROR) /** @since 0.0.2 */ // 🟢
     .addRule('missing-observer', OFF) /** @since 0.0.5 */ // 🟡
     .addRule('unconditional-make-observable', ERROR) /** @since 0.0.2 */ // 🟢
     .enableConfigTesterForPlugin('mobx', {
