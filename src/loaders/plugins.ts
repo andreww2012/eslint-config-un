@@ -1,4 +1,3 @@
-// cspell:ignore mathml
 import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin, PluginTypedByEslintCoreOrTsEslint} from '../eslint/eslint-types';
@@ -9,26 +8,26 @@ import {
   type EslintProcessor,
   MODULE_NOT_FOUND_ERROR_CODES,
   type ModuleLoader,
-  genInferredModuleLoader,
-  genModuleLoader,
+  generateInferredModuleLoader,
+  generateModuleLoader,
 } from './shared';
 
-const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
-  ...m,
+const setPluginRuleSchemas = <Plugin extends EslintPlugin>(plugin: Plugin): Plugin => ({
+  ...plugin,
   rules: mapValues(
-    /* v8 ignore next -- every plugin passed here has rules */ m.rules || {},
+    /* v8 ignore next -- every plugin passed here has rules */ plugin.rules || {},
     (rule) => ({
       ...rule,
       meta: {
         ...rule.meta,
-        // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
+        // `false` means "you can pass anything", `undefined` means "you cannot pass anything"
         schema: rule.meta?.schema ?? false,
       },
     }),
   ),
 });
 
-// `typescript-eslint` typings of a plugin don't satisfy `@eslint/core`'s, but describe the same object
+// The `typescript-eslint` typings of a plugin fail `@eslint/core`'s, but describe the same object
 export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslint) =>
   // eslint-disable-next-line un/no-type-assertion
   plugin as EslintPlugin;
@@ -36,17 +35,17 @@ export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslin
 /* v8 ignore next - The preset always contains the requested plugin */
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
-    (m) =>
+    (module) =>
       // eslint-disable-next-line un/no-type-assertion -- the preset declares the plugins it uses
-      (m.default.configs.all as {plugins: Record<string, EslintPlugin>}).plugins[pluginName] ||
+      (module.default.configs.all as {plugins: Record<string, EslintPlugin>}).plugins[pluginName] ||
       null,
   );
 
 export const pluginsLoaders = {
-  angular: genModuleLoader('angular', '@angular-eslint/eslint-plugin', () =>
+  angular: generateModuleLoader('angular', '@angular-eslint/eslint-plugin', () =>
     interopDefault(import('@angular-eslint/eslint-plugin')).then(castTsEslintTypedPlugin),
   ),
-  'angular-template': genModuleLoader(
+  'angular-template': generateModuleLoader(
     'angular-template',
     '@angular-eslint/eslint-plugin-template',
     () =>
@@ -54,22 +53,22 @@ export const pluginsLoaders = {
         castTsEslintTypedPlugin,
       ),
   ),
-  antfu: genModuleLoader('antfu', 'eslint-plugin-antfu', () =>
+  antfu: generateModuleLoader('antfu', 'eslint-plugin-antfu', () =>
     interopDefault(import('eslint-plugin-antfu')),
   ),
-  'arrow-return-style': genModuleLoader(
+  'arrow-return-style': generateModuleLoader(
     'arrow-return-style',
     'eslint-plugin-arrow-return-style-x',
     () =>
       interopDefault(import('eslint-plugin-arrow-return-style-x')).then(castTsEslintTypedPlugin),
   ),
-  astro: genInferredModuleLoader('astro', 'eslint-plugin-astro', () =>
+  astro: generateInferredModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
   ),
-  ava: genModuleLoader('ava', 'eslint-plugin-ava', () =>
+  ava: generateModuleLoader('ava', 'eslint-plugin-ava', () =>
     interopDefault(import('eslint-plugin-ava')),
   ),
-  awscdk: genModuleLoader(
+  awscdk: generateModuleLoader(
     'awscdk',
     'eslint-plugin-awscdk',
     () =>
@@ -78,18 +77,18 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
+  'barrel-files': generateModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
     interopDefault(import('eslint-plugin-barrel-files')).then(fixupPluginRules),
   ),
-  'better-tailwindcss': genModuleLoader(
+  'better-tailwindcss': generateModuleLoader(
     'better-tailwindcss',
     'eslint-plugin-better-tailwindcss',
     () => interopDefault(import('eslint-plugin-better-tailwindcss')),
   ),
-  boundaries: genModuleLoader('boundaries', 'eslint-plugin-boundaries', () =>
+  boundaries: generateModuleLoader('boundaries', 'eslint-plugin-boundaries', () =>
     interopDefault(import('eslint-plugin-boundaries')),
   ),
-  'case-police': genModuleLoader(
+  'case-police': generateModuleLoader(
     'case-police',
     'eslint-plugin-case-police',
     () =>
@@ -98,13 +97,13 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'check-file': genModuleLoader('check-file', 'eslint-plugin-check-file', () =>
+  'check-file': generateModuleLoader('check-file', 'eslint-plugin-check-file', () =>
     interopDefault(import('eslint-plugin-check-file')),
   ),
-  civet: genModuleLoader('civet', 'eslint-plugin-civet', () =>
+  civet: generateModuleLoader('civet', 'eslint-plugin-civet', () =>
     interopDefault(import('eslint-plugin-civet')),
   ),
-  clsx: genModuleLoader(
+  clsx: generateModuleLoader(
     'clsx',
     'eslint-plugin-clsx',
     () =>
@@ -113,17 +112,17 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  command: genModuleLoader('command', 'eslint-plugin-command', () =>
+  command: generateModuleLoader('command', 'eslint-plugin-command', () =>
     interopDefault(import('eslint-plugin-command')),
   ),
-  compat: genModuleLoader('compat', 'eslint-plugin-compat', () =>
+  compat: generateModuleLoader('compat', 'eslint-plugin-compat', () =>
     interopDefault(import('eslint-plugin-compat')),
   ),
-  cspell: genModuleLoader('cspell', '@cspell/eslint-plugin', () =>
+  cspell: generateModuleLoader('cspell', '@cspell/eslint-plugin', () =>
     interopDefault(import('@cspell/eslint-plugin')),
   ),
-  css: genModuleLoader('css', '@eslint/css', () => interopDefault(import('@eslint/css'))),
-  'css-in-js': genModuleLoader(
+  css: generateModuleLoader('css', '@eslint/css', () => interopDefault(import('@eslint/css'))),
+  'css-in-js': generateModuleLoader(
     'css-in-js',
     'eslint-plugin-css',
     () =>
@@ -132,19 +131,19 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  cssicorn: genModuleLoader('cssicorn', 'eslint-cssicorn', () =>
+  cssicorn: generateModuleLoader('cssicorn', 'eslint-cssicorn', () =>
     interopDefault(import('eslint-cssicorn')),
   ),
-  cypress: genInferredModuleLoader('cypress', 'eslint-plugin-cypress', () =>
+  cypress: generateInferredModuleLoader('cypress', 'eslint-plugin-cypress', () =>
     interopDefault(import('eslint-plugin-cypress')),
   ),
-  'de-morgan': genModuleLoader('de-morgan', 'eslint-plugin-de-morgan', () =>
+  'de-morgan': generateModuleLoader('de-morgan', 'eslint-plugin-de-morgan', () =>
     interopDefault(import('eslint-plugin-de-morgan')),
   ),
-  depend: genModuleLoader('depend', 'eslint-plugin-depend', () =>
+  depend: generateModuleLoader('depend', 'eslint-plugin-depend', () =>
     interopDefault(import('eslint-plugin-depend')),
   ),
-  docusaurus: genModuleLoader(
+  docusaurus: generateModuleLoader(
     'docusaurus',
     '@docusaurus/eslint-plugin',
     () =>
@@ -154,16 +153,16 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  drizzle: genModuleLoader('drizzle', 'eslint-plugin-drizzle', () =>
+  drizzle: generateModuleLoader('drizzle', 'eslint-plugin-drizzle', () =>
     interopDefault(import('eslint-plugin-drizzle')),
   ),
-  e18e: genModuleLoader('e18e', '@e18e/eslint-plugin', () =>
+  e18e: generateModuleLoader('e18e', '@e18e/eslint-plugin', () =>
     interopDefault(import('@e18e/eslint-plugin')),
   ),
-  ember: genModuleLoader('ember', 'eslint-plugin-ember', () =>
+  ember: generateModuleLoader('ember', 'eslint-plugin-ember', () =>
     interopDefault(import('eslint-plugin-ember')),
   ),
-  'erasable-syntax-only': genModuleLoader(
+  'erasable-syntax-only': generateModuleLoader(
     'erasable-syntax-only',
     'eslint-plugin-erasable-syntax-only',
     () =>
@@ -173,21 +172,21 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  es: genModuleLoader('es', 'eslint-plugin-es-x', () =>
+  es: generateModuleLoader('es', 'eslint-plugin-es-x', () =>
     interopDefault(import('eslint-plugin-es-x')),
   ),
-  'eslint-comments': genModuleLoader(
+  'eslint-comments': generateModuleLoader(
     'eslint-comments',
     '@eslint-community/eslint-plugin-eslint-comments',
     () => interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
   ),
-  'eslint-plugin': genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
+  'eslint-plugin': generateModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
     interopDefault(import('eslint-plugin-eslint-plugin')),
   ),
-  'eslint-react': genInferredModuleLoader('eslint-react', '@eslint-react/eslint-plugin', () =>
+  'eslint-react': generateInferredModuleLoader('eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),
   ),
-  'expect-type': genModuleLoader(
+  'expect-type': generateModuleLoader(
     'expect-type',
     'eslint-plugin-expect-type',
     () =>
@@ -197,23 +196,23 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  expo: genModuleLoader('expo', 'eslint-plugin-expo', () =>
+  expo: generateModuleLoader('expo', 'eslint-plugin-expo', () =>
     interopDefault(import('eslint-plugin-expo')),
   ),
-  'file-progress': genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
+  'file-progress': generateModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),
-  format: genModuleLoader('format', '', () => interopDefault(import('../plugin-format'))),
-  formatjs: genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
+  format: generateModuleLoader('format', '', () => interopDefault(import('../plugin-format'))),
+  formatjs: generateModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
     interopDefault(import('eslint-plugin-formatjs')),
   ),
-  functional: genModuleLoader('functional', 'eslint-plugin-functional', () =>
+  functional: generateModuleLoader('functional', 'eslint-plugin-functional', () =>
     interopDefault(import('eslint-plugin-functional')),
   ),
-  'github-actions': genModuleLoader('github-actions', 'eslint-plugin-github-action', () =>
+  'github-actions': generateModuleLoader('github-actions', 'eslint-plugin-github-action', () =>
     interopDefault(import('eslint-plugin-github-action')),
   ),
-  graphql: genModuleLoader<
+  graphql: generateModuleLoader<
     Prettify<
       EslintPlugin & {
         processor: EslintProcessor;
@@ -225,83 +224,83 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('@graphql-eslint/eslint-plugin')),
   ),
-  header: genModuleLoader('header', 'eslint-plugin-header', () =>
+  header: generateModuleLoader('header', 'eslint-plugin-header', () =>
     interopDefault(import('eslint-plugin-header'))
       .then(setPluginRuleSchemas)
       .then(fixupPluginRules),
   ),
-  headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
+  headers: generateModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
   ),
-  html: genModuleLoader('html', '@html-eslint/eslint-plugin', () =>
+  html: generateModuleLoader('html', '@html-eslint/eslint-plugin', () =>
     interopDefault(import('@html-eslint/eslint-plugin')),
   ),
-  'html-angular': genModuleLoader(
+  'html-angular': generateModuleLoader(
     'html-angular',
     '@html-eslint/eslint-plugin-angular-template',
     () => interopDefault(import('@html-eslint/eslint-plugin-angular-template')),
   ),
-  'html-react': genModuleLoader('html-react', '@html-eslint/eslint-plugin-react', () =>
+  'html-react': generateModuleLoader('html-react', '@html-eslint/eslint-plugin-react', () =>
     interopDefault(import('@html-eslint/eslint-plugin-react')),
   ),
-  'html-scripts': genModuleLoader('html-scripts', '', () =>
+  'html-scripts': generateModuleLoader('html-scripts', '', () =>
     interopDefault(import('../plugin-html-scripts')),
   ),
-  'html-svelte': genModuleLoader('html-svelte', '@html-eslint/eslint-plugin-svelte', () =>
+  'html-svelte': generateModuleLoader('html-svelte', '@html-eslint/eslint-plugin-svelte', () =>
     interopDefault(import('@html-eslint/eslint-plugin-svelte')),
   ),
-  i18next: genModuleLoader('i18next', 'eslint-plugin-i18next', () =>
+  i18next: generateModuleLoader('i18next', 'eslint-plugin-i18next', () =>
     interopDefault(import('eslint-plugin-i18next')),
   ),
-  import: genModuleLoader('import', 'eslint-plugin-import-x', () =>
+  import: generateModuleLoader('import', 'eslint-plugin-import-x', () =>
     interopDefault(import('eslint-plugin-import-x')),
   ),
-  'import-integrity': genModuleLoader('import-integrity', 'import-integrity-lint', () =>
+  'import-integrity': generateModuleLoader('import-integrity', 'import-integrity-lint', () =>
     interopDefault(import('import-integrity-lint')).then(castTsEslintTypedPlugin),
   ),
-  'import-zod': genModuleLoader('import-zod', 'eslint-plugin-import-zod', () =>
+  'import-zod': generateModuleLoader('import-zod', 'eslint-plugin-import-zod', () =>
     interopDefault(import('eslint-plugin-import-zod')),
   ),
-  jest: genInferredModuleLoader('jest', 'eslint-plugin-jest', () =>
+  jest: generateInferredModuleLoader('jest', 'eslint-plugin-jest', () =>
     interopDefault(import('eslint-plugin-jest')),
   ),
-  'jest-dom': genModuleLoader('jest-dom', 'eslint-plugin-jest-dom', () =>
+  'jest-dom': generateModuleLoader('jest-dom', 'eslint-plugin-jest-dom', () =>
     interopDefault(import('eslint-plugin-jest-dom')).then(fixupPluginRules),
   ),
-  'jest-extended': genModuleLoader('jest-extended', 'eslint-plugin-jest-extended', () =>
+  'jest-extended': generateModuleLoader('jest-extended', 'eslint-plugin-jest-extended', () =>
     interopDefault(import('eslint-plugin-jest-extended')),
   ),
-  jsdoc: genModuleLoader('jsdoc', 'eslint-plugin-jsdoc', () =>
+  jsdoc: generateModuleLoader('jsdoc', 'eslint-plugin-jsdoc', () =>
     interopDefault(import('eslint-plugin-jsdoc')),
   ),
-  json: genModuleLoader('json', '@eslint/json', () => interopDefault(import('@eslint/json'))),
-  'json-schema-validator': genModuleLoader(
+  json: generateModuleLoader('json', '@eslint/json', () => interopDefault(import('@eslint/json'))),
+  'json-schema-validator': generateModuleLoader(
     'json-schema-validator',
     'eslint-plugin-json-schema-validator',
     () => interopDefault(import('eslint-plugin-json-schema-validator')),
   ),
-  jsonc: genModuleLoader('jsonc', 'eslint-plugin-jsonc', () =>
+  jsonc: generateModuleLoader('jsonc', 'eslint-plugin-jsonc', () =>
     interopDefault(import('eslint-plugin-jsonc')),
   ),
-  'jsx-a11y': genModuleLoader('jsx-a11y', 'eslint-plugin-jsx-a11y-x', () =>
+  'jsx-a11y': generateModuleLoader('jsx-a11y', 'eslint-plugin-jsx-a11y-x', () =>
     interopDefault(import('eslint-plugin-jsx-a11y-x')),
   ),
-  lit: genModuleLoader('lit', 'eslint-plugin-lit', () =>
+  lit: generateModuleLoader('lit', 'eslint-plugin-lit', () =>
     interopDefault(import('eslint-plugin-lit')),
   ),
-  'lit-a11y': genModuleLoader('lit-a11y', 'eslint-plugin-lit-a11y', () =>
+  'lit-a11y': generateModuleLoader('lit-a11y', 'eslint-plugin-lit-a11y', () =>
     interopDefault(import('eslint-plugin-lit-a11y')),
   ),
-  lockfile: genModuleLoader('lockfile', 'eslint-plugin-lockfile', () =>
+  lockfile: generateModuleLoader('lockfile', 'eslint-plugin-lockfile', () =>
     interopDefault(import('eslint-plugin-lockfile')),
   ),
-  markdown: genModuleLoader('markdown', '@eslint/markdown', () =>
+  markdown: generateModuleLoader('markdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
   ),
-  'markdown-links': genModuleLoader('markdown-links', 'eslint-plugin-markdown-links', () =>
+  'markdown-links': generateModuleLoader('markdown-links', 'eslint-plugin-markdown-links', () =>
     interopDefault(import('eslint-plugin-markdown-links')),
   ),
-  'markdown-preferences': genModuleLoader<
+  'markdown-preferences': generateModuleLoader<
     Prettify<
       EslintPlugin & {
         resources: (typeof import('eslint-plugin-markdown-preferences'))['resources'];
@@ -311,7 +310,7 @@ export const pluginsLoaders = {
   >('markdown-preferences', 'eslint-plugin-markdown-preferences', () =>
     interopDefault(import('eslint-plugin-markdown-preferences')),
   ),
-  math: genModuleLoader(
+  math: generateModuleLoader(
     'math',
     'eslint-plugin-math',
     () =>
@@ -320,51 +319,55 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  mdx: genModuleLoader('mdx', 'eslint-plugin-mdx', () =>
+  mdx: generateModuleLoader('mdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
-  mobx: genModuleLoader('mobx', 'eslint-plugin-mobx', () =>
+  mobx: generateModuleLoader('mobx', 'eslint-plugin-mobx', () =>
     interopDefault(import('eslint-plugin-mobx')),
   ),
-  mocha: genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
+  mocha: generateModuleLoader('mocha', 'eslint-plugin-mocha', () =>
     interopDefault(import('eslint-plugin-mocha')),
   ),
-  'module-interop': genModuleLoader('moduleInterop', 'eslint-plugin-module-interop', () =>
+  'module-interop': generateModuleLoader('moduleInterop', 'eslint-plugin-module-interop', () =>
     interopDefault(import('eslint-plugin-module-interop')),
   ),
-  nestjs: genModuleLoader('nestjs', '@darraghor/eslint-plugin-nestjs-typed', () =>
-    interopDefault(import('@darraghor/eslint-plugin-nestjs-typed')).then((m) =>
-      castTsEslintTypedPlugin(m.plugin),
+  nestjs: generateModuleLoader('nestjs', '@darraghor/eslint-plugin-nestjs-typed', () =>
+    interopDefault(import('@darraghor/eslint-plugin-nestjs-typed')).then((module) =>
+      castTsEslintTypedPlugin(module.plugin),
     ),
   ),
-  nextjs: genModuleLoader('nextjs', '@next/eslint-plugin-next', () =>
+  nextjs: generateModuleLoader('nextjs', '@next/eslint-plugin-next', () =>
     interopDefault(import('@next/eslint-plugin-next')),
   ),
-  ngrx: genModuleLoader('ngrx', '@ngrx/eslint-plugin', () =>
+  ngrx: generateModuleLoader('ngrx', '@ngrx/eslint-plugin', () =>
     interopDefault(import('@ngrx/eslint-plugin')).then(castTsEslintTypedPlugin),
   ),
-  'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
+  'no-only-tests': generateModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),
-  'no-relative-import-paths': genModuleLoader(
+  'no-relative-import-paths': generateModuleLoader(
     'no-relative-import-paths',
     'eslint-plugin-no-relative-import-paths',
     () => interopDefault(import('eslint-plugin-no-relative-import-paths')).then(fixupPluginRules),
   ),
-  'no-secrets': genModuleLoader('no-secrets', 'eslint-plugin-no-secrets', () =>
+  'no-secrets': generateModuleLoader('no-secrets', 'eslint-plugin-no-secrets', () =>
     interopDefault(import('eslint-plugin-no-secrets')),
   ),
-  'no-unsanitized': genModuleLoader('no-unsanitized', 'eslint-plugin-no-unsanitized', () =>
+  'no-unsanitized': generateModuleLoader('no-unsanitized', 'eslint-plugin-no-unsanitized', () =>
     interopDefault(import('eslint-plugin-no-unsanitized')),
   ),
-  node: genModuleLoader('node', 'eslint-plugin-n', () => interopDefault(import('eslint-plugin-n'))),
-  'node-dependencies': genModuleLoader('node-dependencies', 'eslint-plugin-node-dependencies', () =>
-    interopDefault(import('eslint-plugin-node-dependencies')),
+  node: generateModuleLoader('node', 'eslint-plugin-n', () =>
+    interopDefault(import('eslint-plugin-n')),
   ),
-  nuxt: genModuleLoader('nuxt', '@nuxt/eslint-plugin', () =>
+  'node-dependencies': generateModuleLoader(
+    'node-dependencies',
+    'eslint-plugin-node-dependencies',
+    () => interopDefault(import('eslint-plugin-node-dependencies')),
+  ),
+  nuxt: generateModuleLoader('nuxt', '@nuxt/eslint-plugin', () =>
     interopDefault(import('@nuxt/eslint-plugin')),
   ),
-  nx: genModuleLoader(
+  nx: generateModuleLoader(
     'nx',
     '@nx/eslint-plugin',
     () =>
@@ -374,13 +377,13 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'package-json': genModuleLoader('package-json', 'eslint-plugin-package-json', () =>
+  'package-json': generateModuleLoader('package-json', 'eslint-plugin-package-json', () =>
     interopDefault(import('eslint-plugin-package-json')),
   ),
-  perfectionist: genModuleLoader('perfectionist', 'eslint-plugin-perfectionist', () =>
+  perfectionist: generateModuleLoader('perfectionist', 'eslint-plugin-perfectionist', () =>
     interopDefault(import('eslint-plugin-perfectionist')),
   ),
-  pinia: genModuleLoader(
+  pinia: generateModuleLoader(
     'pinia',
     'eslint-plugin-pinia',
     () =>
@@ -389,33 +392,33 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  playwright: genModuleLoader('playwright', 'eslint-plugin-playwright', () =>
+  playwright: generateModuleLoader('playwright', 'eslint-plugin-playwright', () =>
     interopDefault(import('eslint-plugin-playwright')),
   ),
-  pnpm: genModuleLoader('pnpm', 'eslint-plugin-pnpm', () =>
+  pnpm: generateModuleLoader('pnpm', 'eslint-plugin-pnpm', () =>
     interopDefault(import('eslint-plugin-pnpm')),
   ),
-  'prefer-arrow-functions': genModuleLoader(
+  'prefer-arrow-functions': generateModuleLoader(
     'prefer-arrow-functions',
     'eslint-plugin-prefer-arrow-functions',
     () => interopDefault(import('eslint-plugin-prefer-arrow-functions')),
   ),
-  promise: genModuleLoader('promise', 'eslint-plugin-promise', () =>
+  promise: generateModuleLoader('promise', 'eslint-plugin-promise', () =>
     interopDefault(import('eslint-plugin-promise')),
   ),
-  qunit: genModuleLoader('qunit', 'eslint-plugin-qunit', () =>
+  qunit: generateModuleLoader('qunit', 'eslint-plugin-qunit', () =>
     interopDefault(import('eslint-plugin-qunit')),
   ),
-  qwik: genModuleLoader('qwik', 'eslint-plugin-qwik', () =>
+  qwik: generateModuleLoader('qwik', 'eslint-plugin-qwik', () =>
     interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules),
   ),
-  react: genModuleLoader('react', 'eslint-plugin-react', () =>
+  react: generateModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')).then(fixupPluginRules),
   ),
-  'react-debug': genModuleLoader('react-debug', 'eslint-plugin-react-debug', () =>
+  'react-debug': generateModuleLoader('react-debug', 'eslint-plugin-react-debug', () =>
     interopDefault(import('eslint-plugin-react-debug')),
   ),
-  'react-hooks': genModuleLoader(
+  'react-hooks': generateModuleLoader(
     'react-hooks',
     'eslint-plugin-react-hooks',
     () =>
@@ -424,18 +427,18 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'react-refresh': genModuleLoader('react-refresh', 'eslint-plugin-react-refresh', () =>
+  'react-refresh': generateModuleLoader('react-refresh', 'eslint-plugin-react-refresh', () =>
     interopDefault(import('eslint-plugin-react-refresh')),
   ),
-  'react-you-might-not-need-an-effect': genModuleLoader(
+  'react-you-might-not-need-an-effect': generateModuleLoader(
     'react-you-might-not-need-an-effect',
     'eslint-plugin-react-you-might-not-need-an-effect',
     () => interopDefault(import('eslint-plugin-react-you-might-not-need-an-effect')),
   ),
-  regexp: genModuleLoader('regexp', 'eslint-plugin-regexp', () =>
+  regexp: generateModuleLoader('regexp', 'eslint-plugin-regexp', () =>
     interopDefault(import('eslint-plugin-regexp')),
   ),
-  remeda: genModuleLoader(
+  remeda: generateModuleLoader(
     'remeda',
     'eslint-plugin-remeda',
     () =>
@@ -445,33 +448,33 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  rxjs: genModuleLoader('rxjs', '@smarttools/eslint-plugin-rxjs', () =>
+  rxjs: generateModuleLoader('rxjs', '@smarttools/eslint-plugin-rxjs', () =>
     interopDefault(import('@smarttools/eslint-plugin-rxjs')).then(castTsEslintTypedPlugin),
   ),
-  safeql: genModuleLoader('safeql', '@ts-safeql/eslint-plugin', () =>
-    import('@ts-safeql/eslint-plugin/config').then((m) =>
-      castTsEslintTypedPlugin(m.default.configs.useConfigFile.plugins['@ts-safeql']),
+  safeql: generateModuleLoader('safeql', '@ts-safeql/eslint-plugin', () =>
+    import('@ts-safeql/eslint-plugin/config').then((module) =>
+      castTsEslintTypedPlugin(module.default.configs.useConfigFile.plugins['@ts-safeql']),
     ),
   ),
-  security: genModuleLoader('security', 'eslint-plugin-security', () =>
+  security: generateModuleLoader('security', 'eslint-plugin-security', () =>
     interopDefault(import('eslint-plugin-security')),
   ),
-  'sentences-per-line': genModuleLoader(
+  'sentences-per-line': generateModuleLoader(
     'sentences-per-line',
     'eslint-plugin-sentences-per-line',
     () => interopDefault(import('eslint-plugin-sentences-per-line')),
   ),
-  solid: genModuleLoader('solid', 'eslint-plugin-solid', () =>
+  solid: generateModuleLoader('solid', 'eslint-plugin-solid', () =>
     interopDefault(import('eslint-plugin-solid')).then(castTsEslintTypedPlugin),
   ),
-  soml: genModuleLoader('soml', 'eslint-soml', () => interopDefault(import('eslint-soml'))),
-  sonar: genModuleLoader('sonar', 'eslint-plugin-sonarjs', () =>
+  soml: generateModuleLoader('soml', 'eslint-soml', () => interopDefault(import('eslint-soml'))),
+  sonar: generateModuleLoader('sonar', 'eslint-plugin-sonarjs', () =>
     interopDefault(import('eslint-plugin-sonarjs')),
   ),
-  sql: genModuleLoader('sql', 'eslint-plugin-sql', () =>
+  sql: generateModuleLoader('sql', 'eslint-plugin-sql', () =>
     interopDefault(import('eslint-plugin-sql')).then(castTsEslintTypedPlugin),
   ),
-  storybook: genModuleLoader(
+  storybook: generateModuleLoader(
     'storybook',
     'eslint-plugin-storybook',
     () =>
@@ -481,21 +484,24 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
-  stylistic: genInferredModuleLoader('stylistic', '@stylistic/eslint-plugin', () =>
+  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue:
+  // https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113
+  // and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see
+  // https://github.com/nodejs/node/issues/54577
+  stylistic: generateInferredModuleLoader('stylistic', '@stylistic/eslint-plugin', () =>
     Promise.resolve(stylistic),
   ),
-  svelte: genModuleLoader(
+  svelte: generateModuleLoader(
     'svelte',
     'eslint-plugin-svelte',
     () => interopDefault(import('eslint-plugin-svelte')),
     // Hard-depends on `svelte` package, uses it at least in `lib/utils/svelte-context.js`
     MODULE_NOT_FOUND_ERROR_CODES,
   ),
-  tailwindcss: genModuleLoader('tailwindcss', 'eslint-plugin-tailwindcss', () =>
+  tailwindcss: generateModuleLoader('tailwindcss', 'eslint-plugin-tailwindcss', () =>
     interopDefault(import('eslint-plugin-tailwindcss')).then(castTsEslintTypedPlugin),
   ),
-  'tanstack-query': genModuleLoader(
+  'tanstack-query': generateModuleLoader(
     'tanstack-query',
     '@tanstack/eslint-plugin-query',
     () =>
@@ -505,7 +511,7 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'tanstack-router': genModuleLoader(
+  'tanstack-router': generateModuleLoader(
     'tanstack-router',
     '@tanstack/eslint-plugin-router',
     () =>
@@ -515,7 +521,7 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'tanstack-start': genModuleLoader(
+  'tanstack-start': generateModuleLoader(
     'tanstack-start',
     '@tanstack/eslint-plugin-start',
     () =>
@@ -525,40 +531,40 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'testing-library': genModuleLoader('testing-library', 'eslint-plugin-testing-library', () =>
+  'testing-library': generateModuleLoader('testing-library', 'eslint-plugin-testing-library', () =>
     interopDefault(import('eslint-plugin-testing-library')),
   ),
-  toml: genModuleLoader('toml', 'eslint-plugin-toml', () =>
+  toml: generateModuleLoader('toml', 'eslint-plugin-toml', () =>
     interopDefault(import('eslint-plugin-toml')),
   ),
-  'tree-shaking': genModuleLoader('tree-shaking', 'eslint-plugin-tree-shaking', () =>
+  'tree-shaking': generateModuleLoader('tree-shaking', 'eslint-plugin-tree-shaking', () =>
     interopDefault(import('eslint-plugin-tree-shaking')).then(fixupPluginRules),
   ),
-  ts: genModuleLoader('ts', 'typescript-eslint', () =>
-    interopDefault(import('typescript-eslint')).then((m) => m.plugin),
+  ts: generateModuleLoader('ts', 'typescript-eslint', () =>
+    interopDefault(import('typescript-eslint')).then((module) => module.plugin),
   ),
-  tsdoc: genModuleLoader('tsdoc', 'eslint-plugin-tsdoc', () =>
+  tsdoc: generateModuleLoader('tsdoc', 'eslint-plugin-tsdoc', () =>
     interopDefault(import('eslint-plugin-tsdoc')),
   ),
-  tsrx: genModuleLoader('tsrx', '@tsrx/eslint-plugin', () =>
+  tsrx: generateModuleLoader('tsrx', '@tsrx/eslint-plugin', () =>
     interopDefault(import('@tsrx/eslint-plugin')),
   ),
-  turbo: genModuleLoader('turbo', 'eslint-plugin-turbo', () =>
+  turbo: generateModuleLoader('turbo', 'eslint-plugin-turbo', () =>
     interopDefault(import('eslint-plugin-turbo')),
   ),
-  un: genModuleLoader('un', '', () => interopDefault(import('../plugin-un'))),
-  unhead: genModuleLoader('unhead', '@unhead/eslint-plugin', () =>
+  un: generateModuleLoader('un', '', () => interopDefault(import('../plugin-un'))),
+  unhead: generateModuleLoader('unhead', '@unhead/eslint-plugin', () =>
     interopDefault(import('@unhead/eslint-plugin')),
   ),
-  unicorn: genModuleLoader('unicorn', 'eslint-plugin-unicorn', () =>
+  unicorn: generateModuleLoader('unicorn', 'eslint-plugin-unicorn', () =>
     interopDefault(import('eslint-plugin-unicorn')),
   ),
-  'unnecessary-abstractions': genModuleLoader(
+  'unnecessary-abstractions': generateModuleLoader(
     'unnecessary-abstractions',
     'eslint-plugin-unnecessary-abstractions',
     () => interopDefault(import('eslint-plugin-unnecessary-abstractions')),
   ),
-  unocss: genModuleLoader(
+  unocss: generateModuleLoader(
     'unocss',
     '@unocss/eslint-plugin',
     () =>
@@ -568,16 +574,16 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'unused-imports': genModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
+  'unused-imports': generateModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
     interopDefault(import('eslint-plugin-unused-imports')),
   ),
-  vitest: genInferredModuleLoader('vitest', '@vitest/eslint-plugin', () =>
+  vitest: generateInferredModuleLoader('vitest', '@vitest/eslint-plugin', () =>
     interopDefault(import('@vitest/eslint-plugin')),
   ),
-  vue: genModuleLoader('vue', 'eslint-plugin-vue', () =>
+  vue: generateModuleLoader('vue', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')),
   ),
-  'vue-i18n': genModuleLoader(
+  'vue-i18n': generateModuleLoader(
     'vue-i18n',
     '@intlify/eslint-plugin-vue-i18n',
     () =>
@@ -587,33 +593,35 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'vue-scoped-css': genModuleLoader('vue-scoped-css', 'eslint-plugin-vue-scoped-css', () =>
+  'vue-scoped-css': generateModuleLoader('vue-scoped-css', 'eslint-plugin-vue-scoped-css', () =>
     interopDefault(import('eslint-plugin-vue-scoped-css')).then(castTsEslintTypedPlugin),
   ),
-  'vuejs-accessibility': genModuleLoader(
+  'vuejs-accessibility': generateModuleLoader(
     'vuejs-accessibility',
     'eslint-plugin-vuejs-accessibility',
     () => interopDefault(import('eslint-plugin-vuejs-accessibility')),
   ),
-  wc: genModuleLoader('wc', 'eslint-plugin-wc', () => interopDefault(import('eslint-plugin-wc'))),
-  yaml: genModuleLoader('yaml', 'eslint-plugin-yml', () =>
+  wc: generateModuleLoader('wc', 'eslint-plugin-wc', () =>
+    interopDefault(import('eslint-plugin-wc')),
+  ),
+  yaml: generateModuleLoader('yaml', 'eslint-plugin-yml', () =>
     interopDefault(import('eslint-plugin-yml')),
   ),
-  'you-dont-need-lodash-underscore': genModuleLoader(
+  'you-dont-need-lodash-underscore': generateModuleLoader(
     'you-dont-need-lodash-underscore',
     'eslint-plugin-you-dont-need-lodash-underscore',
     () => interopDefault(import('eslint-plugin-you-dont-need-lodash-underscore')),
   ),
-  zod: genModuleLoader('zod', 'eslint-plugin-zod', () =>
+  zod: generateModuleLoader('zod', 'eslint-plugin-zod', () =>
     interopDefault(import('eslint-plugin-zod')),
   ),
-  'zod-core': genModuleLoader('zod-core', 'eslint-plugin-zod-core', () =>
+  'zod-core': generateModuleLoader('zod-core', 'eslint-plugin-zod-core', () =>
     interopDefault(import('eslint-plugin-zod-core')),
   ),
-  'zod-mini': genModuleLoader('zod-mini', 'eslint-plugin-zod-mini', () =>
+  'zod-mini': generateModuleLoader('zod-mini', 'eslint-plugin-zod-mini', () =>
     interopDefault(import('eslint-plugin-zod-mini')),
   ),
-  'zod-openapi': genModuleLoader('zod-openapi', 'eslint-plugin-zod-openapi', () =>
+  'zod-openapi': generateModuleLoader('zod-openapi', 'eslint-plugin-zod-openapi', () =>
     interopDefault(import('eslint-plugin-zod-openapi'))
       .then(castTsEslintTypedPlugin)
       .then(fixupPluginRules),

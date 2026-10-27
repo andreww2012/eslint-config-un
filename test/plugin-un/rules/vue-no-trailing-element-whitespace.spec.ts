@@ -16,26 +16,26 @@ const toTestCase = (template: string) => ({
 ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
   valid: [
     ...[
-      '<p>Loading…</p>',
+      '<p>Loading...</p>',
       '<p>\n  {{ label }}\n</p>',
       '<p>\n  <i></i>\n  <b></b>\n</p>',
       '<p>\n  <i></i>\n  <b v-if="isShown"></b>\n</p>',
       '<p>\n  {{ label }}\n  <i v-if="isShown"></i>\n  <b v-else></b>\n</p>',
       '<p>\n  {{ label }}<i v-if="isShown"> (optional)</i>\n</p>',
-      '<p>\n  <i v-if="isShown"></i>\n  Loading…</p>',
+      '<p>\n  <i v-if="isShown"></i>\n  Loading...</p>',
       '<p>\n  <!-- Comment -->\n  <b v-if="isShown"></b>\n</p>',
       '<p>\n  <i></i>\n  <!-- Comment -->\n  <b v-if="isShown"></b>\n</p>',
       '<p>Total:&#32;</p>',
       '<p>Total:&nbsp;</p>',
       '<p>\n  \n</p>',
-      '<pre>Loading…\n</pre>',
-      '<pre><b>Loading… </b></pre>',
-      '<textarea>Loading…\n</textarea>',
+      '<pre>Loading...\n</pre>',
+      '<pre><b>Loading... </b></pre>',
+      '<textarea>Loading...\n</textarea>',
     ].map(toTestCase),
     ...[
-      '<code-block>Loading…\n</code-block>',
-      '<CodeBlock><b>Loading… </b></CodeBlock>',
-      '<div class="whitespace-pre">Loading…\n</div>',
+      '<code-block>Loading...\n</code-block>',
+      '<CodeBlock><b>Loading... </b></CodeBlock>',
+      '<div class="whitespace-pre">Loading...\n</div>',
     ].map((template) => ({
       ...toTestCase(template),
       options: [{ignoredElements: ['CodeBlock', 'div']}],
@@ -53,8 +53,8 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
   invalid: [
     ...[
       {
-        template: '<p>\n  <i></i>\n  Loading…\n</p>',
-        error: {messageId: 'trailing', line: 3, column: 11, endLine: 4, endColumn: 1},
+        template: '<p>\n  <i></i>\n  Loading...\n</p>',
+        error: {messageId: 'trailing', line: 3, column: 13, endLine: 4, endColumn: 1},
       },
       {
         template: '<p>Total: </p>',
@@ -65,12 +65,12 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
         error: {messageId: 'trailing', line: 2, column: 11, endLine: 3, endColumn: 3},
       },
       {
-        template: '<p>\n  Loading…\n  <!-- Comment -->\n</p>',
-        error: {messageId: 'trailing', line: 2, column: 11, endLine: 4, endColumn: 1},
+        template: '<p>\n  Loading...\n  <!-- Comment -->\n</p>',
+        error: {messageId: 'trailing', line: 2, column: 13, endLine: 4, endColumn: 1},
       },
       {
-        template: '<p>\n  Loading…<!-- Comment -->\n</p>',
-        error: {messageId: 'trailing', line: 2, column: 27, endLine: 3, endColumn: 1},
+        template: '<p>\n  Loading...<!-- Comment -->\n</p>',
+        error: {messageId: 'trailing', line: 2, column: 29, endLine: 3, endColumn: 1},
       },
       {
         template: '<p>\n  {{ label }}\n  <i v-if="isShown"></i>\n</p>',
@@ -107,7 +107,7 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
       ],
     },
     {
-      ...toTestCase('<code-block>Loading…\n</code-block><p>Total: </p>'),
+      ...toTestCase('<code-block>Loading...\n</code-block><p>Total: </p>'),
       options: [{ignoredElements: ['CodeBlock']}],
       errors: [{messageId: 'trailing', line: 2, column: 23, endLine: 2, endColumn: 24}],
     },

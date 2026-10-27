@@ -42,7 +42,12 @@ export interface MarkdownLinksEslintConfigOptions<
    *   [`markdown-links/no-self-destination`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-self-destination.html)
    * @default
    * ```ts
-   * {deadUrls: {options: {checkAnchor: false}, severityWarn: true}, missingFragments: true, missingLocalPath: true, selfDestinationLinks: true}
+   * {
+   *   deadUrls: {options: {checkAnchor: false}, severityWarn: true},
+   *   missingFragments: true,
+   *   missingLocalPath: true,
+   *   selfDestinationLinks: true,
+   * }
    * ```
    */
   check?: {

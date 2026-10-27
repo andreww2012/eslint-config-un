@@ -13,7 +13,7 @@ import {
   readDocumentedMiscGroupConfigs,
 } from './configs-reader';
 
-const CONFIGS_DIR = path.join(import.meta.dirname, '../../../src/configs');
+const CONFIGS_DIRECTORY = path.join(import.meta.dirname, '../../../src/configs');
 
 const CONFIG_KEY_REGEXP = /^[a-z][\dA-Za-z]*$/;
 
@@ -265,7 +265,7 @@ const validate = (
       report(key, mainPluginError);
     }
 
-    if (manifest.requires && manifest.enabledBy === undefined) {
+    if (manifest.requires && manifest.enabledBy == null) {
       report(key, '`requires` is only meaningful together with an explicit `enabledBy`');
     }
     if (
@@ -465,9 +465,7 @@ const renderManifests = (configs: readonly DiscoveredConfig[], cascadeOrder: rea
   const serializeStaticFacts = ({manifest}: DiscoveredConfig) =>
     (['enabledBy', 'requires', 'phase', 'after', 'needs', 'supportsMultipleConfigs'] as const)
       .flatMap((property) =>
-        manifest[property] === undefined
-          ? []
-          : `    ${property}: ${JSON.stringify(manifest[property])},`,
+        manifest[property] == null ? [] : `    ${property}: ${JSON.stringify(manifest[property])},`,
       )
       .join('\n');
 
@@ -515,7 +513,9 @@ const generateConfigArtifacts = async () => {
 
   const cascadeOrder = resolveCascadeOrder(configs);
   const configsByKey = new Map(configs.map((config) => [config.key, config]));
-  const orderedConfigs = cascadeOrder.map((key) => configsByKey.get(key)).filter((v) => v != null);
+  const orderedConfigs = cascadeOrder
+    .map((key) => configsByKey.get(key))
+    .filter((config) => config != null);
 
   const allConfigKeys = configs.map(({key}) => key).toSorted();
 
@@ -531,10 +531,10 @@ export const writeConfigArtifacts = async (format: (code: string) => Promise<str
 
   await Promise.all([
     format(indexDtsCode).then((code) =>
-      fs.writeFile(path.join(CONFIGS_DIR, 'index.gen.d.ts'), code),
+      fs.writeFile(path.join(CONFIGS_DIRECTORY, 'index.gen.d.ts'), code),
     ),
     format(manifestsCode).then((code) =>
-      fs.writeFile(path.join(CONFIGS_DIR, 'manifests.gen.ts'), code),
+      fs.writeFile(path.join(CONFIGS_DIRECTORY, 'manifests.gen.ts'), code),
     ),
   ]);
 

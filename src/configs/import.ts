@@ -30,7 +30,7 @@ interface ExtraneousDependenciesCheckOptions {
    * Whether the imports of the packages declared in `devDependencies` will be flagged.
    * Use the object notation to exempt the files matching the given glob patterns from this check.
    * These patterns are never merged with the default ones - use the function form of the parent
-   * option to extend them.
+   * option to extend them
    */
   checkDevDependencies?: boolean | {ignorePatterns: string[]};
 
@@ -42,13 +42,13 @@ interface ExtraneousDependenciesCheckOptions {
    * By default, only the `package.json` closest to the linted file is consulted, which in a
    * monorepo means the root one is ignored for the files belonging to a workspace package.
    * Setting this option replaces that lookup: the dependencies of all the listed `package.json`
-   * files are merged and applied to every linted file.
+   * files are merged and applied to every linted file
    */
   packageDir?: MaybeArray<string>;
 
   /**
    * Package names that are never reported.
-   * Use case: you're linting a library code and some packages are bundled.
+   * Use case: you're linting a library code and some packages are bundled
    */
   whitelist?: readonly string[];
 }
@@ -59,7 +59,7 @@ interface ExtraneousDependenciesCheckOptions {
  * that will be assigned directly to the `settings` flat config option with keys transformed to
  * `import-x/<original property name in kebab case>`.
  *
- * Some settings are set by our config, and the settings you provide here will be merged with ours.
+ * Some settings are set by our config, and the settings you provide here will be merged with ours
  * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/README.md#settings
  */
 export type {ImportSettings as ImportPluginSettings} from 'eslint-plugin-import-x';
@@ -83,8 +83,8 @@ export interface ImportEslintConfigOptions<
    * - <code>**&#47;*.stories.?([cm])[jt]s?(x)</code>
    * - <code>.storybook&#47;**&#47;*</code>
    *
-   * ⚠️ Will be merged with the user provided `files`. Use the function form of `files` to replace
-   * them instead
+   * ⚠️ Will be merged with the user provided `files`.
+   * Use the function form of `files` to replace them instead
    *
    * Affected rule:
    * - [`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
@@ -137,12 +137,12 @@ export interface ImportEslintConfigOptions<
    *
    * When enabled, creates a
    * [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript)
-   * resolver, whose settings can be overridden using `tsResolverOptions` option.
+   * resolver, whose settings can be overridden using `tsResolverOptions` option
    */
   isTypescriptEnabled?: boolean;
 
   /**
-   * Will be merged with the default TypeScript resolver options, if it is enabled.
+   * Will be merged with the default TypeScript resolver options, if it is enabled
    */
   tsResolverOptions?: TypeScriptResolverOptions;
 
@@ -226,7 +226,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
       ? {...extraneousDependenciesCheckDefault, ...extraneousDependenciesCheck}
       : undefined;
   const devDependenciesCheck = extraneousDependenciesCheckObject?.checkDevDependencies;
-  const packageDir = arrayify(extraneousDependenciesCheckObject?.packageDir);
+  const packageDirectories = arrayify(extraneousDependenciesCheckObject?.packageDir);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import');
 
@@ -257,14 +257,14 @@ export default defineUnConfig<ImportEslintConfigOptions>(
                     {importResolverTypescript, eslintPluginImportX},
                   ) {
                     return [
-                      // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
+                      // With the TS resolver after the node one, `import/no-deprecated` breaks
                       // TODO should report?
                       this.isTypescriptEnabled &&
                         importResolverTypescript.createTypeScriptImportResolver(
                           this.tsResolverOptions,
                         ),
                       eslintPluginImportX.createNodeResolver(),
-                    ].filter((v) => typeof v === 'object');
+                    ].filter((value) => typeof value === 'object');
                   },
                   scope: {isTypescriptEnabled, tsResolverOptions},
                 },
@@ -288,7 +288,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
         },
       },
     ])
-    // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule doesn't exist in it
+    // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule isn't in it
     .addRule('consistent-type-specifier-style', OFF) /** @since 2.27.0 */
     .addRule('default', ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('dynamic-import-chunkname', OFF) /** @since 2.12.0 */
@@ -316,7 +316,8 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     .addRule('no-commonjs', OFF) /** @since 0.13.0 */
     .addRule('no-cycle', OFF) /** @since 2.10.0 */
     .addRule('no-default-export', ERROR) /** @since 2.9.0 */
-    // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
+    // Disabled when `typescript` config is enabled because it has a similar rule which works better
+    // (for example, is not triggered on `rxjs` operators)
     .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING) /** @since 1.0.0 */
     .addRule('no-duplicates', ERROR, [
       {'prefer-inline': true, ...noDuplicatesOptions},
@@ -334,7 +335,7 @@ export default defineUnConfig<ImportEslintConfigOptions>(
                 typeof devDependenciesCheck === 'object'
                   ? devDependenciesCheck.ignorePatterns
                   : !devDependenciesCheck,
-              ...(isNonEmptyArray(packageDir) && {packageDir}),
+              ...(isNonEmptyArray(packageDirectories) && {packageDir: packageDirectories}),
               ...(isNonEmptyArray(extraneousDependenciesCheckObject?.whitelist) && {
                 whitelist: extraneousDependenciesCheckObject.whitelist,
               }),

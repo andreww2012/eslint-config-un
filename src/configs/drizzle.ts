@@ -45,12 +45,12 @@ export default defineUnConfig<DrizzleEslintConfigOptions>('drizzle', {
     .addRule(
       'enforce-delete-with-where',
       ERROR,
-      drizzleObjectName === undefined ? [] : [{drizzleObjectName}],
+      drizzleObjectName == null ? [] : [{drizzleObjectName}],
     ) /** @since 0.1.0 */ // 🟢
     .addRule(
       'enforce-update-with-where',
       ERROR,
-      drizzleObjectName === undefined ? [] : [{drizzleObjectName}],
+      drizzleObjectName == null ? [] : [{drizzleObjectName}],
     ) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('drizzle')
     .addOverrides();

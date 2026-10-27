@@ -72,7 +72,7 @@ export interface FormatEslintConfigOptions<
    *
    * ⚠️ `dprint` formatter requires specifying `language` which is a file path or URL to the WASM
    * binary supporting this language.
-   * [Read more on this in dprint docs](https://dprint.dev/plugins).
+   * [Read more on this in dprint docs](https://dprint.dev/plugins)
    * @default 'oxfmt' <=> `oxfmt` package is installed and `prettier` is not, otherwise 'prettier'
    */
   formatter?:
@@ -87,7 +87,7 @@ export interface FormatEslintConfigOptions<
    *
    * ⚠️ Only Prettier's config can be read: oxfmt has no API for it, and dprint plugins are
    * configured in `formatter` only.
-   * Pass the options of other formatters explicitly.
+   * Pass the options of other formatters explicitly
    * @default true
    */
   readFormatterConfig?: boolean;
@@ -98,7 +98,7 @@ export interface FormatEslintConfigOptions<
    * This will use [`eslint-parser-plain`](https://npmx.dev/eslint-parser-plain) for them.
    *
    * Requires `files`: the parser reads nothing, so leaving it unscoped would take the whole project
-   * over.
+   * over
    */
   usePlainParser?: boolean;
 }

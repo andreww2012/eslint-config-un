@@ -63,8 +63,8 @@ export interface GraphqlEslintConfigOptions<
    * - [`graphql/selection-set-depth`](https://the-guild.dev/graphql/eslint/rules/selection-set-depth)
    * - [`graphql/unique-fragment-name`](https://the-guild.dev/graphql/eslint/rules/unique-fragment-name)
    * - [`graphql/unique-operation-name`](https://the-guild.dev/graphql/eslint/rules/unique-operation-name)
-   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set, otherwise
-   * `false`
+   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set,
+   * otherwise `false`
    */
   disableRulesRequiringOperations?: boolean;
 
@@ -83,8 +83,8 @@ export interface GraphqlEslintConfigOptions<
    * - [`graphql/require-nullable-result-in-root`](https://the-guild.dev/graphql/eslint/rules/require-nullable-result-in-root)
    * - [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections)
    * - [`graphql/strict-id-in-types`](https://the-guild.dev/graphql/eslint/rules/strict-id-in-types)
-   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set, otherwise
-   * `false`
+   * @default true if no GraphQL config file is found and `graphqlConfig` option is not set,
+   * otherwise `false`
    */
   disableRulesRequiringSchema?: boolean;
 
@@ -92,7 +92,7 @@ export interface GraphqlEslintConfigOptions<
    * Provides [GraphQL Config](https://npmx.dev/graphql-config).
    * Normally it is not required as it should be automatically found by the plugin.
    *
-   * Will be assigned to `languageOptions.parserOptions.graphQLConfig`.
+   * Will be assigned to `languageOptions.parserOptions.graphQLConfig`
    */
   graphqlConfig?: IGraphQLConfig;
 
@@ -106,7 +106,7 @@ export interface GraphqlEslintConfigOptions<
    * - [`graphql/lone-executable-definition`](https://the-guild.dev/graphql/eslint/rules/lone-executable-definition)
    *
    * ⚠️ You can only set up to 3 types to `false`
-   * ([hard rule restriction](https://github.com/graphql-hive/graphql-eslint/blob/d891c64ae0be4fcf97560a085bcfecc846ad2eac/packages/plugin/src/rules/lone-executable-definition/index.ts#L24)).
+   * ([hard rule restriction](https://github.com/graphql-hive/graphql-eslint/blob/d891c64ae0be4fcf97560a085bcfecc846ad2eac/packages/plugin/src/rules/lone-executable-definition/index.ts#L24))
    */
   requireSeparateFilesFor?: Partial<
     Record<'fragment' | 'query' | 'mutation' | 'subscription', boolean>
@@ -162,8 +162,11 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     [
       'graphql/processor',
       {
-        // "Provided file type must be one of .js, .mjs, .cjs, .jsx, .ts, .mts, .cts, .tsx, .flow, .flow.js, .flow.jsx, .vue, .svelte, .astro, .gts, .gjs"
-        // "Preprocessing error: Processing of `.vue` files is no longer supported, follow the new official vue example for ESLint's flat config https://github.com/graphql-hive/graphql-eslint/tree/master/examples/vue-code-file"
+        // "Provided file type must be one of .js, .mjs, .cjs, .jsx, .ts, .mts, .cts, .tsx, .flow,
+        // .flow.js, .flow.jsx, .vue, .svelte, .astro, .gts, .gjs"
+        // "Preprocessing error: Processing of `.vue` files is no longer supported, follow the new
+        // official vue example for ESLint's flat config
+        // https://github.com/graphql-hive/graphql-eslint/tree/master/examples/vue-code-file"
         filesDefault: [GLOB_JS_TS_X, GLOB_FLOW, GLOB_SVELTE, GLOB_ASTRO, GLOB_EMBER_GLIMMER],
       },
     ],
@@ -188,7 +191,8 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
   // Legend:
   // 🟢 - in recommended (schema)
   // 🔵 - in recommended (operations)
-  // 📦 - wrapper around `graphql-js` validation function (see https://github.com/graphql/graphql-js/tree/HEAD/src/validation)
+  // 📦 - wrapper around `graphql-js` validation function (see
+  // https://github.com/graphql/graphql-js/tree/HEAD/src/validation)
   // 🖥️ - requires GraphQL Operations
   // 📃 - requires GraphQL Schema
 

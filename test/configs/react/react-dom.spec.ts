@@ -135,8 +135,8 @@ describe('react: sub config `dom`', () => {
         });
       });
 
-      // Every `eslint-react` DOM rule must map to a rule that really exists in `eslint-plugin-react`,
-      // otherwise ESLint refuses to load the whole config.
+      // Every `eslint-react` DOM rule must map to a rule that really exists in
+      // `eslint-plugin-react`, otherwise ESLint refuses to load the whole config
       it('produces a loadable eslint config when set to `never`', async () => {
         await expect(
           testEslintConfig(

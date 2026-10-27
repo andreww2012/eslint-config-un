@@ -725,7 +725,7 @@ describe('options', () => {
     it('warns and still builds config when installed `angular` plugin major version does not match the detected Angular version', async () => {
       addInstalledPackages({'@angular-eslint/eslint-plugin': '18.0.0'});
 
-      // @angular/core is '19.0.0' (from beforeEach) → angularVersion = 19, plugin major = 18 → mismatch
+      // `@angular/core` is 19.0.0 (beforeEach) → angularVersion = 19, plugin major = 18 → mismatch
       const configResult = await computeEslintConfig('angular');
 
       expect(

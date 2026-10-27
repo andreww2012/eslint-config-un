@@ -8,9 +8,9 @@ const PLUGIN_OPTIONS_SCHEMAS: Readonly<
 > = {
   header: {
     header: [
-      // option 0: comment type (`'block' | 'line'`) or path to a file containing the expected header
+      // option 0: comment type (`'block' | 'line'`) or path to a file with the expected header
       {type: 'string'},
-      // option 1: header content – a plain string, array of strings/patterns, or a single pattern object
+      // option 1: the header content (a string, an array of strings/patterns or a pattern object)
       {
         oneOf: [
           {type: 'string'},

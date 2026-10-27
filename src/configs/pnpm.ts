@@ -60,7 +60,7 @@ interface PnpmYamlSubConfigOptions<
 /**
  * [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `pnpm` property of the `settings` flat config option.
+ * that will be assigned to the `pnpm` property of the `settings` flat config option
  */
 export interface PnpmPluginSettings {
   /**

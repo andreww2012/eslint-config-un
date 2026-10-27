@@ -17,7 +17,7 @@ const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
  * Lets specs pass read-only arrays (CONSTANT_CASE constants) as `files` and `ignores`, including
  * those of Sub-configs and of the root `linterOptions*` options
  */
-type AcceptReadonlyFilesAndIgnores<T> = T extends (...args: never[]) => unknown
+type AcceptReadonlyFilesAndIgnores<T> = T extends (...arguments_: never[]) => unknown
   ? T
   : T extends readonly (infer Element)[]
     ? T | readonly Element[]
@@ -63,7 +63,7 @@ export const computeEslintConfig = async (
   // Dynamic import is required so that vi.mock() calls in spec files can intercept
   // the modules loaded transitively by `src/index.ts` (e.g. `package-manager-detector/detect`).
   // A static top-level import would be resolved via setupFiles before vi.mock() registers,
-  // binding the real implementations regardless of any mocks defined in the spec file.
+  // binding the real implementations regardless of any mocks defined in the spec file
   const {eslintConfigInternal: eslintConfig} = await import('../../src/config-un/config');
 
   const unOptions = options?.un;
@@ -94,12 +94,12 @@ export const computeEslintConfig = async (
 
   const eslintConfigsByName = Object.fromEntries(
     config
-      .map((c) =>
-        c.name
-          ? ([c.name.slice(UN_ESLINT_CONFIGS_PREFIX.length), c] satisfies NonEmptyTuple)
+      .map((config) =>
+        config.name
+          ? ([config.name.slice(UN_ESLINT_CONFIGS_PREFIX.length), config] satisfies NonEmptyTuple)
           : null,
       )
-      .filter((v) => v != null),
+      .filter((value) => value != null),
   );
 
   const getConfigByUnPostfix = (eslintConfigNamePostfix: string) =>
@@ -127,7 +127,7 @@ export const computeEslintConfig = async (
           name: namePrefixless,
         };
       })
-      .filter((v) => v != null);
+      .filter((value) => value != null);
 
   const getRuleEntry = (configName: string, ruleName: string) =>
     getConfigByUnPostfix(configName)?.rules?.[ruleName];
@@ -187,13 +187,13 @@ export const testEslintConfig = async <
         [K in keyof FixturePaths]: readonly ESLint.LintResult[];
       }
 > => {
-  // See the comment in `computeEslintConfig` for why this is a dynamic import.
+  // See the comment in `computeEslintConfig` for why this is a dynamic import
   const {eslintConfigInternal: eslintConfig} = await import('../../src/config-un/config');
 
   const config = await eslintConfig(
     asEslintConfigUnOptions({
       defaultConfigsStatus: 'all-disabled',
-      // See the comment in `computeEslintConfig` for why offline mode is forced off here.
+      // See the comment in `computeEslintConfig` for why offline mode is forced off here
       offlineMode: false,
       ...(typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
         optionsOrFixtureSearchRelativeToPath.un),

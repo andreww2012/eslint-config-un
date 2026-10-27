@@ -175,7 +175,7 @@ describe('un options', () => {
 
       const configResult = await computeEslintConfig({checkFile: {ignores: IGNORES}});
 
-      // The config intentionally applies to every file type, but the scripts of HTML files are not files
+      // The config deliberately applies to every file type, but scripts of HTML files are not files
       expect(configResult.getConfigByUnPostfix('check-file')?.ignores).toStrictEqual([
         GLOB_HTML_SCRIPTS,
         ...IGNORES,

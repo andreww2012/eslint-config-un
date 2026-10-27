@@ -112,7 +112,7 @@ export interface MarkdownEslintConfigOptions<
            *
            * [Markdown only] Since some language codes
            * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`),
-           * specifying `javascript` instead of `js` won't have any effect.
+           * specifying `javascript` instead of `js` won't have any effect
            */
           ignoredLanguages?: readonly CodeBlockLanguage[];
 
@@ -120,7 +120,7 @@ export interface MarkdownEslintConfigOptions<
            * Lint fenced code blocks as if their code is assumed to be running in JavaScript's
            * [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
            *
-           * Likely you don't want to change this.
+           * Likely you don't want to change this
            * @default true
            * @see https://github.com/eslint/markdown/blob/HEAD/docs/processors/markdown.md#strict-mode
            */
@@ -137,8 +137,8 @@ export interface MarkdownEslintConfigOptions<
    * ❌ Default `ignores`: `LICENSE.md` and <code>.changeset/**&#47;*.md</code> (only if
    * `@changesets/cli` package is installed)
    *
-   * ⚠️ Will be merged with the user provided `ignores`, which default to the parent config's
-   * `ignores`. Use the function form of `ignores` to replace them instead
+   * ⚠️ Will be merged with the user provided `ignores`, which default to the parent's `ignores`.
+   * Use the function form of `ignores` to replace them instead
    *
    * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line)
    * ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
@@ -150,7 +150,7 @@ export interface MarkdownEslintConfigOptions<
         UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> & {
           /**
            * Options of
-           * [the only rule in this sub-config, `sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md).
+           * [the only rule in this sub-config, `sentences-per-line/one`](https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/one.md)
            */
           options?: GetRuleOptions<'sentences-per-line', 'one'>;
         }
@@ -220,7 +220,7 @@ export interface MarkdownEslintConfigOptions<
     | 'any-lang-required';
 
   /**
-   * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.
+   * Enables Front Matter parsing in both `commonmark` and `gfm` dialects
    * @default 'yaml'
    */
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
@@ -402,7 +402,8 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
           ignoresInternal: false,
         },
       ],
-      // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
+      // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed
+      // in the strict mode?
       {
         languageOptions: {
           parserOptions: {

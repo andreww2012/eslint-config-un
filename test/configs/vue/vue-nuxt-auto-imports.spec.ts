@@ -4,9 +4,10 @@ import path from 'node:path';
 import type {
   NuxtAutoImports,
   NuxtAutoImportsResult,
-  NuxtLayerDirs,
+  NuxtLayerDirectories,
   resolveNuxtAutoImports,
 } from '../../../src/config-un/nuxt';
+import {SHARED_STORE_PACKAGE_JSON_PATH} from '../../helpers/shared-store';
 
 const FIXTURES = {
   nuxtProject: 'nuxt-auto-imports-project',
@@ -14,14 +15,14 @@ const FIXTURES = {
   nuxtCustomDirsProject: 'nuxt-custom-dirs-project',
 } as const;
 
-const NUXT_BUILD_DIR = 'nuxt-build';
-const NUXT_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', FIXTURES.nuxtProject);
-const BROKEN_NUXT_PROJECT_DIR = path.join(
+const NUXT_BUILD_DIRECTORY = 'nuxt-build';
+const NUXT_PROJECT_DIRECTORY = path.join(import.meta.dirname, 'fixtures', FIXTURES.nuxtProject);
+const BROKEN_NUXT_PROJECT_DIRECTORY = path.join(
   import.meta.dirname,
   'fixtures',
   FIXTURES.brokenNuxtProject,
 );
-const NUXT_CUSTOM_DIRS_PROJECT_DIR = path.join(
+const NUXT_CUSTOM_DIRS_PROJECT_DIRECTORY = path.join(
   import.meta.dirname,
   'fixtures',
   FIXTURES.nuxtCustomDirsProject,
@@ -51,42 +52,34 @@ const importActualNuxt = async () =>
 /** Narrows away the failure branch, which the successful cases never produce */
 const resolveFromFixture = async (options?: {cwd?: string; buildDir?: string}) => {
   const {resolveNuxtAutoImports} = await importActualNuxt();
-  const result = await resolveNuxtAutoImports({cwd: NUXT_PROJECT_DIR, ...options});
+  const result = await resolveNuxtAutoImports({cwd: NUXT_PROJECT_DIRECTORY, ...options});
   return result && 'globals' in result ? result : null;
 };
 
 // Outside the repository, so its own `nuxt` isn't reachable from there
 const createNuxtProject = async (nuxtKitSource?: string) => {
-  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-project-'));
-  onTestFinished(() => fs.rm(projectDir, {recursive: true, force: true}));
+  const projectDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-project-'));
+  onTestFinished(() => fs.rm(projectDirectory, {recursive: true, force: true}));
 
-  await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {};\n');
+  await fs.writeFile(path.join(projectDirectory, 'nuxt.config.ts'), 'export default {};\n');
   if (nuxtKitSource != null) {
-    const nuxtDir = path.join(projectDir, 'node_modules', 'nuxt');
-    await fs.mkdir(nuxtDir, {recursive: true});
+    const nuxtDirectory = path.join(projectDirectory, 'node_modules', 'nuxt');
+    await fs.mkdir(nuxtDirectory, {recursive: true});
     await Promise.all([
       fs.writeFile(
-        path.join(nuxtDir, 'package.json'),
+        path.join(nuxtDirectory, 'package.json'),
         JSON.stringify({name: 'nuxt', type: 'module', exports: {'./kit': './kit.js'}}),
       ),
-      fs.writeFile(path.join(nuxtDir, 'kit.js'), nuxtKitSource),
+      fs.writeFile(path.join(nuxtDirectory, 'kit.js'), nuxtKitSource),
     ]);
   }
 
-  return projectDir;
+  return projectDirectory;
 };
 
-// Nothing is linked next to it, so whatever the code finds from its real location is not its own
-const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
-  os.tmpdir(),
-  'shared-store',
-  'eslint-config-un@1.0.0',
-  'node_modules',
-  'eslint-config-un',
-  'package.json',
-);
-
-const createLayerDirs = (overrides?: Partial<NuxtLayerDirs>): NuxtLayerDirs => ({
+const createLayerDirectories = (
+  overrides?: Partial<NuxtLayerDirectories>,
+): NuxtLayerDirectories => ({
   app: 'app',
   modules: 'modules',
   server: 'server',
@@ -102,9 +95,9 @@ const createLayerDirs = (overrides?: Partial<NuxtLayerDirs>): NuxtLayerDirs => (
 
 const createAutoImports = (overrides?: Partial<NuxtAutoImports>): NuxtAutoImports => ({
   buildDir: '/project/.nuxt',
-  layers: [createLayerDirs()],
+  layers: [createLayerDirectories()],
   isV4DirectoryStructure: true,
-  isBuildDirGenerated: true,
+  isBuildDirectoryGenerated: true,
   globals: {
     app: ['useFetch', 'useMyComposable', 'vMyDirective'],
     server: ['defineEventHandler'],
@@ -163,7 +156,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
   describe('warnings', () => {
     it('warns when the build directory has not been generated', async () => {
-      autoImports.current = createAutoImports({isBuildDirGenerated: false});
+      autoImports.current = createAutoImports({isBuildDirectoryGenerated: false});
       const processOutput = spyOnProcessOutput();
 
       await computeEslintConfig({vue: {configNuxt: true}});
@@ -272,7 +265,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('excludes `server` and `shared` from the app config when the app sits at the project root', async () => {
       autoImports.current = createAutoImports({
-        layers: [createLayerDirs({app: ''})],
+        layers: [createLayerDirectories({app: ''})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -285,7 +278,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('excludes `server` and `shared` from the app config when they are nested inside it', async () => {
       autoImports.current = createAutoImports({
-        layers: [createLayerDirs({app: 'src', server: 'src/server'})],
+        layers: [createLayerDirectories({app: 'src', server: 'src/server'})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -297,7 +290,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('takes the context directories from the resolved Nuxt config', async () => {
       autoImports.current = createAutoImports({
-        layers: [createLayerDirs({app: 'source', server: 'api', shared: 'common'})],
+        layers: [createLayerDirectories({app: 'source', server: 'api', shared: 'common'})],
       });
 
       const configResult = await computeEslintConfig({vue: {configNuxt: true}});
@@ -334,8 +327,8 @@ describe('vue: sub config `nuxt` auto-imports', () => {
     it('declares the auto-imports of a context in every layer', async () => {
       autoImports.current = createAutoImports({
         layers: [
-          createLayerDirs(),
-          createLayerDirs({
+          createLayerDirectories(),
+          createLayerDirectories({
             app: 'layers/base',
             server: 'layers/base/server',
             shared: 'layers/base/shared',
@@ -368,7 +361,7 @@ describe('vue: sub config `nuxt` auto-imports', () => {
     it('takes the directories of the project from the resolved Nuxt config', async () => {
       autoImports.current = createAutoImports({
         layers: [
-          createLayerDirs({
+          createLayerDirectories({
             modules: 'local-modules',
             server: 'api',
             components: ['widgets', '../ui'],
@@ -400,8 +393,8 @@ describe('vue: sub config `nuxt` auto-imports', () => {
     it('covers the directories of every layer', async () => {
       autoImports.current = createAutoImports({
         layers: [
-          createLayerDirs(),
-          createLayerDirs({
+          createLayerDirectories(),
+          createLayerDirectories({
             app: 'layers/base',
             modules: 'layers/base/modules',
             server: 'layers/base/server',
@@ -435,7 +428,10 @@ describe('vue: sub config `nuxt` auto-imports', () => {
 
     it('moves the directories of the project, but not of its layers, along with `vueOrNuxtProjectDir`', async () => {
       autoImports.current = createAutoImports({
-        layers: [createLayerDirs({layouts: 'page-layouts'}), createLayerDirs({app: 'layers/base'})],
+        layers: [
+          createLayerDirectories({layouts: 'page-layouts'}),
+          createLayerDirectories({app: 'layers/base'}),
+        ],
       });
 
       const configResult = await computeEslintConfig({
@@ -530,23 +526,25 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     const {resolveNuxtAutoImports} = await importActualNuxt();
 
     await expect(
-      resolveNuxtAutoImports({cwd: path.join(NUXT_PROJECT_DIR, 'packages', 'plain-lib')}),
+      resolveNuxtAutoImports({cwd: path.join(NUXT_PROJECT_DIRECTORY, 'packages', 'plain-lib')}),
     ).resolves.toBeNull();
   });
 
   it('reads the artifacts from the build directory Nuxt reports', async () => {
     expect((await resolveFromFixture())?.buildDir).toBe(
-      path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR),
+      path.join(NUXT_PROJECT_DIRECTORY, NUXT_BUILD_DIRECTORY),
     );
   });
 
   it('resolves the directories relative to the working directory', async () => {
-    expect((await resolveFromFixture())?.layers).toStrictEqual([createLayerDirs()]);
+    expect((await resolveFromFixture())?.layers).toStrictEqual([createLayerDirectories()]);
   });
 
   it('reads the directories of the project and of its layers from the Nuxt config', async () => {
-    expect((await resolveFromFixture({cwd: NUXT_CUSTOM_DIRS_PROJECT_DIR}))?.layers).toStrictEqual([
-      createLayerDirs({
+    expect(
+      (await resolveFromFixture({cwd: NUXT_CUSTOM_DIRS_PROJECT_DIRECTORY}))?.layers,
+    ).toStrictEqual([
+      createLayerDirectories({
         modules: 'local-modules',
         components: ['widgets', '../ui'],
         layouts: 'page-layouts',
@@ -554,7 +552,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
         pages: 'views',
         plugins: 'nuxt-plugins',
       }),
-      createLayerDirs({
+      createLayerDirectories({
         app: 'layers/base',
         modules: 'layers/base/modules',
         server: 'layers/base/server',
@@ -566,42 +564,39 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('leaves out the layers installed as packages or living outside the working directory', async () => {
-    const temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-layers-'));
-    onTestFinished(() => fs.rm(temporaryDir, {recursive: true, force: true}));
+    const temporaryDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-layers-'));
+    onTestFinished(() => fs.rm(temporaryDirectory, {recursive: true, force: true}));
 
-    const projectDir = path.join(temporaryDir, 'project');
+    const projectDirectory = path.join(temporaryDirectory, 'project');
     await Promise.all(
       [
-        path.join(projectDir, 'node_modules', 'package-layer'),
-        path.join(temporaryDir, 'outside-layer'),
-      ].map(async (layerDir) => {
-        await fs.mkdir(layerDir, {recursive: true});
-        await fs.writeFile(path.join(layerDir, 'nuxt.config.ts'), 'export default {};\n');
+        path.join(projectDirectory, 'node_modules', 'package-layer'),
+        path.join(temporaryDirectory, 'outside-layer'),
+      ].map(async (layerDirectory) => {
+        await fs.mkdir(layerDirectory, {recursive: true});
+        await fs.writeFile(path.join(layerDirectory, 'nuxt.config.ts'), 'export default {};\n');
       }),
     );
     await fs.writeFile(
-      path.join(projectDir, 'nuxt.config.ts'),
+      path.join(projectDirectory, 'nuxt.config.ts'),
       "export default {extends: ['../outside-layer', './node_modules/package-layer']};\n",
     );
 
-    const result = await resolveFromFixture({cwd: projectDir});
+    const result = await resolveFromFixture({cwd: projectDirectory});
 
     expect(result?.layers?.map((layer) => layer.app)).toStrictEqual(['']);
   });
 
   it('collects the component directories the way Nuxt does', async () => {
-    const projectDir = await createNuxtProject();
+    const projectDirectory = await createNuxtProject();
     await fs.writeFile(
-      path.join(projectDir, 'nuxt.config.ts'),
+      path.join(projectDirectory, 'nuxt.config.ts'),
       "export default {components: [true, false, 'bits', {path: 'icons'}, {prefix: 'No'}, {dirs: ['widgets', {global: true}]}]};\n",
     );
 
-    expect((await resolveFromFixture({cwd: projectDir}))?.layers?.[0].components).toStrictEqual([
-      'components',
-      'bits',
-      'icons',
-      'widgets',
-    ]);
+    expect(
+      (await resolveFromFixture({cwd: projectDirectory}))?.layers?.[0].components,
+    ).toStrictEqual(['components', 'bits', 'icons', 'widgets']);
   });
 
   it('reports the directory structure Nuxt resolved', async () => {
@@ -627,7 +622,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   it('reports the failure when a Nuxt config is found but cannot be loaded', async () => {
     const {resolveNuxtAutoImports} = await importActualNuxt();
 
-    const result = await resolveNuxtAutoImports({cwd: BROKEN_NUXT_PROJECT_DIR});
+    const result = await resolveNuxtAutoImports({cwd: BROKEN_NUXT_PROJECT_DIRECTORY});
 
     expect(result).toMatchObject({
       error: expect.stringContaining('Intentionally broken') as unknown,
@@ -637,8 +632,8 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
   it('reads an explicitly given build directory where no Nuxt config can be found', async () => {
     const result = await resolveFromFixture({
-      cwd: path.join(NUXT_PROJECT_DIR, 'packages', 'plain-lib'),
-      buildDir: path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR),
+      cwd: path.join(NUXT_PROJECT_DIRECTORY, 'packages', 'plain-lib'),
+      buildDir: path.join(NUXT_PROJECT_DIRECTORY, NUXT_BUILD_DIRECTORY),
     });
 
     expect(result?.globals.app).toStrictEqual([
@@ -653,11 +648,11 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('prefers an explicitly given build directory over the one a loadable config reports', async () => {
-    const result = await resolveFromFixture({buildDir: NUXT_BUILD_DIR});
+    const result = await resolveFromFixture({buildDir: NUXT_BUILD_DIRECTORY});
 
-    expect(result?.buildDir).toBe(path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR));
+    expect(result?.buildDir).toBe(path.join(NUXT_PROJECT_DIRECTORY, NUXT_BUILD_DIRECTORY));
     // The config still loaded, so the layout it reports is kept
-    expect(result?.layers).toStrictEqual([createLayerDirs()]);
+    expect(result?.layers).toStrictEqual([createLayerDirectories()]);
   });
 
   it('reports a build directory that cannot be read rather than throwing', async () => {
@@ -665,7 +660,7 @@ describe('vue: `resolveNuxtAutoImports`', () => {
 
     // A file rather than a directory, which is reported instead of being read as a missing one
     const result = await resolveNuxtAutoImports({
-      cwd: NUXT_PROJECT_DIR,
+      cwd: NUXT_PROJECT_DIRECTORY,
       buildDir: 'nuxt.config.ts',
     });
 
@@ -678,8 +673,8 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     const {resolveNuxtAutoImports} = await importActualNuxt();
 
     const result = await resolveNuxtAutoImports({
-      cwd: BROKEN_NUXT_PROJECT_DIR,
-      buildDir: path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR),
+      cwd: BROKEN_NUXT_PROJECT_DIRECTORY,
+      buildDir: path.join(NUXT_PROJECT_DIRECTORY, NUXT_BUILD_DIRECTORY),
     });
     const autoImportsRead = result && 'globals' in result ? result : null;
 
@@ -690,15 +685,17 @@ describe('vue: `resolveNuxtAutoImports`', () => {
   });
 
   it('changes the cache key when the artifacts change, and only then', async () => {
-    const temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-auto-imports-'));
-    const buildDir = path.join(temporaryDir, NUXT_BUILD_DIR);
-    await fs.cp(path.join(NUXT_PROJECT_DIR, NUXT_BUILD_DIR), buildDir, {recursive: true});
+    const temporaryDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'un-nuxt-auto-imports-'));
+    const buildDirectory = path.join(temporaryDirectory, NUXT_BUILD_DIRECTORY);
+    await fs.cp(path.join(NUXT_PROJECT_DIRECTORY, NUXT_BUILD_DIRECTORY), buildDirectory, {
+      recursive: true,
+    });
 
-    const before = await resolveFromFixture({buildDir});
-    const unchanged = await resolveFromFixture({buildDir});
-    await fs.appendFile(path.join(buildDir, 'types', 'imports.d.ts'), '\n');
-    const afterChange = await resolveFromFixture({buildDir});
-    await fs.rm(temporaryDir, {recursive: true});
+    const before = await resolveFromFixture({buildDir: buildDirectory});
+    const unchanged = await resolveFromFixture({buildDir: buildDirectory});
+    await fs.appendFile(path.join(buildDirectory, 'types', 'imports.d.ts'), '\n');
+    const afterChange = await resolveFromFixture({buildDir: buildDirectory});
+    await fs.rm(temporaryDirectory, {recursive: true});
 
     expect(unchanged?.cacheKey).toBe(before?.cacheKey);
     expect(afterChange?.cacheKey).not.toBe(before?.cacheKey);
@@ -717,67 +714,68 @@ describe('vue: `resolveNuxtAutoImports`', () => {
       vi.resetModules();
     });
 
-    // Our own location may be in a store shared between projects, where it reaches another project's Nuxt or none at all
+    // Our own location may be in a store shared between projects, where it reaches another
+    // project's Nuxt or none at all
     it("uses the project's own Nuxt", async () => {
-      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+      const [{resolveNuxtAutoImports}, projectDirectory] = await Promise.all([
         importActualNuxt(),
         createNuxtProject(
           "export const loadNuxtConfig = async ({cwd}) => ({buildDir: 'own-nuxt-build', rootDir: cwd, srcDir: cwd, _layers: []});\n",
         ),
       ]);
 
-      const result = await resolveNuxtAutoImports({cwd: projectDir});
+      const result = await resolveNuxtAutoImports({cwd: projectDirectory});
 
       expect(result && 'buildDir' in result ? result.buildDir : null).toBe(
-        path.join(projectDir, 'own-nuxt-build'),
+        path.join(projectDirectory, 'own-nuxt-build'),
       );
     });
 
     // What `loadNuxtConfig` makes up when it finds no layer at all
     it('assumes the default directories of a layer its config says nothing about', async () => {
-      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+      const [{resolveNuxtAutoImports}, projectDirectory] = await Promise.all([
         importActualNuxt(),
         createNuxtProject(
           "export const loadNuxtConfig = async ({cwd}) => ({buildDir: '.nuxt', rootDir: cwd, srcDir: cwd, alias: {}, _layers: [{cwd, config: {rootDir: cwd, srcDir: cwd}}]});\nexport const resolveAlias = (path) => path;\n",
         ),
       ]);
 
-      const result = await resolveNuxtAutoImports({cwd: projectDir});
+      const result = await resolveNuxtAutoImports({cwd: projectDirectory});
 
       expect(result && 'layers' in result ? result.layers : null).toStrictEqual([
-        createLayerDirs({app: '', routerOptions: 'app'}),
+        createLayerDirectories({app: '', routerOptions: 'app'}),
       ]);
     });
 
     // Like under Yarn PnP, where there is no `node_modules` to resolve from
     it('falls back to the Nuxt reachable from its own location when the project has none to resolve', async () => {
-      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+      const [{resolveNuxtAutoImports}, projectDirectory] = await Promise.all([
         importActualNuxt(),
         createNuxtProject(),
       ]);
 
-      const result = await resolveNuxtAutoImports({cwd: projectDir});
+      const result = await resolveNuxtAutoImports({cwd: projectDirectory});
 
       expect(result).not.toHaveProperty('error');
       expect(result && 'buildDir' in result ? result.buildDir : null).toBe(
-        path.join(projectDir, '.nuxt'),
+        path.join(projectDirectory, '.nuxt'),
       );
     });
 
     it('does not fall back to the Nuxt of another project when installed in a store shared between projects', async () => {
-      // The mock from the setup file would keep serving the package lookup evaluated outside the store
+      // The setup file's mock would keep serving the package lookup evaluated outside the store
       vi.doUnmock(import('../../../src/utils/package-detection'));
       vi.resetModules();
       vi.doMock(import('empathic/package'), async (importOriginal) => ({
         ...(await importOriginal()),
         up: () => SHARED_STORE_PACKAGE_JSON_PATH,
       }));
-      const [{resolveNuxtAutoImports}, projectDir] = await Promise.all([
+      const [{resolveNuxtAutoImports}, projectDirectory] = await Promise.all([
         importActualNuxt(),
         createNuxtProject(),
       ]);
 
-      await expect(resolveNuxtAutoImports({cwd: projectDir})).resolves.toMatchObject({
+      await expect(resolveNuxtAutoImports({cwd: projectDirectory})).resolves.toMatchObject({
         error: "Cannot find package 'nuxt'",
       });
     });

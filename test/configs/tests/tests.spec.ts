@@ -5,7 +5,7 @@ const FIXTURES = {
   emptyFunction: 'empty-function.js',
 } as const;
 
-/** Every rule the config turns off in test files. */
+/** Every rule the config turns off in test files */
 const DISABLED_RULES = [
   'no-empty-function',
   'e18e/no-delete-property',

@@ -9,12 +9,12 @@ import {
 /**
  * [`@unocss/eslint-plugin`](https://npmx.dev/@unocss/eslint-plugin) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `unocss` property of the `settings` flat config option.
+ * that will be assigned to the `unocss` property of the `settings` flat config option
  */
 export interface UnocssPluginSettings {
   /**
    * Path to the UnoCSS config file.
-   * If not specified, the plugin will look for it on its own.
+   * If not specified, the plugin will look for it on its own
    */
   configPath?: string;
 }

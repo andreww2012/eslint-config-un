@@ -364,7 +364,8 @@ interface SortTsconfigKeysSubConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
    * The order of the top-level `tsconfig.json` keys, `false` to not enforce any
-   * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions', 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
+   * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions',
+   * 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
    */
   orderTopLevel?: boolean | (TsconfigTopLevelKeys | (string & {}))[];
 
@@ -374,7 +375,7 @@ interface SortTsconfigKeysSubConfigOptions<
    * - `false`: no order is enforced;
    * - `{preset}`: the order from the specified preset;
    * - `{type: 'order-groups'}`: the order of the option groups;
-   * - `{type: 'order-keys'}`: the order of the options themselves.
+   * - `{type: 'order-keys'}`: the order of the options themselves
    * @default true
    */
   orderCompilerOptions?:
@@ -385,7 +386,7 @@ interface SortTsconfigKeysSubConfigOptions<
          * - `antfu`: use
          *   [Anthony Fu's order](https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138).
          * - `totalTypescript`: use the order from
-         *   [Matt Pocock's TSConfig Cheat Sheet](https://www.totaltypescript.com/tsconfig-cheat-sheet).
+         *   [Matt Pocock's TSConfig Cheat Sheet](https://www.totaltypescript.com/tsconfig-cheat-sheet)
          */
         preset: keyof typeof TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS;
       }
@@ -396,7 +397,7 @@ interface SortTsconfigKeysSubConfigOptions<
         type: 'order-groups';
 
         /**
-         * Unless overridden, order from `antfu` preset will be used *within* groups.
+         * Unless overridden, order from `antfu` preset will be used *within* groups
          */
         order: readonly (TsconfigCompilerOptionsGroups | (string & {}))[];
 
@@ -426,7 +427,7 @@ interface SortTsconfigKeysSubConfigOptions<
   /**
    * Extra configs for
    * [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
-   * that will be appended to the resulting config array.
+   * that will be appended to the resulting config array
    */
   extraSortKeysConfigs?: readonly (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
 }
@@ -489,7 +490,7 @@ export interface TsEslintConfigOptions<
 
   /**
    * For [extension rules](https://typescript-eslint.io/rules/?=extension), try to smartly inherit
-   * corresponding base rule's severity and options.
+   * corresponding base rule's severity and options
    * @default true
    */
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
@@ -497,13 +498,13 @@ export interface TsEslintConfigOptions<
   /**
    * By default it will be auto-detected from the installed `typescript` package.
    * It will contain major and minor version numbers, e.g. even if you installed TypeScript 5.8.1,
-   * `typescriptVersion` will be `5.8`.
+   * `typescriptVersion` will be `5.8`
    */
   typescriptVersion?: number;
 
   /**
    * Globs of files to allow running with the default project compiler options despite not being
-   * matched by the project service.
+   * matched by the project service
    * @see https://typescript-eslint.io/packages/parser#allowdefaultproject
    */
   allowDefaultProject?: (TsEslintParserOptions['projectService'] & object)['allowDefaultProject'];
@@ -516,7 +517,7 @@ export interface TsEslintConfigOptions<
    *
    * Note that if you only need to set
    * [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject),
-   * we recommend using the separate `allowDefaultProject` option instead.
+   * we recommend using the separate `allowDefaultProject` option instead
    * @see https://typescript-eslint.io/packages/parser#configuration
    */
   parserOptions?: MaybeFn<TsEslintParserOptions, readonly [isForTypeAwareConfig: boolean]>;
@@ -605,7 +606,7 @@ export default defineUnConfig<
       context.configsMeta.astro.enabled && 'astro',
       context.configsMeta.svelte.enabled && 'svelte',
       context.configsMeta.vue.enabled && 'vue',
-    ].filter((v) => v !== false),
+    ].filter((value) => value !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   });
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
@@ -727,7 +728,7 @@ export default defineUnConfig<
     const merged = mergeParserOptions(
       context.typeInfoRulesResolved.parserOptions || {},
       mergeParserOptions(omit(parserOptionsTypeAware, ['projectService']), {
-        ...(projectServiceFromUser !== undefined && {projectService: projectServiceFromUser}),
+        ...(projectServiceFromUser != null && {projectService: projectServiceFromUser}),
       }),
     );
 
@@ -812,7 +813,8 @@ export default defineUnConfig<
               const hasProtectedConstructors = allowBase.includes('protectedConstructors');
               return [
                 ...allowBase.filter(
-                  (v) => v !== 'privateConstructors' && v !== 'protectedConstructors',
+                  (option) =>
+                    option !== 'privateConstructors' && option !== 'protectedConstructors',
                 ),
                 ...(hasPrivateConstructors ? (['private-constructors'] as const) : []),
                 ...(hasProtectedConstructors ? (['protected-constructors'] as const) : []),
@@ -1045,7 +1047,8 @@ export default defineUnConfig<
         ];
 
   const configBuilderTypeAware = context.createConfigBuilder(
-    // Unlike other Sub-configs, also disabled by the parent's empty `files`; its own are resolved by hand, so checked here too
+    // Unlike other Sub-configs, also disabled by the parent's empty `files`; its own are resolved
+    // by hand, so checked here too
     userFiles.length > 0 && userFilesTypeAware.length > 0 && configTypeAware,
     'ts',
   );
@@ -1147,7 +1150,8 @@ export default defineUnConfig<
     .addRule('related-getter-setter-pairs', ERROR) /** @since 8.15.0 */ // 🟣
     .addRule('require-array-sort-compare', OFF) /** @since 1.4.0 */
     .addRule('return-await', ERROR, ['always']) /** @since 2.9.0 */ // 🟣
-    // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
+    // Note: has different name. Also note that the original rule is deprecated and not included in
+    // this config, but we disable it anyway just for safety
     .disableAnyRule('', 'no-return-await') // 🟣
     .addRule('strict-boolean-expressions', OFF) /** @since 1.12.0 */
     .addRule('strict-void-return', ERROR) /** @since 8.53.0 */
@@ -1160,7 +1164,8 @@ export default defineUnConfig<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.1.0 */
-    // The base rules of these extension rules work in TypeScript files, so they're turned off only where replaced
+    // The base rules of these extension rules work in TypeScript files, so they're turned off only
+    // where replaced
     .disableAnyRule('', 'consistent-return')
     .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) /** @since 2.30.0 */ // 💅
     .disableAnyRule('', 'dot-notation')
@@ -1298,8 +1303,8 @@ export default defineUnConfig<
                         ] /* v8 ignore start - guaranteed to exist in runtime, but not during type checking */ ||
                         [] /* v8 ignore stop */
                     : isKeyIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
-                      ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
-                          arrayIncludes<string>(TSCONFIG_COMPILER_OPTIONS_KEYS[group], v),
+                      ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((optionName) =>
+                          arrayIncludes<string>(TSCONFIG_COMPILER_OPTIONS_KEYS[group], optionName),
                         )
                       : [],
                 )

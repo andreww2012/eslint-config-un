@@ -4,7 +4,7 @@ import type {MockInstance} from 'vitest';
 
 /* eslint-disable vars-on-top */
 declare global {
-  var projectGraph: object | undefined;
+  var projectGraph: Record<string, unknown> | undefined;
   var projectRootMappings: Map<string, string> | undefined;
   var projectFileMap: Record<string, unknown[]> | undefined;
 }
@@ -69,7 +69,7 @@ let originalProcessArgv1: string;
 beforeAll(() => {
   // Make isTerminalRun() return true so nx rules use the already-set
   // globalThis.projectGraph directly instead of attempting (and failing) to
-  // refresh from the Nx cache, which produces "No cached ProjectGraph" warnings.
+  // refresh from the Nx cache, which produces "No cached ProjectGraph" warnings
   originalProcessArgv1 = process.argv[1] || '';
   process.argv[1] = 'node_modules/eslint/bin/eslint.js';
 
@@ -175,10 +175,10 @@ describe('rules', async () => {
   //   `dependency-checks` doesn't skip the file.
   // - `projectRootMappings`: maps the workspace root to the project name so that
   //   `findProjectForPath` can resolve linted files to a project.
-  // - `projectFileMap`: used by `findNpmDependencies` (crashes without it).
+  // - `projectFileMap`: used by `findNpmDependencies` (crashes without it)
 
   // Suppress `console.warn` from `@nx/eslint-plugin` (e.g. "Error reading
-  // tsconfig.base.json") which is non-fatal and does not affect test results.
+  // tsconfig.base.json") which is non-fatal and does not affect test results
   let consoleWarnSpy: MockInstance;
 
   beforeAll(() => {

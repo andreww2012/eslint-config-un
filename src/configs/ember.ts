@@ -18,7 +18,7 @@ import {
 /**
  * [`eslint-plugin-ember`](https://npmx.dev/eslint-plugin-ember) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `ember` property of the `settings` flat config option.
+ * that will be assigned to the `ember` property of the `settings` flat config option
  */
 export interface EmberPluginSettings {
   /**
@@ -26,7 +26,7 @@ export interface EmberPluginSettings {
    * installed one.
    * Some rules only report when this version supports their fix, and the parser only treats the
    * Ember 7.1 template keywords (such as `eq` and `on`) as defined from 7.1 on.
-   * The parser gets it as its `emberSourceVersion` option.
+   * The parser gets it as its `emberSourceVersion` option
    * @see https://github.com/ember-cli/eslint-plugin-ember#3-set-your-ember-version-optional
    */
   version?: string;
@@ -273,7 +273,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .markCategory('Controllers')
     .addRule('alias-model-in-controller', OFF) /** @since 2.0.0 */
     .addRule('avoid-using-needs-in-controllers', ERROR) /** @since 5.4.0 */ // 🟢
-    // "This rule will not be added to the recommended configuration until controller usage has become less common / deprecated"
+    // "This rule will not be added to the recommended configuration until controller usage has
+    // become less common / deprecated"
     .addRule('no-controllers', OFF) /** @since 7.8.0 */
     .markCategory('Deprecations')
     .addRule('closure-actions', ERROR) /** @since 2.0.0 */ // 🟢
@@ -302,7 +303,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('template-no-unbound', ERROR) /** @since 13.0.0 */
     .addRule('template-no-with', ERROR) /** @since 13.0.0 */
     .markCategory('Ember Data')
-    // "This rule is not in the recommended configuration because the Ember Data team recommends not using transforms unless you actually want to transform something"
+    // "This rule is not in the recommended configuration because the Ember Data team recommends not
+    // using transforms unless you actually want to transform something"
     .addRule('no-empty-attrs', OFF) /** @since 2.0.0 */
     .addRule('require-async-inverse-relationship', ERROR) /** @since 12.2.0 */
     .addRule('use-ember-data-rfc-395-imports', ERROR) /** @since 6.8.0 */ // 🟢
@@ -311,7 +313,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-get', ERROR) /** @since 6.4.0 */ // 🟢
     .addRule('no-get-with-default', ERROR) /** @since 7.6.0 */ // 🟢
     .addRule('no-modifier-argument-destructuring', ERROR) /** @since 13.0.0 */
-    // "This rule is not in the recommended configuration because there are legitimate usages of proxies"
+    // "This rule is not in the recommended configuration because there are legitimate usages of
+    // proxies"
     .addRule('no-proxies', ERROR) /** @since 6.8.0 */
     .addRule('no-try-invoke', ERROR) /** @since 9.3.0 */ // 🟢
     .addRule('require-super-in-lifecycle-hooks', ERROR) /** @since 10.0.0 */ // 🟢
@@ -334,7 +337,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-jquery', ERROR) /** @since 4.5.0 */ // 🟢
     .markCategory('Miscellaneous')
     .addRule('named-functions-in-promises', OFF) /** @since 2.0.0 */
-    // "This rule is not in the recommended configuration because there are legitimate usages of `htmlSafe`"
+    // "This rule is not in the recommended configuration because there are legitimate usages of
+    // `htmlSafe`"
     .addRule('no-html-safe', ERROR) /** @since 10.2.0 */
     .addRule('no-incorrect-calls-with-inline-anonymous-functions', ERROR) /** @since 6.10.0 */ // 🟢
     .addRule('no-invalid-debug-function-arguments', ERROR) /** @since 6.2.0 */ // 🟢
@@ -350,7 +354,9 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('template-no-unbalanced-curlies', ERROR) /** @since 13.0.0 */
     .addRule('template-no-unknown-arguments-for-builtin-components', ERROR) /** @since 13.0.0 */
     .markCategory('Routes')
-    // Not stylistic because "when you accidentally uppercase any of your routes or create upper-cased route using ember-cli the application will crash without any clear information what's wrong"
+    // Not stylistic because "when you accidentally uppercase any of your routes or create
+    // upper-cased route using ember-cli the application will crash without any clear information
+    // what's wrong"
     .addRule('no-capital-letters-in-routes', ERROR) /** @since 3.4.0 */ // 🟢
     .addRule('no-controller-access-in-routes', ERROR) /** @since 8.10.0 */ // 🟢
     .addRule('no-private-routing-service', ERROR) /** @since 7.10.0 */ // 🟢
@@ -361,18 +367,22 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('route-path-style', ERROR) /** @since 6.3.0 */
     .addRule('routes-segments-snake-case', ERROR) /** @since 2.0.0 */ // 🟢
     .markCategory('Security')
-    .addRule(
-      'template-link-rel-noopener', // cspell:disable-line
-      ERROR,
-    ) /** @since 13.0.0 */
+    .addRule('template-link-rel-noopener', ERROR) /** @since 13.0.0 */
     .addRule('template-no-triple-curlies', ERROR) /** @since 13.0.0 */
     .markCategory('Services')
-    // "This rule is not in the recommended configuration because it is somewhat of a stylistic preference and it's not always necessary to explicitly include the service injection argument"
+    // "This rule is not in the recommended configuration because it is somewhat of a stylistic
+    // preference and it's not always necessary to explicitly include the service injection
+    // argument"
     .addRule('no-implicit-service-injection-argument', OFF) /** @since 10.5.0 */
     .addRule('no-restricted-service-injections', OFF) /** @since 8.6.0 */
-    // "This rule is not in the recommended configuration because this is more of a stylistic preference and some developers may prefer to use the explicit service injection argument to avoid potentially costly lookup/normalization of the service name"
+    // "This rule is not in the recommended configuration because this is more of a stylistic
+    // preference and some developers may prefer to use the explicit service injection argument to
+    // avoid potentially costly lookup/normalization of the service name"
     .addRule('no-unnecessary-service-injection-argument', OFF) /** @since 6.3.0 */
-    // "This rule can exhibit false positives <...> Given these significant limitations, the rule is not currently recommended for production usage, but some may find it useful to experiment with. The rule will not be added to the recommended configuration unless the limitations can be addressed"
+    // "This rule can exhibit false positives <...> Given these significant limitations, the rule is
+    // not currently recommended for production usage, but some may find it useful to experiment
+    // with. The rule will not be added to the recommended configuration unless the limitations can
+    // be addressed"
     .addRule('no-unused-services', ERROR) /** @since 10.4.0 */
     .markCategory('Style')
     .addRule(
@@ -424,7 +434,8 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-legacy-test-waiters', ERROR) /** @since 7.9.0 */ // 🟢
     .addRule('no-noop-setup-on-error-in-before', ERROR) /** @since 8.13.0 */ // 🟢
     .addRule('no-pause-test', ERROR) /** @since 7.1.0 */ // 🟢
-    // "This rule will not be added to the recommended configuration because it would cause the default ember-cli blueprint to contain lint violations"
+    // "This rule will not be added to the recommended configuration because it would cause the
+    // default ember-cli blueprint to contain lint violations"
     .addRule('no-replace-test-comments', WARNING) /** @since 7.11.0 */
     .addRule('no-restricted-resolver-tests', ERROR) /** @since 5.3.0 */ // 🟢
     .addRule('no-settled-after-test-helper', ERROR) /** @since 9.4.0 */ // 🟢

@@ -27,7 +27,7 @@ interface OverridesSetting {
 /**
  * [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `immutability` property of the `settings` flat config option.
+ * that will be assigned to the `immutability` property of the `settings` flat config option
  * @see https://github.com/eslint-functional/eslint-plugin-functional/tree/HEAD/docs/rules/settings
  */
 export interface FunctionalPluginSettings {
@@ -37,7 +37,7 @@ export interface FunctionalPluginSettings {
    *
    * Note: When providing custom overrides, the default ones (for `Map`, `Set`, `Date`, `URL`,
    * `URLSearchParams`) will not be applied.
-   * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed.
+   * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed
    */
   overrides?:
     | readonly OverridesSetting[]

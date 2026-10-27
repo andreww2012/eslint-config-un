@@ -105,7 +105,7 @@ export const GLOB_HTM_HTML = `**/*.${GLOB_HTM_HTML_EXTENSION}` as const;
 const GLOB_HTML_SCRIPT_BASENAME = '+([0-9])_script-+([0-9])';
 
 /**
- * The virtual files the `htmlScripts` Config lints the `<script>` blocks of HTML (or other) files as:
+ * The virtual files the `htmlScripts` Config lints `<script>` blocks of HTML (or other) files as:
  * `.js` for classic scripts, `.mjs` for module ones
  */
 export const GLOB_HTML_SCRIPTS = `**/*.*/${GLOB_HTML_SCRIPT_BASENAME}.?(m)js` as const;

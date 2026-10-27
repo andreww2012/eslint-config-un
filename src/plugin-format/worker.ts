@@ -176,7 +176,7 @@ const formatWithPrettier = async (
   shouldReadConfig: boolean,
 ) => {
   const prettier = await import('prettier');
-  // Code blocks resolve as files inside the Markdown file, getting the overrides for their extension
+  // Code blocks resolve as files in the Markdown file, getting the overrides for their extension
   const config = shouldReadConfig
     ? await prettier.resolveConfig(filePath, {editorconfig: true})
     : null;

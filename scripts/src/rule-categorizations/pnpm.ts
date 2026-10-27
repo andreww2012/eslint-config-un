@@ -12,7 +12,7 @@ const categorizePnpmRule: CategorizeRule<(typeof PNPM_RULE_NAME_PREFIXES)[number
     : {
         categories: [],
         errors: [
-          `does not start with any of the known file type prefixes: ${PNPM_RULE_NAME_PREFIXES.map((v) => `\`${v}-\``).join(', ')}`,
+          `does not start with any of the known file type prefixes: ${PNPM_RULE_NAME_PREFIXES.map((candidate) => `\`${candidate}-\``).join(', ')}`,
         ],
       };
 };

@@ -1,4 +1,3 @@
-// cspell:ignore classfield
 import {ERROR, OFF} from '../constants';
 import type {OmitStrict} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
@@ -13,7 +12,7 @@ import {
  * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to `settings` object as-is and applied to the resolved `files` and
- * `ignores` of this config.
+ * `ignores` of this config
  */
 export interface LitA11yPluginSettings {
   /**
@@ -21,7 +20,7 @@ export interface LitA11yPluginSettings {
    * literals are linted.
    *
    * If you're importing `lit-html` from a package that re-exports `lit-html`, for example
-   * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
+   * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here
    */
   litHtmlSources?: boolean | readonly string[];
 }
@@ -43,7 +42,7 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
 /**
  * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `lit` property of the `settings` flat config option.
+ * that will be assigned to the `lit` property of the `settings` flat config option
  */
 export interface LitPluginSettings {
   /**
@@ -104,7 +103,10 @@ export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {packag
     .addRule('ban-attributes', OFF) /** @since 1.7.0 */
     .addRule('binding-positions', ERROR) /** @since 0.1.0 */
     .addRule('lifecycle-super', ERROR) /** @since 1.9.0 */
-    .addRule('no-classfield-shadowing', ERROR) /** @since 1.10.0 */
+    .addRule(
+      'no-classfield-shadowing', // cspell:disable-line
+      ERROR,
+    ) /** @since 1.10.0 */
     .addRule('no-duplicate-template-bindings', ERROR) /** @since 0.1.0 */
     .addRule('no-invalid-escape-sequences', ERROR) /** @since 1.1.0 */
     .addRule('no-invalid-html', ERROR) /** @since 0.4.0 */

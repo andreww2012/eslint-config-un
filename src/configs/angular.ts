@@ -132,12 +132,12 @@ export interface AngularEslintConfigOptions<
    * version of [`@angular-eslint/eslint-plugin`](https://npmx.dev/@angular-eslint/eslint-plugin)
    * and
    * [`@angular-eslint/eslint-plugin-template`](https://npmx.dev/@angular-eslint/eslint-plugin-template)
-   * packages.
+   * packages
    */
   angularVersion?: SupportedAngularVersion;
 
   /**
-   * Process inline templates in order to lint them.
+   * Process inline templates in order to lint them
    * @default true
    */
   processInlineTemplates?: boolean;
@@ -275,7 +275,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
   });
 
   const angularVersion: SupportedAngularVersion =
-    optionsResolved.angularVersion ??
+    optionsResolved.angularVersion ||
     (() => {
       const majorVersion = context.packagesInfo['@angular/core']?.versions.major;
       return arrayIncludes(SUPPORTED_ANGULAR_VERSIONS, majorVersion)
@@ -444,7 +444,8 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule(
       ...getPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
     ) /** @since 0.0.1-alpha.23 */
-    // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
+    // See https://github.com/angular/angular/pull/54084,
+    // https://angular.dev/guide/components/host-elements
     .addRule(
       ...getPluginRuleSeverity(
         'no-host-metadata-property',

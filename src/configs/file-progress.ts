@@ -11,17 +11,17 @@ import {
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `progress` property of the `settings` flat config option.
  *
- * Will be merged with the default value for `hide`.
+ * Will be merged with the default value for `hide`
  */
 export interface FileProgressPluginSettings {
   /**
-   * Hides the progress bar.
+   * Hides the progress bar
    * @default true <=> the resolved `environment` root option is not `default`
    */
   hide?: boolean;
 
   /**
-   * Hide the currently linted file name.
+   * Hide the currently linted file name
    * @default false
    */
   hideFileName?: boolean;

@@ -1,6 +1,6 @@
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {type NuxtAutoImports, resolveNuxtLayerDirs} from '../config-un/nuxt';
+import {type NuxtAutoImports, resolveNuxtLayerDirectories} from '../config-un/nuxt';
 import {
   ERROR,
   GLOB_JS_TS_EXTENSION,
@@ -62,7 +62,7 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
   /**
    * What `ts` rules will be applied to the specified `files`.
    * If you want more control over which TypeScript rules are applied to which Vue files, use `ts`
-   * config options for that.
+   * config options for that
    * @default true
    */
   typescriptRules?: boolean | 'only-non-type-aware';
@@ -71,7 +71,7 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
 /**
  * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `vue-i18n` property of the `settings` flat config option.
+ * that will be assigned to the `vue-i18n` property of the `settings` flat config option
  * @see https://eslint-plugin-vue-i18n.intlify.dev/started#settings-vue-i18n
  */
 export interface VueI18nPluginSettings {
@@ -113,7 +113,7 @@ export interface VueI18nPluginSettings {
              * Specifies how to determine pattern the locale for localization messages.
              * This option means, when `localeKey` is `'path'`, you will need to capture the
              * locale using a regular expression.
-             * You need to use the locale capture as a named capture `?<locale>`, so it’s be able
+             * You need to use the locale capture as a named capture `?<locale>`, so it's be able
              * to capture from the path of the locale resources.
              * If you omit it, it will be captured from the resource path with the same regular
              * expression pattern as `vue-cli-plugin-i18n`.
@@ -141,7 +141,7 @@ export interface VueI18nPluginSettings {
   messageSyntaxVersion?: string;
 
   /**
-   * The directory the relative `localeDir` globs are resolved against.
+   * The directory the relative `localeDir` globs are resolved against
    * @default ESLint's working directory
    */
   cwd?: string;
@@ -175,7 +175,7 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       >;
 
   /**
-   * By default auto-detected from the installed `nuxt` package version.
+   * By default auto-detected from the installed `nuxt` package version
    */
   nuxtMajorVersion?: 3 | 4;
 
@@ -186,7 +186,7 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * loaded, or when it sits anywhere other than the directory ESLint runs in.
    * Note that the auto-imports are all this option recovers: with no Nuxt config to read the
    * directory layout from, `vueOrNuxtProjectDir` has to be set as well unless your app happens to
-   * sit where it would by default.
+   * sit where it would by default
    * @default // read from your Nuxt config
    */
   buildDir?: string;
@@ -195,8 +195,9 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * Whether the app lives in a directory of its own rather than directly at the project root.
    * The [directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#migrating-to-nuxt-4-new-directory-structure)
    * Nuxt 4 introduced, and backported to Nuxt 3, is the usual reason for it, but pointing `srcDir`
-   * elsewhere in a Nuxt 3 project counts just the same.
-   * @default // whether your Nuxt config resolves `srcDir` away from the project root, falling back to `true` <=> Nuxt version is 4
+   * elsewhere in a Nuxt 3 project counts just the same
+   * @default // whether your Nuxt config resolves `srcDir` away from the project root, falling back
+   * to `true` <=> Nuxt version is 4
    */
   v4DirectoryStructure?: boolean;
 }
@@ -379,7 +380,7 @@ export interface VueEslintConfigOptions<
   configScopedCss?: boolean | ScopedCssEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * By default auto-detected from the installed `vue` package version.
+   * By default auto-detected from the installed `vue` package version
    * @default auto-detected
    */
   majorVersion?: SupportedVueMajorVersion;
@@ -569,7 +570,7 @@ export interface VueEslintConfigOptions<
    *
    * - By default, virtual files will be created for `<style>` blocks.
    * - If an object is passed, it will be merged with the defaults above.
-   * - If `false`, no virtual files will be created.
+   * - If `false`, no virtual files will be created
    * @default true
    */
   processSfcBlocks?: boolean | EslintProcessorVueBlocksOptions;
@@ -578,7 +579,7 @@ export interface VueEslintConfigOptions<
    * A relative path to your Vue or Nuxt project, i.e. where the app's entry point (`app.vue`),
    * `pages` and Nuxt's `layouts` directories are located.
    * For Nuxt projects it defaults to the `srcDir` your Nuxt config resolves to, and otherwise to
-   * the current directory `''`.
+   * the current directory `''`
    */
   vueOrNuxtProjectDir?: string;
 }
@@ -690,7 +691,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
         ? `[vue/nuxt] Your Nuxt config could not be loaded, so the auto-imports were read from \`buildDir\` but the directory layout had to be guessed: ${nuxtConfigError}. Set \`vueOrNuxtProjectDir\` if the guess is wrong`
         : `[vue/nuxt] Your Nuxt config could not be loaded, so auto-imported composables, components and directives will be reported as undefined: ${nuxtConfigError}. Set the \`buildDir\` option to read the auto-imports regardless`,
     );
-  } else if (nuxtAutoImports?.isBuildDirGenerated === false) {
+  } else if (nuxtAutoImports?.isBuildDirectoryGenerated === false) {
     context.logger.warn(
       `[vue/nuxt] \`${nuxtAutoImports.buildDir}\` has not been generated yet. Run \`nuxt prepare\`, otherwise auto-imported composables, components and directives will be reported as undefined`,
     );
@@ -743,7 +744,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
                     },
                   });
                 })(),
-              ].filter((v) => v != null),
+              ].filter((value) => value != null),
             );
           },
           scope: {processSfcBlocks},
@@ -892,7 +893,8 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
       [
         {
           html: {
-            // TODO change to `never` once Prettier (and oxfmt following it) does not add `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
+            // TODO change to `never` once Prettier (and oxfmt following it) does not add `/` to the
+            // end of void elements: https://github.com/prettier/prettier/issues/15336
             void: context.packagesInfo.prettier || context.packagesInfo.oxfmt ? 'any' : 'never',
             normal: 'never',
             component: 'never',
@@ -1063,7 +1065,8 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .addRule('padding-lines-in-component-definition', ERROR, [
       {
         withinOption: {
-          // TODO understand the difference between `betweenItems` and `withinEach`: https://eslint.vuejs.org/rules/padding-lines-in-component-definition.html
+          // TODO understand the difference between `betweenItems` and `withinEach`:
+          // https://eslint.vuejs.org/rules/padding-lines-in-component-definition.html
           props: 'ignore',
         },
       },
@@ -1091,9 +1094,10 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .addRule('sort-keys', OFF) /** @since 6.2.0 */
     .addRule('static-class-names-order', OFF) /** @since 6.1.0 */
     .addRule('v-for-delimiter-style', ERROR, ['in' /* default */]) /** @since 7.0.0 */
-    // This rule is not required in Vue 3, as the key is automatically assigned to the elements.
+    // This rule is not required in Vue 3, as the key is automatically assigned to the elements
     .addRule('v-if-else-key', vue2Severity(ERROR))
-    // TODO change to `[inline, inline-function]` once this is landed: https://github.com/vuejs/eslint-plugin-vue/issues/2460
+    // TODO change to `[inline, inline-function]` once this is landed:
+    // https://github.com/vuejs/eslint-plugin-vue/issues/2460
     .addRule('v-on-handler-style', ERROR, ['inline']) /** @since 9.7.0 */
     .addRule('valid-define-options', isMin3_3 ? ERROR : OFF) /** @since 9.13.0 */ // 3️⃣
     .markCategory('Extension Rules')
@@ -1272,7 +1276,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
   );
 
   const [nuxtProjectLayer, ...nuxtOtherLayers] = nuxtAutoImports?.layers || [
-    resolveNuxtLayerDirs(
+    resolveNuxtLayerDirectories(
       {
         srcDir: optionsResolved.vueOrNuxtProjectDir,
         rootDir: nuxtV4DirectoryStructure
@@ -1332,27 +1336,30 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
         joinPaths(directory, `**/*.${GLOB_JS_TS_X_EXTENSION}`),
         joinPaths(directory, '**/*.vue'),
       ]);
-    const appDirs = nuxtLayers.map((layer) => layer.app);
-    const serverDirs = nuxtLayers.map((layer) => layer.server);
-    const sharedDirs = nuxtLayers.map((layer) => layer.shared);
-    const isInsideAppDir = (directory: string) =>
-      appDirs.some(
-        (appDir) => appDir.length === 0 || appDir === '.' || directory.startsWith(`${appDir}/`),
+    const appDirectories = nuxtLayers.map((layer) => layer.app);
+    const serverDirectories = nuxtLayers.map((layer) => layer.server);
+    const sharedDirectories = nuxtLayers.map((layer) => layer.shared);
+    const isInsideAppDirectory = (directory: string) =>
+      appDirectories.some(
+        (appDirectory) =>
+          appDirectory.length === 0 ||
+          appDirectory === '.' ||
+          directory.startsWith(`${appDirectory}/`),
       );
 
     (
       [
         [
           'app',
-          codeFilesIn(appDirs),
+          codeFilesIn(appDirectories),
           // Whichever of these sits inside an app directory is matched by the globs above as well,
           // despite each context being given a different set of auto-imports
-          [...serverDirs, ...sharedDirs]
-            .filter((directory) => isInsideAppDir(directory))
+          [...serverDirectories, ...sharedDirectories]
+            .filter((directory) => isInsideAppDirectory(directory))
             .map((directory) => `${directory}/**`),
         ],
-        ['server', codeFilesIn(serverDirs)],
-        ['shared', codeFilesIn(sharedDirs)],
+        ['server', codeFilesIn(serverDirectories)],
+        ['shared', codeFilesIn(sharedDirectories)],
       ] satisfies readonly (readonly [
         globalsContext: keyof NuxtAutoImports['globals'],
         files: readonly string[],
@@ -1393,7 +1400,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
             optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
           ]
             .flat()
-            .filter((v) => typeof v === 'string'),
+            .filter((value) => typeof value === 'string'),
         ),
       ],
     })
@@ -1424,7 +1431,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
           ]),
       ]
         .flat()
-        .filter((v) => typeof v === 'string'),
+        .filter((value) => typeof value === 'string'),
     })
     .disableAnyRule('import', 'no-default-export');
 

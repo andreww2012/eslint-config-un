@@ -18,20 +18,22 @@ export default defineConfig({
     // which in turn tries to load `@glimmer/env` not listed in its dependencies.
     // So we need to mock it.
     // Node 22's require(esm) then triggers the full ESM import chain before Vite's pipeline
-    // can intercept it, so a Node loader hook is the only way to provide the mock.
+    // can intercept it, so a Node loader hook is the only way to provide the mock
     execArgv: [
       '--import',
       import.meta.resolve('./test/__mocks__/loader/index.js', import.meta.url),
     ],
     snapshotFormat: {
       min: true,
-      // `indent` is implicitly set to 2 by default, but `min` cannot be used together with non-falsy `indent` value
+      // `indent` is implicitly set to 2 by default, but `min` cannot be used together with
+      // non-falsy `indent` value
       indent: 0,
     },
     coverage: {
       include: ['src/**/*.ts'],
       reporter: ['html', 'json'],
-      // Avoid "Error: ENOENT: no such file or directory, open 'coverage\.tmp\coverage-8.json'" in watch mode
+      // Avoid "Error: ENOENT: no such file or directory, open 'coverage\.tmp\coverage-8.json'" in
+      // watch mode
       clean: false,
     },
     ui: true,

@@ -135,7 +135,7 @@ const main = () => {
   const overridePackages = overridePackagesRaw.map((packageNameAndMaybeOverride) => {
     const [packageNameToOverride = '', override] = packageNameAndMaybeOverride
       .split('|')
-      .map((s) => s.trim());
+      .map((part) => part.trim());
     if (!NPM_PACKAGE_NAME_REGEX.test(packageNameToOverride)) {
       invalidPackageNamesToOverride.push(packageNameToOverride);
     }
@@ -256,10 +256,11 @@ const run = async ({
   concurrency,
   batchSize,
 }: ReturnType<typeof main> & {}) => {
-  const projectDir = path.join(import.meta.dirname, 'temp', packageName);
-  const generatePathInProject = (...paths: readonly string[]) => path.join(projectDir, ...paths);
+  const projectDirectory = path.join(import.meta.dirname, 'temp', packageName);
+  const generatePathInProject = (...paths: readonly string[]) =>
+    path.join(projectDirectory, ...paths);
 
-  await fs.mkdir(projectDir, {recursive: true});
+  await fs.mkdir(projectDirectory, {recursive: true});
 
   const packageJsonPath = generatePathInProject('package.json');
 
@@ -300,7 +301,7 @@ const run = async ({
         symbol: `$${i}`,
       };
     })
-    .filter((v) => v != null)
+    .filter((value) => value != null)
     // eslint-disable-next-line unicorn/no-array-sort
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .filter(({version}) => !packageVersionsRange || rangeSatisfies(version, packageVersionsRange));
@@ -343,7 +344,7 @@ const run = async ({
 
   // pnpm-workspace.yaml is written even when no overrides are needed so that it anchors the
   // workspace root for the temp project. Without it, pnpm would walk up and pick up the parent
-  // eslint-config-un workspace settings.
+  // eslint-config-un workspace settings
   const pnpmWorkspaceYamlContent = yamlStringify(
     Object.keys(pnpmOverrides).length > 0 ? {overrides: pnpmOverrides} : {},
   );
@@ -355,20 +356,20 @@ const run = async ({
   ]);
 
   const nodeModulesPath = generatePathInProject('node_modules');
-  const areDepsInstalled = await Promise.all(
+  const areDependenciesInstalled = await Promise.all(
     Object.keys(generatedPackageJson.dependencies || {}).map(
       async (name) => await pathExists(path.join(nodeModulesPath, name)),
     ),
   ).then((results) => results.every(Boolean));
 
-  if (skipInstallation === true && !areDepsInstalled) {
+  if (skipInstallation === true && !areDependenciesInstalled) {
     logger.error(
       '--skip-installation was set but dependencies are not installed. Remove the flag to install them.',
     );
     return false;
   }
 
-  if (areDepsInstalled) {
+  if (areDependenciesInstalled) {
     logger.log('Dependencies already installed, skipping installation.');
   } else {
     logger.log('Installing dependencies...');
@@ -382,14 +383,14 @@ const run = async ({
           'true',
           '--config.confirmModulesPurge=false', // In case modules directory format changes, do not require interactive confirmation as it is unavailable
         ],
-        {nodeOptions: {cwd: projectDir}},
+        {nodeOptions: {cwd: projectDirectory}},
       );
 
     if (dependencyInstallationErrorCode) {
       logger.error(
         dependencyInstallationOutput
           .split('\n')
-          .filter((str) => str && !PNPM_INSTALL_NOISE_LINE_REGEX.test(str))
+          .filter((line) => line && !PNPM_INSTALL_NOISE_LINE_REGEX.test(line))
           .join('\n'),
       );
       return false;

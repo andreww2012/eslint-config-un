@@ -4,7 +4,7 @@ const FIXTURES = {
 
 /**
  * `perfectionist/sort-arrays` only sorts arrays matched by `useConfigurationIf`,
- * so its schema makes that option mandatory.
+ * so its schema makes that option mandatory
  */
 const OPTIONS = {useConfigurationIf: {allNamesMatchPattern: '^[a-z]$'}} as const;
 

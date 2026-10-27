@@ -23,9 +23,11 @@ export function findLintMessageFromLintResults(
 ): Linter.LintMessage | readonly Linter.LintMessage[] | undefined {
   const fileName = substringAfterLast(filePath, '/');
   const fileResult = lintResult.find(
-    (r) => fileName && pathe.normalize(r.filePath).split('/').at(-1) === fileName,
+    (result) => fileName && pathe.normalize(result.filePath).split('/').at(-1) === fileName,
   );
   return options?.all
-    ? fileResult?.messages.filter((m) => m.ruleId === ruleId) || []
-    : fileResult?.messages.find((m) => m.ruleId === ruleId || (m.ruleId == null && m.fatal));
+    ? fileResult?.messages.filter((message) => message.ruleId === ruleId) || []
+    : fileResult?.messages.find(
+        (message) => message.ruleId === ruleId || (message.ruleId == null && message.fatal),
+      );
 }

@@ -19,7 +19,7 @@ import {
  * use `v1` sub-config.
  *
  * Note that if neither `files` nor `ignores` is specified as a non-empty array in the main or a
- * sub-config, that config won't be generated.
+ * sub-config, that config won't be generated
  */
 export interface CloudfrontFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -34,11 +34,13 @@ export interface CloudfrontFunctionsEslintConfigOptions<
   configV1?: UnFlatConfigEntryBase<ExtraPlugins>;
 }
 
-const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
+const generateSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
   `${syntax} ${isPlural ? 'are' : 'is'} not allowed in CloudFront functions`;
 
 const getAllowedImports = (isV2 = true): readonly string[] =>
-  ['querystring', 'crypto', isV2 && 'cloudfront'].filter((v) => typeof v === 'string');
+  ['querystring', 'crypto', isV2 && 'cloudfront'].filter(
+    (moduleName) => typeof moduleName === 'string',
+  );
 
 // Turning Node.js globals off makes `no-undef` report the ones missing in CloudFront
 const getGlobals = (isV2: boolean) =>
@@ -204,15 +206,15 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
         [
           {
             selector: 'ExportNamedDeclaration',
-            message: genSyntaxNotAllowedErrorMessage('Named export statements', true),
+            message: generateSyntaxNotAllowedErrorMessage('Named export statements', true),
           },
           {
             selector: 'ExportDefaultDeclaration',
-            message: genSyntaxNotAllowedErrorMessage('Default export statements', true),
+            message: generateSyntaxNotAllowedErrorMessage('Default export statements', true),
           },
           {
             selector: 'ExportAllDeclaration',
-            message: genSyntaxNotAllowedErrorMessage(
+            message: generateSyntaxNotAllowedErrorMessage(
               'Re-export statements (export * from ...)',
               true,
             ),
@@ -228,24 +230,26 @@ export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfron
           {
             selector:
               "CallExpression[callee.object.name='console'][callee.property.name='log'][arguments.length>1]",
-            message: genSyntaxNotAllowedErrorMessage('Passing multiple arguments to `console.log`'),
+            message: generateSyntaxNotAllowedErrorMessage(
+              'Passing multiple arguments to `console.log`',
+            ),
           },
           {
             selector:
               "CallExpression[callee.object.name='Object'][callee.property.name='create'][arguments.length>1]",
-            message: genSyntaxNotAllowedErrorMessage(
+            message: generateSyntaxNotAllowedErrorMessage(
               'Passing property descriptors to `Object.create`',
             ),
           },
           isV2 && {
             selector:
               ':function :function[async=true], :matches(CallExpression, NewExpression) > :function[async=true]',
-            message: genSyntaxNotAllowedErrorMessage(
+            message: generateSyntaxNotAllowedErrorMessage(
               'Nested async functions and async function arguments',
               true,
             ),
           },
-        ].filter((v) => typeof v === 'object'),
+        ].filter((value) => typeof value === 'object'),
       )
       // AWS recommends sequential `await`s over `Promise.all()` and similar methods to save memory
       .disableAnyRule('', 'no-await-in-loop')

@@ -13,7 +13,7 @@ import {
  * plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `json-schema-validator` property of the `settings` flat config
- * option.
+ * option
  * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/README.md#settings)
  */
 export interface JsonSchemaValidatorPluginSettings {

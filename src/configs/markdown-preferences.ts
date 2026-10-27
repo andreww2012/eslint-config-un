@@ -1,4 +1,3 @@
-// cspell:ignore blockquotes autolinks setext
 import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
 import {pluginsLoaders} from '../loaders';
 import {mergeArrayOrBooleanRecords} from '../utils';
@@ -360,7 +359,10 @@ export default defineUnConfig<
               : orderedLists.style,
           ],
     ) /** @since 0.18.0 */ // 💅
-    .addRule('prefer-autolinks', ERROR) /** @since 0.11.0 */ // 🟢
+    .addRule(
+      'prefer-autolinks', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.11.0 */ // 🟢
     .addRule('prefer-fenced-code-blocks', ERROR) /** @since 0.11.0 */ // 🟢
     .addRule('prefer-link-reference-definitions', ERROR, [
       {minLinks: 3 /* Default: 2 */},
@@ -398,7 +400,10 @@ export default defineUnConfig<
     .addRule('atx-heading-closing-sequence-length', ERROR) /** @since 0.13.0 */ // 💅
     .addRule('code-fence-length', ERROR) /** @since 0.20.0 */ // 💅
     .addRule('max-len', OFF) /** @since 0.40.0 */
-    .addRule('no-laziness-blockquotes', ERROR) /** @since 0.10.0 */ // 🟢
+    .addRule(
+      'no-laziness-blockquotes', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.10.0 */ // 🟢
     .addRule(
       'ordered-list-marker-sequence',
       orderedLists.numbering === false ? OFF : ERROR,
@@ -406,7 +411,10 @@ export default defineUnConfig<
         ? []
         : [{increment: orderedLists.numbering === 'sequential' ? 'always' : 'never'}],
     ) /** @since 0.12.0 */ // 💅
-    .addRule('setext-heading-underline-length', ERROR) /** @since 0.17.0 */ // 💅
+    .addRule(
+      'setext-heading-underline-length', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.17.0 */ // 💅
     .addRule('sort-definitions', OFF) /** @since 0.8.0 */ // 💅
     .addRule('table-leading-trailing-pipes', ERROR) /** @since 0.25.0 */ // 💅
     .addRule('table-pipe-alignment', ERROR) /** @since 0.25.0 */ // 💅

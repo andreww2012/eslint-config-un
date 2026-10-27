@@ -4,8 +4,11 @@ import path from 'node:path';
 import type {GitignoreSourcesOptions} from 'gitignore-reader-x';
 import {resolveGitignore} from '../../src/config-un/gitignore';
 
-const FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore');
-const RECURSIVE_FIXTURES_DIR = path.join(import.meta.dirname, '../fixtures/gitignore-recursive');
+const FIXTURES_DIRECTORY = path.join(import.meta.dirname, '../fixtures/gitignore');
+const RECURSIVE_FIXTURES_DIRECTORY = path.join(
+  import.meta.dirname,
+  '../fixtures/gitignore-recursive',
+);
 
 const createTemporaryDirectory = async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'eslint-config-un-gitignore-spec-'));
@@ -70,19 +73,21 @@ describe('option: `gitignore`', () => {
 
   it('passes the object form to the underlying config as options', async () => {
     await expect(
-      getGitignoreIgnores(getFixtureGitignoreOptions(FIXTURES_DIR)),
+      getGitignoreIgnores(getFixtureGitignoreOptions(FIXTURES_DIRECTORY)),
     ).resolves.toStrictEqual(['**/ignored-dir/', '**/*.ignored']);
   });
 
   it('respects nested `.gitignore` files by default', async () => {
     await expect(
-      getGitignoreIgnores(getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIR)),
+      getGitignoreIgnores(getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIRECTORY)),
     ).resolves.toStrictEqual(['**/root-ignored-dir/', 'nested/**/*.nested-ignored']);
   });
 
   it('does not respect nested `.gitignore` files when `sources.nested` is set to `false`', async () => {
     await expect(
-      getGitignoreIgnores(getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIR, {nested: false})),
+      getGitignoreIgnores(
+        getFixtureGitignoreOptions(RECURSIVE_FIXTURES_DIRECTORY, {nested: false}),
+      ),
     ).resolves.toStrictEqual(['**/root-ignored-dir/']);
   });
 

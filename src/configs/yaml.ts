@@ -13,13 +13,13 @@ const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml', '**/aube-lo
 /**
  * [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `yml` property of the `settings` flat config option.
+ * that will be assigned to the `yml` property of the `settings` flat config option
  */
 export interface YamlPluginSettings {
   /**
    * The number of spaces in a single indentation level, used as the default by the rules that
    * indent the code.
-   * Values below 2 are treated as 2.
+   * Values below 2 are treated as 2
    * @default 2
    */
   indent?: number;
@@ -32,8 +32,8 @@ export interface YamlPluginSettings {
  *
  * ❌ Default `ignores`: <code>**&#47;{aube-lock.yaml,pnpm-lock.yaml,yarn.lock}</code>
  *
- * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to replace
- * them instead
+ * ⚠️ Will be merged with the user provided `ignores`.
+ * Use the function form of `ignores` to replace them instead
  */
 export interface YamlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,

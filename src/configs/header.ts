@@ -22,7 +22,7 @@ export interface HeaderEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'header'> {
   /**
    * Options of
-   * [the only rule, `header/header`](https://github.com/Stuk/eslint-plugin-header/blob/HEAD/README.md#usage).
+   * [the only rule, `header/header`](https://github.com/Stuk/eslint-plugin-header/blob/HEAD/README.md#usage)
    */
   options?:
     | {
@@ -95,7 +95,7 @@ export default defineUnConfig<HeaderEslintConfigOptions>(
           : 'pathToFileWithComment' in options
             ? [options.pathToFileWithComment]
             : [
-                options.commentStyle ?? 'block',
+                options.commentStyle || 'block',
                 options.comment,
                 ...(options.numberOfNewlinesAfterHeader == null && options.lineEndings == null
                   ? ([] satisfies readonly [])

@@ -136,7 +136,7 @@ export const getRuleSeverityFromEslintRuleEntry = (
 ): RuleSeverity => eslintToUnRuleSeverity(Array.isArray(entry) ? entry[0] : (entry ?? OFF));
 
 const FLAT_CONFIG_UN_NAME_PREFIX = 'eslint-config-un/';
-export const genFlatConfigEntryName = (name: string, {isGlobalSetup = false} = {}) =>
+export const generateFlatConfigEntryName = (name: string, {isGlobalSetup = false} = {}) =>
   `${FLAT_CONFIG_UN_NAME_PREFIX}${isGlobalSetup ? 'global-setup/' : ''}${name}`;
 /* v8 ignore next - Every generated config is named */
 export const isUnFlatConfigEntry = (flatConfigEntry: EslintFlatConfigEntry) =>

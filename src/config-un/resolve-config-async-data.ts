@@ -174,7 +174,7 @@ export const resolveConfigAsyncData = async (
           : // Every cached config is named
             /* v8 ignore next */ null,
       )
-      .filter((v) => v != null),
+      .filter((value) => value != null),
   );
 
   const packagesToManuallyInstallOrUpdate = new Map<
@@ -243,7 +243,7 @@ export const resolveConfigAsyncData = async (
         const configs = cacheData
           ? cacheData.usedParsers[parserPrefix]
               ?.map((configName) => cachedConfigsByName[configName])
-              .filter((v) => v != null)
+              .filter((value) => value != null)
           : context.usedParsers.get(parserPrefix);
         configModifyFns.push(() => {
           configs?.forEach((config) => {
@@ -410,7 +410,7 @@ ${styleText(
 
   const loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>> = Object.fromEntries(
     loadedPluginsRaw
-      .filter((v) => v != null)
+      .filter((value) => value != null)
       .map(([pluginPrefix, plugin]) => [
         pluginPrefix,
         internalOptions.keepRuleMetaLanguages ? plugin : removeRuleLanguagesFromPlugin(plugin),
@@ -425,11 +425,11 @@ ${styleText(
     rules: objectEntriesUnsafe({
       ...loadedPlugins,
       '': eslintPluginVanillaRules,
-    }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefixCanonical, plugin]) => {
+    }).reduce<EslintPlugin['rules'] & {}>((acc, [pluginPrefixCanonical, plugin]) => {
       if (
         plugin &&
         (disableAutofixPluginsWithPrefixedMethod.some(
-          (v) => v.pluginPrefix === pluginPrefixCanonical,
+          (entry) => entry.pluginPrefix === pluginPrefixCanonical,
         ) ||
           internalOptions.disableAutofixForAllFixableRulesOnly)
       ) {
@@ -437,9 +437,9 @@ ${styleText(
         debug(
           `Created a copy of \`${stylePluginPrefix(pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
         );
-        return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
+        return Object.assign(acc, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
       }
-      return res;
+      return acc;
     }, {}),
   };
 
@@ -507,7 +507,9 @@ ${styleText(
       );
 
   const loadedPackagesMap = Object.fromEntries(
-    loadedPackages.filter((v) => v != null).map((v) => [v.packagePrefix, v.packageModule]),
+    loadedPackages
+      .filter((loadedPackage) => loadedPackage != null)
+      .map((loadedPackage) => [loadedPackage.packagePrefix, loadedPackage.packageModule]),
   );
 
   const allPackageUses = cacheData
@@ -535,11 +537,11 @@ ${styleText(
                     );
                     const isRegularFunction =
                       isStartsWithPropertyName || functionBodyRaw.startsWith('function ');
-                    const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...args)`;
+                    const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...arguments_)`;
                     return {
                       valueTransformFn: {
                         // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion
-                        fn: new Function('...args', functionBody) as ValueTransformFn['fn'],
+                        fn: new Function('...arguments_', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },
                     };
@@ -547,7 +549,7 @@ ${styleText(
               } satisfies PackageToLoadInfo,
             };
           })
-          .filter((v) => v != null),
+          .filter((value) => value != null),
       )
     : [...context.usedPackages.values()].flatMap((packageUses) =>
         packageUses.map((packageUse) => ({

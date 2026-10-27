@@ -273,7 +273,7 @@ describe('processor indent option', () => {
 
     expect(messages).toHaveLength(7); // The first script is incorrect since the second line gets dedented
     expect(messages[0]?.message).toMatch(/Expected indentation of 2 .* but found 0\./);
-    expect(messages[0]?.line).toBe(11); // The second script is correct.
+    expect(messages[0]?.line).toBe(11); // The second script is correct
     expect(messages[1]?.message).toMatch(/Expected indentation of 0 .* but found 6\./);
     expect(messages[1]?.line).toBe(22);
     expect(messages[2]?.message).toMatch(/Expected indentation of .* but found 6\./);
@@ -307,13 +307,13 @@ describe('processor indent option', () => {
     });
 
     expect(messages).toHaveLength(6); // The first script is correct since it can't be dedented, but follows the indent
-    // rule anyway.
+    // rule anyway
     expect(messages[0]?.message).toMatch(/Expected indentation of 0 .* but found 2\./);
     expect(messages[0]?.line).toBe(16);
     expect(messages[1]?.message).toMatch(/Expected indentation of 2 .* but found 4\./);
     expect(messages[1]?.line).toBe(17);
     expect(messages[2]?.message).toMatch(/Expected indentation of 0 .* but found 2\./);
-    expect(messages[2]?.line).toBe(18); // The third script is correct.
+    expect(messages[2]?.line).toBe(18); // The third script is correct
     expect(messages[3]?.message).toMatch(/Expected indentation of 0 .* but found 10\./);
     expect(messages[3]?.line).toBe(28);
     expect(messages[4]?.message).toMatch(/Expected indentation of 2 .* but found 4\./);

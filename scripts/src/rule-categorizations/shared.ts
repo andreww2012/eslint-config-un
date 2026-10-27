@@ -5,7 +5,7 @@ import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../../../src/eslin
  * Categorizes a single rule into zero or more categories.
  *
  * Whatever stands in the way of categorizing a rule must be described in `errors` instead of being
- * ignored.
+ * ignored
  */
 export type CategorizeRule<CategoryId extends string> = (ruleToCategorize: {
   rule: {meta?: EslintRuleMetaWithLanguages};

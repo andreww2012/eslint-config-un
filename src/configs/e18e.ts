@@ -1,4 +1,3 @@
-// cspell:ignore canparse charcode
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Prettify} from '../types';
@@ -99,7 +98,10 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
       .addRule('prefer-nullish-coalescing', ERROR) /** @since 0.0.1 */
       .addRule('prefer-object-has-own', ERROR) /** @since 0.0.1 */
       .addRule('prefer-spread-syntax', ERROR) /** @since 0.0.1 */
-      .addRule('prefer-url-canparse', ERROR) /** @since 0.0.1 */
+      .addRule(
+        'prefer-url-canparse', // cspell:disable-line
+        ERROR,
+      ) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !arrayIncludes(RULE_CATEGORIES.modernization, ruleName),
@@ -150,13 +152,18 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
       .addRule('no-spread-in-reduce', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
-      .addRule('prefer-charcode-at-in-loop', ERROR) /** @since 0.6.0 */ // 🔴
+      .addRule(
+        'prefer-charcode-at-in-loop', // cspell:disable-line
+        ERROR,
+      ) /** @since 0.6.0 */ // 🔴
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
       .addRule('prefer-flatmap-over-map-flat', ERROR) /** @since 0.5.1 */ // 🔴
       .addRule('prefer-includes-over-regex-test', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */
-      // Reason for disabling: equivalent operation not requiring an intermediate array either requires an intermediate variable instead, or a cryptic form: `haystack.slice(0, haystack.indexOf(needle) >>> 0)`
+      // Reason for disabling: equivalent operation not requiring an intermediate array either
+      // requires an intermediate variable instead, or a cryptic form:
+      // `haystack.slice(0, haystack.indexOf(needle) >>> 0)`
       .addRule('prefer-slice-over-split-index', OFF) /** @since 0.6.0 */ // 🔴
       .addRule('prefer-static-collator', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-static-regex', ERROR) /** @since 0.2.0 */

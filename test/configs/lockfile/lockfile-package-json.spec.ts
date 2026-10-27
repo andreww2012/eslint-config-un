@@ -10,7 +10,7 @@ const DETECTED_PACKAGE_MANAGER = {name: 'pnpm', agent: 'pnpm'} as const;
 vi.mock(import('package-manager-detector/detect'));
 
 // Set at module load too (not just in `beforeEach`), so the package manager is also detected
-// during collection, when the describe-level `computeEslintConfig` calls run.
+// during collection, when the describe-level `computeEslintConfig` calls run
 vi.mocked(detectPackageManager).mockResolvedValue(DETECTED_PACKAGE_MANAGER);
 
 beforeEach(() => {

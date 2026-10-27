@@ -24,7 +24,7 @@ import {
   GLOB_YML_YAML,
 } from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
-import {genFlatConfigEntryName, resolvePluginPrefix} from '../eslint/eslint-utils';
+import {generateFlatConfigEntryName, resolvePluginPrefix} from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
   type PackageToLoadInfo,
@@ -52,7 +52,7 @@ import {
 
 /**
  * These file types are implicitly added to `ignores` array of every Config
- * unless the config sets up the parser for this language or opts out.
+ * unless the config sets up the parser for this language or opts out
  */
 export type ImplicitlyIgnoredFileTypeUnlessParsed =
   | 'css'
@@ -457,7 +457,10 @@ export interface ParsingRequest {
    */
   kind: 'writtenFor' | 'splitOff' | 'runsOn' | 'setUpOnly' | 'augments';
 
-  /** The config to propagate the `ignores` to. A `setUpOnly` request should have none */
+  /**
+   * The config to propagate the `ignores` to.
+   * A `setUpOnly` request should have none
+   */
   config?: EslintFlatConfigEntry;
 
   dialect?: string;
@@ -477,7 +480,10 @@ export interface ParsingRequest {
    */
   nameSuffix?: string;
 
-  /** Defaults to the files the language parses. Only read alongside a name suffix */
+  /**
+   * Defaults to the files the language parses.
+   * Only read alongside a name suffix
+   */
   files?: EslintFlatConfigEntry['files'];
 
   /** Only read alongside a name suffix */
@@ -499,7 +505,7 @@ interface ResolvedParsingEntry {
   /** Kept apart because the layers are emitted over the entry and must not override it */
   languageOptionsFromUser?: LanguageOptions;
 
-  entryProperties?: object;
+  entryProperties?: Record<string, unknown>;
 
   /** Requests asking for an entry of their own on top of this one */
   layers?: readonly ParsingRequest[];
@@ -584,7 +590,7 @@ const resolveEntriesForLanguage = (
   const requestersOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || [])
       .map(({requestedBy}) => requestedBy)
-      .filter((v) => v != null);
+      .filter((value) => value != null);
 
   const contributorsOfDialect = (dialect: string) =>
     (requestsByDialect.get(dialect) || []).filter(({nameSuffix}) => nameSuffix == null);
@@ -620,7 +626,7 @@ const resolveEntriesForLanguage = (
     );
 
   const entryPropertiesFromRequests = (dialect: string) =>
-    contributorsOfDialect(dialect).reduce<object>(
+    contributorsOfDialect(dialect).reduce<Record<string, unknown>>(
       (accumulated, {entryProperties}) => Object.assign(accumulated, entryProperties),
       {},
     );
@@ -743,7 +749,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
       const hasSingleDialect = Object.keys(PARSING_LANGUAGES[language].dialects).length === 1;
 
       const config: EslintFlatConfigEntry = {
-        name: genFlatConfigEntryName(
+        name: generateFlatConfigEntryName(
           `parsing/${language}${hasSingleDialect ? '' : `/${entry.dialect}`}${occurrence > 0 ? `#${occurrence}` : ''}`,
         ),
         files: entryFiles,
@@ -785,7 +791,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
             : intersectParentConfigFilesWithProvidedFiles(entryFiles, layer.files)
           : entryFiles;
         const layerConfig: EslintFlatConfigEntry = {
-          name: genFlatConfigEntryName(
+          name: generateFlatConfigEntryName(
             `parsing/${language}/${layer.nameSuffix}${occurrence > 0 ? `#${occurrence}` : ''}`,
           ),
           ...(layerFiles.length > 0 && {files: layerFiles}),

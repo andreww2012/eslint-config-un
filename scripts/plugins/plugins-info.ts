@@ -1,4 +1,3 @@
-// cspell:ignore millis scandir
 import {styleText} from 'node:util';
 import {Worker} from 'node:worker_threads';
 import {Data, DateTime, Duration, Effect, Semaphore} from 'effect';

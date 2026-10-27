@@ -15,8 +15,8 @@ import {
  * that will be assigned to the `settings` flat config option with keys transformed to
  * `boundaries/<original property name in kebab case>`.
  *
- * Strongly recommended: specify at least `elements` — the plugin needs it to work properly, and its
- * absence is reported at runtime.
+ * Strongly recommended: specify at least `elements`, as the plugin needs it to work properly, and
+ * its absence is reported at runtime
  * @see https://jsboundaries.dev/docs/settings
  */
 export type BoundariesPluginSettings = {

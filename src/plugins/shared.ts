@@ -13,7 +13,8 @@ export type MaybeWithReason<Value> = Value | readonly [value: Value | false, rea
 /**
  * Why a rule is meaningless or misleading in an isolated snippet.
  * `processorDefault` means the rule is already disabled by the default markdown processor config.
- * `fileName` means the rule reads the file name or role, which a snippet takes from its Markdown file.
+ * `fileName` means the rule reads the file name or role, which a snippet takes from its Markdown
+ * file.
  * `alternatives` means the rule reports a snippet showing several ways to do the same thing.
  * `fragment` means the rule judges a whole Markdown document, which a snippet is only a part of.
  * `typeAware` is for the rules that only degrade without type information: the ones that throw are
@@ -126,8 +127,8 @@ export interface PluginMetadata<Prefix extends PluginPrefix = PluginPrefix> {
   allRulesStylistic?: true;
 
   /**
-   * Why the package stays a direct dependency although every Config it serves is disabled by
-   * default. Providing it when some served Config is enabled by default is reported as an error
+   * Why the package stays a direct dependency though every Config it serves is off by default.
+   * Providing it when some served Config is enabled by default is reported as an error
    */
   directDependencyReason?: string;
 

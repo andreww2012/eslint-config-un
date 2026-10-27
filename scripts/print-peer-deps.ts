@@ -12,7 +12,7 @@ const dependenciesUnique: readonly {
     ...Object.keys(packageJson.dependencies).map((packageName) => ({packageName, isDev: false})),
     ...Object.keys(packageJson.devDependencies).map((packageName) => ({packageName, isDev: true})),
   ],
-  (v) => v.packageName,
+  (dependency) => dependency.packageName,
   // eslint-disable-next-line unicorn/no-array-sort
 ).sort(({packageName: a}, {packageName: b}) => a.localeCompare(b));
 

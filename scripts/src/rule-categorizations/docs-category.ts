@@ -33,7 +33,7 @@ export const createDocsCategoryCategorization = <CategoryId extends string>(
     );
     if (rulesExcludedInVain.length > 0) {
       throw new Error(
-        `The following rules are excluded from the \`${docsCategory}\` category of the \`${pluginPrefix}\` plugin, but are not in it in the first place: ${rulesExcludedInVain.map((v) => `\`${v}\``).join(', ')}. The exclusion must be dropped from \`RULE_CATEGORIZATIONS\``,
+        `The following rules are excluded from the \`${docsCategory}\` category of the \`${pluginPrefix}\` plugin, but are not in it in the first place: ${rulesExcludedInVain.map((ruleName) => `\`${ruleName}\``).join(', ')}. The exclusion must be dropped from \`RULE_CATEGORIZATIONS\``,
       );
     }
 

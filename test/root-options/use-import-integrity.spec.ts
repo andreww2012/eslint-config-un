@@ -105,18 +105,18 @@ describe('option: `useImportIntegrity`', () => {
 
   // The plugin validates the monorepo form strictly and errors out on `packageRootDir`
   it('omits the default package root directory when the monorepo one is specified', async () => {
-    const MONOREPO_ROOT_DIR = '/monorepo';
+    const MONOREPO_ROOT_DIRECTORY = '/monorepo';
 
     const configResult = await computeEslintConfig('import', {
       un: {
         useImportIntegrity: true,
-        plugins: {'import-integrity': {settings: {monorepoRootDir: MONOREPO_ROOT_DIR}}},
+        plugins: {'import-integrity': {settings: {monorepoRootDir: MONOREPO_ROOT_DIRECTORY}}},
       },
     });
 
     expect(
       configResult.getConfigByUnPostfix(SETTINGS_CONFIG_NAME)?.settings?.['import-integrity'],
-    ).toStrictEqual({monorepoRootDir: MONOREPO_ROOT_DIR});
+    ).toStrictEqual({monorepoRootDir: MONOREPO_ROOT_DIRECTORY});
   });
 
   it('still creates the settings config when the `import` config is disabled', async () => {

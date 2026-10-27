@@ -30,7 +30,7 @@ export default eslintConfig({
       // Some rules are disabled in non-CI for this file
       isInCi ? null : '.agents/skills/eslint-config-un-new-eslint-plugin/SKILL.md',
       'src/configs/extra/no-prettier-incompatible-rules.ts',
-    ].filter((v) => v != null),
+    ].filter((value) => value != null),
   },
   typeInfoRules: {
     parserOptions: {
@@ -204,11 +204,12 @@ export default eslintConfig({
               '@angular-eslint/eslint-plugin',
               '@angular-eslint/eslint-plugin-template',
               '@angular-eslint/template-parser',
-              // oxfmt is pre-1.0 and released often, so a caret range would only allow one minor version
+              // oxfmt is pre-1.0 and released often: a caret range allows only one minor version
               'oxfmt',
               // Inlined plugins format with the user's Prettier, which can be any 3.x version
               'prettier',
-              // Must stay a peer: under Yarn PnP, `typescript-eslint` can only get the `typescript` it requires through us, and it checks the version itself
+              // Must stay a peer: under Yarn PnP, `typescript-eslint` can only get the `typescript`
+              // it requires through us, and it checks the version itself
               'typescript',
             ],
           },

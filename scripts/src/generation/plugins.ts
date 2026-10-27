@@ -16,7 +16,7 @@ import {
   readPluginMetadata,
 } from '../../shared/plugin-metadata';
 
-const ROOT_DIR = pathe.join(import.meta.dirname, '../../..');
+const ROOT_DIRECTORY = pathe.join(import.meta.dirname, '../../..');
 type Trait = keyof RuleMetadata;
 
 const styleTrait = (trait: Trait) => styleText('cyan', trait);
@@ -251,8 +251,8 @@ const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: Co
 };
 
 /**
- * Code blocks never get type information, so the rules that throw without it are disabled there too,
- * unless an explicit `false` keeps one enabled
+ * Code blocks never get type information, so the rules that throw without it are disabled there
+ * too, unless an explicit `false` keeps one enabled
  */
 const withRulesThrowingWithoutTypeInfo = (
   plugins: readonly DiscoveredPlugin[],
@@ -382,7 +382,7 @@ ${renderTypeInfo(plugins, typeInfo)}
 `;
 };
 
-const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIR, 'src/config-un/shared.ts');
+const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIRECTORY, 'src/config-un/shared.ts');
 
 const AUTOFIX_DEFAULTS_JSDOC_INTRO =
   '`rules` object will be merged with the default value, which disables autofix for these rules:\n';
@@ -425,7 +425,7 @@ export const writePluginMetadataArtifacts = async (format: (code: string) => Pro
 
   const code = await format(renderArtifacts(plugins));
   await Promise.all([
-    fs.writeFile(pathe.join(ROOT_DIR, 'src/plugins.gen.ts'), code),
+    fs.writeFile(pathe.join(ROOT_DIRECTORY, 'src/plugins.gen.ts'), code),
     writeAutofixDefaultsJsdoc(plugins),
   ]);
 

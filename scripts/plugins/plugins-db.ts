@@ -49,16 +49,17 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
         .sort(([nameA], [nameB]) => nameA.localeCompare(nameB)),
     );
 
-    // Renaming the temp file avoids `UNKNOWN` errors thrown by `fs.writeFile` when the file is already locked on Windows
-    const temporaryFileDirPath = path.join(
+    // Renaming the temp file avoids `UNKNOWN` errors thrown by `fs.writeFile` when the file is
+    // already locked on Windows
+    const temporaryFileDirectoryPath = path.join(
       import.meta.dirname,
       '../../node_modules/.cache/eslint-config-un/temp',
     );
 
-    yield* fs.makeDirectory(temporaryFileDirPath, {recursive: true});
+    yield* fs.makeDirectory(temporaryFileDirectoryPath, {recursive: true});
 
     const temporaryFilePath = path.join(
-      temporaryFileDirPath,
+      temporaryFileDirectoryPath,
       `eslint-plugins-db-${Date.now()}.json.tmp`,
     );
 

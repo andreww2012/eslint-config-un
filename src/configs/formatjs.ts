@@ -12,29 +12,29 @@ import {
 /**
  * [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `formatjs` property of the `settings` flat config option.
+ * that will be assigned to the `formatjs` property of the `settings` flat config option
  * @see https://formatjs.github.io/docs/tooling/linter#shared-settings
  */
 export interface FormatjsPluginSettings {
   /**
    * Allows you to specify additional function names to check besides `formatMessage` &
-   * `$formatMessage`.
+   * `$formatMessage`
    */
   additionalFunctionNames?: readonly string[];
 
   /**
-   * Allows you to specify additional component names to check besides `FormattedMessage`.
+   * Allows you to specify additional component names to check besides `FormattedMessage`
    */
   additionalComponentNames?: readonly string[];
 
   /**
    * Skips the message descriptors declared via `defineMessage(s)` calls, only checking the ones
-   * passed to the formatting functions and components.
+   * passed to the formatting functions and components
    */
   excludeMessageDeclCalls?: boolean;
 
   /**
-   * Disables the parsing of the HTML-like tags inside the messages, treating them as plain text.
+   * Disables the parsing of the HTML-like tags inside the messages, treating them as plain text
    */
   ignoreTag?: boolean;
 }

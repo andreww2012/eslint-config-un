@@ -8,7 +8,7 @@ beforeEach(() => {
   addInstalledPackages({turbo: '2.5.4'});
 });
 
-const FIXTURES_DIR = path.join(import.meta.dirname, 'fixtures');
+const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
 describe('basic tests', () => {
   it('creates `turbo` eslint config and loads `turbo` plugin if set to `true`', async () => {
@@ -98,7 +98,7 @@ describe('rules', async () => {
 
   it('`turbo/no-undeclared-env-vars` rule fires on a file with an undeclared env var', async () => {
     const results = await testEslintConfig(
-      {turbo: {undeclaredEnvVarsOptions: {cwd: FIXTURES_DIR}}},
+      {turbo: {undeclaredEnvVarsOptions: {cwd: FIXTURES_DIRECTORY}}},
       FIXTURES.processEnvAccess,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );

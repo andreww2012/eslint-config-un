@@ -29,24 +29,24 @@ import {
  * Each of these narrows down what the plugin treats as a Testing Library usage.
  * Setting one to `off` disables the corresponding
  * [Aggressive Reporting](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/migration-guides/v4.md#aggressive-reporting)
- * mechanism instead.
+ * mechanism instead
  * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#shared-settings
  */
 export interface TestingLibraryPluginSettings {
   /**
-   * The custom module re-exporting everything from the Testing Library package.
+   * The custom module re-exporting everything from the Testing Library package
    * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-libraryutils-module
    */
   utilsModule?: (string & {}) | 'off';
 
   /**
-   * The names of the functions that count as custom renders.
+   * The names of the functions that count as custom renders
    * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-renders
    */
   customRenders?: readonly string[] | 'off';
 
   /**
-   * The names or the patterns of the custom queries.
+   * The names or the patterns of the custom queries
    * @see https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/README.md#testing-librarycustom-queries
    */
   customQueries?: readonly string[] | 'off';
@@ -198,7 +198,7 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
       >;
 
   /**
-   * Disable root (DOM) config if any framework config is enabled.
+   * Disable root (DOM) config if any framework config is enabled
    * @default true
    */
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;

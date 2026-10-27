@@ -1,3 +1,4 @@
+// cspell:ignore idential
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {pluginsLoaders} from '../loaders';
@@ -31,25 +32,25 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<
  * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `vitest` property and applied to the resolved `files` and `ignores`
- * of this config, as well as to the `ts` sub-config.
+ * of this config, as well as to the `ts` sub-config
  */
 export interface VitestPluginSettings {
   /**
    * You must set this to `true` if you're using
-   * [type testing vitest feature](https://vitest.dev/guide/testing-types).
+   * [type testing vitest feature](https://vitest.dev/guide/testing-types)
    * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md#enabling-with-type-testing
    */
   typecheck?: boolean;
 
   /**
-   * Tell the plugin about any global methods you have aliased.
+   * Tell the plugin about any global methods you have aliased
    * @example {describe: ['context']}
    */
   globalAliases?: Record<string, readonly string[]>;
 
   /**
    * The modules re-exporting the Vitest API, such as the ones defining custom fixtures.
-   * A string matches the module name exactly, a regular expression is tested against it.
+   * A string matches the module name exactly, a regular expression is tested against it
    * @see https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/README.md#custom-fixtures
    * @example ['@/tests/fixtures', /test-extend$/]
    */
@@ -353,7 +354,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
                 fnName,
                 typeof enforceEachOrFor === 'string'
                   ? enforceEachOrFor
-                  : (enforceEachOrFor[fnName] ?? enforceEachOrFor.default),
+                  : enforceEachOrFor[fnName] || enforceEachOrFor.default,
               ]),
             ),
           ],
@@ -403,7 +404,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('no-duplicate-hooks', ERROR) /** @since 0.0.49 */ // (warns in all)
     .addRule('no-focused-tests', ERROR, [{fixable: false}]) /** @since 0.0.13 */ // 🟢(since 1.5.0)
     .addRule('no-hooks', OFF) /** @since 0.0.35 */ // (warns in all)
-    .addRule('no-identical-title', ERROR) /** @since 0.0.8 */ /** @aka no-idential-title */ // 🟢 cspell:disable-line
+    .addRule('no-identical-title', ERROR) /** @since 0.0.8 */ /** @aka no-idential-title */ // 🟢
     .addRule('no-import-node-test', ERROR) /** @since 0.3.14 */ // 🟢
     .addRule(
       'no-importing-vitest-globals',

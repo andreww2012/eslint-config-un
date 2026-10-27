@@ -59,18 +59,18 @@ interface JestExtendedSubConfigOptions<
  * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `jest` property and applied to the resolved `files` and `ignores` of
- * this config, as well as to the `ts` and `jestExtended` sub-configs.
+ * this config, as well as to the `ts` and `jestExtended` sub-configs
  */
 export interface JestPluginSettings {
   /**
-   * Tell the plugin about any global methods you have aliased.
+   * Tell the plugin about any global methods you have aliased
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#aliased-jest-globals
    * @example {describe: ['context']}
    */
   globalAliases?: Record<string, readonly string[]>;
 
   /**
-   * Tell the plugin to treat a different package as the source of Jest globals.
+   * Tell the plugin to treat a different package as the source of Jest globals
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#aliased-jestglobals
    * @example 'bun:test'
    */
@@ -78,7 +78,7 @@ export interface JestPluginSettings {
 
   /**
    * Tell the plugin which version of Jest is used, if it cannot be detected automatically.
-   * A string is accepted too, so that the version can be read from the installed package.
+   * A string is accepted too, so that the version can be read from the installed package
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/README.md#jest-version-setting
    */
   version?: number | string;

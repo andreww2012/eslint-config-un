@@ -1,4 +1,4 @@
-// cspell:ignore findlast formatrange displaynames durationformat groupby finalizationregistry weakref subclassing asyncdisposablestack disposablestack plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
+// cspell:ignore findlast formatrange displaynames durationformat groupby finalizationregistry weakref subclassing asyncdisposablestack disposablestack plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime getorinsert getorinsertcomputed
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
@@ -295,7 +295,7 @@ type EcmaVersion = keyof EcmaFeatures;
 /**
  * [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `es-x` property of the `settings` flat config option.
+ * that will be assigned to the `es-x` property of the `settings` flat config option
  */
 export interface EsPluginSettings {
   /**
@@ -325,14 +325,14 @@ export interface EsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'es'> {
   /**
-   * Max supported ECMAScript version.
+   * Max supported ECMAScript version
    * @default 'latest'
    */
   ecmaVersion?: EcmaVersion | 'latest';
 
   /**
    * Specify more granularly than `ecmaVersion` which ECMAScript features are **supported** in the
-   * codebase.
+   * codebase
    */
   ecmaFeatures?: Partial<{
     [Version in EcmaVersion]:
@@ -530,19 +530,19 @@ export const buildEsConfigs = (
       ) /** @since 9.2.0 */
       .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')) /** @since 9.2.0 */
       .addRule(
-        'no-map-prototype-getorinsert', // cspell:disable-line
+        'no-map-prototype-getorinsert',
         grs(2026, 'mapPrototypeGetOrInsert'),
       ) /** @since 9.4.0 */
       .addRule(
-        'no-map-prototype-getorinsertcomputed', // cspell:disable-line
+        'no-map-prototype-getorinsertcomputed',
         grs(2026, 'mapPrototypeGetOrInsertComputed'),
       ) /** @since 9.4.0 */
       .addRule(
-        'no-weakmap-prototype-getorinsert', // cspell:disable-line
+        'no-weakmap-prototype-getorinsert',
         grs(2026, 'weakMapPrototypeGetOrInsert'),
       ) /** @since 9.4.0 */
       .addRule(
-        'no-weakmap-prototype-getorinsertcomputed', // cspell:disable-line
+        'no-weakmap-prototype-getorinsertcomputed',
         grs(2026, 'weakMapPrototypeGetOrInsertComputed'),
       ); /** @since 9.4.0 */
   }

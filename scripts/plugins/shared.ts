@@ -1,4 +1,3 @@
-// cspell:ignore scandir
 import path from 'node:path';
 import consola, {type ConsolaInstance} from 'consola';
 import {Context, Layer, type Ref} from 'effect';
@@ -87,7 +86,7 @@ export const getActualDependencyNames = (
         return null;
       }
     })
-    .filter((v) => v != null);
+    .filter((value) => value != null);
 
 export const isLikelyEslintPlugin = (packageName: string, db: EslintPluginsDb) =>
   (packageName.includes('eslint-plugin') || packageName in db) &&

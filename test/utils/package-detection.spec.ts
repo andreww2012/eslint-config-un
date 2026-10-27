@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {PACKAGES_INSTALLED_THROUGH} from '../../src/constants';
 import type {PackageJson} from '../../src/types';
+import {SHARED_STORE_PACKAGE_JSON_PATH} from '../helpers/shared-store';
 
 type PackageDetectionModule = typeof import('../../src/utils/package-detection');
 
@@ -22,16 +23,6 @@ const PLAIN_OBJECT_FIXTURE_PATH = path.join(
 );
 
 const SOURCE_FILE_REGEXP = /package-detection\.ts$/;
-
-// Nothing is linked next to it, so whatever the code finds from its real location is not its own
-const SHARED_STORE_PACKAGE_JSON_PATH = path.join(
-  os.tmpdir(),
-  'shared-store',
-  'eslint-config-un@1.0.0',
-  'node_modules',
-  'eslint-config-un',
-  'package.json',
-);
 
 const importModuleFromStore = async () => {
   vi.resetModules();
@@ -99,10 +90,10 @@ const stubProjectWithPackage = async (packageName: string, version: string) => {
 };
 
 const fetchProjectPackageVersions = async (
-  ...parameters: Parameters<typeof fetchProjectPackagesInfo<string>>
+  ...arguments_: Parameters<typeof fetchProjectPackagesInfo<string>>
 ) =>
   Object.fromEntries(
-    Object.entries(await fetchProjectPackagesInfo(...parameters)).map(
+    Object.entries(await fetchProjectPackagesInfo(...arguments_)).map(
       ([packageName, packageInfo]) => [packageName, packageInfo?.versions.full ?? null],
     ),
   );

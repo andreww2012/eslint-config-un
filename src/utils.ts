@@ -138,8 +138,8 @@ export function findArrayInversions<T>(
 
   if (group) {
     const resultMap = new Map<T, T[]>();
-    result.forEach(([a, b]) => {
-      mapGetOrInsert(resultMap, a, []).push(b);
+    result.forEach(([key, value]) => {
+      mapGetOrInsert(resultMap, key, []).push(value);
     });
     return resultMap;
   }

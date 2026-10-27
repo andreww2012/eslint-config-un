@@ -53,7 +53,7 @@ export interface ReactPluginSettings {
 
   /**
    * Default React version to use when the version you have installed cannot be detected.
-   * If not provided, defaults to the latest React version.
+   * If not provided, defaults to the latest React version
    */
   defaultVersion?: string;
 
@@ -66,7 +66,7 @@ export interface ReactPluginSettings {
 
   /**
    * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`.
-   * If this isn't set, any `propTypes` wrapped in a function will be skipped.
+   * If this isn't set, any `propTypes` wrapped in a function will be skipped
    */
   propWrapperFunctions?: readonly (
     | string
@@ -90,7 +90,7 @@ export interface ReactPluginSettings {
 
   /**
    * The name of any function used to wrap components, e.g. Mobx `observer` function.
-   * If this isn't set, components wrapped by these functions will be skipped.
+   * If this isn't set, components wrapped by these functions will be skipped
    */
   componentWrapperFunctions?: readonly (
     | string
@@ -146,13 +146,13 @@ export interface ReactPluginSettings {
 
 export interface ReactXPluginSettings {
   /**
-   * A regex pattern matching custom hooks treated as effect hooks.
+   * A regex pattern matching custom hooks treated as effect hooks
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionaleffecthooks
    */
   additionalEffectHooks?: string;
 
   /**
-   * A regex pattern matching custom hooks treated as ref hooks.
+   * A regex pattern matching custom hooks treated as ref hooks
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalrefhooks
    */
   additionalRefHooks?: string;
@@ -185,7 +185,7 @@ export interface ReactXPluginSettings {
 
   /**
    * The [React Compiler](https://react.dev/learn/react-compiler) compilation mode the project
-   * uses, which tells the rules how the compiler picks up the components and hooks.
+   * uses, which tells the rules how the compiler picks up the components and hooks
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#compilationmode
    */
   compilationMode?: 'infer' | 'annotation' | 'syntax' | 'all';
@@ -272,11 +272,11 @@ interface ReactXSubConfigOptions<
 /**
  * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `react-hooks` property of the `settings` flat config option.
+ * that will be assigned to the `react-hooks` property of the `settings` flat config option
  */
 export interface ReactHooksPluginSettings {
   /**
-   * A regular expression with custom effect hooks.
+   * A regular expression with custom effect hooks
    */
   additionalEffectHooks?: string;
 }
@@ -354,7 +354,7 @@ interface RefreshSubConfigOptions<
  * - `refresh`: rules from `eslint-plugin-react-refresh`.
  * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
  * - `html`: rules from `@html-eslint/eslint-plugin-react`.
- * - `typeAwareRules`: rules requiring type information.
+ * - `typeAwareRules`: rules requiring type information
  */
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -511,7 +511,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Detected automatically from a major version of the installed version of `react` package, but
-   * can also be specified manually here.
+   * can also be specified manually here
    */
   reactVersion?: number;
 
@@ -606,8 +606,8 @@ const REMIX_AND_REACT_ROUTER_EXPORTS: readonly string[] = [
   'middleware', // React router only
   'shouldRevalidate',
 ];
-// Entries marked as removed or deprecated are still listed because they remain valid in the versions
-// which predate their removal
+// Entries marked as removed or deprecated are still listed because they remain valid in the
+// versions which predate their removal
 const NEXT_EXPORTS: readonly string[] = [
   'alt', // https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#config-exports
   'config', // https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config
@@ -846,7 +846,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
                 ? element
                 : null,
           )
-          .filter((v) => v != null),
+          .filter((value) => value != null),
       },
     ]) /** @since 6.10.0 */
     .addRule('forbid-foreign-prop-types', isMinVersion19 ? OFF : ERROR) /** @since 6.10.0 */ // propTypes only rule
@@ -1070,7 +1070,8 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
         },
       },
     ])
-    // Severity of react compiler rules correspond to the recommended ones from https://github.com/react/react/blob/bf45a68dd35ed08860b6a70fed641dfe6d7d290d/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L777
+    // Severity of react compiler rules correspond to the recommended ones from
+    // https://github.com/react/react/blob/bf45a68dd35ed08860b6a70fed641dfe6d7d290d/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L777
     .addRule('capitalized-calls', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('config', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('error-boundaries', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
@@ -1079,7 +1080,8 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     .addRule('fbt', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('gating', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('globals', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
-    // Almost the same as `rules-of-hooks`, see https://github.com/react/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
+    // Almost the same as `rules-of-hooks`, see
+    // https://github.com/react/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
     .addRule('hooks', OFF) /** @since 6.1.0 */
     .addRule('immutability', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('incompatible-library', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟡
@@ -1113,7 +1115,8 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
   // Legend:
   // 🟢 - in recommended, severity is `error`
   // 🟡 - in recommended, severity is `warn`
-  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `reactX` sub-config is enabled (name is also same if it is not specified)
+  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `reactX`
+  // sub-config is enabled (name is also same if it is not specified)
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
   configBuilderReactX
@@ -1382,7 +1385,8 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
       ...getDoubleRuleName('dom-no-unsafe-target-blank', 'jsx-no-target-blank'),
       getDoubleRuleSeverity(ERROR),
     ) /** @since 0.6.2 */ /** @since 5.1.0 */ // 🟡 🔄️`jsx-no-target-blank`
-    // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
+    // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called
+    // useFormState."
     .addRule('dom-no-use-form-state', getXRuleSeverity(ERROR)) /** @since 1.35.0 */ // 🟢 🔢19.0.0
     .addAnyRule(
       ...getDoubleRuleName('dom-no-string-style-prop', 'style-prop-object'),

@@ -10,12 +10,12 @@ import {
 /**
  * [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `regexp` property of the `settings` flat config option.
+ * that will be assigned to the `regexp` property of the `settings` flat config option
  */
 export interface RegexpPluginSettings {
   /**
    * Defines a set of allowed character ranges.
-   * Rules will only allow, create, and fix character ranges defined here.
+   * Rules will only allow, create, and fix character ranges defined here
    * @default 'alphanumeric'
    * @see https://ota-meshi.github.io/eslint-plugin-regexp/settings/#allowedcharacterranges
    */
@@ -57,13 +57,16 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     ])
     .markCategory('Possible Errors')
     .addRule('no-contradiction-with-assertion', ERROR) /** @since 1.2.0 */ // 🟢
-    // "This rule is inspired by the `no-control-regex` rule. The positions of reports are improved over the core rule and suggestions are provided in some cases"
+    // "This rule is inspired by the `no-control-regex` rule. The positions of reports are improved
+    // over the core rule and suggestions are provided in some cases"
     .disableAnyRule('', 'no-control-regex') // TODO 🟢(enabled?!)
     .addRule('no-control-character', ERROR) /** @since 1.2.0 */
     .addRule('no-dupe-disjunctions', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('no-empty-alternative', ERROR) /** @since 0.8.0 */ // 🟡
     .addRule('no-empty-capturing-group', ERROR) /** @since 0.12.0 */ // 🟢
-    // "The reports for this rule include reports for the ESLint core no-empty-character-class rule. That is, if you use this rule, you can turn off the ESLint core no-empty-character-class rule"
+    // "The reports for this rule include reports for the ESLint core no-empty-character-class rule.
+    // That is, if you use this rule, you can turn off the ESLint core no-empty-character-class
+    // rule"
     .addRule('no-empty-character-class', ERROR) /** @since 1.2.0 */ // 🟢
     .disableAnyRule('', 'no-empty-character-class') // 🟢
     .addRule('no-empty-group', ERROR) /** @since 0.1.0 */ // 🟢
@@ -80,7 +83,8 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .addRule('no-super-linear-backtracking', ERROR) /** @since 0.13.0 */ // 🟢
     .addRule('no-super-linear-move', OFF) /** @since 0.13.0 */
     .addRule('no-useless-assertions', ERROR) /** @since 0.9.0 */ // 🟢
-    // "This rule is a based on the ESLint core `no-useless-backreference` rule. It reports all the ESLint core rule reports and some more"
+    // "This rule is a based on the ESLint core `no-useless-backreference` rule. It reports all the
+    // ESLint core rule reports and some more"
     .addRule('no-useless-backreference', ERROR) /** @since 0.1.0 */ // 🟢
     .disableAnyRule('', 'no-useless-backreference') // 🟢
     .addRule('no-useless-dollar-replacements', ERROR) /** @since 0.6.0 */ // 🟢
@@ -121,7 +125,8 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .disableAnyRule('unicorn', 'prefer-regexp-test')
     .addRule('prefer-regexp-test', ERROR) // TODO better than the unicorn rule? Off by default
     .addRule('prefer-set-operation', ERROR) /** @since 2.0.0-next.9 */ // 🟢
-    // "This rule is inspired by the `require-unicode-regexp` rule. The position of the report is improved over the core rule and arguments of new RegExp() are also checked"
+    // "This rule is inspired by the `require-unicode-regexp` rule. The position of the report is
+    // improved over the core rule and arguments of new RegExp() are also checked"
     // Yes, still off - we just want to show that it's a better replacement for the core rule
     .addRule('require-unicode-regexp', OFF) /** @since 1.2.0 */
     .disableAnyRule('', 'require-unicode-regexp')
@@ -134,7 +139,8 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .addRule('hexadecimal-escape', ERROR, ['never']) /** @since 0.9.0 */
     .addRule('letter-case', ERROR, [
       {
-        // `lowercase` conflicts with `unicorn/escape-case`: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/escape-case.md
+        // `lowercase` conflicts with `unicorn/escape-case`:
+        // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/escape-case.md
         unicodeEscape: 'uppercase',
         hexadecimalEscape: 'uppercase',
       },
@@ -146,7 +152,8 @@ export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
     .addRule('prefer-d', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('prefer-lookaround', ERROR, [{lookbehind: false}]) /** @since 1.2.0 */
     .addRule('prefer-named-backreference', OFF) /** @since 0.9.0 */
-    // "This rule is inspired by the `prefer-named-capture-group` rule. The positions of reports are improved over the core rule and arguments of new RegExp() are also checked"
+    // "This rule is inspired by the `prefer-named-capture-group` rule. The positions of reports are
+    // improved over the core rule and arguments of new RegExp() are also checked"
     // Yes, still off - we just want to show that it's a better replacement for the core rule
     .addRule('prefer-named-capture-group', OFF) /** @since 1.2.0 */
     .disableAnyRule('', 'prefer-named-capture-group')

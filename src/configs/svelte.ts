@@ -24,7 +24,7 @@ import {
 /**
  * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `svelte` property of the `settings` flat config option.
+ * that will be assigned to the `svelte` property of the `settings` flat config option
  * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)
  */
 export interface SveltePluginSettings {
@@ -40,7 +40,7 @@ export interface SveltePluginSettings {
    * "Specifies options for Svelte compilation.
    * This affects rules that rely on Svelte compilation, such as `svelte/valid-compile` and
    * `svelte/no-unused-svelte-ignore`.
-   * Note that this setting does not impact ESLint’s custom parser" - plugin docs
+   * Note that this setting does not impact ESLint's custom parser" - plugin docs
    */
   compileOptions?: {
     /**
@@ -65,10 +65,10 @@ export interface SveltePluginSettings {
    * `settings.svelte.kit` explicitly.
    * If you are using SvelteKit with a non-default configuration, you need to set the following
    * options.
-   * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
+   * The schema is a subset of SvelteKit's configuration, so refer to the SvelteKit documentation
    * for more details: https://svelte.dev/docs/kit/@sveltejs-kit-vite" - plugin docs
    *
-   * SvelteKit 3 has no `svelte.config.js`, so for it, non-default options must be set explicitly.
+   * SvelteKit 3 has no `svelte.config.js`, so for it, non-default options must be set explicitly
    */
   kit?: SvelteConfig['kit'];
 }
@@ -120,13 +120,13 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    *
    * SvelteKit 3 has no `svelte.config.js` for the parser to load, so for it, this is the only way
    * to pass the config.
-   * Note that it uses the SvelteKit 2 shape: SvelteKit's own options go under `kit`.
+   * Note that it uses the SvelteKit 2 shape: SvelteKit's own options go under `kit`
    */
   svelteKitConfig?: SvelteConfig;
 
   /**
    * `svelte` package version, possibly including a minor version.
-   * Normally should not be set manually as it will be detected automatically.
+   * Normally should not be set manually as it will be detected automatically
    * @default auto-detected or `5` if cannot be detected
    */
   svelteVersion?: number;
@@ -138,7 +138,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    *
    * If `oxfmt` is installed, set this explicitly: `true` if it formats Svelte files (its `svelte`
    * option), `false` otherwise.
-   * Its config cannot be read to detect that, so a warning is printed until this is set.
+   * Its config cannot be read to detect that, so a warning is printed until this is set
    * @default detected automatically
    */
   isPrettierPluginSvelteUsed?: boolean;
@@ -253,7 +253,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     .addRule('comment-directive', commentDirective.severity, [
       {reportUnusedDisableDirectives: commentDirective.shouldReport},
     ]) /** @since 0.0.13 */ // 🟢
-    // "This rule is a system rule for working the this plugin. This rule does not report any errors, but make sure the rule is enabled for the this plugin to work properly"
+    // "This rule is a system rule for working the this plugin. This rule does not report any
+    // errors, but make sure the rule is enabled for the this plugin to work properly"
     .addRule('system', ERROR) /** @since 0.0.13 */ // 🟢
     // Crashes on `statement.expression.type` (`expression` is null)
     .disableAnyRule('sonar', 'no-unused-collection')
@@ -267,7 +268,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
   // Legend:
   // 🟢 - in recommended
   // 4️⃣ - not relevant in Svelte >=5, unless legacy features are used
-  // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
+  // 💅 - included in Prettier config:
+  // https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
 
   configBuilder
     ?.addConfig(['svelte', {parseWith: 'svelte'}])
@@ -319,7 +321,9 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     .addRule('no-useless-mustaches', ERROR, [
       {ignoreIncludesComment: true, ignoreStringEscape: true},
     ]) /** @since 0.0.4 */ // 🟢
-    // "This rule reports the same as the base ESLint `prefer-const` rule, except that ignores Svelte reactive values such as `$derived` and `$props` as default. If this rule is active, make sure to disable the base `prefer-const` rule, as it will conflict with this rule."
+    // "This rule reports the same as the base ESLint `prefer-const` rule, except that ignores
+    // Svelte reactive values such as `$derived` and `$props` as default. If this rule is active,
+    // make sure to disable the base `prefer-const` rule, as it will conflict with this rule."
     .addRule('prefer-const', ERROR, [
       {destructuring: 'all', ignoreReadBeforeAssign: true},
     ]) /** @since 3.0.0-next.6 */

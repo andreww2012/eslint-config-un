@@ -1,4 +1,3 @@
-// cspell:ignore jsdump propequal
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
@@ -69,7 +68,10 @@ export default defineUnConfig<QunitEslintConfigOptions>('qunit', {enabledBy: {pa
     .addRule('no-hooks-from-ancestor-modules', ERROR) /** @since 5.4.0 */ // 🟢
     .addRule('no-identical-names', ERROR) /** @since 2.4.0 */ // 🟢
     .addRule('no-init', ERROR) /** @since 0.9.0 */ // 🟢
-    .addRule('no-jsdump', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule(
+      'no-jsdump', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.9.0 */ // 🟢
     .addRule('no-loose-assertions', WARNING) /** @since 4.3.0 */
     .addRule('no-negated-ok', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('no-nested-tests', ERROR) /** @since 5.0.0 */ // 🟢
@@ -85,7 +87,10 @@ export default defineUnConfig<QunitEslintConfigOptions>('qunit', {enabledBy: {pa
     .addRule('no-test-expect-argument', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-throws-string', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('require-expect', ERROR) /** @since 0.6.0 */ // 🟢
-    .addRule('require-object-in-propequal', ERROR) /** @since 5.4.0 */ // 🟢
+    .addRule(
+      'require-object-in-propequal', // cspell:disable-line
+      ERROR,
+    ) /** @since 5.4.0 */ // 🟢
     .addRule('resolve-async', ERROR) /** @since 0.1.1 */ // 🟢
     .enableConfigTesterForPlugin('qunit')
     .addOverrides();

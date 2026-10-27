@@ -9,31 +9,31 @@ import type {Prettify} from '../../src/types';
 import {exec, jsonParseSafe, mapValues} from '../../src/utils';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {...mod, cache: vi.fn<typeof mod.cache>(mod.cache)};
+  const original = await importOriginal();
+  return {...original, cache: vi.fn<typeof original.cache>(original.cache)};
 });
 
 vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {...mod, detect: vi.fn<typeof mod.detect>(mod.detect)};
+  const original = await importOriginal();
+  return {...original, detect: vi.fn<typeof original.detect>(original.detect)};
 });
 
 vi.mock(import('../../src/utils'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {...mod, exec: vi.fn<typeof mod.exec>(mod.exec)};
+  const original = await importOriginal();
+  return {...original, exec: vi.fn<typeof original.exec>(original.exec)};
 });
 
 vi.mock(import('node:fs/promises'), async (importOriginal) => {
-  const mod = await importOriginal();
-  const writeFile = vi.fn<typeof mod.writeFile>(mod.writeFile);
-  return {...mod, writeFile, default: {...mod.default, writeFile}};
+  const original = await importOriginal();
+  const writeFile = vi.fn<typeof original.writeFile>(original.writeFile);
+  return {...original, writeFile, default: {...original.default, writeFile}};
 });
 
-const CACHE_ROOT_DIR = path.join(os.tmpdir(), 'eslint-config-un-cache-spec');
+const CACHE_ROOT_DIRECTORY = path.join(os.tmpdir(), 'eslint-config-un-cache-spec');
 // The cache directory resolver appends the name the config generator asks for
-const CACHE_FILE_PATH = path.join(CACHE_ROOT_DIR, 'eslint-config-un', 'config.json');
+const CACHE_FILE_PATH = path.join(CACHE_ROOT_DIRECTORY, 'eslint-config-un', 'config.json');
 
-const GITIGNORE_ROOT_DIR = path.join(os.tmpdir(), 'eslint-config-un-cache-spec-gitignore');
+const GITIGNORE_ROOT_DIRECTORY = path.join(os.tmpdir(), 'eslint-config-un-cache-spec-gitignore');
 
 const MEMORY_CACHE_GLOBAL_NAME = 'eslintConfigUnResolvedConfig';
 
@@ -92,7 +92,7 @@ const markStoredConfigs = async (patch?: Partial<CacheFileContents>) => {
 const originalCacheDirectory = process.env['CACHE_DIR'];
 
 beforeAll(() => {
-  process.env['CACHE_DIR'] = CACHE_ROOT_DIR;
+  process.env['CACHE_DIR'] = CACHE_ROOT_DIRECTORY;
 });
 
 beforeEach(async () => {
@@ -112,8 +112,8 @@ afterAll(async () => {
     process.env['CACHE_DIR'] = originalCacheDirectory;
   }
 
-  await fs.rm(CACHE_ROOT_DIR, {recursive: true, force: true});
-  await fs.rm(GITIGNORE_ROOT_DIR, {recursive: true, force: true});
+  await fs.rm(CACHE_ROOT_DIRECTORY, {recursive: true, force: true});
+  await fs.rm(GITIGNORE_ROOT_DIRECTORY, {recursive: true, force: true});
 });
 
 const computeConfigWithDefaultCaching = (environment: Environment) => {
@@ -313,19 +313,19 @@ describe('option: `cacheConfigs`', () => {
     });
 
     it('differs when a nested `.gitignore` changes', async () => {
-      const nestedGitignorePath = path.join(GITIGNORE_ROOT_DIR, 'nested', '.gitignore');
+      const nestedGitignorePath = path.join(GITIGNORE_ROOT_DIRECTORY, 'nested', '.gitignore');
       await fs.mkdir(path.dirname(nestedGitignorePath), {recursive: true});
-      await fs.writeFile(path.join(GITIGNORE_ROOT_DIR, '.gitignore'), '*.ignored', 'utf8');
+      await fs.writeFile(path.join(GITIGNORE_ROOT_DIRECTORY, '.gitignore'), '*.ignored', 'utf8');
       await fs.writeFile(nestedGitignorePath, '*.nested-ignored', 'utf8');
 
-      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIR}});
+      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIRECTORY}});
       const {key} = await readCacheFile();
 
       await fs.rm(CACHE_FILE_PATH, {force: true});
       clearMemoryCache();
       await fs.writeFile(nestedGitignorePath, '*.nested-ignored-differently', 'utf8');
 
-      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIR}});
+      await computeCachedConfig({}, {gitignore: {cwd: GITIGNORE_ROOT_DIRECTORY}});
 
       await expect(readCacheFile()).resolves.not.toHaveProperty('key', key);
     });

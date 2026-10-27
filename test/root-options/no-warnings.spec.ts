@@ -7,10 +7,10 @@ describe('option: `noWarnings`', () => {
       const normalSeverities = getAllRulesSeverities(normal.getConfigByUnPostfix('js'));
       const noWarningsSeverities = getAllRulesSeverities(withNoWarnings.getConfigByUnPostfix('js'));
 
-      // Sanity: the `js` config emits warning-severity rules by default.
+      // Sanity: the `js` config emits warning-severity rules by default
       expect(normalSeverities).toContain(1);
       expect(noWarningsSeverities).not.toContain(1);
-      // The warnings became errors, nothing got disabled in the process.
+      // The warnings became errors, nothing got disabled in the process
       expect(noWarningsSeverities).toStrictEqual(
         normalSeverities.filter((severity) => severity !== 1),
       );

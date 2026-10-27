@@ -82,11 +82,7 @@ export default defineUnConfig<UnusedImportsEslintConfigOptions>(
 
   configBuilderNoUnusedVars
     ?.addConfig('unused-imports/no-unused-vars')
-    .addRule(
-      'no-unused-vars',
-      ERROR,
-      ruleOptions === undefined ? [] : [ruleOptions],
-    ) /** @since 0.0.2 */
+    .addRule('no-unused-vars', ERROR, ruleOptions == null ? [] : [ruleOptions]) /** @since 0.0.2 */
     .disableAnyRule('', 'no-unused-vars')
     .disableAnyRule('sonar', 'no-unused-vars')
     .disableAnyRule('ts', 'no-unused-vars')

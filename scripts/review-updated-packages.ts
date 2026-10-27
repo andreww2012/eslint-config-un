@@ -17,19 +17,13 @@ import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 // =============================================================================
 
 const REPO_ROOT_PATH = path.resolve(import.meta.dirname, '..');
-const CHANGESETS_DIR_PATH = path.join(REPO_ROOT_PATH, '.changeset');
+const CHANGESETS_DIRECTORY_PATH = path.join(REPO_ROOT_PATH, '.changeset');
 const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
-
-const parsePackageJson = (packageJsonText: string) =>
-  PackageJsonZod.safeParse(jsonParseSafe(packageJsonText));
-
-const readRootPackageJson = async () =>
-  parsePackageJson(await fs.readFile(path.join(REPO_ROOT_PATH, 'package.json'), 'utf8'));
 
 const readRootPackageJsonBeforeUncommittedChanges = async () => {
   try {
-    return parsePackageJson(
-      (await exec('git', ['--no-pager', 'show', 'HEAD:package.json'])).stdout,
+    return PackageJsonZod.safeParse(
+      jsonParseSafe((await exec('git', ['--no-pager', 'show', 'HEAD:package.json'])).stdout),
     );
   } catch {
     return null;
@@ -93,7 +87,8 @@ const getDependencyRepoUrl = async (dependency: string) => {
       }
     }
 
-    // Might not always start with `/`: https://npmx.dev/package-code/eslint-plugin-react-refresh/v/0.5.0/package.json#L8
+    // Might not always start with `/`:
+    // https://npmx.dev/package-code/eslint-plugin-react-refresh/v/0.5.0/package.json#L8
     if (repoUrlParsed.pathname.startsWith('/')) {
       gitHubRepoPath = repoUrlParsed.pathname.slice(1);
     }
@@ -130,10 +125,8 @@ const getDependencyRepoUrl = async (dependency: string) => {
 };
 
 const main = async () => {
-  const [packageJsonParseResult, packageJsonBeforeChangesParseResult] = await Promise.all([
-    readRootPackageJson(),
-    readRootPackageJsonBeforeUncommittedChanges(),
-  ]);
+  const packageJsonParseResult = PackageJsonZod.safeParse(ourPackageJson);
+  const packageJsonBeforeChangesParseResult = await readRootPackageJsonBeforeUncommittedChanges();
 
   if (!packageJsonParseResult.success) {
     console.error('Failed to parse package.json', packageJsonParseResult.error);
@@ -198,14 +191,14 @@ const ChangesetFrontmatterZod = z
 // Every changeset lying directly in the changesets directory is unreleased: `changeset version`
 // removes the consumed ones, or, in pre mode, moves them to the `pre` subdirectory
 const readUnreleasedChangesets = async () => {
-  const candidateIds = (await fs.readdir(CHANGESETS_DIR_PATH))
+  const candidateIds = (await fs.readdir(CHANGESETS_DIRECTORY_PATH))
     .filter((fileName) => fileName.endsWith('.md'))
     .map((fileName) => path.basename(fileName, '.md'));
 
   const changesets = await Promise.all(
     candidateIds.map(async (id) => {
       const {data, content} = matter(
-        await fs.readFile(path.join(CHANGESETS_DIR_PATH, `${id}.md`), 'utf8'),
+        await fs.readFile(path.join(CHANGESETS_DIRECTORY_PATH, `${id}.md`), 'utf8'),
       );
       return ChangesetFrontmatterZod.validate(
         data, // eslint-disable-line ts/no-unnecessary-condition
@@ -401,7 +394,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
         },
       };
     })
-    .filter((v) => v != null);
+    .filter((value) => value != null);
 
   let isDiffForLastFileSkipped = false;
   let lastFileExtension: string | undefined;
@@ -545,7 +538,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
       REPO_ROOT_PATH,
     );
 
-    const changesetPath = path.join(CHANGESETS_DIR_PATH, `${changesetId}.md`);
+    const changesetPath = path.join(CHANGESETS_DIRECTORY_PATH, `${changesetId}.md`);
     await fs.writeFile(changesetPath, (await fs.readFile(changesetPath, 'utf8')).trimEnd());
 
     unreleasedChangesets.push({id: changesetId, summary: changesetSummary});

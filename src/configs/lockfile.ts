@@ -32,12 +32,13 @@ type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, st
 /**
  * An ESLint plugin to lint npm ecosystem lockfiles for security and consistency issues.
  *
- * 📁 Default `files`: <code>**&#47;package-lock.json</code>, <code>**&#47;npm-shrinkwrap.json</code>,
+ * 📁 Default `files`: <code>**&#47;package-lock.json</code>,
+ * <code>**&#47;npm-shrinkwrap.json</code>,
  * <code>**&#47;yarn.lock</code>, <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
  * <code>**&#47;bun.lockb</code>, <code>**&#47;vlt-lock.json</code>
  *
  * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding parser
- * configs (named `lockfile/parser/{json,jsonc,plain,yaml}`) will be created for matched entries.
+ * configs (named `lockfile/parser/{json,jsonc,plain,yaml}`) will be created for matched entries
  */
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -271,7 +272,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
 
   const packageManagerDetected = context.meta.usedPackageManager?.name;
   const packageManagerFinal = arrayify(
-    packageManager ??
+    packageManager ||
       (packageManagerDetected != null && isKeyIn(packageManagerDetected, LOCKFILES_INFO_MAP)
         ? packageManagerDetected
         : null),

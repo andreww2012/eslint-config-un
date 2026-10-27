@@ -24,7 +24,7 @@ type ValidateDefaults<S, D> = [SourceObjectShape<S>] extends [never]
  * shallow-cloned to avoid aliasing user input.
  *
  * `defaults` is constrained to be a partial of `source`'s object shape, so call sites no longer
- * need a `satisfies SomeOptions` annotation to type-check the defaults object.
+ * need a `satisfies SomeOptions` annotation to type-check the defaults object
  */
 export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   source: S,
@@ -40,8 +40,8 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
     ? SValue
     : [MutableShallow<Exclude<DValue, NullishOrVoid>>] extends [Exclude<SValue, NullishOrVoid>]
       ? // `DValue` is structurally a subset of `SValue` (e.g. `{}` default for an object option,
-        // or `never[]` default for an array option) — drop it so accessing keys on the result
-        // doesn't have to deal with the empty-literal arm of the union.
+        // or `never[]` default for an array option); without it, code that reads keys of the
+        // result doesn't have to handle the empty-literal arm of the union
         Exclude<SValue, NullishOrVoid>
       : Exclude<SValue, NullishOrVoid> | MutableShallow<Exclude<DValue, NullishOrVoid>>;
 

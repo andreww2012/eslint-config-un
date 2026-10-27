@@ -36,8 +36,8 @@ const PLUGINS_BREAKING_THE_PROBE: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * Their entries are derived from what the plugin itself declares, so a candidate the plugin does not
- * flag is a decision taken upstream, not a gap here
+ * Their entries are derived from what the plugin itself declares, so a candidate the plugin does
+ * not flag is a decision taken upstream, not a gap here
  */
 const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES: ReadonlySet<string> = new Set(
   Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
@@ -216,7 +216,7 @@ const main = async () => {
       const doesThrowWithoutTypeInfo =
         untyped.threw.has(fullRuleName) && !typed.threw.has(fullRuleName);
       // Not throwing proves nothing on its own: the fixture may simply never take the rule down the
-      // path that asks for a type. Reaching the services in both passes is weak evidence that it does
+      // path that asks for a type. Reaching the services in both passes is weak evidence it does
       const doesDegradeGracefully =
         untyped.accessed.has(fullRuleName) && !untyped.threw.has(fullRuleName);
       // Bailing out with nothing more than a warning is no better than throwing
@@ -319,7 +319,7 @@ const main = async () => {
       declared != null && requirement != null && declared !== requirement,
   );
 
-  // Both need a judgement call the metadata has no way to record, so neither can be held at zero.
+  // Both need a judgment call the metadata has no way to record, so neither can be held at zero.
   // Strict mode only says how many there are, to keep an automated run quiet
   if (argv.flags.strict) {
     console.log(

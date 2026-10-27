@@ -75,7 +75,7 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('mdx');
 
   // `mdx/remark` itself only reports when remark-lint plugins are configured in a remark config,
-  // so what is verifiable here is that MDX files really go through the mdx parser.
+  // so what is verifiable here is that MDX files really go through the mdx parser
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('mdx/mdx')).toMatchObject({
       'mdx/remark': 1,

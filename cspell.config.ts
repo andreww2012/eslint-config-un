@@ -3,19 +3,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type {CSpellSettings} from 'cspell';
 
-const ROOT_DIR = import.meta.dirname || process.cwd();
+const ROOT_DIRECTORY = import.meta.dirname || process.cwd();
 
 // TODO drop once cspell reads it itself: https://github.com/streetsidesoftware/cspell/issues/2709
 const readGitExcludePatterns = () => {
   try {
     // eslint-disable-next-line sonar/no-os-command-from-path
     const excludeFilePath = execFileSync('git', ['rev-parse', '--git-path', 'info/exclude'], {
-      cwd: ROOT_DIR,
+      cwd: ROOT_DIRECTORY,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();
     return fs
-      .readFileSync(path.resolve(ROOT_DIR, excludeFilePath), 'utf8')
+      .readFileSync(path.resolve(ROOT_DIRECTORY, excludeFilePath), 'utf8')
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line && !line.startsWith('#'));
@@ -36,7 +36,7 @@ export default {
     'pnpm-workspace.yaml',
     '**/*.svg',
     'patches/**',
-    // Gitignored, but cspell applies `.gitignore` only after walking all (possibly a lot) files in there
+    // Gitignored, but cspell applies `.gitignore` only after walking all (maybe many) files there
     '**/temp/**',
     '.claude/worktrees/**',
     'data/eslint-plugins-db.json',
@@ -101,6 +101,8 @@ export default {
     'danielx', // `@danielx/civet`
     'cssicorn',
     'soml',
+    'lycheeverse',
+    'rambda',
 
     // Technical words/terms
     'arrayify',
@@ -122,6 +124,8 @@ export default {
     'greppability',
     'codemod',
     'worktrees',
+    'networkidle',
+    'noopener',
 
     // Misc
     'multicol',

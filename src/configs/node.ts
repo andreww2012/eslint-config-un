@@ -111,7 +111,7 @@ export interface NodeEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
   /**
    * Specifies which features will not be reported if detected as supported by
-   * `no-unsupported-features/*` rules.
+   * `no-unsupported-features/*` rules
    */
   noUnsupportedFeaturesIgnores?: Prettify<{
     /**
@@ -238,7 +238,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
   after: ['unicorn'],
 })(async (context, optionsRaw) => {
   const closestPackageJson = await interopDefault(import('empathic/package'))
-    .then((m) => m.up())
+    .then((module) => module.up())
     .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -277,7 +277,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
         },
       },
     )
-    // Versions in @since tags are from `eslint-plugin-node` plugin, unless the rule doesn't exist in it
+    // Versions in @since tags are from `eslint-plugin-node` plugin, unless the rule isn't in it
     .addRule('callback-return', OFF) /** @since 11.1.0 */
     .addRule('exports-style', ERROR, [
       'module.exports',

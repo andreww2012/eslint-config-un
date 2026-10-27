@@ -20,7 +20,7 @@ type MochaInterface = 'BDD' | 'TDD' | 'require';
  * [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `settings` flat config option with keys transformed to
- * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config.
+ * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config
  * @see https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/README.md#plugin-settings
  */
 export interface MochaPluginSettings {
@@ -46,7 +46,7 @@ export interface MochaPluginSettings {
 
   /**
    * The Mocha interface the linted code uses.
-   * With `require`, the rules resolve Mocha functions from named imports instead of globals.
+   * With `require`, the rules resolve Mocha functions from named imports instead of globals
    * @default 'BDD'
    */
   interface?: MochaInterface;

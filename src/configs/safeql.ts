@@ -22,7 +22,7 @@ export interface SafeqlEslintConfigOptions<
    * Options of [the only rule, `safeql/check-sql`](https://safeql.dev/api).
    *
    * Either point it at the database(s) to check the queries against, or set `useConfigFile` to
-   * `true` to read them from a `safeql.config.ts` file instead.
+   * `true` to read them from a `safeql.config.ts` file instead
    */
   options?: GetRuleOptions<'safeql', 'check-sql'>;
 }

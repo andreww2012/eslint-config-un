@@ -1,4 +1,3 @@
-// cspell:ignore attributechangedcallback connectedcallback
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
@@ -10,11 +9,11 @@ import {
 /**
  * [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `wc` property of the `settings` flat config option.
+ * that will be assigned to the `wc` property of the `settings` flat config option
  */
 export interface WebComponentsPluginSettings {
   /**
-   * Recognize the following classes as custom element base classes.
+   * Recognize the following classes as custom element base classes
    * @example ['LitElement']
    */
   elementBaseClasses?: readonly string[];
@@ -58,8 +57,14 @@ export default defineUnConfig<WebComponentsEslintConfigOptions>(
     .markCategory('Best Practice')
     .addRule('attach-shadow-constructor', ERROR) /** @since 0.1.0 */
     .addRule('guard-super-call', ERROR) /** @since 0.1.0 */
-    .addRule('no-child-traversal-in-attributechangedcallback', ERROR) /** @since 2.0.0-ce.1 */
-    .addRule('no-child-traversal-in-connectedcallback', ERROR) /** @since 2.0.0-ce.1 */
+    .addRule(
+      'no-child-traversal-in-attributechangedcallback', // cspell:disable-line
+      ERROR,
+    ) /** @since 2.0.0-ce.1 */
+    .addRule(
+      'no-child-traversal-in-connectedcallback', // cspell:disable-line
+      ERROR,
+    ) /** @since 2.0.0-ce.1 */
     .addRule('no-closed-shadow-root', ERROR) /** @since 0.1.0 */
     .addRule('no-constructor-params', ERROR) /** @since 1.3.1 */
     .addRule('no-customized-built-in-elements', ERROR) /** @since 2.0.0-ce.1 */

@@ -9,7 +9,9 @@ const NUXT_CONFIG_FILE_NAMES = Object.freeze(
   ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map((extension) => `nuxt.config.${extension}`),
 );
 
-/** Every auto-import is emitted as its own `const <name>: ...` line inside a `declare global` block */
+/**
+ * Every auto-import is emitted as its own `const <name>: ...` line inside a `declare global` block
+ */
 const NUXT_GLOBAL_DECLARATION_REGEX = /^[\t ]*const[\t ]+([$A-Z_a-z][\w$]*)[\t ]*:/gm;
 
 /** Every auto-imported component is emitted as a top level `export const <Name>: ...` */
@@ -44,9 +46,9 @@ type NuxtComponentsOption =
   | undefined;
 
 /** Mirrors how Nuxt collects the component directories of a layer */
-const collectNuxtComponentDirs = (option: NuxtComponentsOption): readonly string[] => {
+const collectNuxtComponentDirectories = (option: NuxtComponentsOption): readonly string[] => {
   if (Array.isArray(option)) {
-    return option.flatMap((item) => collectNuxtComponentDirs(item));
+    return option.flatMap((item) => collectNuxtComponentDirectories(item));
   }
   if (option === true || option === undefined) {
     // Holds the `global` and `islands` ones too
@@ -59,8 +61,8 @@ const collectNuxtComponentDirs = (option: NuxtComponentsOption): readonly string
     return [];
   }
 
-  return ('dirs' in option ? option.dirs || [] : [option]).flatMap((dir) =>
-    typeof dir === 'string' ? dir : dir.path || [],
+  return ('dirs' in option ? option.dirs || [] : [option]).flatMap((directory) =>
+    typeof directory === 'string' ? directory : directory.path || [],
   );
 };
 
@@ -68,12 +70,12 @@ const collectNuxtComponentDirs = (option: NuxtComponentsOption): readonly string
  * The directories of a layer, taking Nuxt's defaults for whatever the config leaves out.
  * `resolveIn` joins a directory onto another one, which lets the paths be absolute or relative
  */
-export const resolveNuxtLayerDirs = (
+export const resolveNuxtLayerDirectories = (
   {
-    srcDir,
-    rootDir,
-    serverDir = 'server',
-    dir,
+    srcDir: sourceDirectory,
+    rootDir: rootDirectory,
+    serverDir: serverDirectory = 'server',
+    dir: directories,
     components,
   }: {
     srcDir: string;
@@ -86,20 +88,22 @@ export const resolveNuxtLayerDirs = (
   },
   resolveIn: (base: string, directory: string) => string,
 ) => {
-  const relativeToSrcDir = (directory: string) =>
-    toForwardSlashes(path.relative(srcDir, resolveIn(srcDir, directory)));
+  const relativeToSourceDirectory = (directory: string) =>
+    toForwardSlashes(path.relative(sourceDirectory, resolveIn(sourceDirectory, directory)));
 
   return {
-    app: srcDir,
-    modules: resolveIn(rootDir, dir?.modules || 'modules'),
-    server: resolveIn(rootDir, serverDir),
-    shared: resolveIn(rootDir, dir?.shared || 'shared'),
-    components: collectNuxtComponentDirs(components).map(relativeToSrcDir),
-    layouts: relativeToSrcDir(dir?.layouts || 'layouts'),
-    middleware: relativeToSrcDir(dir?.middleware || 'middleware'),
-    pages: relativeToSrcDir(dir?.pages || 'pages'),
-    plugins: relativeToSrcDir(dir?.plugins || 'plugins'),
-    routerOptions: relativeToSrcDir(dir?.app || (srcDir === rootDir ? 'app' : '.')),
+    app: sourceDirectory,
+    modules: resolveIn(rootDirectory, directories?.modules || 'modules'),
+    server: resolveIn(rootDirectory, serverDirectory),
+    shared: resolveIn(rootDirectory, directories?.shared || 'shared'),
+    components: collectNuxtComponentDirectories(components).map(relativeToSourceDirectory),
+    layouts: relativeToSourceDirectory(directories?.layouts || 'layouts'),
+    middleware: relativeToSourceDirectory(directories?.middleware || 'middleware'),
+    pages: relativeToSourceDirectory(directories?.pages || 'pages'),
+    plugins: relativeToSourceDirectory(directories?.plugins || 'plugins'),
+    routerOptions: relativeToSourceDirectory(
+      directories?.app || (sourceDirectory === rootDirectory ? 'app' : '.'),
+    ),
   };
 };
 
@@ -113,16 +117,16 @@ const resolveNuxtLayers = (
 
   const [projectLayer, ...otherLayers] = layers.map(({config}) => {
     const {
-      app: srcDir,
-      modules: modulesDir,
-      server: serverDir,
-      shared: sharedDir,
-      ...dirsInApp
-    } = resolveNuxtLayerDirs(config, resolveIn);
-    const app = relativeDirectoryWithin(cwd, srcDir);
-    const modules = relativeDirectoryWithin(cwd, modulesDir);
-    const server = relativeDirectoryWithin(cwd, serverDir);
-    const shared = relativeDirectoryWithin(cwd, sharedDir);
+      app: sourceDirectory,
+      modules: modulesDirectory,
+      server: serverDirectory,
+      shared: sharedDirectory,
+      ...directoriesInApp
+    } = resolveNuxtLayerDirectories(config, resolveIn);
+    const app = relativeDirectoryWithin(cwd, sourceDirectory);
+    const modules = relativeDirectoryWithin(cwd, modulesDirectory);
+    const server = relativeDirectoryWithin(cwd, serverDirectory);
+    const shared = relativeDirectoryWithin(cwd, sharedDirectory);
     // A layer installed as a package is none of the project's code
     return app == null ||
       modules == null ||
@@ -130,7 +134,7 @@ const resolveNuxtLayers = (
       shared == null ||
       app.split('/').includes('node_modules')
       ? null
-      : {app, modules, server, shared, ...dirsInApp};
+      : {app, modules, server, shared, ...directoriesInApp};
   });
 
   return projectLayer
@@ -139,14 +143,14 @@ const resolveNuxtLayers = (
 };
 
 /** Relative to the ESLint working directory */
-export interface NuxtLayerDirs {
+export interface NuxtLayerDirectories {
   /** `srcDir` */
   app: string;
   modules: string;
   server: string;
   shared: string;
 
-  // Relative to `app` instead, so that the ones of the project move along with `vueOrNuxtProjectDir`
+  // Relative to `app` instead, so the project's ones move along with `vueOrNuxtProjectDir`
   components: readonly string[];
   layouts: string;
   middleware: string;
@@ -172,7 +176,7 @@ export interface NuxtAutoImports {
    * `null` when the Nuxt project root sits above that directory, leaving nothing an ESLint pattern
    * can express
    */
-  layers: readonly [NuxtLayerDirs, ...NuxtLayerDirs[]] | null;
+  layers: readonly [NuxtLayerDirectories, ...NuxtLayerDirectories[]] | null;
 
   /**
    * Whether the app lives in a directory of its own rather than at the project root.
@@ -190,7 +194,7 @@ export interface NuxtAutoImports {
    * Whether the build directory holds the generated artifacts at all, telling a project Nuxt has
    * never prepared apart from one that turned auto-imports off and legitimately declares none
    */
-  isBuildDirGenerated: boolean;
+  isBuildDirectoryGenerated: boolean;
 
   componentNames: readonly string[];
 
@@ -221,7 +225,8 @@ const importNuxtKit = async (cwd: string) => {
     return (await import(nuxtKitUrl)) as typeof import('nuxt/kit');
   }
 
-  // Yarn PnP has no `node_modules` to resolve from, while a store shared between projects may hold another project's Nuxt
+  // Yarn PnP has no `node_modules` to resolve from, while a store shared between projects may hold
+  // another project's Nuxt
   if (isOwnCopyImportable('nuxt')) {
     // eslint-disable-next-line import/no-extraneous-dependencies
     return await import('nuxt/kit');
@@ -247,36 +252,36 @@ const loadNuxtOptions = async (cwd: string) => {
 /** Reads Nuxt's auto-imports resolved by `nuxt/kit` (Nuxt 3.3+) */
 export const resolveNuxtAutoImports = async ({
   cwd = process.cwd(),
-  buildDir: buildDirOption,
+  buildDir: buildDirectoryOption,
 }: {cwd?: string; buildDir?: string} = {}): Promise<NuxtAutoImportsResult | null> => {
   // Yes, bounded to `cwd` because a potential config above it belongs to a different project
   const hasNuxtConfig = findUp.any([...NUXT_CONFIG_FILE_NAMES], {cwd, last: cwd}) != null;
-  if (!hasNuxtConfig && !buildDirOption) {
+  if (!hasNuxtConfig && !buildDirectoryOption) {
     return null;
   }
 
   const loadResult = hasNuxtConfig ? await loadNuxtOptions(cwd) : null;
   // An explicitly pointed at build directory is enough on its own, so a config we failed to load
   // only costs us the directory layout
-  if (!buildDirOption && loadResult?.error != null) {
+  if (!buildDirectoryOption && loadResult?.error != null) {
     return {error: loadResult.error, cacheKey: sha256(loadResult.error)};
   }
 
   const nuxtOptions = loadResult?.options || null;
-  const buildDirRaw = buildDirOption || nuxtOptions?.buildDir;
+  const buildDirectoryRaw = buildDirectoryOption || nuxtOptions?.buildDir;
   /* v8 ignore next 3 - Either the option provided the directory or the config was loaded */
-  if (buildDirRaw == null) {
+  if (buildDirectoryRaw == null) {
     return null;
   }
 
   // Nuxt reports POSIX separators even on Windows
-  const buildDir = path.resolve(cwd, buildDirRaw);
+  const buildDirectory = path.resolve(cwd, buildDirectoryRaw);
 
   // Windows reports reading through a file as `ENOENT`, indistinguishable from a directory that has
   // never been generated
-  const buildDirStats = await fs.stat(buildDir).catch(() => null);
-  if (buildDirStats?.isDirectory() === false) {
-    const error = `\`${buildDir}\` is not a directory`;
+  const buildDirectoryStats = await fs.stat(buildDirectory).catch(() => null);
+  if (buildDirectoryStats?.isDirectory() === false) {
+    const error = `\`${buildDirectory}\` is not a directory`;
     return {error, cacheKey: sha256(error)};
   }
 
@@ -286,10 +291,10 @@ export const resolveNuxtAutoImports = async ({
     : undefined;
 
   const sources = await Promise.all([
-    readFileSafe(path.join(buildDir, 'types', 'imports.d.ts')),
-    readFileSafe(path.join(buildDir, 'types', 'nitro-imports.d.ts')),
-    readFileSafe(path.join(buildDir, 'types', 'shared-imports.d.ts')),
-    readFileSafe(path.join(buildDir, 'components.d.ts')),
+    readFileSafe(path.join(buildDirectory, 'types', 'imports.d.ts')),
+    readFileSafe(path.join(buildDirectory, 'types', 'nitro-imports.d.ts')),
+    readFileSafe(path.join(buildDirectory, 'types', 'shared-imports.d.ts')),
+    readFileSafe(path.join(buildDirectory, 'components.d.ts')),
     // Anything other than a missing file, such as a directory that cannot be read, would otherwise
     // take the whole ESLint config down with it
   ]).catch((error: unknown) => getErrorMessage(error));
@@ -302,11 +307,11 @@ export const resolveNuxtAutoImports = async ({
   const appGlobals = extractDeclaredNames(NUXT_GLOBAL_DECLARATION_REGEX, appSource);
 
   return {
-    buildDir,
+    buildDir: buildDirectory,
     ...(loadResult?.error != null && {error: loadResult.error}),
     layers,
     isV4DirectoryStructure,
-    isBuildDirGenerated: sources.some((source) => source != null),
+    isBuildDirectoryGenerated: sources.some((source) => source != null),
     globals: {
       app: appGlobals,
       server: extractDeclaredNames(NUXT_GLOBAL_DECLARATION_REGEX, serverSource),
@@ -328,7 +333,7 @@ export const resolveNuxtAutoImports = async ({
     ],
     cacheKey: sha256(
       JSON.stringify([
-        {buildDir, layers, isV4DirectoryStructure, error: loadResult?.error},
+        {buildDir: buildDirectory, layers, isV4DirectoryStructure, error: loadResult?.error},
         ...sources,
       ]),
     ),

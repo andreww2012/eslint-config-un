@@ -1,8 +1,7 @@
-# cspell:ignore lycheeverse
 name: Check all links (lychee)
 on:
   schedule:
-    # Cron can't express a strict 48h interval, so this runs daily and the `gate` job skips every other day
+    # Cron can't express a strict 48h interval, so this runs daily and `gate` skips every other day
     - cron: '0 3 * * *'
   workflow_dispatch: {}
 
@@ -20,7 +19,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          # Even days since the Unix epoch, unlike days of the month, keep alternating across month ends
+          # Unlike days of the month, even days since the Unix epoch keep alternating across months
           if [ "${EVENT_NAME}" != schedule ] || [ $(( $(date -u +%s) / 86400 % 2 )) -eq 0 ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           fi

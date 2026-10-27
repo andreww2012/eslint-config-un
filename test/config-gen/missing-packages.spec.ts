@@ -1,8 +1,8 @@
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 
 vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {...mod, detect: vi.fn<typeof mod.detect>(mod.detect)};
+  const original = await importOriginal();
+  return {...original, detect: vi.fn<typeof original.detect>(original.detect)};
 });
 
 const mockedPackageNames: string[] = [];

@@ -1,4 +1,3 @@
-// cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
@@ -10,13 +9,13 @@ import {
 /**
  * [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `next` property of the `settings` flat config option.
+ * that will be assigned to the `next` property of the `settings` flat config option
  */
 export interface NextJsPluginSettings {
   /**
    * If you're using the plugin in a project where Next.js isn't installed in your root directory
    * (such as a monorepo), you can tell the plugin where to find your Next.js application.
-   * Path can be relative or absolute, or a glob (i.e. packages/*\/).
+   * Path can be relative or absolute, or a glob (i.e. packages/*\/)
    */
   rootDir?: string | readonly string[];
 }
@@ -78,7 +77,10 @@ export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {
     .addRule('no-sync-scripts', ERROR) /** @since 9.3.7-canary.14 */ // 🟡🔵
     .addRule('no-title-in-document-head', ERROR) /** @since 10.2.1-canary.3 */ // 🟡
     .addRule('no-typos', ERROR) /** @since 11.0.2-canary.22 */ // 🟡
-    .addRule('no-unwanted-polyfillio', ERROR) /** @since 9.4.5-canary.38 */ // 🟡
+    .addRule(
+      'no-unwanted-polyfillio', // cspell:disable-line
+      ERROR,
+    ) /** @since 9.4.5-canary.38 */ // 🟡
     .enableConfigTesterForPlugin('nextjs')
     .addOverrides();
 });

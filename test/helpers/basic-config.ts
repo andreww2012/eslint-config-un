@@ -8,9 +8,10 @@ type ComputeOptions = Parameters<typeof computeEslintConfig>[1];
 
 /**
  * Shorthand for the three common compute-option presets:
- * - `'all-disabled'` — every config disabled by default (the helper's implicit default)
- * - `'default'`      — no status override (`{reset: true}`)
- * - `'misc-enabled'` — misc configs enabled (`{reset: true, un: {defaultConfigsStatus: 'misc-enabled'}}`)
+ * - `'all-disabled'`: every config disabled by default (the helper's implicit default)
+ * - `'default'`: no status override (`{reset: true}`)
+ * - `'misc-enabled'`: misc configs enabled
+ *   (`{reset: true, un: {defaultConfigsStatus: 'misc-enabled'}}`)
  */
 type ConfigMode = 'all-disabled' | 'default' | 'misc-enabled';
 
@@ -25,13 +26,13 @@ const CONFIG_MODE_OPTIONS: Readonly<Record<ConfigMode, ComputeOptions>> = {
  * and checks whether the "no need to enable/disable" warning was (or was not) printed.
  *
  * `state`:
- * - `true` — config is enabled, no warning
- * - `false` — config is disabled, no warning
- * - `[configName, true]` — config is enabled + "needlessly enabled" warning
- * - `[configName, false]` — config is disabled + "needlessly disabled" warning
+ * - `true`: config is enabled, no warning
+ * - `false`: config is disabled, no warning
+ * - `[configName, true]`: config is enabled + "needlessly enabled" warning
+ * - `[configName, false]`: config is disabled + "needlessly disabled" warning
  *
  * `modeOrComputeOptions`:
- * - `'all-disabled'` (default) / `'default'` / `'misc-enabled'` — preset shorthands
+ * - `'all-disabled'` (default) / `'default'` / `'misc-enabled'`: preset shorthands
  * - or a raw `computeOptions` object, whose `mode` picks the preset the rest is merged into
  */
 export const expectConfigState = async (

@@ -184,7 +184,7 @@ jobs:
           pnpm changeset version || true
           echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
           git restore .
-          # `changeset version` moves the versioned prerelease changesets into an (untracked) `.changeset/pre` directory
+          # `changeset version` moves versioned prerelease changesets to an untracked `.changeset/pre`
           git clean -fdq .changeset
       - name: Create release / Publish
         id: changesets

@@ -1,4 +1,3 @@
-// cspell:ignore attributify blockquotes autolinks setext
 import type {UnExtraPluginsRules} from '../../eslint/eslint-types';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
 import {ALL_STYLISTIC_RULES, type AllStylisticRules} from '../../plugins.gen';
@@ -37,20 +36,20 @@ export interface NoStylisticRulesEslintConfigOptions<
      * `true` enables all rules.
      * In combination with `enableRules.disableAllOtherRules` set to `true`, all the other rules
      * will be disabled.
-     * This allows you to enable stylistic rules exclusively.
+     * This allows you to enable stylistic rules exclusively
      * @default false
      */
     rules: boolean | Partial<Record<AllStylisticRules, boolean>>;
 
     /**
-     * Disable all other rules from all plugins except the ones specified in `enableRules.rules`.
+     * Disable all other rules from all plugins except the ones specified in `enableRules.rules`
      * @default false
      */
     disableAllOtherRules?: boolean;
   };
 
   /**
-   * Specify arbitrary rules which should be considered stylistic.
+   * Specify arbitrary rules which should be considered stylistic
    */
   additionalRules?: Partial<
     Record<Exclude<UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames, AllStylisticRules>, boolean>
@@ -94,7 +93,7 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
             // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- added to preserve the type
             additionalRules! || {},
           ).map(([ruleName, isStylistic]) => (isStylistic ? ruleName : null)),
-        ].filter((v) => v != null),
+        ].filter((value) => value != null),
     )
     .addOverrides();
 
@@ -121,7 +120,7 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
                 : ruleNameWithPluginPrefix;
             }),
           )
-          .filter((v) => v != null),
+          .filter((value) => value != null),
       );
   }
 });

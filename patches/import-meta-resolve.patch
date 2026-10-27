@@ -1,7 +1,8 @@
-Expose the `package.json` URL of the package found by the last `moduleResolve` call, as `local-pkg` can find a wrong one: https://github.com/antfu-collective/local-pkg/issues/16
+Expose the `package.json` URL of the package found by the last `moduleResolve` call, as
+`local-pkg` can find a wrong one: https://github.com/antfu-collective/local-pkg/issues/16
 - `packageResolve` returns the found `package.json` URL along with the resolved URL;
 - `moduleResolve` stores it (or `null` on error), `getLastResolvedPackageJsonUrl` returns it;
-- the `./resolve` subpath export makes `lib/resolve.js` importable.
+- the `./resolve` subpath export makes `lib/resolve.js` importable
 
 diff --git a/lib/resolve.d.ts b/lib/resolve.d.ts
 index f4d2f25a396f5f6a9eff59b695cde18be5a5aae9..9f2f8b35ad7eb20402944b5728e95f5051bff41f 100644

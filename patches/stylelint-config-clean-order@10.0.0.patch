@@ -1,5 +1,7 @@
-Expose the property groups on their own, without the `stylelint-order` import of the config they live in, so that they can be inlined.
-They are moved from `dist/config.js` to the new `dist/property-groups.js` (exported as `./property-groups`), which `dist/config.js` re-exports them from.
+Expose the property groups on their own, without the `stylelint-order` import of the config they
+live in, so that they can be inlined.
+They are moved from `dist/config.js` to the new `dist/property-groups.js` (exported as
+`./property-groups`), which `dist/config.js` re-exports them from
 
 diff --git a/dist/config.d.ts b/dist/config.d.ts
 index a367b214307124ab04d8238bcea444f7ca0cd297..cc4947501884ea2cd58eb1cc4e1c53cfaae9d828 100644

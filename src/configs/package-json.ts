@@ -61,7 +61,7 @@ type PackageJsonRequirableFields = IsRequireRule<GetRuleNamesInPlugin<'package-j
 
 interface RequireFieldsOption {
   /**
-   * Require the specified fields to be present in the package.json file.
+   * Require the specified fields to be present in the package.json file
    */
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
@@ -99,7 +99,7 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
 /**
  * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `packageJson` property of the `settings` flat config option.
+ * that will be assigned to the `packageJson` property of the `settings` flat config option
  */
 export type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 
@@ -146,7 +146,11 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    *
    * Affected rule:
    * - [`package-json/sort-collections`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md)
-   * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
+   * @default {devDependencies: true, dependencies: true, peerDependencies: true,
+   * peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true,
+   * dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true,
+   * 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true,
+   * 'pnpm.peerDependencyRules.allowedVersions': true}
    * @see https://docs.npmjs.com/cli/v12/configuring-npm/package-json/
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
@@ -172,7 +176,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * [`recommended-publishable` config](https://github.com/michaelfaith/eslint-plugin-package-json#supported-rules).
    *
    * If you want to have different configs for publishable and non-publishable `package.json`s,
-   * create multiple `packageJson` configs using array notation.
+   * create multiple `packageJson` configs using array notation
    * @default false
    */
   publishable?: boolean;

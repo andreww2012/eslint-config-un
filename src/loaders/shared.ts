@@ -41,7 +41,8 @@ const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find (?:module|package) '
 // Specifiers starting with a dot, a slash or a Windows drive letter are paths, not package names
 const PATH_SPECIFIER_REGEXP = /^(?:[./\\]|[a-z]:)/i;
 
-// Every Node version fails when a CommonJS module `require()`s a module an `import()` is still loading: https://nodejs.org/api/errors.html#err_require_esm_race_condition
+// Every Node version fails when a CommonJS module `require()`s a module an `import()` is still
+// loading: https://nodejs.org/api/errors.html#err_require_esm_race_condition
 const moduleLoadingMutex = new Mutex();
 
 function createModuleLoader<T, N extends string>(
@@ -137,7 +138,7 @@ type ModuleLoaderFactory<EraseModuleType extends boolean> = <
 ) => ModuleLoader<T, N, ResolvesToNull<N, IgnoredErrors>>;
 
 /* eslint-disable un/no-type-assertion -- these only change how the type of the module is inferred */
-export const genModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
+export const generateModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
 
-export const genInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;
+export const generateInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;
 /* eslint-enable un/no-type-assertion */

@@ -72,7 +72,8 @@ export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
   // 🟢 - in recommended
 
   configBuilder
-    // TODO reports twice on HTML files (via `@html-eslint/parser`): the plugin visits both `Program` and its `Document` child
+    // TODO reports twice on HTML files (via `@html-eslint/parser`): the plugin visits both
+    // `Program` and its `Document` child
     ?.addConfig([
       'check-file',
       {

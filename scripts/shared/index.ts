@@ -15,7 +15,7 @@ export const generateAngularPluginsWithOldRules = async () => {
     interopDefault(import('@angular-eslint/eslint-plugin-template')),
     interopDefault(import('angular-eslint-plugin-template15')),
     // `angular-eslint-plugin-template17` bundles `@typescript-eslint/utils` which extends
-    // `LegacyESLint` from `eslint/use-at-your-own-risk` — removed in ESLint 10.
+    // `LegacyESLint` from `eslint/use-at-your-own-risk`, which ESLint 10 removed
     interopDefault(import('angular-eslint-plugin-template17')).catch(() => null),
     interopDefault(import('angular-eslint-plugin18')),
   ]);

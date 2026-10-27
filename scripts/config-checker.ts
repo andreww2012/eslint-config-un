@@ -38,7 +38,7 @@ const packagesToMoveToDirectDependencies = Array.from(
             ? null
             : {config, packageName},
         )
-        .filter((v) => v != null);
+        .filter((value) => value != null);
     }),
     (item) => item.packageName,
   ),

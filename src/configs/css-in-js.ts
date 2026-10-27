@@ -11,11 +11,11 @@ import {
 /**
  * [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `css.target` property of the `settings` flat config option.
+ * that will be assigned to the `css.target` property of the `settings` flat config option
  */
 export interface CssInJsPluginSettings {
   /**
-   * Specifies the attribute name or pattern that uses the style object.
+   * Specifies the attribute name or pattern that uses the style object
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-attributes
    */
   attributes?: readonly string[];
@@ -23,7 +23,7 @@ export interface CssInJsPluginSettings {
   /**
    * Specifies the function paths that use the style object.
    * Keys are module names, values are the lists of the call paths within that module, where each
-   * path is either a single name or an array of the path segments.
+   * path is either a single name or an array of the path segments
    * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
    * @example {'@emotion/react': [['css'], ['default', 'css']]}
    */

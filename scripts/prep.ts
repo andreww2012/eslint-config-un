@@ -40,7 +40,7 @@ const [
   {featuresCount},
 ] = await Promise.all([
   generateRuleTypes(),
-  fs.mkdir(resolveInOutDir(), {recursive: true}),
+  fs.mkdir(resolveInOutDirectory(), {recursive: true}),
   writeBaselineArtifacts(formatTypescript),
 ]);
 console.log(
@@ -87,15 +87,15 @@ await Promise.all([
     fs.writeFile(path.join(__dirname, '../src/eslint-rule-categories.gen.ts'), formattedCode),
   ),
   fs.writeFile(
-    resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
+    resolveInOutDirectory(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
     allRuleTypesCode,
   ),
 ]);
 
 const {pluginsCount, warnings: pluginMetadataWarnings} =
   // The module reads the rule artifacts written above, which may not exist yet
-  await import('./src/generation/plugins').then((m) =>
-    m.writePluginMetadataArtifacts(formatTypescript),
+  await import('./src/generation/plugins').then((module) =>
+    module.writePluginMetadataArtifacts(formatTypescript),
   );
 console.log(`Generated the metadata of ${styleText('bold', String(pluginsCount))} plugin(s)`);
 pluginMetadataWarnings.forEach((warning) => {
@@ -168,9 +168,8 @@ async function generateRuleTypes() {
         );
 
         // This forces the per-rule option type aliases to be exported.
-        // When a config's emitted `.d.ts` references one of these by name
-        // `rolldown-plugin-dts` needs a matching export
-        // to import — otherwise it warns with `IMPORT_IS_UNDEFINED` during build
+        // When a config's emitted `.d.ts` references one of these by name, `rolldown-plugin-dts`
+        // needs a matching export to import, otherwise it warns with `IMPORT_IS_UNDEFINED`
         code = code.replaceAll(/^type /gm, 'export type ');
 
         return {
@@ -186,10 +185,10 @@ async function generateRuleTypes() {
   ]);
 
   // eslint-disable-next-line ts/no-shadow
-  const perPluginCode = `${perPluginCodeRaw.map((v) => v.code).join('\n\n')}
+  const perPluginCode = `${perPluginCodeRaw.map((pluginCode) => pluginCode.code).join('\n\n')}
 
 export type RuleOptionsPerPlugin = {
-${perPluginCodeRaw.map((v) => `  '${v.pluginName}': ${v.exportTypeName};`).join('\n')}
+${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCode.exportTypeName};`).join('\n')}
 }\n`.replaceAll(/: Linter.RuleEntry<([^>]*)>/g, ': $1;');
 
   const fixableRulesPerPluginEntries = perPluginCodeRaw
@@ -251,7 +250,7 @@ ${perPluginCodeRaw
           [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
           [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
         ]
-          .map((v) => v.filter(Boolean).join(''))
+          .map((icons) => icons.filter(Boolean).join(''))
           .filter(Boolean)
           .join('|');
         return `    '${ruleName}',${comment ? ` // ${comment}` : ''}`;
@@ -344,7 +343,7 @@ ${Array.from(
   };
 }
 
-function resolveInOutDir(...paths: readonly string[]) {
+function resolveInOutDirectory(...paths: readonly string[]) {
   return path.join(__dirname, '../temp/eslint-types', ...paths);
 }
 
@@ -367,10 +366,12 @@ function getDiffAsPatch(a: string, b: string) {
 
 async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: string) {
   // eslint-disable-next-line unicorn/no-array-sort
-  const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDir())).sort().at(-1);
+  const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDirectory())).sort().at(-1);
   let diffString = '';
   if (mostRecentRuleTypesFileName) {
-    const mostRecentRuleTypes = await readFileSafe(resolveInOutDir(mostRecentRuleTypesFileName));
+    const mostRecentRuleTypes = await readFileSafe(
+      resolveInOutDirectory(mostRecentRuleTypesFileName),
+    );
     if (mostRecentRuleTypes) {
       diffString =
         mostRecentRuleTypes === currentRuleTypes

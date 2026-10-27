@@ -1,14 +1,15 @@
 import path from 'node:path';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
-import {type EslintProcessor, genInferredModuleLoader} from './shared';
+import {type EslintProcessor, generateInferredModuleLoader} from './shared';
 
 const loadCivetProcessor = (outputExtension: '.jsx' | '.tsx') =>
   import('eslint-plugin-civet').then(({civet}): EslintProcessor => {
     const processor = civet({js: outputExtension === '.jsx', outputExtension}).processors.civet;
     return {
       ...processor,
-      // The plugin names the compiled file after the absolute source path, so an ignored parent directory would exclude it
+      // The plugin names the compiled file after the absolute source path, so an ignored parent
+      // directory would exclude it
       preprocess: (text, filename) =>
         processor
           .preprocess(text, filename)
@@ -17,9 +18,11 @@ const loadCivetProcessor = (outputExtension: '.jsx' | '.tsx') =>
   });
 
 export const packagesLoaders = {
-  _utils: genInferredModuleLoader('_utils', '_utils', () => interopDefault(import('../utils'))),
+  _utils: generateInferredModuleLoader('_utils', '_utils', () =>
+    interopDefault(import('../utils')),
+  ),
 
-  angularExtractInlineHtmlProcessor: genInferredModuleLoader(
+  angularExtractInlineHtmlProcessor: generateInferredModuleLoader(
     'angularExtractInlineHtmlProcessor',
     '@angular-eslint/eslint-plugin-template',
     () =>
@@ -32,7 +35,7 @@ export const packagesLoaders = {
         return fixedProcessor;
       }),
   ),
-  astroClientSideTsProcessor: genInferredModuleLoader(
+  astroClientSideTsProcessor: generateInferredModuleLoader(
     'astroClientSideTsProcessor',
     'eslint-plugin-astro',
     () =>
@@ -40,79 +43,81 @@ export const packagesLoaders = {
         (module): EslintProcessor => module.processors['client-side-ts'],
       ),
   ),
-  checkFileProcessor: genInferredModuleLoader(
+  checkFileProcessor: generateInferredModuleLoader(
     'checkFileProcessor',
     'eslint-plugin-check-file',
     () =>
       interopDefault(import('eslint-plugin-check-file')).then(
-        (m) => m.processors['eslint-processor-check-file'],
+        (module) => module.processors['eslint-processor-check-file'],
       ),
   ),
-  civetJsProcessor: genInferredModuleLoader('civetJsProcessor', 'eslint-plugin-civet', () =>
+  civetJsProcessor: generateInferredModuleLoader('civetJsProcessor', 'eslint-plugin-civet', () =>
     loadCivetProcessor('.jsx'),
   ),
-  civetTsProcessor: genInferredModuleLoader('civetTsProcessor', 'eslint-plugin-civet', () =>
+  civetTsProcessor: generateInferredModuleLoader('civetTsProcessor', 'eslint-plugin-civet', () =>
     loadCivetProcessor('.tsx'),
   ),
-  eslintCssTreeSyntax: genInferredModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
+  eslintCssTreeSyntax: generateInferredModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
     interopDefault(import('@eslint/css-tree/definition-syntax-data')),
   ),
-  eslintMergeProcessors: genInferredModuleLoader(
+  eslintMergeProcessors: generateInferredModuleLoader(
     'eslintMergeProcessors',
     'eslint-merge-processors',
     () => interopDefault(import('eslint-merge-processors')),
   ),
-  eslintPluginGraphql: genInferredModuleLoader(
+  eslintPluginGraphql: generateInferredModuleLoader(
     'eslintPluginGraphql',
     '@graphql-eslint/eslint-plugin',
     () => interopDefault(import('@graphql-eslint/eslint-plugin')),
   ),
-  eslintPluginImportX: genInferredModuleLoader(
+  eslintPluginImportX: generateInferredModuleLoader(
     'eslintPluginImportX',
     'eslint-plugin-import-x',
     (): Promise<Pick<typeof import('eslint-plugin-import-x'), 'createNodeResolver'>> =>
       interopDefault(import('eslint-plugin-import-x')),
   ),
-  eslintPluginMarkdown: genInferredModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
-    interopDefault(import('@eslint/markdown')),
+  eslintPluginMarkdown: generateInferredModuleLoader(
+    'eslintPluginMarkdown',
+    '@eslint/markdown',
+    () => interopDefault(import('@eslint/markdown')),
   ),
-  eslintPluginMdx: genInferredModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
+  eslintPluginMdx: generateInferredModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
-  htmlScriptsParser: genInferredModuleLoader('htmlScriptsParser', '', () =>
+  htmlScriptsParser: generateInferredModuleLoader('htmlScriptsParser', '', () =>
     import('../plugin-html-scripts').then(({parser}) => parser),
   ),
-  htmlScriptsProcessorFactory: genInferredModuleLoader('htmlScriptsProcessorFactory', '', () =>
+  htmlScriptsProcessorFactory: generateInferredModuleLoader('htmlScriptsProcessorFactory', '', () =>
     import('../plugin-html-scripts').then(({createProcessor}) => createProcessor),
   ),
-  importResolverTypescript: genInferredModuleLoader(
+  importResolverTypescript: generateInferredModuleLoader(
     'importResolverTypescript',
     'eslint-import-resolver-typescript',
     () => interopDefault(import('eslint-import-resolver-typescript')),
   ),
-  mergeProcessors: genInferredModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
+  mergeProcessors: generateInferredModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),
-  scsstree: genInferredModuleLoader('scsstree', '@humanwhocodes/scsstree', () =>
+  scsstree: generateInferredModuleLoader('scsstree', '@humanwhocodes/scsstree', () =>
     interopDefault(import('@humanwhocodes/scsstree')),
   ),
-  svelteProcessor: genInferredModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
-    interopDefault(import('eslint-plugin-svelte')).then((m) => m.processors.svelte),
+  svelteProcessor: generateInferredModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
+    interopDefault(import('eslint-plugin-svelte')).then((module) => module.processors.svelte),
   ),
-  tailwindCsstree: genInferredModuleLoader('tailwindCsstree', 'tailwind-csstree', () =>
+  tailwindCsstree: generateInferredModuleLoader('tailwindCsstree', 'tailwind-csstree', () =>
     interopDefault(import('tailwind-csstree')),
   ),
-  typescriptEslintParser: genInferredModuleLoader(
+  typescriptEslintParser: generateInferredModuleLoader(
     'typescriptEslintParser',
     'typescript-eslint',
-    () => interopDefault(import('typescript-eslint')).then((m) => m.parser),
+    () => interopDefault(import('typescript-eslint')).then((module) => module.parser),
   ),
-  vueBlocksProcessor: genInferredModuleLoader(
+  vueBlocksProcessor: generateInferredModuleLoader(
     'vueBlocksProcessor',
     'eslint-processor-vue-blocks',
     () => interopDefault(import('eslint-processor-vue-blocks')),
   ),
-  vueProcessor: genInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
+  vueProcessor: generateInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')).then(
       // eslint-disable-next-line un/no-type-assertion -- the plugin types its processors as `any`
       (module) => module.processors['.vue'] as EslintProcessor,

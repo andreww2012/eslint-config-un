@@ -186,7 +186,7 @@ const analyze = Effect.gen(function* () {
         score,
       };
     })
-    .filter((v) => v != null);
+    .filter((value) => value != null);
 
   let pluginsSortingCriterion!: (value: (typeof pluginsAnalyzed)[number]) => number;
   let shouldSortInversedByDefault = false;
@@ -240,8 +240,8 @@ const analyze = Effect.gen(function* () {
         const {status: statusId} = plugin.status;
         const statusMeta = ESLINT_PLUGIN_STATUSES_META[statusId];
 
-        const depsCount = plugin.allDirectDependencies.length;
-        const pluginsDepsCount = plugin.directDependenciesOtherEslintPlugins.length;
+        const dependenciesCount = plugin.allDirectDependencies.length;
+        const pluginsDependenciesCount = plugin.directDependenciesOtherEslintPlugins.length;
 
         const {pluginInfo} = plugin;
 
@@ -258,7 +258,7 @@ const analyze = Effect.gen(function* () {
                   ? styleText('red', 'No rules')
                   : `${pluginInfo.customRules.length} rule${pluginInfo.customRules.length === 1 ? '' : 's'}`,
 
-          'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 10 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
+          'Deps (plugins)': `${styleText(dependenciesCount === 0 ? 'green' : dependenciesCount < 10 ? 'yellow' : 'red', dependenciesCount.toString())}${pluginsDependenciesCount > 0 ? styleText(pluginsDependenciesCount < 2 ? 'yellow' : 'red', ` (${pluginsDependenciesCount})`) : ''}`,
 
           'Downloads per day (last month)': Math.round(
             plugin.downloadsPerDayAverage,

@@ -17,8 +17,8 @@ const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
  *
  * ❌ Default `ignores`: <code>**&#47;Cargo.lock</code>
  *
- * ⚠️ Will be merged with the user provided `ignores`. Use the function form of `ignores` to replace
- * them instead
+ * ⚠️ Will be merged with the user provided `ignores`.
+ * Use the function form of `ignores` to replace them instead
  */
 export interface TomlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,

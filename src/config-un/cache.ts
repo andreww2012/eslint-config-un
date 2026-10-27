@@ -74,13 +74,13 @@ const computeCacheKey = async (context: UnConfigContext) => {
     Promise.all(
       // eslint-disable-next-line ts/await-thenable
       lockfilePaths.map((lockfilePath) => (lockfilePath ? readFileSafe(lockfilePath, true) : null)),
-    ).then((files) => files.find((v) => v != null)),
+    ).then((files) => files.find((file) => file != null)),
     Promise.all(
       // eslint-disable-next-line ts/await-thenable
       eslintConfigPaths.map((eslintConfigPath) =>
         eslintConfigPath ? readFileSafe(eslintConfigPath, true) : null,
       ),
-    ).then((files) => files.find((v) => v != null)),
+    ).then((files) => files.find((file) => file != null)),
   ]);
 
   cacheKey.push(
@@ -214,7 +214,7 @@ export const saveCacheToFs = async (
     /* v8 ignore next - A group produced by `Object.groupBy` is never empty */
     const unserializablePathsGrouped = Object.entries(
       // eslint-disable-next-line ts/no-non-null-assertion
-      Object.groupBy(unserializablePaths, (v) => v[0][0]!),
+      Object.groupBy(unserializablePaths, (unserializablePath) => unserializablePath[0][0]!),
     ).map((values) => ({
       configIndex: Number(values[0]),
       configName: dataToStore.configs.at(Number(values[0]))?.name,

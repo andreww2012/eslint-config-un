@@ -1,4 +1,4 @@
-// cspell:disable viem tronweb
+// cspell:ignore tronweb viem
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
@@ -10,7 +10,7 @@ import {
 /**
  * [`eslint-plugin-sonarjs`](https://npmx.dev/eslint-plugin-sonarjs) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned directly to the `settings` flat config option.
+ * that will be assigned directly to the `settings` flat config option
  */
 export interface SonarPluginSettings {
   /**
@@ -154,7 +154,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
   // 🔤 - rule for regular expressions
   // 🧪 - rule for testing frameworks
   // 📦 - rule for specific package(s) or node module(s)
-  // ⚠️ - rule is disabled (or kept disabled) because it overlaps with other rule(s) or by other reason(s) listed hereinafter
+  // ⚠️ - rule is disabled (or kept disabled) because it overlaps with other rule(s) or by other
+  // reason(s) listed hereinafter
   // 🔵 - JSX/HTML rule
 
   const mainConfig = configBuilder?.addConfig([
@@ -212,7 +213,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `camelcase`
     .addRule('class-name', OFF) /** @since 1.0.4-alpha.0 */ // [S101] 🟢
     .addRule('class-prototype', OFF) /** @since 1.0.4-alpha.0 */ // [S3525]
-    // ⚠️ `no-eval`, `no-new-func`, `no-script-url`; also, the changelog says it was removed in v4.0.0, but it is still shipped
+    // ⚠️ `no-eval`, `no-new-func`, `no-script-url`; also, the changelog says it was removed in
+    // v4.0.0, but it is still shipped
     .addRule('code-eval', OFF) /** @since 1.0.4-alpha.0 */ // [S1523] 🟢
     // ⚠️ Unreliable metric and cannot be universally applied to all projects
     .addRule('cognitive-complexity', OFF) /** @since 0.1.0-0 */ // [S3776] 🟢
@@ -243,12 +245,15 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('duplicates-in-character-class', OFF) /** @since 1.0.4-alpha.0 */ // [S5869] 🟢🔤
     .addRule('dynamically-constructed-templates', ERROR) /** @since 3.0.6 */ // [S7790] 🟢 📦 `pug`, `ejs`
     .addRule('elseif-without-else', OFF) /** @since 0.9.1 */ // [S126]
-    // ⚠️ `regexp/no-empty-group` (and also `sonar/no-empty-group`), `regexp/no-empty-alternative`, `regexp/no-trivially-nested-quantifier`
+    // ⚠️ `regexp/no-empty-group` (and also `sonar/no-empty-group`), `regexp/no-empty-alternative`,
+    // `regexp/no-trivially-nested-quantifier`
     .addRule('empty-string-repetition', OFF) /** @since 1.0.4-alpha.0 */ // [S5842] 🟢🔤
     .addRule('encryption-secure-mode', ERROR) /** @since 1.0.4-alpha.0 */ // [S5542] 🟢 📦 `node:crypto`
-    // Not disabling because, despite being mostly covered by `regexp/no-useless-dollar-replacements` rule, finds more problems
+    // Not disabling because, despite being mostly covered by
+    // `regexp/no-useless-dollar-replacements` rule, finds more problems
     .addRule('existing-groups', ERROR) /** @since 1.0.4-alpha.0 */ // [S6328] 🟢🔤
-    // Note: `jest`, `jasmine`, `ava` and `qunit` are explicitly unsupported (they have no in-body `this.skip()`-style skip)
+    // Note: `jest`, `jasmine`, `ava` and `qunit` are explicitly unsupported (they have no in-body
+    // `this.skip()`-style skip)
     .addRule('explicit-test-skip', testRulesSeverity) /** @since 4.2.0 */ // [S8968] 🟢🧪 📦 `@playwright/test`, `node:test`, `bun:test`, `vitest`, `mocha`
     .addRule('expression-complexity', OFF) /** @since 1.0.4-alpha.0 */ // [S1067]
     .addRule('file-header', OFF) /** @since 1.0.4-alpha.0 */ // [S1451]
@@ -281,7 +286,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('jsx-no-leaked-render', ERROR) /** @since 3.0.0 */ // [S6439] 🟢🔵
     // ⚠️ `no-labels`
     .addRule('label-position', OFF) /** @since 1.0.4-alpha.0 */ // [S1439] 🟢
-    // Note: only checks `window.open` calls, for which browsers do not imply `noopener` like they do for links
+    // Note: only checks `window.open` calls, as browsers already imply `noopener` for links
     .addRule('link-with-target-blank', ERROR) /** @since 1.0.4-alpha.0 */ // [S5148] 🟢
     .addRule('max-lines', OFF) /** @since 3.0.0 */ // [S104]
     .addRule('max-lines-per-function', OFF) /** @since 3.0.0 */ // [S138]
@@ -340,11 +345,13 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ `regexp/no-empty-group`
     .addRule('no-empty-group', OFF) /** @since 1.0.4-alpha.0 */ // [S6331] 🟢🔤
     .addRule('no-empty-parameterized-test-dataset', testRulesSeverity) /** @since 4.2.1 */ // [S8998] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `bun:test`
-    // ⚠️ Only `.test`, `.spec` and `.cy` files are considered test files, and these name markers are not configurable
+    // ⚠️ Only `.test`, `.spec` and `.cy` files are considered test files, and these name markers
+    // are not configurable
     .addRule('no-empty-test-file', OFF) /** @since 1.0.4-alpha.0 */ // [S2187] 🟢🧪 `jasmine`, `jest`, `mocha`, `cypress`, `vitest`, `@playwright/test`, `node:test`, Deno (only test API patterns are checked, not package imports: https://github.com/SonarSource/SonarJS/blob/6b11c6ee96a415548f9e754f6764a0b3c30aa45f/packages/analysis/src/jsts/rules/S2187/rule.ts#L26)
     .addRule('no-empty-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8781] 🟢🧪 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
     .addRule('no-equals-in-for-termination', ERROR) /** @since 1.0.4-alpha.0 */ // [S888] 🟢
-    // ⚠️ `jest/no-focused-tests`, `vitest/no-focused-tests`. For other testing frameworks, one can enable this rule manually
+    // ⚠️ `jest/no-focused-tests`, `vitest/no-focused-tests`. For other testing frameworks, one can
+    // enable this rule manually
     .addRule('no-exclusive-tests', OFF) /** @since 1.0.4-alpha.0 */ // [S6426] 🟢🧪 (only patterns are checked, not package imports)
     .addRule('no-extra-arguments', ERROR) /** @since 0.1.0-0 */ // [S930] 🟢
     // ⚠️ `no-fallthrough`
@@ -355,13 +362,17 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-forced-browser-interaction', testRulesSeverity) /** @since 4.1.0 */ // [S8783] 🟢🧪 📦 `@playwright/test`, `cypress`
     .addRule('no-function-declaration-in-block', OFF) /** @since 1.0.4-alpha.0 */ // [S1530]
     .addRule('no-global-this', ERROR) /** @since 1.0.4-alpha.0 */ // [S2990] 🟢
-    // Note: with cases noncompliant with this rule, ESLint fails on parsing stage anyway due to the assuming of being in a strict mode
+    // Note: with cases noncompliant with this rule, ESLint fails on parsing stage anyway due to the
+    // assuming of being in a strict mode
     .addRule('no-globals-shadowing', ERROR) /** @since 1.0.4-alpha.0 */ // [S2137] 🟢
     .addRule('no-gratuitous-expressions', ERROR) /** @since 0.9.1 */ // [S2589] 🟢
     // Warning because has false positives (triggered on any strings looking like IP addresses)
     .addRule('no-hardcoded-ip', WARNING) /** @since 1.0.4-alpha.0 */ // [S1313] 🟢 📦 `node:net`
     .addRule('no-hardcoded-passwords', ERROR) /** @since 3.0.0 */ // [S2068] 🟢 📦 `mysql`
-    // "This rule detects variables/fields having a name matching a list of words (secret, token, credential, auth, api[_.-]?key) being assigned a pseudorandom hard-coded value. The pseudorandomness of the hard-coded value is based on its entropy and the probability to be human-readable."
+    // "This rule detects variables/fields having a name matching a list of words (secret, token,
+    // credential, auth, api[_.-]?key) being assigned a pseudorandom hard-coded value. The
+    // pseudorandomness of the hard-coded value is based on its entropy and the probability to be
+    // human-readable."
     .addRule('no-hardcoded-secrets', ERROR) /** @since 3.0.0 */ // [S6418] 🟢
     .addRule('no-hook-setter-in-body', ERROR) /** @since 1.0.4-alpha.0 */ // [S6442] 🟢 📦 `react`
     // ⚠️ `no-dupe-else-if`, `no-duplicate-case`
@@ -426,7 +437,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-same-argument-assert', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5863] 🟢🧪 📦 `chai`
     // ⚠️ Purely stylistic, handled by Prettier
     .addRule('no-same-line-conditional', OFF) /** @since 0.5.0 */ // [S3972] 🟢
-    // ⚠️ Unsure about this one, it seems to me that it might disallow "normal" code which could be hard to "fix"
+    // ⚠️ Unsure about this one, it seems to me that it might disallow "normal" code which could be
+    // hard to "fix"
     .addRule('no-selector-parameter', OFF) /** @since 2.0.3 */ // [S2301] 🟢
     .addRule('no-session-cookies-on-static-assets', ERROR) /** @since 4.0.0 */ // [S8441] 🟢 📦 `express-session`, `cookie-session`
     // ⚠️ `jest/no-disabled-tests`, `vitest/no-disabled-tests`
@@ -438,7 +450,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // ⚠️ Reports on promise-returning functions marked with `void `
     .addRule('no-try-promise', OFF) /** @since 1.0.4-alpha.0 */ // [S4822] 🟢
     .addRule('no-undefined-argument', ERROR) /** @since 1.0.4-alpha.0 */ // [S4623] 🟢
-    // ⚠️ Useful in some scenarios, for example in `mongoose` to remove the property from the document
+    // ⚠️ Useful in some cases, for example in `mongoose` to remove the property from the document
     .addRule('no-undefined-assignment', OFF) /** @since 1.0.4-alpha.0 */ // [S2138]
     // ⚠️ `curly` and Prettier
     .addRule('no-unenclosed-multiline-block', OFF) /** @since 1.0.4-alpha.0 */ // [S2681] 🟢
@@ -484,7 +496,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('prefer-promise-shorthand', ERROR) /** @since 1.0.4-alpha.0 */ // [S4634] 🟢
     // ⚠️ IMHO this is not a common practice
     .addRule('prefer-read-only-props', OFF) /** @since 3.0.0 */ // [S6759] 🟢
-    // ⚠️ `RegExp.prototype.exec` mutates the state of the regexp: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#return_value
+    // ⚠️ `RegExp.prototype.exec` mutates the state of the regexp:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#return_value
     .addRule('prefer-regexp-exec', OFF) /** @since 3.0.0 */ // [S6594] 🟢🔤
     .addRule('prefer-single-boolean-return', WARNING) /** @since 0.1.0-0 */ // [S1126] 🟢
     .addRule('prefer-specific-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S5906] 🟢🧪 📦 jest, jasmine, playwright, chai-like, `node:assert`

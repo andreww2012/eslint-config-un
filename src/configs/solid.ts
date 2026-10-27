@@ -9,7 +9,7 @@ import {
 /**
  * [`eslint-plugin-solid`](https://npmx.dev/eslint-plugin-solid) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `solid` property of the `settings` flat config option.
+ * that will be assigned to the `solid` property of the `settings` flat config option
  */
 export interface SolidPluginSettings {
   /**

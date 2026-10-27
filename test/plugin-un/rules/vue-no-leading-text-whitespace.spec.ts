@@ -15,26 +15,26 @@ const toTestCase = (template: string) => ({
 ruleTester.run(RULE_NAME, vueNoLeadingTextWhitespace, {
   valid: [
     ...[
-      '<p>Loading…</p>',
-      '\n  Loading…\n',
+      '<p>Loading...</p>',
+      '\n  Loading...\n',
       '<p>\n</p>',
       '<p>\n  {{ label }}</p>',
-      '<p>\n  <i></i>\n  Loading…</p>',
+      '<p>\n  <i></i>\n  Loading...</p>',
       '<p>{{ label }}<i v-if="isShown"> (optional)</i></p>',
-      '<p><i></i><b>\n  Loading…</b></p>',
-      '<p>&#32;Loading…</p>',
-      '<pre>\n  Loading…</pre>',
-      '<pre><b>\n  Loading…</b></pre>',
-      '<textarea>\n  Loading…</textarea>',
+      '<p><i></i><b>\n  Loading...</b></p>',
+      '<p>&#32;Loading...</p>',
+      '<pre>\n  Loading...</pre>',
+      '<pre><b>\n  Loading...</b></pre>',
+      '<textarea>\n  Loading...</textarea>',
     ].map(toTestCase),
-    ...['<code-block>\n  Loading…</code-block>', '<CodeBlock><b> Loading…</b></CodeBlock>'].map(
+    ...['<code-block>\n  Loading...</code-block>', '<CodeBlock><b> Loading...</b></CodeBlock>'].map(
       (template) => ({...toTestCase(template), options: [{ignoredElements: ['code-block']}]}),
     ),
   ],
   invalid: [
     ...[
-      {template: '<p>\n  Loading…</p>', output: '<p>Loading…</p>'},
-      {template: '<p> Loading…</p>', output: '<p>Loading…</p>'},
+      {template: '<p>\n  Loading...</p>', output: '<p>Loading...</p>'},
+      {template: '<p> Loading...</p>', output: '<p>Loading...</p>'},
       {
         template: '<div>\n  <p>Done.</p>\n  <p>\n    You can close the window.</p>\n</div>',
         output: '<div>\n  <p>Done.</p>\n  <p>You can close the window.</p>\n</div>',
@@ -46,8 +46,8 @@ ruleTester.run(RULE_NAME, vueNoLeadingTextWhitespace, {
       errors: [{messageId: 'leading'}],
     })),
     {
-      ...toTestCase('<code-block>\n  Loading…</code-block>'),
-      output: toTestCase('<code-block>Loading…</code-block>').code,
+      ...toTestCase('<code-block>\n  Loading...</code-block>'),
+      output: toTestCase('<code-block>Loading...</code-block>').code,
       options: [{ignoredElements: ['pre']}],
       errors: [{messageId: 'leading', line: 1, column: 23, endLine: 2, endColumn: 3}],
     },

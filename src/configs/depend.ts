@@ -9,7 +9,7 @@ import {
 
 /**
  * Enables rules from a plugin to help suggest alternatives to various dependencies.
- * [The list of replacements](https://e18e.dev/docs/replacements) is maintained by the e18e community.
+ * [The list of replacements](https://e18e.dev/docs/replacements) is kept by the e18e community.
  *
  * ⚠️ You should probably use `e18e` config, which provides functionally the same
  * `moduleReplacements` sub-config, as well as other useful rules.
@@ -21,7 +21,7 @@ export interface DependEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'depend'> {
   /**
    * Options of
-   * [the only rule, `depend/ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
+   * [the only rule, `depend/ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md)
    */
   options?: GetRuleOptions<'depend', 'ban-dependencies'>;
 }

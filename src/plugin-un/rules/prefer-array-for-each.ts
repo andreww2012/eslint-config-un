@@ -398,18 +398,18 @@ const rule: Eslint.Rule.RuleModule = {
           ? statement.declarations[0]
           : undefined;
       const id: (ESTree.Pattern & {typeAnnotation?: unknown}) | undefined = declarator?.id;
-      const init = declarator?.init;
+      const initializer = declarator?.init;
       return statement != null &&
         declarator != null &&
-        init != null &&
+        initializer != null &&
         id?.type === 'Identifier' &&
         id.typeAnnotation == null &&
-        elementReads.includes(init) &&
+        elementReads.includes(initializer) &&
         sourceCode.getCommentsInside(declarator).length === 0 &&
         // A replaced `array[index]` must not end up referring to another variable with this name
         sourceCode.getTokens(body).filter((token) => token.value === id.name).length ===
           sourceCode.getDeclaredVariables(declarator)[0]?.references.length
-        ? {name: id.name, init, statement}
+        ? {name: id.name, init: initializer, statement}
         : undefined;
     };
 

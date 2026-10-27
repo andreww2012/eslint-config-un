@@ -11,7 +11,7 @@ export type CssCustomSyntaxOption = MaybeFn<
     {
       /**
        * Default CSS syntax provided by `@eslint/css`, which in turn comes from
-       * `@eslint/css-tree/definition-syntax-data`.
+       * `@eslint/css-tree/definition-syntax-data`
        */
       defaultSyntax: CssCustomSyntax;
 
@@ -22,7 +22,7 @@ export type CssCustomSyntaxOption = MaybeFn<
        *
        * NOTE: it will already contain the merged default syntax, see
        * [implementation](https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
-       * for details (`tailwindX.js` files specifically).
+       * for details (`tailwindX.js` files specifically)
        */
       extraSyntax?: CssCustomSyntax;
     },

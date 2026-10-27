@@ -19,7 +19,7 @@ export interface HeadersEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'headers'> {
   /**
    * Options of
-   * [the only rule, `headers/header-format`](https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/docs/rules/header-format.md).
+   * [the only rule, `headers/header-format`](https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/docs/rules/header-format.md)
    */
   options?: (
     | {

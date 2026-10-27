@@ -19,7 +19,8 @@ const FIXTURES = {
 
 const JSX_EXTRA_CONFIGS: Readonly<Parameters<typeof testEslintConfig>[2]> = {
   un: {
-    // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
+    // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to
+    // avoid this behavior
     extraConfigs: [{files: ['**/*.jsx']}],
   },
   searchFixturesRelativeToPath: import.meta.dirname,

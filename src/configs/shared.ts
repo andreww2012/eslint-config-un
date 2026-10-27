@@ -25,9 +25,9 @@ import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 
 /**
  * Resolves the `files` option to the patterns themselves, falling back to `filesDefault` if the
- * option is not passed or its function form returns `undefined`. Only meant for the places
- * consuming the patterns outside of `ConfigEntryBuilder#addConfig`, which resolves the option on its
- * own.
+ * option is not passed or its function form returns `undefined`.
+ * Only meant for the places consuming the patterns outside of `ConfigEntryBuilder#addConfig`,
+ * which resolves the option on its own
  * @param files The option value as provided by the user
  * @param filesDefault The patterns `files` would be resolved to if the option was not passed
  */
@@ -40,8 +40,9 @@ export const resolveFilesOption = (
   ];
 
 /**
- * Same as {@link resolveFilesOption}, but for `ignores`. The implicitly ignored patterns are only
- * known when the config is created, hence an empty `ignoresImplicit` is passed to the function.
+ * Same as {@link resolveFilesOption}, but for `ignores`.
+ * The implicitly ignored patterns are only known when the config is created, hence an empty
+ * `ignoresImplicit` is passed to the function
  * @param ignores The option value as provided by the user
  * @param ignoresDefault The patterns `ignores` would be resolved to if the option was not passed
  */
@@ -71,7 +72,9 @@ export const generateDefaultTestFiles = <T extends string>(
 ) => [
   ...(includeRegularSpecFiles
     ? [
-        // Popularity of separators (using GitHub global code source https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts as of 2026-05-30):
+        // Popularity of separators (using GitHub global code source
+        // https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts
+        // as of 2026-05-30):
         // `.`: 4.9M, `-`: 221k, `_`: 42.7k
         `**/*[._-]spec.${extensions}` as const,
         `**/*.test.${extensions}` as const, // 6.3M
@@ -267,22 +270,32 @@ export const CORE_RULES_HANDLED_BY_TS_COMPILER: readonly GetRuleNamesInPlugin<''
   'no-dupe-class-members',
   'no-dupe-keys',
   'no-func-assign',
-  // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
+  // "Note that the compiler will not catch the Object.assign() case. Thus, if you use
+  // Object.assign() in your codebase, this rule will still provide some value." -
+  // https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
   // 'no-import-assign',
-  // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
+  // "Note that, technically, TypeScript will only catch this if you have the strict or
+  // noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are
+  // considered to be best practice." -
+  // https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
   // 'no-invalid-this',
   'no-new-native-nonconstructor', // successor of no-new-symbol
   'no-obj-calls',
-  // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
+  // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch
+  // var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule
+  // will still provide some value." -
+  // https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
   // 'no-redeclare',
   'no-setter-return',
   'no-this-before-super',
   'no-undef',
-  // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
+  // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable
+  // code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
   // 'no-unreachable',
   'no-unsafe-negation',
   'no-with',
-  // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
+  // Does not work correctly when type-only imports are present because you can't combine such an
+  // import with a default import
   'no-duplicate-imports',
 ];
 
@@ -313,7 +326,7 @@ export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigCont
       // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition, ts/no-non-null-asserted-optional-chain -- added to preserve the type
       context.rootOptions.markdownCodeBlocksRules?.additionalDisabledRules! || {},
     ).map(([ruleName, shouldDisable]) => (shouldDisable ? ruleName : null)),
-  ].filter((v) => v != null);
+  ].filter((value) => value != null);
 
 /** Folds the `allowDefaultProject` shortcut into `projectService`, winning over the existing one */
 export const withAllowDefaultProject = (

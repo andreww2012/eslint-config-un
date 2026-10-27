@@ -27,7 +27,8 @@ const PROCESSOR_OPTION_KEYS = allUnionMembers<ProcessorOptionKey, {readonly: tru
   'xmlExtensions',
 ]);
 
-// ESLint only copies `sourceType` to `parserOptions` for espree, and the global setup puts `module` there
+// ESLint only copies `sourceType` to `parserOptions` for espree, and the global setup puts `module`
+// there
 const generateSourceTypeOptions = (sourceType: Eslint.Linter.SourceType) => ({
   sourceType,
   parserOptions: {sourceType},
@@ -69,7 +70,7 @@ export interface HtmlScriptsEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    *
    * To parse the scripts with another parser, set it in `parserOptions.parser`: `parser` itself
    * must stay the one this Config sets, otherwise classic scripts don't see the global variables
-   * of the previous ones.
+   * of the previous ones
    * @default {globals: <browser globals>}
    */
   languageOptions?: Eslint.Linter.LanguageOptions;
@@ -116,7 +117,7 @@ export default defineUnConfig<HtmlScriptsEslintConfigOptions>('htmlScripts', {
       [
         'html-scripts/all',
         {
-          // The user `files` and `ignores` are about the HTML files, not the virtual files of scripts
+          // The user's `files` and `ignores` target the HTML files, not the scripts' virtual files
           applyUserFilesAndIgnores: false,
           filesDefault: [GLOB_HTML_SCRIPTS],
         },

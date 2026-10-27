@@ -17,7 +17,7 @@ import {
   WARNING,
 } from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
-import {genFlatConfigEntryName, isUnFlatConfigEntry} from '../eslint/eslint-utils';
+import {generateFlatConfigEntryName, isUnFlatConfigEntry} from '../eslint/eslint-utils';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   PLUGIN_PREFIXES_LIST,
@@ -61,7 +61,7 @@ import {
 } from './config-utils';
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import {resolveGitignore} from './gitignore';
-import {withDefaultPackageRootDir} from './import-integrity';
+import {withDefaultPackageRootDirectory} from './import-integrity';
 import {resolveNuxtAutoImports} from './nuxt';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
@@ -100,7 +100,7 @@ export function createConfigBuilder<P extends PluginPrefix | null>(
   return configBuilder;
 }
 
-const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('plugins', {isGlobalSetup: true});
+const PLUGINS_CONFIG_NAME = generateFlatConfigEntryName('plugins', {isGlobalSetup: true});
 
 interface TestError {
   message: MaybeArray<string>;
@@ -121,8 +121,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 ): Promise<EslintFlatConfigEntry[] | {configs: EslintFlatConfigEntry[]; errors: TestError[]}> {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
-    log(logObj) {
-      if (logObj.type === 'fatal') {
+    log(logObject) {
+      if (logObject.type === 'fatal') {
         process.exit(1);
       }
     },
@@ -163,7 +163,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     : environmentDetected;
 
   const environmentFromOption = maybeCall(options.environment, environmentBeforeOption);
-  const environment = environmentFromOption ?? environmentBeforeOption;
+  const environment = environmentFromOption || environmentBeforeOption;
   const environmentSource =
     environmentFromOption == null
       ? isEnvironmentFromEnvVarValid
@@ -191,14 +191,14 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const {cacheConfigs} = optionsResolved;
   debug(`Is config caching enabled: ${cacheConfigs}`);
 
-  const {isNuxtConfigDisabled, nuxtBuildDirOption} = (() => {
+  const {isNuxtConfigDisabled, nuxtBuildDirectoryOption} = (() => {
     const vueConfigOptions = optionsResolved.configs?.vue;
     const nuxtConfigOptions =
       typeof vueConfigOptions === 'object' ? vueConfigOptions.configNuxt : undefined;
     return {
       isNuxtConfigDisabled: vueConfigOptions === false || nuxtConfigOptions === false,
       ...(typeof nuxtConfigOptions === 'object' && {
-        nuxtBuildDirOption: nuxtConfigOptions.buildDir,
+        nuxtBuildDirectoryOption: nuxtConfigOptions.buildDir,
       }),
     };
   })();
@@ -211,12 +211,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       import('../eslint-types-fixable-only.gen')
         .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
         .catch(() => ({})),
-      isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirOption}),
+      isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirectoryOption}),
       resolveGitignore(optionsResolved.gitignore),
     ],
   );
 
-  debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
+  debug(`Detected package manager: ${usedPackageManager?.name || '<not detected>'}`);
 
   if (gitignore?.error != null) {
     logger.warn(`Could not generate the ignores from the gitignore files: ${gitignore.error}`);
@@ -229,7 +229,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     typeof typeInfoRulesRaw === 'string' ? typeInfoRulesRaw : typeInfoRulesObject?.mode;
   const typeInfoRulesResolved: UnConfigContext['typeInfoRulesResolved'] = {
     // `mode` is finalized later, after the `ts` config is loaded (see below)
-    mode: typeInfoRulesUserMode ?? 'standalone',
+    mode: typeInfoRulesUserMode || 'standalone',
   };
   if (typeInfoRulesObject?.ignores?.length) {
     typeInfoRulesResolved.ignores = typeInfoRulesObject.ignores;
@@ -518,7 +518,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     // Tools load config files only to run them, so global mutations there are intended
     .disableAnyRule('unicorn', 'no-top-level-side-effects');
 
-  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores
+  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration
+  // object, then the patterns act as global ignores <...> Patterns are added after the default
+  // patterns, which are ["**/node_modules/", ".git/"]." -
+  // https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores
   const globalIgnores = [
     ...(!Array.isArray(ignores) && ignores?.override ? [] : DEFAULT_GLOBAL_IGNORES),
     ...(Array.isArray(ignores) ? ignores : ignores?.files || []),
@@ -532,15 +535,15 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const cascadeAnchorEntries: Record<CascadeAnchor, readonly MaybePromise<ConfigUnresolved>[]> = {
     globalSetup: [
       (files?.length || 0) > 0 && {
-        name: genFlatConfigEntryName('files', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('files', {isGlobalSetup: true}),
         files,
       },
       globalIgnores.length > 0 && {
-        name: genFlatConfigEntryName('ignores', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('ignores', {isGlobalSetup: true}),
         ignores: globalIgnores,
       },
       gitignore?.ignores != null && {
-        name: genFlatConfigEntryName('ignores/gitignore', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('ignores/gitignore', {isGlobalSetup: true}),
         ignores: gitignore.ignores,
       },
       ...(
@@ -563,7 +566,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           const valueInitial = linterOptionConfig.value;
           const hasFiles = (linterOptionConfig.files?.length || 0) > 0;
           const hasIgnores = (linterOptionConfig.ignores?.length || 0) > 0;
-          // An `ignores`-only entry reads as "turn this option off for these paths", so they should become `files`
+          // An `ignores`-only entry reads as "turn this option off for these paths", so they should
+          // become `files`
           const shouldDisableForIgnoredPaths = !hasFiles && hasIgnores && valueInitial == null;
 
           const valueFinal = (() => {
@@ -580,7 +584,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
             : linterOptionConfig.files;
 
           return {
-            name: genFlatConfigEntryName(
+            name: generateFlatConfigEntryName(
               `linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
               {isGlobalSetup: true},
             ),
@@ -595,7 +599,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         }),
       ),
       {
-        name: genFlatConfigEntryName('language-options', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('language-options', {isGlobalSetup: true}),
         languageOptions: {
           ecmaVersion: 'latest',
           sourceType: 'module',
@@ -609,7 +613,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         } as const,
       },
       {
-        name: genFlatConfigEntryName('language-options/commonjs', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('language-options/commonjs', {isGlobalSetup: true}),
         files: ['**/*.c[jt]s?(x)'],
         languageOptions: {
           globals: {
@@ -618,9 +622,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         },
       },
       useImportIntegrity && {
-        name: genFlatConfigEntryName('import-integrity', {isGlobalSetup: true}),
+        name: generateFlatConfigEntryName('import-integrity', {isGlobalSetup: true}),
         settings: {
-          'import-integrity': withDefaultPackageRootDir(
+          'import-integrity': withDefaultPackageRootDirectory(
             pluginsOptions['import-integrity']?.settings,
           ),
         },
@@ -629,7 +633,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     parsing: [],
     rootConfig: [rootConfigBuilder],
     userExtraConfigs: extraConfigs.flatMap((extraConfig, configIndex) => {
-      const configName = genFlatConfigEntryName(
+      const configName = generateFlatConfigEntryName(
         `extra-config/${extraConfig.name || `unnamed${configIndex}`}`,
       );
       const configResolveResult = processUnOrFlatConfig(
@@ -661,7 +665,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const configsResolved: EslintFlatConfigEntry[] =
     // Kept grouped by cascade entry so that the `parsing` band, whose content is only known once
-    // every Config has declared what it targets, can be filled in afterwards without losing its place
+    // every Config has declared what it targets, can be filled in later without losing its place
     (
       await Promise.all(
         configsOrderResolved.map(
@@ -684,7 +688,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           )
           .flat(2)
           // eslint-disable-next-line no-implicit-coercion
-          .filter((v) => !!v),
+          .filter((value) => !!value),
       )
       .flatMap((configs, cascadeIndex) =>
         configsOrderResolved[cascadeIndex] === 'parsing' ? resolveParsingConfigs(context) : configs,
@@ -729,7 +733,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     );
 
     configsResolved.push({
-      name: genFlatConfigEntryName('offline-mode'),
+      name: generateFlatConfigEntryName('offline-mode'),
       rules: Object.fromEntries(
         // eslint-disable-next-line ts/ban-ts-comment -- error only in `tsc`, not in `tsgo`
         // @ts-ignore "TS2590: Expression produces a union type that is too complex to represent" for whatever reason
@@ -763,7 +767,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
     const errorMessages = context.tests
       .flatMap((testFn) => maybeCall(testFn, {plugins: loadedPlugins}))
-      .filter((v) => v != null);
+      .filter((value) => value != null);
 
     errorMessages.forEach((errorMessage) => {
       if (typeof errorMessage === 'string') {
@@ -804,7 +808,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       usedParsers: new Map(
         Array.from(context.usedParsers, ([parserPrefix, configs]) => [
           parserPrefix,
-          configs.map((c) => c.name).filter((v) => typeof v === 'string'),
+          configs.map((config) => config.name).filter((name) => typeof name === 'string'),
         ]),
       ),
       usedPackages: new Map(
@@ -823,7 +827,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
                 ...info,
               };
             })
-            .filter((v) => v != null),
+            .filter((value) => value != null),
         ]),
       ),
     });

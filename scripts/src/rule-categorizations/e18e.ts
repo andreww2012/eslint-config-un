@@ -56,7 +56,7 @@ const parseE18eRuleCategoriesFromReadme = async () => {
   );
   if (headingsMissing.length > 0) {
     throw new Error(
-      `The README of \`@e18e/eslint-plugin\` no longer has the following rule table heading(s): ${headingsMissing.map((v) => `\`${v}\``).join(', ')}. You probably need to update \`E18E_README_HEADINGS_TO_CATEGORIES\` in this script source file.`,
+      `The README of \`@e18e/eslint-plugin\` no longer has the following rule table heading(s): ${headingsMissing.map((heading) => `\`${heading}\``).join(', ')}. You probably need to update \`E18E_README_HEADINGS_TO_CATEGORIES\` in this script source file.`,
     );
   }
 
@@ -76,7 +76,7 @@ export const e18eRuleCategorization = {
     );
     if (rulesUnknownToPlugin.length > 0) {
       throw new Error(
-        `The README of \`@e18e/eslint-plugin\` lists the following rules the plugin does not have: ${rulesUnknownToPlugin.map((v) => `\`${v}\``).join(', ')}. Most likely they were renamed, and the way their categories are parsed in this script source file must be adjusted.`,
+        `The README of \`@e18e/eslint-plugin\` lists the following rules the plugin does not have: ${rulesUnknownToPlugin.map((ruleName) => `\`${ruleName}\``).join(', ')}. Most likely they were renamed, and the way their categories are parsed in this script source file must be adjusted.`,
       );
     }
 

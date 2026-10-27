@@ -12,7 +12,7 @@ const FIXTURES = {
   tsImportValid: 'ts-import-valid.ts',
 } as const;
 
-// Keeps the real resolver, but lets us see the options it was built with.
+// Keeps the real resolver, but lets us see the options it was built with
 vi.mock(import('eslint-import-resolver-typescript'), async (importOriginal) => {
   const original = await importOriginal();
 
@@ -209,7 +209,7 @@ describe('un options', () => {
 describe('options', () => {
   describe('option: `extraneousDependenciesCheck`', () => {
     const IGNORE_PATTERNS = ['**/test/**', '**/spec/**'] as const;
-    const PACKAGE_DIRS = ['.', 'packages/my-package'] as const;
+    const PACKAGE_DIRECTORIES = ['.', 'packages/my-package'] as const;
     const WHITELIST = ['my-bundled-lib', 'another-lib'] as const;
 
     it('enables `import/no-extraneous-dependencies` rule and allows dev dependencies by default', async () => {
@@ -346,22 +346,22 @@ describe('options', () => {
 
     it('looks up the dependencies in the given directory when `packageDir` is a string', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesCheck: {packageDir: PACKAGE_DIRS[0]}},
+        import: {extraneousDependenciesCheck: {packageDir: PACKAGE_DIRECTORIES[0]}},
       });
 
       expect(
         configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
-      ).toStrictEqual([{devDependencies: true, packageDir: [PACKAGE_DIRS[0]]}]);
+      ).toStrictEqual([{devDependencies: true, packageDir: [PACKAGE_DIRECTORIES[0]]}]);
     });
 
     it('looks up the dependencies in all the given directories when `packageDir` is an array', async () => {
       const configResult = await computeEslintConfig({
-        import: {extraneousDependenciesCheck: {packageDir: [...PACKAGE_DIRS]}},
+        import: {extraneousDependenciesCheck: {packageDir: [...PACKAGE_DIRECTORIES]}},
       });
 
       expect(
         configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
-      ).toStrictEqual([{devDependencies: true, packageDir: PACKAGE_DIRS}]);
+      ).toStrictEqual([{devDependencies: true, packageDir: PACKAGE_DIRECTORIES}]);
     });
 
     it('does not set `packageDir` rule option when the option is an empty array', async () => {

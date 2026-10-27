@@ -30,7 +30,7 @@ export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 export type UnAllRuleNames = keyof UnRulesConfig;
 
 /**
- * `files` and `ignores` accepting the patterns only, i.e. with no support for the function form.
+ * `files` and `ignores` accepting the patterns only, i.e. with no support for the function form
  */
 export interface UnFilesAndIgnoresPatterns {
   files?: string[];
@@ -47,12 +47,12 @@ interface UnFlatConfigEntryFilesOnly {
    *
    * Pass an empty array to disable the config, but keep sub-configs intact (if any).
    *
-   * Can also be a function receiving the patterns this option would be resolved to if it was not
-   * passed. The returned patterns completely replace them, unless `undefined` is returned. An empty
-   * array has the same effect as passing it directly.
+   * Can also be a function receiving the patterns this option would resolve to if not passed.
+   * The returned patterns completely replace them, unless `undefined` is returned.
+   * An empty array has the same effect as passing it directly.
    *
    * Called for every ESLint config this config generates, as well as whenever the patterns are
-   * resolved earlier, e.g. when they are passed to another config.
+   * resolved earlier, e.g. when they are passed to another config
    */
   files?: MaybeFn<
     string[] | undefined,
@@ -61,18 +61,18 @@ interface UnFlatConfigEntryFilesOnly {
 }
 
 /**
- * Similar to ESLint's flat config entry type, but with eslint-config-un specific JSDoc comments.
+ * Similar to ESLint's flat config entry type, but with eslint-config-un specific JSDoc comments
  */
 export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFilesOnly {
   /**
    * Can also be a function receiving the patterns this option would be resolved to if it was not
    * passed, split into the config's own defaults (`ignoresDefault`) and the globs of the file types
-   * the config is not meant to lint (`ignoresImplicit`). The returned patterns completely replace
-   * both, unless `undefined` is returned.
+   * the config is not meant to lint (`ignoresImplicit`).
+   * The returned patterns completely replace both, unless `undefined` is returned.
    *
    * Called for every ESLint config this config generates, as well as whenever the patterns are
    * resolved earlier (e.g. when they are passed to another config), in which case `ignoresImplicit`
-   * is empty.
+   * is empty
    */
   ignores?: MaybeFn<
     string[] | undefined,
@@ -92,7 +92,7 @@ interface DisabledAutofixOption {
    *
    * If you'd like to disable autofix without changing the rule name, it's only currently possible
    * to do so globally (for all configs at once).
-   * For that, please use `autofixDisabledGloballyFor` root option.
+   * For that, please use `autofixDisabledGloballyFor` root option
    */
   disableAutofix?: boolean;
 }
@@ -172,7 +172,7 @@ export interface UnFlatConfigEntryBase<
 
   /**
    * Force non-zero severity of all the rules to be `error` or `warning`.
-   * The severity forced here will take precedence over the severity forced on the root level.
+   * The severity forced here will take precedence over the severity forced on the root level
    */
   forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 }

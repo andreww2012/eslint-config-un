@@ -38,7 +38,8 @@ export default definePluginMetadata('yaml', {
       stylistic: true,
       autofixDisabled: [
         true,
-        // Won't fix by default, YAML 1.1 is opt-in: https://github.com/ota-meshi/eslint-plugin-yml/issues/174
+        // Won't fix by default, YAML 1.1 is opt-in:
+        // https://github.com/ota-meshi/eslint-plugin-yml/issues/174
         'unquoted `yes`, `on`, `no` and dates are booleans and timestamps to YAML 1.1 parsers, like the ones Kubernetes and Ansible use',
       ],
     },

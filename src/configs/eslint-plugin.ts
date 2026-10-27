@@ -37,14 +37,14 @@ const DEFAULT_SCHEMA_COMPLETENESS_CHECKS: Readonly<
 /**
  * [`eslint-plugin-eslint-plugin`](https://npmx.dev/eslint-plugin-eslint-plugin) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `eslint-plugin` property of the `settings` flat config option.
+ * that will be assigned to the `eslint-plugin` property of the `settings` flat config option
  * @see https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/README.md#settings
  */
 export interface EslintPluginPluginSettings {
   /**
    * The names allowed for the `RuleTester` constructors.
    * A string must match the whole name, a regular expression is tested against it.
-   * Must not be empty, the plugin throws otherwise.
+   * Must not be empty, the plugin throws otherwise
    * @default ['RuleTester']
    * @see https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/README.md#ruletesterconstructors
    */
@@ -185,7 +185,7 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       'enforce' | 'not-enforce' | undefined
     >,
     defaultValue?: 'enforce' | 'not-enforce',
-  ) => ((metaProperties[property] ?? defaultValue) === 'enforce' ? ERROR : OFF);
+  ) => ((metaProperties[property] || defaultValue) === 'enforce' ? ERROR : OFF);
 
   // Legend:
   // 🟢 - in recommended

@@ -1,4 +1,4 @@
-// cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
+// cspell:ignore spinbutton treegrid
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSX_TSX, OFF, WARNING} from '../constants';
 import type {OmitIndexSignature, OmitStrict, Prettify} from '../types';
@@ -85,7 +85,7 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `jsx-a11y-x` property of the `settings` flat config option.
  * For Astro components, they are also assigned to the `jsx-a11y` property, read by the original
- * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y).
+ * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y)
  */
 export interface JsxA11yPluginSettings {
   /**
@@ -99,7 +99,7 @@ export interface JsxA11yPluginSettings {
   };
 
   /**
-   * Keys are custom component names that render an HTML element specified in the value.
+   * Keys are custom component names that render an HTML element specified in the value
    */
   components?: Record<string, string>;
 
@@ -108,12 +108,12 @@ export interface JsxA11yPluginSettings {
    * This setting will be used determine the element type in rules that require semantic context.
    * To restrict polymorphic linting to specified components, additionally set
    * `polymorphicAllowList` to an array of component names." -
-   * [plugin docs](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x#polymorphic-components).
+   * [plugin docs](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x#polymorphic-components)
    */
   polymorphicPropName?: string;
 
   /**
-   * See `polymorphicPropName` docs.
+   * See `polymorphicPropName` docs
    */
   polymorphicAllowList?: readonly string[];
 }
@@ -239,7 +239,7 @@ export interface JsxA11yEslintConfigOptions<
   tabbableRoles?: false | Partial<Record<PossibleTabbableRoles, boolean>>;
 
   /**
-   * Various custom components that will be checked by various rules.
+   * Various custom components that will be checked by various rules
    */
   customComponents?: {
     /**
@@ -390,7 +390,7 @@ export const buildJsxA11yConfigs = (
   );
 
   const prefix = customConfig?.prefix;
-  const prefixFinal = (prefix === 'lit' ? 'lit-a11y' : prefix) ?? 'jsx-a11y';
+  const prefixFinal = (prefix === 'lit' ? 'lit-a11y' : prefix) || 'jsx-a11y';
   const isForAstro = prefixFinal === 'astro';
   const isForLit = prefix === 'lit';
 
@@ -413,10 +413,11 @@ export const buildJsxA11yConfigs = (
         ...(isForAstro && {
           parseWith: 'astro',
         }),
-        // Direct spreading settings object for `lit-a11y` is not a mistake: https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
+        // Direct spreading settings object for `lit-a11y` is not a mistake:
+        // https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
         settings: {
           [isForLit ? '' : 'jsx-a11y-x']: pluginSettings,
-          // `eslint-plugin-astro` may wrap the original plugin, which reads its settings from this key
+          // `eslint-plugin-astro` may wrap the original plugin, which reads this settings key
           ...(isForAstro && {'jsx-a11y': pluginSettings}),
         },
       },
@@ -494,7 +495,9 @@ export const buildJsxA11yConfigs = (
             },
           ],
     ) /** @since 6.3.0 */
-    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
+    // "this rule probably doesn't work for Astro components because Astro components don't provide
+    // an event listener as syntax" -
+    // https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
     .addRule(rn('click-events-have-key-events'), isForAstro ? null : ERROR) /** @since 2.2.0 */
     .addRule(rn('control-has-associated-label'), isForLit ? null : ERROR, [
       {
@@ -578,7 +581,9 @@ export const buildJsxA11yConfigs = (
         ...(customComponents.trackElements?.length && {track: customComponents.trackElements}),
       },
     ]) /** @since 5.0.0 */
-    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
+    // "this rule probably doesn't work for Astro components because Astro components don't provide
+    // an event listener as syntax" -
+    // https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
     .addRule(
       rn('mouse-events-have-key-events'),
       isForAstro ? OFF : ERROR,
@@ -609,7 +614,10 @@ export const buildJsxA11yConfigs = (
     .addRule(rn('no-interactive-element-to-noninteractive-role'), isForLit ? null : ERROR, [
       {
         // Copied from `recommended` config
-        // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
+        // "The recommended options for this rule allow the `tr` element to be given a role of
+        // `presentation` (or its semantic equivalent none). Under normal circumstances, an element
+        // with an interactive role should not be semantically neutralized with `presentation` (or
+        // `none`)." - rule docs
         tr: ['none', 'presentation'],
         canvas: ['img'],
       },
@@ -639,7 +647,15 @@ export const buildJsxA11yConfigs = (
         // TODO copied from `recommended` config
         ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
         ol: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
-        li: ['menuitem', 'menuitemradio', 'menuitemcheckbox', 'option', 'row', 'tab', 'treeitem'],
+        li: [
+          'menuitem',
+          'menuitemradio', // cspell:disable-line
+          'menuitemcheckbox', // cspell:disable-line
+          'option',
+          'row',
+          'tab',
+          'treeitem',
+        ],
         table: ['grid'],
         td: ['gridcell'],
         fieldset: ['radiogroup', 'presentation'],
@@ -654,7 +670,9 @@ export const buildJsxA11yConfigs = (
       },
     ]) /** @since 5.0.0 */
     .addRule(isForLit ? 'no-redundant-role' : rn('no-redundant-roles'), ERROR) /** @since 4.0.0 */
-    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
+    // "this rule probably doesn't work for Astro components because Astro components don't provide
+    // an event listener as syntax" -
+    // https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
     .addRule(rn('no-static-element-interactions'), isForAstro || isForLit ? null : ERROR, [
       // TODO copied from `recommended` config
       {

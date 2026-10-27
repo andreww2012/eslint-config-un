@@ -8,7 +8,7 @@ import {ALL_RULES_PER_PLUGIN} from '../src/eslint-rules.gen';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import {getRuleDocsUrl, readPluginMetadata} from './shared/plugin-metadata';
 
-const ROOT_DIR = pathe.join(import.meta.dirname, '..');
+const ROOT_DIRECTORY = pathe.join(import.meta.dirname, '..');
 const LOCKFILE = 'pnpm-lock.yaml';
 
 // Changing any of these may change the docs URL of every rule
@@ -37,9 +37,13 @@ const LockfileZod = z.object({
   }),
 });
 
-const git = (...args: readonly string[]) =>
+const git = (...arguments_: readonly string[]) =>
   // eslint-disable-next-line sonar/no-os-command-from-path
-  execFileSync('git', args, {cwd: ROOT_DIR, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']});
+  execFileSync('git', arguments_, {
+    cwd: ROOT_DIRECTORY,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
 
 const isCommit = (ref: string) => {
   try {
@@ -92,7 +96,7 @@ const getChangedPluginPrefixes = async (ref: string): Promise<ReadonlySet<string
   }
   const [versionsBefore, versionsAfter] = [
     readDependencyVersions(git('show', `${ref}:${LOCKFILE}`)),
-    readDependencyVersions(await fs.readFile(pathe.join(ROOT_DIR, LOCKFILE), 'utf8')),
+    readDependencyVersions(await fs.readFile(pathe.join(ROOT_DIRECTORY, LOCKFILE), 'utf8')),
   ];
   return new Set(
     plugins

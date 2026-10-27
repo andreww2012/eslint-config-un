@@ -34,7 +34,7 @@ const ownPackageDirectory = path.dirname(
 // Where our own dependencies and peers are linked for us
 const ownDependenciesDirectory = `${path.dirname(ownPackageDirectory)}${path.sep}`;
 
-// A project's `node_modules` sits next to its `package.json`, unlike the one of a store shared between projects
+// A project's `node_modules` sits next to its `package.json`, unlike that of a shared store
 const isInstalledInSharedStore = (() => {
   const pathSegments = ownPackageDirectory.split(path.sep);
   const nodeModulesIndex = pathSegments.indexOf('node_modules');
@@ -49,8 +49,10 @@ const isInstalledInSharedStore = (() => {
 
 const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   try {
-    // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
-    // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
+    // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json:
+    // https://github.com/antfu-collective/local-pkg/issues/16
+    // This trick uses the patched version of `import-meta-resolve` that after calling
+    // `resolvePackage` updates the last resolved package's package.json path
     resolvePackage(packageName, parentUrl);
     return getLastResolvedPackageJsonUrl();
   } catch {
@@ -59,7 +61,8 @@ const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   }
 };
 
-// aube's global virtual store hoists the packages of every project above ours, so only what is linked next to us is ours
+// aube's global virtual store hoists the packages of every project above ours, so only what is
+// linked next to us is ours
 const resolveOwnPackageJsonUrl = (packageName: string) => {
   const packageJsonUrl = resolvePackageJsonUrl(packageName, import.meta.url);
   return packageJsonUrl &&
@@ -73,7 +76,7 @@ const resolveOwnPackageJsonUrl = (packageName: string) => {
 export const isOwnCopyImportable = (packageName: string) =>
   !isInstalledInSharedStore || resolveOwnPackageJsonUrl(packageName) != null;
 
-/** Resolves the module the way the project itself would, which importing it from our own code may not */
+/** Resolves the module the way the project itself would, which our own `import()` may not */
 export const resolveFromProject = (specifier: string, projectDirectory: string) => {
   try {
     return resolvePackage(specifier, url.pathToFileURL(`${projectDirectory}${path.sep}`).href);

@@ -1,4 +1,3 @@
-// cspell:ignore networkidle
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
@@ -15,7 +14,7 @@ import {
 /**
  * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `playwright` property of the `settings` flat config option.
+ * that will be assigned to the `playwright` property of the `settings` flat config option
  */
 export interface PlaywrightPluginSettings {
   /**

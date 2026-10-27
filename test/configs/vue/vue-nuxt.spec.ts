@@ -195,7 +195,7 @@ describe('vue: sub config `nuxt`', () => {
     });
   });
 
-  // `vueOrNuxtProjectDir` lives on the parent `vue` config, but only this sub config's paths observe it.
+  // `vueOrNuxtProjectDir` lives on the parent `vue` config, but only this sub-config's paths use it
   describe('option: `vueOrNuxtProjectDir` of the parent config', () => {
     it('uses no project directory prefix by default when nuxt 3 is installed', async () => {
       const configResult = await computeEslintConfig('vue');
@@ -212,16 +212,21 @@ describe('vue: sub config `nuxt`', () => {
     });
 
     it('prefixes nuxt paths with the user-provided project directory', async () => {
-      const PROJECT_DIR = 'source';
+      const PROJECT_DIRECTORY = 'source';
 
-      const configResult = await computeEslintConfig({vue: {vueOrNuxtProjectDir: PROJECT_DIR}});
+      const configResult = await computeEslintConfig({
+        vue: {vueOrNuxtProjectDir: PROJECT_DIRECTORY},
+      });
 
       expect(configResult.getConfigByUnPostfix('vue/nuxt')?.files).toStrictEqual([
-        `${PROJECT_DIR}/**/*.vue`,
+        `${PROJECT_DIRECTORY}/**/*.vue`,
       ]);
       expect(
         configResult.getConfigByUnPostfix('vue/allow-single-word-component-names')?.files,
-      ).toIncludeAllMembers([`${PROJECT_DIR}/app.vue`, `${PROJECT_DIR}/layouts/**/*.vue`]);
+      ).toIncludeAllMembers([
+        `${PROJECT_DIRECTORY}/app.vue`,
+        `${PROJECT_DIRECTORY}/layouts/**/*.vue`,
+      ]);
     });
   });
 

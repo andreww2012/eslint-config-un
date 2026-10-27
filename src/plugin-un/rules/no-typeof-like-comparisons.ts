@@ -26,7 +26,7 @@ const DEFAULT_ALLOWED_LITERAL_VALUES_SET: ReadonlySet<string> = new Set(['undefi
 
 /**
  * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are erased
- * at runtime and therefore never change the value of the expression they wrap.
+ * at runtime and therefore never change the value of the expression they wrap
  */
 interface TypeOnlyWrapperExpression {
   type:
@@ -40,7 +40,7 @@ interface TypeOnlyWrapperExpression {
 
 /**
  * Tells whether `node` is guaranteed to evaluate to the result of a `typeof` operator, resolving
- * identifiers to the expressions they are written with.
+ * identifiers to the expressions they are written with
  */
 const isTypeofResultExpression = (
   node: ESTree.Node | TypeOnlyWrapperExpression,

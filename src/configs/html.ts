@@ -13,7 +13,7 @@ import {
 /**
  * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `html` property of the `settings` flat config option.
+ * that will be assigned to the `html` property of the `settings` flat config option
  */
 export interface HtmlPluginSettings {
   // TODO
@@ -23,7 +23,7 @@ export interface HtmlPluginSettings {
    * template literals.
    *
    * Not all template literals are recognized as HTML: only the ones whose tag or leading comment
-   * matches one of the specified regular expressions.
+   * matches one of the specified regular expressions
    * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
    */
   templateLiterals?: {
@@ -56,14 +56,15 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * - `rawContentTags`: the list of HTML tags for which contents should be treated as raw text.
    *
    * Will be assigned to `languageOptions.parserOptions` in the resulting flat config and applied to
-   * the specified `files` and `ignores`.
+   * the specified `files` and `ignores`
    * @see https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/integrating-template-engine.md
    */
   parserOptions?: HtmlEslintParserOptions;
 }
 
 export default defineUnConfig<HtmlEslintConfigOptions>('html', {
-  // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
+  // Multiple parsers (in this case, angular and html) cannot be applied to the same file:
+  // https://github.com/eslint/eslint/issues/14286
   enabledBy: {configDisabled: 'angular'},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});

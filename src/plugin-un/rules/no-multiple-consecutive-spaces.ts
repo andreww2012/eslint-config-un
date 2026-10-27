@@ -52,7 +52,8 @@ type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 type EdgeSpacesOption = NonNullable<RuleOptions['allowLeadingSpaces']>;
 type SpaceKind = keyof NonNullable<RuleOptions['spaceCharacters']>;
 
-// Raw text is scanned, so escapes count too; `\\` is consumed whole so the next char is not misread as an escape
+// Raw text is scanned, so escapes count too; `\\` is consumed whole so the next char is not misread
+// as an escape
 const SPACE_TOKEN_REGEXP =
   /\\\\|[\p{Zs}\t]|\\t|\\x[\dA-Fa-f]{2}|\\u[\dA-Fa-f]{4}|\\u\{[\dA-Fa-f]+\}/gu;
 const UNICODE_SPACE_REGEXP = /^\p{Zs}$/u;

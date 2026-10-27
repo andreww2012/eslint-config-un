@@ -52,7 +52,7 @@ For every new plugin, create `src/plugins/<plugin prefix>.ts` with `configs` and
 Then run `nr prep`.
 It generates two kinds of artifacts:
 
-- The plugin rules' types — its output gives you the exact rules that this plugin provides;
+- The plugin rules' types: its output gives you the exact rules that this plugin provides;
 - Final Config types and JSDoc for them and other technical artifacts.
 
 You will run this command again after writing the Config file for the second item.
@@ -127,7 +127,7 @@ After every `addRule` statement, we annotate the rule with:
 
   This is not strict and may vary from plugin to plugin.
   See the examples at `src/configs/package-json.ts`, `src/configs/jsdoc.ts`, `src/configs/e18e.ts`, etc, if needed.
-  IMPORTANT: `🟢`/`🟡` and `🔴` are **mutually exclusive** — pick one system based on which is the minority.
+  IMPORTANT: `🟢`/`🟡` and `🔴` are **mutually exclusive**: pick one system based on which is the minority.
   Every emoji used in annotations must appear in the legend section.
 
 #### Step 4.4: Plugin metadata file
@@ -140,7 +140,7 @@ Do not copy the report blindly.
 Open the plugin source and confirm every rule it names, because the script cannot prove every case.
 If you decide a reported rule does not count, write `requiresTypeInfo: [false, '<why>']` so that the next run stops reporting it.
 
-Two judgement calls the contract cannot spell out:
+Two judgment calls the contract cannot spell out:
 
 - `stylistic`: after fixing the issue reported by the rule, the logic of the program should not change in any way.
   IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.

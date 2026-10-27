@@ -7,13 +7,13 @@ Tests must live in the `/test` directory and have `.spec.ts` extension.
 
 ## Terminology
 
-- **Config** — a logical entity of `eslint-config-un`, configurable via the `configs.<name>` property.
+- **Config**: a logical entity of `eslint-config-un`, configurable via the `configs.<name>` property.
   - Corresponds to a single file in `src/configs/`.
   - Each Config generates one or more ESLint flat configs.
   - The common interface is `UnFlatConfigEntryBase` from `src/eslint/eslint-types.ts`.
   - All Configs are listed in the generated `src/configs/index.gen.d.ts` (run `nr prep` if it is missing).
   - A Config may have custom options and special `configSomeConfig` options, which are ALWAYS related to Sub-configs.
-- **Sub-config** — same as Config, but defined *within* a Config file.
+- **Sub-config**: same as Config, but defined *within* a Config file.
   Everything said about Configs applies to Sub-configs.
 
 ## General guidance
@@ -29,7 +29,8 @@ Tests must live in the `/test` directory and have `.spec.ts` extension.
 - Extract repeated values into constants in the **closest possible scope**.
 - Always collect fixture file names in a top-level `FIXTURES` object with `as const`, even for a single fixture (of course, omit if none is used).
 - Global hooks should go directly before the first `describe`/`it`, i.e. definitely after `FIXTURES`.
-- A fixture name should describe the code, not the error or ESLint rule — it should be agnostic of where and how it is used.
+- A fixture name should describe the code, not the error or ESLint rule.
+  It should be agnostic of where and how it is used.
 - Avoid assigning an expression to a variable if it's only used once - inline it instead, unless the expression has `await` or is too complex.
 - If some test(s) time out, don't increase the timeout - just re-run the test suite.
 
@@ -53,21 +54,21 @@ You can use, for example, the following test files as a reference for structure 
 
 ##### `basic test` describe block
 
-There should be exactly two tests for everything the Config produces for one set of options — ESLint configs & plugins, `files`, `ignores`, `languageOptions`, `processor` and so on - a positive one (Config enabled) and a negative one (Config disabled).
+There should be exactly two tests for everything the Config produces for one set of options (ESLint configs & plugins, `files`, `ignores`, `languageOptions`, `processor` and so on): a positive one (Config enabled) and a negative one (Config disabled).
 The test name should list what is created and end with the condition: ``'creates `drizzle` eslint config and loads `drizzle` plugin if set to `true`'``.
 
 Determine the default-enable condition from the `enabledBy` property of the Config manifest (the second argument of `defineUnConfig`).
 If it has one, make sure this condition is true by default for the *whole test suite* (the most common example: treating package(s) as installed).
 Then create sub-describe blocks:
 
-- `mode: all configs are disabled` — corresponds to `defaultConfigsStatus: 'all-disabled'`:
+- `mode: all configs are disabled`: corresponds to `defaultConfigsStatus: 'all-disabled'`:
   - config is not explicitly enabled
   - config is explicitly enabled
-- `mode: all configs are not explicitly enabled or disabled` — the actual default (`defaultConfigsStatus: undefined`):
+- `mode: all configs are not explicitly enabled or disabled`: the actual default (`defaultConfigsStatus: undefined`):
   - config is not explicitly enabled/disabled
   - config explicitly {enabled,disabled} (2 tests)
   - (if has condition) condition is explicitly {enabled,disabled} and that condition is {true,false} (4 tests)
-- `mode: misc configs are enabled` — corresponds to `defaultConfigsStatus: 'misc-enabled'`:
+- `mode: misc configs are enabled`: corresponds to `defaultConfigsStatus: 'misc-enabled'`:
   - config is not explicitly enabled/disabled
   - config explicitly {enabled,disabled}
 
@@ -94,11 +95,11 @@ expect(configResult.getRuleSeverities('<config name>')).toMatchObject({
 
 Then pick a "popular" rule and confirm it actually works: create a minimal fixture that triggers an error, lint it with `testEslintConfig`, use `findLintMessageFromLintResults` to locate the error, and assert with `expect(error?.message).toMatchInlineSnapshot()`.
 
-##### `option: \`files\`` — check how provided files affect ESLint config(s) files
+##### `option: \`files\``: check how provided files affect ESLint config(s) files
 
 Include an extra test for `files: []`, which prevents ESLint config(s) from being created (disables the Config without disabling Sub-configs).
 
-##### `option: \`ignores\`` — same as `files`, but an empty array has no special meaning
+##### `option: \`ignores\``: same as `files`, but an empty array has no special meaning
 
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ##### (single test outside describe blocks) `respects \`overrides\` and \`overridesAny\` in \`<eslint config name(s)>\` eslint config(s)`
@@ -136,11 +137,11 @@ Ignore coverage issues in `enableConfigTesterForPlugin` block, since it's only s
 - User-provided files: `toStrictEqual` or `.toIncludeAllMembers`
 - User-provided ignores: `.toIncludeAllMembers` + assert that the ignores array length exceeds the user-provided count (implicit ignores usually exist)
 - Absence of user-provided files/ignores: `.not.toIncludeAnyMembers`
-- Other cases: use the reference or your judgement
+- Other cases: use the reference or your judgment
 
 When using `toMatchInlineSnapshot`, **never** guess the expected output.
 Run tests with empty `.toMatchInlineSnapshot()` and let Vitest fill them via `nr t run --update`.
-Never re-run without `--update` if inline snapshots are already filled — Vitest will append a duplicate instead of replacing.
+Never re-run without `--update` if inline snapshots are already filled: Vitest will append a duplicate instead of replacing.
 If a filled snapshot is `undefined`, switch to a different assertion type.
 
 #### Other guidelines

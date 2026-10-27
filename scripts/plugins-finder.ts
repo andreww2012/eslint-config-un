@@ -1,4 +1,4 @@
-// cspell:ignore headful millis
+// cspell:ignore headful
 import {styleText} from 'node:util';
 import {Solver as CaptchaSolver} from '@2captcha/captcha-solver';
 import {NodeFileSystem} from '@effect/platform-node';
@@ -123,13 +123,13 @@ const solveCaptchaAsync = (browserPage: Page) =>
         ) => {
           try {
             logger.info('Solving the captcha...');
-            const res = await captchaSolver.cloudflareTurnstile(params);
-            logger.info(`Solved the captcha ${res.id}`);
+            const solution = await captchaSolver.cloudflareTurnstile(params);
+            logger.info(`Solved the captcha ${solution.id}`);
             await browserPage.evaluate((token) => {
               // @ts-expect-error executed on the actual page
               // eslint-disable-next-line ts/no-unsafe-call
               cfCallback(token);
-            }, res.data);
+            }, solution.data);
             resolve(true);
           } catch (error) {
             // eslint-disable-next-line ts/prefer-promise-reject-errors
@@ -214,7 +214,7 @@ const fetchPage = (browserPage: Page, page: number, eslintPluginsDbRef: Ref.Ref<
         }
         return packageName;
       })
-      .filter((v) => v != null);
+      .filter((value) => value != null);
 
     yield* Ref.update(eslintPluginsDbRef, (db) => {
       const updatedDb = {...db};
@@ -253,7 +253,7 @@ const mainProgram = Effect.gen(function* () {
   yield* Effect.acquireUseRelease(
     Effect.succeed(browser),
     () => fetchAllPages(browserPage, eslintPluginsDbRef),
-    (b) => Effect.promise(() => b.close()),
+    (acquiredBrowser) => Effect.promise(() => acquiredBrowser.close()),
   );
 });
 

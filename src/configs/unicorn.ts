@@ -65,8 +65,11 @@ type ConsistentBooleanNameOptions = MergeObjects<
     /**
      * Boolean name prefixes to allow (`true`) or disallow (`false`).
      * - *object*: merged with the default prefixes;
-     * - *array*: completely replaces the default prefixes.
-     * @default {is: true, are: true, was: true, were: true, has: true, have: true, had: true, can: true, cannot: true, should: true, must: true, may: true, does: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}
+     * - *array*: completely replaces the default prefixes
+     * @default {is: true, are: true, was: true, were: true, has: true, have: true, had: true,
+     * can: true, cannot: true, should: true, must: true, may: true, does: true, did: true,
+     * will: true, needs: true, requires: true, allows: true, supports: true, contains: true,
+     * includes: true}
      */
     prefixes?: ArrayOrBooleanRecord;
 
@@ -82,7 +85,7 @@ type ConsistentBooleanNameOptions = MergeObjects<
      *
      * Specify `false` as a value to drop the corresponding default wrapper.
      *
-     * ⚠️ Only works for the files provided with type information.
+     * ⚠️ Only works for the files provided with type information
      */
     wrappers?: Partial<Record<string, string | false>>;
   }
@@ -142,8 +145,7 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for HTML to HTML files.
    *
-   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning in the `css`
-   * sub-config.
+   * ⚠️ Enabled by default only if the `html` Config is enabled (see the `css` sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.htm?(l)</code>
    * @default true // if `html` config is enabled
@@ -153,8 +155,8 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for JSON to JSON files.
    *
-   * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled — see the warning in
-   * the `css` sub-config.
+   * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled (see the `css`
+   * sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.json</code>, <code>**&#47;*.jsonc</code>,
    * <code>**&#47;*.json5</code>
@@ -166,18 +168,17 @@ export interface UnicornEslintConfigOptions<
    * Applies the rules declaring support for Markdown to Markdown files.
    *
    * ⚠️ Enabled by default only if the `markdown`, `markdownLinks` or `markdownPreferences` Config
-   * is enabled — see the warning in the `css` sub-config.
+   * is enabled (see the `css` sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>, <code>**&#47;*.mdx</code>
-   * @default true // if any of the following configs are enabled: `markdown`, `markdownLinks`, `markdownPreferences`
+   * @default true // if `markdown`, `markdownLinks` or `markdownPreferences` config is enabled
    */
   configMarkdown?: LanguageSubConfig<ExtraPlugins, 'markdown'>;
 
   /**
    * Applies the rules declaring support for [SOML](https://soml.sh) to SOML files.
    *
-   * ⚠️ Enabled by default only if the `soml` Config is enabled (see the warning in the `css`
-   * sub-config).
+   * ⚠️ Enabled by default only if the `soml` Config is enabled (see the `css` sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.soml</code>
    * @default true // if `soml` config is enabled
@@ -187,8 +188,7 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for TOML to TOML files.
    *
-   * ⚠️ Enabled by default only if the `toml` Config is enabled (see the warning in the `css`
-   * sub-config).
+   * ⚠️ Enabled by default only if the `toml` Config is enabled (see the `css` sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.toml</code>
    * @default true // if `toml` config is enabled
@@ -198,8 +198,7 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for YAML to YAML files.
    *
-   * ⚠️ Enabled by default only if the `yaml` Config is enabled (see the warning in the `css`
-   * sub-config).
+   * ⚠️ Enabled by default only if the `yaml` Config is enabled (see the `css` sub-config warning).
    *
    * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
    * @default true // if `yaml` config is enabled
@@ -282,7 +281,10 @@ export interface UnicornEslintConfigOptions<
    *
    * Affected rule:
    * - [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md)
-   * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true, has: true, have: true, had: true, can: true, cannot: true, should: true, must: true, may: true, does: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true, contains: true, includes: true}}
+   * @default {checkFunctions: 'prohibit', prefixes: {is: true, are: true, was: true, were: true,
+   * has: true, have: true, had: true, can: true, cannot: true, should: true, must: true, may: true,
+   * does: true, did: true, will: true, needs: true, requires: true, allows: true, supports: true,
+   * contains: true, includes: true}}
    */
   enforcePrefixForBooleanNames?:
     | boolean
@@ -327,7 +329,8 @@ export interface UnicornEslintConfigOptions<
    *
    * Affected rule:
    * - [`unicorn/no-non-function-verb-prefix`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-non-function-verb-prefix.md)
-   * @default {get: true, set: true, unset: true, delete: true, add: true, remove: true, destroy: true, create: true}
+   * @default {get: true, set: true, unset: true, delete: true, add: true, remove: true,
+   * destroy: true, create: true}
    */
   functionPrefixesToDisallowForCallables?: boolean | ArrayOrBooleanRecord;
 
@@ -810,7 +813,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-named-default', ERROR) /** @since 57.0.0 */
     .addRule('no-negated-array-predicate', ERROR) /** @since 66.0.0 */
     .addRule('no-negated-comparison', ERROR) /** @since 66.0.0 */
-    // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
+    // "This is an improved version of the no-negated-condition ESLint rule that makes it
+    // automatically fixable" - Unicorn docs
     .addRule('no-negated-condition', ERROR) /** @since 45.0.0 */
     .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR) /** @since 54.0.0 */
@@ -945,7 +949,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */
     .addRule('prefer-direct-iteration', ERROR) /** @since 66.0.0 */
-    // TODO should consider enabling by default when `using` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/using
+    // TODO consider enabling by default once `using` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/using
     .addRule('prefer-dispose', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('prefer-dom-node-append', ERROR) /** @since 7.0.0 */ /** @aka prefer-node-append */
     .addRule('prefer-dom-node-html-methods', OFF) /** @since 66.0.0 */ // 🔴
@@ -959,7 +964,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       {checkShortBodies: true /* Default: false */},
     ]) /** @since 66.0.0 */
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣
-    // TODO should consider enabling by default when `Error.isError` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
+    // TODO consider enabling by default once `Error.isError` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-escaped-irregular-whitespace', ERROR) /** @since 77.0.0 */
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
@@ -990,10 +996,12 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     // Reason for disabling: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565
     .addRule('prefer-iterator-concat', OFF) /** @since 65.0.0 */ // 🔴
     .addRule('prefer-iterator-helpers', ERROR) /** @since 70.0.0 */
-    // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
+    // TODO consider enabling by default once `Iterator#toArray` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
     .addRule('prefer-iterator-to-array', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-iterator-to-array-at-end', ERROR) /** @since 65.0.0 */
-    // TODO should consider enabling by default when `Iterator.zip` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/zip
+    // TODO consider enabling by default once `Iterator.zip` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/zip
     .addRule('prefer-iterator-zip', OFF) /** @since 75.0.0 */ // 🟣
     .addRule('prefer-json-import', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-keyboard-event-key', ERROR) /** @since 9.0.0 */ /** @aka prefer-event-key */
@@ -1021,9 +1029,9 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
         numberProperties?.constants === 'namespace' ||
         (typeof numberProperties?.constants === 'object' &&
           Object.values(numberProperties.constants).some(
-            (v) =>
+            (style) =>
               // eslint-disable-next-line ts/no-unnecessary-condition
-              v === 'namespace',
+              style === 'namespace',
           ))
         ? ERROR
         : OFF,
@@ -1055,14 +1063,16 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-path2d', ERROR) /** @since 66.0.0 */
     .addRule('prefer-private-class-fields', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-promise-static-methods', ERROR) /** @since 77.0.0 */
-    // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try
+    // TODO enable when becomes baseline widely available or close to that:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try
     .addRule('prefer-promise-try', OFF) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-promise-with-resolvers', ERROR) /** @since 68.0.0 */
     .addRule('prefer-prototype-methods', ERROR) /** @since 33.0.0 */
     .addRule('prefer-query-selector', OFF) /** @since 7.0.0 */ // 🟣
     .addRule('prefer-queue-microtask', ERROR) /** @since 65.0.0 */
     .addRule('prefer-reflect-apply', ERROR) /** @since 11.0.0 */
-    // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape
+    // TODO enable when becomes baseline widely available or close to that:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape
     .addRule('prefer-regexp-escape', OFF) /** @since 68.0.0 */ // 🔴
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
@@ -1116,9 +1126,11 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-top-level-await', OFF) /** @since 34.0.0 */
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
     .addRule('prefer-type-literal-last', OFF) /** @since 66.0.0 */
-    // TODO should consider enabling by default when `Uint8Array#toBase64` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
+    // TODO consider enabling by default once `Uint8Array#toBase64` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64
     .addRule('prefer-uint8array-base64', OFF) /** @since 66.0.0 */
-    // TODO should consider enabling by default when `Uint8Array#toHex` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toHex
+    // TODO consider enabling by default once `Uint8Array#toHex` is Baseline widely available:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toHex
     .addRule('prefer-uint8array-hex', OFF) /** @since 75.0.0 */ // 🔴
     .addRule('prefer-unary-minus', ERROR) /** @since 68.0.0 */
     .addRule('prefer-unicode-code-point-escapes', ERROR) /** @since 66.0.0 */
@@ -1340,7 +1352,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     // Covered by `soml/no-loss-of-precision`
     .addRule('no-loss-of-precision', OFF) /** @since 77.0.0 */ // 🔴
     .addRule('no-manually-wrapped-comments', OFF)
-    // Covered by `soml/no-float-trailing-zeros`, which also suggests a string for `3.10`-like versions
+    // Covered by `soml/no-float-trailing-zeros`, also suggesting a string for `3.10`-like versions
     .addRule('no-zero-fractions', OFF)
     .addRule('number-literal-case', OFF)
     // Covered by `soml/numeric-separators-style`

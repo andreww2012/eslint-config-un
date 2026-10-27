@@ -11,9 +11,9 @@ import {
 import {LOADABLE_PLUGIN_PREFIXES_LIST} from '../../../src/loaders';
 import {allUnionMembers, arrayIncludes} from '../../../src/utils';
 
-const ROOT_DIR = pathe.join(import.meta.dirname, '../../..');
-const CONFIGS_DIR = pathe.join(ROOT_DIR, 'src/configs');
-const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIR, 'src/config-un/shared.ts');
+const ROOT_DIRECTORY = pathe.join(import.meta.dirname, '../../..');
+const CONFIGS_DIRECTORY = pathe.join(ROOT_DIRECTORY, 'src/configs');
+const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIRECTORY, 'src/config-un/shared.ts');
 
 const NON_CONFIG_MODULES: ReadonlySet<string> = new Set(['index.ts', 'shared.ts']);
 
@@ -226,12 +226,12 @@ const collectConfigModulePaths = async (directory: string): Promise<readonly str
 };
 
 export const discoverConfigs = async () => {
-  const configModulePaths = (await collectConfigModulePaths(CONFIGS_DIR)).toSorted();
+  const configModulePaths = (await collectConfigModulePaths(CONFIGS_DIRECTORY)).toSorted();
 
-  const tsConfig = ts.readConfigFile(pathe.join(ROOT_DIR, 'tsconfig.json'), (fileName) =>
+  const tsConfig = ts.readConfigFile(pathe.join(ROOT_DIRECTORY, 'tsconfig.json'), (fileName) =>
     ts.sys.readFile(fileName),
   );
-  const parsedTsConfig = ts.parseJsonConfigFileContent(tsConfig.config, ts.sys, ROOT_DIR);
+  const parsedTsConfig = ts.parseJsonConfigFileContent(tsConfig.config, ts.sys, ROOT_DIRECTORY);
   const program = ts.createProgram(configModulePaths, {...parsedTsConfig.options, noEmit: true});
   const checker = program.getTypeChecker();
 
@@ -271,7 +271,7 @@ export const discoverConfigs = async () => {
         throw new Error(`Could not read \`${filePath}\``);
       }
 
-      const relativePath = pathe.relative(CONFIGS_DIR, filePath);
+      const relativePath = pathe.relative(CONFIGS_DIRECTORY, filePath);
       const defaultExport = getDefaultExportExpression(sourceFile);
       const defineCall = defaultExport && findDefineUnConfigCall(defaultExport);
       const defineCallsCount = countDefineUnConfigCalls(sourceFile);

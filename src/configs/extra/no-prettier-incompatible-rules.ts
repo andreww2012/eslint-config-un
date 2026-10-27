@@ -1,4 +1,3 @@
-// cspell:ignore atx setext blockquote nonblock
 import type {UnRulesConfig} from '../../eslint/eslint-types';
 import {
   PLUGINS_BY_PRETTIER_LANGUAGE,
@@ -47,7 +46,7 @@ export interface NoPrettierIncompatibleRulesEslintConfigOptions<
    * Set the corresponding key to `true` to force a group on regardless of the packages, or to
    * `false` to turn any group off.
    * If you format Svelte files with oxfmt (its `svelte` option), set `svelte: true` here: oxfmt's
-   * config cannot be read to detect that.
+   * config cannot be read to detect that
    */
   languages?: Partial<Record<PrettierLanguage, boolean>>;
 }

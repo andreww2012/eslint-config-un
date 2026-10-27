@@ -15,7 +15,7 @@ import {
  * Keys are the modules whose imports should be treated as `clsx`, values are the names of the
  * imports to look at, where `default` stands for the default import.
  *
- * Note that specifying this setting *replaces* the default value rather than being merged with it.
+ * Note that specifying this setting *replaces* the default value rather than being merged with it
  * @default {clsx: ['default', 'clsx'], classnames: 'default'}
  */
 export type ClsxPluginSettings = Partial<

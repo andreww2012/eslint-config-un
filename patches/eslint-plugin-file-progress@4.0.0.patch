@@ -1,3 +1,9 @@
+Leave the terminal in a clean state:
+- never hide the cursor, as it would stay hidden after lint errors, crashes or Ctrl+C (the spinner
+  writes to `stderr` as before, but through a stream that drops the escape sequence hiding it);
+- on success, don't clear the last spinner frame if anything was printed after it, as that would
+  erase the last printed lines instead
+
 diff --git a/rules/progress.js b/rules/progress.js
 index 936406da9ea33b2cbff394e4c8ad44ab6e31aad1..b104be804a4584c8e48b8bcf548d9d06013d2ba4 100644
 --- a/rules/progress.js

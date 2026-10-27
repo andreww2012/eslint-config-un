@@ -33,7 +33,7 @@ const createFetchPackageInfoMock = vi.hoisted(
   () =>
     (
       installedPackages: Record<string, string>,
-      mod: PackageDetectionModule,
+      originalModule: PackageDetectionModule,
     ): PackageDetectionModule => {
       const fetchPackageInfo: PackageDetectionModule['fetchPackageInfo'] = (packageName) => {
         const version = installedPackages[packageName];
@@ -54,7 +54,7 @@ const createFetchPackageInfoMock = vi.hoisted(
       };
 
       return {
-        ...mod,
+        ...originalModule,
         fetchPackageInfo,
         fetchProjectPackagesInfo: async (packageNames, options) => {
           const entries = await Promise.all(
@@ -80,7 +80,7 @@ const createFetchPackageInfoMock = vi.hoisted(
  * By default, only `eslint` itself is considered installed.
  * Each spec file can call `addInstalledPackages` in a `beforeEach` to declare its own defaults.
  * Individual tests or describe blocks can use `setInstalledPackages` / `addInstalledPackages`
- * to fully replace or augment the installed package set.
+ * to fully replace or augment the installed package set
  */
 const {
   installedPackages,
@@ -107,8 +107,8 @@ const {
 });
 
 vi.mock(import('../src/utils/package-detection'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return createFetchPackageInfoMock(installedPackages, mod);
+  const original = await importOriginal();
+  return createFetchPackageInfoMock(installedPackages, original);
 });
 
 beforeEach(() => {

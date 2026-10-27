@@ -129,7 +129,7 @@ export interface ZodEslintConfigOptions<
    * 🧩 Main plugin: [`eslint-plugin-zod-core`](https://npmx.dev/eslint-plugin-zod-core)
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/README.md))
    *
-   * Inherits `enforceConsistentImport` from the parent config; pass an object to override.
+   * Inherits `enforceConsistentImport` from the parent config; pass an object to override
    * @default true
    */
   configCore?: boolean | CoreSubConfigOptions<ExtraPlugins>;
@@ -144,7 +144,7 @@ export interface ZodEslintConfigOptions<
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/README.md))
    *
    * Inherits `allowedObjectSchemaTypes`, `enforceConsistentImport`, `schemaCompiler` and
-   * `schemaVariableName` from the parent config; pass an object to override.
+   * `schemaVariableName` from the parent config; pass an object to override
    * @default true
    */
   configMini?: boolean | MiniSubConfigOptions<ExtraPlugins>;
@@ -384,7 +384,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
         ? true
         : optionsResolved.enforceConsistentImport,
   });
-  optionsMiniResolved.allowedObjectSchemaTypes ??= optionsResolved.allowedObjectSchemaTypes;
+  optionsMiniResolved.allowedObjectSchemaTypes ||= optionsResolved.allowedObjectSchemaTypes;
   const miniSchemaVariableName =
     optionsMiniResolved.schemaVariableName ?? optionsResolved.schemaVariableName;
   const miniSchemaCompiler = resolveSchemaCompiler(

@@ -14,11 +14,11 @@ import {
  * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
  * that will be assigned to the `settings` flat config option with keys transformed to
- * `mdx/<property>` and applied to the resolved `files` and `ignores` of this config.
+ * `mdx/<property>` and applied to the resolved `files` and `ignores` of this config
  */
 export interface MdxPluginSettings {
   /**
-   * Whether to lint code blocks inside MDX files.
+   * Whether to lint code blocks inside MDX files
    * @default false
    */
   codeBlocks?: boolean;
@@ -27,19 +27,19 @@ export interface MdxPluginSettings {
    * Maps a code block language to another one for the purpose of linting, e.g. `{js: 'jsx'}` will
    * treat ` ```js ` blocks as `jsx`.
    *
-   * Set to `false` to disable the default mapping.
+   * Set to `false` to disable the default mapping
    */
   languageMapper?: Record<string, string> | false;
 
   /**
    * Whether to ignore the `remark` configuration files when resolving the config for the
-   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
+   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule
    */
   ignoreRemarkConfig?: boolean;
 
   /**
    * Path to a `remark` configuration file to use for the
-   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
+   * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule
    */
   remarkConfigPath?: string;
 }
@@ -116,7 +116,8 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
     .enableConfigTesterForPlugin('mdx')
     .addOverrides();
 
-  // Comes after `mdx/mdx`, so its processor wins. It also passes the MDX text on, which needs parsing
+  // Comes after `mdx/mdx`, so its processor wins.
+  // It also passes the MDX text on, which needs parsing
   configBuilderCodeBlocks?.addConfig(
     [
       'mdx/code-blocks-processor',

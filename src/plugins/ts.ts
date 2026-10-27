@@ -32,7 +32,8 @@ export default definePluginMetadata('ts', {
     'method-signature-style': {
       autofixDisabled: [
         true,
-        // Won't fix, documented instead: https://github.com/typescript-eslint/typescript-eslint/issues/11806
+        // Won't fix, documented instead:
+        // https://github.com/typescript-eslint/typescript-eslint/issues/11806
         'a property signature checks its parameters more strictly than a method one, so the fix can break existing assignments',
       ],
       disableInCodeBlocks: 'typeStrictness',

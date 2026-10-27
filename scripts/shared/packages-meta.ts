@@ -173,9 +173,9 @@ export const CONFIGS_META = Object.freeze(
         Object.entries(PACKAGES_META).flatMap(([packageName, packageMeta]) =>
           packageMeta.configs.map((config) => ({config, packageName})),
         ),
-        (v) => v.config,
+        (entry) => entry.config,
       ),
-      ([config, entries]) => [config, {packages: entries.map((v) => v.packageName)}],
+      ([config, entries]) => [config, {packages: entries.map((entry) => entry.packageName)}],
     ),
   ),
 );

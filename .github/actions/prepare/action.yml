@@ -32,8 +32,8 @@ runs:
     - name: Check deps for vulnerabilities & peer deps issues
       shell: bash
       run: pnpm check:deps
-    # Don't cache the generated artifacts - they are derived not only from the lockfile, but also
-    # from any config module (`src/configs/**/*.ts`) and other files, which makes the cache hits rare
+    # Don't cache the generated artifacts: they depend not only on the lockfile, but also on every
+    # config module (`src/configs/**/*.ts`) and other files, so cache hits would be rare
     - name: Generate the artifacts
       shell: bash
       run: pnpm prep

@@ -31,7 +31,9 @@ export default defineUnConfig<EslintCommentsEslintConfigOptions>(
     ?.addConfig([
       'eslint-comments',
       {
-        // Gracefully supports any language plugin that implements `getDisableDirectives` (https://eslint.org/docs/latest/extend/languages#:~:text=getDisableDirectives%28%29): https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/fab0d83f7308ea3921479f95401ec2a406a3b909/lib/internal/get-all-directive-comments.js#L146
+        // Gracefully supports any language plugin that implements `getDisableDirectives`
+        // (https://eslint.org/docs/latest/extend/languages#:~:text=getDisableDirectives%28%29):
+        // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/fab0d83f7308ea3921479f95401ec2a406a3b909/lib/internal/get-all-directive-comments.js#L146
         ignoresInternal: false,
       },
     ])

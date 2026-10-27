@@ -139,8 +139,8 @@ describe('basic tests', () => {
 
     it.each(LODASH_PACKAGES)(
       'creates `you-dont-need-lodash-underscore` eslint config when `%s` is installed',
-      async (pkg) => {
-        setInstalledPackages({[pkg]: '4.17.21'});
+      async (packageName) => {
+        setInstalledPackages({[packageName]: '4.17.21'});
 
         const configResult = await computeEslintConfig({}, {reset: true});
 

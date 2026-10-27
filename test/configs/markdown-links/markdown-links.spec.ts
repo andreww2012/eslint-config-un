@@ -121,7 +121,7 @@ describe('rules', async () => {
     );
 
     expect(results[0]?.fatalErrorCount).toBe(0);
-    // File is parsed with an extended syntax language and therefore the rule is able to report errors
+    // The file is parsed with an extended syntax language, so the rule can report errors
     expect(error?.message).toMatchInlineSnapshot(
       '"Expected a space between opening custom container marker and info."',
     );

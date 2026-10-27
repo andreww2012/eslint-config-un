@@ -35,7 +35,7 @@ const categorizeUnicornRule: CategorizeRule<
           errors.push(`unknown language \`${language}\``);
           return null;
         })
-        .filter((v) => v != null),
+        .filter((value) => value != null),
     ),
   ];
 

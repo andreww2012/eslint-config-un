@@ -30,7 +30,7 @@ type RuleSubConfig<
 /**
  * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `perfectionist` property of the `settings` flat config option.
+ * that will be assigned to the `perfectionist` property of the `settings` flat config option
  * @see https://perfectionist.dev/guide/getting-started#settings
  */
 export type PerfectionistPluginSettings = Prettify<

@@ -10,12 +10,12 @@ import {
 /**
  * [`eslint-plugin-remeda`](https://npmx.dev/eslint-plugin-remeda) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `remeda` property of the `settings` flat config option.
+ * that will be assigned to the `remeda` property of the `settings` flat config option
  */
 export interface RemedaPluginSettings {
   /**
    * The name of the object the Remeda functions are called on, so that the rules recognize the
-   * calls made through it and not only the ones made through the imported functions.
+   * calls made through it and not only the ones made through the imported functions
    * @example 'R'
    */
   pragma?: string;

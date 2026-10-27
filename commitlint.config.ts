@@ -8,7 +8,7 @@ export default {
     'footer-leading-blank': [RuleConfigSeverity.Error, 'always'],
     'header-max-length': [RuleConfigSeverity.Error, 'always', 120],
     'subject-full-stop': [RuleConfigSeverity.Disabled], // Sometimes full stop is used for shorthands
-    // `sentence-case` and `start-case` are sometimes useful if commit message starts with a proper name
+    // `sentence-case` and `start-case` are sometimes useful if the header starts with a proper name
     'subject-case': [RuleConfigSeverity.Error, 'never', ['pascal-case', 'upper-case']],
   },
 } satisfies UserConfig;

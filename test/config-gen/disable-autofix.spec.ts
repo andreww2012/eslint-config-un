@@ -1,13 +1,13 @@
-const GEN_MODULE_PATH = '../../src/eslint-types-fixable-only.gen';
+const GENERATED_MODULE_PATH = '../../src/eslint-types-fixable-only.gen';
 
 const FIXTURES = {
   zeroFractionNumber: 'zero-fraction-number.js',
 } as const;
 
 const getDisableAutofixPluginRuleNames = async (
-  ...args: Parameters<typeof computeEslintConfig>
+  ...arguments_: Parameters<typeof computeEslintConfig>
 ) => {
-  const configResult = await computeEslintConfig(...args);
+  const configResult = await computeEslintConfig(...arguments_);
 
   return Object.keys(
     configResult.getConfigByUnPostfix('global-setup/plugins')?.plugins?.['disable-autofix']
@@ -117,7 +117,7 @@ describe('`disable-autofix` plugin only holds the rules with an enabled counterp
 
 it('skips the `disable-autofix` counterpart when the fixable-rules data fails to load', async () => {
   vi.resetModules();
-  vi.doMock(GEN_MODULE_PATH, () => {
+  vi.doMock(GENERATED_MODULE_PATH, () => {
     throw new Error('Simulated missing generated module');
   });
 
@@ -128,7 +128,7 @@ it('skips the `disable-autofix` counterpart when the fixable-rules data fails to
     expect(configResult.getRuleEntry('antfu', 'antfu/curly')).toBe(0);
     expect(configResult.getRuleEntry('antfu', 'disable-autofix/antfu/curly')).toBeUndefined();
   } finally {
-    vi.doUnmock(GEN_MODULE_PATH);
+    vi.doUnmock(GENERATED_MODULE_PATH);
     vi.resetModules();
   }
 });

@@ -1,4 +1,4 @@
-import {withDefaultPackageRootDir} from '../config-un/import-integrity';
+import {withDefaultPackageRootDirectory} from '../config-un/import-integrity';
 import type {Environment} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
 import type {Prettify} from '../types';
@@ -11,7 +11,7 @@ import {
 } from './index';
 
 /**
- * The settings accepted by both forms of {@link ImportIntegrityPluginSettings}.
+ * The settings accepted by both forms of {@link ImportIntegrityPluginSettings}
  * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html
  */
 interface ImportIntegrityCommonPluginSettings {
@@ -19,19 +19,19 @@ interface ImportIntegrityCommonPluginSettings {
    * Set to `auto` by default by the plugin.
    *
    * Set by us to `editor` or `one-shot` if the resolved `environment` root option
-   * is `editor` or `ci` respectively.
+   * is `editor` or `ci` respectively
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#mode
    */
   mode?: 'auto' | 'one-shot' | 'fix' | 'editor';
 
   /**
-   * Defines the rate in milliseconds at which `editor` mode file watching checks for file changes.
+   * Defines the rate in milliseconds at which `editor` mode file watching checks for file changes
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#editorupdaterate
    */
   editorUpdateRate?: number;
 
   /**
-   * Enables verbose logging that tells you performance numbers, when files are updated, and more.
+   * Enables verbose logging that tells you performance numbers, when files are updated, and more
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#debuglogging
    */
   debugLogging?: boolean;
@@ -39,12 +39,12 @@ interface ImportIntegrityCommonPluginSettings {
 
 /**
  * The settings only accepted by the single-package form of
- * {@link ImportIntegrityPluginSettings}: the plugin rejects them in the monorepo one.
+ * {@link ImportIntegrityPluginSettings}: the plugin rejects them in the monorepo one
  * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html
  */
 interface ImportIntegrityPackagePluginSettings {
   /**
-   * Defines custom module aliases, like it is done in TypeScript config file (`tsconfig.json`).
+   * Defines custom module aliases, like it is done in TypeScript config file (`tsconfig.json`)
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#alias
    */
   alias?: Record<string, string>;
@@ -52,7 +52,7 @@ interface ImportIntegrityPackagePluginSettings {
   /**
    * Files representing your package's public API - the set of files whose exports are intended to
    * be consumed by code outside the package.
-   * Defaults to `package.json`'s entry points under certain conditions.
+   * Defaults to `package.json`'s entry points under certain conditions
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#entrypointfiles
    */
   entryPointFiles?: Record<string, string>;
@@ -63,27 +63,27 @@ interface ImportIntegrityPackagePluginSettings {
    *
    * Example: frontend frameworks' pages & layouts.
    *
-   * Defaults to Next.js values if it's detected.
+   * Defaults to Next.js values if it's detected
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#externallyimportedfiles
    */
   externallyImportedFiles?: readonly string[];
 
   /**
    * A list of files to exclude from the analysis.
-   * Uses the format used by `.gitignore`.
+   * Uses the format used by `.gitignore`
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignorepatterns
    */
   ignorePatterns?: readonly string[];
 
   /**
    * A list of files to negate the `ignorePatterns`.
-   * Uses the format used by `.gitignore`.
+   * Uses the format used by `.gitignore`
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignoreoverridepatterns
    */
   ignoreOverridePatterns?: readonly string[];
 
   /**
-   * Allows you to remove certain entries from the default ignore list.
+   * Allows you to remove certain entries from the default ignore list
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#defaultignoreoverrides
    */
   defaultIgnoreOverrides?: readonly string[];
@@ -91,7 +91,7 @@ interface ImportIntegrityPackagePluginSettings {
   /**
    * A list of files that are considered "test" files.
    * This information is used by several rules.
-   * Will be merged with the default list.
+   * Will be merged with the default list
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#testfilepatterns
    */
   testFilePatterns?: readonly string[];
@@ -100,14 +100,14 @@ interface ImportIntegrityPackagePluginSettings {
 /**
  * The plugin validates these settings strictly and accepts exactly one of the two forms: the
  * single-package one, keyed by `packageRootDir`, or the monorepo one, keyed by `monorepoRootDir`.
- * Providing both keys, or the package-level settings alongside `monorepoRootDir`, is a fatal error.
+ * Providing both keys, or the package-level settings alongside `monorepoRootDir`, is a fatal error
  */
 export type ImportIntegrityPluginSettings =
   | Prettify<
       ImportIntegrityCommonPluginSettings &
         ImportIntegrityPackagePluginSettings & {
           /**
-           * Directory path in which the plugin scans for files in the current package.
+           * Directory path in which the plugin scans for files in the current package
            * @default the current working directory
            * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#packagerootdir
            */
@@ -119,7 +119,7 @@ export type ImportIntegrityPluginSettings =
         /**
          * The absolute path to the monorepo root.
          * The plugin uses your monorepo's workspace configuration to discover packages underneath
-         * this directory.
+         * this directory
          * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#monoreporootdir
          */
         monorepoRootDir: string;
@@ -181,7 +181,7 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
       'import-integrity',
       {
         settings: {
-          'import-integrity': withDefaultPackageRootDir(
+          'import-integrity': withDefaultPackageRootDirectory(
             modeFromEnvironment ? {mode: modeFromEnvironment, ...pluginSettings} : pluginSettings,
           ),
         },

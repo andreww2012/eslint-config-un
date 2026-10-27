@@ -11,11 +11,11 @@ import {
 /**
  * [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned directly to the `settings` flat config option.
+ * that will be assigned directly to the `settings` flat config option
  */
 export interface CompatPluginSettings {
   /**
-   * Mark which features are polyfilled and should not be reported.
+   * Mark which features are polyfilled and should not be reported
    * @see https://github.com/amilajack/eslint-plugin-compat#adding-polyfills
    */
   polyfills?: readonly string[];
@@ -40,7 +40,8 @@ export interface CompatPluginSettings {
    */
   ignoreConditionalChecks?: boolean;
 
-  // TODO The following 2 options are officially not documented, usage: https://github.com/amilajack/eslint-plugin-compat/blob/6388a9b65c0b7b110c94a1225403036c1d9b8428/src/rules/compat.ts#L164
+  // TODO The following 2 options are officially not documented, usage:
+  // https://github.com/amilajack/eslint-plugin-compat/blob/6388a9b65c0b7b110c94a1225403036c1d9b8428/src/rules/compat.ts#L164
 
   /**
    * The browsers to check the compatibility against, overriding the `browserslist` resolution

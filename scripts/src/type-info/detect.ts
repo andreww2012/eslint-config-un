@@ -76,7 +76,8 @@ const describeError = (error: unknown) => getErrorMessage(error, '') || inspect(
 
 /**
  * Enabling every rule of every plugin at once makes a good number of them announce a missing
- * dependency, a deprecation or an absent setting. None of it is about the rule being probed
+ * dependency, a deprecation or an absent setting.
+ * None of it is about the rule being probed
  */
 const withSilencedOutput = <Result>(run: () => Result, onOutput: () => void) => {
   const streams = [process.stdout, process.stderr];
@@ -120,9 +121,9 @@ const doesRunOnJavascript = (rule: NonNullable<EslintPlugin['rules']>[string]) =
 };
 
 /**
- * Lints the fixture with every rule enabled at once, recording which rules read the type information
- * members of the parser services, which ones throw when there are none, and which ones register
- * listeners, report or write to the console
+ * Lints the fixture with every rule enabled at once, recording which rules read the type
+ * information members of the parser services, which ones throw when there are none, and which ones
+ * register listeners, report or write to the console
  */
 export const probeRules = async (
   plugins: Record<string, EslintPlugin>,

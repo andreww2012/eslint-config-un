@@ -124,7 +124,7 @@ describe('rules', async () => {
       'lit',
       FIXTURES.htmlAttributeWithQuotedTemplateExpression,
       {
-        // `.ts` files are not matched by any other config, so we need to add an extra config to match them
+        // `.ts` files are not matched by any other config, so an extra config has to match them
         un: {extraConfigs: [{files: ['**/*.ts']}]},
         searchFixturesRelativeToPath: import.meta.dirname,
       },

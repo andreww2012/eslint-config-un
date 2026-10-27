@@ -120,7 +120,7 @@ describe('rules', () => {
   });
 
   // Upstream `@tanstack/eslint-plugin-start` mismatches Node `path.resolve` output
-  // against TypeScript's normalized `sourceFile.fileName`, so the rule never fires on Windows.
+  // against TypeScript's normalized `sourceFile.fileName`, so the rule never fires on Windows
   it.skipIf(process.platform === 'win32')(
     '`tanstack-start/no-async-client-component` rule fires on an async component in a client file',
     async () => {

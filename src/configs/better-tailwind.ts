@@ -23,8 +23,9 @@ type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-cl
  * that will be assigned to the `better-tailwindcss` property of the `settings` flat config option.
  *
  * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or `tailwindConfig`
- * (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work properly, and its absence
- * is reported at runtime. If specified, you must provide exactly one of them.
+ * (for Tailwind 3), as `eslint-plugin-better-tailwindcss` needs it to work properly, and its
+ * absence is reported at runtime.
+ * If specified, you must provide exactly one of them
  */
 export type BetterTailwindPluginSettings = RequireExactlyOne<{
   /**
@@ -47,49 +48,49 @@ export type BetterTailwindPluginSettings = RequireExactlyOne<{
 
   /**
    * From plugin docs: The path to the `tsconfig.json` file.
-   * If not specified, the plugin will try to find it automatically.
+   * If not specified, the plugin will try to find it automatically
    */
   tsconfig?: string;
 
   /**
-   * The name of the attribute that contains the tailwind classes.
+   * The name of the attribute that contains the tailwind classes
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#attributes
    */
   attributes?: AnyRuleOptions['attributes'];
 
   /**
-   * List of function names whose arguments should also get linted.
+   * List of function names whose arguments should also get linted
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#callees
    */
   callees?: AnyRuleOptions['callees'];
 
   /**
-   * List of variable names whose initializer should also get linted.
+   * List of variable names whose initializer should also get linted
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#variables
    */
   variables?: AnyRuleOptions['variables'];
 
   /**
-   * List of template literal tag names whose content should get linted.
+   * List of template literal tag names whose content should get linted
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#tags
    */
   tags?: AnyRuleOptions['tags'];
 
   /**
-   * The font size of the `<html>` element in pixels.
+   * The font size of the `<html>` element in pixels
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#rootfontsize
    */
   rootFontSize?: AnyRuleOptions['rootFontSize'];
 
   /**
-   * Customize how linting messages are displayed.
+   * Customize how linting messages are displayed
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#messagestyle
    */
   messageStyle?: AnyRuleOptions['messageStyle'];
 
   /**
    * [Custom component classes](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)
-   * that should not be reported as unknown.
+   * that should not be reported as unknown
    * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#detectcomponentclasses
    */
   detectComponentClasses?: AnyRuleOptions['detectComponentClasses'];
@@ -111,7 +112,7 @@ export interface BetterTailwindEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'> {
   /**
    * Detected automatically from a major version of the installed version of `tailwindcss` package,
-   * but can also be specified manually here.
+   * but can also be specified manually here
    */
   tailwindVersion?: SupportedTailwindVersion;
 
@@ -182,7 +183,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css'
 
   const tailwindPackageInfo = context.packagesInfo.tailwindcss;
   const tailwindMajorVersion =
-    optionsResolved.tailwindVersion ?? tailwindPackageInfo?.versions.major;
+    optionsResolved.tailwindVersion || tailwindPackageInfo?.versions.major;
 
   const requiredSettingsKey =
     tailwindMajorVersion === 4

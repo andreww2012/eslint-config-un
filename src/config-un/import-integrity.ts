@@ -9,7 +9,7 @@ import type {UnConfigContext} from './shared';
  * The plugin rejects `packageRootDir` in the monorepo form, so it can only be defaulted when the
  * user has not opted into that form
  */
-export const withDefaultPackageRootDir = (
+export const withDefaultPackageRootDirectory = (
   settings: ImportIntegrityPluginSettings | undefined,
 ): ImportIntegrityPluginSettings =>
   settings && 'monorepoRootDir' in settings
@@ -68,7 +68,7 @@ export const replaceImportRulesImplementationWithIntegrityPlugin = (
               },
             ] satisfies NonEmptyTuple;
           })
-          .filter((v) => v != null),
+          .filter((value) => value != null),
       ),
     },
   };

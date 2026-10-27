@@ -1,7 +1,7 @@
 import {forbid$slotsInsideVueTemplates, forbidImportingFromUtilityLibraries} from '../src/snippets';
 
-const buildRegex = (...args: Parameters<typeof forbidImportingFromUtilityLibraries>) =>
-  new RegExp(forbidImportingFromUtilityLibraries(...args).regex);
+const buildRegex = (...arguments_: Parameters<typeof forbidImportingFromUtilityLibraries>) =>
+  new RegExp(forbidImportingFromUtilityLibraries(...arguments_).regex);
 
 describe('forbidImportingFromUtilityLibraries', () => {
   it('forbids the utility packages disallowed by default', () => {

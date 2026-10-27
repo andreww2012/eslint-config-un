@@ -27,7 +27,7 @@ export interface StylisticEslintConfigOptions<
    * Customization function directly coming from
    * [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
    *
-   * This, if used, will override severity and options set by us.
+   * This, if used, will override severity and options set by us
    */
   customizeOptions?: OmitStrict<
     Parameters<(typeof eslintPluginStylistic)['configs']['customize']>[0] & {},

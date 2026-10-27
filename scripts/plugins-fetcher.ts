@@ -261,15 +261,15 @@ const fetchPackageInfo = (packageName: string) =>
         return set;
       });
 
-      const depPriority = isEslintPlugin ? 2 : 0;
+      const dependencyPriority = isEslintPlugin ? 2 : 0;
       // eslint-disable-next-line ts/no-use-before-define
-      yield* queueFetchPackageInfo(dependencyPackageName, depPriority);
+      yield* queueFetchPackageInfo(dependencyPackageName, dependencyPriority);
 
       if (!isEslintPlugin) {
         continue;
       }
 
-      const newCount = yield* Ref.updateAndGet(newEslintPluginsCountRef, (n) => n + 1);
+      const newCount = yield* Ref.updateAndGet(newEslintPluginsCountRef, (count) => count + 1);
       logger.info(
         `👀 Potentially new ESLint plugin found: https://npmx.dev/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${newCount})`,
       );

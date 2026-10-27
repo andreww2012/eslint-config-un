@@ -9,7 +9,7 @@ import {
 /**
  * [`eslint-plugin-sql`](https://npmx.dev/eslint-plugin-sql) plugin
  * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
- * that will be assigned to the `sql` property of the `settings` flat config option.
+ * that will be assigned to the `sql` property of the `settings` flat config option
  * @see https://github.com/gajus/eslint-plugin-sql#settings
  */
 export interface SqlPluginSettings {

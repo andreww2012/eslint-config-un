@@ -7,7 +7,7 @@ import * as z from 'zod';
 import packageJson from '../../package.json' with {type: 'json'};
 import {objectFromKeys, pathExists, substringAfterLast} from '../../src/utils';
 
-type CommandLine = readonly [command: string, ...args: string[]];
+type CommandLine = readonly [command: string, ...arguments: string[]];
 
 const PrintConfigZod = z.object({rules: z.record(z.string(), z.unknown())});
 
@@ -30,17 +30,17 @@ const NPM_ENV_VARIABLE_REGEXP = /^npm_/i;
 // `--print-config` output alone is around 100 kilobytes
 const COMMAND_REPORT_STDOUT_MAX_LENGTH = 2000;
 
-const FIXTURE_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', 'project');
+const FIXTURE_PROJECT_DIRECTORY = path.join(import.meta.dirname, 'fixtures', 'project');
 
-const FIXTURE_JS_PROJECT_DIR = path.join(import.meta.dirname, 'fixtures', 'project-js');
+const FIXTURE_JS_PROJECT_DIRECTORY = path.join(import.meta.dirname, 'fixtures', 'project-js');
 
-const WORKSPACE_PACKAGE_DIR = 'packages/app';
+const WORKSPACE_PACKAGE_DIRECTORY = 'packages/app';
 
 const FIXTURE_EXAMPLE_LINES: readonly string[] = (
-  await fs.readFile(path.join(FIXTURE_PROJECT_DIR, 'src', 'example.ts'), 'utf8')
+  await fs.readFile(path.join(FIXTURE_PROJECT_DIRECTORY, 'src', 'example.ts'), 'utf8')
 ).split('\n');
 
-const PACKAGE_MANAGERS_INSTALL_DIR = path.join(
+const PACKAGE_MANAGERS_INSTALL_DIRECTORY = path.join(
   import.meta.dirname,
   '..',
   '..',
@@ -57,8 +57,8 @@ const AUBE = '@endevco/aube@2.2.4';
 
 const FIXTURE_DEPENDENCIES = {
   '@tanstack/eslint-plugin-query': packageJson.devDependencies['@tanstack/eslint-plugin-query'],
-  // Brings in `@tanstack/query-core`, which enables the `tanstackQuery` config, and `react` as a peer,
-  // which must not enable anything, as it isn't declared
+  // Brings in `@tanstack/query-core`, which enables the `tanstackQuery` config, and `react` as a
+  // peer, which must not enable anything, as it isn't declared
   '@tanstack/react-query': '5.104.5',
   // Its `exports` don't expose `package.json`
   clsx: '2.1.1',
@@ -85,7 +85,8 @@ const getPnpmFiles = (extraSettings: readonly string[] = []) => ({
     'minimumReleaseAge: 0',
     // Dependencies' build scripts aren't needed, and an empty store reports them as an error
     'strictDepBuilds: false',
-    // Install adds the ignored build scripts to this file, so `exec` would install again and print into stdout
+    // Install adds the ignored build scripts to this file, so `exec` would install again and print
+    // into stdout
     'verifyDepsBeforeRun: false',
     ...extraSettings,
   ].join('\n'),
@@ -118,7 +119,8 @@ const PACKAGE_MANAGERS: readonly {
 }[] = [
   {
     id: 'npm',
-    // npm 11 rejects the `eslint-plugin-es-x` version `eslint-plugin-n` depends on, as it doesn't satisfy our peer range
+    // npm 11 rejects the `eslint-plugin-es-x` version `eslint-plugin-n` depends on, as it doesn't
+    // satisfy our peer range
     install: ['npm', 'install', '--no-audit', '--no-fund', '--legacy-peer-deps'],
     eslint: ['npx', '--no-install', 'eslint'],
   },
@@ -156,7 +158,7 @@ const PACKAGE_MANAGERS: readonly {
     install: ['yarn', 'install'],
     eslint: ['yarn', 'eslint'],
     getFiles: (registryUrl) => getYarnBerryFiles(registryUrl, 'pnp'),
-    // PnP only falls back to the root's dependencies, so a workspace's ones reach ours only as our peers
+    // PnP only falls back to the root's dependencies, so workspace ones reach ours only as peers
     isWorkspacePackage: true,
   },
   {
@@ -182,7 +184,7 @@ const PACKAGE_MANAGERS: readonly {
   {
     id: 'aube-gvs',
     npmPackage: AUBE,
-    // Unlike the one of pnpm, it hoists the packages of every project into one shared `node_modules`
+    // Unlike pnpm's, it hoists the packages of every project into one shared `node_modules`
     install: ['aube', 'install', '--no-frozen-lockfile', '--enable-global-virtual-store'],
     eslint: ['aube', 'exec', 'eslint'],
   },
@@ -210,27 +212,30 @@ const PACKAGE_MANAGERS: readonly {
 const SELECTED_PACKAGE_MANAGER_ID = process.env['E2E_PACKAGE_MANAGER'];
 
 const installPackageManager = async (npmPackage: string) => {
-  const installDir = path.join(PACKAGE_MANAGERS_INSTALL_DIR, npmPackage.replaceAll('/', '+'));
-  const binDir = path.join(installDir, 'node_modules', '.bin');
-  if (await pathExists(installDir)) {
-    return binDir;
+  const installDirectory = path.join(
+    PACKAGE_MANAGERS_INSTALL_DIRECTORY,
+    npmPackage.replaceAll('/', '+'),
+  );
+  const binDirectory = path.join(installDirectory, 'node_modules', '.bin');
+  if (await pathExists(installDirectory)) {
+    return binDirectory;
   }
 
-  await fs.mkdir(PACKAGE_MANAGERS_INSTALL_DIR, {recursive: true});
+  await fs.mkdir(PACKAGE_MANAGERS_INSTALL_DIRECTORY, {recursive: true});
   // Moved into place once complete, so an interrupted install is never reused
-  const temporaryDir = await fs.mkdtemp(`${installDir}-`);
+  const temporaryDirectory = await fs.mkdtemp(`${installDirectory}-`);
   // Otherwise npm would install into the closest parent project, which is this repository
-  await fs.writeFile(path.join(temporaryDir, 'package.json'), '{}');
+  await fs.writeFile(path.join(temporaryDirectory, 'package.json'), '{}');
 
   const result = await exec('npm', ['install', '--no-audit', '--no-fund', npmPackage], {
-    nodeOptions: {cwd: temporaryDir, env: CHILD_PROCESS_ENV},
+    nodeOptions: {cwd: temporaryDirectory, env: CHILD_PROCESS_ENV},
   });
   if (result.exitCode !== 0) {
     throw new Error(`Failed to install \`${npmPackage}\`:\n${result.stderr}`);
   }
 
-  await fs.rename(temporaryDir, installDir);
-  return binDir;
+  await fs.rename(temporaryDirectory, installDirectory);
+  return binDirectory;
 };
 
 const getEnabledRuleNames = (printConfigOutput: string) =>
@@ -251,23 +256,25 @@ const getFixtureExampleLine = (lineStart: string) =>
 
 const setUpProject = async (
   {id, npmPackage, install, getFiles, isWorkspacePackage}: (typeof PACKAGE_MANAGERS)[number],
-  fixtureDir: string,
+  fixtureDirectory: string,
   devDependencies: Record<string, string | undefined>,
 ) => {
-  const packageManagerBinDir = npmPackage && (await installPackageManager(npmPackage));
+  const packageManagerBinDirectory = npmPackage && (await installPackageManager(npmPackage));
   const env = {
     ...CHILD_PROCESS_ENV,
-    PATH: [packageManagerBinDir, path.dirname(process.execPath), process.env['PATH']]
+    PATH: [packageManagerBinDirectory, path.dirname(process.execPath), process.env['PATH']]
       .filter(Boolean)
       .join(path.delimiter),
   };
 
   const registryUrl = inject('registryUrl');
-  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), `un-e2e-${id}-`));
-  onTestFinished(() => fs.rm(rootDir, {recursive: true, force: true}));
+  const rootDirectory = await fs.mkdtemp(path.join(os.tmpdir(), `un-e2e-${id}-`));
+  onTestFinished(() => fs.rm(rootDirectory, {recursive: true, force: true}));
 
-  const projectDir = isWorkspacePackage ? path.join(rootDir, WORKSPACE_PACKAGE_DIR) : rootDir;
-  await fs.cp(fixtureDir, projectDir, {recursive: true});
+  const projectDirectory = isWorkspacePackage
+    ? path.join(rootDirectory, WORKSPACE_PACKAGE_DIRECTORY)
+    : rootDirectory;
+  await fs.cp(fixtureDirectory, projectDirectory, {recursive: true});
 
   const projectManifest = JSON.stringify({
     private: true,
@@ -277,8 +284,11 @@ const setUpProject = async (
   const files = {
     ...(isWorkspacePackage
       ? {
-          'package.json': JSON.stringify({private: true, workspaces: [WORKSPACE_PACKAGE_DIR]}),
-          [path.join(WORKSPACE_PACKAGE_DIR, 'package.json')]: projectManifest,
+          'package.json': JSON.stringify({
+            private: true,
+            workspaces: [WORKSPACE_PACKAGE_DIRECTORY],
+          }),
+          [path.join(WORKSPACE_PACKAGE_DIRECTORY, 'package.json')]: projectManifest,
         }
       : {'package.json': projectManifest}),
     '.npmrc': `registry=${registryUrl}\n`,
@@ -286,7 +296,7 @@ const setUpProject = async (
   };
   await Promise.all(
     Object.entries(files).map(([fileName, contents]) =>
-      fs.writeFile(path.join(rootDir, fileName), contents),
+      fs.writeFile(path.join(rootDirectory, fileName), contents),
     ),
   );
 
@@ -295,10 +305,10 @@ const setUpProject = async (
     console.error(commandReports.join('\n\n'));
   });
 
-  const run = async (commandLine: CommandLine, cwd = projectDir) => {
-    const [command, ...args] = commandLine;
-    const result = await exec(command, args, {
-      // Otherwise the Node directory, which may have Corepack's shims, would precede the package manager
+  const run = async (commandLine: CommandLine, cwd = projectDirectory) => {
+    const [command, ...arguments_] = commandLine;
+    const result = await exec(command, arguments_, {
+      // Otherwise the Node directory (maybe with Corepack shims) would precede the package manager
       nodePath: false,
       nodeOptions: {cwd, env},
     });
@@ -312,7 +322,7 @@ const setUpProject = async (
     return result;
   };
 
-  await expect(run(install, rootDir)).resolves.toHaveProperty('exitCode', 0);
+  await expect(run(install, rootDirectory)).resolves.toHaveProperty('exitCode', 0);
 
   return run;
 };
@@ -336,7 +346,7 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
   });
 
   it('installs from the registry and lints the project', async () => {
-    const run = await setUpProject(packageManager, FIXTURE_PROJECT_DIR, FIXTURE_DEPENDENCIES);
+    const run = await setUpProject(packageManager, FIXTURE_PROJECT_DIRECTORY, FIXTURE_DEPENDENCIES);
 
     const printConfigResult = await run([...eslint, '--print-config', 'src/example.ts']);
 
@@ -403,7 +413,7 @@ describe.each(PACKAGE_MANAGERS)('$id', (packageManager) => {
 
   // Only some package managers install `typescript` on their own, as a peer of `typescript-eslint`
   it('lints a project without TypeScript', async () => {
-    const run = await setUpProject(packageManager, FIXTURE_JS_PROJECT_DIR, {
+    const run = await setUpProject(packageManager, FIXTURE_JS_PROJECT_DIRECTORY, {
       eslint: packageJson.devDependencies.eslint,
     });
 

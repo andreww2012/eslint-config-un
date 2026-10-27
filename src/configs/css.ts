@@ -30,7 +30,7 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * The parent option is not applied to them, because it would replace the SCSS syntax entirely.
    *
    * Defaults to the SCSS syntax, which is also passed to the function form as `extraSyntax` so
-   * that you can extend rather than replace it.
+   * that you can extend rather than replace it
    */
   customSyntax?: MaybeFn<
     CssCustomSyntax,
@@ -38,7 +38,7 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       {
         /**
          * Default CSS syntax provided by [`@eslint/css`](https://npmx.dev/@eslint/css), which in
-         * turn comes from the `/definition-syntax-data` entrypoint of this package.
+         * turn comes from the `/definition-syntax-data` entrypoint of this package
          */
         defaultSyntax: CssCustomSyntax;
 
@@ -46,7 +46,7 @@ interface ScssSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
          * SCSS syntax coming from
          * [`@humanwhocodes/scsstree`](https://npmx.dev/@humanwhocodes/scsstree).
          *
-         * NOTE: it will already contain the merged default syntax.
+         * NOTE: it will already contain the merged default syntax
          */
         extraSyntax: CssCustomSyntax;
       },
@@ -167,7 +167,7 @@ export interface CssEslintConfigOptions<
    * > Setting `tolerant` to `true` is necessary if you are using custom syntax, such as PostCSS
    * > plugins, that aren't part of the standard CSS syntax.
    *
-   * Also applied to the `scss` sub-config.
+   * Also applied to the `scss` sub-config
    * @default false
    */
   tolerantMode?: CSSLanguageOptions['tolerant'];
@@ -193,7 +193,7 @@ export interface CssEslintConfigOptions<
    * We don't support the latter because it is not cacheable, but that `defaultSyntax` parameter is
    * coming from `@eslint/css-tree/definition-syntax-data`, which you can use manually.
    *
-   * NOTE: not applied to the `scss` sub-config, which has an option of the same name.
+   * NOTE: not applied to the `scss` sub-config, which has an option of the same name
    */
   customSyntax?: CssCustomSyntaxOption;
 
@@ -377,7 +377,8 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
           }),
         },
       ]) /** @since 0.9.0 */
-      // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
+      // We're keeping `warn` severity, see the discussion in this issue and specifically this
+      // comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
       .addRule('selector-complexity', OFF) /** @since 0.13.0 */
       .addRule('use-baseline', WARNING, [
         {

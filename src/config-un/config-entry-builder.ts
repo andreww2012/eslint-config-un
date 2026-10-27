@@ -33,7 +33,7 @@ import type {
 } from '../eslint/eslint-types';
 import {
   eslintToUnRuleSeverity,
-  genFlatConfigEntryName,
+  generateFlatConfigEntryName,
   getRuleNameAndPluginPrefixByFullName,
   resolveFullRuleName,
 } from '../eslint/eslint-utils';
@@ -155,14 +155,14 @@ export const configIndexProperty = Symbol('ConfigIndex');
 
 interface FlatConfigMetadata {
   /**
-   * Keys are full resolved rule names (i.e. with possible plugin prefix and rename).
+   * Keys are full resolved rule names (i.e. with possible plugin prefix and rename)
    */
   rulesRequiringTypeInfo?: Map<string, {plugin: PluginPrefix; ruleName: string}>;
 
   /**
    * When `true`, this config opts out of the type-information split: its typed rules are left in
    * place (treated as `asIs`) regardless of the global `standalone`/`splitOnly` mode.
-   * The `disabled` mode still turns off throwing rules here.
+   * The `disabled` mode still turns off throwing rules here
    */
   skipTypeInfoSplit?: boolean;
 }
@@ -204,8 +204,8 @@ export class ConfigEntryBuilder<
     return metadata;
   }
 
-  private genConfigName(configName: string) {
-    return genFlatConfigEntryName(
+  private generateConfigName(configName: string) {
+    return generateFlatConfigEntryName(
       `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
     );
   }
@@ -213,10 +213,10 @@ export class ConfigEntryBuilder<
   /**
    * Adds a
    * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores),
-   * which {@link addConfig} is not able to create.
+   * which {@link addConfig} is not able to create
    */
   addGlobalIgnores(configName: string, ignores: string[]) {
-    this.addFlatConfig({name: this.genConfigName(configName), ignores});
+    this.addFlatConfig({name: this.generateConfigName(configName), ignores});
   }
 
   setConfigMetadataForRule(
@@ -263,7 +263,7 @@ export class ConfigEntryBuilder<
    * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores):
    * use {@link addGlobalIgnores} for that.
    *
-   * `rules` and `name` keys cannot be overridden.
+   * `rules` and `name` keys cannot be overridden
    */
   addConfig(
     nameAndMaybeOptions:
@@ -275,7 +275,7 @@ export class ConfigEntryBuilder<
              * Whether the `files` and `ignores` provided by the user (or inherited via
              * `inheritFilesAndIgnoresFrom`) are applied to this config, replacing (or, if
              * `{files,ignores}Default*MergedWith*` options are set, merging with) `filesDefault`
-             * and `ignoresDefault`.
+             * and `ignoresDefault`
              * @default true
              */
             applyUserFilesAndIgnores?: boolean;
@@ -285,7 +285,7 @@ export class ConfigEntryBuilder<
 
             /**
              * Will be merged with the internal `ignores`, and, if
-             * `ignoresDefaultMergedWithUserIgnores` is set to `true`, with the user-provided ones.
+             * `ignoresDefaultMergedWithUserIgnores` is set to `true`, with the user-provided ones
              */
             ignoresDefault?: readonly string[];
             ignoresDefaultMergedWithUserIgnores?: boolean;
@@ -325,7 +325,7 @@ export class ConfigEntryBuilder<
              *
              * Use this option if you don't want to implicitly ignore certain file types (set the
              * file type you wish not to be ignored to `false`).
-             * You can also set the whole option to `false` to not add anything to `ignores`.
+             * You can also set the whole option to `false` to not add anything to `ignores`
              * @default true
              */
             ignoresInternal?:
@@ -335,7 +335,7 @@ export class ConfigEntryBuilder<
             /**
              * Keeps the patterns of `ignoresInternal` even when the function form of the user's
              * `ignores` replaces them.
-             * For rules that crash or misreport on these file types.
+             * For rules that crash or misreport on these file types
              */
             ignoresInternalAlwaysApplied?: boolean;
 
@@ -343,7 +343,7 @@ export class ConfigEntryBuilder<
              * The language this config's rules expect the target files to be written for.
              *
              * Setting this option contributes to the final list of files that will be parsed
-             * by the same parser.
+             * by the same parser
              */
             parseWith?: ParsingLanguagesWithDialects;
 
@@ -358,7 +358,7 @@ export class ConfigEntryBuilder<
              * Specifies which `parsing` root option entries this config takes the `ignores` of.
              *
              * Primarily meant for configs running on files of a language their rules
-             * were not written for (for example, `unicorn/{json,markdown}`).
+             * were not written for (for example, `unicorn/{json,markdown}`)
              */
             parsingIgnoresInheritedFrom?: readonly ParsingLanguages[];
 
@@ -366,7 +366,7 @@ export class ConfigEntryBuilder<
              * Specifies plugin shared settings on the specified property.
              *
              * To assign settings directly to the `settings` object, use an empty string as a
-             * property name.
+             * property name
              */
             settings?: Record<string, Nullable<Record<string, unknown>>>;
 
@@ -474,12 +474,13 @@ export class ConfigEntryBuilder<
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
-    // - to avoid (most likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores)
+    // - to avoid (most likely accidental) "global ignores" configs
+    //   (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores)
     const configFinal: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
-      name: this.genConfigName(configName),
+      name: this.generateConfigName(configName),
       rules: {},
       ...(() => {
         const {settings: settingsRaw} = internalOptions;
@@ -570,7 +571,7 @@ export class ConfigEntryBuilder<
       }
 
       const severityRaw =
-        configOptions.forceSeverity ?? this.context.rootOptions.forceSeverity ?? severity;
+        configOptions.forceSeverity || this.context.rootOptions.forceSeverity || severity;
       const severityResolved = this.context.rootOptions.noWarnings
         ? severityRaw === WARNING
           ? ERROR
@@ -734,7 +735,7 @@ export class ConfigEntryBuilder<
 
             const errorMessages: Exclude<
               (typeof this.context.tests)[number],
-              (...args: readonly unknown[]) => unknown
+              (...arguments_: readonly unknown[]) => unknown
             > &
               readonly unknown[] = [];
 
@@ -811,7 +812,7 @@ export class ConfigEntryBuilder<
                       left,
                       right: right.at(-1) || '',
                     })),
-                    (v) => v.right,
+                    (pair) => pair.right,
                   ),
                 ).map(
                   ([right, rules = []]) =>
@@ -819,7 +820,7 @@ export class ConfigEntryBuilder<
                 );
                 errorMessages.push(
                   `↔️ Rules out of order${groupName ? ` in group ${styleText('cyan', groupName)}` : ''}:\n${rulesToSwapNormalized
-                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b)}`)
+                    .map(([left, right]) => `${styleRuleName(left)} <-> ${styleRuleName(right)}`)
                     .join('\n')}`,
                 );
               });
@@ -943,7 +944,7 @@ export class ConfigEntryBuilder<
             ...config.languageOptions,
             parserOptions: {
               ...(typeof originalParserOptions === 'object' &&
-                originalParserOptions !== null &&
+                originalParserOptions != null &&
                 originalParserOptions),
               ...(shouldConfigureParser && {
                 ...globalParserOptions,

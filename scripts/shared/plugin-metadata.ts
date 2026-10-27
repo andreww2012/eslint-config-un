@@ -5,7 +5,7 @@ import type {PluginPrefix} from '../../src/loaders';
 import type {PluginMetadata} from '../../src/plugins/shared';
 import type {Prettify} from '../../src/types';
 
-const PLUGINS_DIR = pathe.join(import.meta.dirname, '../../src/plugins');
+const PLUGINS_DIRECTORY = pathe.join(import.meta.dirname, '../../src/plugins');
 
 const NON_METADATA_MODULES: ReadonlySet<string> = new Set(['shared.ts']);
 
@@ -34,7 +34,7 @@ export const getRuleDocsUrl = (metadata: PluginMetadata, ruleName: string) => {
  * the published package
  */
 export const readPluginMetadata = async () => {
-  const fileNames = (await fs.readdir(PLUGINS_DIR))
+  const fileNames = (await fs.readdir(PLUGINS_DIRECTORY))
     .filter(
       (fileName) =>
         fileName.endsWith('.ts') &&
@@ -46,7 +46,7 @@ export const readPluginMetadata = async () => {
   return await Promise.all(
     fileNames.map(async (fileName): Promise<DiscoveredPlugin> => {
       // Windows would otherwise read the drive letter of an absolute path as a URL scheme
-      const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIR, fileName)).href;
+      const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIRECTORY, fileName)).href;
       // eslint-disable-next-line no-unsanitized/method, un/no-type-assertion -- the path comes from the plugins directory
       const module = (await import(moduleUrl)) as {
         default: Prettify<PluginMetadata & {prefix: PluginPrefix}>;

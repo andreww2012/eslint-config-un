@@ -53,7 +53,8 @@ remap = [
   '^https://jsboundaries\.dev/(.*)/?(#[^/]*)?$ https://www.jsboundaries.dev/$1/$2',
 ]
 exclude = [
-  # TODO temporary - actually missing fragments for deprecated plugin settings, should remove links to them in future
+  # TODO temporary - actually missing fragments for deprecated plugin settings, should remove links
+  # to them in future
   # Matched after `remap`, hence the raw URL
   '^https://raw\.githubusercontent\.com/schoero/eslint-plugin-better-tailwindcss/HEAD/docs/settings/settings\.md#\w+$',
   # TODO temp - site unavailable
@@ -72,7 +73,8 @@ exclude = [
   'README\.md#(example|ideas|infra|maintenance|tool)-[\w-]+$',
   '^https://all-contributors\.js\.org/docs/en/bot/usage$',
 
-  # Link with a missing fragment inside an inline snapshot in test/configs/web-components/web-components.spec.ts
+  # Link with a missing fragment inside an inline snapshot in
+  # test/configs/web-components/web-components.spec.ts
   '^https://html\.spec\.whatwg\.org/multipage/custom-elements\.html#prod-potentialcustomelementname$',
 
   # Location-dependent redirect
