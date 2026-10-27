@@ -1007,6 +1007,8 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .addRule('next-tick-style', OFF) /** @since 7.5.0 */
     .addRule('no-bare-strings-in-template', OFF) /** @since 7.0.0 */
     .addRule('no-boolean-default', OFF) /** @since 7.0.0 */
+    .addRule('no-content-outside-block', ERROR) /** @since 10.12.0 */
+    .addRule('no-define-model-default', ERROR) /** @since 10.12.0 */
     .addRule('no-deprecated-delete-set', vue3Severity(ERROR)) /** @since 9.29.0 */ // 3️⃣
     .addRule('no-deprecated-model-definition', vue3Severity(ERROR)) /** @since 9.16.0 */ // 3️⃣
     .addRule('no-duplicate-attr-inheritance', ERROR) /** @since 7.0.0 */
@@ -1015,6 +1017,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .addRule('no-multiple-objects-in-class', ERROR) /** @since 7.0.0 */
     .addRule('no-negated-v-if-condition', ERROR) /** @since 10.4.0 */
     .addRule('no-potential-component-option-typo', ERROR) /** @since 7.0.0 */
+    .addRule('no-props-shadow', ERROR) /** @since 10.12.0 */
     .addRule('no-ref-object-reactivity-loss', ERROR) /** @since 9.17.0 */
     .addRule('no-required-prop-with-default', ERROR) /** @since 9.6.0 */ // 3️⃣2️⃣
     .addRule('no-restricted-block', OFF) /** @since 7.4.0 */

@@ -59,7 +59,9 @@ export default definePluginMetadata('vue', {
     'mustache-interpolation-spacing': {prettierIncompatible: true},
     'no-bare-strings-in-template': {disableInCodeBlocks: 'tooStrict'},
     'no-console': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-content-outside-block': {disableInCodeBlocks: 'runtimeOnly'},
     'no-custom-modifiers-on-v-model': {disableInCodeBlocks: 'runtimeOnly'},
+    'no-define-model-default': {disableInCodeBlocks: 'runtimeOnly'},
     'no-dupe-keys': {
       disableInCodeBlocks: [
         false,
@@ -76,6 +78,7 @@ export default definePluginMetadata('vue', {
     'no-multiple-template-root': {disableInCodeBlocks: 'runtimeOnly'},
     'no-negated-condition': {stylistic: true},
     'no-negated-v-if-condition': {stylistic: true},
+    'no-ref-as-operand': {requiresTypeInfo: 'optional'},
     'no-restricted-block': {disableInCodeBlocks: 'tooStrict'},
     'no-restricted-call-after-await': {
       disableInCodeBlocks: [
