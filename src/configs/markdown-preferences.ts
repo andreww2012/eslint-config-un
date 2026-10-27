@@ -258,9 +258,7 @@ export default defineUnConfig<
     casingEnforcementIgnorePatterns,
   );
 
-  const getEnforcedCasing = (
-    place: CasingEnforcementPlace,
-  ): EnforceableCasing | null | undefined =>
+  const getEnforcedCasing = (place: CasingEnforcementPlace): EnforceableCasing | null | undefined =>
     typeof enforceCasing === 'object'
       ? enforceCasing[place]
       : enforceCasing === true
