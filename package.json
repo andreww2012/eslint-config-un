@@ -230,7 +230,7 @@
     "@vitest/eslint-plugin": "1.6.28",
     "@vitest/ui": "5.0.5",
     "actions-up": "2.0.0",
-    "all-contributors-cli": "6.27.0-rc.1",
+    "all-contributors-cli": "7.0.0",
     "angular-eslint-plugin-template15": "npm:@angular-eslint/eslint-plugin-template@15.2.1",
     "angular-eslint-plugin-template17": "npm:@angular-eslint/eslint-plugin-template@17.5.3",
     "angular-eslint-plugin18": "npm:@angular-eslint/eslint-plugin@18.4.3",

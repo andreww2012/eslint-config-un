@@ -36,6 +36,7 @@ minimumReleaseAgeExclude: # []
   - '@oxfmt/binding-win32-ia32-msvc@0.75.0'
   - '@oxfmt/binding-win32-x64-msvc@0.75.0'
   - oxfmt@0.75.0
+  - all-contributors-cli@7.0.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

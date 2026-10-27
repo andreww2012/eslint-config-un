@@ -101,7 +101,6 @@ export default ncuConfig({
 
     // Prerelease channel
     '@effect/platform-node': 'greatest',
-    'all-contributors-cli': 'greatest',
     effect: 'greatest',
   },
   blockedVersions: {},
