@@ -1,7 +1,8 @@
 import {satisfies} from 'verkit';
 import {ERROR, OFF, WARNING} from '../constants';
 import type {SetRequired} from '../types';
-import {allUnionMembers, getKeysOfTruthyValues, objectFromKeys} from '../utils';
+import {allUnionMembers} from '../utils';
+import {resolveAllowedValues} from './shared';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -220,27 +221,15 @@ const resolveConsistentImportOptions = <Syntax extends string>(userOptions: {
 const resolveConsistentObjectSchemaTypeOptions = (
   userOptions: Pick<ZodEslintConfigOptions, 'allowedObjectSchemaTypes'>,
 ) => {
-  const {allowedObjectSchemaTypes: allowedObjectSchemaTypesRaw} = userOptions;
-
-  const allowedObjectSchemaTypes = getKeysOfTruthyValues(
-    Array.isArray(allowedObjectSchemaTypesRaw)
-      ? objectFromKeys(allowedObjectSchemaTypesRaw, () => true)
-      : {
-          ...objectFromKeys(ALL_ZOD_OBJECT_SCHEMA_TYPES, () => true),
-          ...(!Array.isArray(allowedObjectSchemaTypesRaw) && allowedObjectSchemaTypesRaw),
-        },
-    'nonEmptyArray',
+  const allowedObjectSchemaTypes = resolveAllowedValues(
+    userOptions.allowedObjectSchemaTypes,
+    ALL_ZOD_OBJECT_SCHEMA_TYPES,
   );
 
-  const isAllowedObjectSchemaTypesUnrestricted =
-    !allowedObjectSchemaTypes?.length ||
-    allowedObjectSchemaTypes.length === ALL_ZOD_OBJECT_SCHEMA_TYPES.length;
-
-  const severity = isAllowedObjectSchemaTypesUnrestricted ? OFF : ERROR;
   const options: GetRuleOptions<'zod', 'consistent-object-schema-type', 'all'> =
-    isAllowedObjectSchemaTypesUnrestricted ? [] : [{allow: allowedObjectSchemaTypes}];
+    allowedObjectSchemaTypes ? [{allow: allowedObjectSchemaTypes}] : [];
 
-  return [severity, options] as const;
+  return [allowedObjectSchemaTypes ? ERROR : OFF, options] as const;
 };
 
 const resolveSchemaCompiler = (

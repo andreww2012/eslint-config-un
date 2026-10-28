@@ -196,6 +196,7 @@ describe('cascade order', () => {
       eslint-config-un/unnecessary-abstractions
       eslint-config-un/unocss
       eslint-config-un/unused-imports/no-unused-imports
+      eslint-config-un/valibot
       eslint-config-un/vitest
       eslint-config-un/vitest/ts
       eslint-config-un/web-components

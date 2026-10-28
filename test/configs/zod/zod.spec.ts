@@ -401,6 +401,16 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"allow": ["looseObject", "strictObject"]}]');
     });
 
+    it('disallows the types set to `undefined` via object in `zod/consistent-object-schema-type` rule', async () => {
+      const configResult = await computeEslintConfig({
+        zod: {allowedObjectSchemaTypes: {object: undefined}},
+      });
+
+      expect(
+        configResult.getRuleEntry('zod', 'zod/consistent-object-schema-type'),
+      ).toMatchInlineSnapshot('[2, {"allow": ["looseObject", "strictObject"]}]');
+    });
+
     it('supports array form with a subset of types', async () => {
       const configResult = await computeEslintConfig({
         zod: {allowedObjectSchemaTypes: ['object']},

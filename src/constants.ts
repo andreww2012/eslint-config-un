@@ -281,6 +281,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'nx',
   'zod',
   'zod-openapi',
+  'valibot',
   'unocss',
   'unhead',
   '@formatjs/icu-messageformat-parser',

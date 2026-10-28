@@ -19,7 +19,14 @@ import type {
 } from '../eslint/eslint-types';
 import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from '../plugins.gen';
-import {arrayify, objectEntriesUnsafe, pick} from '../utils';
+import {
+  type ArrayOrBooleanRecord,
+  arrayUnique,
+  arrayify,
+  isNonEmptyArray,
+  objectEntriesUnsafe,
+  pick,
+} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 
@@ -342,3 +349,23 @@ export const withAllowDefaultProject = (
         },
       }
     : parserOptions;
+
+/**
+ * Picks the allowed values out of all the possible ones: an array lists them, and an object
+ * disallows the ones set to a falsy value.
+ * `undefined` if nothing is restricted, which includes disallowing every value
+ */
+export const resolveAllowedValues = <T extends string>(
+  allowedValuesRaw: ArrayOrBooleanRecord<T> | undefined,
+  allValues: readonly T[],
+) => {
+  const allowedValues = Array.isArray(allowedValuesRaw)
+    ? arrayUnique(allowedValuesRaw)
+    : allValues.filter((value) =>
+        allowedValuesRaw && Object.hasOwn(allowedValuesRaw, value) ? allowedValuesRaw[value] : true,
+      );
+
+  return isNonEmptyArray(allowedValues) && allowedValues.length < allValues.length
+    ? allowedValues
+    : undefined;
+};

@@ -577,6 +577,16 @@ export const pluginsLoaders = {
   'unused-imports': generateModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
     interopDefault(import('eslint-plugin-unused-imports')),
   ),
+  valibot: generateModuleLoader(
+    'valibot',
+    'eslint-plugin-valibot',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('eslint-plugin-valibot'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   vitest: generateInferredModuleLoader('vitest', '@vitest/eslint-plugin', () =>
     interopDefault(import('@vitest/eslint-plugin')),
   ),
