@@ -175,6 +175,7 @@
   "devDependencies": {
     "@11ty/gray-matter": "3.0.0",
     "@2captcha/captcha-solver": "1.4.0",
+    "@andreww2012/commitlint-config": "0.0.1",
     "@andreww2012/npm-check-updates-config": "0.1.1",
     "@angular-eslint/eslint-plugin": "22.6.0",
     "@angular-eslint/eslint-plugin-template": "22.6.0",
@@ -187,8 +188,6 @@
     "@changesets/read": "1.0.1",
     "@changesets/write": "1.0.1",
     "@commitlint/cli": "21.2.4",
-    "@commitlint/config-conventional": "21.2.4",
-    "@commitlint/types": "21.2.3",
     "@cspell/eslint-plugin": "10.4.0",
     "@darraghor/eslint-plugin-nestjs-typed": "7.5.8",
     "@docusaurus/eslint-plugin": "3.10.2",
