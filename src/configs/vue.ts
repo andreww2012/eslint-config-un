@@ -220,12 +220,14 @@ interface ScopedCssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue-scoped-css'> {
   /**
-   * Will be merged with the default value.
-   * `true` does not restrict the style type.
+   * Specify which style types will be allowed.
+   * - If object is used, it will be merged with `{plain: true, scoped: true}`.
+   * - Disallowing all types will be ignored.
+   * - `true` does not restrict the style type.
    *
    * Affected rule:
    * - [`vue-scoped-css/enforce-style-type`](https://future-architect.github.io/eslint-plugin-vue-scoped-css/rules/enforce-style-type.html)
-   * @default {plain: true, scoped: true}
+   * @default true
    */
   allowedStyleType?:
     | true
@@ -1562,7 +1564,11 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .enableConfigTesterForPlugin('vue-i18n')
     .addOverrides();
 
-  const optionsScopedCssResolved = assignDefaults(configScopedCss, {});
+  const {allowedStyleType} = assignDefaults(configScopedCss, {});
+  const allowedStyleTypes =
+    typeof allowedStyleType === 'object'
+      ? getKeysOfTruthyValues({plain: true, scoped: true, ...allowedStyleType}, 'nonEmptyArray')
+      : undefined;
 
   const configBuilderScopedCss = context.createConfigBuilder(configScopedCss, 'vue-scoped-css');
 
@@ -1581,20 +1587,8 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     ])
     .addRule(
       'enforce-style-type',
-      typeof optionsScopedCssResolved.allowedStyleType === 'object' ? ERROR : OFF,
-      [
-        {
-          allows: getKeysOfTruthyValues(
-            {
-              ...(typeof optionsScopedCssResolved.allowedStyleType === 'object' &&
-                optionsScopedCssResolved.allowedStyleType),
-              plain: true,
-              scoped: true,
-            },
-            'nonEmptyArray',
-          ),
-        },
-      ],
+      allowedStyleTypes ? ERROR : OFF,
+      allowedStyleTypes ? [{allows: allowedStyleTypes}] : [],
     ) /** @since 1.2.0 */ // 3️⃣2️⃣
     .addRule('no-deprecated-deep-combinator', ERROR) /** @since 1.0.0 */ // 3️⃣
     .addRule('no-deprecated-v-enter-v-leave-class', isVue2 ? OFF : ERROR) /** @since 1.1.0 */

@@ -131,6 +131,26 @@ describe('vue: sub config `scopedCss`', () => {
         ).toMatchInlineSnapshot('[2, {"allows": ["plain", "scoped"]}]');
       });
 
+      it('enables `vue-scoped-css/enforce-style-type` rule without the types set to `false` via object', async () => {
+        const configResult = await computeEslintConfig({
+          vue: {configScopedCss: {allowedStyleType: {plain: false}}},
+        });
+
+        expect(
+          configResult.getRuleEntry('vue/scoped-css', 'vue-scoped-css/enforce-style-type'),
+        ).toMatchInlineSnapshot('[2, {"allows": ["scoped"]}]');
+      });
+
+      it('disables `vue-scoped-css/enforce-style-type` rule when all types are disallowed', async () => {
+        const configResult = await computeEslintConfig({
+          vue: {configScopedCss: {allowedStyleType: {plain: false, scoped: false}}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity('vue/scoped-css', 'vue-scoped-css/enforce-style-type'),
+        ).toBe(0);
+      });
+
       it('disables `vue-scoped-css/enforce-style-type` rule when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           vue: {configScopedCss: {allowedStyleType: true}},
