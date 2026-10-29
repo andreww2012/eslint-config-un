@@ -1248,6 +1248,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .disableAnyRule('import', 'first') // May be wrong if multiple <script> blocks are present
     .disableAnyRule('import', 'no-default-export')
     .disableAnyRule('', 'no-useless-assignment') // False positives in script setup
+    .disableAnyRule('node', 'no-top-level-await') // False positives in script setup, which is compiled into a function
     .enableConfigTesterForPlugin('vue')
     .addOverrides();
 

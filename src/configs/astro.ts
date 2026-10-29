@@ -137,6 +137,7 @@ export default defineUnConfig<AstroEslintConfigOptions, readonly [], AstroConfig
     .addRule('sort-attributes', ERROR) /** @since 1.3.0 */
     .markCategory('Extension Rules')
     .addRule('semi', OFF) /** @since 0.19.0 */
+    .disableAnyRule('node', 'no-top-level-await') // False positives in the frontmatter, which is compiled into a function
     .enableConfigTesterForPlugin('astro', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),

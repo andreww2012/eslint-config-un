@@ -2,6 +2,7 @@ import {GLOB_VUE} from '../../../src/constants';
 
 const FIXTURES = {
   paragraphEndingWithWhitespace: 'paragraph-ending-with-whitespace.vue',
+  scriptSetupWithTopLevelAwait: 'published-package/script-setup-with-top-level-await.vue',
   stringLiteralInTemplateMustache: 'string-literal-in-template-mustache.vue',
   templateWithUnneededDisableComment: 'template-with-unneeded-disable-comment.vue',
 } as const;
@@ -122,6 +123,22 @@ describe('basic tests', () => {
 });
 
 describe('rules', () => {
+  it('does not report top-level `await` in `<script setup>` with `node/no-top-level-await` rule', async () => {
+    const results = await testEslintConfig(
+      {vue: true, node: true},
+      FIXTURES.scriptSetupWithTopLevelAwait,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.scriptSetupWithTopLevelAwait,
+        'node/no-top-level-await',
+      ),
+    ).toBeUndefined();
+  });
+
   it('correctly sets severities by default', async () => {
     const configResult = await computeEslintConfig('vue');
 

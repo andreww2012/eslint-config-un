@@ -4,6 +4,7 @@ const FIXTURES = {
   astroCodeBlockWithConflictingSetDirectivesMd:
     'astro-code-block-with-conflicting-set-directives.md',
   divWithSetHtml: 'div-with-set-html.astro',
+  frontmatterWithTopLevelAwait: 'published-package/frontmatter-with-top-level-await.astro',
 } as const;
 
 beforeEach(() => {
@@ -101,6 +102,22 @@ describe('rules', async () => {
       'astro/no-unused-css-selector': 1,
       'astro/no-set-text-directive': 0,
     });
+  });
+
+  it('does not report top-level `await` in the frontmatter with `node/no-top-level-await` rule', async () => {
+    const results = await testEslintConfig(
+      {astro: true, node: true},
+      FIXTURES.frontmatterWithTopLevelAwait,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.frontmatterWithTopLevelAwait,
+        'node/no-top-level-await',
+      ),
+    ).toBeUndefined();
   });
 
   it('`astro/no-set-html-directive` rule fires on a file using `set:html`', async () => {
