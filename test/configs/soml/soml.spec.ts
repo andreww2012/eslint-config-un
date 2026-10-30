@@ -4,6 +4,7 @@ const FIXTURES = {
   quotedKey: 'quoted-key.soml',
   placeholderValue: 'placeholder-value.soml',
   codeBlockWithQuotedKeyAndPlaceholderMd: 'soml-code-block-with-quoted-key-and-placeholder.md',
+  mixedKeysAndStringValues: 'mixed-keys-and-string-values.soml',
 } as const;
 
 beforeEach(() => {
@@ -106,6 +107,100 @@ describe('rules', () => {
     expect(configResult.getRuleSeverities('soml')).toMatchObject({
       'soml/prefer-bare-keys': 2,
       'soml/sort-keys': 0,
+    });
+  });
+
+  describe('mixed keys and string values', async () => {
+    const results = await testEslintConfig(
+      'soml',
+      FIXTURES.mixedKeysAndStringValues,
+      import.meta.dirname,
+    );
+
+    it('`soml/no-dotted-key-collisions` reports a dotted key next to its object', () => {
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedKeysAndStringValues,
+        'soml/no-dotted-key-collisions',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"\`'server.port'\` is a key of its own, not \`port\` in the object \`server\`, because SOML does not split keys at \`.\`. Move it into \`server\`."`,
+      );
+    });
+
+    it('`soml/no-escapes-in-literal-strings` reports an escape in a literal string', () => {
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedKeysAndStringValues,
+        'soml/no-escapes-in-literal-strings',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"A literal string, \`'…'\`, has no escapes, so \`\\n\` is a backslash and \`n\`. Use a \`"…"\` string for escapes."`,
+      );
+    });
+
+    it('`soml/no-quoted-values-in-arrays` reports a quoted number in an integer array', () => {
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedKeysAndStringValues,
+        'soml/no-quoted-values-in-arrays',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"\`'443'\` is a string, but this array holds ints."`,
+      );
+    });
+
+    it('`soml/no-surrounding-whitespace-in-keys` reports whitespace around a key', () => {
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedKeysAndStringValues,
+        'soml/no-surrounding-whitespace-in-keys',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"The whitespace at the start or end of \`' name '\` is part of the key, so a program that reads \`name\` does not find it."`,
+      );
+    });
+
+    it('`soml/prefer-block-strings` reports a string spanning three lines', () => {
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedKeysAndStringValues,
+        'soml/prefer-block-strings',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"A string of three lines or more is easier to read as a block string."',
+      );
+    });
+
+    it('`soml/prefer-block-strings` is disabled by `noStylisticRules` while problem rules remain enabled', async () => {
+      const resultsWithoutStylisticRules = await testEslintConfig(
+        {soml: true, noStylisticRules: true},
+        FIXTURES.mixedKeysAndStringValues,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          resultsWithoutStylisticRules,
+          FIXTURES.mixedKeysAndStringValues,
+          'soml/prefer-block-strings',
+        ),
+      ).toBeUndefined();
+      expect(
+        resultsWithoutStylisticRules.flatMap((result) =>
+          result.messages.map((message) => message.ruleId),
+        ),
+      ).toIncludeAllMembers([
+        'soml/no-dotted-key-collisions',
+        'soml/no-escapes-in-literal-strings',
+        'soml/no-quoted-values-in-arrays',
+        'soml/no-surrounding-whitespace-in-keys',
+      ]);
     });
   });
 

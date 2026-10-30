@@ -843,8 +843,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.44)(eslint@10.13.0)
       eslint-soml:
-        specifier: 0.0.4
-        version: 0.0.4(eslint@10.13.0)
+        specifier: 0.0.5
+        version: 0.0.5(eslint@10.13.0)
       eslint-typegen:
         specifier: 2.3.1
         version: 2.3.1(patch_hash=0d6db82fbea0b90883af8f9544b025291f38bceaa0439ec98af0a91c58c81f41)(eslint@10.13.0)
@@ -8535,8 +8535,8 @@ packages:
     resolution: {integrity: sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  eslint-soml@0.0.4:
-    resolution: {integrity: sha512-RHjmw2vCsSZCQOE/XCWLZmE5+bZGUt8zi033PNLOARDLpJeXkTPebCJR5uLgQkPugtOddMUABnnMvpMJ/gVTSQ==}
+  eslint-soml@0.0.5:
+    resolution: {integrity: sha512-RobbFfGJJVRbvRqgvteP21/BTAfoTu9kTGoqcEeycG/rTs/V6a34MpYrdZiHnXCK7cJN1jMxuhd0sTwuBdbPzg==}
     engines: {node: ^22.13.0 || >=24}
     peerDependencies:
       eslint: '>=10.4'
@@ -11773,8 +11773,8 @@ packages:
     resolution: {integrity: sha512-e0VyvkVTwVYViNovRkZ9aodhxVlyoMn7eJhVUPxZ+eK9P/7CBkxvvsBOHqFPEH416726W8tLXXXjKwqgTErrCQ==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
-  soml-lang@0.0.5:
-    resolution: {integrity: sha512-PcHLYLw4JQW5xjgWUxZh/rvm3d4zC5qyswwpsbyJxL1fPE+ZihnlqVCQywb7tHzNLZSpei2N2KjKABh1iWvEGQ==}
+  soml-lang@0.0.7:
+    resolution: {integrity: sha512-LBxdU/P94yamN+X0ffs6Xnfv4CAb0KZx2qIPz8BKAB2GZR8fNwM+FHVaW8h6evu4v4A0P0unMZDAh5ifm7yGzQ==}
     engines: {node: '>=22'}
 
   sort-object-keys@2.1.0:
@@ -21490,12 +21490,12 @@ snapshots:
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
-  eslint-soml@0.0.4(eslint@10.13.0):
+  eslint-soml@0.0.5(eslint@10.13.0):
     dependencies:
       '@eslint/core': 1.2.1
       '@eslint/plugin-kit': 0.7.3
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
-      soml-lang: 0.0.5
+      soml-lang: 0.0.7
 
   eslint-type-tracer@0.4.1(eslint@10.13.0):
     dependencies:
@@ -25645,7 +25645,7 @@ snapshots:
       ip-address: 10.7.5
       smart-buffer: 4.2.0
 
-  soml-lang@0.0.5: {}
+  soml-lang@0.0.7: {}
 
   sort-object-keys@2.1.0: {}
 

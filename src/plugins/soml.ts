@@ -20,6 +20,7 @@ export default definePluginMetadata('soml', {
     'no-zero-duration-parts': {stylistic: true},
     'numeric-separators-style': {stylistic: true},
     'prefer-bare-keys': {stylistic: true},
+    'prefer-block-strings': {stylistic: true},
     'prefer-literal-strings': {stylistic: true},
     'prefer-utc-instants': {stylistic: true},
     'sort-keys': {stylistic: true},
