@@ -160,7 +160,7 @@
     "eslint-scope": "catalog:html-scripts",
     "eslint-visitor-keys": "catalog:html-scripts",
     "espree": "catalog:html-scripts",
-    "gitignore-reader-x": "0.0.1",
+    "gitignore-reader-x": "0.1.0",
     "globals": "17.13.0",
     "htmlparser2": "catalog:html-scripts",
     "is-in-editor": "0.4.0",

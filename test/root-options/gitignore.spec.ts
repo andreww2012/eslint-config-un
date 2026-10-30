@@ -158,11 +158,11 @@ describe('option: `gitignore`', () => {
       ).resolves.toBeNull();
     });
 
-    it('is respected when `sources.excludesFile` is set to `true`', async () => {
+    it('is respected when `sources.globalIgnoreFile` is set to `true`', async () => {
       await expect(
         resolveGitignore({
           ...(await createRepositoryWithGlobalIgnoreFile()),
-          sources: {excludesFile: true},
+          sources: {globalIgnoreFile: true},
         }),
       ).resolves.toHaveProperty('ignores', ['**/*.global']);
     });

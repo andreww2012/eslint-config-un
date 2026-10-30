@@ -728,7 +728,7 @@ export interface EslintConfigUnOptions<
    * subdirectories and its parents up to the repository root, `.git/info/exclude`, submodules and
    * nested repositories.
    * The only exception is the global ignore file (`core.excludesFile`), since it differs between
-   * machines: set `sources.excludesFile` to `true` to read it.
+   * machines: set `sources.globalIgnoreFile` to `true` to read it.
    *
    * Passed options are handed to [`gitignore-reader-x`](https://npmx.dev/gitignore-reader-x)
    * @default true <=> at least one ignore pattern could be derived

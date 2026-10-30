@@ -20,13 +20,7 @@ export const resolveGitignore = async (
 
   try {
     const {readGitignore} = await import('gitignore-reader-x');
-    const ignores = (
-      await readGitignore({
-        ...options,
-        // The global ignore file differs between machines and may cover tracked files
-        sources: {excludesFile: false, ...options?.sources},
-      })
-    ).toEslintIgnores();
+    const ignores = (await readGitignore(options)).toEslintIgnores();
     return ignores.length > 0 ? {ignores, cacheKey: sha256(JSON.stringify(ignores))} : null;
   } catch (error) {
     const errorMessage = getErrorMessage(error);

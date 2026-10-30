@@ -371,8 +371,8 @@ importers:
         specifier: catalog:html-scripts
         version: 11.2.0
       gitignore-reader-x:
-        specifier: 0.0.1
-        version: 0.0.1
+        specifier: 0.1.0
+        version: 0.1.0
       globals:
         specifier: 17.13.0
         version: 17.13.0
@@ -8963,9 +8963,9 @@ packages:
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
 
-  gitignore-reader-x@0.0.1:
-    resolution: {integrity: sha512-FDVlVRoFMfjUIRJXzJWzKzHUVwND5Eb+2/S6is65ekjzZYii8kDOhCr8jhrd86i8MCVxJh2F5KCtI0hRDvhXUg==}
-    engines: {node: ^22.23.1 || ^24.18.0 || >=26.4.0}
+  gitignore-reader-x@0.1.0:
+    resolution: {integrity: sha512-g7iTBNomiFHv1Nv/aqwFfvnN6TPTUnm3hdJ++mDLfHVFwavxkrXJLAAhtMlmfD7QWUj631m1/pI4s1PxhZ+R0Q==}
+    engines: {node: '>=22'}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -21928,7 +21928,7 @@ snapshots:
 
   github-slugger@2.0.0: {}
 
-  gitignore-reader-x@0.0.1:
+  gitignore-reader-x@0.1.0:
     dependencies:
       quansync: 1.0.0
 
