@@ -128,7 +128,7 @@
     "enhanced-resolve": "5.26.0",
     "eslint-cssicorn": "0.3.0",
     "eslint-import-resolver-typescript": "4.4.5",
-    "eslint-mdx": "3.8.2",
+    "eslint-mdx": "3.8.3",
     "eslint-merge-processors": "2.0.0",
     "eslint-no-restricted": "0.1.2",
     "eslint-parser-plain": "0.1.1",
