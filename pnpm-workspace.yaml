@@ -13,7 +13,22 @@ lockfile:
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: []
+minimumReleaseAgeExclude: # []
+  - '@nx/devkit@24.0.3'
+  - '@nx/eslint-plugin@24.0.3'
+  - '@nx/js@24.0.3'
+  - '@nx/nx-darwin-arm64@24.0.3'
+  - '@nx/nx-darwin-x64@24.0.3'
+  - '@nx/nx-freebsd-x64@24.0.3'
+  - '@nx/nx-linux-arm-gnueabihf@24.0.3'
+  - '@nx/nx-linux-arm64-gnu@24.0.3'
+  - '@nx/nx-linux-arm64-musl@24.0.3'
+  - '@nx/nx-linux-x64-gnu@24.0.3'
+  - '@nx/nx-linux-x64-musl@24.0.3'
+  - '@nx/nx-win32-arm64-msvc@24.0.3'
+  - '@nx/nx-win32-x64-msvc@24.0.3'
+  - '@nx/workspace@24.0.3'
+  - nx@24.0.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
