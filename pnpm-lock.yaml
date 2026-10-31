@@ -810,8 +810,8 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.72.1)(eslint@10.13.0)
       eslint-plugin-valibot:
-        specifier: 1.4.2
-        version: 1.4.2(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)(valibot@1.5.0)
+        specifier: 1.4.3
+        version: 1.4.3(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)(valibot@1.5.0)
       eslint-plugin-vue:
         specifier: 10.12.0
         version: 10.12.0(@stylistic/eslint-plugin@5.10.0)(@typescript-eslint/parser@8.72.1)(eslint@10.13.0)(vue-eslint-parser@10.4.1)
@@ -8404,8 +8404,8 @@ packages:
       '@typescript-eslint/eslint-plugin':
         optional: true
 
-  eslint-plugin-valibot@1.4.2:
-    resolution: {integrity: sha512-McpWibDOJi/uXZdknQRnGIef9Jt5V7vr7FAiB8srKT9oQsP5vi+zs3w4MZBBuJ12jhiJdCH42ThrNVmJCa5tXQ==}
+  eslint-plugin-valibot@1.4.3:
+    resolution: {integrity: sha512-mzPPvBdM6oncmtwS1gTlpKZxFOkJT6JU6AqQgmMvokim3TAaJeKu9kLgl5MxB4YnliZv5xbsG0WMRMm3L6GVeQ==}
     engines: {node: ^22.13.0 || >=24.0.0}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -21369,7 +21369,7 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.72.1(@typescript-eslint/parser@8.72.1)(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
 
-  eslint-plugin-valibot@1.4.2(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)(valibot@1.5.0):
+  eslint-plugin-valibot@1.4.3(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)(valibot@1.5.0):
     dependencies:
       '@typescript-eslint/utils': 8.72.1(@typescript/typescript6@6.0.2)(eslint@10.13.0)(supports-color@7.2.0)
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
