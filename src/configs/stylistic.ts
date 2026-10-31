@@ -58,7 +58,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
         /* v8 ignore start */
         {},
       /* v8 ignore stop */
-      (_, key) => String(key).slice('@stylistic/'.length),
+      (_, key) => key.slice('@stylistic/'.length),
     );
   }
 

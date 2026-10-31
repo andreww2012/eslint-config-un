@@ -107,8 +107,8 @@ describe('rules', async () => {
             boundaries: {
               settings: {
                 elements: [
-                  {type: 'component', pattern: 'components/*', mode: 'file'},
-                  {type: 'page', pattern: 'pages/*', mode: 'file'},
+                  {type: 'component', pattern: 'components'},
+                  {type: 'page', pattern: 'pages'},
                 ],
                 // eslint-disable-next-line node/no-path-concat -- doesn't matter in tests
                 rootPath: `${import.meta.dirname}/fixtures`,
