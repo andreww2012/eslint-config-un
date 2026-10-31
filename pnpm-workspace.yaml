@@ -29,6 +29,10 @@ minimumReleaseAgeExclude: # []
   - '@nx/nx-win32-x64-msvc@24.0.3'
   - '@nx/workspace@24.0.3'
   - nx@24.0.3
+  - '@effect/platform-node-shared@4.1.1'
+  - '@effect/platform-node@4.1.1'
+  - effect@4.1.1
+  - release-it@21.1.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
