@@ -16,6 +16,7 @@ minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list 
 minimumReleaseAgeExclude: # []
   - globals@17.14.0
   - eslint-plugin-mobx@0.2.1
+  - eslint-plugin-regexp@3.3.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
