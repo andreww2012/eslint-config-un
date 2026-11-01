@@ -325,7 +325,7 @@ export interface VueEslintConfigOptions<
    *   will be turned off);
    * - [`nuxt/no-page-meta-runtime-values`](https://github.com/nuxt/eslint/blob/89618070025b4373e90b227eb478b33a13b34c8f/packages/eslint-plugin/src/rules/no-page-meta-runtime-values/no-page-meta-runtime-values.ts#L66)
    *   and
-   *   [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
+   *   [`nuxt/prefer-import-meta`](https://nuxt.com/modules/eslint/plugin#nuxtprefer-import-meta)
    *   will be applied to the specified `files` and `ignores`, defaulting to all files inside
    *   `vueOrNuxtProjectDir` directory and the app directories of the layers;
    * - Another sub-config, `nuxtConfig`, will control whether
@@ -354,7 +354,7 @@ export interface VueEslintConfigOptions<
    * the app directories of the layers
    *
    * 🧩 Main plugin: [`@nuxt/eslint-plugin`](https://npmx.dev/@nuxt/eslint-plugin)
-   * ([docs](https://eslint.nuxt.com/packages/plugin))
+   * ([docs](https://nuxt.com/modules/eslint/plugin))
    * @default true <=> `nuxt` package is installed
    */
   configNuxt?: boolean | NuxtSubConfigOptions<ExtraPlugins>;
