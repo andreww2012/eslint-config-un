@@ -272,7 +272,7 @@ const isElementWriteOrCall = (
   }
 };
 
-const getStatementSiblings = (parent: Eslint.Rule.Node | null): readonly ESTree.Node[] => {
+const getStatementSiblings = (parent: Eslint.Rule.Node | null): readonly ESTree.BaseNode[] => {
   switch (parent?.type) {
     case 'BlockStatement':
     case 'Program':
@@ -370,7 +370,7 @@ const rule: Eslint.Rule.RuleModule = {
       return (
         previous != null &&
         EXPRESSION_ENDING_STATEMENT_TYPES.has(previous.type) &&
-        sourceCode.getLastToken(previous)?.value !== ';'
+        sourceCode.getTokenBefore(node)?.value !== ';'
       );
     };
 

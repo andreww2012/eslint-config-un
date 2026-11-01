@@ -18,6 +18,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-mobx@0.2.1
   - eslint-plugin-regexp@3.3.3
   - '@tanstack/eslint-plugin-query@5.105.1'
+  - eslint-mdx@3.9.1
+  - eslint-plugin-mdx@3.9.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

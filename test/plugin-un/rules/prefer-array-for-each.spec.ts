@@ -1,6 +1,7 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
 import path from 'node:path';
 import {RuleTester} from 'eslint';
+import {parser as mdxParser} from 'eslint-mdx';
 import {parser as typescriptParser} from 'typescript-eslint';
 import {preferArrayForEach} from '../../../src/plugin-un/rules/prefer-array-for-each';
 
@@ -112,6 +113,18 @@ ruleTester.run(RULE_NAME, preferArrayForEach, {
     ),
     withFix('foo()\nfor (const element of [1]) {}', 'foo()\n;[1].forEach((element) => {});'),
     withFix('foo();\nfor (const element of [1]) {}', 'foo();\n[1].forEach((element) => {});'),
+    withFix(
+      'foo() // comment\nfor (const element of [1]) {}',
+      'foo() // comment\n;[1].forEach((element) => {});',
+    ),
+    withFix(
+      'switch (value) { case 1: foo()\nfor (const element of [1]) {} }',
+      'switch (value) { case 1: foo()\n;[1].forEach((element) => {}); }',
+    ),
+    withFix(
+      'class Example { static { foo()\nfor (const element of [1]) {} } }',
+      'class Example { static { foo()\n;[1].forEach((element) => {}); } }',
+    ),
     withFix(
       'if (foo) {}\nfor (const element of [1]) {}',
       'if (foo) {}\n[1].forEach((element) => {});',
@@ -279,6 +292,21 @@ ruleTester.run(RULE_NAME, preferArrayForEach, {
       'for (let index = 0; index < array.length; index++) {}',
       'array.forEach((element) => {});',
     ),
+  ],
+});
+
+const mdxRuleTester = new RuleTester({languageOptions: {parser: mdxParser}});
+
+mdxRuleTester.run(`${RULE_NAME} (MDX)`, preferArrayForEach, {
+  valid: [],
+  invalid: [
+    {
+      ...withFix(
+        '# Heading\n\nexport const run = () => {\n  foo()\n  for (const element of [1]) {}\n}',
+        '# Heading\n\nexport const run = () => {\n  foo()\n  ;[1].forEach((element) => {});\n}',
+      ),
+      filename: 'file.mdx',
+    },
   ],
 });
 
