@@ -29,7 +29,7 @@ const setPluginRuleSchemas = <Plugin extends EslintPlugin>(plugin: Plugin): Plug
 
 // The `typescript-eslint` typings of a plugin fail `@eslint/core`'s, but describe the same object
 export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslint) =>
-  // eslint-disable-next-line un/no-type-assertion
+  // eslint-disable-next-line un/no-type-assertion -- intentional cast
   plugin as EslintPlugin;
 
 /* v8 ignore next - The preset always contains the requested plugin */

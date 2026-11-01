@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as jestExtendedMatchers from 'jest-extended';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {type MatchersObject, expect} from 'vitest';
 import {expectConfigState as expectConfigStateImpl} from './helpers/basic-config';
 import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
@@ -16,7 +14,7 @@ import {
 
 // The published matcher types describe the assertions they produce (`(...expected) => R`),
 // not their real `(received, ...expected)` implementation shape
-// eslint-disable-next-line un/no-type-assertion
+// eslint-disable-next-line un/no-type-assertion -- the published types describe assertions rather than matcher implementations
 expect.extend(jestExtendedMatchers as unknown as MatchersObject);
 
 // `jest-extended` only augments the global `jest` namespace, which Vitest no longer bridges into
@@ -95,7 +93,7 @@ const {
     installedPackages,
     setInstalledPackages(packages: Record<string, string>): void {
       Object.keys(installedPackages).forEach((key) => {
-        // eslint-disable-next-line ts/no-dynamic-delete
+        // eslint-disable-next-line ts/no-dynamic-delete -- clear the shared object while preserving references held by mocks
         delete installedPackages[key];
       });
       Object.assign(installedPackages, packages);
@@ -115,7 +113,7 @@ beforeEach(() => {
   setInstalledPackagesImpl({eslint: '10.8.1'});
 });
 
-/* eslint-disable vars-on-top */
+/* eslint-disable vars-on-top -- ambient globals are declarations rather than runtime variables */
 declare global {
   var computeEslintConfig: typeof computeEslintConfigImpl;
   var testEslintConfig: typeof testEslintConfigImpl;
@@ -127,7 +125,7 @@ declare global {
   var addInstalledPackages: typeof addInstalledPackagesImpl;
   var spyOnProcessOutput: typeof spyOnProcessOutputImpl;
 }
-/* eslint-enable vars-on-top */
+/* eslint-enable vars-on-top -- the ambient globals block ends here */
 
 globalThis.computeEslintConfig = computeEslintConfigImpl;
 globalThis.testEslintConfig = testEslintConfigImpl;

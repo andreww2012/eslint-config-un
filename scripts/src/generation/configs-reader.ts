@@ -338,7 +338,7 @@ export const discoverConfigs = async () => {
       // A `file://` URL rather than the path itself: Windows reads the `<disk_letter>:`
       // of an absolute path as a URL scheme and refuses to load it
       const manifest =
-        // eslint-disable-next-line no-unsanitized/method, un/no-type-assertion -- the path comes from the configs directory
+        // eslint-disable-next-line un/no-type-assertion -- the path comes from the configs directory
         ((await import(pathToFileURL(filePath).href)) as {default: AnyConfigManifest}).default;
 
       configs.push({
@@ -360,7 +360,7 @@ export const discoverConfigs = async () => {
           .getPropertiesOfType(checker.getDeclaredTypeOfSymbol(optionsSymbol))
           .filter(({name}) => SUB_CONFIG_PROPERTY_REGEXP.test(name))
           .map(({name}) => name.slice(6, 7).toLowerCase() + name.slice(7))
-          // eslint-disable-next-line unicorn/no-array-sort
+          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
           .sort(),
       });
     }),

@@ -34,7 +34,7 @@ Check new or changed links with lychee as [CI](./.github/workflows/check-links.y
 
 Reference rules by their "full name": `<default un plugin prefix>/<rule-name>`, i.e. `unicorn/prefer-dispose`, not just `prefer-dispose`.
 
-<!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
+<!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -- the heading introduces a list -->
 ## When you're asked to...
 
 - Add or modify config tests, follow [this skill](./.agents/skills/eslint-config-un-config-tests/SKILL.md).

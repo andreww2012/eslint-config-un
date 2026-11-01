@@ -95,25 +95,24 @@ expect(configResult.getRuleSeverities('<config name>')).toMatchObject({
 
 Then pick a "popular" rule and confirm it actually works: create a minimal fixture that triggers an error, lint it with `testEslintConfig`, use `findLintMessageFromLintResults` to locate the error, and assert with `expect(error?.message).toMatchInlineSnapshot()`.
 
-##### `option: \`files\``: check how provided files affect ESLint config(s) files
+##### ``option: `files` ``: check how provided files affect ESLint config(s) files
 
 Include an extra test for `files: []`, which prevents ESLint config(s) from being created (disables the Config without disabling Sub-configs).
 
-##### `option: \`ignores\``: same as `files`, but an empty array has no special meaning
+##### ``option: `ignores` ``: same as `files`, but an empty array has no special meaning
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
-##### (single test outside describe blocks) `respects \`overrides\` and \`overridesAny\` in \`<eslint config name(s)>\` eslint config(s)`
+##### (Single test outside describe blocks) ``respects `overrides` and `overridesAny` in `<eslint config name(s)>` eslint config(s)``
 
 ##### `options` block
 
 Test each custom option of the Config (excluding Sub-config-related options).
 Create a describe block per option.
-It should be named `option: \`<option name>\``.
+It should be named ``option: `<option name>` ``.
 
 Unless the value set is big or infinite, test **every possible value** (including the default) both positively and negatively.
 For example, for a boolean option you should test `true`, `false` and unset values.
 The test name for an unset value should end with `when option is not set`.
-The test name for primitive values should end with `when option is \`value\`\`.
+The test name for primitive values should end with ``when option is `value` ``.
 BUT: if the tested value is the default value, the test name should end with `by default` instead of `when option is <...>`.
 
 ---

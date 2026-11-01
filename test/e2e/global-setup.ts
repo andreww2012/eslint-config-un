@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-// eslint-disable-next-line import/no-extraneous-dependencies -- unlike `utilery`'s, runs Windows `.cmd` shims like `pnpm`
 import {exec} from 'tinyexec';
 import type {TestProject} from 'vitest/node';
 import packageJson from '../../package.json' with {type: 'json'};

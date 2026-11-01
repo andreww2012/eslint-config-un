@@ -169,7 +169,7 @@ interface FlatConfigMetadata {
 
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
-  // eslint-disable-next-line ts/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any -- the default must accept every plugin prefix without narrowing rule names
   DefaultPrefix extends PluginPrefix | null = any,
 > {
   private readonly pluginPrefix: DefaultPrefix;
@@ -566,7 +566,7 @@ export class ConfigEntryBuilder<
       ruleOptions,
     ) => {
       if (severity == null || isConfigDisabled) {
-        // eslint-disable-next-line ts/no-use-before-define
+        // eslint-disable-next-line ts/no-use-before-define -- the callback runs after the chain object is initialized
         return result;
       }
 
@@ -617,7 +617,7 @@ export class ConfigEntryBuilder<
         severity: eslintToUnRuleSeverity(severityResolved),
       });
 
-      // eslint-disable-next-line ts/no-use-before-define
+      // eslint-disable-next-line ts/no-use-before-define -- the callback runs after the chain object is initialized
       return result;
     };
 
@@ -721,7 +721,7 @@ export class ConfigEntryBuilder<
             }
 
             const addedRulesForPlugin = Object.entries(
-              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition
+              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- the test mode initializes these records before the callback runs
               addedRules![pluginPrefixToTest]! || {},
             );
             const addedRulesForPluginNamesSet = new Set(
@@ -777,7 +777,7 @@ export class ConfigEntryBuilder<
               );
             }
 
-            // eslint-disable-next-line ts/no-non-null-assertion
+            // eslint-disable-next-line ts/no-non-null-assertion -- the test mode initializes this record before the callback runs
             const duplicateRulesForPlugin = duplicateRules![pluginPrefixToTest] || new Set();
             if (duplicateRulesForPlugin.size > 0) {
               errorMessages.push(

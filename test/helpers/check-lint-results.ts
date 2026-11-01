@@ -1,5 +1,4 @@
 import type {ESLint, Linter} from 'eslint';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import pathe from 'pathe';
 import {substringAfterLast} from '../../src/utils';
 

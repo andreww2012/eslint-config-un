@@ -141,4 +141,4 @@ type ModuleLoaderFactory<EraseModuleType extends boolean> = <
 export const generateModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
 
 export const generateInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;
-/* eslint-enable un/no-type-assertion */
+/* eslint-enable un/no-type-assertion -- only the module type helpers above need assertions */

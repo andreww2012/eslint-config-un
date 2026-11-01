@@ -2,7 +2,7 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('nextjs', {
   configs: [
-    'nextJs', // eslint-disable-line case-police/string-check
+    'nextJs', // eslint-disable-line case-police/string-check -- preserve the public option name
   ],
   docsUrl: 'https://nextjs.org/docs/app/api-reference/config/eslint',
   ruleDocsUrl: (ruleName) => `https://nextjs.org/docs/messages/${ruleName}`,

@@ -1034,7 +1034,7 @@ export const processUnOrFlatConfig = (
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
-      // eslint-disable-next-line unicorn/consistent-boolean-name
+      // eslint-disable-next-line unicorn/consistent-boolean-name -- fine for ergonomics
       const isRuleEntryRawObject =
         ruleEntryRaw &&
         typeof ruleEntryRaw === 'object' &&
@@ -1097,7 +1097,7 @@ export const processUnOrFlatConfig = (
         }
       }
 
-      // eslint-disable-next-line unicorn/consistent-boolean-name
+      // eslint-disable-next-line unicorn/consistent-boolean-name -- fine for ergonomics
       const shouldCreateDistinctConfigForRule =
         isRuleEntryRawObject &&
         (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length || 0) > 0 &&

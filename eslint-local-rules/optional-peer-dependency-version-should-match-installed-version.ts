@@ -2,7 +2,6 @@ import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {AST as JsonAST} from 'jsonc-eslint-parser';
 import {findMinimumForRange as minSemverVersion, isEqual as semverVersionsEqual} from 'verkit';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import type {JsRuleDefinitionWithNodes} from '../src/eslint/eslint-types';
 import {jsonParseSafe} from '../src/utils';

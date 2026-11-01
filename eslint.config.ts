@@ -59,6 +59,9 @@ export default eslintConfig({
       },
     },
     erasableSyntaxOnly: true,
+    eslintComments: {
+      requireDescriptions: true,
+    },
     eslintPlugin: {
       files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
     },
@@ -77,7 +80,12 @@ export default eslintConfig({
       ],
     },
     import: {
-      extraneousDependenciesCheck: {whitelist: [...ALWAYS_BUNDLED_DEPENDENCIES]},
+      extraneousDependenciesCheck: (defaultIgnorePatterns) => ({
+        whitelist: [...ALWAYS_BUNDLED_DEPENDENCIES],
+        checkDevDependencies: {
+          ignorePatterns: [...defaultIgnorePatterns, 'eslint-local-rules/**', 'test/**'],
+        },
+      }),
       configAllowDefaultExport: {
         files: ({filesDefault}) => [...filesDefault, 'src/configs/**/*.ts', 'src/plugins/*.ts'],
       },
@@ -115,6 +123,7 @@ export default eslintConfig({
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind', 'JSDoc'],
       casingEnforcementIgnorePatterns: ['/changes/i'] /* Added by changeset CLI to CHANGELOG.md */,
     },
+    noUnsanitized: false, // Only useful for frontend code
     nodeDependencies: {
       enforceAbsoluteVersion: {
         dependencies: 'always',
@@ -127,12 +136,7 @@ export default eslintConfig({
         files: ['src/configs/index.ts'],
       },
       configSortObjects: {
-        files: [
-          'src/configs/extra/no-prettier-incompatible-rules.ts',
-          'src/configs/extra/no-stylistic-rules.ts',
-          'src/loaders/*.ts',
-          'scripts/shared/packages-meta.ts',
-        ],
+        files: ['src/loaders/*.ts', 'scripts/shared/packages-meta.ts'],
         ignores: ['src/loaders/{index,shared}.ts'],
       },
     },

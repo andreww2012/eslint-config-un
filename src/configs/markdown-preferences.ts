@@ -23,11 +23,11 @@ const DEFAULT_IGNORE_PATTERNS = [
   String.raw`/\w+\.[a-z\d]+$/u`,
 
   // Common technical patterns
-  /* eslint-disable case-police/string-check */
+  /* eslint-disable case-police/string-check -- these patterns intentionally match different capitalization styles */
   String.raw`/\w+(?:API|Api)$/u`, // webAPI, restAPI, etc.
   String.raw`/\w+(?:SDK|Sdk)$/u`, // nodeSDK, etc.
   String.raw`/\w+(?:CLI|Cli)$/u`, // nodeCLI, etc.
-  /* eslint-enable case-police/string-check */
+  /* eslint-enable case-police/string-check -- only the technical suffix patterns allow mixed capitalization */
 ] as const;
 
 /**

@@ -29,11 +29,11 @@ export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nextjs'> {}
 
-// eslint-disable-next-line case-police/string-check
-export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {package: 'next'}})((
-  context,
-  optionsRaw,
-) => {
+export default defineUnConfig<NextJsEslintConfigOptions>(
+  // eslint-disable-next-line case-police/string-check -- can't touch this
+  'nextJs',
+  {enabledBy: {package: 'next'}},
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const pluginSettings = context.getPluginSettings('nextjs');

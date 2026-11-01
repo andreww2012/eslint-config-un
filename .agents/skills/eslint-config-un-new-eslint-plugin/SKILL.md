@@ -3,7 +3,7 @@ name: eslint-config-un-new-eslint-plugin
 description: Adding support for a new ESLint plugin for eslint-config-un
 ---
 
-<!-- eslint-disable markdown-preferences/heading-casing -->
+<!-- eslint-disable markdown-preferences/heading-casing -- rule is not ideal -->
 
 ## Intro
 

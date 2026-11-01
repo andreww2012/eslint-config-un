@@ -2,7 +2,7 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('nestjs', {
   configs: [
-    'nestJs', // eslint-disable-line case-police/string-check
+    'nestJs', // eslint-disable-line case-police/string-check -- preserve the public option name
   ],
   docsUrl: 'https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/README.md',
   ruleDocsUrl: (ruleName) =>

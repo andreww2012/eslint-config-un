@@ -177,14 +177,15 @@ async function generateRuleTypes() {
           exportTypeName,
           pluginName,
           plugin,
-          // eslint-disable-next-line unicorn/no-array-sort
-          ruleNamesSorted: Object.keys(plugin.rules || {}).sort(),
+          ruleNamesSorted: Object.keys(plugin.rules || {})
+            // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+            .sort(),
         };
       }),
     ),
   ]);
 
-  // eslint-disable-next-line ts/no-shadow
+  // eslint-disable-next-line ts/no-shadow -- fine
   const perPluginCode = `${perPluginCodeRaw.map((pluginCode) => pluginCode.code).join('\n\n')}
 
 export type RuleOptionsPerPlugin = {
@@ -200,7 +201,7 @@ ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCo
     })
     .filter(({fixableRuleNames}) => fixableRuleNames.length > 0);
 
-  // eslint-disable-next-line ts/no-shadow
+  // eslint-disable-next-line ts/no-shadow -- fine
   const fixableRulesOnlyCode = `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
 ${fixableRulesPerPluginEntries
   .map(
@@ -222,7 +223,7 @@ export type FixableRuleNames = {
 }[keyof typeof FIXABLE_RULES_PER_PLUGIN_RAW];
 `;
 
-  // eslint-disable-next-line ts/no-shadow
+  // eslint-disable-next-line ts/no-shadow -- fine
   const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
 ${perPluginCodeRaw
   .map(({pluginName, plugin}) => {
@@ -271,7 +272,7 @@ ${perPluginCodeRaw
       const errors: string[] = [];
       const rulesPerCategory = new Map<string, string[]>();
       const rulesSorted = Object.entries(plugin.rules || {})
-        // eslint-disable-next-line unicorn/no-array-sort
+        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
         .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB));
 
       await forEachAsync(
@@ -365,8 +366,10 @@ function getDiffAsPatch(a: string, b: string) {
 }
 
 async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: string) {
-  // eslint-disable-next-line unicorn/no-array-sort
-  const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDirectory())).sort().at(-1);
+  const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDirectory()))
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+    .sort()
+    .at(-1);
   let diffString = '';
   if (mostRecentRuleTypesFileName) {
     const mostRecentRuleTypes = await readFileSafe(

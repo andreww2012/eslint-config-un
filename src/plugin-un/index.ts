@@ -22,5 +22,5 @@ const eslintPluginUn: EslintPlugin = {
   },
 };
 
-// eslint-disable-next-line import/no-default-export
+// eslint-disable-next-line import/no-default-export -- ESLint plugins use a default export
 export default eslintPluginUn;

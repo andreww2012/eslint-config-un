@@ -45,7 +45,7 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
 
     const dataWritten = Object.fromEntries(
       Object.entries(data)
-        // eslint-disable-next-line unicorn/no-array-sort
+        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
         .sort(([nameA], [nameB]) => nameA.localeCompare(nameB)),
     );
 
@@ -96,7 +96,7 @@ export const readEslintPluginsDb = Effect.gen(function* () {
 
 export const updateEslintPluginsDb = (
   data: EslintPluginsDb,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
+  // eslint-disable-next-line unicorn/consistent-boolean-name -- fine
   doNotAppendCurrentDb = false,
 ) =>
   Effect.gen(function* () {

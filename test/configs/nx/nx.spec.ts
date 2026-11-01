@@ -2,13 +2,13 @@ import path from 'node:path';
 import pathe from 'pathe';
 import type {MockInstance} from 'vitest';
 
-/* eslint-disable vars-on-top */
+/* eslint-disable vars-on-top -- ambient globals are declarations rather than runtime variables */
 declare global {
   var projectGraph: Record<string, unknown> | undefined;
   var projectRootMappings: Map<string, string> | undefined;
   var projectFileMap: Record<string, unknown[]> | undefined;
 }
-/* eslint-enable vars-on-top */
+/* eslint-enable vars-on-top -- the ambient globals block ends here */
 
 const FIXTURES = {
   withUnusedDep: 'with-unused-dep/package.json',

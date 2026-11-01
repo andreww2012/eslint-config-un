@@ -94,7 +94,7 @@ export default eslintConfig({
 > We strongly recommend a TypeScript config file.
 > If you stay with JavaScript, add the [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file instead.
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -- intentional -->
 ## Configs and Sub-configs
 
 eslint-config-un is built around Configs and Sub-configs (both are called Configs in this section).
@@ -344,7 +344,7 @@ Configs mentioning `misc-enabled` in the second column are disabled by default a
 | ![GraphQL](./assets/logos-graphql.svg) `graphql/jsProcessor` | ✅                                          | ^                                                                                                                     | Since v1.0.0<br>Runs the GraphQL processor on JS/TS files                                                                  |
 | `civet`                                                      | ✅ (`@danielx/civet` is installed)          | [eslint-plugin-civet](https://npmx.dev/eslint-plugin-civet) (`civet`)                                                 | Since v1.0.0<br>Lints `.civet` files by compiling them to TypeScript/JavaScript first                                      |
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -- intentional -->
 ### JS/TS - miscellaneous
 
 | Un config name                 | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                           | Description/Notes                                                                                                                                                                                                                       |
@@ -781,7 +781,7 @@ To parse them with another parser, set it in `parserOptions.parser`: replacing `
 
 To skip scripts, for example ones with template syntax, put `<!-- eslint-disable-next-script -->` before one, or `<!-- eslint-disable -->` and `<!-- eslint-enable -->` around several.
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -- intentional -->
 ### Markdown/MDX
 
 When the `markdown`/`mdx` config is enabled (the default), the rules from the other configs are also applied to the code blocks (\```lang ... \```) inside Markdown files.
@@ -1460,7 +1460,7 @@ See [the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal
 Depending on your pnpm settings, installing eslint-config-un may print a banner or an error asking you to do something about the build script of the `unrs-resolver` package.
 That package is a transitive dependency of ours, and at the time of writing [its build script only installs `optionalDependencies` for old npm versions](https://github.com/unrs/unrs-resolver/issues/193), so under pnpm it can, and should, stay ignored.
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -- intentional -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
 
 Install the `globals` package as a dev dependency.
@@ -1503,7 +1503,7 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
 
 ## Contributors
 
-<!-- eslint-disable markdown-preferences/padding-line-between-blocks, markdown/require-alt-text -->
+<!-- eslint-disable markdown-preferences/padding-line-between-blocks, markdown/require-alt-text -- auto-generated -->
 <!-- cspell:disable -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -1542,7 +1542,7 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-<!-- eslint-enable markdown-preferences/padding-line-between-blocks, markdown/require-alt-text -->
+<!-- eslint-enable markdown-preferences/padding-line-between-blocks, markdown/require-alt-text -- auto-generated -->
 
 <!-- cspell:enable -->
 

@@ -38,7 +38,7 @@ const LockfileZod = z.object({
 });
 
 const git = (...arguments_: readonly string[]) =>
-  // eslint-disable-next-line sonar/no-os-command-from-path
+  // eslint-disable-next-line sonar/no-os-command-from-path -- safe
   execFileSync('git', arguments_, {
     cwd: ROOT_DIRECTORY,
     encoding: 'utf8',

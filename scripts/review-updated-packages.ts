@@ -162,7 +162,7 @@ const main = async () => {
   const result = await Promise.all(
     changedDependencies.map(async ([dependency, newVersion]) => {
       const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
-      // eslint-disable-next-line ts/no-non-null-assertion
+      // eslint-disable-next-line ts/no-non-null-assertion -- the dependency list contains only entries from the previous manifest
       const oldVersion = dependenciesBeforeChanges[dependency]!;
       const codeDiffResult = await exec('npm', [
         'diff',
@@ -201,7 +201,7 @@ const readUnreleasedChangesets = async () => {
         await fs.readFile(path.join(CHANGESETS_DIRECTORY_PATH, `${id}.md`), 'utf8'),
       );
       return ChangesetFrontmatterZod.validate(
-        data, // eslint-disable-line ts/no-unnecessary-condition
+        data, // eslint-disable-line ts/no-unnecessary-condition -- the validator can fail at runtime despite its return type
       )
         ? {id, summary: content.trim()}
         : null;
@@ -358,7 +358,7 @@ const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | unde
 };
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
-  // eslint-disable-next-line ts/no-non-null-assertion
+  // eslint-disable-next-line ts/no-non-null-assertion -- the loop bounds guarantee an entry exists
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
 
   if (i > 0) {
@@ -413,7 +413,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
               : ((isDiffHeader = true), styleText('magentaBright', line));
     const fileHeaderMatch = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
     if (fileHeaderMatch) {
-      // eslint-disable-next-line sonar/no-redundant-assignments
+      // eslint-disable-next-line sonar/no-redundant-assignments -- each file header must reset the diff state
       isDiffHeader = true;
       const extensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(fileHeaderMatch[1]);
       lastFileExtension = extensionMatch?.groups.extension;

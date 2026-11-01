@@ -14,13 +14,26 @@ import {
  */
 export interface EslintCommentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-comments'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-comments'> {
+  /**
+   * Requires descriptions in ESLint directive comments to explain why they are needed.
+   *
+   * Affected rule:
+   * - [`eslint-comments/require-description`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/require-description.html)
+   * @default false
+   */
+  requireDescriptions?: boolean;
+}
 
 export default defineUnConfig<EslintCommentsEslintConfigOptions>(
   'eslintComments',
   true,
 )((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {});
+  const optionsResolved = assignDefaults(optionsRaw, {
+    requireDescriptions: false,
+  });
+
+  const {requireDescriptions} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-comments');
 
@@ -46,7 +59,7 @@ export default defineUnConfig<EslintCommentsEslintConfigOptions>(
     .markCategory('Stylistic')
     .addRule('no-restricted-disable', OFF) /** @since 3.2.0 */
     .addRule('no-use', OFF) /** @since 3.2.0 */
-    .addRule('require-description', OFF) /** @since 3.2.0 */
+    .addRule('require-description', requireDescriptions ? ERROR : OFF) /** @since 3.2.0 */
     .enableConfigTesterForPlugin('eslint-comments')
     .addOverrides();
 });

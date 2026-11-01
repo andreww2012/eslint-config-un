@@ -12,7 +12,7 @@ export const eslintConfig = <
   // Casting is in place here merely to avoid a prohibitively expensive structural relate of the
   // two huge config types here (it would make the type checker instantiate the per-key
   // warn-stripping for every config)
-  // eslint-disable-next-line un/no-type-assertion
+  // eslint-disable-next-line un/no-type-assertion -- avoid an expensive structural comparison of the config types
   eslintConfigInternal(options as EslintConfigUnOptions<ExtraPlugins>);
 
 export type {RuleOptions} from './eslint-types.gen';

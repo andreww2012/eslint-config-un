@@ -47,7 +47,7 @@ export const readPluginMetadata = async () => {
     fileNames.map(async (fileName): Promise<DiscoveredPlugin> => {
       // Windows would otherwise read the drive letter of an absolute path as a URL scheme
       const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIRECTORY, fileName)).href;
-      // eslint-disable-next-line no-unsanitized/method, un/no-type-assertion -- the path comes from the plugins directory
+      // eslint-disable-next-line un/no-type-assertion -- the path comes from the plugins directory
       const module = (await import(moduleUrl)) as {
         default: Prettify<PluginMetadata & {prefix: PluginPrefix}>;
       };

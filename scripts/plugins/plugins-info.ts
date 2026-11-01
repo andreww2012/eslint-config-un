@@ -26,7 +26,7 @@ const throttleStats = Effect.gen(function* () {
     yield* Effect.sleep(Duration.millis(waitTimeMs));
   }
 
-  // eslint-disable-next-line require-atomic-updates
+  // eslint-disable-next-line require-atomic-updates -- the semaphore serializes access to this timestamp
   lastStatsFetchTimeMs = Date.now();
 });
 

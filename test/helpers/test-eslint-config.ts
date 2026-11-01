@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {ESLint} from 'eslint';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import pathe from 'pathe';
 import type {
   EslintConfigUnInternalOptions,
@@ -43,7 +42,7 @@ type UnOption = AcceptReadonlyFilesAndIgnores<OmitStrict<EslintConfigUnOptions, 
 
 // The generator never mutates `files` and `ignores`, so read-only arrays are fine at runtime
 const asEslintConfigUnOptions = (options: Prettify<UnOption & {configs: ConfigsOption}>) =>
-  // eslint-disable-next-line un/no-type-assertion
+  // eslint-disable-next-line un/no-type-assertion -- intentional cast
   options as EslintConfigUnOptions;
 
 export const computeEslintConfig = async (
@@ -237,7 +236,10 @@ export const testEslintConfig = async <
     ),
   );
 
-  // @ts-expect-error -- TS doesn't support conditional return types
-  // eslint-disable-next-line ts/no-non-null-assertion
-  return typeof fixturePaths === 'string' ? lintResults[0]! : lintResults;
+  return typeof fixturePaths === 'string'
+    ? // @ts-expect-error -- TS doesn't support conditional return types
+      // eslint-disable-next-line ts/no-non-null-assertion -- each requested fixture produces a lint result
+      lintResults[0]!
+    : // @ts-expect-error -- TS doesn't support conditional return types
+      lintResults;
 };

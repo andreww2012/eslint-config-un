@@ -97,14 +97,12 @@ export function findArrayInversions<T>(
 export function findArrayInversions<T>(
   array: readonly T[],
   compareFn: (a: T, b: T) => number,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  group: true,
+  shouldGroup: true,
 ): ReadonlyMap<T, readonly T[]>;
 export function findArrayInversions<T>(
   array: readonly T[],
   compareFn: (a: T, b: T) => number,
-  // eslint-disable-next-line unicorn/consistent-boolean-name
-  group?: boolean,
+  shouldGroup?: boolean,
 ): readonly (readonly [T, T])[] | ReadonlyMap<T, readonly T[]> {
   const result: (readonly [T, T])[] = [];
   const addedPairsCompoundIndexes = new Set<`${number}-${number}`>();
@@ -136,7 +134,7 @@ export function findArrayInversions<T>(
       return aIndex < bIndex ? comparatorResult : -comparatorResult;
     });
 
-  if (group) {
+  if (shouldGroup) {
     const resultMap = new Map<T, T[]>();
     result.forEach(([key, value]) => {
       mapGetOrInsert(resultMap, key, []).push(value);
@@ -157,7 +155,8 @@ export const sha256 = (input: string | Buffer) => {
   return hashInstance.digest('hex');
 };
 
-// eslint-disable-next-line ts/no-redundant-type-constituents
+// TODO should report?
+// eslint-disable-next-line ts/no-redundant-type-constituents -- false positive
 export const joinPaths = (...paths: readonly (string | Falsy)[]) =>
   path.posix.join(...arrayWithoutFalsy(paths));
 
@@ -186,7 +185,7 @@ export function getKeysOfTruthyValues<
   if (Array.isArray(objectOrArray)) {
     return mode === 'nonEmptyArray' && objectOrArray.length === 0
       ? undefined
-      : // eslint-disable-next-line un/no-typeof-like-comparisons
+      : // eslint-disable-next-line un/no-typeof-like-comparisons -- not the `typeof` comparison
         mode === 'object'
         ? objectFromKeys(objectOrArray, () => true)
         : objectOrArray;
@@ -197,9 +196,9 @@ export function getKeysOfTruthyValues<
     objectOrArray! || {},
   ).filter(([, value]) => value);
   if (mode === 'nonEmptyArray' && result.length === 0) {
-    // eslint-disable-next-line unicorn/no-useless-undefined
+    // eslint-disable-next-line unicorn/no-useless-undefined -- the nonempty-array overload uses undefined for an empty result
     return undefined;
   }
-  // eslint-disable-next-line un/no-typeof-like-comparisons
+  // eslint-disable-next-line un/no-typeof-like-comparisons -- not the `typeof` comparison
   return mode === 'object' ? Object.fromEntries(result) : result.map(([key]) => key);
 }

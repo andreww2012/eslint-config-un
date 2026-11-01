@@ -74,7 +74,7 @@ class RuntimeLayerTag extends Context.Service<
 const TASK_QUEUE_CONCURRENCY = 10;
 const CACHED_DATA_FRESH_FOR_MS = 604800000 satisfies Ms<'1w'>;
 
-// eslint-disable-next-line unicorn/consistent-boolean-name
+// eslint-disable-next-line unicorn/consistent-boolean-name -- fine
 const SHOULD_REFETCH_ERRORED_PLUGIN_INFO_AFTER_MINIMUM_MS = 86400000 satisfies Ms<'1d'>;
 
 const argv = cli({
@@ -262,7 +262,7 @@ const fetchPackageInfo = (packageName: string) =>
       });
 
       const dependencyPriority = isEslintPlugin ? 2 : 0;
-      // eslint-disable-next-line ts/no-use-before-define
+      // eslint-disable-next-line ts/no-use-before-define -- break circular calls
       yield* queueFetchPackageInfo(dependencyPackageName, dependencyPriority);
 
       if (!isEslintPlugin) {

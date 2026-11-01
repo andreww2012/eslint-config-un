@@ -88,8 +88,10 @@ describe('rules', async () => {
       'case-police/string-check',
     );
 
-    // eslint-disable-next-line case-police/string-check
-    expect(error?.message).toMatchInlineSnapshot(`"'Github' should be 'GitHub'."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      // eslint-disable-next-line case-police/string-check -- snapshot
+      `"'Github' should be 'GitHub'."`,
+    );
   });
 });
 

@@ -24,7 +24,7 @@ import type {MaybeFn} from '../utils';
 // #region 🟠 eslint-config-un specific types
 
 // TODO report false positive
-// eslint-disable-next-line unicorn/prefer-export-from
+// eslint-disable-next-line unicorn/prefer-export-from -- the imported types are also used locally
 export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 
 export type UnAllRuleNames = keyof UnRulesConfig;
@@ -221,7 +221,7 @@ export type JsRuleDefinitionWithNodes<
 }>;
 
 // TODO report false positive
-// eslint-disable-next-line unicorn/prefer-export-from
+// eslint-disable-next-line unicorn/prefer-export-from -- the imported types are also used locally
 export type {EslintPlugin, EslintSeverity};
 
 // #endregion

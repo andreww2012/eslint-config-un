@@ -540,7 +540,7 @@ ${styleText(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...arguments_)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion
+                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion -- restore a cached transform from trusted config code
                         fn: new Function('...arguments_', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },

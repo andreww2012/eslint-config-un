@@ -28,7 +28,7 @@ const DEFAULT_BATCH_SIZE = 100;
 
 const isStringRegexpValid = (regexp: string) => {
   try {
-    // eslint-disable-next-line no-new
+    // eslint-disable-next-line no-new -- required
     new RegExp(regexp);
     return true;
   } catch (error) {
@@ -163,7 +163,7 @@ const main = () => {
 
   const ignorePrereleaseRegexes = ignorePrereleaseRegexStrings.map((regexString) => {
     if (unescapeRegexes) {
-      // eslint-disable-next-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign -- fine
       regexString = regexString.replaceAll(String.raw`\\`, '\\');
     }
     return new RegExp(regexString);
@@ -244,7 +244,7 @@ const mergeRulesPresenceResults = (
   };
 };
 
-// eslint-disable-next-line unicorn/consistent-boolean-name
+// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
 const run = async ({
   packageName,
   packageVersionsRange,
@@ -302,7 +302,7 @@ const run = async ({
       };
     })
     .filter((value) => value != null)
-    // eslint-disable-next-line unicorn/no-array-sort
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .filter(({version}) => !packageVersionsRange || rangeSatisfies(version, packageVersionsRange));
 
@@ -617,7 +617,7 @@ if (!mainResult) {
   process.exit(1);
 }
 
-// eslint-disable-next-line unicorn/consistent-boolean-name
+// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
 const result = await run(mainResult);
 
 if (!result) {

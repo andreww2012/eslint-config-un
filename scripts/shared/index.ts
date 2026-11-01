@@ -59,7 +59,7 @@ export const generateEslintPluginsRulesPresence = (
     if (plugin.rules && typeof plugin.rules === 'object') {
       Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
         const isDeprecated =
-          // eslint-disable-next-line ts/no-unnecessary-condition
+          // eslint-disable-next-line ts/no-unnecessary-condition -- third-party plugins can have missing rule definitions at runtime
           rule &&
           typeof rule === 'object' &&
           'meta' in rule &&

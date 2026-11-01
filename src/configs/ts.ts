@@ -1289,7 +1289,7 @@ export default defineUnConfig<
           ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS[orderCompilerOptions.preset]
           : orderCompilerOptions.type === 'order-keys'
             ? orderCompilerOptions.order
-            : // eslint-disable-next-line ts/no-unnecessary-condition
+            : // eslint-disable-next-line ts/no-unnecessary-condition -- keep the fallback for unknown option shapes at runtime
               orderCompilerOptions.type === 'order-groups'
               ? orderCompilerOptions.order.flatMap((group) =>
                   orderCompilerOptions.orderWithinGroup &&

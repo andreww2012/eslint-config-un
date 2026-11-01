@@ -16,7 +16,6 @@ describe('module loaders', () => {
       const loader = generateModuleLoader(
         'missing',
         LOADED_PACKAGE,
-        // eslint-disable-next-line no-unsanitized/method
         () => import(MISSING_PACKAGE),
         MODULE_NOT_FOUND_ERROR_CODES,
       );
@@ -53,7 +52,6 @@ describe('module loaders', () => {
       const loader = generateModuleLoader(
         'missing',
         LOADED_PACKAGE,
-        // eslint-disable-next-line no-unsanitized/method
         () => import(MISSING_RELATIVE_PATH),
         MODULE_NOT_FOUND_ERROR_CODES,
       );
@@ -70,7 +68,6 @@ describe('module loaders', () => {
       const loader = generateModuleLoader(
         'missing',
         MISSING_PACKAGE,
-        // eslint-disable-next-line no-unsanitized/method
         () => import(MISSING_PACKAGE),
         MODULE_NOT_FOUND_ERROR_CODES,
       );

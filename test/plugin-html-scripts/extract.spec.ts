@@ -270,7 +270,7 @@ describe('indent option', () => {
       expected: ['a;\n\ta;\na;\n'],
     });
   });
-  /* eslint-enable un/no-multiple-consecutive-spaces */
+  /* eslint-enable un/no-multiple-consecutive-spaces -- the indentation-specific test cases end here */
 });
 
 it('works with crlf new lines', () => {

@@ -1,4 +1,4 @@
-/* eslint-disable case-police/string-check */
+/* eslint-disable case-police/string-check -- the tests cover intentionally different capitalization styles */
 import {GLOB_MARKDOWN} from '../../../src/constants';
 
 const FIXTURES = {

@@ -1,4 +1,5 @@
 const FIXTURES = {
+  describedEslintDisableComment: 'described-eslint-disable-comment.js',
   unlimitedEslintDisableComment: 'unlimited-eslint-disable-comment.js',
 } as const;
 
@@ -141,5 +142,94 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/disable-enable-pair'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('eslint-comments', 'no-console')).toBe(0);
+  });
+});
+
+describe('options', () => {
+  describe('option: `requireDescriptions`', () => {
+    it('disables `eslint-comments/require-description` rule when option is not set', async () => {
+      const configResult = await computeEslintConfig('eslintComments');
+
+      expect(
+        configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/require-description'),
+      ).toBe(0);
+
+      const results = await testEslintConfig(
+        'eslintComments',
+        FIXTURES.unlimitedEslintDisableComment,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.unlimitedEslintDisableComment,
+          'eslint-comments/require-description',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('disables `eslint-comments/require-description` rule by default', async () => {
+      const CONFIGS = {eslintComments: {requireDescriptions: false}} as const;
+      const configResult = await computeEslintConfig(CONFIGS);
+
+      expect(
+        configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/require-description'),
+      ).toBe(0);
+
+      const results = await testEslintConfig(
+        CONFIGS,
+        FIXTURES.unlimitedEslintDisableComment,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.unlimitedEslintDisableComment,
+          'eslint-comments/require-description',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('enables `eslint-comments/require-description` rule when option is `true`', async () => {
+      const CONFIGS = {eslintComments: {requireDescriptions: true}} as const;
+      const configResult = await computeEslintConfig(CONFIGS);
+
+      expect(
+        configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/require-description'),
+      ).toBe(2);
+
+      const results = await testEslintConfig(
+        CONFIGS,
+        FIXTURES.unlimitedEslintDisableComment,
+        import.meta.dirname,
+      );
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.unlimitedEslintDisableComment,
+        'eslint-comments/require-description',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Unexpected undescribed directive comment. Include descriptions to explain why the comment is necessary."',
+      );
+    });
+
+    it('accepts a described comment with `eslint-comments/require-description` rule when option is `true`', async () => {
+      const results = await testEslintConfig(
+        {eslintComments: {requireDescriptions: true}},
+        FIXTURES.describedEslintDisableComment,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.describedEslintDisableComment,
+          'eslint-comments/require-description',
+        ),
+      ).toBeUndefined();
+    });
   });
 });

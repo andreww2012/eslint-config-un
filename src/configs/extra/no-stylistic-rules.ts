@@ -13,8 +13,6 @@ import {
 const STYLISTIC_RULES_PER_PLUGIN: Readonly<Partial<Record<string, Partial<Record<string, true>>>>> =
   ALL_STYLISTIC_RULES;
 
-/* eslint-disable perfectionist/sort-objects */
-
 /**
  * If you integrate eslint-config-un into an existing project, you might encounter a lot of reports
  * from rules that are merely about stylistic and other choices, not the ones that can potentially
@@ -124,5 +122,3 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
       );
   }
 });
-
-/* eslint-enable perfectionist/sort-objects */

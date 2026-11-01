@@ -1,7 +1,7 @@
 const OFFLINE_MODE_CONFIG_NAME = 'offline-mode';
 
 const computeOfflineModeConfig = async (
-  // eslint-disable-next-line unicorn/consistent-boolean-name
+  // eslint-disable-next-line unicorn/consistent-boolean-name -- fine
   offlineMode: boolean,
 ) =>
   (await computeEslintConfig({}, {un: {offlineMode}})).getConfigByUnPostfix(

@@ -7,7 +7,7 @@ import {castToSafe, isObject} from '../utils';
 // but `Foo extends Record<string, any>` is `true`). Without `any` the
 // `Extract<S, Input>` filter below collapses to `never` for user-defined
 // option interfaces and the merged result loses all of `S`'s keys.
-// eslint-disable-next-line ts/no-explicit-any
+// eslint-disable-next-line ts/no-explicit-any -- need to use for assignability
 type AssignDefaultsInput = Record<PropertyKey, any>;
 
 type SourceObjectShape<S> = Extract<Exclude<S, readonly unknown[]>, AssignDefaultsInput>;
@@ -31,7 +31,7 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   defaults: D & ValidateDefaults<S, D>,
 ) => {
   // TODO void required?
-  // eslint-disable-next-line ts/no-invalid-void-type
+  // eslint-disable-next-line ts/no-invalid-void-type -- functions returning void can supply an absent source
   type NullishOrVoid = null | undefined | void;
 
   type MutableShallow<T> = T extends readonly (infer U)[] ? U[] : T;
@@ -52,9 +52,9 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
     Defaults extends AssignDefaultsInput,
   > = Source extends Defaults
     ? Source
-    : // eslint-disable-next-line ts/no-restricted-types
+    : // eslint-disable-next-line ts/no-restricted-types -- keep omission non-distributive so unions expose only their shared properties
       Omit<Defaults, keyof Source & keyof Defaults> &
-        // eslint-disable-next-line ts/no-restricted-types
+        // eslint-disable-next-line ts/no-restricted-types -- keep omission non-distributive so unions expose only their shared properties
         Omit<Source, keyof Source & keyof Defaults> & {
           -readonly [K in keyof Source & keyof Defaults]: MergeValue<Source[K], Defaults[K]>;
         };

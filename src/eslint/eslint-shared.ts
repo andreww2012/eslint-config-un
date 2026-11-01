@@ -6,13 +6,13 @@ export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
     {},
     Object.fromEntries(
       Array.from(
-        // eslint-disable-next-line ts/no-deprecated
+        // eslint-disable-next-line ts/no-deprecated -- the built-in rules are needed to expose their metadata
         eslintBuiltinRules.keys(),
         (ruleName) => [
           ruleName,
           {
             enumerable: true,
-            // eslint-disable-next-line ts/no-deprecated
+            // eslint-disable-next-line ts/no-deprecated -- the built-in rules are needed to expose their metadata
             get: () => eslintBuiltinRules.get(ruleName),
           },
         ],

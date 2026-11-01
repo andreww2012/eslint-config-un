@@ -72,11 +72,11 @@ const computeCacheKey = async (context: UnConfigContext) => {
     }),
     packageJsonPath && readFileSafe(packageJsonPath, true),
     Promise.all(
-      // eslint-disable-next-line ts/await-thenable
+      // eslint-disable-next-line ts/await-thenable -- fine: some values are promises
       lockfilePaths.map((lockfilePath) => (lockfilePath ? readFileSafe(lockfilePath, true) : null)),
     ).then((files) => files.find((file) => file != null)),
     Promise.all(
-      // eslint-disable-next-line ts/await-thenable
+      // eslint-disable-next-line ts/await-thenable -- fine: some values are promises
       eslintConfigPaths.map((eslintConfigPath) =>
         eslintConfigPath ? readFileSafe(eslintConfigPath, true) : null,
       ),
@@ -155,7 +155,7 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
 
 interface CacheDataStoredInFs extends CacheDataInFs, CacheMetadata {}
 
-// eslint-disable-next-line unicorn/consistent-boolean-name
+// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
 export const saveCacheToFs = async (
   context: UnConfigContext,
   cacheData: CacheDataInFs<false>,
@@ -204,8 +204,10 @@ export const saveCacheToFs = async (
   const unserializablePaths: (readonly [path: readonly PropertyKey[], value: unknown])[] = [];
   traverseForEach(dataToStore.configs, ({path: valuePath}, value: unknown) => {
     const isUnserializable =
-      // eslint-disable-next-line ts/no-unnecessary-condition
-      typeof value === 'function' || (isObject(value) && !isPlainObject(value));
+      typeof value === 'function' ||
+      (isObject(value) &&
+        // eslint-disable-next-line ts/no-unnecessary-condition -- doesn't change the type, but performs additional checks
+        !isPlainObject(value));
     if (isUnserializable) {
       unserializablePaths.push([valuePath, value]);
     }
@@ -213,8 +215,12 @@ export const saveCacheToFs = async (
   if (unserializablePaths.length > 0) {
     /* v8 ignore next - A group produced by `Object.groupBy` is never empty */
     const unserializablePathsGrouped = Object.entries(
-      // eslint-disable-next-line ts/no-non-null-assertion
-      Object.groupBy(unserializablePaths, (unserializablePath) => unserializablePath[0][0]!),
+      Object.groupBy(
+        unserializablePaths,
+        (unserializablePath) =>
+          // eslint-disable-next-line ts/no-non-null-assertion -- safe
+          unserializablePath[0][0]!,
+      ),
     ).map((values) => ({
       configIndex: Number(values[0]),
       configName: dataToStore.configs.at(Number(values[0]))?.name,
@@ -273,7 +279,7 @@ interface CacheDataInMemory {
 
 interface CacheDataStoredInMemory extends CacheDataInMemory, CacheMetadata {}
 
-// eslint-disable-next-line no-shadow-restricted-names, sonar/no-globals-shadowing
+// eslint-disable-next-line no-shadow-restricted-names, sonar/no-globals-shadowing -- safe extension
 declare const globalThis: typeof global & {
   eslintConfigUnResolvedConfig?: CacheDataStoredInMemory;
 };

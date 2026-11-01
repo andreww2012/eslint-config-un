@@ -43,7 +43,7 @@ const readme = await fs.readFile(README_PATH, 'utf8');
 if (!isUnpinning) {
   const referencedAssets = arrayUnique(readme.match(REFERENCED_ASSET_REGEXP) || []);
   const trackedAssets = new Set(
-    // eslint-disable-next-line sonar/no-os-command-from-path
+    // eslint-disable-next-line sonar/no-os-command-from-path -- safe
     execFileSync('git', ['ls-files', '--', ...referencedAssets], {encoding: 'utf8'}).split('\n'),
   );
   const untrackedAssets = referencedAssets.filter((assetPath) => !trackedAssets.has(assetPath));

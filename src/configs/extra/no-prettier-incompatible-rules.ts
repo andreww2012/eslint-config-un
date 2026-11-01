@@ -21,8 +21,6 @@ const PACKAGES_ENABLING_LANGUAGE = {
 
 type PrettierLanguage = keyof typeof PLUGINS_BY_PRETTIER_LANGUAGE;
 
-/* eslint-disable perfectionist/sort-objects */
-
 /**
  * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io) or
  * [oxfmt](https://oxc.rs/docs/guide/usage/formatter), which follows Prettier's output.
@@ -95,5 +93,3 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
     )
     .addOverrides();
 });
-
-/* eslint-enable perfectionist/sort-objects */

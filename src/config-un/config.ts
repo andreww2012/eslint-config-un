@@ -92,7 +92,8 @@ export function createConfigBuilder<P extends PluginPrefix | null>(
   }
   const configBuilder = new ConfigEntryBuilder<ExtraPluginsType, P>(
     rulesPrefix,
-    // eslint-disable-next-line ts/no-unnecessary-condition
+    // TODO really needed?
+    // eslint-disable-next-line ts/no-unnecessary-condition -- for extra safety
     options && typeof options === 'object' ? options : {},
     this,
   );
@@ -687,7 +688,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
             ),
           )
           .flat(2)
-          // eslint-disable-next-line no-implicit-coercion
+          // eslint-disable-next-line no-implicit-coercion -- need to preserve the boolean type predicate
           .filter((value) => !!value),
       )
       .flatMap((configs, cascadeIndex) =>
@@ -698,8 +699,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadPluginsOnDemand === false
       ? [...LOADABLE_PLUGIN_PREFIXES_LIST]
       : // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
-        // eslint-disable-next-line unicorn/no-array-sort
-        [...context.usedPlugins].sort();
+        [...context.usedPlugins]
+          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+          .sort();
   if (typeof loadPluginsOnDemand === 'object') {
     usedPluginPrefixes.push(...loadPluginsOnDemand.alwaysLoad);
   }

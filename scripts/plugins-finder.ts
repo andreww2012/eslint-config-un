@@ -45,7 +45,7 @@ if (!captchaSolverApiKey) {
 }
 const captchaSolver = new CaptchaSolver(captchaSolverApiKey);
 
-// eslint-disable-next-line ts/no-unnecessary-type-conversion
+// eslint-disable-next-line ts/no-unnecessary-type-conversion -- discard the type predicate so invalid JSON strings are not narrowed to never
 const isValidJson = (value: unknown) => Boolean(isValidJsonInternal(value));
 
 const ResponseSchemaZod = z.looseObject({
@@ -127,12 +127,12 @@ const solveCaptchaAsync = (browserPage: Page) =>
             logger.info(`Solved the captcha ${solution.id}`);
             await browserPage.evaluate((token) => {
               // @ts-expect-error executed on the actual page
-              // eslint-disable-next-line ts/no-unsafe-call
+              // eslint-disable-next-line ts/no-unsafe-call -- call of global variable
               cfCallback(token);
             }, solution.data);
             resolve(true);
           } catch (error) {
-            // eslint-disable-next-line ts/prefer-promise-reject-errors
+            // eslint-disable-next-line ts/prefer-promise-reject-errors -- preserve the original error, which type is not known
             reject(error);
           }
         };

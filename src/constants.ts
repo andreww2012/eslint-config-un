@@ -14,7 +14,7 @@ export const OPTIONAL_PEER_DEPENDENCIES = Object.freeze(
 export const ERROR = 2 as Branded<2, 'error'>;
 export const WARNING = 1 as Branded<1, 'warning'>;
 export const OFF = 0 as Branded<0, 'off'>;
-/* eslint-enable un/no-type-assertion */
+/* eslint-enable un/no-type-assertion -- only the branded constants above need assertions */
 
 export type RuleSeverity = typeof ERROR | typeof WARNING | typeof OFF;
 

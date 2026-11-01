@@ -390,7 +390,7 @@ export const buildEsConfigs = (
   const grs = <Version extends EcmaVersion>(version: Version, feature: EcmaFeatures[Version]) => {
     const esFeatures = getEsVersionFeatures(version);
     const isFeatureSupported =
-      // eslint-disable-next-line ts/no-unnecessary-condition
+      // eslint-disable-next-line ts/no-unnecessary-condition -- false positive
       (isKeyIn(feature, esFeatures) ? esFeatures[feature] : null) ?? esFeatures.default;
     return isFeatureSupported ? OFF : ERROR;
   };

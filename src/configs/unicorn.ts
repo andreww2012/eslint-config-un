@@ -1030,7 +1030,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
         (typeof numberProperties?.constants === 'object' &&
           Object.values(numberProperties.constants).some(
             (style) =>
-              // eslint-disable-next-line ts/no-unnecessary-condition
+              // eslint-disable-next-line ts/no-unnecessary-condition -- only a single value is supported for now
               style === 'namespace',
           ))
         ? ERROR

@@ -15,10 +15,13 @@ export interface NestJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nestjs'> {}
 
-// eslint-disable-next-line case-police/string-check
-export default defineUnConfig<NestJsEslintConfigOptions>('nestJs', {
-  enabledBy: {package: '@nestjs/core'},
-})((context, optionsRaw) => {
+export default defineUnConfig<NestJsEslintConfigOptions>(
+  // eslint-disable-next-line case-police/string-check -- can't touch this
+  'nestJs',
+  {
+    enabledBy: {package: '@nestjs/core'},
+  },
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'nestjs');
