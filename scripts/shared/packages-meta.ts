@@ -135,6 +135,10 @@ export const PACKAGES_META: Readonly<Record<string, PackageMeta>> = {
     gitTag: versionAsIs,
     ruleDocsUrl: null,
   },
+  globals: {
+    configs: [],
+    ruleDocsUrl: null,
+  },
   'is-immutable-type': {
     configs: ['functional'],
     ruleDocsUrl: null,

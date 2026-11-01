@@ -1460,11 +1460,6 @@ See [the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal
 Depending on your pnpm settings, installing eslint-config-un may print a banner or an error asking you to do something about the build script of the `unrs-resolver` package.
 That package is a transitive dependency of ours, and at the time of writing [its build script only installs `optionalDependencies` for old npm versions](https://github.com/unrs/unrs-resolver/issues/193), so under pnpm it can, and should, stay ignored.
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -- intentional -->
-### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
-
-Install the `globals` package as a dev dependency.
-
 ### Some dependencies are inlined into the package code
 
 If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these three, whose code is inlined into the published package:

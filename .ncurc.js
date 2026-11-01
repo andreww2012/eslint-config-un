@@ -46,6 +46,7 @@ const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set([
   'stylelint-config-clean-order',
   'stylelint-config-recess-order',
   'tailwind-csstree',
+  'globals',
 ]);
 
 /** @type {ReadonlySet<string>} */

@@ -304,8 +304,7 @@ const {write: shouldWriteChangesets} = cli({
     write: {
       type: Boolean,
       description:
-        'Create a patch changeset for every updated dependency belonging to a config that has no unreleased changeset yet',
-      default: true,
+        'Create patch changesets even when candidates exist; by default, create only when none exist. Use --no-write to disable creation',
     },
   },
 }).flags;
@@ -460,9 +459,9 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   }
 
   console.log(styleText('underline', 'For commit message:'));
-  console.log(`chore(${mainUnConfigNames}): update ${dependency} to v${newVersion}`);
+  console.log(`chore(${mainUnConfigNames}): update \`${dependency}\` to v${newVersion}`);
   console.log(
-    `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
+    `feat(${mainUnConfigNames}): update \`${dependency}\` to v${newVersion} and enable ___INSERT-CHANGES___`,
   );
 
   const pluginPrefix = PLUGIN_PACKAGES_META[dependency]?.pluginPrefix;
@@ -512,13 +511,13 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     isDependencyMentionedIn(summary, dependency),
   );
 
-  if (changesetCandidates.length > 0) {
+  if (shouldWriteChangesets !== true && changesetCandidates.length > 0) {
     console.log(
       styleText(
         'black',
         styleText(
           'bgYellowBright',
-          ` ⚠ Possible changeset candidates mentioning ${dependency} - consider updating one of them instead of creating a new one: `,
+          ` ⚠ Possible changeset candidates mentioning ${dependency} - consider updating one of them instead of creating a new one (or pass \`--write\` to create): `,
         ),
       ),
     );
@@ -531,7 +530,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
           .join('\n'),
       );
     });
-  } else if (shouldWriteChangesets) {
+  } else if (shouldWriteChangesets !== false) {
     const changesetSummary = `${changelogEntry}\n${changelogEntryOptions}`;
     const changesetId = await writeChangeset(
       {summary: changesetSummary, releases: [{name: ourPackageJson.name, type: 'patch'}]},
