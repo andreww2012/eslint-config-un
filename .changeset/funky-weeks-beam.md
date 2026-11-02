@@ -2,7 +2,7 @@
 "eslint-config-un": minor
 ---
 
-soml: updated `eslint-soml` from v0.0.4 to v0.0.5:
+soml: updated `eslint-soml` from v0.0.4 to v0.0.6:
 
 - 🟢 enabled the following rules:
   - [`soml/no-dotted-key-collisions`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/no-dotted-key-collisions.md)
