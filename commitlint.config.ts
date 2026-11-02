@@ -4,4 +4,7 @@ export default commitlintConfig({
   spelling: {
     ignoreWords: ['subdependencies', 'vulns'], // cspell:disable-line
   },
+  coAuthors: {
+    deny: ['ai'],
+  },
 });

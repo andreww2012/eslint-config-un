@@ -20,6 +20,7 @@ minimumReleaseAgeExclude: # []
   - '@tanstack/eslint-plugin-query@5.105.1'
   - eslint-mdx@3.9.1
   - eslint-plugin-mdx@3.9.1
+  - '@andreww2012/commitlint-config@0.1.0'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
