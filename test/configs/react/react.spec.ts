@@ -1,4 +1,5 @@
 const FIXTURES = {
+  functionDeclarationEventHandler: 'function-declaration-event-handler.jsx',
   multipleComponents: 'multiple-components.jsx',
 } as const;
 
@@ -130,6 +131,22 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Declare only one React component per file"');
+  });
+
+  it('`react/jsx-no-bind` rule does not fire on an event handler declared as a function in a component, like an arrow function', async () => {
+    const results = await testEslintConfig(
+      'react',
+      FIXTURES.functionDeclarationEventHandler,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.functionDeclarationEventHandler,
+        'react/jsx-no-bind',
+      ),
+    ).toBeUndefined();
   });
 });
 

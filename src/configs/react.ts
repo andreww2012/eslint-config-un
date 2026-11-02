@@ -911,7 +911,15 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     .addRule('jsx-max-props-per-line', OFF) /** @since 3.2.0 */
     .addRule('jsx-newline', OFF) /** @since 7.22.0 */
     .addRule('jsx-no-bind', ERROR, [
-      {allowArrowFunctions: true, ignoreRefs: true},
+      {
+        // Disallowing functions would require `useCallback` for every handler, though it only
+        // matters for `memo` components and hook dependencies, and the React Compiler memoizes
+        // handlers on its own
+        allowArrowFunctions: true,
+        allowFunctions: true,
+
+        ignoreRefs: true,
+      },
     ]) /** @since 3.7.0 */
     .addRule(
       'jsx-no-comment-textnodes',
