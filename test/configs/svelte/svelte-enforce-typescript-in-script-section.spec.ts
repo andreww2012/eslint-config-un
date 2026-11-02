@@ -1,5 +1,6 @@
 const FIXTURES = {
   scriptWithoutLang: 'script-without-lang.svelte',
+  styleWithScssLang: 'style-with-scss-lang.svelte',
 } as const;
 
 beforeEach(() => {
@@ -26,7 +27,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
           'svelte/enforce-typescript-in-script-section',
           'svelte/block-lang',
         ),
-      ).toStrictEqual([{script: ['ts']}]);
+      ).toMatchObject([{script: ['ts']}]);
     });
 
     it('creates `svelte/enforce-typescript-in-script-section` eslint config even when `ts` config is disabled, but does not enforce `ts` lang for <script> sections', async () => {
@@ -37,7 +38,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
           'svelte/enforce-typescript-in-script-section',
           'svelte/block-lang',
         ),
-      ).toStrictEqual([{script: ['ts', null]}]);
+      ).toMatchObject([{script: ['ts', null]}]);
     });
 
     it('creates `svelte/enforce-typescript-in-script-section` eslint config and enforces `ts` lang when set to `true`', async () => {
@@ -50,7 +51,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
           'svelte/enforce-typescript-in-script-section',
           'svelte/block-lang',
         ),
-      ).toStrictEqual([{script: ['ts']}]);
+      ).toMatchObject([{script: ['ts']}]);
     });
 
     it('creates `svelte/enforce-typescript-in-script-section` eslint config, but does not enforce `ts` lang when set to `false`', async () => {
@@ -64,7 +65,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
           'svelte/enforce-typescript-in-script-section',
           'svelte/block-lang',
         ),
-      ).toStrictEqual([{script: ['ts', null]}]);
+      ).toMatchObject([{script: ['ts', null]}]);
     });
   });
 
@@ -97,6 +98,18 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
       expect(error?.message).toMatchInlineSnapshot(
         '"The lang attribute of the <script> block should be "ts"."',
       );
+    });
+
+    it('`svelte/block-lang` rule does not fire on `<style>` with a `lang` of a CSS preprocessor', async () => {
+      const results = await testEslintConfig(
+        {svelte: {configEnforceTypescriptInScriptSection: true}},
+        FIXTURES.styleWithScssLang,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.styleWithScssLang, 'svelte/block-lang'),
+      ).toBeUndefined();
     });
   });
 

@@ -166,6 +166,21 @@ export interface SvelteConfigResult {
   optionsResolved: SvelteEslintConfigOptions;
 }
 
+// The style languages `svelte-preprocess` and `vitePreprocess` compile
+const STYLE_LANGS = [
+  null,
+  'css',
+  'less',
+  'pcss', // cspell:disable-line
+  'postcss',
+  'sass',
+  'scss',
+  'sss',
+  'styl', // cspell:disable-line
+  'stylus',
+  'sugarss',
+] as const;
+
 export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConfigResult>(
   'svelte',
   {
@@ -415,6 +430,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     .addRule('block-lang', ERROR, [
       {
         script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],
+        // Without it, the rule only allows `<style>` without `lang`
+        style: [...STYLE_LANGS],
       },
     ])
     .addOverrides();
