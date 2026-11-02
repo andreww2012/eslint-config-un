@@ -1,8 +1,16 @@
-import {detect as detectPackageManager} from 'package-manager-detector/detect';
+import path from 'node:path';
+import {
+  detect as detectPackageManager,
+  getUserAgent as getPackageManagerFromUserAgent,
+} from 'package-manager-detector/detect';
 
 vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
   const original = await importOriginal();
-  return {...original, detect: vi.fn<typeof original.detect>(original.detect)};
+  return {
+    ...original,
+    detect: vi.fn<typeof original.detect>(original.detect),
+    getUserAgent: vi.fn<typeof original.getUserAgent>(original.getUserAgent),
+  };
 });
 
 const mockedPackageNames: string[] = [];
@@ -110,14 +118,15 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
   });
 
   it('suggests an installation command for the required and the minimal version', async () => {
+    vi.mocked(detectPackageManager).mockResolvedValueOnce({name: 'npm', agent: 'npm'});
     mockUnresolvablePackage(DE_MORGAN_PACKAGE);
 
     await computeEslintConfig('deMorgan');
 
     const output = stderrOutput();
 
-    expect(output).toContain('Install them with:');
-    expect(output).toContain(`i --save-dev ${DE_MORGAN_PACKAGE}`);
+    expect(output).toContain('Install it with:');
+    expect(output).toContain(`npm i --save-dev ${DE_MORGAN_PACKAGE}`);
   });
 
   it.each([
@@ -215,13 +224,57 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain('disable the corresponding configs');
   });
 
-  it('falls back to a generic installation command when no package manager is detected', async () => {
+  it('suggests an installation command of the package manager running ESLint when no package manager is detected', async () => {
     vi.mocked(detectPackageManager).mockResolvedValueOnce(null);
+    vi.mocked(getPackageManagerFromUserAgent).mockReturnValueOnce('npm');
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).toContain(`npm i --save-dev ${DE_MORGAN_PACKAGE}`);
+  });
+
+  it('falls back to a generic installation command when no package manager is detected and ESLint does not run through one', async () => {
+    vi.mocked(detectPackageManager).mockResolvedValueOnce(null);
+    vi.mocked(getPackageManagerFromUserAgent).mockReturnValueOnce(null);
     mockUnresolvablePackage(DE_MORGAN_PACKAGE);
 
     await computeEslintConfig('deMorgan');
 
     expect(stderrOutput()).toContain('<your package manager> i --save-dev');
+  });
+
+  it('suggests adding the package to the root of a pnpm workspace', async () => {
+    vi.mocked(detectPackageManager).mockResolvedValueOnce({name: 'pnpm', agent: 'pnpm'});
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    // This repository is a pnpm workspace root
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).toContain(`pnpm i --save-dev -w ${DE_MORGAN_PACKAGE}`);
+  });
+
+  it('suggests adding the package to the root of a Yarn Classic workspace', async () => {
+    vi.mocked(detectPackageManager).mockResolvedValueOnce({name: 'yarn', agent: 'yarn'});
+    const cwdSpy = vi
+      .spyOn(process, 'cwd')
+      .mockReturnValue(path.join(import.meta.dirname, 'fixtures', 'yarn-workspace-root'));
+    onTestFinished(() => {
+      cwdSpy.mockRestore();
+    });
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).toContain(`yarn add --dev -W ${DE_MORGAN_PACKAGE}`);
+  });
+
+  it('does not color the table of packages when the rest of the message is not colored', async () => {
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).not.toContain('\u{1B}[');
   });
 
   it('reports a parser that cannot be loaded', async () => {

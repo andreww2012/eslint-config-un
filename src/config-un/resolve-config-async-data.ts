@@ -1,4 +1,7 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import {renderTable} from 'console-table-printer';
+import {getUserAgent} from 'package-manager-detector/detect';
 import {satisfies} from 'verkit';
 import {type DisableAutofixPrefix, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
@@ -34,6 +37,7 @@ import {
   objectEntriesUnsafe,
   objectFromKeys,
   objectKeysUnsafe,
+  readAndParseJson,
   setByPath,
   styleConfigName,
   stylePackageName,
@@ -86,8 +90,27 @@ const INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER: Readonly<
   yarn: {subcommand: 'add', dev: '--dev', exact: '--exact'},
 };
 
-const generateInstallationCommand = (
+/**
+ * Without the flag, pnpm and Yarn Classic refuse to add a dependency to the root of a workspace
+ */
+const resolveWorkspaceRootFlag = async (
   packageManager: UnConfigContext['meta']['usedPackageManager'],
+) => {
+  if (packageManager?.name === 'pnpm') {
+    return fs.existsSync(path.join(process.cwd(), 'pnpm-workspace.yaml')) ? '-w' : null;
+  }
+  if (packageManager?.agent === 'yarn') {
+    const packageJson = await readAndParseJson<{workspaces?: unknown}>(
+      path.join(process.cwd(), 'package.json'),
+    );
+    return packageJson?.workspaces == null ? null : '-W';
+  }
+  return null;
+};
+
+const generateInstallationCommand = (
+  packageManagerName: string | null,
+  workspaceRootFlag: string | null,
   packageNames: readonly string[],
   isExact = false,
 ) => {
@@ -95,14 +118,18 @@ const generateInstallationCommand = (
     subcommand = 'i',
     dev = '--save-dev',
     exact = '--save-exact',
-  } = (packageManager && INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER[packageManager.name]) || {};
+  } = (packageManagerName != null &&
+    isKeyIn(packageManagerName, INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER) &&
+    INSTALLATION_COMMAND_PARTS_BY_PACKAGE_MANAGER[packageManagerName]) ||
+  {};
   return [
-    packageManager?.name || '<your package manager>',
+    packageManagerName || '<your package manager>',
     subcommand,
     dev,
     ...(isExact ? [exact] : []),
+    ...(workspaceRootFlag ? [workspaceRootFlag] : []),
     // Deno before v2.8 requires the prefix
-    ...(packageManager?.name === 'deno'
+    ...(packageManagerName === 'deno'
       ? packageNames.map((packageName) => `npm:${packageName}`)
       : packageNames),
   ].join(' ');
@@ -305,8 +332,21 @@ export const resolveConfigAsyncData = async (
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     const collator = new Intl.Collator();
+    const {usedPackageManager} = context.meta;
+    // Without a lockfile, the package manager running ESLint is the best guess
+    const packageManagerName = usedPackageManager?.name ?? getUserAgent();
+    const workspaceRootFlag = await resolveWorkspaceRootFlag(usedPackageManager);
+    const areColorsEnabled = styleText('cyan', ' ') !== ' ';
+    const renderInstallationCommand = (packageNames: readonly string[], isExact?: boolean) =>
+      styleText(
+        'cyan',
+        generateInstallationCommand(packageManagerName, workspaceRootFlag, packageNames, isExact),
+      );
+
     arrayPartition(
-      Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name})),
+      Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name}))
+        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+        .sort((a, b) => collator.compare(a.name, b.name)),
       (item) => item.installedVersion != null,
     ).forEach((packages, index) => {
       if (packages.length === 0) {
@@ -322,56 +362,33 @@ export const resolveConfigAsyncData = async (
         .filter(Boolean)
         .join(' and ');
 
-      const {usedPackageManager} = context.meta;
-
       context.logger[isUpdates ? 'warn' : 'fatal'](
-        `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'} to make this error disappear:
+        `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'}${isUpdates ? '' : ' to make this error disappear'}:
 ${renderTable(
-  packages
-    .toSorted((a, b) => collator.compare(a.name, b.name))
-    .map(({name, versionRange}) => ({
-      Name: stylePackageName(name),
-      'Required version range': versionRange
-        ? styleText('green', versionRange)
-        : styleText('gray', 'Unknown'),
-      'Required by': renderPackageRequesters(packageRequesters.get(name), collator),
-    })),
+  packages.map(({name, versionRange}) => ({
+    Name: stylePackageName(name),
+    'Required version range': versionRange
+      ? styleText('green', versionRange)
+      : styleText('gray', 'Unknown'),
+    'Required by': renderPackageRequesters(packageRequesters.get(name), collator),
+  })),
+  {shouldDisableColors: !areColorsEnabled},
 )}
-Install them with:
-${styleText(
-  'cyan',
-  generateInstallationCommand(
-    usedPackageManager,
-    packages.map(({name}) => name),
-  ),
-)}
+${isUpdates ? 'Update' : 'Install'} ${packages.length === 1 ? 'it' : 'them'} with:
+${renderInstallationCommand(packages.map(({name}) => name))}
 ... with explicit version ranges:
-${styleText(
-  'cyan',
-  generateInstallationCommand(
-    usedPackageManager,
-    packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`),
-  ),
-)}
-... or guaranteed without them:
-${styleText(
-  'cyan',
-  generateInstallationCommand(
-    usedPackageManager,
-    packages.map(({name}) => name),
-    true,
-  ),
+${renderInstallationCommand(packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`))}
+... or saving the exact installed versions:
+${renderInstallationCommand(
+  packages.map(({name}) => name),
+  true,
 )}
 ... with explicit minimal satisfying versions:
-${styleText(
-  'cyan',
-  generateInstallationCommand(
-    usedPackageManager,
-    packages.map(({name, versionRange}) =>
-      versionRange
-        ? `${name}@${versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '')}`
-        : name,
-    ),
+${renderInstallationCommand(
+  packages.map(({name, versionRange}) =>
+    versionRange
+      ? `${name}@${versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '')}`
+      : name,
   ),
 )}`,
       );
