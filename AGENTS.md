@@ -34,6 +34,9 @@ Check new or changed links with lychee as [CI](./.github/workflows/check-links.y
 
 Reference rules by their "full name": `<default un plugin prefix>/<rule-name>`, i.e. `unicorn/prefer-dispose`, not just `prefer-dispose`.
 
+Scope commit messages and changesets by the Configs whose output actually changes.
+For example, marking rules as stylistic only changes what `noStylisticRules` disables, so scope it to `noStylisticRules`, not to the Configs of the rules' plugins.
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -- the heading introduces a list -->
 ## When you're asked to...
 

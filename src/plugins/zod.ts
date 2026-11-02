@@ -13,6 +13,7 @@ export default definePluginMetadata('zod', {
     'consistent-import': {stylistic: true},
     'consistent-import-source': {disableInCodeBlocks: 'imports'},
     'consistent-schema-output-type-style': {stylistic: true},
+    'consistent-schema-var-name': {stylistic: true},
     'no-any-schema': {disableInCodeBlocks: 'typeStrictness'},
     'no-dynamic-schema-value': {disableInCodeBlocks: 'runtimeOnly'},
     'no-function-scoped-schema': {disableInCodeBlocks: 'performance'},

@@ -78,6 +78,17 @@ describe('rules', async () => {
     });
   });
 
+  it('disables the naming rules whose fixes never change the behavior', () => {
+    expect(configResult.getRuleSeverities('no-stylistic-rules')).toMatchObject({
+      'eslint-react/naming-convention-ref-name': 0,
+      'eslint-react/no-unnecessary-use-prefix': 0,
+      'unicorn/name-replacements': 0,
+      'unicorn/no-non-function-verb-prefix': 0,
+      'zod/consistent-schema-var-name': 0,
+      'zod-mini/consistent-schema-var-name': 0,
+    });
+  });
+
   it('does not set `no-console` rule in `no-stylistic-rules` eslint config (not a stylistic rule)', () => {
     expect(configResult.getRuleEntry('no-stylistic-rules', 'no-console')).toBeUndefined();
   });

@@ -70,7 +70,11 @@ export default definePluginMetadata('unicorn', {
     'import-style': {stylistic: true},
     indent: {stylistic: true},
     'iteration-fallback-style': {stylistic: true},
-    'key-name-casing': {disableInCodeBlocks: 'tooStrict'},
+    'key-name-casing': {
+      stylistic: [false, 'renaming a data key breaks the code and tools that read it'],
+      disableInCodeBlocks: 'tooStrict',
+    },
+    'name-replacements': {stylistic: true},
     'no-abusive-eslint-disable': {
       disableInCodeBlocks: [
         false,
@@ -164,6 +168,7 @@ export default definePluginMetadata('unicorn', {
     },
     'no-non-function-verb-prefix': {
       requiresTypeInfo: [true, 'does nothing without it instead of throwing'],
+      stylistic: true,
     },
     'no-nonstandard-builtin-properties': {disableInCodeBlocks: 'runtimeOnly'},
     'no-null': {stylistic: true},
@@ -172,6 +177,9 @@ export default definePluginMetadata('unicorn', {
     'no-process-exit': {disableInCodeBlocks: 'runtimeOnly', cliFiles: 'off'},
     'no-redundant-comparison': {stylistic: true},
     'no-return-array-push': {requiresTypeInfo: ['optional', 'indirect']},
+    'no-selector-as-dom-name': {
+      stylistic: [false, 'the fix changes which class is set or which element is found'],
+    },
     'no-static-only-class': {disableInCodeBlocks: 'tooStrict'},
     'no-subtraction-comparison': {
       requiresTypeInfo: [
