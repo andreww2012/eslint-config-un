@@ -1,4 +1,4 @@
-import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON, OFF, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {Prettify} from '../types';
 import {arrayIncludes} from '../utils';
@@ -50,7 +50,9 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
         SubConfigOptions<ExtraPlugins, 'moduleReplacements'> & {
           /**
            * Options of
-           * [the only rule in this sub-config, `e18e/ban-dependencies`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md#module-replacements)
+           * [the only rule in this sub-config, `e18e/ban-dependencies`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md#module-replacements).
+           *
+           * The optional peer dependencies of this package are always added to `allowed`
            */
           options?: GetRuleOptions<'e18e', 'ban-dependencies'>;
         }
@@ -125,11 +127,15 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
           parseWith: ['jsonc', 'json'],
         },
       ])
-      .addRule(
-        'ban-dependencies',
-        ERROR,
-        banDependenciesOptions ? [banDependenciesOptions] : [],
-      ) /** @since 0.0.1 */
+      .addRule('ban-dependencies', ERROR, [
+        {
+          ...banDependenciesOptions,
+          allowed: [
+            ...Object.keys(OPTIONAL_PEER_DEPENDENCIES),
+            ...(banDependenciesOptions?.allowed || []),
+          ],
+        },
+      ]) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore start */
         rulesToSkipInConfig: (ruleName) =>

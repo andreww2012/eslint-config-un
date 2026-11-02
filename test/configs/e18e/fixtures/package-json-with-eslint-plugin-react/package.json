@@ -1,0 +1,7 @@
+{
+  "name": "package-json-with-eslint-plugin-react",
+  "private": true,
+  "devDependencies": {
+    "eslint-plugin-react": "7.37.5"
+  }
+}

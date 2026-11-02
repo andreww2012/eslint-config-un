@@ -1,4 +1,7 @@
+import {OPTIONAL_PEER_DEPENDENCIES} from '../../../src/constants';
+
 const FIXTURES = {
+  packageJsonWithEslintPluginReact: 'package-json-with-eslint-plugin-react/package.json',
   packageJsonWithLodash: 'package-json-with-lodash/package.json',
 } as const;
 
@@ -45,6 +48,22 @@ describe('e18e: sub config `moduleReplacements`', () => {
       expect(error?.message).toMatchInlineSnapshot(
         '""lodash" is flagged as no longer needed. lodash and Underscore can be replaced with native JavaScript APIs"',
       );
+    });
+
+    it('`e18e/ban-dependencies` rule does not fire on a `package.json` depending on an optional peer dependency', async () => {
+      const results = await testEslintConfig(
+        'e18e',
+        FIXTURES.packageJsonWithEslintPluginReact,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.packageJsonWithEslintPluginReact,
+          'e18e/ban-dependencies',
+        ),
+      ).toBeUndefined();
     });
   });
 
@@ -105,24 +124,24 @@ describe('e18e: sub config `moduleReplacements`', () => {
 
   describe('options', () => {
     describe('option: `options`', () => {
-      it('does not add options to `e18e/ban-dependencies` rule by default', async () => {
+      it('only allows optional peer dependencies in `e18e/ban-dependencies` rule by default', async () => {
         const configResult = await computeEslintConfig('e18e');
 
         expect(
           configResult.getRuleEntryOptions('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toStrictEqual([]);
+        ).toStrictEqual([{allowed: Object.keys(OPTIONAL_PEER_DEPENDENCIES)}]);
       });
 
-      it('passes custom `options` to `e18e/ban-dependencies` rule when provided', async () => {
-        const OPTIONS = Object.freeze({modules: ['lodash']});
-
+      it('passes custom `options` to `e18e/ban-dependencies` rule when provided, adding optional peer dependencies to `allowed`', async () => {
         const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {options: OPTIONS}},
+          e18e: {configModuleReplacements: {options: {modules: ['lodash'], allowed: ['jquery']}}},
         });
 
         expect(
           configResult.getRuleEntryOptions('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toStrictEqual([OPTIONS]);
+        ).toStrictEqual([
+          {modules: ['lodash'], allowed: [...Object.keys(OPTIONAL_PEER_DEPENDENCIES), 'jquery']},
+        ]);
       });
     });
   });
