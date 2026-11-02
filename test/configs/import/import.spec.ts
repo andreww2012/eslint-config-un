@@ -1,5 +1,6 @@
 import {createRequire} from 'node:module';
 import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
+import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import {TESTS_CONFIG_DEFAULT_FILES} from '../../../src/configs/shared';
 import {
   GLOB_CONFIG_FILES,
@@ -10,7 +11,10 @@ import {
 const FIXTURES = {
   defaultExport: 'default-export.js',
   tsImportValid: 'ts-import-valid.ts',
+  virtualModuleImports: 'virtual-module-imports.js',
 } as const;
+
+vi.mock(import('package-manager-detector/detect'), {spy: true});
 
 // Keeps the real resolver, but lets us see the options it was built with
 vi.mock(import('eslint-import-resolver-typescript'), async (importOriginal) => {
@@ -502,6 +506,83 @@ describe('options', () => {
       expect(configResult.getRuleEntryOptions('import', 'import/no-unresolved')).toStrictEqual([
         {ignore: PATTERNS},
       ]);
+    });
+
+    describe('virtual modules', () => {
+      it.each([
+        ['astro', ['^astro:']],
+        ['@types/bun', ['^bun(:|$)']],
+        ['bun-types', ['^bun(:|$)']],
+        ['@sveltejs/kit', [String.raw`^\$(app|env)/`, String.raw`^\$service-worker$`]],
+      ] as const)(
+        'adds the virtual modules to `ignore` of `import/no-unresolved` rule when `%s` is installed',
+        async (packageName, patterns) => {
+          addInstalledPackages({[packageName]: '1.0.0'});
+
+          const configResult = await computeEslintConfig('import');
+
+          expect(configResult.getRuleEntryOptions('import', 'import/no-unresolved')).toStrictEqual([
+            {ignore: patterns},
+          ]);
+        },
+      );
+
+      it('adds the virtual modules of Bun to `ignore` of `import/no-unresolved` rule when `bun` is the package manager', async () => {
+        vi.mocked(detectPackageManager).mockResolvedValueOnce({name: 'bun', agent: 'bun'});
+
+        const configResult = await computeEslintConfig('import');
+
+        expect(configResult.getRuleEntryOptions('import', 'import/no-unresolved')).toStrictEqual([
+          {ignore: ['^bun(:|$)']},
+        ]);
+      });
+
+      it('puts the virtual modules before the user-provided patterns', async () => {
+        addInstalledPackages({astro: '5.0.0'});
+
+        const configResult = await computeEslintConfig({
+          import: {importPatternsToIgnoreWhenTryingToResolve: 'virtual:*'},
+        });
+
+        expect(configResult.getRuleEntryOptions('import', 'import/no-unresolved')).toStrictEqual([
+          {ignore: ['^astro:', 'virtual:*']},
+        ]);
+      });
+
+      it('`import/no-unresolved` rule fires on the virtual modules of Astro, Bun and SvelteKit when none of them is detected', async () => {
+        const results = await testEslintConfig(
+          'import',
+          FIXTURES.virtualModuleImports,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.virtualModuleImports,
+            'import/no-unresolved',
+            {all: true},
+          ),
+        ).toHaveLength(3);
+      });
+
+      it('`import/no-unresolved` rule does not fire on the virtual modules of Astro, Bun and SvelteKit when they are detected', async () => {
+        addInstalledPackages({'@sveltejs/kit': '2.27.0', '@types/bun': '1.2.0', astro: '5.0.0'});
+
+        const results = await testEslintConfig(
+          'import',
+          FIXTURES.virtualModuleImports,
+          import.meta.dirname,
+        );
+
+        expect(
+          findLintMessageFromLintResults(
+            results,
+            FIXTURES.virtualModuleImports,
+            'import/no-unresolved',
+          ),
+        ).toBeUndefined();
+      });
     });
   });
 

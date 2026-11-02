@@ -342,6 +342,8 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'vite',
   'vue-i18n',
   'zod-compiler',
+  '@types/bun',
+  'bun-types',
 ] as const;
 
 /**

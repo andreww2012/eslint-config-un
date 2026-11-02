@@ -25,6 +25,12 @@ import {
 
 const TS_FILE_EXTENSIONS = ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'] as const;
 
+const VIRTUAL_MODULE_PATTERNS = {
+  astro: ['^astro:'],
+  bun: ['^bun(:|$)'],
+  svelteKit: [String.raw`^\$(app|env)/`, String.raw`^\$service-worker$`],
+} as const satisfies Record<string, string[]>;
+
 interface ExtraneousDependenciesCheckOptions {
   /**
    * Whether the imports of the packages declared in `devDependencies` will be flagged.
@@ -152,7 +158,13 @@ export interface ImportEslintConfigOptions<
   tsResolverOptions?: TypeScriptResolverOptions;
 
   /**
-   * Regular expressions of the import paths that are never reported as unresolved
+   * Regular expressions of the import paths that are never reported as unresolved.
+   *
+   * The virtual modules of these tools are never reported either, if the tool is detected:
+   * - Astro (`astro` is installed): `astro:*`
+   * - Bun (`bun` is the package manager, or `@types/bun` or `bun-types` is installed): `bun`,
+   *   `bun:*`
+   * - SvelteKit (`@sveltejs/kit` is installed): `$app/*`, `$env/*`, `$service-worker`
    *
    * Affected rule:
    * - [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md)
@@ -218,7 +230,17 @@ export default defineUnConfig<ImportEslintConfigOptions>(
 
   const pluginSettings = context.getPluginSettings('import');
 
-  const noUnresolvedIgnores = arrayify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
+  const {packagesInfo} = context;
+  const isBunUsed =
+    context.meta.usedPackageManager?.name === 'bun' ||
+    packagesInfo['@types/bun'] != null ||
+    packagesInfo['bun-types'] != null;
+  const noUnresolvedIgnores = [
+    ...(packagesInfo.astro ? VIRTUAL_MODULE_PATTERNS.astro : []),
+    ...(isBunUsed ? VIRTUAL_MODULE_PATTERNS.bun : []),
+    ...(packagesInfo['@sveltejs/kit'] ? VIRTUAL_MODULE_PATTERNS.svelteKit : []),
+    ...arrayify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve),
+  ];
 
   const extraneousDependenciesCheckRaw = maybeCall(
     optionsResolved.extraneousDependenciesCheck,
