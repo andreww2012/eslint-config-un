@@ -16,6 +16,10 @@ minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list 
 minimumReleaseAgeExclude: # []
   - '@andreww2012/commitlint-config@0.1.0'
   - web-features@3.45.0
+  - '@boundaries/config@1.0.0'
+  - '@boundaries/elements@3.3.1'
+  - '@boundaries/policies@1.0.0'
+  - eslint-plugin-boundaries@7.4.1
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
