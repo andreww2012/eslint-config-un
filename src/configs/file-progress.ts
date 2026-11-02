@@ -1,3 +1,4 @@
+// cspell:ignore terminfo
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
@@ -16,8 +17,8 @@ import {
 export interface FileProgressPluginSettings {
   /**
    * Hides the progress bar
-   * @default true <=> the resolved `environment` root option is not `default` or the standard
-   * error output is not a terminal (`!process.stderr.isTTY`)
+   * @default true <=> the resolved `environment` root option is not `default`, or the progress
+   * can't be drawn in place in a terminal
    */
   hide?: boolean;
 
@@ -37,13 +38,27 @@ export interface FileProgressPluginSettings {
  * An ESLint plugin to print file progress.
  *
  * The progress is hidden unless the resolved `environment` root option is `default` and the
- * standard error output is a terminal (`!process.stderr.isTTY`).
+ * progress can be drawn in place: both the standard output and the standard error output are
+ * terminals, [`TERM`](https://man7.org/linux/man-pages/man7/term.7.html) is not `dumb` and no
+ * `CI` environment variable is set.
  *
  * 📁 Default `files`: all files
  */
 export interface FileProgressEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'file-progress'> {}
+
+// The progress is drawn to the standard error output, but the plugin's spinner library decides
+// whether it's in a terminal by the standard output, and otherwise prints every update on a line of
+// its own
+const isProgressDrawnInPlace =
+  process.stderr.isTTY &&
+  process.stdout.isTTY &&
+  // `dumb` is the terminfo type of terminals that can't move the cursor, so the spinner library
+  // treats it as no terminal
+  process.env['TERM'] !== 'dumb' &&
+  // The spinner library sees any `CI` variable as CI, even `CI=false`, unlike the `ci` environment
+  !('CI' in process.env);
 
 export default defineUnConfig<FileProgressEslintConfigOptions>(
   'fileProgress',
@@ -65,10 +80,7 @@ export default defineUnConfig<FileProgressEslintConfigOptions>(
         ignoresInternal: false,
         settings: {
           progress: {
-            hide:
-              context.meta.environment !== 'default' ||
-              // Outside a terminal, like in a file, updates pile up instead of replacing each other
-              !process.stderr.isTTY,
+            hide: context.meta.environment !== 'default' || !isProgressDrawnInPlace,
             ...pluginSettings,
           } satisfies FileProgressPluginSettings,
         },

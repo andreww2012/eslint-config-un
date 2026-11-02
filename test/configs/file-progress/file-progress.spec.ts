@@ -162,14 +162,22 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    const {isTTY} = process.stderr;
+    const isStderrTty = process.stderr.isTTY;
+    const isStdoutTty = process.stdout.isTTY;
 
     beforeEach(() => {
       process.stderr.isTTY = true;
+      process.stdout.isTTY = true;
+      vi.stubEnv('CI', undefined);
+      vi.stubEnv('TERM', 'xterm-256color');
+      // The config reads the terminal state once, when it's imported
+      vi.resetModules();
     });
 
     afterEach(() => {
-      process.stderr.isTTY = isTTY;
+      process.stderr.isTTY = isStderrTty;
+      process.stdout.isTTY = isStdoutTty;
+      vi.unstubAllEnvs();
     });
 
     it('merges default settings with user-provided ones and assigns them to `file-progress` settings property', async () => {
@@ -184,8 +192,23 @@ describe('options', () => {
       ).toStrictEqual({hide: false, ...SETTINGS});
     });
 
-    it('sets `hide` to `true` when the standard error output is not a terminal', async () => {
-      process.stderr.isTTY = false;
+    it.each([
+      [
+        'the standard error output is not a terminal',
+        () => {
+          process.stderr.isTTY = false;
+        },
+      ],
+      [
+        'the standard output is not a terminal',
+        () => {
+          process.stdout.isTTY = false;
+        },
+      ],
+      ['`TERM` is `dumb`', () => vi.stubEnv('TERM', 'dumb')],
+      ['`CI` is set, even to `false`', () => vi.stubEnv('CI', 'false')],
+    ] as const)('sets `hide` to `true` when %s', async (_, setUp) => {
+      setUp();
 
       const configResult = await computeEslintConfig('fileProgress');
 

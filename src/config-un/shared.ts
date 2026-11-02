@@ -37,7 +37,14 @@ import type {
 } from '../loaders';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../plugins.gen';
 import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
-import {type MaybeArray, type MaybeFn, arrayify, castToWritableUnsafe, maybeCall} from '../utils';
+import {
+  type MaybeArray,
+  type MaybeFn,
+  allUnionMembers,
+  arrayify,
+  castToWritableUnsafe,
+  maybeCall,
+} from '../utils';
 import type {fetchPackageInfo} from '../utils/package-detection';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
@@ -149,8 +156,12 @@ type ValueOrEslintConfigWithValue<T> =
 
 type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 
-export const ENVIRONMENTS = ['ci', 'editor', 'default'] as const;
-export type Environment = (typeof ENVIRONMENTS)[number];
+export type Environment = 'ci' | 'editor' | 'default';
+export const ENVIRONMENTS = allUnionMembers<Environment, {readonly: true}>()([
+  'ci',
+  'editor',
+  'default',
+]);
 
 /**
  * Why a package might need to be loaded: a Config asked for it, a root option did, or another
