@@ -57,11 +57,6 @@ exclude = [
   # to them in future
   # Matched after `remap`, hence the raw URL
   '^https://raw\.githubusercontent\.com/schoero/eslint-plugin-better-tailwindcss/HEAD/docs/settings/settings\.md#\w+$',
-  # TODO temp - site unavailable
-  '^https://safeql\.dev/?',
-
-  # These rule pages exist but the site wrongly answers with 404
-  '^https://eslint-plugin-github-action\.ntnyq\.com/rules/[\w-]+/?$',
 
   # Fragments exist in the served HTML but this SSG host intermittently drops
   # page content under the concurrent load of a full run, so lychee reports them

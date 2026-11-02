@@ -21,7 +21,7 @@ export interface GithubActionsEslintConfigOptions<
    * Not enforced by default.
    *
    * Affected rule:
-   * - [`github-actions/max-jobs-per-action`](https://eslint-plugin-github-action.ntnyq.com/rules/max-jobs-per-action)
+   * - [`github-actions/max-jobs-per-action`](https://eslint-plugin-github-action.ntnyq.com/rules/max-jobs-per-action.html)
    */
   maxJobsPerAction?: number;
 
@@ -30,13 +30,13 @@ export interface GithubActionsEslintConfigOptions<
    *
    * Affected rules:
    * - `actionName`:
-   *   [`github-actions/require-action-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-name)
+   *   [`github-actions/require-action-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-name.html)
    * - `actionRunName`:
-   *   [`github-actions/require-action-run-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-run-name)
+   *   [`github-actions/require-action-run-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-action-run-name.html)
    * - `jobName`:
-   *   [`github-actions/require-job-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-name)
+   *   [`github-actions/require-job-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-name.html)
    * - `jobStepName`:
-   *   [`github-actions/require-job-step-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-step-name)
+   *   [`github-actions/require-job-step-name`](https://eslint-plugin-github-action.ntnyq.com/rules/require-job-step-name.html)
    * @default {actionName: true, jobName: true}
    */
   require?: Partial<Record<'actionName' | 'actionRunName' | 'jobName' | 'jobStepName', boolean>>;
@@ -45,7 +45,7 @@ export interface GithubActionsEslintConfigOptions<
    * Enforces `<job>.steps.uses` style.
    *
    * Affected rule:
-   * - [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style)
+   * - [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style.html)
    * @default {commit: true, allowRepository: true}
    */
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;

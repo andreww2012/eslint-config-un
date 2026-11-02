@@ -467,7 +467,7 @@ export interface EslintConfigUnOptions<
    * - [`e18e/prefer-nullish-coalescing`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
    * - [`e18e/prefer-spread-syntax`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
    * - [`e18e/prefer-timer-args`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md)
-   * - [`github-actions/action-name-casing`](https://eslint-plugin-github-action.ntnyq.com/rules/action-name-casing)
+   * - [`github-actions/action-name-casing`](https://eslint-plugin-github-action.ntnyq.com/rules/action-name-casing.html)
    * - [`html/head-order`](https://html-eslint.org/docs/rules/head-order)
    * - [`jest/prefer-lowercase-title`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-lowercase-title.md)
    * - [`jest/prefer-mock-promise-shorthand`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-mock-promise-shorthand.md)

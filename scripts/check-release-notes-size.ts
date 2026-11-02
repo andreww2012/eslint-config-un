@@ -2,7 +2,7 @@ import {styleText} from 'node:util';
 import {readPreState} from '@changesets/pre';
 import {readChangesets} from '@changesets/read';
 
-// https://docs.github.com/rest/releases/releases#create-a-release
+// https://docs.github.com/en/rest/releases/releases#create-a-release
 const MAX_RELEASE_NOTES_LENGTH = 125_000;
 // Room for the PR and commit links the changelog generator adds to each entry
 const LINKS_LENGTH_PER_CHANGESET = 200;
