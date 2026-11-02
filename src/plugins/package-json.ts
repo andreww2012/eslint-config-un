@@ -3,6 +3,7 @@ import {definePluginMetadata} from './shared';
 // Hand-written rules, documented outside the sections of the rules generated per property
 const RULES_OUTSIDE_PROPERTY_SECTIONS: ReadonlySet<string> = new Set([
   'require-attribution',
+  'require-override-restrictions',
   'require-package-json-export',
   'valid-peerDependenciesMeta-relationship',
   'valid-repository-directory',
