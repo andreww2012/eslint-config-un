@@ -16,7 +16,8 @@ import {
 export interface FileProgressPluginSettings {
   /**
    * Hides the progress bar
-   * @default true <=> the resolved `environment` root option is not `default`
+   * @default true <=> the resolved `environment` root option is not `default` or the standard
+   * error output is not a terminal (`!process.stderr.isTTY`)
    */
   hide?: boolean;
 
@@ -35,7 +36,8 @@ export interface FileProgressPluginSettings {
 /**
  * An ESLint plugin to print file progress.
  *
- * The progress is hidden unless the resolved `environment` root option is `default`.
+ * The progress is hidden unless the resolved `environment` root option is `default` and the
+ * standard error output is a terminal (`!process.stderr.isTTY`).
  *
  * 📁 Default `files`: all files
  */
@@ -63,7 +65,10 @@ export default defineUnConfig<FileProgressEslintConfigOptions>(
         ignoresInternal: false,
         settings: {
           progress: {
-            hide: context.meta.environment !== 'default',
+            hide:
+              context.meta.environment !== 'default' ||
+              // Outside a terminal, like in a file, updates pile up instead of replacing each other
+              !process.stderr.isTTY,
             ...pluginSettings,
           } satisfies FileProgressPluginSettings,
         },

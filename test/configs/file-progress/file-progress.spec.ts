@@ -162,6 +162,16 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', () => {
+    const {isTTY} = process.stderr;
+
+    beforeEach(() => {
+      process.stderr.isTTY = true;
+    });
+
+    afterEach(() => {
+      process.stderr.isTTY = isTTY;
+    });
+
     it('merges default settings with user-provided ones and assigns them to `file-progress` settings property', async () => {
       const SETTINGS = {hideFileName: true} as const;
 
@@ -172,6 +182,16 @@ describe('options', () => {
       expect(
         configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
       ).toStrictEqual({hide: false, ...SETTINGS});
+    });
+
+    it('sets `hide` to `true` when the standard error output is not a terminal', async () => {
+      process.stderr.isTTY = false;
+
+      const configResult = await computeEslintConfig('fileProgress');
+
+      expect(
+        configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
+      ).toStrictEqual({hide: true});
     });
 
     it.each(['ci', 'editor'] as const)(

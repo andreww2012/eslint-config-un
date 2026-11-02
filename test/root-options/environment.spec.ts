@@ -35,8 +35,16 @@ const mockDetectedEnvironment = ({isInCi, isInEditor}: {isInCi: boolean; isInEdi
   vi.spyOn(utils, 'isInEditor').mockReturnValue(isInEditor);
 };
 
+const {isTTY} = process.stderr;
+
+// The progress is also hidden when the standard error output is not a terminal
+beforeEach(() => {
+  process.stderr.isTTY = true;
+});
+
 afterEach(() => {
   vi.unstubAllEnvs();
+  process.stderr.isTTY = isTTY;
 });
 
 describe('option: `environment`', () => {
