@@ -23,5 +23,6 @@ export default definePluginMetadata('mocha', {
     'no-setup-in-suite': {disableInCodeBlocks: 'tooStrict'},
     'no-synchronous-tests': {disableInCodeBlocks: 'tooStrict'},
     'no-top-level-tests': {disableInCodeBlocks: 'tooStrict'},
+    'prefer-arrow-callback': {stylistic: true},
   },
 });

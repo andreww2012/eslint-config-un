@@ -1,5 +1,6 @@
 const FIXTURES = {
   arrowFunctions: 'arrow-functions/test.spec.js',
+  functionCallbacks: 'test/function-callbacks.js',
   testInTestDirectory: 'test/app.js',
 } as const;
 
@@ -92,6 +93,35 @@ describe('basic tests', () => {
 
 describe('rules', async () => {
   const configResult = await computeEslintConfig('mocha');
+
+  it('replaces core `prefer-arrow-callback` rule with `mocha/prefer-arrow-callback` rule with the same options', async () => {
+    const jsAndMochaConfigResult = await computeEslintConfig({mocha: true, js: true});
+
+    expect(
+      jsAndMochaConfigResult.getRuleEntry('mocha', 'mocha/prefer-arrow-callback'),
+    ).toStrictEqual(jsAndMochaConfigResult.getRuleEntry('js', 'prefer-arrow-callback'));
+    expect(jsAndMochaConfigResult.getRuleEntrySeverity('mocha', 'prefer-arrow-callback')).toBe(0);
+  });
+
+  it('reports only non-Mocha function callbacks with `mocha/prefer-arrow-callback` rule', async () => {
+    const results = await testEslintConfig(
+      {mocha: true, js: true},
+      FIXTURES.functionCallbacks,
+      import.meta.dirname,
+    );
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.functionCallbacks, 'prefer-arrow-callback'),
+    ).toBeUndefined();
+    expect(
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.functionCallbacks,
+        'mocha/prefer-arrow-callback',
+        {all: true},
+      ).map((message) => message.line),
+    ).toStrictEqual([3]);
+  });
 
   it('applies to the files in `test` directories, where Mocha looks for tests by default', async () => {
     const results = await testEslintConfig(

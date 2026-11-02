@@ -12,6 +12,7 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
+  getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
 type MochaInterface = 'BDD' | 'TDD' | 'require';
@@ -83,9 +84,11 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   maxTopLevelSuites?: number;
 }
 
-export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
+export default defineUnConfig<MochaEslintConfigOptions, readonly ['js']>('mocha', {
   enabledBy: {package: 'mocha'},
-})((context, optionsRaw) => {
+  after: ['js'],
+  needs: ['js'],
+})((context, optionsRaw, {js}) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
     maxTopLevelSuites: 1,
@@ -159,7 +162,14 @@ export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
     .addRule('no-setup-in-suite', ERROR) /** @since 4.12.0 */ /** @aka no-setup-in-describe */ // 🟢
     .addRule('no-synchronous-tests', OFF) /** @since 0.5.1 */
     .addRule('no-top-level-tests', ERROR) /** @since 1.1.0 */ /** @aka no-global-tests */ // 🟢
-    .addRule('prefer-arrow-callback', OFF) /** @since 5.1.0 */
+    // The core rule reports the callbacks that `mocha/no-mocha-arrows` requires
+    .addRule(
+      'prefer-arrow-callback',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        js?.finalFlatConfigRules['prefer-arrow-callback'] ?? OFF,
+      ),
+    ) /** @since 5.1.0 */
+    .disableAnyRule('', 'prefer-arrow-callback')
     .addRule('valid-suite-title', OFF) /** @since 11.0.0 */
     .addRule('valid-test-title', OFF) /** @since 11.0.0 */
     .enableConfigTesterForPlugin('mocha')
