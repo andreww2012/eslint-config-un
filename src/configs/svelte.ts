@@ -110,6 +110,21 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   configHtml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'html-svelte'>;
 
   /**
+   * Disables the rules that wrongly report the
+   * [SvelteKit app template](https://svelte.dev/docs/kit/project-structure#Project-files-src),
+   * which lacks what SvelteKit adds to every page when rendering it.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;src&#47;app.html</code>
+   *
+   * Affected rule:
+   * - [`html/require-title`](https://html-eslint.org/docs/rules/require-title): the title comes
+   *   from `%sveltekit.head%`
+   * @default true <=> `@sveltejs/kit` is installed and `html` config is enabled
+   */
+  configKitAppTemplate?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'html'>;
+
+  /**
    * Used by some rules like
    * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` if specified (but only if
@@ -196,6 +211,8 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
     configHtml: true,
+    configKitAppTemplate:
+      context.configsMeta.html.enabled && context.packagesInfo['@sveltejs/kit'] != null,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
@@ -212,6 +229,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
   const {
     configEnforceTypescriptInScriptSection,
     configHtml,
+    configKitAppTemplate,
     svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
@@ -434,6 +452,12 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
         style: [...STYLE_LANGS],
       },
     ])
+    .addOverrides();
+
+  context
+    .createConfigBuilder(configKitAppTemplate, 'html')
+    ?.addConfig(['svelte/kit-app-template', {filesDefault: ['**/src/app.html'], parseWith: 'html'}])
+    .disableAnyRule('html', 'require-title')
     .addOverrides();
 
   const configBuilderHtml = context.createConfigBuilder(configHtml, 'html-svelte');

@@ -3,7 +3,12 @@ import {eslintConfigInternal} from '../../src/config-un/config';
 // `testMode` force-enables Configs, but not the sub-configs gated on an installed package,
 // so these have to be declared explicitly for the order below to be complete
 beforeEach(() => {
-  addInstalledPackages({'jest-extended': '7.0.0', prettier: '3.9.6', 'react-dom': '19.2.7'});
+  addInstalledPackages({
+    '@sveltejs/kit': '2.27.0',
+    'jest-extended': '7.0.0',
+    prettier: '3.9.6',
+    'react-dom': '19.2.7',
+  });
 });
 
 describe('cascade order', () => {
@@ -226,6 +231,7 @@ describe('cascade order', () => {
       eslint-config-un/svelte
       eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
+      eslint-config-un/svelte/kit-app-template
       eslint-config-un/svelte/html
       eslint-config-un/vue
       eslint-config-un/vue/allow-single-word-component-names

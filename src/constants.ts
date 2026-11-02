@@ -305,6 +305,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'next',
   'expo',
   'svelte',
+  '@sveltejs/kit',
   'solid-js',
   '@angular/core',
   '@ngrx/store',
