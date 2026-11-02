@@ -548,6 +548,17 @@ export interface TsEslintConfigOptions<
 const TS_FILES_DEFAULT = [GLOB_TS_X] as const;
 const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED] as const;
 
+type NodeTestModule = typeof import('node:test');
+/** The test runner awaits the promises these functions return on its own  */
+const NODE_TEST_PROMISE_FUNCTION_NAMES = allUnionMembers<
+  {
+    [K in keyof NodeTestModule]: NodeTestModule[K] extends (...args: never[]) => Promise<unknown>
+      ? K
+      : never;
+  }[keyof NodeTestModule],
+  {readonly: true}
+>()(['describe', 'it', 'only', 'skip', 'suite', 'test', 'todo']);
+
 const mergeParserOptions = (
   lower: TsEslintParserOptions,
   higher: TsEslintParserOptions,
@@ -1077,6 +1088,9 @@ export default defineUnConfig<
     .addRule('no-duplicate-type-constituents', ERROR) /** @since 5.57.0 */ // 🟣
     .addRule('no-floating-promises', ERROR, [
       {
+        allowForKnownSafeCalls: [
+          {from: 'package', name: [...NODE_TEST_PROMISE_FUNCTION_NAMES], package: 'node:test'},
+        ],
         checkThenables: true,
         ignoreVoid: true, // Default
       },

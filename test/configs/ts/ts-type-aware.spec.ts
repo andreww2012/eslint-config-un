@@ -1,6 +1,7 @@
 const FIXTURES = {
   asyncFunctionWithoutAwait: 'async-function-without-await.ts',
   floatingPromise: 'floating-promise.ts',
+  nodeTestCalls: 'node-test-calls.ts',
 } as const;
 
 describe('ts: sub config `typeAware`', () => {
@@ -76,6 +77,14 @@ describe('ts: sub config `typeAware`', () => {
         '"Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator."',
       );
     });
+  });
+
+  it('`ts/no-floating-promises` rule does not fire on `node:test` calls', async () => {
+    const results = await testEslintConfig('ts', FIXTURES.nodeTestCalls, import.meta.dirname);
+
+    expect(
+      findLintMessageFromLintResults(results, FIXTURES.nodeTestCalls, 'ts/no-floating-promises'),
+    ).toBeUndefined();
   });
 
   describe('un options', () => {
