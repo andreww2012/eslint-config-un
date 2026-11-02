@@ -41,12 +41,13 @@ const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set([
 const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set([
   '@humanwhocodes/scsstree',
   'browserslist',
+  'globals',
   'is-immutable-type',
   'shiki',
   'stylelint-config-clean-order',
   'stylelint-config-recess-order',
   'tailwind-csstree',
-  'globals',
+  'web-features',
 ]);
 
 /** @type {ReadonlySet<string>} */
