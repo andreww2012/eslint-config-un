@@ -20,6 +20,7 @@ minimumReleaseAgeExclude: # []
   - '@boundaries/elements@3.3.1'
   - '@boundaries/policies@1.0.0'
   - eslint-plugin-boundaries@7.4.1
+  - eslint-plugin-playwright@2.12.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
