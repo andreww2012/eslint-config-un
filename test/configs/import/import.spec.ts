@@ -442,25 +442,32 @@ describe('options', () => {
   });
 
   describe('option: `isTypescriptEnabled`', () => {
-    it('enables `import/named` and `import/no-deprecated` rules by default', async () => {
-      const configResult = await computeEslintConfig('import');
+    const RULES_DISABLED_WITH_TYPESCRIPT = [
+      'import/default',
+      'import/named',
+      'import/namespace',
+      'import/no-deprecated',
+    ] as const;
 
-      expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(2);
-      expect(configResult.getRuleEntrySeverity('import', 'import/no-deprecated')).toBe(1);
+    const getSeverities = (configResult: Awaited<ReturnType<typeof computeEslintConfig>>) =>
+      RULES_DISABLED_WITH_TYPESCRIPT.map((ruleName) =>
+        configResult.getRuleEntrySeverity('import', ruleName),
+      );
+
+    it('enables `import/{default,named,namespace,no-deprecated}` rules by default', async () => {
+      expect(getSeverities(await computeEslintConfig('import'))).toStrictEqual([2, 2, 2, 1]);
     });
 
-    it('disables `import/named` and `import/no-deprecated` rules when set to `true`', async () => {
-      const configResult = await computeEslintConfig({import: {isTypescriptEnabled: true}});
-
-      expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(0);
-      expect(configResult.getRuleEntrySeverity('import', 'import/no-deprecated')).toBe(0);
+    it('disables `import/{default,named,namespace,no-deprecated}` rules when set to `true`', async () => {
+      expect(
+        getSeverities(await computeEslintConfig({import: {isTypescriptEnabled: true}})),
+      ).toStrictEqual([0, 0, 0, 0]);
     });
 
-    it('disables `import/named` and `import/no-deprecated` rules when set to implicitly `true` (`ts` config is enabled)', async () => {
-      const configResult = await computeEslintConfig({import: true, ts: true});
-
-      expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(0);
-      expect(configResult.getRuleEntrySeverity('import', 'import/no-deprecated')).toBe(0);
+    it('disables `import/{default,named,namespace,no-deprecated}` rules when set to implicitly `true` (`ts` config is enabled)', async () => {
+      expect(getSeverities(await computeEslintConfig({import: true, ts: true}))).toStrictEqual([
+        0, 0, 0, 0,
+      ]);
     });
   });
 

@@ -137,7 +137,12 @@ export interface ImportEslintConfigOptions<
    *
    * When enabled, creates a
    * [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript)
-   * resolver, whose settings can be overridden using `tsResolverOptions` option
+   * resolver, whose settings can be overridden using `tsResolverOptions` option, and disables the
+   * rules TypeScript does better:
+   * - [`import/default`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/default.md)
+   * - [`import/named`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/named.md)
+   * - [`import/namespace`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/namespace.md)
+   * - [`import/no-deprecated`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-deprecated.md)
    */
   isTypescriptEnabled?: boolean;
 
@@ -290,7 +295,8 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     ])
     // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule isn't in it
     .addRule('consistent-type-specifier-style', OFF) /** @since 2.27.0 */
-    .addRule('default', ERROR) /** @since 0.3.0 */ // 🟢
+    // TypeScript checks it better: it also knows about `esModuleInterop` and `export =`
+    .addRule('default', isTypescriptEnabled ? OFF : ERROR) /** @since 0.3.0 */ // 🟢
     .addRule('dynamic-import-chunkname', OFF) /** @since 2.12.0 */
     .addRule('export', ERROR) /** @since 0.7.3 */ // 🟢
     .addRule('exports-last', OFF) /** @since 2.8.0 */
@@ -308,7 +314,8 @@ export default defineUnConfig<ImportEslintConfigOptions>(
     .addRule('group-exports', OFF) /** @since 2.9.0 */
     .addRule('max-dependencies', OFF) /** @since 1.15.0 */
     .addRule('named', isTypescriptEnabled ? OFF : ERROR) /** @since 0.3.0 */ // 🔵(disabled)
-    .addRule('namespace', ERROR) /** @since 0.3.4 */ // 🟢
+    // TypeScript checks it better, while the rule is slow
+    .addRule('namespace', isTypescriptEnabled ? OFF : ERROR) /** @since 0.3.4 */ // 🟢
     .addRule('newline-after-import', ERROR) /** @since 1.7.0 */
     .addRule('no-absolute-path', ERROR) /** @since 1.15.0 */
     .addRule('no-amd', OFF) /** @since 0.13.0 */
