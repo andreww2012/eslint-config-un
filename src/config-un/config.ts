@@ -1,5 +1,6 @@
 import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
+import * as packageUtils from 'empathic/package';
 import globals from 'globals';
 import {createDebug} from 'obug';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
@@ -11,7 +12,9 @@ import {
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
   ERROR,
+  GLOB_CJS_CTS_X,
   GLOB_CONFIG_FILES,
+  GLOB_PLAIN_JS,
   PACKAGES_INSTALLED_THROUGH,
   PACKAGES_TO_GET_INFO_FOR,
   WARNING,
@@ -33,9 +36,11 @@ import {
   assignDefaults,
   isInCi,
   isInEditor,
+  isPlainObject,
   maybeCall,
   objectEntriesUnsafe,
   omit,
+  readAndParseJson,
   styleConfigName,
   stylePluginPrefix,
   styleRuleName,
@@ -204,18 +209,23 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     };
   })();
 
-  const [usedPackageManager, fixableRulesPerPlugin, nuxtAutoImports, gitignore] = await Promise.all(
-    [
-      detectPackageManager(),
-      // The file may be absent since it's generated, and its generator script
-      // executes this code
-      import('../eslint-types-fixable-only.gen')
-        .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
-        .catch(() => ({})),
-      isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirectoryOption}),
-      resolveGitignore(optionsResolved.gitignore),
-    ],
-  );
+  const [
+    usedPackageManager,
+    fixableRulesPerPlugin,
+    nuxtAutoImports,
+    gitignore,
+    closestPackageJson,
+  ] = await Promise.all([
+    detectPackageManager(),
+    // The file may be absent since it's generated, and its generator script
+    // executes this code
+    import('../eslint-types-fixable-only.gen')
+      .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
+      .catch(() => ({})),
+    isNuxtConfigDisabled ? null : resolveNuxtAutoImports({buildDir: nuxtBuildDirectoryOption}),
+    resolveGitignore(optionsResolved.gitignore),
+    readAndParseJson(packageUtils.up()),
+  ]);
 
   debug(`Detected package manager: ${usedPackageManager?.name || '<not detected>'}`);
 
@@ -259,7 +269,15 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     parsingRequests,
     requestParsing: createRequestParsing(parsingRequests),
     codeBlocksConfigs: [],
-    meta: {usedPackageManager, environment},
+    meta: {
+      usedPackageManager,
+      environment,
+      // TODO detect it per package?
+      // In a monorepo, the closest `package.json` is usually the root
+      // one, which then decides for every package
+      isCommonjsPackage:
+        isPlainObject(closestPackageJson) && closestPackageJson['type'] !== 'module',
+    },
     nuxtAutoImports,
     gitignore,
     logger,
@@ -615,7 +633,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       },
       {
         name: generateFlatConfigEntryName('language-options/commonjs', {isGlobalSetup: true}),
-        files: ['**/*.c[jt]s?(x)'],
+        files: [GLOB_CJS_CTS_X, ...(context.meta.isCommonjsPackage ? [GLOB_PLAIN_JS] : [])],
         languageOptions: {
           globals: {
             ...globals.commonjs,

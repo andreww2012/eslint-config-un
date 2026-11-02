@@ -1,4 +1,4 @@
-import {ERROR, GLOB_CJS_CTS_X, GLOB_TS_X, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_CJS_CTS_X, GLOB_PLAIN_JS, GLOB_TS_X, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -353,7 +353,7 @@ export default defineUnConfig<JsEslintConfigOptions, readonly [], JsConfigResult
   // Linted as modules, but run as scripts: dropping the directive turns sloppy mode on
   configBuilder
     ?.addConfig(['js/commonjs', {applyUserFilesAndIgnores: false}], {
-      files: [GLOB_CJS_CTS_X],
+      files: [GLOB_CJS_CTS_X, ...(context.meta.isCommonjsPackage ? [GLOB_PLAIN_JS] : [])],
     })
     .addRule('strict', OFF);
 

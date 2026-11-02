@@ -1,11 +1,29 @@
+import path from 'node:path';
+import {up as findUpPackageJson} from 'empathic/package';
 import {GLOB_HTM_HTML, GLOB_TS_X, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
+  commonjsPackageJson: 'commonjs-package/package.json',
+  commonjsPackageUseStrictDirective: 'commonjs-package/use-strict-directive.js',
   typescriptSyntax: 'typescript-syntax.ts',
   usedConsoleLog: 'used-console-log.js',
   useStrictDirectiveCjs: 'use-strict-directive.cjs',
   useStrictDirectiveJs: 'use-strict-directive.js',
 } as const;
+
+vi.mock(import('empathic/package'), async (importOriginal) => {
+  const original = await importOriginal();
+  return {...original, up: vi.fn<typeof original.up>(original.up)};
+});
+
+const mockCommonjsPackage = () => {
+  vi.mocked(findUpPackageJson).mockReturnValue(
+    path.join(import.meta.dirname, 'fixtures', FIXTURES.commonjsPackageJson),
+  );
+  onTestFinished(() => {
+    vi.mocked(findUpPackageJson).mockReset();
+  });
+};
 
 describe('basic tests', () => {
   it('creates `js`, `js/stylistic_spaced-comment`, `js/disable-in-ts-files` and `js/commonjs` eslint configs if set to `true`', async () => {
@@ -145,6 +163,31 @@ describe('rules', async () => {
       expect(
         findLintMessageFromLintResults(results, FIXTURES.useStrictDirectiveCjs, 'strict'),
       ).toBeUndefined();
+    });
+
+    it('does not report the `use strict` directive and CommonJS globals in `.js` files of CommonJS packages', async () => {
+      mockCommonjsPackage();
+
+      const results = await testEslintConfig(
+        'js',
+        FIXTURES.commonjsPackageUseStrictDirective,
+        import.meta.dirname,
+      );
+
+      expect(results[0]?.messages.map(({ruleId}) => ruleId)).not.toIncludeAnyMembers([
+        'no-undef',
+        'strict',
+      ]);
+    });
+
+    it('applies to `.js` files in CommonJS packages', async () => {
+      mockCommonjsPackage();
+
+      const commonjsPackageConfigResult = await computeEslintConfig('js');
+
+      expect(
+        commonjsPackageConfigResult.getConfigByUnPostfix('js/commonjs')?.files,
+      ).toMatchInlineSnapshot('["**/*.c[jt]s?(x)", "**/*.js"]');
     });
 
     it('still reports the `use strict` directive in modules', async () => {

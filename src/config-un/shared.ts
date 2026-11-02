@@ -964,6 +964,12 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   meta: {
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
     environment: Environment;
+
+    /**
+     * Whether Node.js runs the `.js` files as CommonJS, judged by the `package.json` closest to the
+     * working directory
+     */
+    isCommonjsPackage: boolean;
   };
 
   nuxtAutoImports: NuxtAutoImportsResult | null;

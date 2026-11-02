@@ -66,6 +66,7 @@ export const GLOB_JSX = `${GLOB_JS}x` as const;
 
 /* Globs - CommonJS/ESM */
 
+export const GLOB_PLAIN_JS = '**/*.js' as const;
 export const GLOB_CJS = '**/*.cjs' as const;
 export const GLOB_MJS = '**/*.mjs' as const;
 export const GLOB_CTS = '**/*.cts' as const;
