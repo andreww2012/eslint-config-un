@@ -272,7 +272,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'cypress',
   'mocha',
   'turbo',
-  'playwright',
+  '@playwright/test',
   'qunit',
   'lodash',
   'lodash-es',
@@ -383,7 +383,6 @@ export const PACKAGES_INSTALLED_THROUGH: Readonly<Record<string, readonly string
   '@unhead/vue': ['nuxt'],
   jest: ['react-scripts'],
   pinia: ['@pinia/nuxt'],
-  playwright: ['@playwright/test'],
   'relay-runtime': ['react-relay'],
   sass: ['@angular/build'],
   tailwindcss: [

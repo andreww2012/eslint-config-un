@@ -73,7 +73,10 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
 }
 
 export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
-  enabledBy: {package: 'playwright'},
+  enabledBy: {
+    // Not `playwright`, which is also used without the test runner, like by Vitest browser mode
+    package: '@playwright/test',
+  },
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,

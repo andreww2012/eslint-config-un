@@ -4,7 +4,7 @@ const FIXTURES = {
 } as const;
 
 beforeEach(() => {
-  addInstalledPackages({playwright: '1.45.0'});
+  addInstalledPackages({'@playwright/test': '1.45.0'});
 });
 
 describe('basic tests', () => {
@@ -40,7 +40,7 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('creates `playwright` eslint config when `playwright` package is installed', async () => {
+    it('creates `playwright` eslint config when `@playwright/test` package is installed', async () => {
       await expectConfigState({}, 'playwright', true, 'default');
     });
 
@@ -52,7 +52,17 @@ describe('basic tests', () => {
       await expectConfigState({playwright: false}, 'playwright', false, 'default');
     });
 
-    describe('`playwright` is not installed', () => {
+    describe('only `playwright` library is installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({playwright: '1.45.0'});
+      });
+
+      it('does not create `playwright` eslint config', async () => {
+        await expectConfigState({}, 'playwright', false, 'default');
+      });
+    });
+
+    describe('`@playwright/test` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });
@@ -77,7 +87,7 @@ describe('basic tests', () => {
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('creates `playwright` eslint config when `playwright` package is installed', async () => {
+    it('creates `playwright` eslint config when `@playwright/test` package is installed', async () => {
       await expectConfigState({}, 'playwright', true, 'misc-enabled');
     });
 
