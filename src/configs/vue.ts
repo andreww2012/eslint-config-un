@@ -1465,7 +1465,10 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     .addRule('heading-has-content', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('iframe-has-title', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('interactive-supports-focus', ERROR) /** @since 0.1.0 */ // 🟢
-    .addRule('label-has-for', ERROR, [{allowChildren: true}]) /** @since 0.1.0 */ // 🟢
+    // A label pointing to its control with `for` doesn't need to wrap it too, while a label that only
+    // wraps its control isn't supported by all assistive technologies:
+    // https://a11ysupport.io/tech/html/label_element
+    .addRule('label-has-for', ERROR, [{required: 'id'}]) /** @since 0.1.0 */ // 🟢
     .addRule('media-has-caption', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('mouse-events-have-key-events', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-access-key', ERROR) /** @since 0.1.0 */ // 🟢

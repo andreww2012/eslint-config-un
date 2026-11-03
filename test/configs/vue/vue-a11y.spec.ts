@@ -1,5 +1,7 @@
 const FIXTURES = {
   imgWithoutAlt: 'img-without-alt.vue',
+  labelForSiblingInput: 'label-for-sibling-input.vue',
+  labelWrappingInput: 'label-wrapping-input.vue',
   vueCodeBlockWithUnknownAriaAttributeAndImgWithoutAlt:
     'vue-code-block-with-unknown-aria-attribute-and-img-without-alt.md',
 } as const;
@@ -54,6 +56,38 @@ describe('vue: sub config `a11y`', () => {
       expect(error?.message).toMatchInlineSnapshot(
         '"img elements must have an alt prop, either with meaningful text, or an empty string for decorative images."',
       );
+    });
+
+    it('`vuejs-accessibility/label-has-for` rule does not fire on a label pointing to a sibling control with `for`', async () => {
+      const results = await testEslintConfig(
+        'vue',
+        FIXTURES.labelForSiblingInput,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.labelForSiblingInput,
+          'vuejs-accessibility/label-has-for',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('`vuejs-accessibility/label-has-for` rule fires on a label only wrapping its control', async () => {
+      const results = await testEslintConfig(
+        'vue',
+        FIXTURES.labelWrappingInput,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.labelWrappingInput,
+        'vuejs-accessibility/label-has-for',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Form label must have an associated control."');
     });
 
     it('lints Vue code blocks inside Markdown files, except for the rules disabled in code blocks', async () => {
