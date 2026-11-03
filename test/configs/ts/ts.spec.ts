@@ -477,6 +477,28 @@ describe('options', () => {
         ],
       ).toMatchObject({projectService: false});
     });
+
+    it('gives Astro components `project: true` instead of the project service', async () => {
+      const configResult = await computeEslintConfig({astro: true, ts: true});
+
+      expect(
+        configResult.getConfigByUnPostfix('parsing/ts/type-aware/astro')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchInlineSnapshot('{"project": true, "projectService": false}');
+    });
+
+    it.each([
+      ['a custom `project`', {project: './tsconfig.eslint.json'}],
+      ['`projectService: false`', {projectService: false}],
+    ] as const)(
+      'keeps the type-aware parser options of Astro components with %s',
+      async (_, parserOptions) => {
+        const configResult = await computeEslintConfig({astro: true, ts: {parserOptions}});
+
+        expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware/astro')).toBeUndefined();
+      },
+    );
   });
 
   describe('option interaction: global `typeInfoRules` parser options', () => {

@@ -757,12 +757,29 @@ export default defineUnConfig<
     files: [...TS_FILES_DEFAULT, ...extraFilesTypeAware],
     ignores: extraIgnoresTypeAware,
   };
+  const typeAwareParserOptions = buildTypeAwareParserOptions();
   context.requestParsing('ts', {
     kind: 'setUpOnly',
     nameSuffix: 'type-aware',
     ...typeAwareParsing,
-    languageOptions: {parserOptions: buildTypeAwareParserOptions()},
+    languageOptions: {parserOptions: typeAwareParserOptions},
   });
+  if (
+    astroResolvedOptions &&
+    context.rootOptions.parsing?.astro !== false &&
+    typeAwareParserOptions.projectService &&
+    !typeAwareParserOptions.project
+  ) {
+    // The Astro parser doesn't support the project service: it warns about it for every file and
+    // uses `project: true` instead
+    context.requestParsing('ts', {
+      kind: 'setUpOnly',
+      nameSuffix: 'type-aware/astro',
+      files: resolveFilesOption(astroResolvedOptions.files, []),
+      ignores: typeAwareParsing.ignores,
+      languageOptions: {parserOptions: {project: true, projectService: false}},
+    });
+  }
 
   const configBuilderNONTypeAware = context.createConfigBuilder(
     {

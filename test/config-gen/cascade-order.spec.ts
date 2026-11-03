@@ -252,6 +252,7 @@ describe('cascade order', () => {
       eslint-config-un/mdx/code-blocks
       eslint-config-un/parsing/ts
       eslint-config-un/parsing/ts/type-aware
+      eslint-config-un/parsing/ts/type-aware/astro
       eslint-config-un/parsing/css
       eslint-config-un/parsing/jsonc/auto
       eslint-config-un/parsing/jsonc/json

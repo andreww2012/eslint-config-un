@@ -120,6 +120,19 @@ describe('rules', async () => {
     ).toBeUndefined();
   });
 
+  it('does not let the parser warn about the project service when `ts` config is enabled', async () => {
+    using consoleWarnSpy = vi.spyOn(console, 'warn').mockReturnValue();
+
+    const results = await testEslintConfig(
+      {astro: true, ts: true},
+      FIXTURES.divWithSetHtml,
+      import.meta.dirname,
+    );
+
+    expect(results[0]?.fatalErrorCount).toBe(0);
+    expect(consoleWarnSpy.mock.calls.flat().join('\n')).not.toContain('projectService');
+  });
+
   it('`astro/no-set-html-directive` rule fires on a file using `set:html`', async () => {
     const results = await testEslintConfig('astro', FIXTURES.divWithSetHtml, import.meta.dirname);
 
