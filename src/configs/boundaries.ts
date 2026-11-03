@@ -1,6 +1,7 @@
 import type {Settings as EslintPluginBoundariesSettingsWithPrefixes} from 'eslint-plugin-boundaries';
+import type {EslintConfigUnOptions} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
-import type {ToCamelCase} from '../types';
+import type {PathsBracketed, ToCamelCase} from '../types';
 import {mapKeys, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
@@ -46,7 +47,7 @@ export default defineUnConfig<BoundariesEslintConfigOptions>(
 
   if (pluginSettings?.elements == null) {
     context.logger.warn(
-      "[boundaries] You haven't specified `settings.elements` option which is required for `eslint-plugin-boundaries` to work properly",
+      `[boundaries] You haven't specified \`${'plugins.boundaries.settings.elements' satisfies PathsBracketed<Pick<EslintConfigUnOptions, 'plugins'>>}\` root option, which is required for \`eslint-plugin-boundaries\` to work properly`,
     );
   }
 

@@ -202,7 +202,7 @@ describe('options', () => {
 
       expect(config?.settings).toBeUndefined();
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[boundaries] You haven't specified `settings.elements`",
+        "[boundaries] You haven't specified `plugins.boundaries.settings.elements`",
       );
     });
 

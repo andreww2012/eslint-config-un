@@ -56,7 +56,7 @@ describe('basic tests', () => {
 
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+        "[betterTailwind] You haven't specified `plugins['better-tailwindcss'].settings.tailwindConfig`",
       );
     });
 
@@ -108,7 +108,7 @@ describe('basic tests', () => {
 
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+        "[betterTailwind] You haven't specified `plugins['better-tailwindcss'].settings.tailwindConfig`",
       );
     });
 
@@ -299,7 +299,7 @@ describe('options', () => {
       await computeEslintConfig('betterTailwind');
 
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+        "[betterTailwind] You haven't specified `plugins['better-tailwindcss'].settings.tailwindConfig`",
       );
     });
 
@@ -309,7 +309,7 @@ describe('options', () => {
       await computeEslintConfig({betterTailwind: {tailwindVersion: 4}});
 
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[betterTailwind] You haven't specified `settings.entryPoint`",
+        "[betterTailwind] You haven't specified `plugins['better-tailwindcss'].settings.entryPoint`",
       );
     });
 
@@ -526,7 +526,7 @@ describe('options', () => {
       );
 
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
-        "[betterTailwind] You haven't specified `settings.entryPoint`",
+        "[betterTailwind] You haven't specified `plugins['better-tailwindcss'].settings.entryPoint`",
       );
     });
 

@@ -1,5 +1,6 @@
+import type {EslintConfigUnOptions} from '../config-un/shared';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
-import type {RequireExactlyOne} from '../types';
+import type {PathsBracketed, RequireExactlyOne} from '../types';
 import {allUnionMembers} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
@@ -194,7 +195,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css'
 
   if (requiredSettingsKey != null && !pluginSettings?.[requiredSettingsKey]) {
     context.logger.warn(
-      `[betterTailwind] You haven't specified \`settings.${requiredSettingsKey}\` option which is required for \`eslint-plugin-better-tailwindcss\` to work properly with Tailwind ${tailwindMajorVersion}`,
+      `[betterTailwind] You haven't specified \`${`plugins['better-tailwindcss'].settings.${requiredSettingsKey}` satisfies PathsBracketed<Pick<EslintConfigUnOptions, 'plugins'>>}\` root option, which is required for \`eslint-plugin-better-tailwindcss\` to work properly with Tailwind ${tailwindMajorVersion}`,
     );
   }
   if (tailwindMajorVersion != null && !SUPPORTED_TAILWIND_VERSIONS.has(tailwindMajorVersion)) {
