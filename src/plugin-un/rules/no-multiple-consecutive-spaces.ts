@@ -214,7 +214,19 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
           return;
         }
 
-        if (!isMixed) {
+        if (isMixed) {
+          // Indentation may mix tabs and spaces, like inline snapshots in files indented with tabs
+          const isLineIndentation =
+            !kinds.has('unicodeSpaces') &&
+            isEdgeAllowed(
+              options?.allowLeadingSpaces,
+              false,
+              isLineBreakBefore(text, start, lineBreaks),
+            );
+          if (isLineIndentation) {
+            return;
+          }
+        } else {
           if (isSpacesOnly && options?.allowSpacesOnly) {
             return;
           }

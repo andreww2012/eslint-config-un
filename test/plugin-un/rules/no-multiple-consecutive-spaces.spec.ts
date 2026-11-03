@@ -105,6 +105,8 @@ ruleTester.run(RULE_NAME, noMultipleConsecutiveSpaces, {
       code: "const value = 'a \u{A0}b';",
       options: [{reportMixedSpaces: false}],
     },
+    'const value = `a\n\t\t  b`;',
+    String.raw`const value = 'a\n\t b';`,
     {
       code: String.raw`const value = 'a \tb';`,
       options: [{reportMixedSpaces: false}],
@@ -330,6 +332,15 @@ ruleTester.run(RULE_NAME, noMultipleConsecutiveSpaces, {
     {
       code: 'const value = `a \u{A0}${b}`;',
       errors: [mixedErrorWithSuggestion('const value = `a ${b}`;')],
+    },
+    {
+      code: 'const value = `a\n\t  b`;',
+      options: [{allowLeadingSpaces: 'stringOnly'}],
+      errors: [mixedErrorWithSuggestion('const value = `a\n b`;')],
+    },
+    {
+      code: 'const value = `a\n \u{A0}b`;',
+      errors: [mixedErrorWithSuggestion('const value = `a\n b`;')],
     },
 
     // Escaped backslashes are not escape sequences
