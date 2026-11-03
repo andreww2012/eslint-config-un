@@ -43,6 +43,7 @@ const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set([
   'browserslist',
   'globals',
   'is-immutable-type',
+  'nuxt',
   'shiki',
   'stylelint-config-clean-order',
   'stylelint-config-recess-order',
