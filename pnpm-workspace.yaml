@@ -42,6 +42,7 @@ minimumReleaseAgeExclude: # []
   - '@vitest/ui@5.1.0'
   - '@vitest/utils@5.1.0'
   - vitest@5.1.0
+  - eslint-plugin-package-json@1.14.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

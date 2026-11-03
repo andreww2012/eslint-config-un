@@ -363,6 +363,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
     .addRule('no-redundant-publishConfig', ERROR) /** @since 0.65.0 */ // 🟢
     .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🎨
     .addRule('prefer-rolling-workspace-spec', OFF) /** @since 1.8.0 */
+    .addRule('prefer-scoped-name', OFF) /** @since 1.14.0 */
     .addRule('repository-shorthand', ERROR, [
       {form: repositoryShorthand},
     ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
