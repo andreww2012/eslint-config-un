@@ -22,7 +22,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-boundaries@7.4.1
   - eslint-plugin-playwright@2.12.2
   - '@next/eslint-plugin-next@16.4.4'
-  - '@tanstack/eslint-plugin-query@5.105.2'
+  - '@tanstack/eslint-plugin-query@5.105.3'
   - '@shikijs/core@4.6.0'
   - '@shikijs/engine-javascript@4.6.0'
   - '@shikijs/engine-oniguruma@4.6.0'
