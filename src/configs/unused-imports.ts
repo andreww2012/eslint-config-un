@@ -47,10 +47,12 @@ export interface UnusedImportsEslintConfigOptions<
   configNoUnusedVars?: boolean | NoUnusedVarsSubConfigOptions<ExtraPlugins>;
 }
 
-export default defineUnConfig<UnusedImportsEslintConfigOptions>(
-  'unusedImports',
-  false,
-)((context, optionsRaw) => {
+export default defineUnConfig<UnusedImportsEslintConfigOptions>('unusedImports', {
+  enabledBy: false,
+  // Turns `ts` rules off
+  phase: 'late',
+  after: ['ts'],
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
   });

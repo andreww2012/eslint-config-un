@@ -31,6 +31,17 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
       });
     });
 
+    it('turns `ts/no-unused-vars` rule off in TypeScript files, coming after `ts` config', async () => {
+      const configResultWithTs = await computeEslintConfig({
+        unusedImports: {configNoUnusedVars: true},
+        ts: true,
+      });
+
+      await expect(
+        configResultWithTs.getRuleSeveritiesForFile('src/index.ts'),
+      ).resolves.toMatchObject({'ts/no-unused-vars': 0, 'unused-imports/no-unused-vars': 2});
+    });
+
     it('`unused-imports/no-unused-vars` rule fires on a file with an unused variable', async () => {
       const results = await testEslintConfig(
         {unusedImports: {configNoUnusedVars: true}},

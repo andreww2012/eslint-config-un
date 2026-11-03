@@ -262,6 +262,9 @@ const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET: ReadonlySet<string> = new Set
 
 export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   enabledBy: {package: 'vitest'},
+  // Turns `ts` rules off
+  phase: 'late',
+  after: ['ts'],
 })(async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 

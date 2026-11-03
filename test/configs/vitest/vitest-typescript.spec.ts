@@ -51,6 +51,23 @@ describe('vitest: sub config `typescript`', () => {
       });
     });
 
+    it('turns `ts/unbound-method` rule off in the test files, coming after `ts` config', async () => {
+      await expect(
+        configResult.getRuleSeveritiesForFile('src/index.test.ts'),
+      ).resolves.toMatchObject({'ts/unbound-method': 0, 'vitest/unbound-method': 2});
+    });
+
+    it('lets `overridesAny` change `ts/*` rules in the test files', async () => {
+      const configResultWithOverrides = await computeEslintConfig({
+        vitest: {overridesAny: {'ts/no-explicit-any': 0}},
+        ts: true,
+      });
+
+      await expect(
+        configResultWithOverrides.getRuleSeveritiesForFile('src/index.test.ts'),
+      ).resolves.toMatchObject({'ts/no-explicit-any': 0});
+    });
+
     it('does not add `vitest/unbound-method` rule to the main `vitest` eslint config', () => {
       expect(configResult.getRuleEntry('vitest', 'vitest/unbound-method')).toBeUndefined();
     });

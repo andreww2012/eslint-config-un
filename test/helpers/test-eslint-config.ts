@@ -8,7 +8,7 @@ import type {
 } from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
 import type {NonEmptyTuple, OmitStrict, Prettify} from '../../src/types';
-import {arrayify, mapValues} from '../../src/utils';
+import {arrayify, isObject, mapValues} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
@@ -151,6 +151,25 @@ export const computeEslintConfig = async (
     options: getRuleEntryOptions(configName, ruleName),
   });
 
+  /**
+   * The severities of the rules every config entry together sets up for the file, as ESLint
+   * resolves them
+   */
+  const getRuleSeveritiesForFile = async (filePath: string) => {
+    const eslint = new ESLint({overrideConfigFile: true, overrideConfig: config});
+    const fileConfig: unknown = await eslint.calculateConfigForFile(filePath);
+    const rules =
+      isObject(fileConfig) && 'rules' in fileConfig && isObject(fileConfig.rules)
+        ? fileConfig.rules
+        : {};
+    return Object.fromEntries(
+      Object.entries(rules).map(([ruleName, ruleEntry]) => [
+        ruleName,
+        Array.isArray(ruleEntry) ? ruleEntry[0] : ruleEntry,
+      ]),
+    );
+  };
+
   return {
     config,
     getConfigByUnPostfix,
@@ -160,6 +179,7 @@ export const computeEslintConfig = async (
     getRuleSeverities,
     getRuleEntryOptions,
     getRuleEntryParsed,
+    getRuleSeveritiesForFile,
     getLoadedPlugin: (pluginPrefix: Exclude<PluginPrefix, ''>) =>
       getConfigByUnPostfix('global-setup/plugins')?.plugins?.[
         unOptions?.plugins?.[pluginPrefix]?.prefix ?? pluginPrefix

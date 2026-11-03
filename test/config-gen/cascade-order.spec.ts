@@ -87,9 +87,6 @@ describe('cascade order', () => {
       eslint-config-un/import/allow-default-export
       eslint-config-un/import-integrity
       eslint-config-un/import-zod
-      eslint-config-un/jest
-      eslint-config-un/jest/ts
-      eslint-config-un/jest/extended
       eslint-config-un/jest-dom
       eslint-config-un/jsdoc
       eslint-config-un/jsdoc/@type-information
@@ -200,10 +197,7 @@ describe('cascade order', () => {
       eslint-config-un/unhead
       eslint-config-un/unnecessary-abstractions
       eslint-config-un/unocss
-      eslint-config-un/unused-imports/no-unused-imports
       eslint-config-un/valibot
-      eslint-config-un/vitest
-      eslint-config-un/vitest/ts
       eslint-config-un/web-components
       eslint-config-un/yaml
       eslint-config-un/yaml/pnpm-workspace.yaml
@@ -227,12 +221,18 @@ describe('cascade order', () => {
       eslint-config-un/github-actions
       eslint-config-un/graphql/processor
       eslint-config-un/graphql
+      eslint-config-un/jest
+      eslint-config-un/jest/ts
+      eslint-config-un/jest/extended
       eslint-config-un/svelte/system
       eslint-config-un/svelte
       eslint-config-un/svelte/@type-information
       eslint-config-un/svelte/enforce-typescript-in-script-section
       eslint-config-un/svelte/kit-app-template
       eslint-config-un/svelte/html
+      eslint-config-un/unused-imports/no-unused-imports
+      eslint-config-un/vitest
+      eslint-config-un/vitest/ts
       eslint-config-un/vue
       eslint-config-un/vue/allow-single-word-component-names
       eslint-config-un/vue/allow-implicit-slots

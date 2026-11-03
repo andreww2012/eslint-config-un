@@ -44,6 +44,14 @@ describe('jest: sub config `typescript`', () => {
         'ts/unbound-method': 0,
       });
     });
+
+    it('turns `ts/unbound-method` rule off in the test files, coming after `ts` config', async () => {
+      const configResult = await computeEslintConfig({jest: true, ts: true});
+
+      await expect(
+        configResult.getRuleSeveritiesForFile('src/index.test.ts'),
+      ).resolves.toMatchObject({'jest/unbound-method': 2, 'ts/unbound-method': 0});
+    });
   });
 
   describe('un options', () => {
