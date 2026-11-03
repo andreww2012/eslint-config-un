@@ -2,6 +2,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import {
   ERROR,
+  GLOB_ASTRO_CLIENT_SCRIPTS,
   GLOB_CIVET_COMPILED,
   GLOB_MD_X_CODE_BLOCKS,
   GLOB_TS_X,
@@ -546,7 +547,11 @@ export interface TsEslintConfigOptions<
 }
 
 const TS_FILES_DEFAULT = [GLOB_TS_X] as const;
-const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED] as const;
+const DEFAULT_IGNORES_TYPE_AWARE = [
+  GLOB_MD_X_CODE_BLOCKS,
+  GLOB_CIVET_COMPILED,
+  GLOB_ASTRO_CLIENT_SCRIPTS,
+] as const;
 
 type NodeTestModule = typeof import('node:test');
 /** The test runner awaits the promises these functions return on its own  */

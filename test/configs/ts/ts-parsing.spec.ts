@@ -1,4 +1,8 @@
-import {GLOB_CIVET_COMPILED, GLOB_MD_X_CODE_BLOCKS} from '../../../src/constants';
+import {
+  GLOB_ASTRO_CLIENT_SCRIPTS,
+  GLOB_CIVET_COMPILED,
+  GLOB_MD_X_CODE_BLOCKS,
+} from '../../../src/constants';
 import {arrayUnique} from '../../../src/utils';
 
 describe('ts: how the files it lints are parsed', () => {
@@ -62,12 +66,13 @@ describe('ts: how the files it lints are parsed', () => {
       expect(config?.languageOptions?.['parser']).toBeUndefined();
     });
 
-    it('skips the code blocks and the compiled Civet files the parser still reads, since no program covers them', async () => {
+    it('skips the code blocks, the compiled Civet files and the client-side scripts of Astro components the parser still reads, since no program covers them', async () => {
       const configResult = await computeEslintConfig('ts');
 
       expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.ignores).toStrictEqual([
         GLOB_MD_X_CODE_BLOCKS,
         GLOB_CIVET_COMPILED,
+        GLOB_ASTRO_CLIENT_SCRIPTS,
       ]);
       expect(configResult.getConfigByUnPostfix('parsing/ts')?.ignores).toBeUndefined();
     });
@@ -108,6 +113,7 @@ describe('ts: how the files it lints are parsed', () => {
       expect(configResult.getConfigByUnPostfix('parsing/ts/type-aware')?.ignores).toStrictEqual([
         GLOB_MD_X_CODE_BLOCKS,
         GLOB_CIVET_COMPILED,
+        GLOB_ASTRO_CLIENT_SCRIPTS,
         'legacy/**/*.vue',
       ]);
     });

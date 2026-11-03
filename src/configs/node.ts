@@ -1,7 +1,7 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import globals from 'globals';
 import {isRangeSubset as isFirstSemverRangeIsSubsetOfSecond, parseRange} from 'verkit';
-import {ERROR, GLOB_HTML_SCRIPTS, OFF} from '../constants';
+import {ERROR, GLOB_ASTRO_CLIENT_SCRIPTS, GLOB_HTML_SCRIPTS, OFF} from '../constants';
 import type {PackageJson, Prettify} from '../types';
 import {interopDefault, readAndParseJson} from '../utils';
 import {
@@ -264,7 +264,7 @@ export default defineUnConfig<NodeEslintConfigOptions>('node', {
         'node',
         {
           // They run in browsers
-          ignoresDefault: [GLOB_HTML_SCRIPTS],
+          ignoresDefault: [GLOB_HTML_SCRIPTS, GLOB_ASTRO_CLIENT_SCRIPTS],
           ignoresDefaultMergedWithUserIgnores: true,
           settings: {
             node: pluginSettings,

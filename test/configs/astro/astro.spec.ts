@@ -3,6 +3,7 @@ import {GLOB_ASTRO} from '../../../src/constants';
 const FIXTURES = {
   astroCodeBlockWithConflictingSetDirectivesMd:
     'astro-code-block-with-conflicting-set-directives.md',
+  componentWithClientScript: 'component-with-client-script.astro',
   divWithSetHtml: 'div-with-set-html.astro',
   frontmatterWithTopLevelAwait: 'published-package/frontmatter-with-top-level-await.astro',
 } as const;
@@ -118,6 +119,23 @@ describe('rules', async () => {
         'node/no-top-level-await',
       ),
     ).toBeUndefined();
+  });
+
+  it('lints client-side scripts as browser code without type information when `ts` config is enabled', async () => {
+    const results = await testEslintConfig(
+      {astro: true, ts: true, js: true, node: true, unicorn: true},
+      FIXTURES.componentWithClientScript,
+      import.meta.dirname,
+    );
+
+    const ruleIds = results[0]?.messages.map(({ruleId}) => ruleId);
+
+    expect(ruleIds).toContain('no-var');
+    expect(ruleIds).not.toIncludeAnyMembers([
+      null,
+      'node/no-unsupported-features/node-builtins',
+      'unicorn/no-optional-chaining-on-undeclared-variable',
+    ]);
   });
 
   it('does not let the parser warn about the project service when `ts` config is enabled', async () => {

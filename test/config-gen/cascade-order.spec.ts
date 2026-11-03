@@ -216,6 +216,7 @@ describe('cascade order', () => {
       eslint-config-un/angular/template
       eslint-config-un/angular/template/html
       eslint-config-un/astro
+      eslint-config-un/astro/client-scripts
       eslint-config-un/jsx-a11y/astro
       eslint-config-un/es
       eslint-config-un/github-actions

@@ -1,4 +1,5 @@
-import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
+import globals from 'globals';
+import {ERROR, GLOB_ASTRO, GLOB_ASTRO_CLIENT_SCRIPTS, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith, Prettify} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
@@ -75,19 +76,18 @@ export default defineUnConfig<AstroEslintConfigOptions, readonly [], AstroConfig
 
   const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
 
-  const isTypescriptEnabled = context.configsMeta.ts.enabled;
+  const isTsConfigEnabled = context.configsMeta.ts.enabled;
 
   context.requestParsing('astro', {
     kind: 'setUpOnly',
     languageOptions: {
       globals: eslintPluginAstro?.environments.astro.globals,
       parserOptions: {
-        ...(isTypescriptEnabled &&
-          generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
+        ...(isTsConfigEnabled && generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
       },
       sourceType: 'module',
     },
-    ...(isTypescriptEnabled && {
+    ...(isTsConfigEnabled && {
       entryProperties: generatePackageToLoadProperty('processor', 'astroClientSideTsProcessor'),
     }),
   });
@@ -143,6 +143,17 @@ export default defineUnConfig<AstroEslintConfigOptions, readonly [], AstroConfig
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),
     })
     .addOverrides();
+
+  // The processor extracting the client-side scripts is only set up along with `ts`
+  if (isTsConfigEnabled) {
+    configBuilder?.addConfig(
+      [
+        'astro/client-scripts',
+        {applyUserFilesAndIgnores: false, filesDefault: [GLOB_ASTRO_CLIENT_SCRIPTS]},
+      ],
+      {languageOptions: {globals: globals.browser}},
+    );
+  }
 
   if (configJsxA11y !== false && isJsxA11yPluginLoaded) {
     const {buildJsxA11yConfigs} = await import('./jsx-a11y');

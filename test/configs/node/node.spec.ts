@@ -24,7 +24,7 @@ describe('basic tests', () => {
     expect(config).toBeDefined();
     // They run in browsers
     expect(config?.ignores).toMatchInlineSnapshot(
-      '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml", "**/*.*/+([0-9])_script-+([0-9]).?(m)js"]',
+      '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml", "**/*.*/+([0-9])_script-+([0-9]).?(m)js", "**/*.astro/*.ts"]',
     );
 
     const globals = await import('globals');
