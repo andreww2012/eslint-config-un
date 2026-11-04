@@ -43,7 +43,7 @@ import {
   objectKeysUnsafe,
 } from '../utils';
 import {doesConfigRequestTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
-import {generateTailwindCssSyntaxProperty} from './css-syntax';
+import {generateDefaultCssLanguageOptions} from './css-syntax';
 import {
   type PackageRequester,
   type UnConfigContext,
@@ -143,7 +143,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
         mechanism: {language: ['css', 'css']},
         filesDefault: [GLOB_CSS],
         ignoresExclusions: ['css', 'scss'],
-        languageOptionsDefault: generateTailwindCssSyntaxProperty,
+        languageOptionsDefault: generateDefaultCssLanguageOptions,
       },
     },
     dialectDefault: 'css',

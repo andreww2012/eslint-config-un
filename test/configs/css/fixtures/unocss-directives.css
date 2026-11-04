@@ -1,0 +1,11 @@
+@unocss;
+
+.plain {
+  @apply border-main py-1;
+}
+
+@screen sm {
+  .wide {
+    color: red;
+  }
+}

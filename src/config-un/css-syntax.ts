@@ -72,3 +72,22 @@ export const generateTailwindCssSyntaxProperty = (
     },
   );
 };
+
+// `@apply` with variants or `!` still fails to parse: that needs a parser of its own, like the one
+// `tailwind-csstree` has for TailwindCSS
+const UNOCSS_SYNTAX: Readonly<CssCustomSyntax> = {
+  // cspell:disable-next-line
+  atrules: {
+    apply: {prelude: '<any-value>'},
+    screen: {prelude: '<ident>'},
+    unocss: {prelude: '<any-value>?'},
+  },
+};
+
+/**
+ * The syntax CSS files are parsed with unless the user says otherwise: the one of TailwindCSS or
+ * UnoCSS, whichever is used
+ */
+export const generateDefaultCssLanguageOptions = (context: UnConfigContext) =>
+  generateTailwindCssSyntaxProperty(context) ||
+  (context.configsMeta.unocss.enabled ? {customSyntax: UNOCSS_SYNTAX} : null);

@@ -3,6 +3,7 @@ import {packagesLoaders} from '../../../src/loaders';
 
 const FIXTURES = {
   cssEmptyBlock: 'css-empty-block.css',
+  unocssDirectives: 'unocss-directives.css',
 } as const;
 
 describe('basic tests', () => {
@@ -188,6 +189,28 @@ describe('options', () => {
       expect(
         configResult.getConfigByUnPostfix('parsing/css')?.languageOptions?.['customSyntax'],
       ).toBeUndefined();
+    });
+
+    it('makes the directives of UnoCSS known when `unocss` config is enabled', async () => {
+      const configResult = await computeEslintConfig({css: true, unocss: true});
+
+      const languageOptions = configResult.getConfigByUnPostfix('parsing/css')?.languageOptions;
+
+      expect(languageOptions).toMatchObject({
+        customSyntax: {atrules: {apply: expect.any(Object) as unknown}},
+      });
+      // Tolerant parsing would hide every syntax error
+      expect(languageOptions).not.toHaveProperty('tolerant');
+    });
+
+    it('does not report the directives of UnoCSS when `unocss` config is enabled', async () => {
+      const results = await testEslintConfig(
+        {css: true, unocss: {files: []}},
+        FIXTURES.unocssDirectives,
+        import.meta.dirname,
+      );
+
+      expect(results[0]?.messages).toStrictEqual([]);
     });
 
     it('sets user-provided `customSyntax` directly when `tailwindcss` is not installed', async () => {
