@@ -211,6 +211,9 @@ const readUnreleasedChangesets = async () => {
   return changesets.filter((changeset) => changeset != null);
 };
 
+type Changeset = Awaited<ReturnType<typeof readUnreleasedChangesets>>[number];
+type UpdatedDependencyInfo = Awaited<ReturnType<typeof main>>[number];
+
 const getCompareDiffUrl = (
   dependency: string,
   repoUrl: string,
@@ -255,6 +258,67 @@ const isDependencyMentionedIn = (changesetSummary: string, dependency: string) =
       .replaceAll(String.raw`\*`, '[^/]*');
     return new RegExp(`^${pattern}$`).test(dependency);
   });
+
+const UPDATE_ENTRY_REGEXP = regexTyped(
+  '\\[(?<dependenciesText>[^\\[\\]]+?) from v(?<fromVersion>[^\\s\\]]+) to v[^\\s\\]]+\\]\\([^\\s)]+\\)',
+);
+// `matchAll` would lose the typed captures
+const UPDATE_ENTRIES_REGEXP = new RegExp(UPDATE_ENTRY_REGEXP.source, 'g');
+const OUR_DEPENDENCY_NAMES: readonly string[] = Object.keys({
+  ...ourPackageJson.dependencies,
+  ...ourPackageJson.devDependencies,
+});
+
+// Moving an entry like "[`foo` from v1.0.0 to v1.1.0](compare URL)" to the new version is only
+// safe if no other entry mentions the dependency, every dependency in the entry got the same
+// update, and the entry is exactly what this script would generate for the old or the new version
+const findChangesetEntryUpdate = (
+  {dependency, oldVersion, newVersion}: UpdatedDependencyInfo,
+  updatedDependenciesInfo: readonly UpdatedDependencyInfo[],
+  changesets: readonly Changeset[],
+) => {
+  const [foundEntry, ...otherFoundEntries] = changesets.flatMap((changeset) =>
+    (changeset.summary.match(UPDATE_ENTRIES_REGEXP) || []).flatMap((entry) => {
+      const groups = UPDATE_ENTRY_REGEXP.exec(entry)?.groups;
+      return groups && isDependencyMentionedIn(groups.dependenciesText, dependency)
+        ? {changeset, entry, ...groups}
+        : [];
+    }),
+  );
+  if (!foundEntry || otherFoundEntries.length > 0) {
+    return null;
+  }
+
+  const {changeset, entry, dependenciesText, fromVersion} = foundEntry;
+  const sameUpdates = updatedDependenciesInfo.filter(
+    (info) =>
+      info.oldVersion === oldVersion &&
+      info.newVersion === newVersion &&
+      isDependencyMentionedIn(dependenciesText, info.dependency),
+  );
+  if (
+    fromVersion === newVersion ||
+    sameUpdates.length !==
+      OUR_DEPENDENCY_NAMES.filter((name) => isDependencyMentionedIn(dependenciesText, name)).length
+  ) {
+    return null;
+  }
+
+  // The compare URL of a grouped entry may be generated for any of its dependencies
+  const newEntry = sameUpdates
+    .map(({dependency: urlDependency, repoUrl}) => {
+      const formatEntry = (toVersion: string) =>
+        repoUrl &&
+        `[${dependenciesText} from v${fromVersion} to v${toVersion}](${getCompareDiffUrl(urlDependency, repoUrl, fromVersion, toVersion)})`;
+      return (
+        [formatEntry(oldVersion), formatEntry(newVersion)].includes(entry) &&
+        formatEntry(newVersion)
+      );
+    })
+    .find(Boolean);
+
+  return newEntry ? {changeset, entry, newEntry} : null;
+};
 
 // lychee is an optional external binary, and a broken link is never a reason to fail the whole run
 const checkLinksWithLychee = async (changesetPath: string) => {
@@ -304,7 +368,7 @@ const {write: shouldWriteChangesets} = cli({
     write: {
       type: Boolean,
       description:
-        'Create patch changesets even when candidates exist; by default, create only when none exist. Use --no-write to disable creation',
+        'Create patch changesets even when candidates exist. By default, move the update entry of a changeset to the new version when it is safe, otherwise create a changeset only when no candidates exist. Pass `--no-write` to leave changesets untouched',
     },
   },
 }).flags;
@@ -358,7 +422,8 @@ const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | unde
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion -- the loop bounds guarantee an entry exists
-  const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
+  const updatedDependencyInfo = updatedDependenciesInfo[i]!;
+  const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependencyInfo;
 
   if (i > 0) {
     console.log();
@@ -511,7 +576,34 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     isDependencyMentionedIn(summary, dependency),
   );
 
-  if (shouldWriteChangesets !== true && changesetCandidates.length > 0) {
+  const changesetEntryUpdate =
+    shouldWriteChangesets == null &&
+    findChangesetEntryUpdate(updatedDependencyInfo, updatedDependenciesInfo, unreleasedChangesets);
+
+  if (changesetEntryUpdate) {
+    const {changeset, entry, newEntry} = changesetEntryUpdate;
+    const changesetRelativePath = `.changeset/${changeset.id}.md`;
+    if (entry === newEntry) {
+      console.log(styleText('green', `✔ ${changesetRelativePath} already includes this update`));
+    } else {
+      const changesetPath = path.join(REPO_ROOT_PATH, changesetRelativePath);
+      await fs.writeFile(
+        changesetPath,
+        (await fs.readFile(changesetPath, 'utf8')).replace(entry, () => newEntry),
+      );
+      changeset.summary = changeset.summary.replace(entry, () => newEntry);
+      console.log(
+        styleText(
+          'black',
+          styleText('bgGreenBright', ` ✔ Updated the changeset: ${changesetRelativePath} `),
+        ),
+      );
+      console.log(`  ${styleText('red', `- ${entry}`)}`);
+      console.log(`  ${styleText('green', `+ ${newEntry}`)}`);
+
+      await checkLinksWithLychee(changesetPath);
+    }
+  } else if (shouldWriteChangesets !== true && changesetCandidates.length > 0) {
     console.log(
       styleText(
         'black',
