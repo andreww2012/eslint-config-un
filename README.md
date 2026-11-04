@@ -664,10 +664,12 @@ Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInfo
 Such rules come not only from `typescript-eslint` but from many other plugins too, and they are all controlled by one root option, [`typeInfoRules`](#typeinforules).
 Set it to `disabled` to opt out of typed linting, or use its `ignores`/`allowDefaultProject` for TypeScript files that are not part of any `tsconfig.json` and would otherwise make [the project service](https://typescript-eslint.io/packages/parser/#projectservice) throw.
 
-Two things that are easy to miss:
+Things that are easy to miss:
 
 - turning these rules off does not make linting faster on its own: as long as the `ts` config is enabled, the project service is still set up, and that is what takes the time (`ts: {parserOptions: {projectService: false}}` turns it off);
-- the `ts` config's `typeAware` sub-config only covers *its own* type-aware rules; the rules from the other plugins follow `typeInfoRules`.
+- the `ts` config's `typeAware` sub-config only covers *its own* type-aware rules; the rules from the other plugins follow `typeInfoRules`;
+- the ESLint config file itself (`eslint.config.ts`) and the configs of other tools are often not part of any `tsconfig.json`: add them to one, or list them in `typeInfoRules.allowDefaultProject`;
+- the project service only reads files named `tsconfig.json` and the projects they reference, so a `tsconfig.test.json` covering the `test` directory has to be referenced from a `tsconfig.json`, or be renamed to `test/tsconfig.json`.
 
 ### Node.js
 
@@ -749,6 +751,9 @@ To avoid that, set the rule per package with [`extraConfigs`][extraConfigs optio
 We detect the version of the frontend framework you use (Angular, Vue, Svelte and so on) and enable the rules that fit that version.
 You can always set the version yourself through the config's own option.
 See the JSDoc of each config for the details.
+
+Generate the types of your framework before linting, like `nuxt prepare`, `astro sync` or `svelte-kit sync` do.
+Without them, type-aware rules see much of your code as `any`.
 
 #### Vue
 
@@ -1460,6 +1465,11 @@ See [the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal
 
 Depending on your pnpm settings, installing eslint-config-un may print a banner or an error asking you to do something about the build script of the `unrs-resolver` package.
 That package is a transitive dependency of ours, and at the time of writing [its build script only installs `optionalDependencies` for old npm versions](https://github.com/unrs/unrs-resolver/issues/193), so under pnpm it can, and should, stay ignored.
+
+### Some files are linted with a different config
+
+ESLint [looks up the config file](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-file-resolution) from the directory of each linted file, so a nested `eslint.config.*` file, like the one of an example project or a fixture, is used for its directory instead of yours.
+Ignore such directories in your config, and lint them in a separate run with their own config file if needed, or remove the nested config files.
 
 ### Some dependencies are inlined into the package code
 
