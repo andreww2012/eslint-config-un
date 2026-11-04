@@ -334,7 +334,7 @@ export const resolveConfigAsyncData = async (
     const collator = new Intl.Collator();
     const {usedPackageManager} = context.meta;
     // Without a lockfile, the package manager running ESLint is the best guess
-    const packageManagerName = usedPackageManager?.name ?? getUserAgent();
+    const packageManagerName = usedPackageManager?.name || getUserAgent();
     const workspaceRootFlag = await resolveWorkspaceRootFlag(usedPackageManager);
     const areColorsEnabled = styleText('cyan', ' ') !== ' ';
     const renderInstallationCommand = (packageNames: readonly string[], isExact?: boolean) =>

@@ -9,6 +9,7 @@ export default definePluginMetadata('un', {
       disableInCodeBlocks: 'typeStrictness',
     },
     'prefer-array-for-each': {requiresTypeInfo: 'optional', stylistic: true},
+    'prefer-logical-or': {requiresTypeInfo: true, stylistic: true},
     'vue-no-leading-text-whitespace': {stylistic: true},
     'vue-no-trailing-element-whitespace': {disableInCodeBlocks: 'runtimeOnly'},
   },

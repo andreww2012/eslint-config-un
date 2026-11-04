@@ -3,6 +3,7 @@ const FIXTURES = {
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
   forOfLoopOverArray: 'for-of-loop-over-array.js',
   neverConditionalTypes: 'never-conditional-types.ts',
+  nullishCoalescing: 'nullish-coalescing.ts',
   typeAssertions: 'type-assertions.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
@@ -169,6 +170,26 @@ describe('rules', async () => {
     expect(errors[0]?.suggestions).toBeUndefined();
     expect(errors[1]?.suggestions?.map(({desc}) => desc)).toMatchInlineSnapshot(
       '["Replace the assertion with a type annotation", "Check the assertion with `satisfies`"]',
+    );
+  });
+
+  it('`un/prefer-logical-or` rule fires on `??` with a left operand that cannot be falsy when enabled', async () => {
+    const results = await testEslintConfig(
+      {ts: true, un: {overrides: {'un/prefer-logical-or': 'error'}}},
+      FIXTURES.nullishCoalescing,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.nullishCoalescing,
+      'un/prefer-logical-or',
+      {all: true},
+    );
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0]?.message).toMatchInlineSnapshot(
+      '"Use `||` instead of `??`: they work the same here, because the left side cannot be `false`, `0`, `0n`, `NaN` or an empty string."',
     );
   });
 

@@ -4,6 +4,7 @@ import {noMultipleConsecutiveSpaces} from './rules/no-multiple-consecutive-space
 import {noTypeAssertion} from './rules/no-type-assertion';
 import {noTypeofLikeComparison} from './rules/no-typeof-like-comparisons';
 import {preferArrayForEach} from './rules/prefer-array-for-each';
+import {preferLogicalOr} from './rules/prefer-logical-or';
 import {vueNoLeadingTextWhitespace} from './rules/vue-no-leading-text-whitespace';
 import {vueNoTrailingElementWhitespace} from './rules/vue-no-trailing-element-whitespace';
 
@@ -17,6 +18,7 @@ const eslintPluginUn: EslintPlugin = {
     'no-type-assertion': noTypeAssertion,
     'no-typeof-like-comparisons': noTypeofLikeComparison,
     'prefer-array-for-each': preferArrayForEach,
+    'prefer-logical-or': preferLogicalOr,
     'vue-no-leading-text-whitespace': vueNoLeadingTextWhitespace,
     'vue-no-trailing-element-whitespace': vueNoTrailingElementWhitespace,
   },

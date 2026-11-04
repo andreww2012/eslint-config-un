@@ -32,6 +32,7 @@ export default defineUnConfig<UnEslintConfigOptions>(
     .addRule('no-type-assertion', OFF) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
     .addRule('prefer-array-for-each', OFF) /** @since 1.0.0 */
+    .addRule('prefer-logical-or', OFF) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('un', {
       // Added in the `vue` config
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('vue-'),
