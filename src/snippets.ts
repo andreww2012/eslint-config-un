@@ -22,6 +22,7 @@ const UTILITY_PACKAGES: Readonly<Record<string, true>> = {
   'string-ts': true,
   'fp-ts': true,
   '@mobily/ts-belt': true,
+  utilery: true,
 
   'date-fns': true,
   dayjs: true,
@@ -48,25 +49,26 @@ const UTILITY_PACKAGES: Readonly<Record<string, true>> = {
  * Note that importing from sub-paths (`/something`) will be disallowed too.
  *
  * The full list of packages forbidden by default:
- * - `lodash`
- * - `lodash-es`
- * - `underscore`
- * - `es-toolkit`
  * - `@antfu/utils`
- * - `remeda`
- * - `ramda`
- * - `radashi`
- * - `rambda`
- * - `node:util`
- * - `string-ts`
- * - `fp-ts`
  * - `@mobily/ts-belt`
  * - `date-fns`
  * - `dayjs`
+ * - `es-toolkit`
+ * - `fp-ts`
+ * - `lodash-es`
+ * - `lodash`
  * - `luxon`
- * - `type-fest`
- * - `ts-toolbelt`
+ * - `node:util`
+ * - `radashi`
+ * - `rambda`
+ * - `ramda`
+ * - `remeda`
+ * - `string-ts`
  * - `ts-essentials`
+ * - `ts-toolbelt`
+ * - `type-fest`
+ * - `underscore`
+ * - `utilery`
  */
 export const forbidImportingFromUtilityLibraries = ({
   packageNames,
