@@ -1,6 +1,6 @@
 import globals from 'globals';
 import type {SvelteConfig} from 'svelte-eslint-parser';
-import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_SVELTE, GLOB_SVELTE_SCRIPT, OFF, WARNING} from '../constants';
 import type {EslintSeverity} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
@@ -76,7 +76,8 @@ export interface SveltePluginSettings {
 /**
  * [Svelte](https://svelte.dev) specific rules.
  *
- * 📁 Default `files`: <code>**&#47;*.svelte</code>
+ * 📁 Default `files`: <code>**&#47;*.svelte</code> and <code>**&#47;*.svelte.{js,ts}</code> (runes
+ * modules)
  */
 export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
@@ -85,7 +86,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Enforces the presence of `lang="ts"` in `<script>` blocks.
    *
-   * 📁 Default `files` and `ignores`: inherited from the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config, without runes modules.
    * Specifying them explicitly here will *override* the respective property of the parent config.
    *
    * Affected rule:
@@ -102,7 +103,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Enables or specifies the configuration for the HTML rules applied to Svelte components.
    *
-   * 📁 Default `files` and `ignores`: inherited from the parent config
+   * 📁 Default `files` and `ignores`: inherited from the parent config, without runes modules
    *
    * 🧩 Main plugin: [`@html-eslint/eslint-plugin-svelte`](https://npmx.dev/@html-eslint/eslint-plugin-svelte)
    * @default true
@@ -217,6 +218,10 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
   });
+  const svelteRulesFiles = resolveFilesOption(optionsResolved.files, [
+    ...DEFAULT_SVELTE_FILES,
+    GLOB_SVELTE_SCRIPT,
+  ]);
   // Must be assigned to options for `ts` config
   optionsResolved.files = resolveFilesOption(optionsResolved.files, DEFAULT_SVELTE_FILES);
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
@@ -296,7 +301,10 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
       rulesToSkipInConfig: (ruleName) => !arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
     });
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'svelte');
+  const configBuilder = context.createConfigBuilder(
+    {...optionsResolved, files: svelteRulesFiles},
+    'svelte',
+  );
 
   // Legend:
   // 🟢 - in recommended

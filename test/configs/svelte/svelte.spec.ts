@@ -2,6 +2,7 @@ import {GLOB_SVELTE} from '../../../src/constants';
 
 const FIXTURES = {
   browserGlobals: 'browser-globals.svelte',
+  counterRunesModule: 'counter.svelte.js',
   stringLiteralInSvelteExpression: 'string-literal-in-svelte-expression.svelte',
 } as const;
 
@@ -17,7 +18,7 @@ describe('basic tests', () => {
 
     expect(config).toBeDefined();
     expect(configResult.getConfigByUnPostfix('svelte/system')).toBeDefined();
-    expect(config?.files).toMatchInlineSnapshot('["**/*.svelte"]');
+    expect(config?.files).toMatchInlineSnapshot('["**/*.svelte", "**/*.svelte.{js,ts}"]');
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
     expect(configResult.getLoadedPlugin('svelte')).toBeDefined();
@@ -97,6 +98,22 @@ describe('rules', async () => {
       'svelte/derived-has-same-inputs-outputs': 1,
       'svelte/no-target-blank': 0,
     });
+  });
+
+  it('`svelte/no-inspect` rule fires in runes modules too', async () => {
+    const results = await testEslintConfig(
+      'svelte',
+      FIXTURES.counterRunesModule,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.counterRunesModule,
+      'svelte/no-inspect',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Do not use $inspect directive"');
   });
 
   it('defines browser globals', async () => {
