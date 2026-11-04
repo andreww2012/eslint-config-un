@@ -157,7 +157,7 @@
     "eslint-plugin-toml": "1.5.0",
     "eslint-plugin-unicorn": "79.0.0",
     "eslint-plugin-unnecessary-abstractions": "1.0.0",
-    "eslint-plugin-yml": "3.9.0",
+    "eslint-plugin-yml": "3.10.0",
     "eslint-scope": "catalog:html-scripts",
     "eslint-visitor-keys": "catalog:html-scripts",
     "espree": "catalog:html-scripts",

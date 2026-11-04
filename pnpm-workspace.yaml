@@ -16,6 +16,7 @@ minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list 
 minimumReleaseAgeExclude: # []
   - eslint-plugin-jsdoc@65.4.3
   - eslint-plugin-markdown-preferences@0.43.0
+  - eslint-plugin-yml@3.10.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
