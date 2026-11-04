@@ -14,43 +14,7 @@ lockfile:
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - '@andreww2012/commitlint-config@0.1.0'
-  - web-features@3.45.0
-  - '@boundaries/config@1.0.0'
-  - '@boundaries/elements@3.3.1'
-  - '@boundaries/policies@1.0.0'
-  - eslint-plugin-boundaries@7.4.1
-  - eslint-plugin-playwright@2.12.2
-  - '@next/eslint-plugin-next@16.4.4'
-  - '@tanstack/eslint-plugin-query@5.105.3'
-  - '@shikijs/core@4.6.0'
-  - '@shikijs/engine-javascript@4.6.0'
-  - '@shikijs/engine-oniguruma@4.6.0'
-  - '@shikijs/langs@4.6.0'
-  - '@shikijs/primitive@4.6.0'
-  - '@shikijs/themes@4.6.0'
-  - '@shikijs/types@4.6.0'
-  - shiki@4.6.0
-  - stylelint-config-recess-order@7.10.0
-  - '@effect/platform-node-shared@4.1.2'
-  - '@effect/platform-node@4.1.2'
-  - effect@4.1.2
-  - '@vitest/coverage-v8@5.1.0'
-  - '@vitest/mocker@5.1.0'
-  - '@vitest/pretty-format@5.1.0'
-  - '@vitest/spy@5.1.0'
-  - '@vitest/ui@5.1.0'
-  - '@vitest/utils@5.1.0'
-  - vitest@5.1.0
-  - eslint-plugin-package-json@1.14.0
-  - '@nuxt/kit@4.6.4'
-  - '@nuxt/nitro-server@4.6.4'
-  - '@nuxt/schema@4.6.4'
-  - '@nuxt/vite-builder@4.6.4'
-  - '@nuxt/vite-server@4.6.4'
-  - nitropack@2.13.6
-  - nuxt@4.6.4
-  - unrouting@0.3.2
+  - eslint-plugin-jsdoc@65.4.3
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
