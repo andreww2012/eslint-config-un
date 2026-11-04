@@ -374,7 +374,7 @@ ${renderTable(
   })),
   {shouldDisableColors: !areColorsEnabled},
 )}
-${isUpdates ? 'Update' : 'Install'} ${packages.length === 1 ? 'it' : 'them'} with:
+${isUpdates ? 'Update' : 'Install'} ${packages.length === 1 ? 'it' : 'them'} in the package that depends on ${stylePackageName('eslint-config-un')}, with:
 ${renderInstallationCommand(packages.map(({name}) => name))}
 ... with explicit version ranges:
 ${renderInstallationCommand(packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`))}

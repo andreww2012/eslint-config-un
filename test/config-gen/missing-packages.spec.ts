@@ -125,7 +125,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
 
     const output = stderrOutput();
 
-    expect(output).toContain('Install it with:');
+    expect(output).toContain('Install it in the package that depends on eslint-config-un, with:');
     expect(output).toContain(`npm i --save-dev ${DE_MORGAN_PACKAGE}`);
   });
 
