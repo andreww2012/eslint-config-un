@@ -99,7 +99,7 @@ const {pluginsCount, warnings: pluginMetadataWarnings} =
   );
 console.log(`Generated the metadata of ${styleText('bold', String(pluginsCount))} plugin(s)`);
 pluginMetadataWarnings.forEach((warning) => {
-  console.log(`  ${styleText('yellow', '⚠')} ${warning}`);
+  console.warn(`  ${styleText('yellow', '⚠', {stream: process.stderr})} ${warning}`);
 });
 
 const {renamesCount} = await writeReadmeArtifacts();

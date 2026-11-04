@@ -6,7 +6,10 @@ import {
   getKeysOfTruthyValues,
   isNonEmptyArray,
   readAndParseJson,
+  styleRuleName,
+  styleText,
 } from '../src/utils';
+import {pinTerminalStreams} from './helpers/terminal-streams';
 
 const FIXTURES = {
   plainObjectJson: 'plain-object.json',
@@ -314,4 +317,31 @@ describe('assignDefaults', () => {
 
     expect(defaults).toStrictEqual({a: 1, b: {nested: true}});
   });
+});
+
+describe('styleText', () => {
+  const CASES = [
+    ['stderr by default', 'stderr', undefined],
+    ['the given stream', 'stdout', {stream: process.stdout}],
+  ] as const;
+
+  it.each(CASES)(
+    'checks %s and uses colors if it is a terminal, even if the other stream is not',
+    (_, streamName, options) => {
+      pinTerminalStreams({stdout: streamName === 'stdout', stderr: streamName === 'stderr'});
+
+      expect(styleText('green', 'text', options)).toBe('\u{1B}[32mtext\u{1B}[39m');
+      expect(styleRuleName('text', options)).toBe('\u{1B}[32mtext\u{1B}[39m');
+    },
+  );
+
+  it.each(CASES)(
+    'checks %s and does not use colors if it is not a terminal, even if the other stream is',
+    (_, streamName, options) => {
+      pinTerminalStreams({stdout: streamName !== 'stdout', stderr: streamName !== 'stderr'});
+
+      expect(styleText('green', 'text', options)).toBe('text');
+      expect(styleRuleName('text', options)).toBe('text');
+    },
+  );
 });

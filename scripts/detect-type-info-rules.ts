@@ -23,6 +23,10 @@ import {
 
 const logger = consola.withTag('type-info-rules');
 
+const REPORT_STYLE_OPTIONS = Object.freeze({stream: process.stdout} satisfies Parameters<
+  typeof styleText
+>[2]);
+
 const require = createRequire(import.meta.url);
 
 const LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {rootOptions: {}, missingPackages: new Map()};
@@ -102,7 +106,7 @@ const report = (
   findings: readonly Finding[],
   describe: (finding: Finding) => string,
 ) => {
-  console.log(`\n${styleText('bold', title)} (${findings.length})`);
+  console.log(`\n${styleText('bold', title, REPORT_STYLE_OPTIONS)} (${findings.length})`);
   if (findings.length === 0) {
     console.log('  none');
     return;
@@ -111,9 +115,11 @@ const report = (
     left.localeCompare(right),
   );
   groups.forEach(([prefix, group]) => {
-    console.log(`  ${stylePluginPrefix(prefix)} (${group.length})`);
+    console.log(`  ${stylePluginPrefix(prefix, REPORT_STYLE_OPTIONS)} (${group.length})`);
     group.forEach((finding) => {
-      console.log(`    ${styleRuleName(finding.ruleName).padEnd(60)} ${describe(finding)}`);
+      console.log(
+        `    ${styleRuleName(finding.ruleName, REPORT_STYLE_OPTIONS).padEnd(60)} ${describe(finding)}`,
+      );
     });
   });
 };
@@ -310,7 +316,7 @@ const main = async () => {
     'Detected but not declared',
     undeclared,
     ({requirement, reasons}) =>
-      `${styleText('yellow', requirement == null ? 'severity unproven' : String(requirement))} ${reasons.join(' | ')}`,
+      `${styleText('yellow', requirement == null ? 'severity unproven' : String(requirement), REPORT_STYLE_OPTIONS)} ${reasons.join(' | ')}`,
   );
 
   const undetected = findings.filter(({declared, isDetected}) => declared != null && !isDetected);
@@ -323,11 +329,11 @@ const main = async () => {
   // Strict mode only says how many there are, to keep an automated run quiet
   if (argv.flags.strict) {
     console.log(
-      `\n${styleText('dim', `${undetected.length} declared rule(s) the probe did not reach, ${contradicted.length} whose requirement it read differently. Run \`nr type-info-rules\` for the detail.`)}`,
+      `\n${styleText('dim', `${undetected.length} declared rule(s) the probe did not reach, ${contradicted.length} whose requirement it read differently. Run \`nr type-info-rules\` for the detail.`, REPORT_STYLE_OPTIONS)}`,
     );
   } else {
     report('Declared but nothing detected', undetected, ({declared}) =>
-      styleText('yellow', String(declared)),
+      styleText('yellow', String(declared), REPORT_STYLE_OPTIONS),
     );
 
     const [declaredTrue, declaredOptional] = arrayPartition(
@@ -347,7 +353,7 @@ const main = async () => {
       describeReasons,
     );
 
-    console.log(`\n${styleText('dim', CAVEAT)}`);
+    console.log(`\n${styleText('dim', CAVEAT, REPORT_STYLE_OPTIONS)}`);
   }
 
   if (!argv.flags.strict || undeclared.length === 0) {

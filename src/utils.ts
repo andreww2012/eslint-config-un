@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import path from 'node:path';
 import url from 'node:url';
-import {styleText} from 'node:util';
+import {type StyleTextOptions, styleText as styleTextOriginal} from 'node:util';
 import {isInEditor as isInEditorOriginal} from 'is-in-editor';
 import {
   arrayHasMinElements,
@@ -68,10 +68,17 @@ export const isInEditor = () => isInEditorOriginal({mode: 'strict'});
 
 export {isCI as isInCi} from 'ci-info';
 
-const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>
-  styleText(color, string);
+/**
+ * Like the function from `node:util`, but checks stderr instead of stdout by default to decide
+ * whether to use colors: the logger's warnings and errors and the debug output are printed there.
+ * Pass another stream if the text is printed elsewhere
+ */
+export const styleText = (...[format, text, options]: Parameters<typeof styleTextOriginal>) =>
+  styleTextOriginal(format, text, {...options, stream: options?.stream || process.stderr});
 
-export {styleText} from 'node:util';
+const generateStyleFn =
+  (format: Parameters<typeof styleText>[0]) => (text: string, options?: StyleTextOptions) =>
+    styleText(format, text, options);
 
 export const styleConfigName = generateStyleFn('magenta');
 export const stylePackageName = generateStyleFn('yellow');

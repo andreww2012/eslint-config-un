@@ -137,10 +137,11 @@ const generateInstallationCommand = (
 
 const PACKAGE_REQUESTER_RENDERERS = {
   config: (configKeys) =>
-    `${configKeys.map(styleConfigName).join(', ')} config${configKeys.length === 1 ? '' : 's'}`,
+    `${configKeys.map((configKey) => styleConfigName(configKey)).join(', ')} config${configKeys.length === 1 ? '' : 's'}`,
   option: (optionNames) =>
     `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} option${optionNames.length === 1 ? '' : 's'}`,
-  package: (packageNames) => `a dependency of ${packageNames.map(stylePackageName).join(', ')}`,
+  package: (packageNames) =>
+    `a dependency of ${packageNames.map((packageName) => stylePackageName(packageName)).join(', ')}`,
 } as const satisfies Record<string, (names: readonly string[]) => string>;
 
 /**
@@ -505,7 +506,7 @@ ${renderInstallationCommand(
             (ruleName) => !pluginRulesAutofixDisabledStatuses[ruleName],
           );
           debug(
-            `Globally disabling autofix for ${isAutofixDisabledForAllPluginRulesByDefault ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin${rulesWithAutofixKept.length > 0 ? ` except for: ${rulesWithAutofixKept.map(styleRuleName).join(', ')}` : ''}` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules: ${rulesToDisableAutofixFor.map(styleRuleName).join(', ')}`}`,
+            `Globally disabling autofix for ${isAutofixDisabledForAllPluginRulesByDefault ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin${rulesWithAutofixKept.length > 0 ? ` except for: ${rulesWithAutofixKept.map((ruleName) => styleRuleName(ruleName)).join(', ')}` : ''}` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules: ${rulesToDisableAutofixFor.map((ruleName) => styleRuleName(ruleName)).join(', ')}`}`,
           );
 
           return [

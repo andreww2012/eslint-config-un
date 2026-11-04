@@ -3,6 +3,7 @@ import {
   detect as detectPackageManager,
   getUserAgent as getPackageManagerFromUserAgent,
 } from 'package-manager-detector/detect';
+import {pinTerminalStreams} from '../helpers/terminal-streams';
 
 vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
   const original = await importOriginal();
@@ -269,7 +270,22 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(stderrOutput()).toContain(`yarn add --dev -W ${DE_MORGAN_PACKAGE}`);
   });
 
-  it('does not color the table of packages when the rest of the message is not colored', async () => {
+  it('colors the table of packages along with the rest of the message when stderr is a terminal, even if stdout is not', async () => {
+    pinTerminalStreams({stdout: false, stderr: true});
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    const output = stderrOutput();
+    const tableHeader = output.split('\n').find((line) => line.includes('Required by'));
+
+    expect(output).toContain(`\u{1B}[33m${DE_MORGAN_PACKAGE}\u{1B}[39m`);
+    // The header has no colored text in it, so any colors there are the table's own
+    expect(tableHeader).toContain('\u{1B}[');
+  });
+
+  it('does not color the table of packages or the rest of the message when stderr is not a terminal, even if stdout is', async () => {
+    pinTerminalStreams({stdout: true, stderr: false});
     mockUnresolvablePackage(DE_MORGAN_PACKAGE);
 
     await computeEslintConfig('deMorgan');

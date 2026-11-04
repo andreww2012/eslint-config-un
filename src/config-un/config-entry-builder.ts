@@ -141,7 +141,8 @@ interface ConfigEntryChain<DefaultPrefix extends PluginPrefix | null> {
   ) => ConfigEntryChain<DefaultPrefix>;
 }
 
-const styleRuleNames = (ruleNames: readonly string[]) => ruleNames.map(styleRuleName).join(', ');
+const styleRuleNames = (ruleNames: readonly string[]) =>
+  ruleNames.map((ruleName) => styleRuleName(ruleName)).join(', ');
 
 const TYPE_AWARE_PARSING_DEFAULT = {
   files: [GLOB_TS_X],

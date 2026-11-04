@@ -749,7 +749,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   if (offlineMode) {
     debug(
-      `Offline mode is active, the following ${RULES_TO_DISABLE_IN_OFFLINE_MODE.length} rules were disabled: ${RULES_TO_DISABLE_IN_OFFLINE_MODE.map(styleRuleName).join(', ')}`,
+      `Offline mode is active, the following ${RULES_TO_DISABLE_IN_OFFLINE_MODE.length} rules were disabled: ${RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
     );
 
     configsResolved.push({
@@ -781,7 +781,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
     if (duplicateConfigNames.length > 0) {
       context.tests.push(
-        `Duplicate config names found: ${duplicateConfigNames.map(styleConfigName).join(', ')}`,
+        `Duplicate config names found: ${duplicateConfigNames.map((configName) => styleConfigName(configName)).join(', ')}`,
       );
     }
 
