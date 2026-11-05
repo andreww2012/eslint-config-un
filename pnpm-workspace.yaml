@@ -14,9 +14,7 @@ lockfile:
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - eslint-plugin-jsdoc@65.4.3
-  - eslint-plugin-markdown-preferences@0.43.0
-  - eslint-plugin-yml@3.10.0
+  - '@tanstack/eslint-plugin-query@5.106.1'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade

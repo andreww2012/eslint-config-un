@@ -2,4 +2,4 @@
 "eslint-config-un": patch
 ---
 
-tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.104.3 to v5.105.3](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.104.3...@tanstack/eslint-plugin-query@5.105.3)
+tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.104.3 to v5.106.1](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.104.3...@tanstack/eslint-plugin-query@5.106.1)
