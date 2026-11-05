@@ -2,4 +2,4 @@
 "eslint-config-un": patch
 ---
 
-boundaries: updated [`eslint-plugin-boundaries` from v7.2.0 to v7.4.1](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.2.0...v7.4.1)
+boundaries: updated [`eslint-plugin-boundaries` from v7.2.0 to v7.4.2](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.2.0...v7.4.2)
