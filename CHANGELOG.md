@@ -1,5 +1,303 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.6
+
+### Minor Changes
+
+- [`eede326`](https://github.com/andreww2012/eslint-config-un/commit/eede326d7f4840b2594fd5bd413082274e943332) - eslintComments: added the `requireDescriptions` option to enable [`eslint-comments/require-description`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/require-description.html), off by default
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`b724f6a`](https://github.com/andreww2012/eslint-config-un/commit/b724f6a7ce625937a579c4ea90777e021a203156) - [**BREAKING**] htmlScripts: the `jsInline` config was renamed to `htmlScripts`, `eslint-plugin-html` was replaced by the built-in `html-scripts` plugin, and its `html-processor` plugin settings by the `indent`, `reportBadIndent`, `scriptTags` and `xmlExtensions` options. Each `<script>` tag is now linted as a virtual JS file, matched by `GLOB_HTML_SCRIPTS` rather than HTML file globs, by every config linting JS files except `node`, `format` and `checkFile`, and classic scripts (the ones without `type="module"`) are parsed as scripts sharing their global variables
+
+- [`2a2aae7`](https://github.com/andreww2012/eslint-config-un/commit/2a2aae709d5a135047c4ae3bc1f3b94a14396f4e) - soml: updated `eslint-soml` from v0.0.4 to v0.0.6:
+  
+  - 🟢 enabled the following rules:
+    - [`soml/no-dotted-key-collisions`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/no-dotted-key-collisions.md)
+    - [`soml/no-escapes-in-literal-strings`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/no-escapes-in-literal-strings.md)
+    - [`soml/no-quoted-values-in-arrays`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/no-quoted-values-in-arrays.md)
+    - [`soml/no-surrounding-whitespace-in-keys`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/no-surrounding-whitespace-in-keys.md)
+    - [`soml/prefer-block-strings`](https://github.com/soml-lang/eslint-soml/blob/HEAD/docs/rules/prefer-block-strings.md) and added it to the `noStylisticRules` config
+
+- [`b4fb0e4`](https://github.com/andreww2012/eslint-config-un/commit/b4fb0e4621ab5d4b6dd7f49bb44d371db7b297c3) - valibot: updated [`eslint-plugin-valibot` from v1.4.3 to v1.5.0](https://github.com/nimaebra/eslint-plugin-valibot/compare/v1.4.3...v1.5.0):
+  
+  - 🟢 enabled the following new rules:
+    - [`valibot/no-discarded-safe-parse`](https://github.com/nimaebra/eslint-plugin-valibot/blob/HEAD/docs/rules/no-discarded-safe-parse.md)
+    - [`valibot/no-shared-mutable-default`](https://github.com/nimaebra/eslint-plugin-valibot/blob/HEAD/docs/rules/no-shared-mutable-default.md)
+
+- [`9e6513c`](https://github.com/andreww2012/eslint-config-un/commit/9e6513cf5309b7667cbd1c0769d0ff9e52cdd7e4) - Added a new config `valibot` which uses [`eslint-plugin-valibot`](https://npmx.dev/eslint-plugin-valibot), ❓ enabled if `valibot` v1 package is installed
+
+- [`c40e466`](https://github.com/andreww2012/eslint-config-un/commit/c40e466e8440dccb3988c807f2dd7ce9cc11c6e4) - unicorn: updated [`eslint-plugin-unicorn` from v78.0.0 to v79.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v78.0.0...v79.0.0):
+  
+  - [`unicorn/no-top-level-side-effects`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-top-level-side-effects.md) now only reports mutations of globals, not unknown calls
+  - Re-enabled autofix for the following rules, since their fixes that could break code are now safe or offered as suggestions:
+    - [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-existence-index-check.md)
+    - [`unicorn/no-useless-spread`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-spread.md)
+    - [`unicorn/prefer-modern-dom-apis`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-modern-dom-apis.md)
+    - [`unicorn/prefer-modern-math-apis`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-modern-math-apis.md)
+    - [`unicorn/prefer-string-raw`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-raw.md)
+
+- [`d26b7f9`](https://github.com/andreww2012/eslint-config-un/commit/d26b7f9c40358093387083a41fcf0d6b0f5bd8a3) - vue: updated [`eslint-plugin-vue` from v10.11.1 to v10.12.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.11.1...v10.12.0):
+  
+  - 🟢 enabled [`vue/no-content-outside-block`](https://eslint.vuejs.org/rules/no-content-outside-block.html) rule
+  - 🟢 enabled [`vue/no-define-model-default`](https://eslint.vuejs.org/rules/no-define-model-default.html) rule
+  - 🟢 enabled [`vue/no-props-shadow`](https://eslint.vuejs.org/rules/no-props-shadow.html) rule
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`145870a`](https://github.com/andreww2012/eslint-config-un/commit/145870a0597df25412bde225c7cbc1f217540c32) - markdown, mdx: ⚙️ `markdown/codeBlocks` and ⚙️ `mdx/codeBlocks` sub-configs now also apply to nested Markdown code blocks (`md`, `mdx`), and 20 rules that misjudge a part of a document or what an example shows on purpose are now disabled in code blocks
+  
+  <details>
+  <summary>Rules now disabled in embedded code blocks (20)</summary>
+  
+  - [`markdown/fenced-code-meta`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/fenced-code-meta.md)
+  - [`markdown/heading-increment`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/heading-increment.md)
+  - [`markdown/no-bare-urls`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-bare-urls.md)
+  - [`markdown/no-duplicate-headings`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-headings.md)
+  - [`markdown/no-html`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-html.md)
+  - [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md)
+  - [`markdown/no-missing-link-fragments`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-link-fragments.md)
+  - [`markdown/no-multiple-h1`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-multiple-h1.md)
+  - [`markdown/no-unused-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-unused-definitions.md)
+  - [`markdown/require-alt-text`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/require-alt-text.md)
+  - [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html)
+  - [`markdown-links/no-missing-fragments`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-fragments.html)
+  - [`markdown-links/no-missing-path`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-missing-path.html)
+  - [`markdown-preferences/definitions-last`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/definitions-last.html)
+  - [`markdown-preferences/prefer-autolinks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-autolinks.html) <!-- cspell:disable-line -->
+  - [`markdown-preferences/prefer-fenced-code-blocks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-fenced-code-blocks.html)
+  - [`markdown-preferences/prefer-inline-code-words`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-inline-code-words.html)
+  - [`markdown-preferences/prefer-linked-words`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/prefer-linked-words.html)
+  - [`unicorn/no-missing-local-resource`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-missing-local-resource.md)
+  - [`unicorn/require-frontmatter-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-frontmatter-fields.md)
+  
+  </details>
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`c441d17`](https://github.com/andreww2012/eslint-config-un/commit/c441d17a0d049b2dbbf64fb398d0f01880cbd18c) - perfectionist: updated [`eslint-plugin-perfectionist` from v5.12.1 to v5.13.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.12.1...v5.13.0):
+  
+  - 🔴 not enabled [`perfectionist/sort-constructor-parameters`](https://perfectionist.dev/rules/sort-constructor-parameters) rule, added the corresponding ⚙️ `perfectionist/sortConstructorParameters` sub-config, which requires `options` with the rule's `useConfigurationIf` option
+
+- [`008765d`](https://github.com/andreww2012/eslint-config-un/commit/008765dee50610203f43b92e7e3f21907f6d8246) - ember: the plugin's shared settings can now be provided via the `plugins.ember.settings` root option, where `version` sets the Ember version the rules and the parser assume instead of the installed `ember-source` one (the parser gets it as its `emberSourceVersion` option)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`3f4d9f5`](https://github.com/andreww2012/eslint-config-un/commit/3f4d9f5d6d3fcbe3545597e4b84a82d457f010fc) - ember: updated [`eslint-plugin-ember` from v13.6.1 to v13.9.1](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.6.1...v13.9.1) and [`ember-eslint-parser` from v0.14.9 to v0.16.1](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.14.9...v0.16.1):
+  
+  - 🟢 enabled [`ember/no-deprecated-imports`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-deprecated-imports.md) rule with `reportAll: false`, so that it only reports the deprecations your Ember version has reached
+  - 🟢 enabled [`ember/template-tag-position`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-tag-position.md) and [`ember/template-tag-spacing`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-tag-spacing.md) rules and added them to the `noStylisticRules` config
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`aaba253`](https://github.com/andreww2012/eslint-config-un/commit/aaba2531200000bd0e7af5de00fa7c3f425ae8dc) - [**BREAKING**] mobx: updated [`eslint-plugin-mobx` from v0.1.0 to v0.2.1](https://github.com/mobxjs/mobx/compare/eslint-plugin-mobx@0.1.0...eslint-plugin-mobx@0.2.1), which now only supports MobX 7:
+  
+  - ❌ `mobx/missing-make-observable` rule was removed
+
+- [`5786b24`](https://github.com/andreww2012/eslint-config-un/commit/5786b24a06e30afe923cb05da7ed671a35620dc5) - css: updated [`eslint-cssicorn` from v0.2.0 to v0.3.0](https://github.com/sindresorhus/eslint-cssicorn/compare/v0.2.0...v0.3.0) and in ⚙️ `css/unicorn` sub-config:
+  
+  - 🟢 enabled the following new rules:
+    - [`cssicorn/no-overridden-animation-properties`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-overridden-animation-properties.md)
+    - [`cssicorn/no-unknown-type-selectors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-type-selectors.md)
+    - [`cssicorn/prefer-longhand-overrides`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-longhand-overrides.md)
+  - ❓ enabled [`cssicorn/prefer-subgrid`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/prefer-subgrid.md) rule unless the `baselineAvailability` root option is set to a year before 2023
+  - ❓ enabled [`cssicorn/consistent-custom-property-fallbacks`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/consistent-custom-property-fallbacks.md) rule for the custom properties from the `customProperties` option, if it's not empty
+  - Added a new option `knownElementNames` that lists the element names (strings or regular expressions) [`cssicorn/no-unknown-type-selectors`](https://github.com/sindresorhus/eslint-cssicorn/blob/HEAD/docs/rules/no-unknown-type-selectors.md) rule allows
+
+- [`b83da34`](https://github.com/andreww2012/eslint-config-un/commit/b83da3444d3ca938bdb38089a1522069400328fb) - svelte: added the ⚙️ `svelte/kitAppTemplate` sub-config, enabled if `@sveltejs/kit` is installed and the `html` config is enabled, which disables [`html/require-title`](https://html-eslint.org/docs/rules/require-title) rule in the [SvelteKit app template](https://svelte.dev/docs/kit/project-structure#Project-files-src) (`src/app.html`), whose title comes from `%sveltekit.head%`
+
+- [`8a8e319`](https://github.com/andreww2012/eslint-config-un/commit/8a8e31947f60bdba1b9267bbfb086513d2b2ca15) - un: added `un/prefer-logical-or` rule, off by default, which reports `??` and `??=` that `||` and `||=` can replace without a change in behavior
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`55d317f`](https://github.com/andreww2012/eslint-config-un/commit/55d317facbd2cac4576c63848206ba80301e1b43) - [**BREAKING**] `gitignore` root option now uses [`gitignore-reader-x`](https://npmx.dev/gitignore-reader-x) instead of `eslint-config-flat-gitignore`, and its object form now takes the options of the former. The ignores now match what git ignores and come from every source git reads, including parent `.gitignore` files and `.git/info/exclude`
+
+- [`59b291f`](https://github.com/andreww2012/eslint-config-un/commit/59b291f714b374961c017451606a0d9d066d1582) - packageJson: updated [`eslint-plugin-package-json` from v1.10.1 to v1.13.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.10.1...v1.13.0):
+  
+  - 🟢 enabled [`package-json/consistent-property-aliases`](https://eslint-plugin-package-json.dev/rules/consistent-property-aliases) rule
+  - ❓ enabled conditionally [`package-json/consistent-package-manager-declaration`](https://eslint-plugin-package-json.dev/rules/consistent-package-manager-declaration) rule, which enforces `devEngines` if the detected package manager supports `devEngines.packageManager`, and added the `packageManagerDeclaration` option to choose the field or disable the rule
+  - 🟢 enabled [`package-json/require-override-restrictions`](https://eslint-plugin-package-json.dev/rules/require-override-restrictions) rule
+  - 🔴 not enabled [`package-json/prefer-scoped-name`](https://eslint-plugin-package-json.dev/rules/prefer-scoped-name) rule
+
+### Patch Changes
+
+- [`a4ab65d`](https://github.com/andreww2012/eslint-config-un/commit/a4ab65dcbbbd09d2c9720f8dec663b991b6a68e8) - mocha: [`prefer-arrow-callback`](https://eslint.org/docs/latest/rules/prefer-arrow-callback) rule no longer reports and autofixes Mocha callbacks, which [`mocha/no-mocha-arrows`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-mocha-arrows.md) rule requires to be functions
+
+- [`a021a91`](https://github.com/andreww2012/eslint-config-un/commit/a021a9126d5d5f5764dfd0e6209e8f447a5048a4) - angular, html, react, svelte: [`html/use-baseline`](https://html-eslint.org/docs/rules/use-baseline) and its variants now report features that are not widely available by default, as documented
+
+- [`f41731e`](https://github.com/andreww2012/eslint-config-un/commit/f41731ed1599643fa242ab58b231b6b9b16f45d4) - unocss: updated [`@unocss/eslint-plugin` from v66.11.0 to v66.12.0](https://github.com/unocss/unocss/compare/v66.11.0...v66.12.0)
+
+- [`fc63fcd`](https://github.com/andreww2012/eslint-config-un/commit/fc63fcd472d257bbcbada4076ae4e03c22b7b518) - cspell: updated [`@cspell/eslint-plugin` from v10.4.0 to v10.4.1](https://github.com/streetsidesoftware/cspell/compare/v10.4.0...v10.4.1)
+
+- [`673b11c`](https://github.com/andreww2012/eslint-config-un/commit/673b11cb8cd6c0f53e7c24318cbf2eccd54b1d4c) - un: `un/no-multiple-consecutive-spaces` rule no longer reports indentation mixing tabs and spaces, unless `allowLeadingSpaces` forbids leading spaces at line starts
+
+- [`d935964`](https://github.com/andreww2012/eslint-config-un/commit/d9359642b1e9019e9c95f1e3a81eea1106938081) - import: [`import/default`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/default.md) and [`import/namespace`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/namespace.md) rules are now disabled when the `ts` config is enabled, like [`import/named`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/named.md) already was, as TypeScript checks the same better and the rules are slow
+
+- [`926da05`](https://github.com/andreww2012/eslint-config-un/commit/926da051f7ab67ec5bfcc80b30e00ff1ee5a0e58) - playwright: updated [`eslint-plugin-playwright` from v2.12.1 to v2.12.2](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.12.1...v2.12.2)
+
+- [`23ba6f9`](https://github.com/andreww2012/eslint-config-un/commit/23ba6f90a9dd8f56a71a1907be62899e185c5683) - qwik: updated [`eslint-plugin-qwik` from v1.20.2 to v1.20.3](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik@1.20.2...eslint-plugin-qwik@1.20.3)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`96949b2`](https://github.com/andreww2012/eslint-config-un/commit/96949b2c24059ea4d320d058411a6c985f5e4481) - storybook: updated [`eslint-plugin-storybook` from v10.6.2 to v10.6.6](https://github.com/storybookjs/storybook/compare/v10.6.2...v10.6.6)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`516d88e`](https://github.com/andreww2012/eslint-config-un/commit/516d88e1d0773b2cbb50feb6d5b5825c181fffa1) - css: updated [`stylelint-config-recess-order` from v7.8.0 to v7.10.0](https://github.com/stormwarning/stylelint-config-recess-order/compare/v7.8.0...v7.10.0), which adds newer properties like `border-block-color`, `text-box`, `field-sizing` and the SVG and MathML ones to the `recess` property order of ⚙️ `css/unicorn` sub-config
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`8e7cc16`](https://github.com/andreww2012/eslint-config-un/commit/8e7cc162e87bcd3bc20e95f8e05c09faff90407b) - turbo: updated [`eslint-plugin-turbo` from v2.11.8 to v2.11.10](https://github.com/vercel/turborepo/compare/v2.11.8...v2.11.10)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`0357f8f`](https://github.com/andreww2012/eslint-config-un/commit/0357f8f33efeeb115e846e948084ad612aeb81aa) - awsCdk: updated [`eslint-plugin-awscdk` from v4.4.3 to v4.4.4](https://github.com/ren-yamanashi/awscdk-lint/compare/eslint-plugin-awscdk@4.4.3...eslint-plugin-awscdk@4.4.4)
+
+- [`cdb0714`](https://github.com/andreww2012/eslint-config-un/commit/cdb0714fb8c550f0dc13b0999ab98eadfa516af0) - vitest: updated [`@vitest/eslint-plugin` from v1.6.27 to v1.6.28](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.27...v1.6.28)
+
+- [`55e3f28`](https://github.com/andreww2012/eslint-config-un/commit/55e3f2818296ef87e6215e3b0da2fd188b57fc74) - astro, vue: [`node/no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md) rule no longer reports `await` in Astro frontmatter and Vue `<script setup>`
+
+- [`6bc3a9d`](https://github.com/andreww2012/eslint-config-un/commit/6bc3a9d1d554bd50593a2db046d03f9fe27d17b2) - html, angular, react, svelte: updated [`@html-eslint/*` from v0.67.0 to v0.68.0](https://github.com/yeonjuan/html-eslint/compare/v0.67.0...v0.68.0):
+  
+  - [`html/no-extra-spacing-text`](https://html-eslint.org/docs/rules/no-extra-spacing-text) rule no longer checks spacing inside comments (new `skipComments` option)
+
+- [`7966565`](https://github.com/andreww2012/eslint-config-un/commit/796656563fb7ac4f25361cd4df72c0a83fd66646) - css: updated [`tailwind-csstree` from v0.4.1 to v0.4.2](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.4.1...tailwind-csstree-v0.4.2)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`160ef01`](https://github.com/andreww2012/eslint-config-un/commit/160ef01e57186fdc9dd70b42d1acdfc6e3b97e83) - safeql: updated [`@ts-safeql/eslint-plugin` from v5.4.1 to v5.4.2](https://github.com/ts-safeql/safeql/compare/@ts-safeql/eslint-plugin@5.4.1...@ts-safeql/eslint-plugin@5.4.2)
+
+- [`be11d94`](https://github.com/andreww2012/eslint-config-un/commit/be11d94fac9c299802903aed5120dd59b747285e) - css: with the `unocss` config enabled, the `@apply`, `@screen` and `@unocss` at-rules of UnoCSS are no longer reported as unknown
+
+- [`08be903`](https://github.com/andreww2012/eslint-config-un/commit/08be90327a91881cb478d48b86c008d636eb578f) - jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v6.3.1 to v6.3.2](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v6.3.1...v6.3.2)
+
+- [`9079761`](https://github.com/andreww2012/eslint-config-un/commit/90797616ee5a36cc0f2e7a9c3944b85b0b39163d) - [**BREAKING**] Packages enabling configs now count as installed only if your `package.json` (or `deno.json`) files declare them, under any name, or a declared package depends on them (like `@tanstack/react-query` on `@tanstack/query-core`), so the result no longer depends on the package manager or the `node_modules` layout
+
+- [`c940bee`](https://github.com/andreww2012/eslint-config-un/commit/c940bee2ad43723cbfbccdbf53cb484e118ea2b1) - svelte: the rules of the main config now also apply to [runes modules](https://svelte.dev/docs/svelte/svelte-js-files) (`.svelte.js` and `.svelte.ts` files) by default
+
+- [`5461deb`](https://github.com/andreww2012/eslint-config-un/commit/5461deb29a4d5221a78494b97edfb0970c7cb87b) - js: `.js` files are now treated like `.cjs` ones when the `package.json` closest to the working directory has no `"type": "module"`, so [`strict`](https://eslint.org/docs/latest/rules/strict) rule no longer removes their `'use strict'`
+
+- [`41825a7`](https://github.com/andreww2012/eslint-config-un/commit/41825a73b08a8b2f1001ce29ae5a78ba6e3a248a) - graphql: rules requiring a schema or operations are now off by default without a GraphQL config; `disableRulesRequiringSchema` now covers all the rules requiring a schema
+
+- [`42d67fb`](https://github.com/andreww2012/eslint-config-un/commit/42d67fb719f80a72a689e189c96dc99edad8d4d6) - vue: updated [`vue-eslint-parser` from v10.4.1 to v10.4.2](https://github.com/vuejs/vue-eslint-parser/compare/v10.4.1...v10.4.2)
+
+- [`84bb8d7`](https://github.com/andreww2012/eslint-config-un/commit/84bb8d7bfc50f4ce7207e7ffaaa74c0b2f9bc65f) - markdown: updated [`shiki` from v4.5.0 to v4.6.0](https://github.com/shikijs/shiki/compare/v4.5.0...v4.6.0)
+
+- [`fc27d64`](https://github.com/andreww2012/eslint-config-un/commit/fc27d646a5731a8a5e6dcacf06b77a81700b04db) - astro, node, ts: client-side `<script>` blocks of Astro components are now linted, as browser code without type information, instead of being skipped silently
+
+- [`7a80710`](https://github.com/andreww2012/eslint-config-un/commit/7a80710837aa6e6ab1514e61192a97a54ec65e91) - ts: [`ts/no-floating-promises`](https://typescript-eslint.io/rules/no-floating-promises) rule no longer reports [`node:test`](https://nodejs.org/api/test.html) calls like `describe(...)` and `it.skip(...)`
+
+- [`ec39549`](https://github.com/andreww2012/eslint-config-un/commit/ec39549d87beb96d281df90fc1dd8fc4c40f732e) - vue: `allowedStyleType` option of ⚙️ `vue/scopedCss` sub-config can now disallow `plain` and `scoped` style types, which were always allowed before; disallowing all types turns [`vue-scoped-css/enforce-style-type`](https://future-architect.github.io/eslint-plugin-vue-scoped-css/rules/enforce-style-type.html) off
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`b644482`](https://github.com/andreww2012/eslint-config-un/commit/b64448279a9a403efa49bb5590aa32949140bf49) - un: `un/vue-no-trailing-element-whitespace` now treats the whitespace around HTML comments like Vue does in production builds, where comments are removed: it no longer reports the whitespace between a comment and an element that may not render, and now reports the whitespace after a comment at the end of an element
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`5ffe012`](https://github.com/andreww2012/eslint-config-un/commit/5ffe012f14b4f733f1d2a35242b6853c71f37600) - react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.28.0 to v5.28.8](https://github.com/Rel1cx/eslint-react/compare/v5.28.0...v5.28.8)
+
+- [`fdcbaee`](https://github.com/andreww2012/eslint-config-un/commit/fdcbaee914bac6ecedeed10a74010f216ea400ca) - nodeDependencies: set [`node-dependencies/compat-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html) severity to *error* and set [the `deep` option](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html#options) to `false`, because usually the transitive dependencies' incompatibility is:
+  
+  - not the user's fault;
+  - not a big deal;
+  - hard to fix.
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`bb16ebe`](https://github.com/andreww2012/eslint-config-un/commit/bb16ebe7bf8eb551f8ad9d80005118a949043407) - jsdoc: [`jsdoc/no-unnecessary-type-assertion`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-unnecessary-type-assertion.md) is now only enabled in files with type information, so it no longer prints a warning for other files
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`0445673`](https://github.com/andreww2012/eslint-config-un/commit/044567374e04dd1e87ab70382cb0923f9e45832e) - compat: updated [`browserslist` from v4.29.3 to v4.29.5](https://github.com/browserslist/browserslist/compare/4.29.3...4.29.5)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`e2440ef`](https://github.com/andreww2012/eslint-config-un/commit/e2440ef9ae8488a416e944a4668331b3cce7898b) - [**BREAKING**] vitest: `vitestGlobalsImporting` option now defaults to `enforce` to match Vitest, which requires importing globals unless its [`globals`](https://vitest.dev/config/globals) option is on. Set it to `disallow` to keep the previous behavior
+
+- [`2e5c26f`](https://github.com/andreww2012/eslint-config-un/commit/2e5c26f61c5cfab77696e112431da20adbbc6512) - deMorgan: updated [`eslint-plugin-de-morgan` from v2.2.1 to v2.3.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v2.2.1...v2.3.0)
+
+- [`a6c27b1`](https://github.com/andreww2012/eslint-config-un/commit/a6c27b1acb3f3a8371a7ccbf0cd005eec6b26c48) - svelte: [`svelte/block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang) rule now allows `<style>` blocks in the languages of CSS preprocessors, like `lang="scss"` or `lang="postcss"`
+
+- [`0f95f15`](https://github.com/andreww2012/eslint-config-un/commit/0f95f151dc59e22793610ee609f4104effb73b35) - deps: updated [`globals` from v17.13.0 to v17.14.0](https://github.com/sindresorhus/globals/compare/v17.13.0...v17.14.0)
+
+- [`019d145`](https://github.com/andreww2012/eslint-config-un/commit/019d1459708de635c358c97d0356ae39281e90ad) - antfu: updated [`eslint-plugin-antfu` from v3.2.3 to v3.3.1](https://github.com/antfu/eslint-plugin-antfu/compare/v3.2.3...v3.3.1):
+  
+  - 🔴 not enabled [`antfu/reasonable-newline`](https://github.com/antfu/eslint-plugin-antfu/blob/HEAD/src/rules/reasonable-newline.md) rule
+
+- [`1692c8a`](https://github.com/andreww2012/eslint-config-un/commit/1692c8a416adeb7cec4709b06a1637609ba43247) - graphql, unhead: the configs are now enabled by default only for the versions their plugins support
+
+- [`deca8a2`](https://github.com/andreww2012/eslint-config-un/commit/deca8a29fbb37645c136c3b10221f58e45456e01) - cypress: the config now defines the globals of Cypress tests, like the plugin's `globals` config does
+
+- [`be39d75`](https://github.com/andreww2012/eslint-config-un/commit/be39d75dd4a46858cd3dd3299d7fb79b82e45175) - cypress: updated [`eslint-plugin-cypress` from v7.0.2 to v7.0.3](https://github.com/cypress-io/eslint-plugin-cypress/compare/v7.0.2...v7.0.3)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`900fca8`](https://github.com/andreww2012/eslint-config-un/commit/900fca8a2f7d59e124f475e934d60eb74ba57f35) - jsdoc: updated [`eslint-plugin-jsdoc` from v65.3.8 to v65.4.5](https://github.com/gajus/eslint-plugin-jsdoc/compare/v65.3.8...v65.4.5)
+
+- [`09aa40a`](https://github.com/andreww2012/eslint-config-un/commit/09aa40a56be8b99bca85c1b3bff2b3306cfb90c5) - import: `import/*` rules no longer report "Parse errors in imported module" for TS modules in strict `node_modules` layouts, like the ones of Yarn PnP and upm
+
+- [`99611ba`](https://github.com/andreww2012/eslint-config-un/commit/99611ba3abd59a3f0c351c60702aeeabd065e1a8) - stylistic: [`stylistic/spaced-comment`](https://eslint.style/rules/spaced-comment) rule no longer reports license comments (`/*! ... */`) and the [`__PURE__` and `__NO_SIDE_EFFECTS__` bundler annotations](https://github.com/javascript-compiler-hints/compiler-notations-spec)
+
+- [`4f0b053`](https://github.com/andreww2012/eslint-config-un/commit/4f0b053377d76fb8f1b4bac488b98c9819cfdac3) - e18e: [`e18e/ban-dependencies`](https://github.com/e18e/eslint-plugin/blob/HEAD/README.md#module-replacements) rule no longer reports the optional peer dependencies of this package, like `eslint-plugin-react`
+
+- [`b22683c`](https://github.com/andreww2012/eslint-config-un/commit/b22683ca590a43dd82cc58919e05bf639d2bbabd) - headers: updated [`eslint-plugin-headers` from v1.3.4 to v1.3.5](https://github.com/robmisasi/eslint-plugin-headers/compare/v1.3.4...v1.3.5)
+
+- [`c7c2cc0`](https://github.com/andreww2012/eslint-config-un/commit/c7c2cc09a7520118b2f0616b6d9f50406c411b80) - playwright: the config is now enabled by default only if `@playwright/test` is installed, not just the `playwright` library (used by Vitest browser mode, for example, and therefore producing false positives)
+
+- [`a81a39b`](https://github.com/andreww2012/eslint-config-un/commit/a81a39b92058d90ea9bc5f5cf8d484b2b5c1e136) - vue: [`vuejs-accessibility/label-has-for`](https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility/rules/label-has-for.html) rule no longer requires a label pointing to its control with `for` to also wrap it
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`b67a1d6`](https://github.com/andreww2012/eslint-config-un/commit/b67a1d6d9f80099a022ec5d97bf239f459f0396c) - ts: updated [`typescript-eslint` from v8.71.2 to v8.72.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.71.2...v8.72.1)
+
+- [`2637a0a`](https://github.com/andreww2012/eslint-config-un/commit/2637a0aafeb5b032a77100bc666464083061f95e) - import: updated [`eslint-plugin-import-x` from v4.17.1 to v4.18.0](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.17.1...v4.18.0):
+  
+  - 🔴 not enabled the following new rules:
+    - [`import/avoid-barrel-files`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/avoid-barrel-files.md)
+    - [`import/avoid-importing-barrel-files`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/avoid-importing-barrel-files.md)
+    - [`import/avoid-namespace-import`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/avoid-namespace-import.md)
+    - [`import/avoid-re-export-all`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/avoid-re-export-all.md)
+
+- [`58bd0f9`](https://github.com/andreww2012/eslint-config-un/commit/58bd0f95e2dfd4899efdd283fa0c0711eb08771d) - The message about missing or outdated optional peer dependencies now suggests installation commands that work in the root of pnpm and Yarn Classic workspaces and without a lockfile, and colors its table only along with the rest of the message
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`8580999`](https://github.com/andreww2012/eslint-config-un/commit/8580999c856f74d6e2123d98777f84c3831c28fd) - Generating the config no longer loads all the rules of `typescript-eslint` (which loads them on demand) and all ESLint core rules, so ESLint starts a bit faster
+
+- [`92e3b45`](https://github.com/andreww2012/eslint-config-un/commit/92e3b455e0db1a6e4262b7bc39ad99f57f302030) - jest, unusedImports, vitest: the `ts/*` rules these configs replace, like [`ts/unbound-method`](https://typescript-eslint.io/rules/unbound-method) and [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars), are now actually turned off, and `ts/*` rules in their `overridesAny` take effect
+
+- [`277d0c7`](https://github.com/andreww2012/eslint-config-un/commit/277d0c7255bfda520c5fdb557ec57dd769cdf937) - svelte: Svelte components and runes modules now get browser globals, like Vue components
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`e6e0f0c`](https://github.com/andreww2012/eslint-config-un/commit/e6e0f0c3edc9d4e5722a53d954d97b849c5e4177) - mdx: updated [`eslint-mdx` from v3.8.1 to v3.9.1](https://github.com/mdx-js/eslint-mdx/compare/eslint-mdx@3.8.1...eslint-mdx@3.9.1) and [`eslint-plugin-mdx` from v3.8.1 to v3.9.1](https://github.com/mdx-js/eslint-mdx/compare/eslint-plugin-mdx@3.8.1...eslint-plugin-mdx@3.9.1)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`cf1145f`](https://github.com/andreww2012/eslint-config-un/commit/cf1145f7bc2f810beaa86d520e31a0aa995b7e59) - formatJs: updated [`eslint-plugin-formatjs` from v8.1.1 to v8.1.3](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@8.1.1...eslint-plugin-formatjs@8.1.3)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`b1f9fd1`](https://github.com/andreww2012/eslint-config-un/commit/b1f9fd19b3c508c98eaaad523ec1a97aee10629f) - betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.9.1 to v4.10.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.9.1...v4.10.0)
+
+- [`7f3f805`](https://github.com/andreww2012/eslint-config-un/commit/7f3f80519a8213317b2f7e958e600e1ae18ff354) - nextJs: updated [`@next/eslint-plugin-next` from v16.4.2 to v16.4.5](https://github.com/vercel/next.js/compare/v16.4.2...v16.4.5)
+
+- [`6c1b26b`](https://github.com/andreww2012/eslint-config-un/commit/6c1b26bd2d87c57362a13fc0e38272d58f53fb78) - vue: updated [`eslint-plugin-vuejs-accessibility` from v2.6.2 to v2.6.3](https://github.com/vue-a11y/eslint-plugin-vuejs-accessibility/compare/v2.6.2...v2.6.3)
+
+- [`97f508c`](https://github.com/andreww2012/eslint-config-un/commit/97f508c2fbe0aefc0ebe3280275b7c9a4a5076a8) - import: [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md) rule no longer reports the virtual modules of Astro (`astro:*`), Bun (`bun`, `bun:*`) and SvelteKit (`$app/*`, `$env/*`, `$service-worker`) when the respective tool is detected
+
+- [`3abfda1`](https://github.com/andreww2012/eslint-config-un/commit/3abfda16a5e65a664268dda5b143bf178ba42fd8) - ava, mocha: the configs now also apply to the files in `test` and `tests` directories
+
+- [`df30c6c`](https://github.com/andreww2012/eslint-config-un/commit/df30c6ced9eca75a6f7e4f8b19a29c1398aaff91) - noStylisticRules: the config now also disables the following naming rules, as renaming what they report doesn't change the behavior:
+  
+  - [`eslint-react/naming-convention-context-name`](https://eslint-react.xyz/docs/rules/naming-convention-context-name)
+  - [`eslint-react/naming-convention-id-name`](https://eslint-react.xyz/docs/rules/naming-convention-id-name)
+  - [`eslint-react/naming-convention-ref-name`](https://eslint-react.xyz/docs/rules/naming-convention-ref-name)
+  - [`eslint-react/no-unnecessary-use-prefix`](https://eslint-react.xyz/docs/rules/no-unnecessary-use-prefix)
+  - [`unicorn/name-replacements`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/name-replacements.md)
+  - [`unicorn/no-non-function-verb-prefix`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-non-function-verb-prefix.md)
+  - [`zod/consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)
+  - [`zod-mini/consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/consistent-schema-var-name.md)
+
+- [`d71ec40`](https://github.com/andreww2012/eslint-config-un/commit/d71ec40edb8244d4c9a6aad8328bc5655901debc) - yaml: `aube-lock.yaml` lockfiles are no longer linted
+
+- [`274bd92`](https://github.com/andreww2012/eslint-config-un/commit/274bd9297f049e562cd7bcc95b6af6240ad7f249) - fileProgress: the progress is now also hidden by default when the standard output is not a terminal, [`TERM`](https://man7.org/linux/man-pages/man7/term.7.html) is `dumb` or a `CI` variable is set, where it printed a line per linted file
+
+- [`e6ac1f4`](https://github.com/andreww2012/eslint-config-un/commit/e6ac1f45cc7d980cdcb6b2fa21d1923ea4148d03) - fileProgress: the progress is now also hidden by default when the standard error output is not a terminal, like when it is redirected to a file
+
+- [`461f6bf`](https://github.com/andreww2012/eslint-config-un/commit/461f6bfbb1837d17c4d040eb5bf96654e7ce7311) - markdown, mdx: code blocks are now linted only if a parser is set up for their language
+
+- [`92544f3`](https://github.com/andreww2012/eslint-config-un/commit/92544f31aa0397f62f18055931187d202fca8428) - yaml: updated [`eslint-plugin-yml` from v3.9.0 to v3.10.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.9.0...v3.10.0):
+  
+  - 🔴 not enabled [`yaml/max-len`](https://ota-meshi.github.io/eslint-plugin-yml/rules/max-len.html) rule
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`a544229`](https://github.com/andreww2012/eslint-config-un/commit/a544229ed6c23d40eff921f6065671063b8a90b4) - boundaries: updated [`eslint-plugin-boundaries` from v7.2.0 to v7.4.2](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.2.0...v7.4.2)
+
+- [`0bdf2ef`](https://github.com/andreww2012/eslint-config-un/commit/0bdf2ef6ed15e43179df46cde3be92e6713b7a82) - lockfile: binary `bun.lockb` lockfiles no longer fail to parse; `eslint-parser-plain` is now a regular dependency
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`1c64c4c`](https://github.com/andreww2012/eslint-config-un/commit/1c64c4cf6c88452b00ada497f912711c6f75e701) - tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.104.3 to v5.107.1](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.104.3...@tanstack/eslint-plugin-query@5.107.1)
+
+- [`c7631bb`](https://github.com/andreww2012/eslint-config-un/commit/c7631bb71cee4e2fe75173e914d8a58515f9bd9d) - react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v1.0.2 to v1.1.0](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v1.0.2...v1.1.0)
+
+- [`acbe13f`](https://github.com/andreww2012/eslint-config-un/commit/acbe13f20e300b34305c09e3337137362ac37c92) - nx: updated [`@nx/eslint-plugin` from v23.3.0 to v24.0.5](https://github.com/nrwl/nx/compare/23.3.0...24.0.5)
+
+- [`710600c`](https://github.com/andreww2012/eslint-config-un/commit/710600cea855173dd773425b84465cb0864d1a04) - react: [`react/jsx-no-bind`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-no-bind.md) rule now allows functions in JSX props, like it already allowed arrow functions
+
+- [`8d20b0d`](https://github.com/andreww2012/eslint-config-un/commit/8d20b0d6e0f3b23d012d722b73695d4d590ffb0b) - ts: type-aware linting of Astro components no longer makes [`astro-eslint-parser`](https://npmx.dev/astro-eslint-parser) warn about the unsupported project service for every file
+
+- [`48599c3`](https://github.com/andreww2012/eslint-config-un/commit/48599c3251191bc3982242249c299ad35f1ccee7) - regexp: updated [`eslint-plugin-regexp` from v3.3.1 to v3.3.3](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v3.3.1...v3.3.3)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`f8d086e`](https://github.com/andreww2012/eslint-config-un/commit/f8d086ee01407029f97254e7fa7fb2402380a2cd) - zod: updated [`eslint-plugin-zod` from v5.2.0 to v5.2.2](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@5.2.0...eslint-plugin-zod@5.2.2), [`eslint-plugin-zod-mini` from v2.1.1 to v2.1.3](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@2.1.1...eslint-plugin-zod-mini@2.1.3) and [`eslint-plugin-zod-core` from v2.1.1 to v2.1.3](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@2.1.1...eslint-plugin-zod-core@2.1.3)
+
+- [`a6587c4`](https://github.com/andreww2012/eslint-config-un/commit/a6587c41c38e9f1641f97d4ceea97dcbb4d956fb) - security: updated [`eslint-plugin-security` from v4.2.0 to v4.2.1](https://github.com/eslint-community/eslint-plugin-security/compare/eslint-plugin-security-v4.2.0...eslint-plugin-security-v4.2.1)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`cc080d1`](https://github.com/andreww2012/eslint-config-un/commit/cc080d1dfe45e37d7c630e8e821699a320333ea7) - node: updated [`eslint-plugin-n` from v18.4.1 to v18.5.0](https://github.com/eslint-community/eslint-plugin-n/compare/v18.4.1...v18.5.0)
+
+- [`00e87af`](https://github.com/andreww2012/eslint-config-un/commit/00e87af7cdb05581eb8b147908391aa29e772a18) - markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.42.0 to v0.43.0](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.42.0...v0.43.0)
+
+- [`536b588`](https://github.com/andreww2012/eslint-config-un/commit/536b58803bbb03c8856164a6ad27a3419e4e7412) - svelte: updated [`eslint-plugin-svelte` from v3.23.1 to v3.24.1](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.23.1...eslint-plugin-svelte@3.24.1) and [`svelte-eslint-parser` from v1.9.0 to v1.10.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.9.0...v1.10.1)
+
+- [#60](https://github.com/andreww2012/eslint-config-un/pull/60) [`c60fbe6`](https://github.com/andreww2012/eslint-config-un/commit/c60fbe6b8e5451474e1523a8bc7613ab5f189fc2) - ember, nestJs, sonar, svelte, unicorn: 43 rules that do nothing without type information are now only enabled in files with it
+
+- [`79cd316`](https://github.com/andreww2012/eslint-config-un/commit/79cd316b8c80456f0489c9f4b7c0e86f7ae359d5) - [**BREAKING**] Default global ignores: `**/dist` was removed, `**/__snapshots__` and some `.yarn` paths were added
+
 ## 1.0.0-rc.5
 
 ### Minor Changes
