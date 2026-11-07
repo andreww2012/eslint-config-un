@@ -6,6 +6,7 @@ import {cli} from 'cleye';
 import {exec} from 'tinyexec';
 import {jsonParseSafe, regexTyped} from 'utilery';
 import {isNodeError, styleText} from 'utilery/server';
+import {parse as parseYaml} from 'yaml';
 import * as z from 'zod';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
@@ -19,15 +20,49 @@ import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 const REPO_ROOT_PATH = path.resolve(import.meta.dirname, '..');
 const CHANGESETS_DIRECTORY_PATH = path.join(REPO_ROOT_PATH, '.changeset');
 const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
+const PNPM_WORKSPACE_FILE_NAME = 'pnpm-workspace.yaml';
+const CATALOG_PROTOCOL = 'catalog:';
 
-const readRootPackageJsonBeforeUncommittedChanges = async () => {
+const readFileBeforeUncommittedChanges = async (fileName: string) => {
   try {
-    return PackageJsonZod.safeParse(
-      jsonParseSafe((await exec('git', ['--no-pager', 'show', 'HEAD:package.json'])).stdout),
-    );
+    return (await exec('git', ['--no-pager', 'show', `HEAD:${fileName}`])).stdout;
   } catch {
     return null;
   }
+};
+
+const readRootPackageJsonBeforeUncommittedChanges = async () => {
+  const packageJsonText = await readFileBeforeUncommittedChanges('package.json');
+  return packageJsonText == null ? null : PackageJsonZod.safeParse(jsonParseSafe(packageJsonText));
+};
+
+const CatalogZod = z.record(z.string(), z.string());
+const PnpmWorkspaceCatalogsZod = z.object({
+  catalog: z.optional(CatalogZod),
+  catalogs: z.optional(z.record(z.string(), CatalogZod)),
+});
+
+// Versions of catalog dependencies change in the workspace file, while `package.json` keeps the
+// same `catalog:<name>` specifiers
+const resolveCatalogSpecifiers = (
+  dependencies: Readonly<Record<string, string>>,
+  pnpmWorkspaceYaml: string | null,
+) => {
+  const {catalog, catalogs} = PnpmWorkspaceCatalogsZod.parse(
+    (pnpmWorkspaceYaml && parseYaml(pnpmWorkspaceYaml)) || {},
+  );
+  return Object.fromEntries(
+    Object.entries(dependencies).map(([dependency, specifier]) => {
+      if (!specifier.startsWith(CATALOG_PROTOCOL)) {
+        return [dependency, specifier];
+      }
+      const catalogName = specifier.slice(CATALOG_PROTOCOL.length) || 'default';
+      // The default catalog can be defined in either field
+      const catalogVersions =
+        catalogName === 'default' ? catalog || catalogs?.['default'] : catalogs?.[catalogName];
+      return [dependency, catalogVersions?.[dependency] || specifier];
+    }),
+  );
 };
 
 // Only the needed field is validated: a full package.json schema models plenty of valid fields too
@@ -126,7 +161,12 @@ const getDependencyRepoUrl = async (dependency: string) => {
 
 const main = async () => {
   const packageJsonParseResult = PackageJsonZod.safeParse(ourPackageJson);
-  const packageJsonBeforeChangesParseResult = await readRootPackageJsonBeforeUncommittedChanges();
+  const [packageJsonBeforeChangesParseResult, pnpmWorkspaceYaml, pnpmWorkspaceYamlBeforeChanges] =
+    await Promise.all([
+      readRootPackageJsonBeforeUncommittedChanges(),
+      fs.readFile(path.join(REPO_ROOT_PATH, PNPM_WORKSPACE_FILE_NAME), 'utf8'),
+      readFileBeforeUncommittedChanges(PNPM_WORKSPACE_FILE_NAME),
+    ]);
 
   if (!packageJsonParseResult.success) {
     console.error('Failed to parse package.json', packageJsonParseResult.error);
@@ -144,15 +184,15 @@ const main = async () => {
   const packageJson = packageJsonParseResult.data;
   const packageJsonBeforeChanges = packageJsonBeforeChangesParseResult.data;
 
-  const currentDependencies = {
-    ...packageJson.dependencies,
-    ...packageJson.devDependencies,
-  };
+  const currentDependencies = resolveCatalogSpecifiers(
+    {...packageJson.dependencies, ...packageJson.devDependencies},
+    pnpmWorkspaceYaml,
+  );
 
-  const dependenciesBeforeChanges = {
-    ...packageJsonBeforeChanges.dependencies,
-    ...packageJsonBeforeChanges.devDependencies,
-  };
+  const dependenciesBeforeChanges = resolveCatalogSpecifiers(
+    {...packageJsonBeforeChanges.dependencies, ...packageJsonBeforeChanges.devDependencies},
+    pnpmWorkspaceYamlBeforeChanges,
+  );
 
   const changedDependencies = Object.entries(currentDependencies).filter(
     ([dependency, version]) =>

@@ -71,6 +71,12 @@ catalogs:
     eslint-visitor-keys: 5.0.1
     espree: 11.2.0
     htmlparser2: 12.0.0
+  node-dependencies:
+    eslint-json-compat-utils: 0.2.3
+    jsonc-eslint-parser: 3.3.0
+    npm-package-arg: 14.0.0
+    package-json: 10.0.1
+    undici: 7.30.2
 
 overrides:
   # 11 and 12 only break executor helpers and subgraph schema printing, neither used by
@@ -84,6 +90,7 @@ overrides:
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
+  eslint-plugin-node-dependencies@2.3.0: patches/eslint-plugin-node-dependencies@2.3.0.patch
   eslint-typegen: patches/eslint-typegen.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch

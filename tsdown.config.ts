@@ -7,6 +7,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
   'remeda', // Inlined to avoid always considered installed
   '@eslint/compat', // Patched
   'eslint-plugin-file-progress', // Patched
+  'eslint-plugin-node-dependencies', // Patched
   'eslint-plugin-arrow-return-style-x', // Its `@typescript-eslint/utils` dependency is overridden to work with ESLint 10 by the one we declare, so it's not loaded twice with typescript-eslint's
   '@eslint-community/eslint-plugin-eslint-comments', // Inlined code gets a `require` with `cache`, which Yarn PnP doesn't provide: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322
   'stylelint-config-clean-order', // Patched; only its property list is used, while the package requires `stylelint` as a peer
@@ -17,6 +18,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
 // Inlined plugins spawn these by file path, so they're never part of the main module graph
 const INLINED_PLUGIN_WORKERS = [
   'eslint-plugin-arrow-return-style-x/dist/workers/prettier-worker.mjs',
+  'eslint-plugin-node-dependencies/dist/worker.mjs',
 ] as const;
 
 const MJS_EXTENSION_REGEXP = /\.mjs$/;

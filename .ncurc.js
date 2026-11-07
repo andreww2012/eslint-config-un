@@ -105,6 +105,10 @@ export default ncuConfig({
     // Prerelease channel
     '@effect/platform-node': 'greatest',
     effect: 'greatest',
+
+    // Only declared for the inlined `eslint-plugin-node-dependencies`, so it follows that plugin's
+    // range rather than the latest version
+    undici: 'minor',
   },
   blockedVersions: {},
 

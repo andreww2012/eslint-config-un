@@ -1473,13 +1473,14 @@ Ignore such directories in your config, and lint them in a separate run with the
 
 ### Some dependencies are inlined into the package code
 
-If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these three, whose code is inlined into the published package:
+If you don't want to wait for us to update a dependency, or need a different version of one for any other reason, your package manager's overrides will do the job for every dependency except these four, whose code is inlined into the published package:
 
-| Package name                                                                                         | Reason                                                                                                                   |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [`eslint-plugin-file-progress`][eslint-plugin-file-progress]                                         | Patched by us so that it doesn't leave the terminal cursor hidden or erase the end of ESLint's output                    |
-| [`eslint-plugin-arrow-return-style-x`][eslint-plugin-arrow-return-style-x]                           | Its `@typescript-eslint/utils` dependency is overridden to a version that works with ESLint 10                           |
-| [`@eslint-community/eslint-plugin-eslint-comments`][@eslint-community/eslint-plugin-eslint-comments] | [Crashes](https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322) under Yarn Plug'n'Play otherwise |
+| Package name                                                                                         | Reason                                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`eslint-plugin-file-progress`][eslint-plugin-file-progress]                                         | Patched by us so that it doesn't leave the terminal cursor hidden or erase the end of ESLint's output                                                                                                                                            |
+| [`eslint-plugin-node-dependencies`][eslint-plugin-node-dependencies]                                 | Patched by us to add [the `allows` option](https://github.com/ota-meshi/eslint-plugin-node-dependencies/pull/312) to [`node-dependencies/compat-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html) |
+| [`eslint-plugin-arrow-return-style-x`][eslint-plugin-arrow-return-style-x]                           | Its `@typescript-eslint/utils` dependency is overridden to a version that works with ESLint 10                                                                                                                                                   |
+| [`@eslint-community/eslint-plugin-eslint-comments`][@eslint-community/eslint-plugin-eslint-comments] | [Crashes](https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/322) under Yarn Plug'n'Play otherwise                                                                                                                         |
 
 ## Versioning policy
 
@@ -1574,6 +1575,7 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
 [extraConfigs option]: #providing-user-defined-flat-configs
 [ignores option]: #ignores
 [eslint-plugin-file-progress]: https://npmx.dev/eslint-plugin-file-progress
+[eslint-plugin-node-dependencies]: https://npmx.dev/eslint-plugin-node-dependencies
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg
 [Zod]: ./assets/logos-zod.svg

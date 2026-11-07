@@ -130,6 +130,17 @@ export default eslintConfig({
         devDependencies: 'always',
         peerDependencies: 'never',
       },
+      overrides: {
+        'node-dependencies/compat-engines': (severity, options) => [
+          severity,
+          {
+            ...options?.[0],
+            // Requires Node.js 24+, but it's an optional peer dependency only needed by NestJS
+            // projects, which have to meet its requirements anyway
+            allows: ['@darraghor/eslint-plugin-nestjs-typed'],
+          },
+        ],
+      },
     },
     perfectionist: {
       configSortInterfaces: {

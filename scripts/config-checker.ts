@@ -3,6 +3,7 @@ import ourPackageJson from '../package.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
 import {CONFIG_MANIFESTS, MISC_GROUP_CONFIGS} from '../src/configs/manifests.gen';
 import {arrayify, styleConfigName, stylePackageName} from '../src/utils';
+import {ALWAYS_BUNDLED_DEPENDENCIES} from '../tsdown.config';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {CONFIGS_META, PACKAGES_META} from './shared/packages-meta';
 
@@ -34,6 +35,8 @@ const packagesToMoveToDirectDependencies = Array.from(
       return configPackages
         .map((packageName) =>
           packageName in ourPackageJson.dependencies ||
+          // Inlined packages ship with our code, just like direct dependencies
+          ALWAYS_BUNDLED_DEPENDENCIES.includes(packageName) ||
           PACKAGES_META[packageName]?.optionalPeerDependencyReason != null
             ? null
             : {config, packageName},

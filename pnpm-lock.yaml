@@ -187,6 +187,22 @@ catalogs:
     htmlparser2:
       specifier: 12.0.0
       version: 12.0.0
+  node-dependencies:
+    eslint-json-compat-utils:
+      specifier: 0.2.3
+      version: 0.2.3
+    jsonc-eslint-parser:
+      specifier: 3.3.0
+      version: 3.3.0
+    npm-package-arg:
+      specifier: 14.0.0
+      version: 14.0.0
+    package-json:
+      specifier: 10.0.1
+      version: 10.0.1
+    undici:
+      specifier: 7.30.2
+      version: 7.30.2
 
 overrides:
   '@graphql-tools/utils@<12.0.1': 12.1.0
@@ -199,6 +215,7 @@ packageExtensionsChecksum: sha256-viRUJkqQHSHoPzf5szskuSZb6Q7/PwkBbjO6LfpaHYk=
 patchedDependencies:
   '@eslint/compat': 4e5e4917c998f88f8f72a871dc9041fde5bb11aa7e8a7249bee180a58497d8fd
   eslint-plugin-file-progress@4.0.0: ecec73ce0847a21faf9e229531be6e8d71066c26b4002c1ca7f52c5824b2aa68
+  eslint-plugin-node-dependencies@2.3.0: dda4168bc090993babe84cd96bf408ac337af94007a3197b09cafa7aa647a141
   eslint-typegen: 0d6db82fbea0b90883af8f9544b025291f38bceaa0439ec98af0a91c58c81f41
   import-meta-resolve: 8bee2eba65fdfc0aa991a55a4ca81a0ae2d441b79b1d30b1267d1d943153b75a
   npm-check-updates: bb86fdcf0342c94a2c0ebead1958ccbd095b111173743db5c50efe8702347845
@@ -274,6 +291,9 @@ importers:
       eslint-import-resolver-typescript:
         specifier: 4.4.5
         version: 4.4.5(eslint-plugin-import-x@4.18.0)(eslint@10.14.0)(supports-color@7.2.0)
+      eslint-json-compat-utils:
+        specifier: catalog:node-dependencies
+        version: 0.2.3(@eslint/json@2.1.1)(eslint@10.14.0)(jsonc-eslint-parser@3.3.0)
       eslint-mdx:
         specifier: 3.9.1
         version: 3.9.1(@types/estree@1.0.10)(eslint@10.14.0)(supports-color@7.2.0)
@@ -331,9 +351,6 @@ importers:
       eslint-plugin-no-unsanitized:
         specifier: 4.1.5
         version: 4.1.5(eslint@10.14.0)
-      eslint-plugin-node-dependencies:
-        specifier: 2.3.0
-        version: 2.3.0(@eslint/json@2.1.1)(eslint@10.14.0)
       eslint-plugin-package-json:
         specifier: 1.14.0
         version: 1.14.0(@eslint/json@2.1.1)(eslint@10.14.0)
@@ -382,9 +399,18 @@ importers:
       is-in-editor:
         specifier: 0.4.0
         version: 0.4.0
+      jsonc-eslint-parser:
+        specifier: catalog:node-dependencies
+        version: 3.3.0
+      npm-package-arg:
+        specifier: catalog:node-dependencies
+        version: 14.0.0
       obug:
         specifier: 3.0.0
         version: 3.0.0
+      package-json:
+        specifier: catalog:node-dependencies
+        version: 10.0.1
       package-manager-detector:
         specifier: 1.9.0
         version: 1.9.0
@@ -397,6 +423,9 @@ importers:
       typescript-eslint:
         specifier: 8.72.1
         version: 8.72.1(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0)
+      undici:
+        specifier: catalog:node-dependencies
+        version: 7.30.2
       verkit:
         specifier: 0.5.0
         version: 0.5.0
@@ -737,6 +766,9 @@ importers:
       eslint-plugin-no-relative-import-paths:
         specifier: 1.7.3
         version: 1.7.3
+      eslint-plugin-node-dependencies:
+        specifier: 2.3.0
+        version: 2.3.0(patch_hash=dda4168bc090993babe84cd96bf408ac337af94007a3197b09cafa7aa647a141)(@eslint/json@2.1.1)(eslint@10.14.0)
       eslint-plugin-perfectionist:
         specifier: 5.13.0
         version: 5.13.0(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0)
@@ -872,9 +904,6 @@ importers:
       json-stringify-pretty-compact:
         specifier: 4.0.0
         version: 4.0.0
-      jsonc-eslint-parser:
-        specifier: 3.3.0
-        version: 3.3.0
       knip:
         specifier: 6.44.2
         version: 6.44.2
@@ -887,9 +916,6 @@ importers:
       npm-check-updates:
         specifier: 23.1.1
         version: 23.1.1(patch_hash=bb86fdcf0342c94a2c0ebead1958ccbd095b111173743db5c50efe8702347845)
-      npm-package-arg:
-        specifier: 14.0.0
-        version: 14.0.0
       nuxt:
         specifier: 4.6.4
         version: 4.6.4(@babel/plugin-proposal-decorators@7.29.7)(@babel/plugin-syntax-jsx@7.29.7)(@babel/plugin-syntax-typescript@7.29.7)(@oxc-project/types@0.157.0)(@parcel/watcher@2.6.0)(@types/node@22.20.5)(@typescript/typescript6@6.0.2)(@vue/compiler-sfc@3.5.45)(acorn@8.19.0)(bare-buffer@3.7.1)(confbox@0.3.2)(db0@0.3.4)(dotenv@17.4.2)(esbuild@0.28.2)(eslint@10.14.0)(giget@3.3.1)(ioredis@5.11.1)(lightningcss@1.33.0)(mlly@1.8.2)(optionator@0.9.4)(oxc-parser@0.156.0)(rolldown@1.2.16)(rollup-plugin-visualizer@7.1.2)(rollup@4.68.0)(srvx@1.0.5)(supports-color@7.2.0)(terser@5.51.2)(tsx@4.23.15)(vite@8.3.6)(yaml@2.9.1)
@@ -899,9 +925,6 @@ importers:
       p-queue:
         specifier: 10.0.0
         version: 10.0.0
-      package-json:
-        specifier: 10.0.1
-        version: 10.0.1
       pathe:
         specifier: 2.0.3
         version: 2.0.3
@@ -12562,6 +12585,10 @@ packages:
     resolution: {integrity: sha512-03KrMbjIFDWQR5RNPrSw3bd1r12JpyFQl9/yxjUbJtqkjmllqC5lFjZh6ujeuJCKr8EOQvRW872Oy/az+nLYxg==}
     engines: {node: '>=20.18.1'}
 
+  undici@7.30.2:
+    resolution: {integrity: sha512-mLyPQnHwUxaM/rideoK/+KL8DaAJLRl4aBCfmX444aCSLnIaomqPLtNRe2jdCYcsk5wZzXrDIQC8ZeYNRAYyIA==}
+    engines: {node: '>=20.18.1'}
+
   undici@8.12.4:
     resolution: {integrity: sha512-8Mx+uNKKER2bA4AdtedkqRbwUCIJFr2nJckXRe5yrDqzePqwLP7VNcctN8/XdmDSbF7mS+jJKIszlL+vbam1VA==}
     engines: {node: '>=22.19.0'}
@@ -21115,7 +21142,7 @@ snapshots:
     dependencies:
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  eslint-plugin-node-dependencies@2.3.0(@eslint/json@2.1.1)(eslint@10.14.0):
+  eslint-plugin-node-dependencies@2.3.0(patch_hash=dda4168bc090993babe84cd96bf408ac337af94007a3197b09cafa7aa647a141)(@eslint/json@2.1.1)(eslint@10.14.0):
     dependencies:
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
       eslint-json-compat-utils: 0.2.3(@eslint/json@2.1.1)(eslint@10.14.0)(jsonc-eslint-parser@3.3.0)
@@ -26588,6 +26615,8 @@ snapshots:
   undici@6.29.1: {}
 
   undici@7.30.1: {}
+
+  undici@7.30.2: {}
 
   undici@8.12.4: {}
 

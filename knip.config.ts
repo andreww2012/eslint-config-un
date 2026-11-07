@@ -21,6 +21,9 @@ const config: KnipConfig = {
     'lychee-config-nick2bad4u',
     // The `format/dprint` rule loads it by name, which tests pass in its options
     '@dprint/markdown',
+    // Imported by the inlined `eslint-plugin-node-dependencies`
+    'eslint-json-compat-utils',
+    'undici',
   ],
   vitest: {
     config: ['vitest.config.ts', 'vitest.e2e.config.ts'],

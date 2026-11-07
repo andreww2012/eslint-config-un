@@ -1,0 +1,71 @@
+Add the `allows` option to `node-dependencies/compat-engines`: a list of package names to skip.
+Neither the listed packages nor their dependencies are checked, also when they're found deeper in the
+tree with `deep`. An alias like `"ts7": "npm:typescript@^7"` is skipped when either its name or the
+package it points to is listed.
+
+Same change as in the upstream PR (only the rule code, without docs and tests):
+https://github.com/ota-meshi/eslint-plugin-node-dependencies/pull/312
+
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 279ae66..e040ee4 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -740,6 +740,18 @@ function extractDependencies(metaList) {
+ 	}
+ 	return [...dependencies].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0);
+ }
++/**
++* Get the name of the package an `npm:` alias points to
++*/
++function getAliasedName(ver) {
++	const trimmed = ver.trim();
++	if (!trimmed.startsWith("npm:")) return null;
++	try {
++		return npa(trimmed.slice(4).trim()).name ?? null;
++	} catch {
++		return null;
++	}
++}
+ var compat_engines_default = createRule("compat-engines", {
+ 	meta: {
+ 		docs: {
+@@ -752,7 +764,12 @@ var compat_engines_default = createRule("compat-engines", {
+ 			properties: {
+ 				deep: { type: "boolean" },
+ 				devDependencies: { type: "boolean" },
+-				comparisonType: { enum: ["normal", "major"] }
++				comparisonType: { enum: ["normal", "major"] },
++				allows: {
++					type: "array",
++					items: { type: "string" },
++					uniqueItems: true
++				}
+ 			},
+ 			additionalProperties: false
+ 		}],
+@@ -764,8 +781,17 @@ var compat_engines_default = createRule("compat-engines", {
+ 		const deep = context.options[0]?.deep !== false;
+ 		const devDependencies = context.options[0]?.devDependencies === true;
+ 		const comparisonType = context.options[0]?.comparisonType ?? "normal";
++		const allows = new Set(context.options[0]?.allows);
+ 		const selfEngines = /* @__PURE__ */ new Map();
+ 		/**
++		* Checks whether the given dependency is skipped by the `allows` option
++		*/
++		function isAllowed(name, ver) {
++			if (allows.has(name)) return true;
++			const aliasedName = getAliasedName(ver);
++			return aliasedName != null && allows.has(aliasedName);
++		}
++		/**
+ 		* Process meta data
+ 		*/
+ 		function processMeta(ctx, meta) {
+@@ -784,6 +810,7 @@ var compat_engines_default = createRule("compat-engines", {
+ 		* Process dependency module
+ 		*/
+ 		function processDependencyModule(ctx, name, ver, modules, node) {
++			if (isAllowed(name, ver)) return;
+ 			const currModules = [...modules, `${name}@${ver}`];
+ 			const nodeModulesMeta = getMetaFromNodeModules(name, ver, { context });
+ 			if (nodeModulesMeta) {
