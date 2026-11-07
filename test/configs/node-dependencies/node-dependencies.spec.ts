@@ -85,7 +85,7 @@ describe('rules', async () => {
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('node-dependencies')).toMatchObject({
       'node-dependencies/no-dupe-deps': 2,
-      'node-dependencies/compat-engines': 1,
+      'node-dependencies/compat-engines': 2,
       'node-dependencies/absolute-version': 0,
     });
   });

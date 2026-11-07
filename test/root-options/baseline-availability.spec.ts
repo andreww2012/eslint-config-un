@@ -1,6 +1,6 @@
 const FIXTURES = {
   dialogElement: 'dialog-element.html',
-  popoverAttribute: 'popover-attribute.html',
+  autocorrectAttribute: 'autocorrect-attribute.html',
 } as const;
 
 const USE_BASELINE_RULES = [
@@ -66,16 +66,20 @@ describe('option: `baselineAvailability`', () => {
   });
 
   it('`html/use-baseline` rule fires on an attribute that is only newly available by default', async () => {
-    const result = await testEslintConfig('html', FIXTURES.popoverAttribute, import.meta.dirname);
+    const result = await testEslintConfig(
+      'html',
+      FIXTURES.autocorrectAttribute,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       result,
-      FIXTURES.popoverAttribute,
+      FIXTURES.autocorrectAttribute,
       'html/use-baseline',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"Attribute 'popover' is not a widely available baseline feature."`,
+      `"Attribute 'autocorrect' is not a widely available baseline feature."`,
     );
   });
 
