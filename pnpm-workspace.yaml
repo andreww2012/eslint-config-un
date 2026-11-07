@@ -16,6 +16,15 @@ minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list 
 minimumReleaseAgeExclude: # []
   - eslint-plugin-import-x@4.18.0
   - eslint-plugin-svelte@3.24.1
+  - '@html-eslint/core@0.68.0'
+  - '@html-eslint/eslint-plugin-angular-template@0.68.0'
+  - '@html-eslint/eslint-plugin-react@0.68.0'
+  - '@html-eslint/eslint-plugin-svelte@0.68.0'
+  - '@html-eslint/eslint-plugin@0.68.0'
+  - '@html-eslint/parser@0.68.0'
+  - '@html-eslint/template-parser@0.68.0'
+  - '@html-eslint/template-syntax-parser@0.68.0'
+  - '@html-eslint/types@0.68.0'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
