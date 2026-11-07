@@ -3,8 +3,11 @@ import {definePluginMetadata} from './shared';
 export default definePluginMetadata('storybook', {
   configs: ['storybook'],
   docsUrl: 'https://storybook.js.org/docs/configure/integration/eslint-plugin',
-  ruleDocsUrl: (ruleName) =>
-    `https://github.com/storybookjs/storybook/blob/HEAD/code/lib/eslint-plugin/docs/rules/${ruleName}.md`,
+  ruleDocsUrl: (ruleName, ref = 'HEAD') =>
+    `https://github.com/storybookjs/storybook/blob/${ref}/code/lib/eslint-plugin/docs/rules/${ruleName}.md`,
+  ruleDocsRefs: {
+    'meta-inline-properties': 'v10.6.6',
+  },
   rules: {
     'csf-component': {disableInCodeBlocks: 'tooStrict'},
     'default-exports': {disableInCodeBlocks: 'imports'},
