@@ -26,6 +26,7 @@ minimumReleaseAgeExclude: # []
   - '@html-eslint/template-syntax-parser@0.68.0'
   - '@html-eslint/types@0.68.0'
   - '@tanstack/eslint-plugin-query@5.107.1'
+  - knip@6.44.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
