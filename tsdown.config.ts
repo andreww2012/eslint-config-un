@@ -26,6 +26,13 @@ export default defineConfig([
     entry: ['src/index.ts', 'src/snippets.ts', 'src/globs.ts'],
     format: 'esm',
     unbundle: true,
+    dts: {
+      // With `allowJs`, a package resolved to a JS file is treated as a source whose declarations
+      // sit next to it, which fails for packages typed elsewhere (like `@types/*`). We have no JS
+      // sources anyway
+      // TODO remove once https://github.com/sxzz/rolldown-plugin-dts/issues/348 is fixed
+      emitJs: false,
+    },
     deps: {
       neverBundle: ['nuxt/kit'],
       alwaysBundle: [
