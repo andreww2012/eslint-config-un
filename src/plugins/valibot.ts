@@ -8,9 +8,11 @@ export default definePluginMetadata('valibot', {
   rules: {
     'consistent-import': {stylistic: true},
     'no-any-schema': {disableInCodeBlocks: 'typeStrictness'},
+    'no-discarded-safe-parse': {disableInCodeBlocks: 'runtimeOnly'},
     'no-loose-object': {disableInCodeBlocks: 'runtimeOnly'},
     'no-recreated-schemas': {disableInCodeBlocks: 'performance', disableInTestFiles: true},
     'no-redundant-transformation': {stylistic: true},
+    'no-shared-mutable-default': {disableInCodeBlocks: 'runtimeOnly'},
     'no-single-member-union': {stylistic: true},
     'no-unguarded-parse': {disableInCodeBlocks: 'runtimeOnly', disableInTestFiles: true},
     'no-unknown-schema': {disableInCodeBlocks: 'typeStrictness'},

@@ -131,6 +131,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
     .addRule('no-async-action-in-sync-pipe', ERROR) /** @since 1.3.0 */ // 🟢
     .addRule('no-async-schema-in-sync-parent', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-conflicting-pipe-actions', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-discarded-safe-parse', ERROR) /** @since 1.5.0 */
     .addRule('no-duplicate-pipe-actions', ERROR) /** @since 0.1.0 */ // 🟡
     .addRule('no-empty-pipe', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-empty-union', ERROR) /** @since 1.2.0 */ // 🟢
@@ -145,6 +146,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
     .addRule('no-redundant-schema-wrappers', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-redundant-transformation', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-schema-as-type', ERROR) /** @since 0.1.0 */ // 🔵
+    .addRule('no-shared-mutable-default', ERROR) /** @since 1.5.0 */
     .addRule('no-single-member-union', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-throw-in-check', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-transform-in-record-key', ERROR) /** @since 0.1.0 */ // 🟢
