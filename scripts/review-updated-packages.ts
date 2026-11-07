@@ -384,6 +384,7 @@ const EXTENSIONS_TO_SKIP_IN_DIFF: ReadonlySet<string> = new Set([
   'cts',
   'mts',
   'tsbuildinfo',
+  'wasm',
 ]);
 const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<
   Record<string, readonly string[]>
