@@ -16,6 +16,7 @@ export default {
     '.all-contributorsrc',
     '.changeset/*.json',
     '.agents/guidelines.md',
+    'CHANGELOG.md',
   ],
   dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
