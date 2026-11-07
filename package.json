@@ -361,7 +361,7 @@
     "utilery": "0.3.0",
     "validate-npm-package-name": "8.0.0",
     "vitest": "5.1.0",
-    "vue-eslint-parser": "10.4.1",
+    "vue-eslint-parser": "10.4.2",
     "web-features": "3.45.0",
     "zod": "4.6.7",
     "zod-package-json": "2.1.0"
@@ -481,7 +481,7 @@
     "svelte-eslint-parser": "^1.10.1",
     "tailwind-csstree": "^0.4.2",
     "typescript": "*",
-    "vue-eslint-parser": "^10.4.1"
+    "vue-eslint-parser": "^10.4.2"
   },
   "peerDependenciesMeta": {
     "@angular-eslint/eslint-plugin": {
