@@ -316,6 +316,10 @@ export default defineUnConfig<ImportEslintConfigOptions>(
       },
     ])
     // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule isn't in it
+    .addRule('avoid-barrel-files', OFF) /** @since 4.18.0 */ // ✖️
+    .addRule('avoid-importing-barrel-files', OFF) /** @since 4.18.0 */ // ✖️
+    .addRule('avoid-namespace-import', OFF) /** @since 4.18.0 */ // ✖️
+    .addRule('avoid-re-export-all', OFF) /** @since 4.18.0 */ // ✖️
     .addRule('consistent-type-specifier-style', OFF) /** @since 2.27.0 */
     // TypeScript checks it better: it also knows about `esModuleInterop` and `export =`
     .addRule('default', isTypescriptEnabled ? OFF : ERROR) /** @since 0.3.0 */ // 🟢

@@ -10,6 +10,10 @@ export default definePluginMetadata('import', {
     'a fork meant to replace the original plugin, so it keeps the original prefix',
   ],
   rules: {
+    'avoid-barrel-files': {disableInCodeBlocks: 'imports'},
+    'avoid-importing-barrel-files': {disableInCodeBlocks: 'imports'},
+    'avoid-namespace-import': {disableInCodeBlocks: 'imports'},
+    'avoid-re-export-all': {disableInCodeBlocks: 'imports'},
     'consistent-type-specifier-style': {stylistic: true},
     default: {disableInCodeBlocks: 'imports'},
     'dynamic-import-chunkname': {disableInCodeBlocks: 'runtimeOnly'},
