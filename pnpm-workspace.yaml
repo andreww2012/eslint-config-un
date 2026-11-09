@@ -39,6 +39,7 @@ minimumReleaseAgeExclude: # []
   - eslint-mdx@3.9.4
   - eslint-plugin-mdx@3.9.4
   - eslint-plugin-qwik@1.20.4
+  - ci-info@4.5.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
