@@ -10,6 +10,7 @@ import {
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
+  relativeImportWithExtension: 'relative-import-with-extension.js',
   tsImportValid: 'ts-import-valid.ts',
   virtualModuleImports: 'virtual-module-imports.js',
 } as const;
@@ -599,7 +600,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('import', 'import/extensions')).toMatchInlineSnapshot(
-        '[2, "ignorePackages", {"checkTypeImports": true, "cjs": "always", "cts": "always", "js": "always", "jsx": "always", "mjs": "always", "mts": "always", "ts": "always", "tsx": "always"}]',
+        '[2, "ignorePackages", {"checkTypeImports": true, "pattern": {"cjs": "always", "cts": "always", "js": "always", "jsx": "always", "mjs": "always", "mts": "always", "ts": "always", "tsx": "always"}}]',
       );
     });
 
@@ -612,7 +613,7 @@ describe('options', () => {
 
       expect(configResult.getRuleEntryOptions('import', 'import/extensions')).toStrictEqual([
         'always',
-        {...OPTIONS, checkTypeImports: true},
+        {checkTypeImports: true, pattern: OPTIONS},
       ]);
     });
 
@@ -623,8 +624,26 @@ describe('options', () => {
 
       expect(configResult.getRuleEntryOptions('import', 'import/extensions')).toStrictEqual([
         'ignorePackages',
-        {checkTypeImports: true, ts: 'never'},
+        {checkTypeImports: true, pattern: {ts: 'never'}},
       ]);
+    });
+
+    it('`import/extensions` rule fires on an extension set to `never` when `requireModuleExtensions` is object', async () => {
+      const results = await testEslintConfig(
+        {import: {requireModuleExtensions: {js: 'never'}}},
+        FIXTURES.relativeImportWithExtension,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.relativeImportWithExtension,
+        'import/extensions',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Unexpected use of file extension "js" for "./default-export.js""',
+      );
     });
   });
 

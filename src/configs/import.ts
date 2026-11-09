@@ -331,9 +331,14 @@ export default defineUnConfig<ImportEslintConfigOptions>(
         'ignorePackages',
       {
         checkTypeImports: true,
-        ...(requireModuleExtensions === true &&
-          objectFromKeys(['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'], () => 'always')),
-        ...(typeof requireModuleExtensions === 'object' && requireModuleExtensions),
+        pattern: {
+          ...(requireModuleExtensions === true &&
+            objectFromKeys(
+              ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'],
+              () => 'always' as const,
+            )),
+          ...(typeof requireModuleExtensions === 'object' && requireModuleExtensions),
+        },
       },
     ]) /** @since 1.6.0 */
     .addRule('first', ERROR) /** @since 2.0.0-beta.0 */
