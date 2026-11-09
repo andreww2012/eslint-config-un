@@ -4,6 +4,7 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
+  getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
 /**
@@ -13,11 +14,13 @@ import {
  */
 export interface SolidPluginSettings {
   /**
-   * Names of the modules Solid's primitives are imported from besides `solid-js` and
-   * `@solidjs/signals`, for example a custom renderer or a re-exporting wrapper module.
+   * Names of the modules Solid's primitives are imported from besides `solid-js`,
+   * `@solidjs/signals` and `@solidjs/web`, for example a custom renderer or a re-exporting wrapper
+   * module.
    * The names are matched in whole and are added to the built-in ones instead of replacing them.
    *
    * Affected rules:
+   * - [`solid/action-yield-after-await`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/action-yield-after-await.md)
    * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
    * - [`solid/no-module-scope-reactive-primitive`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-module-scope-reactive-primitive.md)
    * - [`solid/no-proxy-apis`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-proxy-apis.md)
@@ -42,11 +45,14 @@ export interface SolidPluginSettings {
    * - [`solid/imports`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/imports.md)
    * - [`solid/jsx-no-duplicate-props`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-duplicate-props.md)
    * - [`solid/jsx-no-undef`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/jsx-no-undef.md)
+   * - [`solid/no-destructure`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-destructure.md)
    * - [`solid/no-react-deps`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-react-deps.md)
    * - [`solid/no-unknown-namespaces`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unknown-namespaces.md)
+   * - [`solid/prefer-for`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/prefer-for.md)
    * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
    *
    * Rules whose severity or options are also derived from this setting:
+   * - [`solid/action-yield-after-await`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/action-yield-after-await.md)
    * - [`solid/no-accessor-as-prop`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-accessor-as-prop.md)
    * - [`solid/no-browser-globals-in-server-function`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-browser-globals-in-server-function.md)
    * - [`solid/no-invalid-server-capture`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-invalid-server-capture.md)
@@ -75,9 +81,12 @@ export interface SolidEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'solid'> {}
 
-export default defineUnConfig<SolidEslintConfigOptions>('solid', {
+export default defineUnConfig<SolidEslintConfigOptions, readonly ['js']>('solid', {
   enabledBy: {package: 'solid-js'},
-})((context, optionsRaw) => {
+  // Turns off the `no-unassigned-vars` rule of the `js` config, so we must win
+  after: ['js'],
+  needs: ['js'],
+})((context, optionsRaw, {js}) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
@@ -121,6 +130,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
         },
       },
     ])
+    .addRule('action-yield-after-await', errorIfSolidVersion2) /** @since 0.19.0 */
     .addRule('components-return-once', ERROR) /** @since 0.6.0 */ // 🟡
     .addRule('event-handlers', WARNING, [
       {
@@ -157,6 +167,14 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     .addRule('no-restated-default-options', errorIfSolidVersion2) /** @since 0.16.0 */ // 🟣
     .addRule('no-single-arg-create-effect', errorIfSolidVersion2) /** @since 0.16.0 */ // 🔵
     .addRule('no-store-mutation-outside-setter', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔵
+    // Replaces the core rule, so inherits its severity, which the user might have changed
+    .addRule(
+      'no-unassigned-vars',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        js?.finalFlatConfigRules['no-unassigned-vars'] ?? ERROR,
+      ),
+    ) /** @since 0.19.0 */ // 🟢
+    .disableAnyRule('', 'no-unassigned-vars') // 🟢
     .addRule('no-unknown-namespaces', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-unused-signal', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔷
     .addRule('no-write-in-pure-computation', errorIfSolidVersion2) /** @since 0.18.0 */ // 🔵
@@ -175,6 +193,7 @@ export default defineUnConfig<SolidEslintConfigOptions>('solid', {
     ]) /** @since 0.7.0 */ // 🟡
     .addRule('style-prop', WARNING) /** @since 0.1.0 */ // 🟡
     .addRule('valid-use-server', ERROR) /** @since 0.17.0 */ // 🔵
+    .addRule('validate-jsx-nesting', ERROR) /** @since 0.19.0 */ // 🟢
     .enableConfigTesterForPlugin('solid')
     .addOverrides();
 });

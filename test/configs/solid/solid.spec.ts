@@ -1,4 +1,4 @@
-import {ERROR, OFF, type RuleSeverity} from '../../../src/constants';
+import {ERROR, OFF, type RuleSeverity, WARNING} from '../../../src/constants';
 
 const FIXTURES = {
   jsxWithInnerHtmlProp: 'jsx-with-inner-html-prop.js',
@@ -177,6 +177,30 @@ describe('rules', async () => {
 
     expect(result.getRuleSeverities('solid')).toMatchObject(someSolid2OnlyRuleEntries());
   });
+
+  it('turns core `no-unassigned-vars` rule off in favor of `solid/no-unassigned-vars`, coming after `js` config', async () => {
+    const jsConfigResult = await computeEslintConfig({js: true, solid: true});
+
+    await expect(jsConfigResult.getRuleSeveritiesForFile('src/index.js')).resolves.toMatchObject({
+      'no-unassigned-vars': 0,
+      'solid/no-unassigned-vars': 2,
+    });
+  });
+
+  it.each([WARNING, OFF])(
+    'gives `solid/no-unassigned-vars` the severity %s of core `no-unassigned-vars` rule set in `js` config',
+    async (severity) => {
+      const jsConfigResult = await computeEslintConfig({
+        js: {overrides: {'no-unassigned-vars': severity}},
+        solid: true,
+      });
+
+      await expect(jsConfigResult.getRuleSeveritiesForFile('src/index.js')).resolves.toMatchObject({
+        'no-unassigned-vars': 0,
+        'solid/no-unassigned-vars': severity,
+      });
+    },
+  );
 
   it('`solid/no-innerhtml` rule fires on JSX element with `innerHTML` prop', async () => {
     const results = await testEslintConfig(

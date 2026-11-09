@@ -13,6 +13,7 @@ export default definePluginMetadata('solid', {
     'no-module-scope-reactive-primitive': {disableInCodeBlocks: 'runtimeOnly'},
     'no-proxy-apis': {disableInCodeBlocks: 'runtimeOnly'},
     'no-restated-default-options': {stylistic: true},
+    'no-unassigned-vars': {disableInCodeBlocks: 'tooStrict'},
     'no-unused-signal': {disableInCodeBlocks: 'unused'},
     'prefer-for': {disableInCodeBlocks: 'performance'},
     'prefer-onSettled-for-side-effects': {disableInCodeBlocks: 'runtimeOnly'},
