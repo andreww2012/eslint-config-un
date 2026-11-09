@@ -784,8 +784,8 @@ importers:
         specifier: 8.2.6
         version: 8.2.6(eslint@10.14.0)
       eslint-plugin-qwik:
-        specifier: 1.20.3
-        version: 1.20.3(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0)
+        specifier: 1.20.4
+        version: 1.20.4(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0)
       eslint-plugin-react:
         specifier: 7.37.5
         version: 7.37.5(eslint@10.14.0)
@@ -8314,8 +8314,8 @@ packages:
     peerDependencies:
       eslint: '>=8.38.0'
 
-  eslint-plugin-qwik@1.20.3:
-    resolution: {integrity: sha512-Uwhn42wuhwKO/7axzccZZe1fIr7UmvSu6gHjQM9b3v3zdSa3qePIIMCCuZAETHHYMYXikVHOvvPmC1a3ZYulFA==}
+  eslint-plugin-qwik@1.20.4:
+    resolution: {integrity: sha512-LEYVwjpnDNTmtyJaWTSL0PsRC4iIgYQxHVt66iD/T3s0CBIrlZaphN3s4V2abMngbBjuQGXBakrHTgYQI03r+Q==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
@@ -21234,7 +21234,7 @@ snapshots:
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
       requireindex: 1.2.0
 
-  eslint-plugin-qwik@1.20.3(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0):
+  eslint-plugin-qwik@1.20.4(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/utils': 8.72.1(@typescript/typescript6@6.0.2)(eslint@10.14.0)(supports-color@7.2.0)
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)

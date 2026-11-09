@@ -38,6 +38,7 @@ minimumReleaseAgeExclude: # []
   - oxfmt@0.78.0
   - eslint-mdx@3.9.4
   - eslint-plugin-mdx@3.9.4
+  - eslint-plugin-qwik@1.20.4
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
