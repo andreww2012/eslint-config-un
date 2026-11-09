@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import {configDefaults, defineConfig} from 'vitest/config';
 
 const exclude = [
@@ -7,8 +8,37 @@ const exclude = [
   'test/e2e/**', // Run separately through `vitest.e2e.config.ts`
 ];
 
+// Mocking modules or changing the environment or globals would affect the test files that run
+// after it in the same worker
+const CODE_NEEDING_ISOLATION_REGEXP =
+  /\bvi\.(?:mock|doMock|resetModules|stubEnv|stubGlobal)\(|\bglobalThis\.\w+\s*=/;
+
+const isolatedTestFiles = fs
+  .globSync('test/**/*.{test,spec}.ts', {exclude})
+  .filter((filePath) => CODE_NEEDING_ISOLATION_REGEXP.test(fs.readFileSync(filePath, 'utf8')))
+  // Globs only use forward slashes
+  .map((filePath) => filePath.replaceAll('\\', '/'));
+
 export default defineConfig({
   test: {
+    // Loading ESLint plugins takes most of the time, and a worker that runs several test files in
+    // a row only loads them once
+    projects: [
+      {
+        test: {
+          name: 'shared-workers',
+          exclude: isolatedTestFiles,
+          isolate: false,
+        },
+      },
+      {
+        test: {
+          name: 'isolated',
+          include: isolatedTestFiles,
+          typecheck: {enabled: false},
+        },
+      },
+    ],
     exclude,
     globals: true,
     testTimeout: 60_000, // Generating ESLint config might not be very fast

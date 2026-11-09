@@ -6,6 +6,10 @@ import {
   getAllRulesSeverities as getAllRulesSeveritiesImpl,
   getRuleSeverityFromEslintRuleEntry as getRuleSeverityFromEslintRuleEntryImpl,
 } from './helpers/eslint-config';
+import {
+  addInstalledPackages as addInstalledPackagesImpl,
+  setInstalledPackages as setInstalledPackagesImpl,
+} from './helpers/installed-packages';
 import {spyOnProcessOutput as spyOnProcessOutputImpl} from './helpers/process-output';
 import {
   computeEslintConfig as computeEslintConfigImpl,
@@ -25,88 +29,13 @@ declare module 'vitest' {
   > extends jest.Matchers<R> {}
 }
 
-type PackageDetectionModule = typeof import('../src/utils/package-detection');
-
-const createFetchPackageInfoMock = vi.hoisted(
-  () =>
-    (
-      installedPackages: Record<string, string>,
-      originalModule: PackageDetectionModule,
-    ): PackageDetectionModule => {
-      const fetchPackageInfo: PackageDetectionModule['fetchPackageInfo'] = (packageName) => {
-        const version = installedPackages[packageName];
-        if (version == null) {
-          return Promise.resolve(null);
-        }
-
-        const majorVersionRaw = Number.parseInt(version, 10);
-        const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
-        const majorAndMinorVersionRaw = Number.parseFloat(version);
-        const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
-          ? null
-          : majorAndMinorVersionRaw;
-        return Promise.resolve({
-          info: {name: packageName, version},
-          versions: {full: version, major: majorVersion, majorAndMinor: majorAndMinorVersion},
-        });
-      };
-
-      return {
-        ...originalModule,
-        fetchPackageInfo,
-        fetchProjectPackagesInfo: async (packageNames, options) => {
-          const entries = await Promise.all(
-            packageNames.map(async (packageName) => [
-              packageName,
-              await fetchPackageInfo(options?.aliases?.[packageName] || packageName),
-            ]),
-          );
-          // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
-          return Object.fromEntries(entries) as Record<
-            (typeof packageNames)[number],
-            Awaited<ReturnType<typeof fetchPackageInfo>>
-          >;
-        },
-      };
-    },
-);
-
-/**
- * The installed packages state is defined via `vi.hoisted` so it can be safely
- * referenced inside the `vi.mock` factory (which is hoisted above imports).
- *
- * By default, only `eslint` itself is considered installed.
- * Each spec file can call `addInstalledPackages` in a `beforeEach` to declare its own defaults.
- * Individual tests or describe blocks can use `setInstalledPackages` / `addInstalledPackages`
- * to fully replace or augment the installed package set
- */
-const {
-  installedPackages,
-  // eslint-disable-next-line ts/unbound-method -- safe
-  setInstalledPackages: setInstalledPackagesImpl,
-  // eslint-disable-next-line ts/unbound-method -- safe
-  addInstalledPackages: addInstalledPackagesImpl,
-} = vi.hoisted(() => {
-  const installedPackages: Record<string, string> = {};
-
-  return {
-    installedPackages,
-    setInstalledPackages(packages: Record<string, string>): void {
-      Object.keys(installedPackages).forEach((key) => {
-        // eslint-disable-next-line ts/no-dynamic-delete -- clear the shared object while preserving references held by mocks
-        delete installedPackages[key];
-      });
-      Object.assign(installedPackages, packages);
-    },
-    addInstalledPackages(packages: Record<string, string>): void {
-      Object.assign(installedPackages, packages);
-    },
-  };
-});
-
 vi.mock(import('../src/utils/package-detection'), async (importOriginal) => {
-  const original = await importOriginal();
-  return createFetchPackageInfoMock(installedPackages, original);
+  // `vi.mock` is hoisted above the imports, so they may not be initialized when the factory runs
+  const [{mockPackageDetection}, original] = await Promise.all([
+    import('./helpers/installed-packages'),
+    importOriginal(),
+  ]);
+  return mockPackageDetection(original);
 });
 
 beforeEach(() => {
