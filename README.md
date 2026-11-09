@@ -1461,11 +1461,6 @@ export default defineConfig(await eslintConfig(/* ... */));
 The heading describes the whole fix.
 See [the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal) for the details.
 
-### I'm getting an error or a warning from pnpm about the ignored `unrs-resolver` build script
-
-Depending on your pnpm settings, installing eslint-config-un may print a banner or an error asking you to do something about the build script of the `unrs-resolver` package.
-That package is a transitive dependency of ours, and at the time of writing [its build script only installs `optionalDependencies` for old npm versions](https://github.com/unrs/unrs-resolver/issues/193), so under pnpm it can, and should, stay ignored.
-
 ### Some files are linted with a different config
 
 ESLint [looks up the config file](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-file-resolution) from the directory of each linted file, so a nested `eslint.config.*` file, like the one of an example project or a fixture, is used for its directory instead of yours.

@@ -208,7 +208,6 @@ overrides:
   '@graphql-tools/utils@<12.0.1': 12.1.0
   basic-ftp@<6.2.1: 6.2.1
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
-  undici@>=7.0.0 <7.30.1: 7.30.1
 
 packageExtensionsChecksum: sha256-viRUJkqQHSHoPzf5szskuSZb6Q7/PwkBbjO6LfpaHYk=
 
@@ -21044,7 +21043,7 @@ snapshots:
       github-slugger: 2.0.0
       sdbm: 3.0.0
       synckit: 0.11.13
-      undici: 7.30.1
+      undici: 7.30.2
 
   eslint-plugin-markdown-preferences@0.43.0(@eslint/markdown@8.0.3)(eslint@10.14.0)(supports-color@7.2.0):
     dependencies:
@@ -21150,7 +21149,7 @@ snapshots:
       npm-package-arg: 13.0.2
       package-json: 10.0.1
       synckit: 0.12.3
-      undici: 7.30.1
+      undici: 7.30.2
       verkit: 0.5.0
     transitivePeerDependencies:
       - '@eslint/json'
