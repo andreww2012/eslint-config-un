@@ -62,6 +62,7 @@ export {
   // --
   GLOB_TOML,
   GLOB_SOML,
+  GLOB_MERMAID,
   GLOB_VUE,
   GLOB_CSS,
   GLOB_ASTRO,

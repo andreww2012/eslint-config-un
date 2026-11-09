@@ -13,6 +13,7 @@ import {
   GLOB_JSONC,
   GLOB_MARKDOWN,
   GLOB_MDX,
+  GLOB_MERMAID,
   GLOB_RIPPLE,
   GLOB_SOML,
   GLOB_SVELTE,
@@ -63,6 +64,7 @@ export type ImplicitlyIgnoredFileTypeUnlessParsed =
   | 'jsonc'
   | 'md'
   | 'mdx'
+  | 'mermaid'
   | 'scss'
   | 'soml'
   | 'toml'
@@ -227,6 +229,17 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'soml',
+  },
+
+  mermaid: {
+    dialects: {
+      mermaid: {
+        mechanism: {language: ['mermaid', 'mermaid']},
+        filesDefault: [GLOB_MERMAID],
+        ignoresExclusions: ['mermaid'],
+      },
+    },
+    dialectDefault: 'mermaid',
   },
 
   markdown: {

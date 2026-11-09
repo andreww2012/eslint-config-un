@@ -213,6 +213,7 @@
     "@intlify/eslint-plugin-vue-i18n": "4.5.1",
     "@jest/environment": "30.5.2",
     "@jest/expect": "30.5.2",
+    "@mmd-toolkit/eslint-plugin": "0.4.0",
     "@next/eslint-plugin-next": "16.4.5",
     "@ngrx/eslint-plugin": "22.0.1",
     "@nuxt/eslint-plugin": "1.17.0",
@@ -384,6 +385,7 @@
     "@html-eslint/eslint-plugin-svelte": "^0.68.0",
     "@humanwhocodes/scsstree": "^0.1.1",
     "@intlify/eslint-plugin-vue-i18n": "^4.5.1",
+    "@mmd-toolkit/eslint-plugin": "^0.4.0",
     "@next/eslint-plugin-next": "^16.4.5",
     "@ngrx/eslint-plugin": "^22.0.1",
     "@nuxt/eslint-plugin": "^1.17.0",
@@ -529,6 +531,9 @@
       "optional": true
     },
     "@intlify/eslint-plugin-vue-i18n": {
+      "optional": true
+    },
+    "@mmd-toolkit/eslint-plugin": {
       "optional": true
     },
     "@next/eslint-plugin-next": {

@@ -118,6 +118,8 @@ export const GLOB_TOML = '**/*.toml' as const;
 
 export const GLOB_SOML = '**/*.soml' as const;
 
+export const GLOB_MERMAID = '**/*.{mmd,mermaid}' as const;
+
 export const GLOB_VUE = '**/*.vue' as const;
 
 export const GLOB_CSS = '**/*.css' as const;
@@ -322,6 +324,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'ripple',
   '@danielx/civet',
   'soml-lang',
+  'mermaid',
 
   // Used in various configs to determine the default values of their options
   '@changesets/cli',

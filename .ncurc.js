@@ -10,6 +10,7 @@ const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat'
 const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Set([
   '@cspell/eslint-plugin',
   '@docusaurus/eslint-plugin',
+  '@mmd-toolkit/eslint-plugin',
   '@next/eslint-plugin-next',
   '@ngrx/eslint-plugin',
   '@nx/eslint-plugin',

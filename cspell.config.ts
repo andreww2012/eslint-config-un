@@ -76,6 +76,7 @@ export default {
     'soml',
     'lycheeverse',
     'rambda',
+    'mmd', // Mermaid file extension, `@mmd-toolkit/eslint-plugin`
 
     // Technical words/terms
     'arrayify',

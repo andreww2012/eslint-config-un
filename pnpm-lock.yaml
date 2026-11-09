@@ -537,6 +537,9 @@ importers:
       '@jest/expect':
         specifier: 30.5.2
         version: 30.5.2(supports-color@7.2.0)
+      '@mmd-toolkit/eslint-plugin':
+        specifier: 0.4.0
+        version: 0.4.0(eslint@10.14.0)
       '@next/eslint-plugin-next':
         specifier: 16.4.5
         version: 16.4.5(eslint@10.14.0)
@@ -3338,6 +3341,25 @@ packages:
 
   '@microsoft/tsdoc@0.17.1':
     resolution: {integrity: sha512-VHyYyyoH63jFoO3shpw9Zfijk5v/9p/VrClW35z0/q6ooK7sSmxpzOkS4iZPxs3vO4XtBW4H38HRAKkAMIK7DA==}
+
+  '@mmd-toolkit/eslint-plugin@0.4.0':
+    resolution: {integrity: sha512-ydml2MDY4ZhQKKoEDC7tcRTbPRyJ6oELmoLhuQkw/dEIQRZt+SqRSvG0w7RmYJfaEie9GvqZGe7aRSls9s8GzQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+    peerDependencies:
+      '@mmd-toolkit/ast': '*'
+      eslint: ^10.0.0
+    peerDependenciesMeta:
+      '@mmd-toolkit/ast':
+        optional: true
+
+  '@mmd-toolkit/parser@0.3.1':
+    resolution: {integrity: sha512-r9GknMrdizAAjAhx2X9wTB9JKgoNhoH2W2yAzk8aB9KiW37jW3IP03DLtjx13MkThSDTRPPUwdFXuThowEA8Rg==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+    peerDependencies:
+      '@mmd-toolkit/ast': ^0.3.1
+    peerDependenciesMeta:
+      '@mmd-toolkit/ast':
+        optional: true
 
   '@modelcontextprotocol/client@2.4.0':
     resolution: {integrity: sha512-LgrD2OphHuG12vfKFKz6SOnq7bKHQmhGJIAYdD+MZBn2npHEyry6uD8zvktodtl5CQM85MO0anUyD9JwmUmxww==}
@@ -16147,6 +16169,16 @@ snapshots:
       resolve: 1.22.14
 
   '@microsoft/tsdoc@0.17.1': {}
+
+  '@mmd-toolkit/eslint-plugin@0.4.0(eslint@10.14.0)':
+    dependencies:
+      '@eslint/core': 1.2.1
+      '@eslint/plugin-kit': 0.7.3
+      '@mmd-toolkit/parser': 0.3.1
+      '@ota-meshi/ast-token-store': 0.3.0
+      eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
+
+  '@mmd-toolkit/parser@0.3.1': {}
 
   '@modelcontextprotocol/client@2.4.0':
     dependencies:

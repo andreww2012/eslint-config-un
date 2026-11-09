@@ -111,6 +111,7 @@ describe('cascade order', () => {
       eslint-config-un/markdown-links
       eslint-config-un/markdown-preferences
       eslint-config-un/math
+      eslint-config-un/mermaid
       eslint-config-un/mobx
       eslint-config-un/mocha
       eslint-config-un/mocha/no-only-tests
@@ -264,6 +265,7 @@ describe('cascade order', () => {
       eslint-config-un/parsing/yaml
       eslint-config-un/parsing/toml
       eslint-config-un/parsing/soml
+      eslint-config-un/parsing/mermaid
       eslint-config-un/parsing/markdown/commonmark
       eslint-config-un/parsing/markdown/gfm
       eslint-config-un/parsing/html

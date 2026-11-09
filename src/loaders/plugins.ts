@@ -322,6 +322,9 @@ export const pluginsLoaders = {
   mdx: generateModuleLoader('mdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
+  mermaid: generateModuleLoader('mermaid', '@mmd-toolkit/eslint-plugin', () =>
+    interopDefault(import('@mmd-toolkit/eslint-plugin')),
+  ),
   mobx: generateModuleLoader('mobx', 'eslint-plugin-mobx', () =>
     interopDefault(import('eslint-plugin-mobx')),
   ),
