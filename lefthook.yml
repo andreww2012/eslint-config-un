@@ -57,6 +57,13 @@ pre-commit:
     oxfmt:
       run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
+    changeset-template:
+      glob: '.changeset/*.md'
+      # Searches the staged content, which may differ from the files on disk. Only the template
+      # starts a line with a colon
+      run: '! git grep --cached -n -e SAMPLE-RULE-NAME -e ___REPLACE_ME___ -e "^:" -- {staged_files}'
+      fail_text: >-
+        Fill in or remove the changeset template leftovers
 
 commit-msg:
   commands:
