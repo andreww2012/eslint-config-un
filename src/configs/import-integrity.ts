@@ -123,6 +123,16 @@ export type ImportIntegrityPluginSettings =
          * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#monoreporootdir
          */
         monorepoRootDir: string;
+
+        /**
+         * Names of workspace packages (as set in their `package.json`) to leave out of the
+         * analysis entirely.
+         * Their imports are then not visible to other packages, so
+         * [`import-integrity/no-unused-package-exports`](https://nebrius.github.io/import-integrity-lint/rules/no-unused-package-exports)
+         * may report exports that only these packages use
+         * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#ignorepackages
+         */
+        ignorePackages?: readonly string[];
       } & Partial<Record<keyof ImportIntegrityPackagePluginSettings | 'packageRootDir', never>>
     >;
 
@@ -198,7 +208,7 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
     .addRule(
       'no-restricted-imports',
       restrictImports ? ERROR : OFF,
-      restrictImports ? [restrictImports] : [],
+      restrictImports ? [restrictImports] : undefined,
     ) /** @since 1.0.0 */
     .addRule('no-test-imports-in-prod', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-test-only-imports', ERROR) /** @since 1.0.0 */ // 🟢
