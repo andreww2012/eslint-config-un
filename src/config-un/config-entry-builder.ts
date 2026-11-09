@@ -2,21 +2,8 @@ import {
   DISABLE_AUTOFIX_WITH_SLASH,
   ERROR,
   GLOB_CIVET_COMPILED,
-  GLOB_CSS,
-  GLOB_GRAPHQL,
-  GLOB_HTM_HTML,
-  GLOB_JSON,
-  GLOB_JSON5,
-  GLOB_JSONC,
-  GLOB_MARKDOWN,
-  GLOB_MDX,
   GLOB_MD_X_CODE_BLOCKS,
-  GLOB_MERMAID,
-  GLOB_SCSS,
-  GLOB_SOML,
-  GLOB_TOML,
   GLOB_TS_X,
-  GLOB_YML_YAML,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -63,11 +50,11 @@ import {
 } from '../utils';
 import {doesConfigRequestTypeInformation, savePackagesToLoadFromConfig} from './config-utils';
 import {
-  type ImplicitlyIgnoredFileTypeUnlessParsed,
+  GLOBS_IGNORED_UNLESS_PARSED,
   PARSING_LANGUAGES,
-  type ParsingLanguageDefinition,
   type ParsingLanguages,
   type ParsingLanguagesWithDialects,
+  getLanguageFiles,
 } from './parsing';
 import {
   type ExtraPluginsType,
@@ -85,24 +72,6 @@ export type ConfigEntryBuilderOptions<
   ExtraPlugins extends ExtraPluginsType,
   DefaultPrefix extends PluginPrefix | null,
 > = UnFlatConfigEntryBase<ExtraPlugins, DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix>;
-
-const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS: Readonly<
-  Record<ImplicitlyIgnoredFileTypeUnlessParsed, readonly [string, ...string[]]>
-> = {
-  css: [GLOB_CSS],
-  graphql: [GLOB_GRAPHQL],
-  scss: [GLOB_SCSS],
-  json: [GLOB_JSON],
-  jsonc: [GLOB_JSONC],
-  json5: [GLOB_JSON5],
-  md: [GLOB_MARKDOWN],
-  mdx: [GLOB_MDX],
-  mermaid: [GLOB_MERMAID],
-  html: [GLOB_HTM_HTML],
-  soml: [GLOB_SOML],
-  toml: [GLOB_TOML],
-  yaml: [GLOB_YML_YAML],
-};
 
 type AddRuleInternalOptions = EmptyObject;
 
@@ -327,13 +296,11 @@ export class ConfigEntryBuilder<
              * final `ignores` array.
              *
              * Use this option if you don't want to implicitly ignore certain file types (set the
-             * file type you wish not to be ignored to `false`).
+             * language whose files you wish not to be ignored to `false`).
              * You can also set the whole option to `false` to not add anything to `ignores`
              * @default true
              */
-            ignoresInternal?:
-              | boolean
-              | Partial<Record<ImplicitlyIgnoredFileTypeUnlessParsed, boolean>>;
+            ignoresInternal?: boolean | Partial<Record<ParsingLanguages, boolean>>;
 
             /**
              * Keeps the patterns of `ignoresInternal` even when the function form of the user's
@@ -421,35 +388,27 @@ export class ConfigEntryBuilder<
             : undefined)
         : undefined;
       const ignoresFromUser = typeof ignoresOption === 'function' ? undefined : ignoresOption;
-      const ignoresExclusionsOfParsedLanguages = (() => {
-        const fileTypes: ImplicitlyIgnoredFileTypeUnlessParsed[] = [];
-
-        if (parseWithInfo != null) {
-          const {language, dialect} = parseWithInfo;
-          const {dialects, dialectDefault}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
-          fileTypes.push(...(dialects[dialect || dialectDefault]?.ignoresExclusions || []));
-        }
-
-        parsingIgnoresInheritedFrom?.forEach((language) => {
-          const {dialects}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
-          // No dialect is set, so any of them may be the one that ends up set up
-          Object.values(dialects).forEach(({ignoresExclusions}) => {
-            fileTypes.push(...(ignoresExclusions || []));
-          });
-        });
-
-        return fileTypes;
-      })();
-      const ignoresInternal = objectEntriesUnsafe(
-        FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
-      ).flatMap(([fileType, globs]) =>
-        internalOptions.ignoresInternal === false ||
-        (internalOptions.ignoresInternal !== true &&
-          (internalOptions.ignoresInternal?.[fileType] === false ||
-            ignoresExclusionsOfParsedLanguages.includes(fileType)))
+      const {ignoresInternal: ignoresInternalOption} = internalOptions;
+      const filesNotIgnoredInternally = new Set([
+        ...(parseWithInfo == null
           ? []
-          : globs,
-      );
+          : getLanguageFiles(
+              parseWithInfo.language,
+              parseWithInfo.dialect || PARSING_LANGUAGES[parseWithInfo.language].dialectDefault,
+            )),
+        ...(parsingIgnoresInheritedFrom?.flatMap((language) => getLanguageFiles(language)) || []),
+        ...(typeof ignoresInternalOption === 'object'
+          ? objectEntriesUnsafe(ignoresInternalOption).flatMap(([language, isIgnored]) =>
+              isIgnored === false ? getLanguageFiles(language) : [],
+            )
+          : []),
+      ]);
+      const ignoresInternal =
+        ignoresInternalOption === false
+          ? []
+          : GLOBS_IGNORED_UNLESS_PARSED.filter(
+              (glob) => ignoresInternalOption === true || !filesNotIgnoredInternally.has(glob),
+            );
       const ignoresDefault = internalOptions.ignoresDefault || [];
       const ignoresBeforeUserFn = [
         ...ignoresInternal,

@@ -211,7 +211,7 @@ describe('un options', () => {
       const configResult = await computeEslintConfig('astro');
 
       expect(configResult.getConfigByUnPostfix('astro')?.ignores).toMatchInlineSnapshot(
-        '["**/*.css", "**/*.{graphql,gql}", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.{mmd,mermaid}", "**/*.htm?(l)", "**/*.soml", "**/*.toml", "**/*.y?(a)ml"]',
+        '["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.y?(a)ml", "**/*.toml", "**/*.soml", "**/*.{mmd,mermaid}", "**/*.md", "**/*.htm?(l)", "**/*.mdx", "**/*.{graphql,gql}"]',
       );
     });
 

@@ -446,7 +446,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
           ignoresDefault: ['LICENSE.md', ...(isChangesetsCliInstalled ? [GLOB_CHANGESETS] : [])],
           ignoresDefaultMergedWithUserIgnores: true,
           ignoresInternal: {
-            md: false,
+            markdown: false,
           },
         },
       ])

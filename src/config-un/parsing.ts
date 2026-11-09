@@ -15,6 +15,7 @@ import {
   GLOB_MDX,
   GLOB_MERMAID,
   GLOB_RIPPLE,
+  GLOB_SCSS,
   GLOB_SOML,
   GLOB_SVELTE,
   GLOB_SVELTE_SCRIPT,
@@ -51,25 +52,6 @@ import {
   intersectParentConfigFilesWithProvidedFiles,
 } from './shared';
 
-/**
- * These file types are implicitly added to `ignores` array of every Config
- * unless the config sets up the parser for this language or opts out
- */
-export type ImplicitlyIgnoredFileTypeUnlessParsed =
-  | 'css'
-  | 'graphql'
-  | 'html'
-  | 'json'
-  | 'json5'
-  | 'jsonc'
-  | 'md'
-  | 'mdx'
-  | 'mermaid'
-  | 'scss'
-  | 'soml'
-  | 'toml'
-  | 'yaml';
-
 type ParsingMechanism =
   | {
       language: readonly [plugin: Exclude<PluginPrefix, ''>, languageName: string];
@@ -93,7 +75,11 @@ type ParsingMechanism =
 interface ParsingDialectDefinition {
   mechanism: ParsingMechanism;
   filesDefault: string[];
-  ignoresExclusions?: readonly ImplicitlyIgnoredFileTypeUnlessParsed[];
+
+  /**
+   * Files the dialect only parses when a Config asks for them, as they need extra language options
+   */
+  filesOnRequest?: readonly string[];
 
   /**
    * How the dialect is parsed unless a Config or the `parsing` option says otherwise.
@@ -103,9 +89,15 @@ interface ParsingDialectDefinition {
   languageOptionsDefault?: (context: UnConfigContext) => Record<string, unknown> | null;
 }
 
-export interface ParsingLanguageDefinition {
+interface ParsingLanguageDefinition {
   dialects: Record<string, ParsingDialectDefinition>;
   dialectDefault: string;
+
+  /**
+   * Other Configs lint the language's files too, as rules written for JS work on them.
+   * Otherwise, only the Configs written for the language lint its files: the rest ignore them
+   */
+  lintedByOtherConfigs?: true;
 }
 
 // Checks that every default dialect is one of the language's own
@@ -114,6 +106,7 @@ const defineParsingLanguages = <
     [Key in keyof Languages]: {
       dialects: Record<string, ParsingDialectDefinition>;
       dialectDefault: keyof Languages[Key]['dialects'];
+      lintedByOtherConfigs?: true;
     };
   },
 >(
@@ -137,6 +130,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'ts',
+    lintedByOtherConfigs: true,
   },
 
   css: {
@@ -144,7 +138,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       css: {
         mechanism: {language: ['css', 'css']},
         filesDefault: [GLOB_CSS],
-        ignoresExclusions: ['css', 'scss'],
+        filesOnRequest: [GLOB_SCSS],
         languageOptionsDefault: generateDefaultCssLanguageOptions,
       },
     },
@@ -156,22 +150,18 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       auto: {
         mechanism: {language: ['jsonc', 'x']},
         filesDefault: [GLOB_JSON, GLOB_JSONC, GLOB_JSON5],
-        ignoresExclusions: ['json', 'jsonc', 'json5'],
       },
       json: {
         mechanism: {language: ['jsonc', 'json']},
         filesDefault: [GLOB_JSON],
-        ignoresExclusions: ['json'],
       },
       jsonc: {
         mechanism: {language: ['jsonc', 'jsonc']},
         filesDefault: [GLOB_JSONC],
-        ignoresExclusions: ['jsonc'],
       },
       json5: {
         mechanism: {language: ['jsonc', 'json5']},
         filesDefault: [GLOB_JSON5],
-        ignoresExclusions: ['json5'],
       },
     },
     dialectDefault: 'auto',
@@ -182,17 +172,14 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       json: {
         mechanism: {language: ['json', 'json']},
         filesDefault: [GLOB_JSON],
-        ignoresExclusions: ['json'],
       },
       jsonc: {
         mechanism: {language: ['json', 'jsonc']},
         filesDefault: [GLOB_JSONC],
-        ignoresExclusions: ['jsonc'],
       },
       json5: {
         mechanism: {language: ['json', 'json5']},
         filesDefault: [GLOB_JSON5],
-        ignoresExclusions: ['json5'],
       },
     },
     dialectDefault: 'json',
@@ -203,7 +190,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       yaml: {
         mechanism: {language: ['yaml', 'yaml']},
         filesDefault: [GLOB_YML_YAML],
-        ignoresExclusions: ['yaml'],
       },
     },
     dialectDefault: 'yaml',
@@ -214,7 +200,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       toml: {
         mechanism: {language: ['toml', 'toml']},
         filesDefault: [GLOB_TOML],
-        ignoresExclusions: ['toml'],
       },
     },
     dialectDefault: 'toml',
@@ -225,7 +210,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       soml: {
         mechanism: {language: ['soml', 'soml']},
         filesDefault: [GLOB_SOML],
-        ignoresExclusions: ['soml'],
       },
     },
     dialectDefault: 'soml',
@@ -236,7 +220,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       mermaid: {
         mechanism: {language: ['mermaid', 'mermaid']},
         filesDefault: [GLOB_MERMAID],
-        ignoresExclusions: ['mermaid'],
       },
     },
     dialectDefault: 'mermaid',
@@ -247,17 +230,14 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       commonmark: {
         mechanism: {language: ['markdown', 'commonmark']},
         filesDefault: [GLOB_MARKDOWN],
-        ignoresExclusions: ['md'],
       },
       gfm: {
         mechanism: {language: ['markdown', 'gfm']},
         filesDefault: [GLOB_MARKDOWN],
-        ignoresExclusions: ['md'],
       },
       extendedSyntax: {
         mechanism: {language: ['markdown-preferences', 'extended-syntax']},
         filesDefault: [GLOB_MARKDOWN],
-        ignoresExclusions: ['md'],
       },
     },
     dialectDefault: 'gfm',
@@ -268,7 +248,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       html: {
         mechanism: {parser: '@html-eslint/parser'},
         filesDefault: [GLOB_HTM_HTML],
-        ignoresExclusions: ['html'],
       },
     },
     dialectDefault: 'html',
@@ -279,7 +258,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       mdx: {
         mechanism: {parser: 'mdx-eslint-parser'},
         filesDefault: [GLOB_MDX],
-        ignoresExclusions: ['mdx'],
       },
     },
     dialectDefault: 'mdx',
@@ -293,6 +271,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'vue',
+    lintedByOtherConfigs: true,
   },
 
   svelte: {
@@ -304,6 +283,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'svelte',
+    lintedByOtherConfigs: true,
   },
 
   astro: {
@@ -314,6 +294,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'astro',
+    lintedByOtherConfigs: true,
   },
 
   graphql: {
@@ -321,7 +302,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       graphql: {
         mechanism: {parser: 'graphql-eslint-parser'},
         filesDefault: [GLOB_GRAPHQL],
-        ignoresExclusions: ['graphql'],
       },
     },
     dialectDefault: 'graphql',
@@ -340,6 +320,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'ember',
+    lintedByOtherConfigs: true,
   },
 
   tsrx: {
@@ -350,6 +331,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'tsrx',
+    lintedByOtherConfigs: true,
   },
 
   civet: {
@@ -364,6 +346,7 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       },
     },
     dialectDefault: 'ts',
+    lintedByOtherConfigs: true,
   },
 
   angularTemplate: {
@@ -371,7 +354,6 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
       angularTemplate: {
         mechanism: {parser: '@angular-eslint/template-parser'},
         filesDefault: [GLOB_HTM_HTML],
-        ignoresExclusions: ['html'],
       },
     },
     dialectDefault: 'angularTemplate',
@@ -389,6 +371,30 @@ export const PARSING_LANGUAGES = defineParsingLanguages({
 });
 
 export type ParsingLanguages = keyof typeof PARSING_LANGUAGES;
+
+/**
+ * The files a Config written for the language may lint, so it must not ignore them.
+ * Without a dialect, any of them may be the one that ends up set up
+ */
+export const getLanguageFiles = (language: ParsingLanguages, dialect?: string) => {
+  const {dialects}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
+  return (dialect == null ? Object.values(dialects) : [dialects[dialect]]).flatMap(
+    (dialectDefinition) =>
+      dialectDefinition
+        ? [...dialectDefinition.filesDefault, ...(dialectDefinition.filesOnRequest || [])]
+        : [],
+  );
+};
+
+/**
+ * Every Config ignores these files unless it's written for their language or opts out
+ */
+export const GLOBS_IGNORED_UNLESS_PARSED: readonly string[] = arrayUnique(
+  objectKeysUnsafe(PARSING_LANGUAGES).flatMap((language) => {
+    const {lintedByOtherConfigs}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
+    return lintedByOtherConfigs ? [] : getLanguageFiles(language);
+  }),
+);
 
 /**
  * A Config declares which language its rules are written for, optionally pinning a dialect.
