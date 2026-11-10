@@ -49,9 +49,19 @@ runs:
       shell: bash
       working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
       run: pnpm check:deps
-    # Don't cache the generated artifacts: they depend not only on the lockfile, but also on every
-    # config module (`src/configs/**/*.ts`) and other files, so cache hits would be rare
+    # Shared only between the jobs of the same commit, as the artifacts depend on many source files.
+    # Skipped on Windows, where the cache would be restored outside the Dev Drive
+    - name: Restore the generated artifacts
+      id: artifacts-cache
+      if: runner.os != 'Windows'
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: |
+          src/**/*.gen.ts
+          src/**/*.gen.d.ts
+        key: generated-artifacts-${{ github.sha }}
     - name: Generate the artifacts
+      if: steps.artifacts-cache.outputs.cache-hit != 'true'
       shell: bash
       working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
       run: pnpm prep
