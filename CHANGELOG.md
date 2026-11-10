@@ -1,5 +1,50 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.7
+
+### Minor Changes
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`206d94f`](https://github.com/andreww2012/eslint-config-un/commit/206d94fd5842b226ed6108b55ba604b6520a2202) - solid: updated [`eslint-plugin-solid` from v0.18.1 to v0.19.0](https://github.com/solidjs-community/eslint-plugin-solid/compare/v0.18.1...v0.19.0):
+  
+  - 🟢 enabled the following rules:
+    - [`solid/no-unassigned-vars`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unassigned-vars.md), which replaces the core [`no-unassigned-vars`](https://eslint.org/docs/latest/rules/no-unassigned-vars) rule and takes its severity from the `js` config
+    - [`solid/validate-jsx-nesting`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/validate-jsx-nesting.md)
+  - 🟢 enabled [`solid/action-yield-after-await`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/action-yield-after-await.md) if the resolved Solid major version is at least 2
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`4797860`](https://github.com/andreww2012/eslint-config-un/commit/4797860e9dd6d152bb8279c7d9219ea95cae9188) - Added a new config `mermaid` which uses [`@mmd-toolkit/eslint-plugin`](https://npmx.dev/@mmd-toolkit/eslint-plugin), ❓ enabled if `mermaid` package is installed
+
+### Patch Changes
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`f5f1fb9`](https://github.com/andreww2012/eslint-config-un/commit/f5f1fb9710e5032e62ece176b3d6b2467b842c04) - ts: updated [`typescript-eslint` from v8.72.1 to v8.72.2](https://github.com/typescript-eslint/typescript-eslint/compare/v8.72.1...v8.72.2)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`6a46977`](https://github.com/andreww2012/eslint-config-un/commit/6a46977bbb5bab31207ad1a899c086c5d5c9da5d) - cypress: updated [`eslint-plugin-cypress` from v7.0.3 to v7.0.4](https://github.com/cypress-io/eslint-plugin-cypress/compare/v7.0.3...v7.0.4)
+
+- [`7a683da`](https://github.com/andreww2012/eslint-config-un/commit/7a683da4cf2e57a96e1215fbe7db6ffed56f8203) - vue: updated [`eslint-plugin-vue` from v10.12.0 to v10.12.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.12.0...v10.12.1)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`229b98b`](https://github.com/andreww2012/eslint-config-un/commit/229b98bfac866e4f6acc7eae20e387a1849a3485) - react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v1.1.0 to v1.2.0](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v1.1.0...v1.2.0)
+
+- [`b0f51ff`](https://github.com/andreww2012/eslint-config-un/commit/b0f51ffce69a1b96ac764a086091aa48ea3e073f) - githubActions: [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style.html) now expects release tags by default if the [actions lockfile](https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles) exists, as it pins their commits, and no longer reports same-repository `$/` references
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`d014465`](https://github.com/andreww2012/eslint-config-un/commit/d014465ec42e85606beb400a3c4112bcc34563c5) - react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.28.8 to v5.30.1](https://github.com/Rel1cx/eslint-react/compare/v5.28.8...v5.30.1):
+  
+  - 🔴 not enabled [`eslint-react/unstable-exhaustive-deps`](https://github.com/Rel1cx/eslint-react/blob/HEAD/plugins/eslint-plugin/src/rules/exhaustive-deps/exhaustive-deps.mdx) rule
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`5a2ed44`](https://github.com/andreww2012/eslint-config-un/commit/5a2ed442bc0bf3edd0542ac327d85d25a2171d3d) - nextJs: updated [`@next/eslint-plugin-next` from v16.4.5 to v16.4.6](https://github.com/vercel/next.js/compare/v16.4.5...v16.4.6)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`bdec4eb`](https://github.com/andreww2012/eslint-config-un/commit/bdec4eb1ddb2d41f98f102e1b08d12d7adab264c) - importIntegrity: updated [`import-integrity-lint` from v1.3.1 to v2.1.0](https://github.com/nebrius/import-integrity-lint/compare/v1.3.1...v2.1.0) and added support for the new [`ignorePackages` setting](https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#ignorepackages)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`6318474`](https://github.com/andreww2012/eslint-config-un/commit/631847421a7ac45f5dde60caaed7130b0242fa67) - betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.10.0 to v4.11.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.10.0...v4.11.0) and added support for the new [`extends` form of the `selectors` setting](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#selectors)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`b79f983`](https://github.com/andreww2012/eslint-config-un/commit/b79f983a8bd49171a2a09c8ff8e2bd339e8437b9) - mdx: updated [`eslint-mdx` from v3.9.1 to v3.9.4](https://github.com/mdx-js/eslint-mdx/compare/eslint-mdx@3.9.1...eslint-mdx@3.9.4) and [`eslint-plugin-mdx` from v3.9.1 to v3.9.4](https://github.com/mdx-js/eslint-mdx/compare/eslint-plugin-mdx@3.9.1...eslint-plugin-mdx@3.9.4)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`a7f3ed8`](https://github.com/andreww2012/eslint-config-un/commit/a7f3ed8a4840c5318f7254494a3df59c12792de1) - qwik: updated [`eslint-plugin-qwik` from v1.20.3 to v1.20.4](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik@1.20.3...34f23a89a7d6304d7e8757224423eec1755e6bcf)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`6c86028`](https://github.com/andreww2012/eslint-config-un/commit/6c86028b281175f7cd8d9f41733faf9a7f10ba55) - import: updated [`eslint-plugin-import-x` from v4.18.0 to v4.18.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.18.0...v4.18.1)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`b414f38`](https://github.com/andreww2012/eslint-config-un/commit/b414f3897a329263f92fe333931a9a9a01ca5ee6) - formatJs: updated [`eslint-plugin-formatjs` from v8.1.3 to v8.1.4](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@8.1.3...eslint-plugin-formatjs@8.1.4)
+
+- [#62](https://github.com/andreww2012/eslint-config-un/pull/62) [`e68d437`](https://github.com/andreww2012/eslint-config-un/commit/e68d437d5d6d726693b973e46d1d971ecc610915) - import: fixed ESLint crash caused by invalid [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/extensions.md) rule options when `requireModuleExtensions` option is enabled; per-extension values in its object form, which were ignored before, now apply
+
 ## 1.0.0-rc.6
 
 ### Minor Changes
