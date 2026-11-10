@@ -13,6 +13,9 @@ For usage examples, concepts and API documentation, see [`README.md`](./README.m
 Only ever run the full test suite if you've made the core logic changes and it has a high chance of affecting majority of test files.
 Running it fully takes a lot of resources (time especially and memory too) to complete.
 
+Don't typecheck with TypeScript 6: it only exists for ESLint to work.
+Use TypeScript 7.
+
 Avoid mentioning this package's name in internal comments.
 
 Never statically import at runtime any Config file matching `src/configs/**/*.ts` or the plugin metadata files (`src/plugins/*.ts` except `shared.ts`).
