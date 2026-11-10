@@ -2,7 +2,7 @@
 #:schema https://www.schemastore.org/lychee.json
 #
 # Repo-specific overrides layered on top of `lychee-config-nick2bad4u`, which is
-# always passed first (see `check-links.yml`).
+# always passed first (see the CI workflows).
 # Scalars here win over the baseline, list values are merged into it
 
 # Report broken links only. The baseline's "info" also streams a line per working

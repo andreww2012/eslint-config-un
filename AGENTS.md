@@ -33,7 +33,7 @@ Declare the corresponding array using `allUnionMembers` helper.
 
 When referencing rule names in the docs, always wrap it in a link to the rule's docs page if it's available.
 
-Check new or changed links with lychee as [CI](./.github/workflows/check-links.yml) does (local report: `.lychee.report.md`).
+Check new or changed links with lychee as [CI](./.github/workflows/ci.yml) does (local report: `.lychee.report.md`).
 
 Reference rules by their "full name": `<default un plugin prefix>/<rule-name>`, i.e. `unicorn/prefer-dispose`, not just `prefer-dispose`.
 

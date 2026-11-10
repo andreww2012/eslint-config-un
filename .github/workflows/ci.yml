@@ -1,3 +1,4 @@
+# cspell:ignore ACMR pipefail
 name: Check code (+ Publish)
 on:
   pull_request:
@@ -88,7 +89,75 @@ jobs:
   check-links:
     name: Links checker
     needs: install
-    uses: ./.github/workflows/check-links.yml
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml` and the
+      # changed files filtering script below
+      - uses: ./.github/actions/prepare
+      - name: Resolve base commit
+        id: base
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha ||
+            github.event.before }}
+        run: |
+          # `github.event.before` is all zeroes for a newly pushed branch and may
+          # point at a commit dropped by a force push. Compare against the empty tree
+          # in that case, which checks every file in the repo and every rule docs URL
+          if git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "ref=${BASE_SHA}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=$(git hash-object -t tree /dev/null)" >> "$GITHUB_OUTPUT"
+          fi
+      # Rule docs URLs are built by functions in the plugin metadata, so no file holds them
+      - name: List rule docs URLs of changed plugins
+        env:
+          BASE: ${{ steps.base.outputs.ref }}
+        run: |
+          node --import tsx/esm scripts/list-rule-docs-urls.ts --changed-since "${BASE}" \
+            > "${RUNNER_TEMP}/rule-docs-urls.md"
+          echo "Rule docs URLs of changed plugins:"
+          cat "${RUNNER_TEMP}/rule-docs-urls.md"
+      - name: Collect changed files
+        id: changed-files
+        env:
+          BASE: ${{ steps.base.outputs.ref }}
+        run: |
+          # Neither half of the pipeline below may fail silently
+          set -o pipefail
+          # Explicitly listed inputs bypass lychee's `extensions` allowlist,
+          # so we're intersecting them with the same allowlist
+          git diff --name-only --diff-filter=ACMR "${BASE}" HEAD |
+            node scripts/filter-lychee-inputs.ts \
+              node_modules/lychee-config-nick2bad4u/lychee.toml lychee.toml \
+            > "${RUNNER_TEMP}/changed-files.txt"
+          if [ -s "${RUNNER_TEMP}/rule-docs-urls.md" ]; then
+            echo "${RUNNER_TEMP}/rule-docs-urls.md" >> "${RUNNER_TEMP}/changed-files.txt"
+          fi
+          echo "Changed files:"
+          cat "${RUNNER_TEMP}/changed-files.txt"
+          echo "count=$(wc -l < "${RUNNER_TEMP}/changed-files.txt")" >> "$GITHUB_OUTPUT"
+      - name: Restore lychee cache
+        if: steps.changed-files.outputs.count != '0'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .lycheecache # cspell:disable-line
+          key: lychee-${{ github.run_id }}
+          restore-keys: lychee-
+      - name: Check links
+        if: steps.changed-files.outputs.count != '0'
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          # Changed files containing no links at all is a normal outcome here
+          failIfEmpty: false
+          args: >-
+            --config node_modules/lychee-config-nick2bad4u/lychee.toml
+            --config lychee.toml
+            --files-from ${{ runner.temp }}/changed-files.txt
 
   test:
     name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }})
