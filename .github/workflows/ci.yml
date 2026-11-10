@@ -113,9 +113,8 @@ jobs:
       allow-failure: ${{ matrix.allow-failure || false }}
 
   e2e:
-    name: E2E (${{ matrix.package-manager }}, Node ${{ matrix.node-version }})
+    name: E2E (${{ matrix.package-manager }})
     needs: install
-    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -132,19 +131,15 @@ jobs:
           - aube-gvs
           - nub
           - upm
-        node-version: *node-versions
-        # Deno lints with its own runtime, so the Node version doesn't matter
+        # Wrapped in another list to be a single matrix value: the called workflow runs a job for
+        node-versions: [*node-versions]
         include:
           - package-manager: deno
-            node-version: *latest-node-version
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: pnpm test:e2e
-        env:
-          E2E_PACKAGE_MANAGER: ${{ matrix.package-manager }}
+            node-versions: [*latest-node-version]
+    uses: ./.github/workflows/ci-e2e-tests.yml
+    with:
+      package-manager: ${{ matrix.package-manager }}
+      node-versions: ${{ toJSON(matrix.node-versions) }}
 
   build:
     name: Build (tsdown) & lint package (attw, publint)

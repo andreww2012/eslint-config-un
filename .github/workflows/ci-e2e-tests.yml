@@ -1,0 +1,28 @@
+name: CI E2E tests
+on:
+  workflow_call:
+    inputs:
+      package-manager:
+        required: true
+        type: string
+      node-versions:
+        description: JSON array of Node.js versions
+        required: true
+        type: string
+
+jobs:
+  e2e:
+    name: Node ${{ matrix.node-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ${{ fromJSON(inputs.node-versions) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/prepare
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: pnpm test:e2e
+        env:
+          E2E_PACKAGE_MANAGER: ${{ inputs.package-manager }}
