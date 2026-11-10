@@ -1,14 +1,27 @@
-import {dir as findUpDirectory} from 'empathic/find';
+import {dir as findUpDirectory, file as findUpFile} from 'empathic/find';
 
 const FIXTURES = {
   githubWorkflowEmptyMapping: 'github-workflow-empty-mapping.yml',
   workflowMissingName: 'workflow-missing-name.yml',
+  workflowWithSelfRepositoryAction: 'workflow-with-self-repository-action.yml',
 } as const;
 
-vi.mock(import('empathic/find'), async (importOriginal) => ({
-  ...(await importOriginal()),
-  dir: vi.fn<typeof findUpDirectory>(),
-}));
+const ACTIONS_LOCKFILE_PATH = vi.hoisted(() => '.github/workflows/actions.lock');
+
+vi.mock(import('empathic/find'), async (importOriginal) => {
+  const original = await importOriginal();
+  return {
+    ...original,
+    dir: vi.fn<typeof findUpDirectory>(),
+    // Hides the lockfile of this repo
+    file: vi.fn<typeof findUpFile>((name, options) =>
+      name === ACTIONS_LOCKFILE_PATH ? undefined : original.file(name, options),
+    ),
+  };
+});
+
+const {file: findUpFileOriginal} =
+  await vi.importActual<typeof import('empathic/find')>('empathic/find');
 
 beforeEach(() => {
   vi.mocked(findUpDirectory).mockReturnValue('.github/workflows');
@@ -294,10 +307,53 @@ describe('options', async () => {
   });
 
   describe('option: `usesStyle`', () => {
-    it('enables `github-actions/prefer-step-uses-style` rule with default options by default', () => {
+    it('enables `github-actions/prefer-step-uses-style` rule expecting commit SHAs by default', () => {
       expect(
         configResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
-      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true}]');
+      ).toMatchInlineSnapshot(
+        '[2, {"allowRepository": true, "commit": true, "ignores": ["^\\$/"]}]',
+      );
+    });
+
+    describe('actions lockfile exists', () => {
+      beforeEach(() => {
+        vi.mocked(findUpFile).mockImplementation((name, options) =>
+          name === ACTIONS_LOCKFILE_PATH ? `/project/${name}` : findUpFileOriginal(name, options),
+        );
+      });
+
+      afterEach(() => {
+        vi.mocked(findUpFile).mockReset();
+      });
+
+      it('enables `github-actions/prefer-step-uses-style` rule expecting release tags by default', async () => {
+        const customConfigResult = await computeEslintConfig('githubActions');
+
+        expect(
+          customConfigResult.getRuleEntry(
+            'github-actions',
+            'github-actions/prefer-step-uses-style',
+          ),
+        ).toMatchInlineSnapshot(
+          '[2, {"allowRepository": true, "ignores": ["^\\$/"], "release": true}]',
+        );
+      });
+    });
+
+    it('`github-actions/prefer-step-uses-style` rule does not report same-repository `$/` references by default', async () => {
+      const results = await testEslintConfig(
+        {githubActions: {files: ['**/*.yml']}},
+        FIXTURES.workflowWithSelfRepositoryAction,
+        import.meta.dirname,
+      );
+
+      expect(
+        findLintMessageFromLintResults(
+          results,
+          FIXTURES.workflowWithSelfRepositoryAction,
+          'github-actions/prefer-step-uses-style',
+        ),
+      ).toBeUndefined();
     });
 
     it('disables `github-actions/prefer-step-uses-style` rule when set to `false`', async () => {

@@ -1,3 +1,4 @@
+import * as findUp from 'empathic/find';
 import {ERROR, GLOB_YML_YAML_EXTENSION, OFF} from '../constants';
 import {
   type ExtraPluginsType,
@@ -6,6 +7,9 @@ import {
   assignDefaults,
   defineUnConfig,
 } from './index';
+
+// TODO remove once https://github.com/ntnyq/eslint-plugin-github-action/issues/108 is fixed
+const DEFAULT_USES_STYLE_IGNORES: readonly string[] = [String.raw`^\$/`];
 
 /**
  * An ESLint plugin with rules for consistent, readable and valid GitHub Actions files.
@@ -44,9 +48,15 @@ export interface GithubActionsEslintConfigOptions<
   /**
    * Enforces `<job>.steps.uses` style.
    *
+   * By default, release tags are expected if the
+   * [actions lockfile](https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles)
+   * exists, as it pins their commits, and commit SHAs otherwise.
+   * Same-repository `$/` references are ignored, as the rule reports them as branches.
+   *
    * Affected rule:
    * - [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style.html)
-   * @default {commit: true, allowRepository: true}
+   * @default {release: true, allowRepository: true, ignores: ['^\\$/']} <=> `.github/workflows/actions.lock`
+   * exists, otherwise `commit: true` instead of `release: true`
    */
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
 }
@@ -58,8 +68,10 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     usesStyle: {
-      commit: true,
+      ...(findUp.file('.github/workflows/actions.lock') == null ? {commit: true} : {release: true}),
       allowRepository: true,
+      // eslint-disable-next-line unicorn/prefer-spread -- `assignDefaults` would infer a spread as read-only
+      ignores: DEFAULT_USES_STYLE_IGNORES.slice(),
     },
   });
 
