@@ -6,7 +6,9 @@ const ALIAS_PREFIX_REGEX = /^x-/;
 export default definePluginMetadata('eslint-react', {
   configs: ['react'],
   ruleDocsUrl: (ruleName) =>
-    `https://eslint-react.xyz/docs/rules/${ruleName.replace(ALIAS_PREFIX_REGEX, '')}`,
+    ruleName === 'unstable-exhaustive-deps'
+      ? 'https://github.com/Rel1cx/eslint-react/blob/HEAD/plugins/eslint-plugin/src/rules/exhaustive-deps/exhaustive-deps.mdx'
+      : `https://eslint-react.xyz/docs/rules/${ruleName.replace(ALIAS_PREFIX_REGEX, '')}`,
   suggestedPrefix: [
     '@eslint-react',
     'more concise and convenient to use; `@` feels redundant; `react` is already taken by `eslint-plugin-react`',

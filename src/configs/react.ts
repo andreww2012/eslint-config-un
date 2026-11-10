@@ -1274,6 +1274,9 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     ) /** @since 1.5.26 */ /** @aka no-direct-set-state-in-use-layout-effect (until 2.0.0) */ /** @aka no-direct-set-state-in-use-effect (until 3.0.0) */ // 🟡
     .addRule('set-state-in-render', ERROR) /** @since 3.0.0-beta.0 */ // 🟢
     .addRule('static-components', ERROR) /** @since 3.0.0-beta.29 */ // 🟢
+    // Experimental fork of `exhaustive-deps` which reports the same problems unless its `hooks`
+    // option is set
+    .addRule('unstable-exhaustive-deps', OFF) /** @since 5.30.0 */
     .addRule('unsupported-syntax', ERROR) /** @since 1.51.0 */ // 🟢
     .addRule('use-memo', ERROR) /** @since 3.0.0-beta.20 */ // 🟢
     .addRule('use-state', getXRuleSeverity(WARNING)) /** @since 0.9.6 */ // 🟡
