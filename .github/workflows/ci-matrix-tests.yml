@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
       - run: pnpm check:config
+        working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
   test-vitest:
     name: Vitest
     runs-on: ${{ inputs.os }}
@@ -34,3 +35,4 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
       - run: pnpm test:vitest
+        working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}

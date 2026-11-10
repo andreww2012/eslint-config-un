@@ -10,6 +10,18 @@ inputs:
 runs:
   using: composite
   steps:
+    # Makes installing and loading the dependencies faster. Steps that need them must run in the
+    # copied workspace
+    - name: Set up a Dev Drive
+      if: runner.os == 'Windows'
+      # cspell:disable-next-line
+      uses: samypr100/setup-dev-drive@562171fe8df7401fdf582d766cd3b6ab80d5b1a0 # v4.1.0
+      with:
+        # The drive only grows as files are written to it; this size ensures all deps fit
+        drive-size: 6GB
+        workspace-copy: true
+        # Lets Microsoft Defender scan the files after they are opened rather than before
+        trusted-dev-drive: true
     - name: Read pnpm version from package.json
       id: pnpm-version
       shell: bash
@@ -28,12 +40,15 @@ runs:
         registry-url: https://registry.npmjs.org # Required for Trusted Publishing
     - name: Install dependencies
       shell: bash
+      working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
       run: pnpm ci
     - name: Check deps for vulnerabilities & peer deps issues
       shell: bash
+      working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
       run: pnpm check:deps
     # Don't cache the generated artifacts: they depend not only on the lockfile, but also on every
     # config module (`src/configs/**/*.ts`) and other files, so cache hits would be rare
     - name: Generate the artifacts
       shell: bash
+      working-directory: ${{ env.DEV_DRIVE_WORKSPACE || github.workspace }}
       run: pnpm prep
