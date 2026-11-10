@@ -32,7 +32,7 @@ jobs:
       - run: pnpm knip
 
   spellcheck:
-    name: Spellcheck (cspell)
+    name: Spelling
     needs: install
     runs-on: ubuntu-24.04
     steps:
@@ -41,7 +41,7 @@ jobs:
       - run: pnpm check:spelling
 
   formatting:
-    name: Formatting check (oxfmt)
+    name: Formatting
     needs: install
     runs-on: ubuntu-24.04
     steps:
@@ -50,7 +50,7 @@ jobs:
       - run: pnpm check:format
 
   typecheck:
-    name: Typecheck (tsgo)
+    name: Types
     needs: install
     runs-on: ubuntu-24.04
     steps:
@@ -86,7 +86,7 @@ jobs:
       - run: pnpm check:release-notes
 
   check-links:
-    name: Check links
+    name: Links checker
     needs: install
     uses: ./.github/workflows/check-links.yml
 
@@ -142,7 +142,7 @@ jobs:
       node-versions: ${{ toJSON(matrix.node-versions) }}
 
   build:
-    name: Build (tsdown) & lint package (attw, publint)
+    name: Build
     needs: install
     runs-on: ubuntu-24.04
     steps:
@@ -151,7 +151,7 @@ jobs:
       - run: pnpm check:package
 
   release-main:
-    name: Create release PR _OR_ Publish on merge
+    name: Create release PR / Publish on merge
     needs:
       - knip
       - spellcheck
