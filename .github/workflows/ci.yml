@@ -96,15 +96,21 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: &node-versions [22, 24, &latest-node-version 26]
-        # Only run Windows tests on the latest Node version
+        node-version: &node-versions ['22', '24', &latest-node-version '26']
         include:
+          # Only run Windows tests on the latest Node version because they're slower
           - os: windows-2025
             node-version: *latest-node-version
+          # Reports problems with the next Node version early, without failing the run.
+          # TODO Node 27 only has alpha releases until April 2027, so bump it to the newest one by hand
+          - os: ubuntu-24.04
+            node-version: 27.0.0-alpha.0.0.0
+            allow-failure: true
     uses: ./.github/workflows/ci-matrix-tests.yml
     with:
       os: ${{ matrix.os }}
       node-version: ${{ matrix.node-version }}
+      allow-failure: ${{ matrix.allow-failure || false }}
 
   e2e:
     name: E2E (${{ matrix.package-manager }}, Node ${{ matrix.node-version }})

@@ -7,12 +7,17 @@ on:
         type: string
       node-version:
         required: true
-        type: number
+        type: string
+      allow-failure:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test-config:
     name: Un config test
     runs-on: ${{ inputs.os }}
+    continue-on-error: ${{ inputs.allow-failure }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
@@ -22,6 +27,7 @@ jobs:
   test-vitest:
     name: Vitest
     runs-on: ${{ inputs.os }}
+    continue-on-error: ${{ inputs.allow-failure }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/prepare
