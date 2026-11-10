@@ -19,6 +19,15 @@ describe('`plugins.better-tailwindcss.settings`', () => {
     ({tailwindConfig: 'tailwind.config.js', cwd: '/path/to/project'}) satisfies Settings;
   });
 
+  it('allows extending the default `selectors`', () => {
+    ({
+      entryPoint: 'src/index.css',
+      selectors: {
+        extends: [{kind: 'attribute', match: [{type: 'objectValues'}], name: '^classNames$'}],
+      },
+    }) satisfies Settings;
+  });
+
   it('does not allow using `entryPoint` and `tailwindConfig` properties at the same time', () => {
     ({
       entryPoint: 'src/index.css',
