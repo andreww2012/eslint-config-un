@@ -79,6 +79,15 @@ export default eslintConfig({
         },
       ],
     },
+    githubActions: {
+      // Commits are pinned by the actions lockfile
+      usesStyle: {
+        release: true,
+        allowRepository: true,
+        // Same-repository `$/` references are not recognized and reported as branches
+        ignores: [String.raw`^\$/`],
+      },
+    },
     import: {
       extraneousDependenciesCheck: (defaultIgnorePatterns) => ({
         whitelist: [...ALWAYS_BUNDLED_DEPENDENCIES],

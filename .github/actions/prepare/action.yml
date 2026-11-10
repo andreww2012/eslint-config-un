@@ -15,13 +15,13 @@ runs:
       shell: bash
       run: echo "version=$(jq -r '.devEngines.packageManager.version' package.json)" >> "$GITHUB_OUTPUT"
     - name: Setup pnpm
-      uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      uses: pnpm/action-setup@v6.1.1
       with:
         # TODO remove the explicit version after
         # https://github.com/pnpm/action-setup/issues/227 is fixed
         version: ${{ steps.pnpm-version.outputs.version }}
     - name: Setup Node.js
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      uses: actions/setup-node@v7.1.0
       with:
         cache: pnpm
         node-version: ${{ inputs.node-version }}
@@ -37,7 +37,7 @@ runs:
     - name: Restore the generated artifacts
       id: artifacts-cache
       if: runner.os != 'Windows'
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      uses: actions/cache@v6.1.0
       with:
         path: |
           src/**/*.gen.ts

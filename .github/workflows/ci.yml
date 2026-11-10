@@ -16,20 +16,32 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  actions-lock:
+    name: Actions lockfile
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: gh extension install github/gh-actions-lock --pin v0.4.1
+      - run: gh actions-lock --verify
+
   install:
     name: Install dependencies
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
 
   knip:
     name: Knip
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm knip
 
   spellcheck:
@@ -37,8 +49,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm check:spelling
 
   formatting:
@@ -46,8 +58,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm check:format
 
   typecheck:
@@ -55,8 +67,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm ts
 
   eslint:
@@ -64,8 +76,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm eslint
 
   type-info:
@@ -73,8 +85,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm check:type-info
 
   release-notes:
@@ -82,8 +94,8 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm check:release-notes
 
   check-links:
@@ -93,12 +105,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
       # Only needed for `node_modules/lychee-config-nick2bad4u/lychee.toml` and the
       # changed files filtering script below
-      - uses: ./.github/actions/prepare
+      - uses: $/.github/actions/prepare
       - name: Resolve base commit
         id: base
         env:
@@ -143,14 +155,14 @@ jobs:
           echo "count=$(wc -l < "${RUNNER_TEMP}/changed-files.txt")" >> "$GITHUB_OUTPUT"
       - name: Restore lychee cache
         if: steps.changed-files.outputs.count != '0'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: .lycheecache # cspell:disable-line
           key: lychee-${{ github.run_id }}
           restore-keys: lychee-
       - name: Check links
         if: steps.changed-files.outputs.count != '0'
-        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        uses: lycheeverse/lychee-action@v2.9.0
         with:
           # Changed files containing no links at all is a normal outcome here
           failIfEmpty: false
@@ -215,13 +227,14 @@ jobs:
     needs: install
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/prepare
+      - uses: actions/checkout@v7.0.1
+      - uses: $/.github/actions/prepare
       - run: pnpm check:package
 
   release-main:
     name: Create release PR / Publish on merge
     needs:
+      - actions-lock
       - knip
       - spellcheck
       - formatting
@@ -235,10 +248,10 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/prepare
+      - uses: $/.github/actions/prepare
       - name: Enter pre-release mode
         if: github.ref == 'refs/heads/dev-v1'
         # Should ignore an error happening if already in pre mode
@@ -258,7 +271,7 @@ jobs:
           git clean -fdq .changeset
       - name: Create release / Publish
         id: changesets
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        uses: changesets/action@v2.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           publish-script: pnpm release

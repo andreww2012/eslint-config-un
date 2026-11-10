@@ -35,6 +35,9 @@ When referencing rule names in the docs, always wrap it in a link to the rule's 
 
 Check new or changed links with lychee as [CI](./.github/workflows/ci.yml) does (local report: `.lychee.report.md`).
 
+GitHub Actions dependencies are locked with [`gh actions-lock`](https://github.com/github/gh-actions-lock).
+After adding or updating any `uses:` in workflows or actions, run it to update the lockfile.
+
 Reference rules by their "full name": `<default un plugin prefix>/<rule-name>`, i.e. `unicorn/prefer-dispose`, not just `prefer-dispose`.
 
 Scope commit messages and changesets by the Configs whose output actually changes.
