@@ -1,4 +1,5 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
+import markdown from '@eslint/markdown';
 import {RuleTester} from 'eslint';
 import {parser as typescriptParser} from 'typescript-eslint';
 import * as vueParser from 'vue-eslint-parser';
@@ -112,4 +113,12 @@ ruleTester.run(RULE_NAME, vueNoTrailingElementWhitespace, {
       errors: [{messageId: 'trailing', line: 2, column: 23, endLine: 2, endColumn: 24}],
     },
   ],
+});
+
+// Other languages have no parser services
+const markdownRuleTester = new RuleTester({plugins: {markdown}, language: 'markdown/commonmark'});
+
+markdownRuleTester.run(`${RULE_NAME} (Markdown)`, vueNoTrailingElementWhitespace, {
+  valid: ['<p>Loading... </p>'],
+  invalid: [],
 });

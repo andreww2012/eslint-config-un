@@ -24,7 +24,8 @@ export const defineElementVisitor = (
     defineTemplateBodyVisitor?: (visitor: {
       VElement: (element: AST.VElement) => void;
     }) => Eslint.Rule.RuleListener;
-  } = context.sourceCode.parserServices;
+    // Other languages, like Markdown, have no parser services
+  } = context.sourceCode.parserServices || {};
 
   const ignoredElementNames = new Set(ignoredElements?.map((name) => toKebabCase(name)));
   const isIgnored = (element: AST.VElement): boolean =>

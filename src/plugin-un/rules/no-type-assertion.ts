@@ -159,7 +159,8 @@ const rule: JsRuleDefinitionWithNodes<TypeAssertion, [RuleOptions?]> = {
         scriptVisitor: Record<string, (node: TypeAssertion) => void>,
       ) => Record<string, (node: TypeAssertion) => void>;
       getTemplateBodyTokenStore?: () => TokenStore;
-    } = sourceCode.parserServices;
+      // Other languages, like Markdown, have no parser services
+    } = sourceCode.parserServices || {};
     const {program, esTreeNodeToTSNodeMap} = parserServices;
     // No type information is available for Vue templates
     const scriptTypeInformation: TypeInformation | undefined =

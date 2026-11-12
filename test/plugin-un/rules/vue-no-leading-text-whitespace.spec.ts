@@ -1,4 +1,5 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
+import markdown from '@eslint/markdown';
 import {RuleTester} from 'eslint';
 import * as vueParser from 'vue-eslint-parser';
 import {vueNoLeadingTextWhitespace} from '../../../src/plugin-un/rules/vue-no-leading-text-whitespace';
@@ -52,4 +53,12 @@ ruleTester.run(RULE_NAME, vueNoLeadingTextWhitespace, {
       errors: [{messageId: 'leading', line: 1, column: 23, endLine: 2, endColumn: 3}],
     },
   ],
+});
+
+// Other languages have no parser services
+const markdownRuleTester = new RuleTester({plugins: {markdown}, language: 'markdown/commonmark'});
+
+markdownRuleTester.run(`${RULE_NAME} (Markdown)`, vueNoLeadingTextWhitespace, {
+  valid: ['<p> Loading...</p>'],
+  invalid: [],
 });

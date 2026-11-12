@@ -1,5 +1,6 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
 import path from 'node:path';
+import markdown from '@eslint/markdown';
 import {
   type ParserOptions,
   parseForESLint as parseWithTypescriptParser,
@@ -444,5 +445,13 @@ const javascriptRuleTester = new RuleTester();
 
 javascriptRuleTester.run(`${RULE_NAME} (JavaScript)`, noTypeAssertion, {
   valid: ['const value = /** @type {string} */ (other);'],
+  invalid: [],
+});
+
+// Other languages have no parser services
+const markdownRuleTester = new RuleTester({plugins: {markdown}, language: 'markdown/commonmark'});
+
+markdownRuleTester.run(`${RULE_NAME} (Markdown)`, noTypeAssertion, {
+  valid: ['```ts\nvalue as Type;\n```'],
   invalid: [],
 });
