@@ -8,9 +8,6 @@ import {
   defineUnConfig,
 } from './index';
 
-// TODO remove once https://github.com/ntnyq/eslint-plugin-github-action/issues/108 is fixed
-const DEFAULT_USES_STYLE_IGNORES: readonly string[] = [String.raw`^\$/`];
-
 /**
  * An ESLint plugin with rules for consistent, readable and valid GitHub Actions files.
  *
@@ -70,8 +67,6 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
     usesStyle: {
       ...(findUp.file('.github/workflows/actions.lock') == null ? {commit: true} : {release: true}),
       allowRepository: true,
-      // eslint-disable-next-line unicorn/prefer-spread -- `assignDefaults` would infer a spread as read-only
-      ignores: DEFAULT_USES_STYLE_IGNORES.slice(),
     },
   });
 
