@@ -211,7 +211,7 @@ When both conditions hold, a separate flat config item is created with:
 
 - `name`: the current Config's name plus a `/@rule/<rule name with its prefix>` suffix;
 - `files`: the ones given here, [intersected with the Config's `files`](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation) if the Config has any;
-- `ignores`: the ones given here, or the Config's ones if you don't pass any.
+- `ignores`: the Config's ones plus the ones given here.
 
 ## List of configs
 

@@ -265,7 +265,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        '{"files": ["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.{bench,benchmark}.?([cm])[jt]s?(x)"], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
+        '{"files": ["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.{bench,benchmark}.?([cm])[jt]s?(x)"], "ignores": ["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.y?(a)ml", "**/*.toml", "**/*.soml", "**/*.{mmd,mermaid}", "**/*.md", "**/*.htm?(l)", "**/*.mdx", "**/*.{graphql,gql}", "**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 
@@ -287,8 +287,24 @@ describe('option: `overrides` and `overridesAny`', () => {
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        '{"files": [["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
+        '{"files": [["**/*[._-]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.css", "**/*.scss", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.y?(a)ml", "**/*.toml", "**/*.soml", "**/*.{mmd,mermaid}", "**/*.md", "**/*.htm?(l)", "**/*.mdx", "**/*.{graphql,gql}", "**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
+    });
+
+    it('keeps the `ignores` of the config in the eslint config of the rule', async () => {
+      const CONFIG_IGNORES = ['**/*.skip.test.ts'] as const;
+      const RULE_IGNORES = ['**/*.todo.test.ts'] as const;
+
+      const configResult = await computeEslintConfig({
+        vitest: {
+          ignores: [...CONFIG_IGNORES],
+          overrides: {'vitest/no-focused-tests': {severity: 2, ignores: [...RULE_IGNORES]}},
+        },
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests')?.ignores,
+      ).toIncludeAllMembers([...CONFIG_IGNORES, ...RULE_IGNORES]);
     });
 
     it('does not create a separate eslint config if `files` is set to empty array', async () => {

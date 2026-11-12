@@ -1132,7 +1132,7 @@ export const processUnOrFlatConfig = (
                 : ruleEntryRaw.files || config.files,
           }),
           ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
-            ignores: ruleEntryRaw.ignores?.length ? ruleEntryRaw.ignores : config.ignores,
+            ignores: [...(config.ignores || []), ...(ruleEntryRaw.ignores || [])],
           }),
           rules: Object.fromEntries(newRuleEntries),
         };
