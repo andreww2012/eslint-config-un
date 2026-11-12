@@ -26,7 +26,6 @@ const MJS_EXTENSION_REGEXP = /\.mjs$/;
 export default defineConfig([
   {
     entry: ['src/index.ts', 'src/snippets.ts', 'src/globs.ts'],
-    format: 'esm',
     unbundle: true,
     dts: {
       // With `allowJs`, a package resolved to a JS file is treated as a source whose declarations
