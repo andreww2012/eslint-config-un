@@ -10,12 +10,6 @@ export default definePluginMetadata('stylistic', {
     ref
       ? `https://github.com/eslint-stylistic/eslint-stylistic/blob/${ref}/packages/eslint-plugin/rules/${ruleName}/README.md`
       : `https://eslint.style/rules/${ruleName.replace(EXPERIMENTAL_PREFIX_REGEX, '')}`,
-  // Deprecated rules
-  ruleDocsRefs: {
-    'jsx-indent': 'v5.10.0',
-    'jsx-props-no-multi-spaces': 'v5.10.0',
-    'jsx-sort-props': 'v5.10.0',
-  },
   suggestedPrefix: ['@stylistic', 'more concise and convenient to use; `@` feels redundant'],
   prettierLanguage: 'js',
   allRulesStylistic: true,
@@ -35,7 +29,6 @@ export default definePluginMetadata('stylistic', {
     'dot-location': {prettierIncompatible: true},
     'eol-last': {prettierIncompatible: true, disableInCodeBlocks: 'tooStrict'},
     'exp-jsx-props-style': {prettierIncompatible: true},
-    'exp-list-style': {prettierIncompatible: true},
     'function-call-argument-newline': {prettierIncompatible: true},
     'function-call-spacing': {prettierIncompatible: true},
     'function-paren-newline': {prettierIncompatible: true},
@@ -51,12 +44,10 @@ export default definePluginMetadata('stylistic', {
     'jsx-equals-spacing': {prettierIncompatible: true},
     'jsx-first-prop-new-line': {prettierIncompatible: true},
     'jsx-function-call-newline': {prettierIncompatible: true},
-    'jsx-indent': {prettierIncompatible: true},
     'jsx-indent-props': {prettierIncompatible: true},
     'jsx-max-props-per-line': {prettierIncompatible: true},
     'jsx-newline': {prettierIncompatible: true},
     'jsx-one-expression-per-line': {prettierIncompatible: true},
-    'jsx-props-no-multi-spaces': {prettierIncompatible: true},
     'jsx-quotes': {prettierIncompatible: true},
     'jsx-tag-spacing': {prettierIncompatible: true},
     'jsx-wrap-multilines': {prettierIncompatible: true},
@@ -64,6 +55,7 @@ export default definePluginMetadata('stylistic', {
     'keyword-spacing': {prettierIncompatible: true},
     'linebreak-style': {prettierIncompatible: true},
     'lines-around-comment': {prettierIncompatible: true},
+    'list-style': {prettierIncompatible: true},
     'max-len': {prettierIncompatible: true},
     'max-statements-per-line': {prettierIncompatible: true},
     'member-delimiter-style': {prettierIncompatible: true},

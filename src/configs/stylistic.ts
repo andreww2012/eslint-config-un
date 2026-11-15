@@ -89,9 +89,6 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
 
   configBuilder
     ?.addConfig('stylistic')
-    .addRule(...setupRule('array-bracket-newline', OFF)) /** @since 0.0.4 */
-    .addRule(...setupRule('array-bracket-spacing', OFF)) /** @since 0.0.4 */ // 🟢
-    .addRule(...setupRule('array-element-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('arrow-parens', OFF)) /** @since 0.0.12 */ // 🟢
     .addRule(...setupRule('arrow-spacing', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('block-spacing', OFF)) /** @since 0.0.4 */ // 🟢
@@ -104,10 +101,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     .addRule(...setupRule('dot-location', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('eol-last', OFF)) /** @since 0.0.6 */ // 🟢
     .addRule(...setupRule('exp-jsx-props-style', OFF)) /** @since 5.8.0 */
-    .addRule(...setupRule('exp-list-style', OFF)) /** @since 5.5.0 */
-    .addRule(...setupRule('function-call-argument-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('function-call-spacing', OFF)) /** @since 0.0.4 */
-    .addRule(...setupRule('function-paren-newline', OFF)) /** @since 1.2.0 */
     .addRule(...setupRule('generator-star-spacing', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('implicit-arrow-linebreak', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('indent', OFF)) /** @since 0.0.4 */ // 🟢
@@ -128,6 +122,8 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     .addRule(...setupRule('jsx-pascal-case', OFF)) /** @since 1.6.0 */
     .addRule(...setupRule('jsx-quotes', OFF)) /** @since 0.0.6 */ // 🟢
     .addRule(...setupRule('jsx-self-closing-comp', OFF)) /** @since 0.1.0 */
+    .addRule(...setupRule('jsx-shorthand-boolean', OFF)) /** @since 6.0.0 */
+    .addRule(...setupRule('jsx-shorthand-fragment', OFF)) /** @since 6.0.0 */
     .addRule(...setupRule('jsx-tag-spacing', OFF)) /** @since 0.0.7 */ // 🟢
     .addRule(...setupRule('jsx-wrap-multilines', OFF)) /** @since 0.0.7 */ // 🟢
     .addRule(...setupRule('key-spacing', OFF)) /** @since 0.0.4 */ // 🟢
@@ -136,6 +132,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     .addRule(...setupRule('linebreak-style', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('lines-around-comment', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('lines-between-class-members', OFF)) /** @since 0.0.4 */ // 🟢
+    .addRule(...setupRule('list-style', OFF)) /** @since 5.5.0 */ /** @aka exp-list-style */ // 🟢
     .addRule(...setupRule('max-len', OFF)) /** @since 0.0.6 */
     .addRule(...setupRule('max-statements-per-line', OFF)) /** @since 0.0.6 */ // 🟢
     .addRule(...setupRule('member-delimiter-style', OFF)) /** @since 0.0.4 */ // 🟢
@@ -156,9 +153,6 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
     // cspell:disable-next-line
     .addRule(...setupRule('nonblock-statement-body-position', OFF)) /** @since 0.0.4 */
-    .addRule(...setupRule('object-curly-newline', OFF)) /** @since 0.0.4 */
-    .addRule(...setupRule('object-curly-spacing', OFF)) /** @since 0.0.4 */ // 🟢
-    .addRule(...setupRule('object-property-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('one-var-declaration-per-line', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('operator-linebreak', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('padded-blocks', OFF)) /** @since 0.0.4 */ // 🟢

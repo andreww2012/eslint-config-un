@@ -105,6 +105,7 @@ const RULES_REPORTING_GENERATED_CODE: readonly UnAllRuleNames[] = [
   'stylistic/jsx-wrap-multilines',
   'stylistic/key-spacing',
   'stylistic/keyword-spacing',
+  'stylistic/list-style',
   'stylistic/max-statements-per-line',
   'stylistic/member-delimiter-style',
   'stylistic/multiline-ternary',

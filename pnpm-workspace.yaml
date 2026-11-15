@@ -15,6 +15,7 @@ minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
   - prettier@3.10.1
+  - '@stylistic/eslint-plugin@6.0.0'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -71,6 +72,7 @@ overrides:
 
 patchedDependencies:
   '@eslint/compat': patches/@eslint__compat.patch
+  '@stylistic/eslint-plugin@6.0.0': patches/@stylistic__eslint-plugin@6.0.0.patch
   eslint-plugin-file-progress@4.0.0: patches/eslint-plugin-file-progress@4.0.0.patch
   eslint-plugin-node-dependencies@2.3.0: patches/eslint-plugin-node-dependencies@2.3.0.patch
   eslint-typegen: patches/eslint-typegen.patch
