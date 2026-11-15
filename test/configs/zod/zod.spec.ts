@@ -129,6 +129,7 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('zod', 'zod/no-number-schema-with-int')).toBe(2);
     expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-meta')).toBe(2);
     expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-validate')).toBe(2);
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/no-reshape-on-refined-object')).toBe(2);
   });
 
   it('disables `zod/prefer-validate` rule when zod <4.6 is installed', async () => {
@@ -143,6 +144,20 @@ describe('rules', async () => {
     const configResult = await computeEslintConfig('zod');
 
     expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-validate')).toBe(2);
+  });
+
+  it('disables `zod/no-reshape-on-refined-object` rule when zod <4.3 is installed', async () => {
+    addInstalledPackages({zod: '4.2.1'});
+
+    const configResult = await computeEslintConfig('zod');
+
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/no-reshape-on-refined-object')).toBe(0);
+  });
+
+  it('enables `zod/no-reshape-on-refined-object` rule when zod >=4.3 is installed', async () => {
+    const configResult = await computeEslintConfig('zod');
+
+    expect(configResult.getRuleEntrySeverity('zod', 'zod/no-reshape-on-refined-object')).toBe(2);
   });
 
   it('`zod/consistent-schema-var-name` rule fires when schema variable lacks configured suffix', async () => {

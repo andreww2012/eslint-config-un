@@ -282,6 +282,9 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
   // `.validate()` added in v4.6
   const severityForPreferValidate =
     zodPackageVersions == null || satisfies(zodPackageVersions.full, '>=4.6') ? ERROR : OFF;
+  // Before v4.3, most methods reshaping an object schema drop its refinements instead of throwing
+  const severityForNoReshapeOnRefinedObject =
+    zodPackageVersions == null || satisfies(zodPackageVersions.full, '>=4.3') ? ERROR : OFF;
 
   const schemaCompiler = resolveSchemaCompiler(
     optionsResolved.schemaCompiler,
@@ -307,6 +310,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
       ...resolveConsistentImportOptions(optionsResolved),
     ) /** @since 3.1.0 */ // 🟢
     .addRule('consistent-import-source', OFF) /** @since 1.2.0 */ // 🎨
+    .addRule('consistent-object-property-key-style', OFF) /** @since 5.3.0 */
     .addRule(
       'consistent-object-schema-type',
       ...resolveConsistentObjectSchemaTypeOptions(optionsResolved),
@@ -339,6 +343,10 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     .addRule('no-number-schema-with-step', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
     .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 4.5.0 */ // 🟢
+    .addRule(
+      'no-reshape-on-refined-object',
+      severityForNoReshapeOnRefinedObject,
+    ) /** @since 5.3.0 */ // 🟢
     .addRule('no-schema-with-is-nullable', severityForRulesOnlyForV4) /** @since 4.4.0 */ // 🟢
     .addRule('no-schema-with-is-optional', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
@@ -395,6 +403,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
       ...resolveConsistentImportOptions(optionsMiniResolved),
     ) /** @since 0.1.0 */ // 🟢
     .addRule('consistent-import-source', OFF) /** @since 0.1.0 */ // 🎨
+    .addRule('consistent-object-property-key-style', OFF) /** @since 2.2.0 */
     .addRule(
       'consistent-object-schema-type',
       ...resolveConsistentObjectSchemaTypeOptions(optionsMiniResolved),
@@ -419,6 +428,10 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     ) /** @since 1.10.0 */ // 🔵
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
+    .addRule(
+      'no-reshape-on-refined-object',
+      severityForNoReshapeOnRefinedObject,
+    ) /** @since 2.2.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-transform-in-record-key', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */ // 🔵

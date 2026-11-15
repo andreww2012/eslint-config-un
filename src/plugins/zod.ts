@@ -12,6 +12,10 @@ export default definePluginMetadata('zod', {
     'array-style': {stylistic: true},
     'consistent-import': {stylistic: true},
     'consistent-import-source': {disableInCodeBlocks: 'imports'},
+    'consistent-object-property-key-style': {
+      stylistic: [false, 'renaming a key changes which input key the schema reads'],
+      disableInCodeBlocks: 'tooStrict',
+    },
     'consistent-schema-output-type-style': {stylistic: true},
     'consistent-schema-var-name': {stylistic: true},
     'no-any-schema': {disableInCodeBlocks: 'typeStrictness'},
