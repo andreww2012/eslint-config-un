@@ -57,10 +57,7 @@ const isPackageInstalled = (
 function getIsConfigEnabled(
   this: UnConfigContext,
   configName: keyof UnConfigs,
-  defaultConditionOrPackageInstalled:
-    | boolean
-    | PackageToCheck
-    | NonEmptyTuple<PackageToCheck> = true,
+  defaultConditionOrPackageInstalled: boolean | PackageToCheck | NonEmptyTuple<PackageToCheck>,
   {
     preCondition,
   }: {

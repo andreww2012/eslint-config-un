@@ -42,7 +42,6 @@ export interface PackageJson {
 export type {
   Branded,
   ConditionalKeys,
-  EmptyObject,
   Falsy,
   MaybePromise,
   MergeObjects,

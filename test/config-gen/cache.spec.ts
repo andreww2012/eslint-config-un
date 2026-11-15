@@ -63,7 +63,7 @@ const clearMemoryCache = () => {
 };
 
 const computeCachedConfig = (
-  configs: Parameters<typeof computeEslintConfig>[0] = {},
+  configs: Parameters<typeof computeEslintConfig>[0],
   unOptions?: (Parameters<typeof computeEslintConfig>[1] & {})['un'],
 ) => computeEslintConfig(configs, {un: {...unOptions, cacheConfigs: true}});
 
@@ -146,9 +146,9 @@ describe('option: `cacheConfigs`', () => {
 
   describe('memory cache', () => {
     it('serves the very same config on a subsequent call', async () => {
-      const first = await computeCachedConfig();
+      const first = await computeCachedConfig({});
 
-      await expect(computeCachedConfig()).resolves.toHaveProperty('config', first.config);
+      await expect(computeCachedConfig({})).resolves.toHaveProperty('config', first.config);
     });
 
     it('recomputes the config when caching is disabled', async () => {
@@ -159,26 +159,26 @@ describe('option: `cacheConfigs`', () => {
     });
 
     it('recomputes the config when the cache key changes', async () => {
-      const first = await computeCachedConfig();
+      const first = await computeCachedConfig({});
       const second = await computeCachedConfig({}, {offlineMode: true});
 
       expect(second.config).not.toBe(first.config);
     });
 
     it('recomputes the config when the resolved environment changes', async () => {
-      const first = await computeCachedConfig();
+      const first = await computeCachedConfig({});
       const second = await computeCachedConfig({}, {environment: 'ci'});
 
       expect(second.config).not.toBe(first.config);
     });
 
     it('recomputes the config when the cached one is older than an hour', async () => {
-      const first = await computeCachedConfig();
+      const first = await computeCachedConfig({});
 
       vi.useFakeTimers({toFake: ['Date']});
       vi.setSystemTime(Date.now() + MAX_CACHE_VALID_MS + 1);
 
-      const second = await computeCachedConfig();
+      const second = await computeCachedConfig({});
 
       expect(second.config).not.toBe(first.config);
     });
@@ -285,7 +285,7 @@ describe('option: `cacheConfigs`', () => {
       const processOutput = spyOnProcessOutput();
       vi.mocked(fs.writeFile).mockRejectedValueOnce(new Error('EACCES: permission denied'));
 
-      await computeCachedConfig();
+      await computeCachedConfig({});
 
       expect(processOutput.getStderrOutput()).toContain('Could not save cache data');
       await expect(doesCacheFileExist()).resolves.toBe(false);
@@ -300,14 +300,14 @@ describe('option: `cacheConfigs`', () => {
         packageManager: {name: 'npm', agent: 'npm'} as const,
       },
     ])('differs when $reason', async ({packageManager}) => {
-      await computeCachedConfig();
+      await computeCachedConfig({});
       const {key} = await readCacheFile();
 
       await fs.rm(CACHE_FILE_PATH, {force: true});
       clearMemoryCache();
       vi.mocked(detectPackageManager).mockResolvedValueOnce(packageManager);
 
-      await computeCachedConfig();
+      await computeCachedConfig({});
 
       await expect(readCacheFile()).resolves.not.toHaveProperty('key', key);
     });
@@ -334,7 +334,7 @@ describe('option: `cacheConfigs`', () => {
       const processOutput = spyOnProcessOutput();
       vi.mocked(exec).mockRejectedValueOnce(new Error('git is not installed'));
 
-      await computeCachedConfig();
+      await computeCachedConfig({});
 
       expect(processOutput.getStderrOutput()).toContain('Error getting git HEAD hash');
       await expect(doesCacheFileExist()).resolves.toBe(true);
@@ -349,7 +349,7 @@ describe('option: `cacheConfigs`', () => {
         }),
       );
 
-      await computeCachedConfig();
+      await computeCachedConfig({});
 
       await expect(doesCacheFileExist()).resolves.toBe(true);
     });
@@ -453,7 +453,7 @@ describe('option: `cacheConfigs`', () => {
       const processOutput = spyOnProcessOutput();
       vi.mocked(packageUtils.cache).mockReturnValue(undefined);
 
-      await computeCachedConfig();
+      await computeCachedConfig({});
 
       await expect(doesCacheFileExist()).resolves.toBe(false);
       expect(processOutput.getStderrOutput()).toContain('Could not determine the cache path');

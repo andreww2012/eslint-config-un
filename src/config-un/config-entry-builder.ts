@@ -28,7 +28,6 @@ import {
 import type {PluginPrefix} from '../loaders';
 import {RULES_REQUIRING_TYPE_INFORMATION} from '../plugins.gen';
 import type {
-  EmptyObject,
   Falsy,
   NonEmptyString,
   NonEmptyTuple,
@@ -73,22 +72,18 @@ export type ConfigEntryBuilderOptions<
   DefaultPrefix extends PluginPrefix | null,
 > = UnFlatConfigEntryBase<ExtraPlugins, DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix>;
 
-type AddRuleInternalOptions = EmptyObject;
-
 interface ConfigEntryChain<DefaultPrefix extends PluginPrefix | null> {
   config: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'>;
   addRule: <RuleName extends GetRuleNamesInPlugin<DefaultPrefix>>(
     ruleName: RuleName,
     severity: RuleSeverity | null,
     ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, RuleName, 'all'>>,
-    options?: AddRuleInternalOptions,
   ) => ConfigEntryChain<DefaultPrefix>;
   addAnyRule: <Prefix extends PluginPrefix, RuleName extends GetRuleNamesInPlugin<Prefix>>(
     prefix: Prefix,
     ruleName: RuleName,
     severity: RuleSeverity | null,
     ruleOptions?: NoInfer<GetRuleOptions<Prefix, RuleName, 'all'>>,
-    options?: AddRuleInternalOptions,
   ) => ConfigEntryChain<DefaultPrefix>;
   disableAnyRule: <Prefix extends PluginPrefix>(
     plugin: Prefix,

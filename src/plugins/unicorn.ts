@@ -216,7 +216,7 @@ export default definePluginMetadata('unicorn', {
     'no-unnecessary-default-arguments': {requiresTypeInfo: 'optional', stylistic: true},
     'no-unnecessary-fetch-options': {requiresTypeInfo: 'optional', stylistic: true},
     'no-unnecessary-global-this': {stylistic: true},
-    'no-unnecessary-nested-ternary': {stylistic: true},
+    'no-unnecessary-nested-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-unnecessary-parameters': {
       requiresTypeInfo: [
         false,
@@ -455,6 +455,7 @@ export default definePluginMetadata('unicorn', {
     'prefer-object-iterable-methods': {stylistic: true},
     'prefer-observer-apis': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
     'prefer-optional-catch-binding': {disableInCodeBlocks: 'emptiness'},
+    'prefer-options-parameter': {requiresTypeInfo: 'optional'},
     'prefer-path2d': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
     'prefer-private-class-fields': {
       autofixDisabled: [
@@ -478,6 +479,7 @@ export default definePluginMetadata('unicorn', {
       requiresTypeInfo: ['optional', 'indirect'],
       disableInCodeBlocks: 'runtimeOnly',
     },
+    'prefer-regexp-exec': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-regexp-test': {requiresTypeInfo: 'optional', stylistic: true},
     'prefer-set-has': {disableInCodeBlocks: 'performance'},
     'prefer-set-methods': {
@@ -575,6 +577,7 @@ export default definePluginMetadata('unicorn', {
     'require-module-specifiers': {disableInCodeBlocks: 'emptiness'},
     'require-passive-events': {disableInCodeBlocks: 'performance'},
     'require-post-message-target-origin': {requiresTypeInfo: 'optional'},
+    'require-spread-parentheses': {stylistic: true},
     'single-line-block-comment-style': {stylistic: true},
     'switch-case-braces': {stylistic: true},
     'template-indent': {

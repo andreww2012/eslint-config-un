@@ -116,15 +116,15 @@ interface TestError {
 }
 
 export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
-  options?: EslintConfigUnOptions<ExtraPlugins>,
+  options: EslintConfigUnOptions<ExtraPlugins>,
   internalOptions?: Prettify<EslintConfigUnInternalOptions & {testMode?: false}>,
 ): Promise<EslintFlatConfigEntry[]>;
 export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
-  options?: EslintConfigUnOptions<ExtraPlugins>,
+  options: EslintConfigUnOptions<ExtraPlugins>,
   internalOptions?: Prettify<EslintConfigUnInternalOptions & {testMode: true}>,
 ): Promise<{configs: EslintFlatConfigEntry[]; errors: TestError[]}>;
 export async function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
-  options: EslintConfigUnOptions<ExtraPlugins> = {},
+  options: EslintConfigUnOptions<ExtraPlugins>,
   internalOptions: EslintConfigUnInternalOptions = {},
 ): Promise<EslintFlatConfigEntry[] | {configs: EslintFlatConfigEntry[]; errors: TestError[]}> {
   const logger = consola.withTag('eslint-config-un');

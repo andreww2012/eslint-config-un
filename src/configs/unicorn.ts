@@ -744,7 +744,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣
     .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('no-async-iterator-callback', ERROR) /** @since 75.0.0 */
-    .addRule('no-async-promise-finally', ERROR) /** @since 70.0.0 */
+    // Also reports async cleanup that handles its own errors
+    .addRule('no-async-promise-finally', OFF) /** @since 70.0.0 */ // 🔴
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
     .addRule('no-await-in-promise-methods', ERROR) /** @since 52.0.0 */
     .addRule('no-barrel-files', OFF) /** @since 73.0.0 */ // 🔴
@@ -1060,6 +1061,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-object-iterable-methods', ERROR) /** @since 66.0.0 */
     .addRule('prefer-observer-apis', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-optional-catch-binding', ERROR) /** @since 20.0.0 */
+    .addRule('prefer-options-parameter', ERROR) /** @since 80.0.0 */ // 🟣
     .addRule('prefer-path2d', ERROR) /** @since 66.0.0 */
     .addRule('prefer-private-class-fields', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-promise-static-methods', ERROR) /** @since 77.0.0 */
@@ -1074,6 +1076,8 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     // TODO enable when becomes baseline widely available or close to that:
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape
     .addRule('prefer-regexp-escape', OFF) /** @since 68.0.0 */ // 🔴
+    // Off like the rules of the same name in the `regexp`, `sonar` and `ts` configs
+    .addRule('prefer-regexp-exec', OFF) /** @since 80.0.0 */ // 🟣
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
     .addRule('prefer-scoped-selector', ERROR) /** @since 66.0.0 */ // 🟣
@@ -1149,6 +1153,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('require-passive-events', ERROR) /** @since 65.0.0 */
     .addRule('require-post-message-target-origin', OFF) /** @since 34.0.0 */ // 🔴
     .addRule('require-proxy-trap-boolean-return', ERROR) /** @since 66.0.0 */
+    .addRule('require-spread-parentheses', ERROR) /** @since 80.0.0 */ // 🟣
     .addRule('require-text-decoder-streaming', ERROR) /** @since 77.0.0 */
     .addRule('single-line-block-comment-style', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
