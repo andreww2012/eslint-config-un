@@ -6,7 +6,6 @@ export default {
   ignorePaths: [
     ...readGitignoreSync({cwd: import.meta.dirname}).toCspellIgnorePaths(),
     '**/.gitignore',
-    '**/pnpm-lock.yaml',
     '.vscode/extensions.json',
     'test/**/*',
     'pnpm-workspace.yaml',
