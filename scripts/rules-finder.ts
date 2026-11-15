@@ -302,7 +302,6 @@ const run = async ({
       };
     })
     .filter((value) => value != null)
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .filter(({version}) => !packageVersionsRange || rangeSatisfies(version, packageVersionsRange));
 

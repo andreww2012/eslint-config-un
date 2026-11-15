@@ -3,7 +3,13 @@ import {AST_NODE_TYPES, type TSESTree} from '@typescript-eslint/types';
 import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type * as ts from 'typescript';
-import type {OmitStrict} from '../../types';
+import type {OmitStrict, Prettify} from '../../types';
+import {
+  MEMBER_OBJECT_TYPES,
+  TYPE_ONLY_WRAPPER_TYPES,
+  getTypeInformation,
+  isGlobalReference,
+} from '../rule-utils';
 
 // `sparse` arrays have holes, which loops visit, but `forEach` skips
 type ArrayState = 'array' | 'nonArray' | 'sparse' | 'unknown';
@@ -46,24 +52,6 @@ const LOOP_TYPES: ReadonlySet<string> = new Set([
 
 const BREAKABLE_TYPES: ReadonlySet<string> = new Set([...LOOP_TYPES, 'SwitchStatement']);
 
-const TYPE_ONLY_WRAPPER_TYPES: ReadonlySet<string> = new Set([
-  'TSAsExpression',
-  'TSNonNullExpression',
-  'TSSatisfiesExpression',
-  'TSTypeAssertion',
-]);
-
-// Expressions that can be the object of a member access without parentheses
-const MEMBER_OBJECT_TYPES: ReadonlySet<string> = new Set([
-  'ArrayExpression',
-  'CallExpression',
-  'Identifier',
-  'MemberExpression',
-  'Super',
-  'ThisExpression',
-  'TSNonNullExpression',
-]);
-
 // A line starting with `(` or `[` continues these statements if they don't end with a semicolon
 const EXPRESSION_ENDING_STATEMENT_TYPES: ReadonlySet<string> = new Set([
   'ExportDefaultDeclaration',
@@ -80,7 +68,10 @@ const ASI_HAZARD_REGEX = /^[([]/;
 const isIdentifierNamed = (node: ESTree.Node | null | undefined, name: string) =>
   node?.type === 'Identifier' && node.name === name;
 
-const isArrayTypeNode = (typeNode: TSESTree.TypeNode | undefined): boolean => {
+const isArrayTypeNode = (
+  sourceCode: Eslint.SourceCode,
+  typeNode: TSESTree.TypeNode | undefined,
+): boolean => {
   switch (typeNode?.type) {
     case AST_NODE_TYPES.TSArrayType:
     case AST_NODE_TYPES.TSTupleType: {
@@ -88,18 +79,21 @@ const isArrayTypeNode = (typeNode: TSESTree.TypeNode | undefined): boolean => {
     }
 
     case AST_NODE_TYPES.TSTypeOperator: {
-      return typeNode.operator === 'readonly' && isArrayTypeNode(typeNode.typeAnnotation);
+      return (
+        typeNode.operator === 'readonly' && isArrayTypeNode(sourceCode, typeNode.typeAnnotation)
+      );
     }
 
     case AST_NODE_TYPES.TSTypeReference: {
       return (
         typeNode.typeName.type === AST_NODE_TYPES.Identifier &&
-        ARRAY_TYPE_NAMES.has(typeNode.typeName.name)
+        ARRAY_TYPE_NAMES.has(typeNode.typeName.name) &&
+        isGlobalReference(sourceCode, typeNode.typeName, 'type')
       );
     }
 
     case AST_NODE_TYPES.TSUnionType: {
-      return typeNode.types.every(isArrayTypeNode);
+      return typeNode.types.every((member) => isArrayTypeNode(sourceCode, member));
     }
 
     default: {
@@ -108,18 +102,24 @@ const isArrayTypeNode = (typeNode: TSESTree.TypeNode | undefined): boolean => {
   }
 };
 
-const getTypeAnnotationArrayState = ({
-  typeAnnotation,
-}: ESTree.Identifier & {typeAnnotation?: TSESTree.TSTypeAnnotation}): ArrayState =>
-  isArrayTypeNode(typeAnnotation?.typeAnnotation)
+const getTypeAnnotationArrayState = (
+  sourceCode: Eslint.SourceCode,
+  {typeAnnotation}: Prettify<ESTree.Identifier & {typeAnnotation?: TSESTree.TSTypeAnnotation}>,
+): ArrayState =>
+  isArrayTypeNode(sourceCode, typeAnnotation?.typeAnnotation)
     ? 'array'
     : typeAnnotation?.typeAnnotation.type === AST_NODE_TYPES.TSStringKeyword
       ? 'nonArray'
       : 'unknown';
 
+const isGlobalArray = (sourceCode: Eslint.SourceCode, node: ESTree.Node) =>
+  node.type === 'Identifier' &&
+  node.name === 'Array' &&
+  isGlobalReference(sourceCode, node, 'value');
+
 const getArrayState = (
+  sourceCode: Eslint.SourceCode,
   node: ESTree.Node,
-  scope: Eslint.Scope.Scope,
   shouldResolveIdentifiers = true,
 ): ArrayState => {
   switch (node.type) {
@@ -130,7 +130,7 @@ const getArrayState = (
     // `Array(length)` creates holes
     case 'CallExpression': {
       const {callee} = node;
-      if (isIdentifierNamed(callee, 'Array')) {
+      if (isGlobalArray(sourceCode, callee)) {
         return 'sparse';
       }
 
@@ -138,13 +138,14 @@ const getArrayState = (
         callee.object.type === 'Identifier' &&
         callee.property.type === 'Identifier' &&
         !callee.computed &&
-        KNOWN_ARRAY_FACTORIES.has(`${callee.object.name}.${callee.property.name}`)
+        KNOWN_ARRAY_FACTORIES.has(`${callee.object.name}.${callee.property.name}`) &&
+        isGlobalReference(sourceCode, callee.object, 'value')
         ? 'array'
         : 'unknown';
     }
 
     case 'NewExpression': {
-      return isIdentifierNamed(node.callee, 'Array') ? 'sparse' : 'nonArray';
+      return isGlobalArray(sourceCode, node.callee) ? 'sparse' : 'nonArray';
     }
 
     case 'Literal':
@@ -153,13 +154,15 @@ const getArrayState = (
     }
 
     case 'Identifier': {
-      const variable = shouldResolveIdentifiers ? findVariable(scope, node) : null;
+      const variable = shouldResolveIdentifiers
+        ? findVariable(sourceCode.getScope(node), node)
+        : null;
       const definition = variable?.defs.length === 1 ? variable.defs[0] : undefined;
       if (variable == null || definition == null) {
         return 'unknown';
       }
 
-      const typeAnnotationState = getTypeAnnotationArrayState(definition.name);
+      const typeAnnotationState = getTypeAnnotationArrayState(sourceCode, definition.name);
       if (typeAnnotationState !== 'unknown') {
         return typeAnnotationState;
       }
@@ -169,7 +172,7 @@ const getArrayState = (
         definition.node.id === definition.name &&
         definition.node.init != null &&
         variable.references.every((reference) => reference.init || !reference.isWrite())
-        ? getArrayState(definition.node.init, scope, false)
+        ? getArrayState(sourceCode, definition.node.init, false)
         : 'unknown';
     }
 
@@ -178,18 +181,6 @@ const getArrayState = (
     }
   }
 };
-
-const hasTypeInformation = (
-  parserServices: unknown,
-): parserServices is {
-  program: ts.Program;
-  esTreeNodeToTSNodeMap: {get: (node: ESTree.Node) => ts.Node};
-} =>
-  typeof parserServices === 'object' &&
-  parserServices != null &&
-  'esTreeNodeToTSNodeMap' in parserServices &&
-  'program' in parserServices &&
-  parserServices.program != null;
 
 const getTypeArrayState = (type: ts.Type, checker: ts.TypeChecker): ArrayState => {
   // A type parameter is judged by its constraint
@@ -314,7 +305,7 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const parserServices: unknown = sourceCode.parserServices;
+    const typeInformation = getTypeInformation(sourceCode);
     const candidates = new Map<ESTree.Node, Candidate>();
 
     const isInside = (node: ESTree.Node, container: ESTree.Node) => {
@@ -326,12 +317,9 @@ const rule: Eslint.Rule.RuleModule = {
     // Closest first, up to the nearest function
     const getAncestorsInFunction = (node: ESTree.Node) => {
       const ancestors = sourceCode.getAncestors(node);
-      return (
-        ancestors
-          .slice(ancestors.findLastIndex((ancestor) => FUNCTION_TYPES.has(ancestor.type)) + 1)
-          // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
-          .reverse()
-      );
+      return ancestors
+        .slice(ancestors.findLastIndex((ancestor) => FUNCTION_TYPES.has(ancestor.type)) + 1)
+        .reverse();
     };
 
     // For `await`, `yield`, `return` and `var`, which change their meaning inside a callback
@@ -421,15 +409,15 @@ const rule: Eslint.Rule.RuleModule = {
       candidate: OmitStrict<Candidate, 'body' | 'isKnownArray' | 'continueStatements'>,
     ) => {
       const {receiver} = candidate;
-      const syntaxArrayState = getArrayState(receiver, sourceCode.getScope(node));
+      const syntaxArrayState = getArrayState(sourceCode, receiver);
       // Holes are invisible to types, and an unhelpful type leaves only the syntax to rely on
+      const receiverTsNode =
+        syntaxArrayState === 'sparse' ? undefined : typeInformation?.getTsNode(receiver);
       const typeArrayState =
-        syntaxArrayState !== 'sparse' && hasTypeInformation(parserServices)
+        typeInformation && receiverTsNode
           ? getTypeArrayState(
-              parserServices.program
-                .getTypeChecker()
-                .getTypeAtLocation(parserServices.esTreeNodeToTSNodeMap.get(receiver)),
-              parserServices.program.getTypeChecker(),
+              typeInformation.checker.getTypeAtLocation(receiverTsNode),
+              typeInformation.checker,
             )
           : 'unknown';
       const arrayState = typeArrayState === 'unknown' ? syntaxArrayState : typeArrayState;
@@ -595,7 +583,7 @@ const rule: Eslint.Rule.RuleModule = {
           // Closest first, starting with `array[index]` itself
           const [member, ...ancestors] = sourceCode
             .getAncestors(identifier)
-            // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
+            // eslint-disable-next-line un/no-array-reverse -- `toReversed` is redundant
             .reverse();
           if (
             member?.type !== 'MemberExpression' ||

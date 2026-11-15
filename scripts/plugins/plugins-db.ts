@@ -44,9 +44,7 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
     const fs = yield* FileSystem.FileSystem;
 
     const dataWritten = Object.fromEntries(
-      Object.entries(data)
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-        .sort(([nameA], [nameB]) => nameA.localeCompare(nameB)),
+      Object.entries(data).sort(([nameA], [nameB]) => nameA.localeCompare(nameB)),
     );
 
     // Renaming the temp file avoids `UNKNOWN` errors thrown by `fs.writeFile` when the file is

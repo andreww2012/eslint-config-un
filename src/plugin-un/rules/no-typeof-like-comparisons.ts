@@ -3,6 +3,7 @@ import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
+import type {TypeOnlyWrapperExpression} from '../rule-utils';
 
 const TYPEOF_POSSIBLE_RETURN_VALUES_SET: ReadonlySet<string> = new Set([
   'string',
@@ -23,20 +24,6 @@ const COMPARISON_OPERATORS_SET: ReadonlySet<string> = new Set([
 ] satisfies readonly ESTree.BinaryOperator[]);
 
 const DEFAULT_ALLOWED_LITERAL_VALUES_SET: ReadonlySet<string> = new Set(['undefined']);
-
-/**
- * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are erased
- * at runtime and therefore never change the value of the expression they wrap
- */
-interface TypeOnlyWrapperExpression {
-  type:
-    | 'TSAsExpression'
-    | 'TSInstantiationExpression'
-    | 'TSNonNullExpression'
-    | 'TSSatisfiesExpression'
-    | 'TSTypeAssertion';
-  expression: ESTree.Expression;
-}
 
 /**
  * Tells whether `node` is guaranteed to evaluate to the result of a `typeof` operator, resolving

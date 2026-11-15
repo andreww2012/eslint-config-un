@@ -3,6 +3,9 @@ import {definePluginMetadata} from './shared';
 export default definePluginMetadata('un', {
   configs: ['un'],
   rules: {
+    'no-array-reverse': {requiresTypeInfo: 'optional'},
+    'no-array-sort': {requiresTypeInfo: 'optional'},
+    'no-array-splice': {requiresTypeInfo: 'optional'},
     'no-type-assertion': {
       requiresTypeInfo: 'optional',
       stylistic: [false, 'replacing an assertion that narrows the type takes a runtime check'],

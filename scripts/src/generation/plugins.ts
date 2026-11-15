@@ -273,7 +273,6 @@ const withRulesThrowingWithoutTypeInfo = (
       ({fullRuleName, value}) =>
         value === true && !listed.has(fullRuleName) && !keptEnabled.has(fullRuleName),
     ),
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
   ].sort(
     (left, right) =>
       (pluginIndexes.get(left.prefix) || 0) - (pluginIndexes.get(right.prefix) || 0) ||
@@ -312,7 +311,6 @@ const renderPrettierLanguages = (plugins: readonly DiscoveredPlugin[]) =>
     ([language, languagePlugins]) =>
       `  '${language}': [${languagePlugins.map(({prefix}) => `'${prefix}'`).join(', ')}],`,
   )
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort()
     .join('\n');
 

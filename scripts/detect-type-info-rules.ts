@@ -111,9 +111,9 @@ const report = (
     console.log('  none');
     return;
   }
-  const groups = [...Map.groupBy(findings, ({prefix}) => prefix)]
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-    .sort(([left], [right]) => left.localeCompare(right));
+  const groups = [...Map.groupBy(findings, ({prefix}) => prefix)].sort(([left], [right]) =>
+    left.localeCompare(right),
+  );
   groups.forEach(([prefix, group]) => {
     console.log(`  ${stylePluginPrefix(prefix, REPORT_STYLE_OPTIONS)} (${group.length})`);
     group.forEach((finding) => {
@@ -251,13 +251,7 @@ const main = async () => {
       ) {
         addDetection(
           fullRuleName,
-          [
-            `probe: read ${[...keys]
-              // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-              .sort()
-              .join(', ')}`,
-            ...signsOfSilence,
-          ].join(' | '),
+          [`probe: read ${[...keys].sort().join(', ')}`, ...signsOfSilence].join(' | '),
           doesThrowWithoutTypeInfo ||
             isSilentWithoutTypeInfo ||
             (doesDegradeGracefully ? 'optional' : undefined),
@@ -295,7 +289,6 @@ const main = async () => {
     .filter(({prefix}) => onlyPrefixes.size === 0 || onlyPrefixes.has(prefix))
     .flatMap(({prefix, plugin}) =>
       Object.keys(plugin.rules || {})
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
         .sort()
         .flatMap((ruleName) => {
           const fullRuleName = `${prefix}/${ruleName}`;

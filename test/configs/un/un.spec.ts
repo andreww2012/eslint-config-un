@@ -1,4 +1,7 @@
 const FIXTURES = {
+  arrayReversing: 'array-reversing.js',
+  arraySorting: 'array-sorting.js',
+  arraySplicing: 'array-splicing.js',
   consecutiveSpaces: 'consecutive-spaces.js',
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
   forOfLoopOverArray: 'for-of-loop-over-array.js',
@@ -145,6 +148,62 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Use `.forEach(...)` instead of this loop."');
+  });
+
+  it('`un/no-array-sort` rule fires on sorting a shared array and copying a new one when enabled', async () => {
+    const results = await testEslintConfig(
+      {un: {overrides: {'un/no-array-sort': 'error'}}},
+      FIXTURES.arraySorting,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.arraySorting,
+      'un/no-array-sort',
+      {all: true},
+    );
+
+    expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
+      '["Use `.toSorted()` instead of `.sort()`, which changes the array in place.", "`.toSorted()` copies an array that nothing else uses. Use `.sort()` to change it in place instead."]',
+    );
+  });
+
+  it('`un/no-array-reverse` rule fires on reversing a shared array and copying a new one when enabled', async () => {
+    const results = await testEslintConfig(
+      {un: {overrides: {'un/no-array-reverse': 'error'}}},
+      FIXTURES.arrayReversing,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.arrayReversing,
+      'un/no-array-reverse',
+      {all: true},
+    );
+
+    expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
+      '["Use `.toReversed()` instead of `.reverse()`, which changes the array in place.", "`.toReversed()` copies an array that nothing else uses. Use `.reverse()` to change it in place instead."]',
+    );
+  });
+
+  it('`un/no-array-splice` rule fires on a copy assigned back to the only reference when enabled', async () => {
+    const results = await testEslintConfig(
+      {un: {overrides: {'un/no-array-splice': 'error'}}},
+      FIXTURES.arraySplicing,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.arraySplicing,
+      'un/no-array-splice',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"`.toSpliced()` copies an array that nothing else uses. Use `.splice()` to change it in place instead."',
+    );
   });
 
   it('`un/no-type-assertion` rule fires on type assertions when enabled', async () => {

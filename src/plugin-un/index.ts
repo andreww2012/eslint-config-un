@@ -1,4 +1,7 @@
 import type {EslintPlugin} from '../eslint/eslint-types';
+import {noArrayReverse} from './rules/no-array-reverse';
+import {noArraySort} from './rules/no-array-sort';
+import {noArraySplice} from './rules/no-array-splice';
 import {noDistributiveNeverCheck} from './rules/no-distributive-never-check';
 import {noMultipleConsecutiveSpaces} from './rules/no-multiple-consecutive-spaces';
 import {noTypeAssertion} from './rules/no-type-assertion';
@@ -13,6 +16,9 @@ const eslintPluginUn: EslintPlugin = {
     name: 'eslint-plugin-un',
   },
   rules: {
+    'no-array-reverse': noArrayReverse,
+    'no-array-sort': noArraySort,
+    'no-array-splice': noArraySplice,
     'no-distributive-never-check': noDistributiveNeverCheck,
     'no-multiple-consecutive-spaces': noMultipleConsecutiveSpaces,
     'no-type-assertion': noTypeAssertion,

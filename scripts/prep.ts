@@ -177,9 +177,7 @@ async function generateRuleTypes() {
           exportTypeName,
           pluginName,
           plugin,
-          ruleNamesSorted: Object.keys(plugin.rules || {})
-            // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-            .sort(),
+          ruleNamesSorted: Object.keys(plugin.rules || {}).sort(),
         };
       }),
     ),
@@ -271,9 +269,9 @@ ${perPluginCodeRaw
 
       const errors: string[] = [];
       const rulesPerCategory = new Map<string, string[]>();
-      const rulesSorted = Object.entries(plugin.rules || {})
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-        .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB));
+      const rulesSorted = Object.entries(plugin.rules || {}).sort(([ruleNameA], [ruleNameB]) =>
+        ruleNameA.localeCompare(ruleNameB),
+      );
 
       await forEachAsync(
         arrayify(categorizations),
@@ -367,7 +365,7 @@ function getDiffAsPatch(a: string, b: string) {
 
 async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: string) {
   const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDirectory()))
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+    // eslint-disable-next-line un/no-array-sort -- `toSorted` is redundant
     .sort()
     .at(-1);
   let diffString = '';

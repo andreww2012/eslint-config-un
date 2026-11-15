@@ -2,18 +2,7 @@ import {isParenthesized} from '@eslint-community/eslint-utils';
 import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type * as ts from 'typescript';
-
-interface TypeInformation {
-  program: ts.Program;
-  esTreeNodeToTSNodeMap: {get: (node: ESTree.Node) => ts.Node | undefined};
-}
-
-const hasTypeInformation = (parserServices: unknown): parserServices is TypeInformation =>
-  typeof parserServices === 'object' &&
-  parserServices != null &&
-  'esTreeNodeToTSNodeMap' in parserServices &&
-  'program' in parserServices &&
-  parserServices.program != null;
+import {getTypeInformation} from '../rule-utils';
 
 const isNullishCoalescing = (
   node: ESTree.Node | null,
@@ -37,14 +26,14 @@ const rule: Eslint.Rule.RuleModule = {
 
   create: (context) => {
     const {sourceCode} = context;
-    const parserServices: unknown = sourceCode.parserServices;
-    if (!hasTypeInformation(parserServices)) {
+    const typeInformation = getTypeInformation(sourceCode);
+    if (!typeInformation) {
       throw new Error(
         'This rule requires type information: https://typescript-eslint.io/getting-started/typed-linting',
       );
     }
 
-    const checker = parserServices.program.getTypeChecker();
+    const {checker, getTsNode} = typeInformation;
     const falsyTypes = [
       checker.getFalseType(),
       checker.getNumberLiteralType(0),
@@ -104,7 +93,7 @@ const rule: Eslint.Rule.RuleModule = {
     };
 
     const canBeReplaced = ({left}: ESTree.AssignmentExpression | ESTree.LogicalExpression) => {
-      const leftTsNode = parserServices.esTreeNodeToTSNodeMap.get(left);
+      const leftTsNode = getTsNode(left);
       const leftType = leftTsNode && checker.getTypeAtLocation(leftTsNode);
       return (
         leftType != null &&

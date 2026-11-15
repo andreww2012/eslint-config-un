@@ -66,7 +66,6 @@ const orderRows = (rows: readonly RenameRow[]) =>
       group: group.toSorted((a, b) => a.packageName.localeCompare(b.packageName)),
     }),
   )
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort((a, b) => b.group.length - a.group.length || a.reason.localeCompare(b.reason))
     .flatMap(({group}) =>
       group.map((row, index) => ({

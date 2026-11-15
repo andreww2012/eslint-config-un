@@ -18,5 +18,4 @@ export const getAllRulesSeverities = (
         )
         .map(([, ruleEntry]) => getRuleSeverityFromEslintRuleEntry(ruleEntry)),
     ),
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
   ].sort((a, b) => a - b);

@@ -27,6 +27,9 @@ export default defineUnConfig<UnEslintConfigOptions>(
 
   configBuilder
     ?.addConfig('un')
+    .addRule('no-array-reverse', OFF) /** @since 1.0.0 */
+    .addRule('no-array-sort', OFF) /** @since 1.0.0 */
+    .addRule('no-array-splice', OFF) /** @since 1.0.0 */
     .addRule('no-distributive-never-check', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-type-assertion', OFF) /** @since 1.0.0 */

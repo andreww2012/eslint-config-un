@@ -25,7 +25,6 @@ const entries = pendingChangesets
     id,
     length: summary.replaceAll('\n', '\n  ').length + LINKS_LENGTH_PER_CHANGESET,
   }))
-  // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
   .sort((first, second) => second.length - first.length);
 const totalLength = entries.reduce((acc, {length}) => acc + length, 0);
 

@@ -360,7 +360,6 @@ export const discoverConfigs = async () => {
           .getPropertiesOfType(checker.getDeclaredTypeOfSymbol(optionsSymbol))
           .filter(({name}) => SUB_CONFIG_PROPERTY_REGEXP.test(name))
           .map(({name}) => name.slice(6, 7).toLowerCase() + name.slice(7))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
           .sort(),
       });
     }),

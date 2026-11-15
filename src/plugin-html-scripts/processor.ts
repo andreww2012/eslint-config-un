@@ -217,7 +217,6 @@ export const createProcessor = ({
               severity: badIndentSeverity,
             }))
           : []),
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
       ].sort((first, second) => first.line - second.line || first.column - second.column);
     },
   };

@@ -418,7 +418,6 @@ const renderIndexDts = (configs: readonly DiscoveredConfig[], allConfigKeys: rea
 
   const results = configs
     .filter(({resultInterfaceName}) => resultInterfaceName)
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort((a, b) => a.key.localeCompare(b.key))
     .map(
       ({key, modulePath, resultInterfaceName}) =>
@@ -518,10 +517,7 @@ const generateConfigArtifacts = async () => {
     .map((key) => configsByKey.get(key))
     .filter((config) => config != null);
 
-  const allConfigKeys = configs
-    .map(({key}) => key)
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-    .sort();
+  const allConfigKeys = configs.map(({key}) => key).sort();
 
   return {
     indexDtsCode: renderIndexDts(configs, allConfigKeys),

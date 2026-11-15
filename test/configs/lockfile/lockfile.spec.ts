@@ -10,9 +10,7 @@ const FIXTURES = {
   vltLockJson: 'vlt/vlt-lock.json',
 } as const;
 
-const ENABLED_PARSERS: readonly string[] = ['json', 'jsonc', 'plain', 'yaml']
-  // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-  .sort();
+const ENABLED_PARSERS: readonly string[] = ['json', 'jsonc', 'plain', 'yaml'].sort();
 
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
@@ -29,10 +27,7 @@ describe('basic tests', () => {
     );
 
     expect(
-      allParserConfigs
-        .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-        .sort(),
+      allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
     ).toStrictEqual(ENABLED_PARSERS);
     expect(config?.files).toMatchInlineSnapshot(
       '["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]',
@@ -147,10 +142,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -164,10 +156,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -179,10 +168,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['yaml']);
     });
 
@@ -194,10 +180,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['yaml']);
     });
 
@@ -209,10 +192,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['jsonc']);
     });
 
@@ -224,10 +204,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -239,10 +216,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs
-          .map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length))
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort(),
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
       ).toStrictEqual(['plain']);
     });
 

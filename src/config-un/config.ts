@@ -719,9 +719,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadPluginsOnDemand === false
       ? [...LOADABLE_PLUGIN_PREFIXES_LIST]
       : // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
-        [...context.usedPlugins]
-          // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-          .sort();
+        [...context.usedPlugins].sort();
   if (typeof loadPluginsOnDemand === 'object') {
     usedPluginPrefixes.push(...loadPluginsOnDemand.alwaysLoad);
   }

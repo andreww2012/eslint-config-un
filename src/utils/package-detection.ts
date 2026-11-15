@@ -319,7 +319,6 @@ const createProjectPackageFinder = async (
           ([packageName, specifier]) => [packageName, {directory, specifier}] as const,
         ),
       )
-      // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
       .reverse(),
   );
 

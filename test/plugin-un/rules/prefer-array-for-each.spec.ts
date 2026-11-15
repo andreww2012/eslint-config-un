@@ -93,6 +93,15 @@ ruleTester.run(RULE_NAME, preferArrayForEach, {
       'for (const element of new Array(3)) {}',
       '(new Array(3)).forEach((element) => {});',
     ),
+    // Declarations shadowing the globals
+    withSuggestion(
+      "import {Array} from 'list';\nfor (const {name} of Array.of(1)) {}",
+      "import {Array} from 'list';\nArray.of(1).forEach(({name}) => {});",
+    ),
+    withSuggestion(
+      'function foo(Object) { for (const key of Object.keys(object)) {} }',
+      'function foo(Object) { Object.keys(object).forEach((key) => {}); }',
+    ),
     withSuggestion(
       'const array = Array(3); for (const element of array) {}',
       'const array = Array(3); array.forEach((element) => {});',
@@ -329,6 +338,15 @@ typescriptRuleTester.run(`${RULE_NAME} (TypeScript)`, preferArrayForEach, {
     withFix(
       'function foo(items: Array<string> | ReadonlyArray<number>) { for (const item of items) {} }',
       'function foo(items: Array<string> | ReadonlyArray<number>) { items.forEach((item) => {}); }',
+    ),
+    // A value doesn't shadow a type
+    withFix(
+      'const Array = getArray(); function foo(items: Array<string>) { for (const item of items) {} }',
+      'const Array = getArray(); function foo(items: Array<string>) { items.forEach((item) => {}); }',
+    ),
+    withSuggestion(
+      'type Array<Item> = Set<Item>; function foo(items: Array<string>) { for (const item of items) {} }',
+      'type Array<Item> = Set<Item>; function foo(items: Array<string>) { items.forEach((item) => {}); }',
     ),
     withFix(
       'const items: string[] = getItems(); for (const item of items) {}',

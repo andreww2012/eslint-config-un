@@ -41,7 +41,6 @@ export const readPluginMetadata = async () => {
         !fileName.endsWith('.gen.ts') &&
         !NON_METADATA_MODULES.has(fileName),
     )
-    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort();
 
   return await Promise.all(

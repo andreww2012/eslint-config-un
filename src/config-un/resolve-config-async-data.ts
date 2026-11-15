@@ -159,7 +159,6 @@ const renderPackageRequesters = (
   const reasons = objectKeysUnsafe(PACKAGE_REQUESTER_RENDERERS).flatMap((requesterType) => {
     const names = (requestersByType[requesterType] || [])
       .map((requester) => substringAfter(requester, ':'))
-      // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
       .sort((nameA, nameB) => collator.compare(nameA, nameB));
     return names.length > 0 ? PACKAGE_REQUESTER_RENDERERS[requesterType](names) : [];
   });
@@ -346,9 +345,9 @@ export const resolveConfigAsyncData = async (
       );
 
     arrayPartition(
-      Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name}))
-        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
-        .sort((a, b) => collator.compare(a.name, b.name)),
+      Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name})).sort(
+        (a, b) => collator.compare(a.name, b.name),
+      ),
       (item) => item.installedVersion != null,
     ).forEach((packages, index) => {
       if (packages.length === 0) {
