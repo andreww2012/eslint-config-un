@@ -3,6 +3,7 @@ import {GLOB_MDX} from '../../../src/constants';
 
 const FIXTURES = {
   basic: 'basic.mdx',
+  duplicateHeadings: 'duplicate-headings.mdx',
   unclosedJsxTag: 'unclosed-jsx-tag.mdx',
 } as const;
 
@@ -78,8 +79,36 @@ describe('rules', async () => {
   // so what is verifiable here is that MDX files really go through the mdx parser
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('mdx/mdx')).toMatchObject({
+      'mdx/no-duplicate-headings': 0,
       'mdx/remark': 1,
     });
+  });
+
+  it('runs a `remark-lint` rule from the remark config with `mdx/remark` instead of its native counterpart', async () => {
+    const results = await testEslintConfig('mdx', FIXTURES.duplicateHeadings, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {
+        parsing: {
+          mdx: {
+            languageOptions: {
+              parserOptions: {
+                remarkConfigPath: path.join(
+                  import.meta.dirname,
+                  'fixtures',
+                  'remark-config-with-no-duplicate-headings.mjs',
+                ),
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+      results.flatMap(({messages}) => messages.map(({ruleId, message}) => [ruleId, message])),
+    ).toMatchInlineSnapshot(
+      '[["remark-lint-no-duplicate-headings", "Reported by a remark plugin"]]',
+    );
   });
 
   it('reports MDX syntax errors, proving the mdx parser is applied to `.mdx` files', async () => {
