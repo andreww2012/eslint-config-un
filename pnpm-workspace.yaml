@@ -23,6 +23,7 @@ minimumReleaseAgeExclude: # []
   - eslint-mdx@3.10.1
   - eslint-plugin-mdx@3.10.1
   - eslint-plugin-perfectionist@5.14.0
+  - eslint-plugin-react-refresh@0.5.8
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
