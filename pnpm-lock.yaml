@@ -1004,8 +1004,8 @@ importers:
         specifier: 10.4.2
         version: 10.4.2(eslint@10.15.0)(supports-color@7.2.0)
       web-features:
-        specifier: 3.45.0
-        version: 3.45.0
+        specifier: 3.46.0
+        version: 3.46.0
       zod:
         specifier: 4.6.7
         version: 4.6.7
@@ -13228,8 +13228,8 @@ packages:
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
 
-  web-features@3.45.0:
-    resolution: {integrity: sha512-Atp/v77aPEuVIPsw7tYz9IrID8CztDcIleh8n/Z8r7HEkvNt7eYWHF8s4hlWQ0QskFzTPDjq81vjubXXCnBMSg==}
+  web-features@3.46.0:
+    resolution: {integrity: sha512-UXJz08ycij5sVoOL97e8kvzhnC/3kbo3SCGC1j84G5pqx7XXStbqPVNVli+BHwo8Gcb6SquKUGk5TJYsl0oRYw==}
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
@@ -27425,7 +27425,7 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-features@3.45.0: {}
+  web-features@3.46.0: {}
 
   web-streams-polyfill@3.3.3: {}
 
