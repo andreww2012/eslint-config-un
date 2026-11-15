@@ -1,6 +1,7 @@
 const FIXTURES = {
   forBlockWithoutTemplateOutputTsrx: 'for-block-without-template-output.tsrx',
   forBlockWithoutTemplateOutputRipple: 'for-block-without-template-output.ripple',
+  unusedVariable: 'unused-variable.tsrx',
 } as const;
 
 beforeEach(() => {
@@ -19,13 +20,18 @@ describe('basic tests', () => {
     );
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
+    expect(
+      configResult.getConfigByUnPostfix('tsrx/core-rules-replacements')?.files,
+    ).toMatchInlineSnapshot('["**/*.tsrx", "**/*.ripple"]');
+
     expect(configResult.getLoadedPlugin('tsrx')).toBeDefined();
   });
 
-  it('does not create `tsrx` eslint config and does not load `tsrx` plugin if set to `false`', async () => {
+  it('does not create `tsrx{,/core-rules-replacements}` eslint configs and does not load `tsrx` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({tsrx: false});
 
     expect(configResult.getConfigByUnPostfix('tsrx')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('tsrx/core-rules-replacements')).toBeUndefined();
     expect(configResult.getLoadedPlugin('tsrx')).toBeUndefined();
   });
 
@@ -102,7 +108,65 @@ describe('rules', () => {
 
     expect(configResult.getRuleSeverities('tsrx')).toMatchObject({
       'tsrx/control-flow-jsx': 2,
-      'tsrx/valid-for-of-key': 2,
+      'tsrx/jsx-curly-brace-presence': 0,
+    });
+    expect(configResult.getRuleSeverities('tsrx/core-rules-replacements')).toMatchObject({
+      'no-unused-vars': 0,
+      'tsrx/no-await-in-loop': 1,
+      'tsrx/no-unused-vars': 2,
+    });
+  });
+
+  describe('core rules replacements', () => {
+    it('replaces the core rules in TSRX files only', async () => {
+      const configResult = await computeEslintConfig({js: true, tsrx: true});
+
+      await expect(configResult.getRuleSeveritiesForFile('component.tsrx')).resolves.toMatchObject({
+        'no-unused-vars': 0,
+        'tsrx/no-unused-vars': 2,
+      });
+
+      const jsFileSeverities = await configResult.getRuleSeveritiesForFile('component.js');
+
+      expect(jsFileSeverities).toMatchObject({'no-unused-vars': 2});
+      expect(jsFileSeverities).not.toHaveProperty('tsrx/no-unused-vars');
+    });
+
+    it('inherits the severities and options of the core rules from `js` config', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'no-unused-vars': [1, {vars: 'local'}]}},
+        tsrx: true,
+      });
+
+      expect(
+        configResult.getRuleEntryParsed('tsrx/core-rules-replacements', 'tsrx/no-unused-vars'),
+      ).toStrictEqual({severity: 1, options: [{vars: 'local'}]});
+    });
+
+    it('lets `overrides` of `tsrx` config win over the inherited severities', async () => {
+      const configResult = await computeEslintConfig({
+        js: true,
+        tsrx: {overrides: {'tsrx/no-unused-vars': 0}},
+      });
+
+      await expect(configResult.getRuleSeveritiesForFile('component.tsrx')).resolves.toMatchObject({
+        'no-unused-vars': 0,
+        'tsrx/no-unused-vars': 0,
+      });
+    });
+
+    it('`tsrx/no-unused-vars` rule fires on an unused variable in a `.tsrx` file', async () => {
+      const results = await testEslintConfig(
+        {js: true, tsrx: true},
+        FIXTURES.unusedVariable,
+        import.meta.dirname,
+      );
+
+      expect(
+        results.flatMap(({messages}) => messages.map(({ruleId, message}) => [ruleId, message])),
+      ).toMatchInlineSnapshot(
+        `[["tsrx/no-unused-vars", "'unused' is assigned a value but never used."]]`,
+      );
     });
   });
 

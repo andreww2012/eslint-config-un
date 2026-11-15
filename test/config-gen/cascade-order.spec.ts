@@ -192,6 +192,7 @@ describe('cascade order', () => {
       eslint-config-un/toml
       eslint-config-un/tree-shaking
       eslint-config-un/tsdoc
+      eslint-config-un/tsrx/core-rules-replacements
       eslint-config-un/tsrx
       eslint-config-un/turbo
       eslint-config-un/un
