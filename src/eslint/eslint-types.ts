@@ -24,7 +24,7 @@ import type {MaybeFn} from '../utils';
 // #region 🟠 eslint-config-un specific types
 
 // TODO report false positive
-// eslint-disable-next-line unicorn/prefer-export-from -- the imported types are also used locally
+// eslint-disable-next-line unicorn/prefer-export-from -- The imported types are also used locally
 export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 
 export type UnAllRuleNames = keyof UnRulesConfig;
@@ -118,8 +118,8 @@ export type UnFlatConfigEntryOverridesEntry<
   readonly [severity: EslintSeverity & number, options?: Options]
 >;
 
-export type UnFlatConfigEntryOverridesType<T> = {
-  [RuleName in keyof T]?: T[RuleName] & {} extends EslintRuleEntry<infer Options>
+export type UnFlatConfigEntryOverridesType<Rules> = {
+  [RuleName in keyof Rules]?: Rules[RuleName] & {} extends EslintRuleEntry<infer Options>
     ? UnFlatConfigEntryOverridesEntry<RuleName & string, ReadonlyDeep<Options>>
     : never;
 };
@@ -135,27 +135,27 @@ export type UnExtraPluginsRulesConfig<ExtraPlugins extends ExtraPluginsType> = P
   Record<UnExtraPluginsRules<ExtraPlugins>, UnFlatConfigEntryOverridesEntry>
 >;
 
-type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P extends ''
-  ? N
-  : `${P}/${N}`;
+type PluginAndPrefixToFullRuleName<
+  Prefix extends PluginPrefix,
+  RuleName extends string,
+> = Prefix extends '' ? RuleName : `${Prefix}/${RuleName}`;
 
 type UnRulesConfigRelaxed = Record<string, EslintRuleEntry> & UnRulesConfig;
 
 export type UnRulesConfigPartial<
-  P extends null | PluginPrefix | UnRulesConfigRelaxed = PluginPrefix,
-> = P extends PluginPrefix
+  PrefixOrRules extends null | PluginPrefix | UnRulesConfigRelaxed = PluginPrefix,
+> = PrefixOrRules extends PluginPrefix
   ? {
       [
-        N in keyof OmitIndexSignature<UnRuleOptionsByPlugin[P]> as PluginAndPrefixToFullRuleName<
-          P,
-          N
-        >
-      ]?: UnRuleOptionsByPlugin[P][N] extends unknown[]
-        ? EslintRuleEntry<UnRuleOptionsByPlugin[P][N]>
+        RuleName in keyof OmitIndexSignature<
+          UnRuleOptionsByPlugin[PrefixOrRules]
+        > as PluginAndPrefixToFullRuleName<PrefixOrRules, RuleName>
+      ]?: UnRuleOptionsByPlugin[PrefixOrRules][RuleName] extends unknown[]
+        ? EslintRuleEntry<UnRuleOptionsByPlugin[PrefixOrRules][RuleName]>
         : never;
     }
-  : P extends UnRulesConfigRelaxed
-    ? OmitIndexSignature<EslintFlatConfigEntry<P>['rules'] & {}>
+  : PrefixOrRules extends UnRulesConfigRelaxed
+    ? OmitIndexSignature<EslintFlatConfigEntry<PrefixOrRules>['rules'] & {}>
     : never;
 
 /**
@@ -163,9 +163,11 @@ export type UnRulesConfigPartial<
  */
 export interface UnFlatConfigEntryBase<
   ExtraPlugins extends ExtraPluginsType = never,
-  T extends null | PluginPrefix | UnRulesConfig = UnRulesConfig,
+  PrefixOrRules extends null | PluginPrefix | UnRulesConfig = UnRulesConfig,
 > extends UnFlatConfigEntryFilesAndIgnores {
-  overrides?: UnFlatConfigEntryOverridesType<UnionToIntersection<UnRulesConfigPartial<T>>>;
+  overrides?: UnFlatConfigEntryOverridesType<
+    UnionToIntersection<UnRulesConfigPartial<PrefixOrRules>>
+  >;
 
   overridesAny?: UnFlatConfigEntryOverridesType<UnRulesConfig> &
     UnExtraPluginsRulesConfig<ExtraPlugins>;
@@ -184,13 +186,13 @@ export interface UnFlatConfigEntryBase<
 /**
  * A convenient alias of `ConfigObject` from `@eslint/core`
  */
-export type EslintFlatConfigEntry<T extends UnRulesConfigRelaxed = UnRulesConfigRelaxed> =
-  // @ts-expect-error a few plugins augment `RulesConfig` with rule option types they generate
+export type EslintFlatConfigEntry<Rules extends UnRulesConfigRelaxed = UnRulesConfigRelaxed> =
+  EslintConfigObject<// @ts-expect-error A few plugins augment `RulesConfig` with rule option types they generate
   // themselves, using `json-schema-to-typescript-lite` where we use `json-schema-to-typescript`
   // (the former is an old-ish fork of the latter; the latter is now better in terms of correctness)
   // The two compilers disagree often enough (most visibly on whether an index signature also
   // admits `undefined`) that such types no longer structurally match ours
-  EslintConfigObject<T>;
+  Rules>;
 
 export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
   Eslint.Linter.RuleEntry<// @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
@@ -221,7 +223,7 @@ export type JsRuleDefinitionWithNodes<
 }>;
 
 // TODO report false positive
-// eslint-disable-next-line unicorn/prefer-export-from -- the imported types are also used locally
+// eslint-disable-next-line unicorn/prefer-export-from -- The imported types are also used locally
 export type {EslintPlugin, EslintSeverity};
 
 // #endregion
@@ -250,9 +252,9 @@ export type GetRuleOptions<
   undefined
 >;
 
-export type GetRuleNamesInPlugin<P extends PluginPrefix | null> = P extends null
+export type GetRuleNamesInPlugin<Prefix extends PluginPrefix | null> = Prefix extends null
   ? keyof UnRuleOptionsByPlugin[keyof UnRuleOptionsByPlugin]
-  : keyof OmitIndexSignature<UnRuleOptionsByPlugin[P & keyof UnRuleOptionsByPlugin]>;
+  : keyof OmitIndexSignature<UnRuleOptionsByPlugin[Prefix & keyof UnRuleOptionsByPlugin]>;
 
 export type BuiltinEslintRules = PickKeysNotStartingWith<UnRulesConfig, `${string}/`>;
 

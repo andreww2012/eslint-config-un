@@ -335,7 +335,7 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     .addRule('no-duplicate-test-title', testRulesSeverity) /** @since 4.1.0 */ // [S8754] 🟢🧪 📦 `jest`, `mocha`, `vitest`, `@playwright/test`
     .addRule('no-duplicated-branches', ERROR) /** @since 0.1.0-0 */ // [S1871] 🟢
     .addRule('no-element-overwrite', ERROR) /** @since 0.1.0-0 */ // [S4143] 🟢
-    // Reason for keeping enabled: not caught by eslint-plugin-regexp
+    // Reason for keeping enabled: not caught by `eslint-plugin-regexp`
     .addRule('no-empty-after-reluctant', ERROR) /** @since 1.0.4-alpha.0 */ // [S6019] 🟢🔤
     // ⚠️ `regexp/no-empty-alternative`
     .addRule('no-empty-alternatives', OFF) /** @since 1.0.4-alpha.0 */ // [S6323] 🟢🔤

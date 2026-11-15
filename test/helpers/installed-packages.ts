@@ -54,7 +54,7 @@ export const mockPackageDetection = (
         await fetchPackageInfo(options?.aliases?.[packageName] || packageName),
       ]),
     );
-    // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
+    // eslint-disable-next-line un/no-type-assertion -- The entries cover every package
     return Object.fromEntries(entries) as Record<
       (typeof packageNames)[number],
       Awaited<ReturnType<typeof fetchPackageInfo>>

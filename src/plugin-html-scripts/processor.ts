@@ -188,7 +188,7 @@ export const createProcessor = ({
 
     postprocess: (messagesLists, filename) => {
       const preprocessResult = preprocessResults.get(filename);
-      /* v8 ignore next 3 -- ESLint always preprocesses a file before postprocessing it */
+      /* v8 ignore next 3 ESLint always preprocesses a file before postprocessing it */
       if (!preprocessResult) {
         return messagesLists.flat();
       }
@@ -205,7 +205,7 @@ export const createProcessor = ({
         ...omitDirectiveCommentMessages(markupMessages, {directiveComments, htmlLineStarts}),
         ...scriptsMessages.flatMap((messages, index) => {
           const script = scripts[index];
-          /* v8 ignore next -- every list of messages belongs to a script */
+          /* v8 ignore next Every list of messages belongs to a script */
           return script ? remapMessages(messages, {html, htmlLineStarts, script}) : [];
         }),
         ...(badIndentSeverity
@@ -217,7 +217,8 @@ export const createProcessor = ({
               severity: badIndentSeverity,
             }))
           : []),
-      ].toSorted((first, second) => first.line - second.line || first.column - second.column);
+        // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+      ].sort((first, second) => first.line - second.line || first.column - second.column);
     },
   };
 };

@@ -211,7 +211,7 @@ describe('options', () => {
     });
 
     it('enables `node-dependencies/absolute-version` rule with custom options when set to object', async () => {
-      const OPTIONS = {dependencies: 'always' as const} as const;
+      const OPTIONS = {dependencies: 'always'} as const;
 
       const configResult = await computeEslintConfig({
         nodeDependencies: {enforceAbsoluteVersion: OPTIONS},

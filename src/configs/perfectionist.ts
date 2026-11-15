@@ -12,18 +12,18 @@ import {
 
 type RuleSubConfig<
   ExtraPlugins extends ExtraPluginsType,
-  T extends keyof UnRuleOptionsByPlugin['perfectionist'],
+  RuleName extends keyof UnRuleOptionsByPlugin['perfectionist'],
 > =
   | boolean
   | Prettify<
       UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
+        Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${RuleName}`>
       > & {
         /**
          * Options of the rule this sub-config enables
          */
-        options?: GetRuleOptions<'perfectionist', T>;
+        options?: GetRuleOptions<'perfectionist', RuleName>;
       }
     >;
 

@@ -80,10 +80,10 @@ import {
   processUnOrFlatConfig,
 } from './shared';
 
-export function createConfigBuilder<P extends PluginPrefix | null>(
+export function createConfigBuilder<Prefix extends PluginPrefix | null>(
   this: UnConfigContext,
-  options: NoInfer<ConfigEntryBuilderOptions<ExtraPluginsType, P> | boolean>,
-  rulesPrefix: P,
+  options: NoInfer<ConfigEntryBuilderOptions<ExtraPluginsType, Prefix> | boolean>,
+  rulesPrefix: Prefix,
   isDisabledIfEmptyFiles = true,
 ) {
   const optionsResolved = typeof options === 'object' ? options : {};
@@ -95,11 +95,13 @@ export function createConfigBuilder<P extends PluginPrefix | null>(
   ) {
     return null;
   }
-  const configBuilder = new ConfigEntryBuilder<ExtraPluginsType, P>(
+  const configBuilder = new ConfigEntryBuilder<ExtraPluginsType, Prefix>(
     rulesPrefix,
     // TODO really needed?
-    // eslint-disable-next-line ts/no-unnecessary-condition -- for extra safety
-    options && typeof options === 'object' ? options : {},
+    options && // eslint-disable-line ts/no-unnecessary-condition -- For extra safety
+      typeof options === 'object'
+      ? options
+      : {},
     this,
   );
   this.configBuilders?.push(configBuilder);
@@ -135,7 +137,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   });
   // TODO come up with better solution
   // Prevents logging the same messages when ESLint is run in the concurrent mode
-  /* v8 ignore next -- tests never run the generator off the main thread */
+  /* v8 ignore next Tests never run the generator off the main thread */
   if (!isMainThread) {
     logger.pauseLogs();
   }
@@ -629,7 +631,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
             },
             sourceType: 'module',
           },
-        } as const,
+        },
       },
       {
         name: generateFlatConfigEntryName('language-options/commonjs', {isGlobalSetup: true}),
@@ -690,7 +692,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         configsOrderResolved.map(
           async (entry) =>
             await (arrayIncludes(CASCADE_ANCHORS, entry)
-              ? // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
+              ? // eslint-disable-next-line ts/await-thenable -- Most of the anchors contribute plain entries
                 Promise.all(cascadeAnchorEntries[entry])
               : loadManifestConfig(entry)),
         ),
@@ -706,7 +708,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
             ),
           )
           .flat(2)
-          // eslint-disable-next-line no-implicit-coercion -- need to preserve the boolean type predicate
+          // eslint-disable-next-line no-implicit-coercion -- Need to preserve the boolean type predicate
           .filter((value) => !!value),
       )
       .flatMap((configs, cascadeIndex) =>
@@ -755,7 +757,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     configsResolved.push({
       name: generateFlatConfigEntryName('offline-mode'),
       rules: Object.fromEntries(
-        // eslint-disable-next-line ts/ban-ts-comment -- error only in `tsc`, not in `tsgo`
+        // eslint-disable-next-line ts/ban-ts-comment -- Error only in `tsc`, not in `tsgo`
         // @ts-ignore "TS2590: Expression produces a union type that is too complex to represent" for whatever reason
         RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => [ruleName, 0]),
       ),
@@ -810,7 +812,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     });
 
     const configsToCache = Array.from(configsResolved, (configItem) => {
-      /* v8 ignore next -- every generated config carries our name prefix */
+      /* v8 ignore next Every generated config carries our name prefix */
       if (!isUnFlatConfigEntry(configItem)) {
         return configItem;
       }
@@ -837,7 +839,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           usedPackagesInfo
             .map(({config, path, info}) => {
               const configName = config.name;
-              /* v8 ignore next -- every config using a package is named */
+              /* v8 ignore next Every config using a package is named */
               if (!configName) {
                 return null;
               }
@@ -857,7 +859,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   modifyConfigs();
 
   if (internalOptions.testMode) {
-    /* v8 ignore next - The config tester always finds something to report */
+    /* v8 ignore next The config tester always finds something to report */
     return {
       configs: configsResolved,
       errors: testErrors || [],

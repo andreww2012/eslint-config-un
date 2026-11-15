@@ -235,7 +235,7 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     .addRule(
       'lone-executable-definition',
       ERROR,
-      // @ts-expect-error too strict type: `ignore` can only have so much elements, which the assigned variable cannot express
+      // @ts-expect-error Too strict type: `ignore` can only have so much elements, which the assigned variable cannot express
       isNonEmptyArray(doNotRequireSeparateFilesFor) ? [{ignore: doNotRequireSeparateFilesFor}] : [],
     ) /** @since 3.14.0 */
     .addRule('lone-schema-definition', ERROR) /** @since 0.6.0 */ // 🟢📦

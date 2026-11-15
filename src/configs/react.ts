@@ -460,7 +460,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Controls how rules from
-   * [@eslint-react/eslint-plugin](https://npmx.dev/@eslint-react/eslint-plugin) and
+   * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) and
    * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin` and
    *   `eslint-plugin-react` (the full list is below), use the one from
@@ -732,11 +732,11 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
   const isReactXPreferred = pluginX === 'prefer' || pluginX === 'only';
 
   const getDoubleRuleName = <
-    A extends GetRuleNamesInPlugin<'eslint-react'>,
-    B extends GetRuleNamesInPlugin<'react'>,
+    NameX extends GetRuleNamesInPlugin<'eslint-react'>,
+    NameOriginal extends GetRuleNamesInPlugin<'react'>,
   >(
-    nameXUnprefixed: A,
-    nameOriginal: B,
+    nameXUnprefixed: NameX,
+    nameOriginal: NameOriginal,
   ) => {
     const prefix = isReactXPreferred ? 'eslint-react' : 'react';
     const name = isReactXPreferred ? nameXUnprefixed : nameOriginal;
@@ -797,7 +797,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
       newJsxTransform && {
         languageOptions: {
           parserOptions: {
-            jsxPragma: null, // for @typescript/eslint-parser
+            jsxPragma: null, // for `@typescript/eslint-parser`
           },
         },
       }),

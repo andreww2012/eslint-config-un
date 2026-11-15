@@ -231,7 +231,7 @@ describe('assignDefaults', () => {
   it('skips nullish values in source', () => {
     const result = assignDefaults(
       {a: undefined, b: null, c: 5},
-      // @ts-expect-error skip types testing
+      // @ts-expect-error Skip types testing
       {a: 1, b: 2, c: 3},
     );
 
@@ -250,8 +250,11 @@ describe('assignDefaults', () => {
   it('shallow-replaces nested objects instead of deep-merging', () => {
     const result = assignDefaults(
       {meta: {name: 'override'}},
-      // @ts-expect-error skip types testing
-      {meta: {name: 'default', version: '1.0'}, other: true},
+      {
+        meta: {name: 'default', version: '1.0'},
+        // @ts-expect-error Skip types testing
+        other: true,
+      },
     );
 
     expect(result).toStrictEqual({meta: {name: 'override'}, other: true});
@@ -261,8 +264,11 @@ describe('assignDefaults', () => {
   it('replaces arrays in defaults rather than concatenating', () => {
     const result = assignDefaults(
       {tags: ['a']},
-      // @ts-expect-error skip types testing
-      {tags: ['x', 'y'], keep: 1},
+      {
+        tags: ['x', 'y'],
+        // @ts-expect-error Skip types testing
+        keep: 1,
+      },
     );
 
     expect(result).toStrictEqual({tags: ['a'], keep: 1});
@@ -279,7 +285,7 @@ describe('assignDefaults', () => {
   it('preserves keys present only in source', () => {
     const result = assignDefaults(
       {extra: 'yes'},
-      // @ts-expect-error skip types testing
+      // @ts-expect-error Skip types testing
       {base: 1},
     );
 
@@ -289,8 +295,11 @@ describe('assignDefaults', () => {
   it('preserves keys present only in defaults', () => {
     const result = assignDefaults(
       {a: 9},
-      // @ts-expect-error skip types testing
-      {a: 1, b: 2},
+      {
+        a: 1,
+        // @ts-expect-error Skip types testing
+        b: 2,
+      },
     );
 
     expect(result).toStrictEqual({a: 9, b: 2});
@@ -311,7 +320,7 @@ describe('assignDefaults', () => {
     const defaults = {a: 1, b: {nested: true}};
     assignDefaults(
       {a: 9, b: {other: false}},
-      // @ts-expect-error skip types testing
+      // @ts-expect-error Skip types testing
       defaults,
     );
 

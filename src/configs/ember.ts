@@ -245,8 +245,10 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-classic-components', enforceGlimmerComponents ? ERROR : OFF) /** @since 7.3.0 */ // 🟢
     .addRule('no-component-lifecycle-hooks', ERROR) /** @since 7.9.0 */ // 🟢
     .addRule('no-on-calls-in-components', ERROR) /** @since 2.0.0 */ // 🟢
-    // cspell:disable-next-line
-    .addRule('require-tagless-components', ERROR) /** @since 7.3.0 */ // 🟢
+    .addRule(
+      'require-tagless-components', // cspell:disable-line
+      ERROR,
+    ) /** @since 7.3.0 */ // 🟢
     .markCategory('Computed Properties')
     .addRule(
       'computed-property-getters',
@@ -343,8 +345,10 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('no-incorrect-calls-with-inline-anonymous-functions', ERROR) /** @since 6.10.0 */ // 🟢
     .addRule('no-invalid-debug-function-arguments', ERROR) /** @since 6.2.0 */ // 🟢
     .addRule('no-restricted-property-modifications', OFF) /** @since 10.5.0 */
-    // cspell:disable-next-line
-    .addRule('no-runloop', ERROR) /** @since 11.3.0 */ // 🟢
+    .addRule(
+      'no-runloop', // cspell:disable-line
+      ERROR,
+    ) /** @since 11.3.0 */ // 🟢
     .addRule('require-fetch-import', OFF) /** @since 10.1.0 */
     .markCategory('Possible Errors')
     .addRule('template-no-extra-mut-helper-argument', ERROR) /** @since 13.0.0 */

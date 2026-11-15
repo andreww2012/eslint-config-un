@@ -137,7 +137,7 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
       });
 
       it('adds options to `unused-imports/no-unused-vars` rule when `ruleOptions` is provided', async () => {
-        const OPTIONS = {vars: 'all' as const, args: 'after-used' as const} as const;
+        const OPTIONS = {vars: 'all', args: 'after-used'} as const;
 
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {ruleOptions: OPTIONS}},

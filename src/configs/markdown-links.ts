@@ -51,7 +51,7 @@ export interface MarkdownLinksEslintConfigOptions<
    * ```
    */
   check?: {
-    [K in IssueType]?:
+    [Key in IssueType]?:
       | boolean
       | {
           /**
@@ -59,11 +59,11 @@ export interface MarkdownLinksEslintConfigOptions<
            */
           options?: GetRuleOptions<
             'markdown-links',
-            K extends 'deadUrls'
+            Key extends 'deadUrls'
               ? 'no-dead-urls'
-              : K extends 'missingFragments'
+              : Key extends 'missingFragments'
                 ? 'no-missing-fragments'
-                : K extends 'missingLocalPath'
+                : Key extends 'missingLocalPath'
                   ? 'no-missing-path'
                   : never
           >;
@@ -99,19 +99,19 @@ export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
   };
 
   const getCheckSeverity = <
-    T extends IssueType,
+    Type extends IssueType,
     RuleOptions = Extract<
-      (MarkdownLinksEslintConfigOptions['check'] & {})[T],
+      (MarkdownLinksEslintConfigOptions['check'] & {})[Type],
       Record<string, unknown>
     >['options'] & {},
   >(
-    issueType: T,
+    issueType: Type,
   ) => {
     const checkInfo = check[issueType];
     const isCheckInfoObject = typeof checkInfo === 'object';
     return [
       checkInfo === false ? OFF : isCheckInfoObject && checkInfo.severityWarn ? WARNING : ERROR,
-      // eslint-disable-next-line ts/no-unnecessary-type-assertion, un/no-type-assertion -- wrong
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion, un/no-type-assertion -- Wrong
       (isCheckInfoObject && checkInfo.options != null ? [checkInfo.options] : []) as [
         RuleOptions,
       ] extends [never]

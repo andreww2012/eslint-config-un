@@ -138,7 +138,7 @@ describe('options', () => {
     });
 
     it('passes provided options to `headers/header-format` rule when `options` is set', async () => {
-      const OPTIONS = {source: 'string' as const, content: 'Copyright'} as const;
+      const OPTIONS = {source: 'string', content: 'Copyright'} as const;
 
       const configResult = await computeEslintConfig({
         headers: {options: OPTIONS},

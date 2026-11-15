@@ -1,4 +1,4 @@
-// TODO: treat version from our package.json as latest
+// TODO: treat version from our `package.json` as latest
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
@@ -28,7 +28,7 @@ const DEFAULT_BATCH_SIZE = 100;
 
 const isStringRegexpValid = (regexp: string) => {
   try {
-    // eslint-disable-next-line no-new -- required
+    // eslint-disable-next-line no-new -- Required
     new RegExp(regexp);
     return true;
   } catch (error) {
@@ -163,7 +163,7 @@ const main = () => {
 
   const ignorePrereleaseRegexes = ignorePrereleaseRegexStrings.map((regexString) => {
     if (unescapeRegexes) {
-      // eslint-disable-next-line no-param-reassign -- fine
+      // eslint-disable-next-line no-param-reassign -- Fine
       regexString = regexString.replaceAll(String.raw`\\`, '\\');
     }
     return new RegExp(regexString);
@@ -209,7 +209,7 @@ const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
   ),
   ['@typescript-eslint/experimental-utils@4.33.0', 'latest'],
   ['@graphql-eslint/parser@>=0.0.1 <0.0.2-0', '0.1.0'],
-  '@local/eff', // Not found, dependency of @eslint-react/eslint-plugin@3.0.0-next.74
+  '@local/eff', // Not found, dependency of `@eslint-react/eslint-plugin@3.0.0-next.74`
 ];
 const DEFAULT_NPM_PACKAGE_OVERRIDE = 'npm:-';
 
@@ -244,7 +244,7 @@ const mergeRulesPresenceResults = (
   };
 };
 
-// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
+// eslint-disable-next-line unicorn/consistent-boolean-name -- Acceptable
 const run = async ({
   packageName,
   packageVersionsRange,
@@ -342,7 +342,7 @@ const run = async ({
     ),
   };
 
-  // pnpm-workspace.yaml is written even when no overrides are needed so that it anchors the
+  // `pnpm-workspace.yaml` is written even when no overrides are needed so that it anchors the
   // workspace root for the temp project. Without it, pnpm would walk up and pick up the parent
   // eslint-config-un workspace settings
   const pnpmWorkspaceYamlContent = yamlStringify(
@@ -415,9 +415,9 @@ globalThis.require = createRequire(import.meta.url);
 
 const toStdout = process.stdout.write.bind(process.stdout);
 
-/** @ts-expect-error - picks up the wrong overload */
+/** @ts-expect-error Picks up the wrong overload */
 process.stdout.write = (chunk, encodingOrCallback, callback) => {
-  typeof encodingOrCallback === 'function' /** @ts-expect-error - same reason as above */
+  typeof encodingOrCallback === 'function' /** @ts-expect-error Same reason as above */
     ? encodingOrCallback()
     : callback?.();
   return true;
@@ -617,7 +617,7 @@ if (!mainResult) {
   process.exit(1);
 }
 
-// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
+// eslint-disable-next-line unicorn/consistent-boolean-name -- Acceptable
 const result = await run(mainResult);
 
 if (!result) {

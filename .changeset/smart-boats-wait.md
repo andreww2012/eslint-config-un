@@ -2,4 +2,4 @@
 "eslint-config-un": patch
 ---
 
-The `ignores` of a rule entry are now added to the `ignores` of its Config instead of replacing them, so the rule no longer runs on the files the Config ignores, like Markdown or JSON files
+Fixed the `ignores` of a rule entry replacing the `ignores` of its Config instead of adding to them, which made the rule run on the files the Config ignores, like Markdown or JSON files

@@ -416,10 +416,12 @@ describe('processor reports bad indent', () => {
   });
 
   it('should throw on invalid values', () => {
-    // @ts-expect-error not one of the values
-    expect(() => createProcessor({reportBadIndent: 2})).toThrow(
-      "Invalid value of `reportBadIndent`: 2, expected 'off', 'warn' or 'error'",
-    );
+    expect(() =>
+      createProcessor({
+        // @ts-expect-error Not one of the values
+        reportBadIndent: 2,
+      }),
+    ).toThrow("Invalid value of `reportBadIndent`: 2, expected 'off', 'warn' or 'error'");
   });
 });
 
@@ -609,7 +611,7 @@ describe('fix', () => {
           '<!DOCTYPE html>',
           '<html lang="en">',
           '  <script>',
-          // eslint-disable-next-line un/no-multiple-consecutive-spaces -- the fix keeps them
+          // eslint-disable-next-line un/no-multiple-consecutive-spaces -- The fix keeps them
           '    foo();;  </script>',
           '</html>',
           '',

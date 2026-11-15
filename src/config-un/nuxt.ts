@@ -221,7 +221,7 @@ export type NuxtAutoImportsResult = NuxtAutoImports | NuxtAutoImportsFailure;
 const importNuxtKit = async (cwd: string) => {
   const nuxtKitUrl = resolveFromProject('nuxt/kit', cwd);
   if (nuxtKitUrl) {
-    // eslint-disable-next-line un/no-type-assertion -- resolved from a fixed specifier
+    // eslint-disable-next-line un/no-type-assertion -- Resolved from a fixed specifier
     return (await import(nuxtKitUrl)) as typeof import('nuxt/kit');
   }
 
@@ -269,7 +269,7 @@ export const resolveNuxtAutoImports = async ({
 
   const nuxtOptions = loadResult?.options || null;
   const buildDirectoryRaw = buildDirectoryOption || nuxtOptions?.buildDir;
-  /* v8 ignore next 3 - Either the option provided the directory or the config was loaded */
+  /* v8 ignore next 3 Either the option provided the directory or the config was loaded */
   if (buildDirectoryRaw == null) {
     return null;
   }

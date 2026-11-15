@@ -43,7 +43,7 @@ export default defineConfig([
       // `browserslist` is an optional peer dependency
       dts: {
         // `is-immutable-type` imports `typescript` types, which
-        // `rolldown-plugin-dts` cannot bundle as `typescript` ships CJS .d.ts.
+        // `rolldown-plugin-dts` cannot bundle as `typescript` ships CJS `.d.ts`.
         // But types we actually consume don't reference `typescript`, so keeping
         // it external drops the warning without leaking the import into our output
         neverBundle: ['typescript'],

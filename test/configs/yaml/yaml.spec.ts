@@ -74,7 +74,7 @@ describe('basic tests', () => {
 
 describe('`yaml/pnpm-workspace.yaml` eslint config', () => {
   it('creates `yaml/pnpm-workspace.yaml` eslint config when pnpm is used', async () => {
-    // eslint-disable-next-line ts/no-unused-vars -- the using declaration restores the mock at scope exit
+    // eslint-disable-next-line ts/no-unused-vars -- The using declaration restores the mock at scope exit
     using _ = vi.mocked(detectPackageManager).mockResolvedValue({name: 'pnpm', agent: 'pnpm'});
 
     const configResult = await computeEslintConfig('yaml');
@@ -83,7 +83,7 @@ describe('`yaml/pnpm-workspace.yaml` eslint config', () => {
   });
 
   it('disables `yaml/file-extension` rule in `yaml/pnpm-workspace.yaml` eslint config', async () => {
-    // eslint-disable-next-line ts/no-unused-vars -- the using declaration restores the mock at scope exit
+    // eslint-disable-next-line ts/no-unused-vars -- The using declaration restores the mock at scope exit
     using _ = vi.mocked(detectPackageManager).mockResolvedValue({name: 'pnpm', agent: 'pnpm'});
 
     const configResult = await computeEslintConfig('yaml');
@@ -94,7 +94,7 @@ describe('`yaml/pnpm-workspace.yaml` eslint config', () => {
   });
 
   it('does not create `yaml/pnpm-workspace.yaml` eslint config when detected package manager is not pnpm', async () => {
-    // eslint-disable-next-line ts/no-unused-vars -- the using declaration restores the mock at scope exit
+    // eslint-disable-next-line ts/no-unused-vars -- The using declaration restores the mock at scope exit
     using _ = vi.mocked(detectPackageManager).mockResolvedValue(null);
 
     const configResult = await computeEslintConfig('yaml');
@@ -306,7 +306,7 @@ describe('options', () => {
     });
 
     it('sets `languageOptions.parserOptions` when provided', async () => {
-      const PARSER_OPTIONS = {defaultYAMLVersion: '1.1' as const} as const;
+      const PARSER_OPTIONS = {defaultYAMLVersion: '1.1'} as const;
 
       const configResult = await computeEslintConfig({yaml: {parserOptions: PARSER_OPTIONS}});
 

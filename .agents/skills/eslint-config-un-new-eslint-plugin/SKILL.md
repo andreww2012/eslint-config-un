@@ -3,7 +3,7 @@ name: eslint-config-un-new-eslint-plugin
 description: Adding support for a new ESLint plugin for eslint-config-un
 ---
 
-<!-- eslint-disable markdown-preferences/heading-casing -- rule is not ideal -->
+<!-- eslint-disable markdown-preferences/heading-casing -- Rule is not ideal -->
 
 ## Intro
 
@@ -38,7 +38,7 @@ Common documentation locations are:
 - Repo likely specified in `repository` field of the plugin's `package.json`;
 - Website specified in `homepage` field.
 
-ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> (as unknown) as Promise<EslintPlugin>` and then put `// @ts-expect-error types mismatch` directive before the line on which the error occurs.
+ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> (as unknown) as Promise<EslintPlugin>` and then put `// @ts-expect-error Types mismatch` directive before the line on which the error occurs.
 
 ### Step 1*: Adding other loaders
 

@@ -1,4 +1,4 @@
-/* eslint-disable case-police/string-check -- the tests cover intentionally different capitalization styles */
+/* eslint-disable case-police/string-check -- The tests cover intentionally different capitalization styles */
 import {GLOB_MARKDOWN} from '../../../src/constants';
 
 const FIXTURES = {
@@ -474,7 +474,7 @@ describe('options', () => {
 
   describe('option: `casingEnforcementIgnorePatterns`', () => {
     it('merges array-provided patterns with default ignore patterns for heading-casing and table-header-casing rules', async () => {
-      const PATTERNS = ['/myPatternApi/u' as const] as const;
+      const PATTERNS = ['/myPatternApi/u'] as const;
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: true, casingEnforcementIgnorePatterns: [...PATTERNS]},
@@ -645,7 +645,7 @@ describe('options', () => {
     it('directly passes options passed to `style` to `markdown-preferences/ordered-list-marker-style` rule', async () => {
       const OPTIONS = Object.freeze({
         overrides: [{level: 2, parentMarker: 'bullet' as const}],
-        prefer: 'n)' as const,
+        prefer: 'n)',
       });
 
       const configResult = await computeEslintConfig({

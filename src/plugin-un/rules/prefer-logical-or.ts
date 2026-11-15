@@ -15,7 +15,9 @@ const hasTypeInformation = (parserServices: unknown): parserServices is TypeInfo
   'program' in parserServices &&
   parserServices.program != null;
 
-const isNullishCoalescing = (node: ESTree.Node | null): node is ESTree.LogicalExpression =>
+const isNullishCoalescing = (
+  node: ESTree.Node | null,
+): node is ESTree.LogicalExpression & {operator: '??'} =>
   node?.type === 'LogicalExpression' && node.operator === '??';
 
 const rule: Eslint.Rule.RuleModule = {

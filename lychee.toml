@@ -64,7 +64,7 @@ exclude = [
   '^https://eslint-react\.xyz/docs/configuration/configure-analyzer#[\w-]+$',
   '^https://eslint-react\.xyz/docs/rules#[\w-]+$',
 
-  # Inserted by `all-contributors-cli` in README.md
+  # Inserted by `all-contributors-cli` in `README.md`
   'README\.md#(example|ideas|infra|maintenance|tool)-[\w-]+$',
   '^https://all-contributors\.js\.org/docs/en/bot/usage$',
 

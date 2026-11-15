@@ -1,13 +1,13 @@
 import type {Falsy} from '../types';
 
 export type ArrayOrBooleanRecord<
-  T extends PropertyKey = string,
+  Key extends PropertyKey = string,
   Mode extends 'boolean' | 'booleanOrMessage' | 'message' = 'boolean',
 > =
-  | T[]
+  | Key[]
   | Partial<
       Record<
-        T,
+        Key,
         Mode extends 'boolean'
           ? boolean
           : Mode extends 'booleanOrMessage'

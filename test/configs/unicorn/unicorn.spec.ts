@@ -371,9 +371,7 @@ describe('options', () => {
     });
 
     it('passes the array form directly as rule options', async () => {
-      const OPTIONS = [
-        {replacements: {fooBar: 'foobar'}} as const,
-      ] as const satisfies NonEmptyTuple;
+      const OPTIONS = [{replacements: {fooBar: 'foobar'}}] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({
         unicorn: {compoundWordsSuggestedReplacements: [...OPTIONS]},

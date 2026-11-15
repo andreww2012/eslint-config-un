@@ -194,7 +194,7 @@ describe('options', () => {
     });
 
     it('merges user-provided `settings` into `import-integrity` settings (e.g. overrides `packageRootDir`)', async () => {
-      const SETTINGS = {packageRootDir: 'custom-root', mode: 'fix' as const} as const;
+      const SETTINGS = {packageRootDir: 'custom-root', mode: 'fix'} as const;
 
       const configResult = await computeEslintConfig('importIntegrity', {
         un: {plugins: {'import-integrity': {settings: SETTINGS}}},

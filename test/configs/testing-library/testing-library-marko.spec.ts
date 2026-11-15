@@ -191,7 +191,7 @@ describe('testing-library: sub config `marko`', () => {
       });
 
       it('enables `testing-library/prefer-query-matchers` rule with provided entries', async () => {
-        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'} as const] as const;
+        const MATCHERS = [{matcher: 'toBeVisible', query: 'get'}] as const;
 
         const configResult = await computeEslintConfig({
           testingLibrary: {configMarko: {preferQueryMatchers: [...MATCHERS]}},

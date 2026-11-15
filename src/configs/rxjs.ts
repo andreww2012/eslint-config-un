@@ -117,29 +117,39 @@ export default defineUnConfig<RxjsEslintConfigOptions>('rxjs', {enabledBy: {pack
     .addRule('no-ignored-replay-buffer', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-ignored-subscribe', OFF) /** @since 1.0.0 */
     .addRule('no-ignored-subscription', OFF) /** @since 1.0.0 */
-    // cspell:disable-next-line
-    .addRule('no-ignored-takewhile-value', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule(
+      'no-ignored-takewhile-value', // cspell:disable-line
+      ERROR,
+    ) /** @since 1.0.0 */ // 🟢
     .addRule('no-implicit-any-catch', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-index', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-internal', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-nested-subscribe', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-redundant-notify', ERROR) /** @since 1.0.0 */ // 🟢
-    // cspell:disable-next-line
-    .addRule('no-sharereplay', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule(
+      'no-sharereplay', // cspell:disable-line
+      ERROR,
+    ) /** @since 1.0.0 */ // 🟢
     .addRule('no-subclass', OFF) /** @since 1.0.0 */
     .addRule('no-subject-unsubscribe', ERROR) // 🟢
     .addRule('no-subject-value', ERROR) /** @since 1.0.0 */ // TODO
     .addRule('no-subscribe-handlers', OFF) /** @since 1.0.0 */
-    // cspell:disable-next-line
-    .addRule('no-topromise', OFF) /** @since 1.0.2 */ // TODO
+    .addRule(
+      'no-topromise', // cspell:disable-line
+      OFF,
+    ) /** @since 1.0.2 */ // TODO
     .addRule('no-unbound-methods', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-unsafe-catch', ERROR) /** @since 1.0.0 */
     .addRule('no-unsafe-first', ERROR) /** @since 1.0.0 */
     .addRule('no-unsafe-subject-next', ERROR) /** @since 1.0.0 */ // 🟢
-    // cspell:disable-next-line
-    .addRule('no-unsafe-switchmap', ERROR) /** @since 1.0.0 */
-    // cspell:disable-next-line
-    .addRule('no-unsafe-takeuntil', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule(
+      'no-unsafe-switchmap', // cspell:disable-line
+      ERROR,
+    ) /** @since 1.0.0 */
+    .addRule(
+      'no-unsafe-takeuntil', // cspell:disable-line
+      ERROR,
+    ) /** @since 1.0.0 */ // 🟢
     .addRule('prefer-observer', OFF) /** @since 1.0.0 */
     .addRule('suffix-subjects', OFF) /** @since 1.0.0 */
     .addRule('throw-error', ERROR) /** @since 1.0.0 */

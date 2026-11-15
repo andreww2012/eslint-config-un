@@ -1,6 +1,6 @@
 # Guidelines
 
-Source: <https://github.com/andreww2012/ai-guidelines/blob/@andreww2012/ai-guidelines@0.2.6/.agents/guidelines.md>
+Source: <https://github.com/andreww2012/ai-guidelines/blob/@andreww2012/ai-guidelines@0.2.9/.agents/guidelines.md>
 
 These are generic guidelines that might be copied or linked from a different repository.
 If anything stated here conflicts with the origin repo or the prompt, prefer them.
@@ -14,7 +14,7 @@ For example, "Communication and writing" rules apply to your output, docs and co
 Most likely you'll be read by people who are not native or C2-level speakers, so adapt accordingly.
 Avoid:
 
-- long dashes (like —, U+2014), the ellipsis character (…, U+2026), or quotation marks other than the plain `"` and `'` (like “ and ’, U+201C and U+2019);
+- long dashes (like —, U+2014), the ellipsis character (…, U+2026), or quotation marks other than the plain `"` and `'` (like “ and ’, U+201C and U+2019, and others);
 - terms and phrases like "load-bearing", "byte-identical", "it's not x; it's y", "earn its place" and similar;
 - complex metaphors and jargon;
 - mannered prose;
@@ -28,9 +28,13 @@ This applies to all languages, not only English.
 
 Avoid British variants of words like *behaviour* or *organisation* unless the project allows them.
 
+In Russian, prefer `ё` over `е`.
+
 In comments and docs, don't name symbols (variables), commands, files, etc. unless the reader needs the name: if the entity is renamed, the reference becomes stale.
 
 Code, comments, docs and other work artifacts must make sense without the session context: don't write anything that can't be understood without it, like `// as requested`, `// now uses X instead of Y` or mentions of earlier attempts.
+
+Wrap all technical names, code snippets and the like in backticks.
 
 ## Code
 
@@ -51,9 +55,12 @@ If you need a utility or a utility type, first look for it in the project's own 
   - ❌ `str`, `arr`, `cls`, `brk`, `err`, `val`, `pkg`, `dir`, etc.
 
   Exceptions:
-  - ✅ `acc`, `char`, `coeff`, `ctx`, `dev`, `dict`, `env`, `fn`, `impl`, `param`
+  - ✅ `acc`, `char`, `coeff`, `ctx`, `dev`, `dict`, `env`, `fn`, `impl`, `param`, `w/(o)`
   - ✅ `docs` (when it's shorthand for "documentation", not "documents")
   - ✅ index variables like `i`/`j`/etc.
+
+  The full word must mean the same thing: for example, `arguments` can't be a variable name in strict mode code, but `parameters` is not a valid substitute for `args`, because it means something else.
+  Add, say, a trailing underscore (`arguments_`) instead.
 - Never omit curly braces around blocks (like `if`, `else`, etc.)
 - Let the type system infer types whenever possible: prefer implicit/inferred return types.
   Especially avoid:
@@ -71,7 +78,7 @@ If you need a utility or a utility type, first look for it in the project's own 
   - ✅ `a ? b : c`, `if (a) { ... } else { ... }`
   - ❌ `!a ? c : b`, `if (!a) { ... } else { ... }`
 - If `||` and `??` operators work the same, prefer using `||`.
-- Use CONSTANT_CASE only for constants holding a primitive, a read-only array/object (`as const`, `Object.freeze`, `: Readonly<T>`, etc.), a `Set`/`Map` typed as `ReadonlySet`/`ReadonlyMap` or a `RegExp`, no matter how its values are computed:
+- Use `CONSTANT_CASE` only for constants holding a primitive, a read-only array/object (`as const`, `Object.freeze`, `: Readonly<T>`, etc.), a `Set`/`Map` typed as `ReadonlySet`/`ReadonlyMap` or a `RegExp`, no matter how its values are computed:
   - ✅ `const FOO = 'bar'`
   - ✅ `const FOO = ['bar', 1 + 2, Math.random()] as const`
   - ✅ `const FOO = Object.freeze({bar: Math.random()})`
@@ -88,6 +95,9 @@ If you need a utility or a utility type, first look for it in the project's own 
 - If `!== ''`/`=== ''` work the same as `.length > 0`/`.length === 0`, prefer the latter.
 - Put units in names: `MAX_SIZE_BYTES` or `DURATION_MS`, not `MAX_SIZE` or `DURATION`.
 - Prefer reading `.json` files with a static `import` rather than with file system utilities, unless the path is only known at runtime.
+- If `.toSorted()` and `.sort()` work the same, prefer `.sort()`, even if an ESLint rule like `unicorn/no-array-sort` requires the former: it's overly strict.
+  The same goes for the other copying methods, like `.toReversed()`.
+  Don't disable such lint rules globally though: they are still useful.
 
 ### Performance
 
@@ -100,7 +110,11 @@ If you need a utility or a utility type, first look for it in the project's own 
   Safe type casting exceptions: `as unknown`, `as const`, `satisfies T as T`.
 - Prefer `Record<string, unknown>` over the `object` type as the former is usually simpler to reason about.
 - Don't use `satisfies T` if the regular type annotation (`: T`) would work the same.
-  Tip: if `as const` is only there for the CONSTANT_CASE rule, use `: Readonly<T>` instead of `as const satisfies T` if possible.
+  Tip: if `as const` is only there for the `CONSTANT_CASE` rule, use `: Readonly<T>` instead of `as const satisfies T` if possible.
+- The same goes for `as const`: use it sparingly, only when really necessary.
+- Use descriptive names for type parameters: `Value`, `Key`, `Item`, `Element`, `Length`, etc. - NOT `T`, `U`, `V`, `K` and the like.
+- Beware that a type guard (`value is T`) also narrows the `false` branch.
+  If a value that already has the type `T` fails the check, it becomes `never` there - this is likely not intended.
 
 ### Style
 
@@ -122,14 +136,11 @@ If you need a utility or a utility type, first look for it in the project's own 
 - Keep comments short and clear, but don't lose their value.
 - Never put a full stop at the very end of a comment.
 - Wrap comments to fit the max line length (usually set in `.editorconfig` or the formatter config).
-  Tool-specific comments, like `eslint-disable-next-line <rule> -- <reason>`, `cspell:ignore <words>`, don't have to fit it.
   In block comments (like `<!-- ... -->` or `/* ... */`, but not JSDoc), keep the opening marker on the first line of the text and the closing marker on the last one.
 
-### Documentation (including comments)
+### Documentation and JSDoc
 
 If you need to link an npm package, prefer `https://npmx.dev/<package-name>` links over `npmjs.com` ones or direct repo links.
-
-In Russian, prefer `ё` over `е`.
 
 ### Frontend
 
@@ -174,18 +185,24 @@ Prefer not to use your memory: save anything that may help other people working 
 ### Version control
 
 NEVER stage/unstage or commit changes unless explicitly asked to, not even as a side effect: e.g. use `mv`/`rm`, not `git mv`/`git rm`.
+So never ask whether to commit when, judging by these rules, the answer would likely be "no".
 Assume your change may be staged or committed by a user (most likely) or another agent at any point.
-Unless you're asked to, never add yourself as a co-author.
+
 At the end of your work, *suggest* commit message(s) that follow the project's commit style.
+Put each one in its own full-width code block.
 Check them with the project's commit linter (e.g. `commitlint`), if there is one.
+
 Always put package names inside backticks in commit messages.
 Always use the imperative mood in commit headers.
+Unless you're allowed/asked to, never add yourself as a co-author.
 
-Use git stash only if there's no other way: prefer git worktrees or throwaway repos.
+Use `git stash` only if there's no other way: prefer git worktrees or throwaway repos.
 
 ### Writing on the hosting platform
 
 These rules apply when you are asked to write content on the platform that hosts the repository (issues/discussions/comments/etc. on GitHub/GitLab/etc.).
+
+Use a more casual, less formal writing style.
 
 #### AI disclosure
 
@@ -196,7 +213,7 @@ These rules apply when you are asked to write content on the platform that hosts
   Otherwise, start the content with this preamble:
   ```md
   > [!NOTE]
-  > This <issue|discussion|comment|...> was written by AI (<model name>, <harness>), <any additional info>.
+  > This <issue|discussion|comment|...> was written by AI (<model name>, <harness>), <any additional relevant info>.
   ```
 
 #### Audience
@@ -220,9 +237,10 @@ You may commit each update, as a deliberate exception to the rule against commit
 Start the commit header of each update, including the ones you only suggest, with ``chore(deps): update `package-name` to v<version>`` (unless a different commit style is used).
 You may use another conventional commit type, like `fix`, `feat`, etc., if it makes more sense, and say what has changed in the commit header.
 
-## Testing tools, linters and checkers
+## Testing tools, linters and other QA tools
 
 When the task is done, run *all* the available tools on *all changed* files - take the list of changed files from version control, e.g. `git status`.
+Before running them, check the machine's free RAM and CPU to decide whether to run them in an optimal way, likely parallel or one by one.
 Ignore the pre-existing unrelated issues.
 Prefer the tool's `package.json` script if you can limit it to the changed files (usually by passing their paths).
 Otherwise, call the tool directly on the changed files, with the same options the script uses.
@@ -236,24 +254,43 @@ Note: TypeScript checkers don't report type errors in files with a `@ts-nocheck`
 
 If you encounter a linter error that can be fixed in multiple ways, always weigh all options INCLUDING disabling the rule for this line (or, much more rarely, for the entire file) before fixing.
 
-### CSpell
+### Tool-specific comments
 
-If a word to ignore is only found in a single file:
+These are comments like `eslint-disable-next-line <rule> -- <reason>`, `cspell:ignore <words>`, `@ts-expect-error` and others.
 
-- Use top-level comment `cspell:ignore words to disable` if the word occurs more than once in a file, or it's not possible to use the inline comment `cspell:disable-line`
-- Otherwise, use that inline comment.
-  Note: it disables the whole line, so keep that line short.
+- Always include that `<reason>` in ESLint, TypeScript and other tool comments wherever that makes sense.
+  Start it with an uppercase letter.
+- `--` between the directive and the reason is an ESLint requirement, not a general one: other tools have their own syntax.
+  If the tool doesn't require a delimiter, don't invent one: separate them with a plain space.
+- They don't have to satisfy the max line length requirement if that is impossible.
+- Put them in comments of their own.
+  Never add them to an existing comment, and never put them into content like strings or commands, unless there is clearly no other way of using them.
+- Make these comments cover only exactly the code that causes the report, so that they don't hide other problems.
+  For example, a `eslint-disable(-next)-line` comment covers the whole (next) line, which might have other code without issues.
+  In that case, break (re-format) the code so that the reported part gets a line of its own, unless the syntax or the formatter doesn't allow it.
+  To do that, put an argument, an array item, a chained call or the value after `=` on a new line, or move the value into a variable first.
+  Linters don't check this, so before you finish, look at what else is on the lines that these comments cover.
 
-## Concrete software instructions
+#### CSpell
+
+If a word to ignore is only found in a single file, use the inline comment `cspell:disable(-next)-line`.
+Use a top-level `cspell:ignore <words>` comment instead if the word occurs more than once in the file or the inline comment can't be used.
+
+## Other
 
 - To write a CLI, prefer `cleye`, unless a new dependency is unwanted or another tool was suggested.
   Always set `strictFlags: true` when using it.
-- If you're asked to create a changeset (<https://changesets.dev>), always use its underlying name generator, `human-id`, for file names.
-  Don't use the imperative mood in changesets, i.e. "Add `foo`" form should never be used.
-  Keep changesets short: go straight to the main point and skip details most readers don't need.
-  Never end them with a full stop.
 - Keep Tailwind classes in markup, not in script strings: tools usually can't lint, sort or check them there.
 - It's strictly forbidden to end up with ``toMatchInlineSnapshot(`undefined`)`` when using testing frameworks.
+
+### Changesets
+
+- If you're asked to create a changeset (<https://changesets.dev>), always use its underlying name generator, `human-id`, for file names.
+- Don't use the imperative mood in changesets, i.e. "Add `foo`" form should never be used.
+  Prefer writing them in the past tense.
+- Keep changesets short: go straight to the main point and skip details most readers don't need.
+  Assume no one has time to read changelogs closely and figure out what each change is about.
+- Never end them with a full stop.
 
 ### Vue
 
@@ -271,7 +308,7 @@ If a word to ignore is only found in a single file:
 
 ## Meta
 
-Don't report how extensively you've verified your work - if you need to say that, say *very* briefly.
+IMPORTANT: don't report how extensively you've verified/tested your work - if you feel the need to say it, say *very* briefly.
 
 Don't say (unless asked explicitly) you have been following these guidelines; just follow them.
 In general, don't mention that you followed an instruction - that is implied.

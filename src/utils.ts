@@ -94,24 +94,24 @@ export {
 } from './utils/array-or-boolean-record';
 export {assignDefaults} from './utils/assign-defaults';
 
-export const isNonEmptyArray = <T>(value?: readonly T[] | null): value is [T, ...T[]] =>
+export const isNonEmptyArray = <Item>(value?: readonly Item[] | null): value is [Item, ...Item[]] =>
   arrayHasMinElements(value || [], 1);
 
-export function findArrayInversions<T>(
-  array: readonly T[],
-  compareFn: (a: T, b: T) => number,
-): readonly (readonly [T, T])[];
-export function findArrayInversions<T>(
-  array: readonly T[],
-  compareFn: (a: T, b: T) => number,
+export function findArrayInversions<Item>(
+  array: readonly Item[],
+  compareFn: (a: Item, b: Item) => number,
+): readonly (readonly [Item, Item])[];
+export function findArrayInversions<Item>(
+  array: readonly Item[],
+  compareFn: (a: Item, b: Item) => number,
   shouldGroup: true,
-): ReadonlyMap<T, readonly T[]>;
-export function findArrayInversions<T>(
-  array: readonly T[],
-  compareFn: (a: T, b: T) => number,
+): ReadonlyMap<Item, readonly Item[]>;
+export function findArrayInversions<Item>(
+  array: readonly Item[],
+  compareFn: (a: Item, b: Item) => number,
   shouldGroup?: boolean,
-): readonly (readonly [T, T])[] | ReadonlyMap<T, readonly T[]> {
-  const result: (readonly [T, T])[] = [];
+): readonly (readonly [Item, Item])[] | ReadonlyMap<Item, readonly Item[]> {
+  const result: (readonly [Item, Item])[] = [];
   const addedPairsCompoundIndexes = new Set<`${number}-${number}`>();
 
   array
@@ -120,7 +120,7 @@ export function findArrayInversions<T>(
       const aIndex = a.index;
       const bIndex = b.index;
 
-      /* v8 ignore start - The comparator argument order is implementation-defined */
+      /* v8 ignore start The comparator argument order is implementation-defined */
       const aForComparator = (aIndex < bIndex ? a : b).value;
       const bForComparator = (aIndex < bIndex ? b : a).value;
       /* v8 ignore stop */
@@ -130,7 +130,7 @@ export function findArrayInversions<T>(
         /* v8 ignore next */
         const pairIndex =
           aIndex < bIndex ? (`${aIndex}-${bIndex}` as const) : (`${bIndex}-${aIndex}` as const);
-        /* v8 ignore else - Reachability depends on the engine's sort algorithm: V8's TimSort does compare the same pair twice, while a plain insertion sort never does */
+        /* v8 ignore else Reachability depends on the engine's sort algorithm: V8's TimSort does compare the same pair twice, while a plain insertion sort never does */
         if (!addedPairsCompoundIndexes.has(pairIndex)) {
           addedPairsCompoundIndexes.add(pairIndex);
           result.push([aForComparator, bForComparator]);
@@ -142,7 +142,7 @@ export function findArrayInversions<T>(
     });
 
   if (shouldGroup) {
-    const resultMap = new Map<T, T[]>();
+    const resultMap = new Map<Item, Item[]>();
     result.forEach(([key, value]) => {
       mapGetOrInsert(resultMap, key, []).push(value);
     });
@@ -163,49 +163,51 @@ export const sha256 = (input: string | Buffer) => {
 };
 
 // TODO should report?
-// eslint-disable-next-line ts/no-redundant-type-constituents -- false positive
+// eslint-disable-next-line ts/no-redundant-type-constituents -- False positive
 export const joinPaths = (...paths: readonly (string | Falsy)[]) =>
   path.posix.join(...arrayWithoutFalsy(paths));
 
-export const readAndParseJson = async <T>(filePath: string | URL | undefined): Promise<T | null> =>
+export const readAndParseJson = async <Result>(
+  filePath: string | URL | undefined,
+): Promise<Result | null> =>
   filePath
-    ? jsonParseSafe<T | null>(
+    ? jsonParseSafe<Result | null>(
         await readFileSafe(typeof filePath === 'string' ? filePath : url.fileURLToPath(filePath)),
       )
     : null;
 
 export function getKeysOfTruthyValues<
-  T extends string[] | Partial<Record<string, boolean | string>>,
->(objectOrArray: Nullable<T>): (keyof T & string)[];
+  ObjectOrArray extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<ObjectOrArray>): (keyof ObjectOrArray & string)[];
 export function getKeysOfTruthyValues<
-  T extends string[] | Partial<Record<string, boolean | string>>,
+  ObjectOrArray extends string[] | Partial<Record<string, boolean | string>>,
 >(
-  objectOrArray: Nullable<T>,
+  objectOrArray: Nullable<ObjectOrArray>,
   mode: 'nonEmptyArray',
-): [keyof T & string, ...(keyof T & string)[]] | undefined;
+): [keyof ObjectOrArray & string, ...(keyof ObjectOrArray & string)[]] | undefined;
 export function getKeysOfTruthyValues<
-  T extends string[] | Partial<Record<string, boolean | string>>,
->(objectOrArray: Nullable<T>, mode: 'object'): Exclude<T, string[]>;
+  ObjectOrArray extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<ObjectOrArray>, mode: 'object'): Exclude<ObjectOrArray, string[]>;
 export function getKeysOfTruthyValues<
-  T extends string[] | Partial<Record<string, boolean | string>>,
->(objectOrArray: Nullable<T>, mode?: 'array' | 'nonEmptyArray' | 'object') {
+  ObjectOrArray extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<ObjectOrArray>, mode?: 'array' | 'nonEmptyArray' | 'object') {
   if (Array.isArray(objectOrArray)) {
     return mode === 'nonEmptyArray' && objectOrArray.length === 0
       ? undefined
-      : // eslint-disable-next-line un/no-typeof-like-comparisons -- not the `typeof` comparison
+      : // eslint-disable-next-line un/no-typeof-like-comparisons -- Not the `typeof` comparison
         mode === 'object'
         ? objectFromKeys(objectOrArray, () => true)
         : objectOrArray;
   }
 
   const result = objectEntriesUnsafe(
-    // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- for correct types
+    // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- For correct types
     objectOrArray! || {},
   ).filter(([, value]) => value);
   if (mode === 'nonEmptyArray' && result.length === 0) {
-    // eslint-disable-next-line unicorn/no-useless-undefined -- the nonempty-array overload uses undefined for an empty result
+    // eslint-disable-next-line unicorn/no-useless-undefined -- The nonempty-array overload uses undefined for an empty result
     return undefined;
   }
-  // eslint-disable-next-line un/no-typeof-like-comparisons -- not the `typeof` comparison
+  // eslint-disable-next-line un/no-typeof-like-comparisons -- Not the `typeof` comparison
   return mode === 'object' ? Object.fromEntries(result) : result.map(([key]) => key);
 }

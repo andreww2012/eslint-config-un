@@ -262,7 +262,7 @@ describe('options', () => {
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/es-syntax` rule if `noUnsupportedFeaturesIgnores.esSyntax` is non-empty array', async () => {
-      const SYNTAX = ['modules' as const] as const;
+      const SYNTAX = ['modules'] as const;
 
       const result = await computeEslintConfig({
         node: {noUnsupportedFeaturesIgnores: {esSyntax: [...SYNTAX]}},
@@ -274,7 +274,7 @@ describe('options', () => {
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/node-builtins` rule if `noUnsupportedFeaturesIgnores.nodeBuiltins` is non-empty array', async () => {
-      const NODE_BUILTINS = ['fs' as const] as const;
+      const NODE_BUILTINS = ['fs'] as const;
 
       const result = await computeEslintConfig({
         node: {noUnsupportedFeaturesIgnores: {nodeBuiltins: [...NODE_BUILTINS]}},

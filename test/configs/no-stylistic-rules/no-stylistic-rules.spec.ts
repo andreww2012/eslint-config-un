@@ -235,7 +235,7 @@ describe('options', () => {
         noStylisticRules: {
           enableRules: {rules: false, disableAllOtherRules: true},
           additionalRules: {
-            // @ts-expect-error testing runtime path: providing already "stylistic" rule
+            // @ts-expect-error Testing runtime path: providing already "stylistic" rule
             'prefer-template': true,
           },
         },

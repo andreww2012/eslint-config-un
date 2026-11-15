@@ -1,4 +1,4 @@
-/* eslint-disable check-file/filename-naming-convention -- deliberate exclusion */
+/* eslint-disable check-file/filename-naming-convention -- Deliberate exclusion */
 import fs from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
@@ -37,7 +37,7 @@ try {
       error: {
         code: 'INSTALLATION',
         // TODO review
-        // eslint-disable-next-line sonar/super-linear-regex -- might be false positive
+        // eslint-disable-next-line sonar/super-linear-regex -- Might be false positive
         cause: cause.match(/^\s*(ERR_PNPM_\w+\s+(?:\S.*)?)$/m)?.[1] || cause,
       },
     });
@@ -60,7 +60,7 @@ try {
       cause:
         error instanceof Error
           ? JSON.stringify(error, ['message', 'code', 'stack'])
-          : // eslint-disable-next-line ts/no-base-to-string -- need to serialize somehow
+          : // eslint-disable-next-line ts/no-base-to-string -- Need to serialize somehow
             String(error),
     },
   });

@@ -1,10 +1,10 @@
 import type {Paths} from 'utilery';
 
-export type PickKeysStartingWith<O, T extends string> = {
-  [K in keyof O as K extends `${T}${string}` ? K : never]: O[K];
+export type PickKeysStartingWith<Source, Prefix extends string> = {
+  [Key in keyof Source as Key extends `${Prefix}${string}` ? Key : never]: Source[Key];
 };
-export type PickKeysNotStartingWith<O, T extends string> = {
-  [K in keyof O as K extends `${T}${string}` ? never : K]: O[K];
+export type PickKeysNotStartingWith<Source, Prefix extends string> = {
+  [Key in keyof Source as Key extends `${Prefix}${string}` ? never : Key]: Source[Key];
 };
 
 type PathSegmentInBracketNotation<
@@ -23,7 +23,7 @@ type ToBracketNotation<
  * `Paths`, but written like in code, with the keys containing dashes in brackets:
  * `plugins['better-tailwindcss'].settings`, not `plugins.better-tailwindcss.settings`
  */
-export type PathsBracketed<T> = ToBracketNotation<`${Paths<T>}`>;
+export type PathsBracketed<Value> = ToBracketNotation<`${Paths<Value>}`>;
 
 /** Only a subset of fields we actually read; `package.json` has many more */
 export interface PackageJson {

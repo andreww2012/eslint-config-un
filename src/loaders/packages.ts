@@ -28,7 +28,7 @@ export const packagesLoaders = {
     () =>
       interopDefault(import('@angular-eslint/eslint-plugin-template')).then((module) => {
         const fixedProcessor = cloneDeep(
-          // eslint-disable-next-line un/no-type-assertion -- unlike its types say, older versions of the plugin have no `meta`
+          // eslint-disable-next-line un/no-type-assertion -- Unlike its types say, older versions of the plugin have no `meta`
           module.processors['extract-inline-html'] as EslintProcessor,
         );
         fixedProcessor.meta ||= {name: 'extract-inline-html'};
@@ -119,7 +119,7 @@ export const packagesLoaders = {
   ),
   vueProcessor: generateInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')).then(
-      // eslint-disable-next-line un/no-type-assertion -- the plugin types its processors as `any`
+      // eslint-disable-next-line un/no-type-assertion -- The plugin types its processors as `any`
       (module) => module.processors['.vue'] as EslintProcessor,
     ),
   ),

@@ -19,8 +19,10 @@ describe('option: `plugins`', () => {
 
     it('expects the type of the built-in plugin if it has a precise one', () => {
       ({
-        // @ts-expect-error - assertion
-        stylistic: {plugin: tsEslintTypedPlugin},
+        stylistic: {
+          // @ts-expect-error Assertion
+          plugin: tsEslintTypedPlugin,
+        },
       }) satisfies PluginsOption;
     });
   });
@@ -30,8 +32,10 @@ describe('option: `plugins`', () => {
       expectTypeOf<keyof (PluginsOption['unicorn'] & {})>().toEqualTypeOf<'prefix' | 'plugin'>();
 
       ({
-        // @ts-expect-error - assertion
-        unicorn: {settings: {}},
+        unicorn: {
+          // @ts-expect-error Assertion
+          settings: {},
+        },
       }) satisfies PluginsOption;
     });
 
@@ -45,8 +49,12 @@ describe('option: `plugins`', () => {
       }) satisfies PluginsOption;
 
       ({
-        // @ts-expect-error - assertion
-        regexp: {settings: {allowedCharacterRanges: 'nope'}},
+        regexp: {
+          settings: {
+            // @ts-expect-error Assertion
+            allowedCharacterRanges: 'nope',
+          },
+        },
       }) satisfies PluginsOption;
     });
   });

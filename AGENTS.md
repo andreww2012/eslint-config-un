@@ -46,7 +46,7 @@ For example, marking rules as stylistic only changes what `noStylisticRules` dis
 In changesets, describe only what changes in this package, like its output, options or API.
 Don't describe behavior changes inside a dependency, like a rule that now reports more cases.
 
-<!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -- the heading introduces a list -->
+<!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -- The heading introduces a list -->
 ## When you're asked to...
 
 - Add or modify config tests, follow [this skill](./.agents/skills/eslint-config-un-config-tests/SKILL.md).

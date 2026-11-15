@@ -20,7 +20,7 @@ describe('`perfectionist/sortConstructorParameters` sub-config (type level)', ()
     void eslintConfig({
       configs: {
         perfectionist: {
-          // @ts-expect-error the rule sorts nothing without `useConfigurationIf`
+          // @ts-expect-error The rule sorts nothing without `useConfigurationIf`
           configSortConstructorParameters: true,
         },
       },
@@ -31,7 +31,7 @@ describe('`perfectionist/sortConstructorParameters` sub-config (type level)', ()
     void eslintConfig({
       configs: {
         perfectionist: {
-          // @ts-expect-error the rule sorts nothing without `useConfigurationIf`
+          // @ts-expect-error The rule sorts nothing without `useConfigurationIf`
           configSortConstructorParameters: {files: ['**/*.ts']},
         },
       },
@@ -42,8 +42,10 @@ describe('`perfectionist/sortConstructorParameters` sub-config (type level)', ()
     void eslintConfig({
       configs: {
         perfectionist: {
-          // @ts-expect-error the rule sorts nothing without `useConfigurationIf`
-          configSortConstructorParameters: {options: {type: 'natural'}},
+          configSortConstructorParameters: {
+            // @ts-expect-error The rule sorts nothing without `useConfigurationIf`
+            options: {type: 'natural'},
+          },
         },
       },
     });

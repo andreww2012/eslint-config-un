@@ -1,6 +1,6 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
-/* eslint-disable un/no-multiple-consecutive-spaces -- the test cases are made of them */
-/* eslint-disable no-template-curly-in-string -- some test cases are template literals with expressions */
+/* eslint-disable un/no-multiple-consecutive-spaces -- The test cases are made of them */
+/* eslint-disable no-template-curly-in-string -- Some test cases are template literals with expressions */
 import {RuleTester} from 'eslint';
 import {noMultipleConsecutiveSpaces} from '../../../src/plugin-un/rules/no-multiple-consecutive-spaces';
 

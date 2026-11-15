@@ -22,10 +22,10 @@ import {
  */
 export type BoundariesPluginSettings = {
   [
-    K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
+    Key in keyof EslintPluginBoundariesSettingsWithPrefixes as Key extends `boundaries/${infer Name}`
       ? ToCamelCase<Name>
       : never
-  ]?: EslintPluginBoundariesSettingsWithPrefixes[K];
+  ]?: EslintPluginBoundariesSettingsWithPrefixes[Key];
 };
 
 /**

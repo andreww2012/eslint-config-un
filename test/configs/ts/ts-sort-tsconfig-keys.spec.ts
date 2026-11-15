@@ -353,7 +353,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       });
 
       it('appends extra sort-keys configs when provided', async () => {
-        const EXTRA = [{pathPattern: '^paths$', order: {type: 'asc'}} as const] as const;
+        const EXTRA = [{pathPattern: '^paths$', order: {type: 'asc'}}] as const;
 
         const configResult = await computeEslintConfig({
           ts: {configSortTsconfigKeys: {extraSortKeysConfigs: [...EXTRA]}},

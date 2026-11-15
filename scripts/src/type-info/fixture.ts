@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-incorrect-template-string-interpolation -- the fixtures are TSX sources, so `{...}` in them is JSX, not an interpolation */
+/* eslint-disable unicorn/no-incorrect-template-string-interpolation -- The fixtures are TSX sources, so `{...}` in them is JSX, not an interpolation */
 
 /**
  * Sources the runtime probe lints to make rules reach their type-aware branches.

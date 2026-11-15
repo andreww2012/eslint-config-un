@@ -65,8 +65,8 @@ const resolveCatalogSpecifiers = (
   );
 };
 
-// Only the needed field is validated: a full package.json schema models plenty of valid fields too
-// narrowly, for example `devEngines.packageManager.onFail: download`, which is a pnpm extension
+// Only the needed field is validated: a full `package.json` schema models plenty of valid fields
+// too narrowly, for example `devEngines.packageManager.onFail: download`, which is a pnpm extension
 const DependencyRepositoryZod = z.optional(z.union([z.string(), z.object({url: z.string()})]));
 
 const GITHUB_REPO_SHORTHAND_REGEXP = /^[\w-]+\/[\w\-.]+$/;
@@ -74,7 +74,7 @@ const SSH_LIKE_REPO_URL_REGEXP = /^git@github.com:([\w-]+\/[\w\-.]+)\.git?$/;
 const GIT_URL_PROTOCOL_PREFIX_REGEXP = /^git\+/;
 const GIT_URL_SUFFIX_REGEXP = /\.git$/;
 
-// `fetchPackageInfo` locates package.json by resolving the package as a module, which fails for
+// `fetchPackageInfo` locates `package.json` by resolving the package as a module, which fails for
 // bin-only packages like `@eslint/config-inspector`
 const readDependencyPackageJson = async (dependency: string) => {
   const info = await fetchPackageInfo(dependency);
@@ -202,7 +202,7 @@ const main = async () => {
   const result = await Promise.all(
     changedDependencies.map(async ([dependency, newVersion]) => {
       const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
-      // eslint-disable-next-line ts/no-non-null-assertion -- the dependency list contains only entries from the previous manifest
+      // eslint-disable-next-line ts/no-non-null-assertion -- The dependency list contains only entries from the previous manifest
       const oldVersion = dependenciesBeforeChanges[dependency]!;
       const codeDiffResult = await exec('npm', [
         'diff',
@@ -241,7 +241,7 @@ const readUnreleasedChangesets = async () => {
         await fs.readFile(path.join(CHANGESETS_DIRECTORY_PATH, `${id}.md`), 'utf8'),
       );
       return ChangesetFrontmatterZod.validate(
-        data, // eslint-disable-line ts/no-unnecessary-condition -- the validator can fail at runtime despite its return type
+        data, // eslint-disable-line ts/no-unnecessary-condition -- The validator can fail at runtime despite its return type
       )
         ? {id, summary: content.trim()}
         : null;
@@ -429,7 +429,7 @@ const EXTENSIONS_TO_SKIP_IN_DIFF: ReadonlySet<string> = new Set([
 const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Readonly<
   Record<string, readonly string[]>
 > = {
-  // For packages distributed as ESM+CJS (for example: eslint-plugin-zod-x@2.0.0)
+  // For packages distributed as ESM+CJS (for example: `eslint-plugin-zod-x@2.0.0`)
   cjs: ['js', 'mjs'],
   cts: ['ts', 'mts'],
 };
@@ -462,7 +462,7 @@ const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | unde
 };
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
-  // eslint-disable-next-line ts/no-non-null-assertion -- the loop bounds guarantee an entry exists
+  // eslint-disable-next-line ts/no-non-null-assertion -- The loop bounds guarantee an entry exists
   const updatedDependencyInfo = updatedDependenciesInfo[i]!;
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependencyInfo;
 
@@ -518,7 +518,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
               : ((isDiffHeader = true), styleText('magentaBright', line));
     const fileHeaderMatch = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
     if (fileHeaderMatch) {
-      // eslint-disable-next-line sonar/no-redundant-assignments -- each file header must reset the diff state
+      // eslint-disable-next-line sonar/no-redundant-assignments -- Each file header must reset the diff state
       isDiffHeader = true;
       const extensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(fileHeaderMatch[1]);
       lastFileExtension = extensionMatch?.groups.extension;

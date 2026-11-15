@@ -65,7 +65,7 @@ const doesAttributeMatch = (
     case '*=': {
       return actualValue.includes(expectedValue);
     }
-    /* v8 ignore next 3 -- the parser only accepts the operators above */
+    /* v8 ignore next 3 The parser only accepts the operators above */
     default: {
       throw new Error(`Unsupported operator ${operator}`);
     }
@@ -98,13 +98,13 @@ const doesSelectorMatch = (selector: AstSelector, node: TagNode): boolean =>
         }
         case 'PseudoClass': {
           // Only `:not()` with a selector is enabled
-          /* v8 ignore next 3 -- the parser rejects `:not` without a selector */
+          /* v8 ignore next 3 The parser rejects `:not` without a selector */
           if (item.argument?.type !== 'Selector') {
             throw new Error(`Unsupported pseudo-class ${item.name}`);
           }
           return !doesSelectorMatch(item.argument, node);
         }
-        /* v8 ignore next 3 -- the parser rejects the other syntax */
+        /* v8 ignore next 3 The parser rejects the other syntax */
         default: {
           throw new Error(`Unsupported selector syntax ${item.type}`);
         }

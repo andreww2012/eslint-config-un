@@ -1,5 +1,5 @@
 /* eslint-disable vitest/require-hook -- `RuleTester` generates its own `describe`/`it` blocks */
-/* eslint-disable no-template-curly-in-string -- some test cases have template literal types */
+/* eslint-disable no-template-curly-in-string -- Some test cases have template literal types */
 import path from 'node:path';
 import {Linter, RuleTester} from 'eslint';
 import {parser as typescriptParser} from 'typescript-eslint';

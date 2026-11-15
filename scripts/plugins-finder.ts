@@ -45,7 +45,7 @@ if (!captchaSolverApiKey) {
 }
 const captchaSolver = new CaptchaSolver(captchaSolverApiKey);
 
-// eslint-disable-next-line ts/no-unnecessary-type-conversion -- discard the type predicate so invalid JSON strings are not narrowed to never
+// eslint-disable-next-line ts/no-unnecessary-type-conversion -- Discard the type predicate so invalid JSON strings are not narrowed to never
 const isValidJson = (value: unknown) => Boolean(isValidJsonInternal(value));
 
 const ResponseSchemaZod = z.looseObject({
@@ -126,13 +126,13 @@ const solveCaptchaAsync = (browserPage: Page) =>
             const solution = await captchaSolver.cloudflareTurnstile(params);
             logger.info(`Solved the captcha ${solution.id}`);
             await browserPage.evaluate((token) => {
-              // @ts-expect-error executed on the actual page
-              // eslint-disable-next-line ts/no-unsafe-call -- call of global variable
+              // @ts-expect-error Executed on the actual page
+              // eslint-disable-next-line ts/no-unsafe-call -- Call of global variable
               cfCallback(token);
             }, solution.data);
             resolve(true);
           } catch (error) {
-            // eslint-disable-next-line ts/prefer-promise-reject-errors -- preserve the original error, which type is not known
+            // eslint-disable-next-line ts/prefer-promise-reject-errors -- Preserve the original error, which type is not known
             reject(error);
           }
         };
@@ -145,8 +145,10 @@ const solveCaptchaAsync = (browserPage: Page) =>
 
           const params: unknown = JSON.parse(messageText.replace('intercepted-params:', ''));
 
-          // @ts-expect-error assuming params are of right type
-          void solveCaptcha(params);
+          void solveCaptcha(
+            // @ts-expect-error Assuming params are of right type
+            params,
+          );
         });
       }),
     catch: (error) => new CaptchaSolveError({cause: error}),

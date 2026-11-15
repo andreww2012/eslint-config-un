@@ -41,13 +41,14 @@ export const readPluginMetadata = async () => {
         !fileName.endsWith('.gen.ts') &&
         !NON_METADATA_MODULES.has(fileName),
     )
-    .toSorted();
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+    .sort();
 
   return await Promise.all(
     fileNames.map(async (fileName): Promise<DiscoveredPlugin> => {
       // Windows would otherwise read the drive letter of an absolute path as a URL scheme
       const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIRECTORY, fileName)).href;
-      // eslint-disable-next-line un/no-type-assertion -- the path comes from the plugins directory
+      // eslint-disable-next-line un/no-type-assertion -- The path comes from the plugins directory
       const module = (await import(moduleUrl)) as {
         default: Prettify<PluginMetadata & {prefix: PluginPrefix}>;
       };

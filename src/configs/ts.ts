@@ -557,8 +557,10 @@ type NodeTestModule = typeof import('node:test');
 /** The test runner awaits the promises these functions return on its own  */
 const NODE_TEST_PROMISE_FUNCTION_NAMES = allUnionMembers<
   {
-    [K in keyof NodeTestModule]: NodeTestModule[K] extends (...args: never[]) => Promise<unknown>
-      ? K
+    [Key in keyof NodeTestModule]: NodeTestModule[Key] extends (
+      ...args: never[]
+    ) => Promise<unknown>
+      ? Key
       : never;
   }[keyof NodeTestModule],
   {readonly: true}
@@ -1325,7 +1327,7 @@ export default defineUnConfig<
           ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS[orderCompilerOptions.preset]
           : orderCompilerOptions.type === 'order-keys'
             ? orderCompilerOptions.order
-            : // eslint-disable-next-line ts/no-unnecessary-condition -- keep the fallback for unknown option shapes at runtime
+            : // eslint-disable-next-line ts/no-unnecessary-condition -- Keep the fallback for unknown option shapes at runtime
               orderCompilerOptions.type === 'order-groups'
               ? orderCompilerOptions.order.flatMap((group) =>
                   orderCompilerOptions.orderWithinGroup &&
@@ -1336,7 +1338,7 @@ export default defineUnConfig<
                         : []
                       : orderCompilerOptions.orderWithinGroup[
                           group
-                        ] /* v8 ignore start - guaranteed to exist in runtime, but not during type checking */ ||
+                        ] /* v8 ignore start Guaranteed to exist in runtime, but not during type checking */ ||
                         [] /* v8 ignore stop */
                     : isKeyIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                       ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((optionName) =>
@@ -1344,7 +1346,7 @@ export default defineUnConfig<
                         )
                       : [],
                 )
-              : /* v8 ignore start - not reachable */ []
+              : /* v8 ignore start Not reachable */ []
         : /* v8 ignore stop */
           orderCompilerOptions
           ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu

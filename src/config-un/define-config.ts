@@ -104,7 +104,7 @@ export type UnConfigSetup<
   context: Readonly<UnConfigContext>,
   configOptions:
     | boolean
-    // eslint-disable-next-line ts/no-restricted-types -- some configs don't have the omitted properties
+    // eslint-disable-next-line ts/no-restricted-types -- Some configs don't have the omitted properties
     | Omit<Options, 'overrides' | 'overridesAny'>
     | undefined,
   resolved: Pick<UnConfigResults, Extract<Needs[number], keyof UnConfigResults>>,
@@ -117,7 +117,7 @@ export type UnConfigSetup<
  * per-Config manifests, each with its own options and results types, to be assignable here
  */
 export interface AnyConfigManifest extends ConfigManifest<readonly ConfigKey[]> {
-  // eslint-disable-next-line ts/method-signature-style -- see the note above
+  // eslint-disable-next-line ts/method-signature-style -- See the note above
   setup(
     context: Readonly<UnConfigContext>,
     configOptions: boolean | object | undefined,

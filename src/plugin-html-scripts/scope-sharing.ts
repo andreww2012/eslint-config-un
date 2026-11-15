@@ -105,7 +105,7 @@ const analyzeScope = (
     ecmaVersion: typeof ecmaVersion === 'number' ? ecmaVersion : 6,
     sourceType: sourceType === 'module' || sourceType === 'commonjs' ? sourceType : 'script',
     childVisitorKeys: visitorKeys || eslintVisitorKeys.KEYS,
-    /* v8 ignore next -- only for the nodes no visitor keys describe */
+    /* v8 ignore next Only for the nodes no visitor keys describe */
     fallback: (node) => [...eslintVisitorKeys.getKeys(node)],
     jsx: ecmaFeatures.jsx,
   });
@@ -170,7 +170,7 @@ const getTopLevelScope = (globalScope: Eslint.Scope.Scope, ast: Eslint.AST.Progr
 // Must run before any global is added to the scope manager
 const collectGlobals = ({ast, scopeManager}: ParseResult, isModule: boolean) => {
   const {globalScope} = scopeManager;
-  /* v8 ignore next 3 -- every scope manager made for ESLint has a global scope */
+  /* v8 ignore next 3 Every scope manager made for ESLint has a global scope */
   if (!globalScope) {
     return EMPTY_GLOBALS;
   }
@@ -194,7 +194,7 @@ const haveSameOptions = (first: ParseOptions, second: ParseOptions) =>
 /** Parses another script of the file ahead of time, with the options of the current one */
 const getScriptGlobals = (file: FileState, index: number, currentScript: FileScript) => {
   const script = file.scripts[index];
-  /* v8 ignore next 3 -- the index always points to a script of the file */
+  /* v8 ignore next 3 The index always points to a script of the file */
   if (!script) {
     return EMPTY_GLOBALS;
   }

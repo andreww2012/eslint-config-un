@@ -135,10 +135,10 @@ describe('options', () => {
 
     it('passes array-style options to `header/header` rule as-is', async () => {
       const OPTIONS = [
-        'block' as const,
+        'block',
         'Copy-right',
         2,
-        {lineEndings: 'windows' as const},
+        {lineEndings: 'windows'},
       ] as const satisfies NonEmptyTuple;
 
       const configResult = await computeEslintConfig({

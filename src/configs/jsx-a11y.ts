@@ -395,7 +395,7 @@ export const buildJsxA11yConfigs = (
   const isForLit = prefix === 'lit';
 
   // `rn` means "rule name"
-  const rn = <T extends string>(ruleName: T) =>
+  const rn = <RuleName extends string>(ruleName: RuleName) =>
     `${isForAstro ? 'jsx-a11y/' : ''}${ruleName}` as const;
 
   const pluginSettings = context.getPluginSettings(isForLit ? 'lit-a11y' : 'jsx-a11y');

@@ -1,5 +1,3 @@
-// cspell:ignore oncdatastart onclosetag oncomment onopentag
-
 // Why this parser, not html-eslint's one, for example:
 // it aligns with the HTML spec (v12+), has an XML mode, and gives exact positions for remapping
 import {Parser} from 'htmlparser2';
@@ -82,41 +80,43 @@ const parseHtml = (
     ignore: 'none',
   });
   const chunks: (HtmlChunk | ScriptChunk)[] = [createHtmlChunk(0)];
-  // eslint-disable-next-line ts/no-non-null-assertion -- there is always a chunk
+  // eslint-disable-next-line ts/no-non-null-assertion -- There is always a chunk
   const getCurrentChunk = () => chunks.at(-1)!;
 
   const parser = new Parser(
     {
-      onopentag: (tagName, attributes) => {
-        const chunk = getCurrentChunk();
-        if (chunk.type !== 'html') {
-          return;
-        }
+      onopentag: // cspell:disable-line
+        (tagName, attributes) => {
+          const chunk = getCurrentChunk();
+          if (chunk.type !== 'html') {
+            return;
+          }
 
-        const matchingMatcher = scriptMatchers.find(({match}) => match({tagName, attributes}));
-        if (!matchingMatcher) {
-          return;
-        }
+          const matchingMatcher = scriptMatchers.find(({match}) => match({tagName, attributes}));
+          if (!matchingMatcher) {
+            return;
+          }
 
-        if (chunk.ignore === 'nextScript') {
-          chunk.ignore = 'none';
-          return;
-        }
-        if (chunk.ignore === 'untilEnabled') {
-          return;
-        }
+          if (chunk.ignore === 'nextScript') {
+            chunk.ignore = 'none';
+            return;
+          }
+          if (chunk.ignore === 'untilEnabled') {
+            return;
+          }
 
-        chunk.end = parser.endIndex + 1;
-        chunks.push({
-          type: 'script',
-          start: parser.endIndex + 1,
-          end: html.length,
-          isModule: matchingMatcher.isModule,
-          tagName,
-          cdataRanges: [],
-        });
-      },
+          chunk.end = parser.endIndex + 1;
+          chunks.push({
+            type: 'script',
+            start: parser.endIndex + 1,
+            end: html.length,
+            isModule: matchingMatcher.isModule,
+            tagName,
+            cdataRanges: [],
+          });
+        },
 
+      // cspell:disable-next-line
       oncdatastart: () => {
         const chunk = getCurrentChunk();
         if (chunk.type === 'script') {
@@ -127,34 +127,36 @@ const parseHtml = (
         }
       },
 
-      onclosetag: (tagName) => {
-        const chunk = getCurrentChunk();
-        if (chunk.type !== 'script' || chunk.tagName !== tagName) {
-          return;
-        }
+      onclosetag: // cspell:disable-line
+        (tagName) => {
+          const chunk = getCurrentChunk();
+          if (chunk.type !== 'script' || chunk.tagName !== tagName) {
+            return;
+          }
 
-        // In XML, the index doesn't move past a self-closing tag, which has no content anyway
-        if (parser.startIndex < chunk.start) {
-          chunks.pop();
-          return;
-        }
+          // In XML, the index doesn't move past a self-closing tag, which has no content anyway
+          if (parser.startIndex < chunk.start) {
+            chunks.pop();
+            return;
+          }
 
-        chunk.end = parser.startIndex;
-        chunks.push(createHtmlChunk(parser.startIndex));
-      },
+          chunk.end = parser.startIndex;
+          chunks.push(createHtmlChunk(parser.startIndex));
+        },
 
-      oncomment: (comment) => {
-        const ignore = DIRECTIVE_COMMENTS.get(comment.trim());
-        if (ignore == null) {
-          return;
-        }
+      oncomment: // cspell:disable-line
+        (comment) => {
+          const ignore = DIRECTIVE_COMMENTS.get(comment.trim());
+          if (ignore == null) {
+            return;
+          }
 
-        const chunk = getCurrentChunk();
-        if (chunk.type === 'html') {
-          chunk.ignore = ignore;
-        }
-        directiveComments.push({start: parser.startIndex, end: parser.endIndex + 1});
-      },
+          const chunk = getCurrentChunk();
+          if (chunk.type === 'html') {
+            chunk.ignore = ignore;
+          }
+          directiveComments.push({start: parser.startIndex, end: parser.endIndex + 1});
+        },
 
       onend: () => {
         getCurrentChunk().end = parser.endIndex + 1;

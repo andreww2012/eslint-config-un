@@ -68,10 +68,10 @@ const dprintContexts = new Map<string, Promise<Dprint.FormatterContext>>();
 // `@dprint/*` plugin packages are not our dependencies, so only the project can reach them
 const projectRequire = createRequire(path.join(process.cwd(), 'package.json'));
 
-const getOrInsertPromise = <T>(
-  map: Map<string, Promise<T>>,
+const getOrInsertPromise = <Value>(
+  map: Map<string, Promise<Value>>,
   key: string,
-  create: () => Promise<T>,
+  create: () => Promise<Value>,
 ) => {
   const existingPromise = map.get(key);
   if (existingPromise) {
@@ -86,7 +86,7 @@ const getOrInsertPromise = <T>(
 const loadDprintPlugin = async (source: string) => {
   if (source.startsWith(DPRINT_PACKAGE_PREFIX)) {
     const dprintPackageUrl = url.pathToFileURL(projectRequire.resolve(source)).href;
-    // eslint-disable-next-line un/no-type-assertion -- only `@dprint/*` packages, which all export these, are imported
+    // eslint-disable-next-line un/no-type-assertion -- Only `@dprint/*` packages, which all export these, are imported
     const dprintPackage = (await import(dprintPackageUrl)) as {
       getBuffer?: () => ArrayBufferView;
       getPath?: () => string;

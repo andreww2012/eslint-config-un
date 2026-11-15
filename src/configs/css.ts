@@ -217,10 +217,10 @@ export interface CssEslintConfigOptions<
    */
   allowedFeatures?: {
     [
-      K in keyof GetRuleOptions<'css', 'use-baseline'> as K extends `allow${infer T}`
-        ? Uncapitalize<T>
+      Key in keyof GetRuleOptions<'css', 'use-baseline'> as Key extends `allow${infer Feature}`
+        ? Uncapitalize<Feature>
         : never
-    ]: GetRuleOptions<'css', 'use-baseline'>[K];
+    ]: GetRuleOptions<'css', 'use-baseline'>[Key];
   };
 }
 
@@ -478,7 +478,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
     .addRule(
       'no-unknown-type-selectors',
       ERROR,
-      // @ts-expect-error too strict type: the rule's JSON schema can only describe a `RegExp` as a plain object
+      // @ts-expect-error Too strict type: the rule's JSON schema can only describe a `RegExp` as a plain object
       knownElementNames.length > 0 ? [{allow: [...knownElementNames]}] : [],
     ) /** @since 0.3.0 */
     .addRule('no-unscoped-nesting-selector', ERROR) /** @since 0.1.0 */

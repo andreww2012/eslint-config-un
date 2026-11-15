@@ -60,8 +60,8 @@ export const resolveIgnoresOption = (
   (typeof ignores === 'function' ? ignores({ignoresDefault, ignoresImplicit: []}) : ignores) ||
   ignoresDefault;
 
-export const generateDefaultTestFiles = <T extends string>(
-  extensions: T,
+export const generateDefaultTestFiles = (
+  extensions: string,
   {
     includeRegularSpecFiles = true,
     includeCypressTests,
@@ -83,15 +83,15 @@ export const generateDefaultTestFiles = <T extends string>(
         // https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts
         // as of 2026-05-30):
         // `.`: 4.9M, `-`: 221k, `_`: 42.7k
-        `**/*[._-]spec.${extensions}` as const,
-        `**/*.test.${extensions}` as const, // 6.3M
-        `**/__test?(s)__/**/*.${extensions}` as const, // tests: 513k, test: 26.6k
+        `**/*[._-]spec.${extensions}`,
+        `**/*.test.${extensions}`, // 6.3M
+        `**/__test?(s)__/**/*.${extensions}`, // tests: 513k, test: 26.6k
       ]
     : []),
-  ...(includeTestDirectories ? [`**/test?(s)/**/*.${extensions}` as const] : []),
-  ...(includeVitestBenchmarkFiles ? [`**/*.{bench,benchmark}.${extensions}` as const] : []), // 10.9k (1k)
-  ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []), // 107k
-  ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}` as const] : []), // 115k, 2.2k
+  ...(includeTestDirectories ? [`**/test?(s)/**/*.${extensions}`] : []),
+  ...(includeVitestBenchmarkFiles ? [`**/*.{bench,benchmark}.${extensions}`] : []), // 10.9k (1k)
+  ...(includeCypressTests ? [`**/*.cy.${extensions}`] : []), // 107k
+  ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}`] : []), // 115k, 2.2k
 ];
 
 export const TESTS_CONFIG_DEFAULT_FILES = Object.freeze(
@@ -330,7 +330,7 @@ export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigCont
       (ruleName) => context.rootOptions.markdownCodeBlocksRules?.doNotDisable?.[ruleName] !== true,
     ),
     ...objectEntriesUnsafe(
-      // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition, ts/no-non-null-asserted-optional-chain -- added to preserve the type
+      // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition, ts/no-non-null-asserted-optional-chain -- Added to preserve the type
       context.rootOptions.markdownCodeBlocksRules?.additionalDisabledRules! || {},
     ).map(([ruleName, shouldDisable]) => (shouldDisable ? ruleName : null)),
   ].filter((value) => value != null);
@@ -355,9 +355,9 @@ export const withAllowDefaultProject = (
  * disallows the ones set to a falsy value.
  * `undefined` if nothing is restricted, which includes disallowing every value
  */
-export const resolveAllowedValues = <T extends string>(
-  allowedValuesRaw: ArrayOrBooleanRecord<T> | undefined,
-  allValues: readonly T[],
+export const resolveAllowedValues = <Value extends string>(
+  allowedValuesRaw: ArrayOrBooleanRecord<Value> | undefined,
+  allValues: readonly Value[],
 ) => {
   const allowedValues = Array.isArray(allowedValuesRaw)
     ? arrayUnique(allowedValuesRaw)

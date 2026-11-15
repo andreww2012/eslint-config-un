@@ -38,7 +38,7 @@ ruleTester.run('prettier', formatRules.prettier, {
       errors: [{message: 'Insert `;`', line: 1, column: 16}],
     },
     {
-      // eslint-disable-next-line un/no-multiple-consecutive-spaces -- the formatter removes the extra one
+      // eslint-disable-next-line un/no-multiple-consecutive-spaces -- The formatter removes the extra one
       code: 'const value  = 1;\n',
       filename: 'file.js',
       output: 'const value = 1;\n',

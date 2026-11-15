@@ -45,7 +45,7 @@ describe('no-secrets: sub config `json`', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        // eslint-disable-next-line no-secrets/no-secrets -- snapshot
+        // eslint-disable-next-line no-secrets/no-secrets -- Snapshot
         '"Found a string with entropy 5.11 : "WkQTUwGtlCOJXaqR34qicCxjnGEweU7v2mPUBSNA8tHZvxPZ""',
       );
     });

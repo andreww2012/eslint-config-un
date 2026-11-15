@@ -53,8 +53,10 @@ export default defineUnConfig<UnocssEslintConfigOptions>('unocss', {
     .addRule('blocklist', ERROR) /** @since 0.55.7 */
     .addRule('enforce-class-compile', OFF) /** @since 0.58.6 */
     .addRule('order', ERROR) /** @since 0.49.3 */ // 🟡
-    // cspell:disable-next-line
-    .addRule('order-attributify', ERROR) /** @since 0.49.3 */ // 🟡
+    .addRule(
+      'order-attributify', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.49.3 */ // 🟡
     .enableConfigTesterForPlugin('unocss')
     .addOverrides();
 });

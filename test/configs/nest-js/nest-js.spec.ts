@@ -1,4 +1,4 @@
-/* eslint-disable case-police/string-check -- preserve the public option name throughout these tests */
+/* eslint-disable case-police/string-check -- Preserve the public option name throughout these tests */
 
 const FIXTURES = {
   duplicateDecorators: 'duplicate-decorators.ts',

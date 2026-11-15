@@ -80,7 +80,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     const optionsFinal = Array.isArray(customizedRuleEntry)
       ? customizedRuleEntry.slice(1)
       : options || [];
-    // eslint-disable-next-line un/no-type-assertion -- the options come from the preset of the same plugin
+    // eslint-disable-next-line un/no-type-assertion -- The options come from the preset of the same plugin
     return [ruleName, severityFinal, optionsFinal as _RuleOptions];
   };
 
@@ -151,8 +151,12 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     .addRule(...setupRule('no-tabs', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-trailing-spaces', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
-    // cspell:disable-next-line
-    .addRule(...setupRule('nonblock-statement-body-position', OFF)) /** @since 0.0.4 */
+    .addRule(
+      ...setupRule(
+        'nonblock-statement-body-position', // cspell:disable-line
+        OFF,
+      ),
+    ) /** @since 0.0.4 */
     .addRule(...setupRule('one-var-declaration-per-line', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('operator-linebreak', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('padded-blocks', OFF)) /** @since 0.0.4 */ // 🟢

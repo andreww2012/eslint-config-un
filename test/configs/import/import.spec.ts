@@ -605,7 +605,7 @@ describe('options', () => {
     });
 
     it('enables `import/extensions` with `*` key controlling default when `requireModuleExtensions` is object with `*`', async () => {
-      const OPTIONS = {'*': 'always' as const, ts: 'never' as const} as const;
+      const OPTIONS = {'*': 'always', ts: 'never'} as const;
 
       const configResult = await computeEslintConfig({
         import: {requireModuleExtensions: OPTIONS},

@@ -9,7 +9,8 @@ import type {EslintPlugin} from '../../../src/eslint/eslint-types';
 import {FIXTURE_FILES} from './fixture';
 
 /**
- * The members of the typescript-eslint parser services that only exist when type information does.
+ * The members of the `typescript-eslint` parser services that only exist when type information
+ * does.
  * Reading any of them is what "the rule consumes type information" means
  */
 const TYPE_INFO_SERVICE_KEYS: ReadonlySet<string> = new Set([
@@ -35,7 +36,7 @@ const TS_CHECKER_TOKENS_REGEX =
 
 /**
  * A plugin may define its own `getParserServices` returning something else entirely, so the name
- * only counts next to a typescript-eslint import
+ * only counts next to a `typescript-eslint` import
  */
 const TS_ESLINT_PACKAGE_REGEX = /@typescript-eslint\/(?:typescript-estree|utils)/;
 
@@ -149,7 +150,7 @@ export const probeRules = async (
     }
   };
 
-  const withCurrentRule = <T>(ruleName: string, run: () => T, fallback: T) => {
+  const withCurrentRule = <Result>(ruleName: string, run: () => Result, fallback: Result) => {
     const previous = currentRuleName;
     currentRuleName = ruleName;
     try {
@@ -209,7 +210,7 @@ export const probeRules = async (
         .filter(([, rule]) => doesRunOnJavascript(rule))
         .map(([ruleName, rule]) => {
           const fullRuleName = `${prefix}/${ruleName}`;
-          // eslint-disable-next-line un/no-type-assertion -- the probe only calls `create` and reads what it returns
+          // eslint-disable-next-line un/no-type-assertion -- The probe only calls `create` and reads what it returns
           const {create} = rule as unknown as {
             create: (context: unknown) => Record<string, unknown> | null | undefined;
           };

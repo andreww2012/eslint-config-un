@@ -88,7 +88,7 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
             }),
           ),
           ...objectEntriesUnsafe(
-            // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- added to preserve the type
+            // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- Added to preserve the type
             additionalRules! || {},
           ).map(([ruleName, isStylistic]) => (isStylistic ? ruleName : null)),
         ].filter((value) => value != null),

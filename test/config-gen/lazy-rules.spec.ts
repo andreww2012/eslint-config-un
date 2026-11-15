@@ -6,7 +6,8 @@ const RULE_WITH_AUTOFIX_DISABLED = 'string-check';
 const RULE_WITH_AUTOFIX_KEPT = 'other-rule';
 
 /**
- * Defines the rules as getters which record their loading, like typescript-eslint does to only load
+ * Defines the rules as getters which record their loading, like `typescript-eslint` does to only
+ * load
  * the rules on first access
  */
 const createLazilyLoadedPlugin = () => {

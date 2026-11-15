@@ -162,8 +162,8 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * Restricts the use of specific Jest methods.
    * "Restrictions are expressed in the form of a map, with the value being either a string message
-   * to be shown, or `null` if a generic default message should be used." - from eslint-plugin-jest
-   * docs
+   * to be shown, or `null` if a generic default message should be used." - from
+   * `eslint-plugin-jest` docs
    *
    * Affected rule:
    * - [`jest/no-restricted-jest-methods`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-jest-methods.md)
@@ -173,7 +173,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * Restricts the use of specific Jest matchers.
    * "Bans are expressed in the form of a map, with the value being either a string message to be
-   * shown, or `null` if the default rule message should be used." - from eslint-plugin-jest docs
+   * shown, or `null` if the default rule message should be used." - from `eslint-plugin-jest` docs
    *
    * Affected rule:
    * - [`jest/no-restricted-matchers`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-matchers.md)

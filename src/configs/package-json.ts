@@ -64,7 +64,7 @@ type PackageJsonRequirableFields = IsRequireRule<GetRuleNamesInPlugin<'package-j
 
 interface RequireFieldsOption {
   /**
-   * Require the specified fields to be present in the package.json file
+   * Require the specified fields to be present in the `package.json` file
    */
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
@@ -129,7 +129,7 @@ const isDevEnginesSupportedByPackageManager = (
 export type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 
 /**
- * An ESLint plugin with rules for consistent, readable, and valid package.json files.
+ * An ESLint plugin with rules for consistent, readable, and valid `package.json` files.
  *
  * 📁 Default `files`: <code>**&#47;package.json</code>
  *
@@ -151,7 +151,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   order?: GetRuleOptions<'package-json', 'order-properties'>['order'];
 
   /**
-   * Enforces that repository entries in a package.json use either object or shorthand notation to
+   * Enforces that repository entries in a `package.json` use either object or shorthand notation to
    * refer to GitHub repositories when possible.
    *
    * Affected rule:
@@ -161,7 +161,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   repositoryShorthand?: GetRuleOptions<'package-json', 'repository-shorthand'>['form'];
 
   /**
-   * Sort lexically the properties of the specified package.json collections.
+   * Sort lexically the properties of the specified `package.json` collections.
    *
    * NOTE: "our" default value is not the same as the actual default value of the rule.
    * Namely, we don't sort `scripts`, `config` and `exports` sections, but do sort `resolutions`,
@@ -221,8 +221,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   disallowUnnecessaryPropertiesInPrivatePackages?: boolean | readonly string[];
 
   /**
-   * Disallow certain top-level properties in package.json.
-   * This is useful, for example, when you want to keep package.json minimal and enforce that
+   * Disallow certain top-level properties in `package.json`.
+   * This is useful, for example, when you want to keep `package.json` minimal and enforce that
    * certain tool configurations live in their own dedicated files.
    *
    * You can set this to a special value `'popularTools'` to bulk disallow top-level properties for

@@ -1,7 +1,7 @@
 const FIXTURES = {
-  // `ember/no-pause-test` uses emberUtils.isTestFile() which only matches
-  // Ember-style names ending in -test.js or _test.js; the file must also match
-  // the ember/tests config files pattern (e.g. **/__tests__/**/*.js)
+  // `ember/no-pause-test` uses `emberUtils.isTestFile()` which only matches
+  // Ember-style names ending in `-test.js` or `_test.js`; the file must also match
+  // the `ember/tests` config files pattern (e.g. `**/__tests__/**/*.js`)
   awaitPauseTestCall: 'await-pause-test/__tests__/calls-pause-test.js',
 } as const;
 

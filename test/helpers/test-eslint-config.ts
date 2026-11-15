@@ -16,25 +16,25 @@ const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
  * Lets specs pass read-only arrays (CONSTANT_CASE constants) as `files` and `ignores`, including
  * those of Sub-configs and of the root `linterOptions*` options
  */
-type AcceptReadonlyFilesAndIgnores<T> = T extends (...arguments_: never[]) => unknown
-  ? T
-  : T extends readonly (infer Element)[]
-    ? T | readonly Element[]
-    : T extends object
+type AcceptReadonlyFilesAndIgnores<Value> = Value extends (...arguments_: never[]) => unknown
+  ? Value
+  : Value extends readonly (infer Element)[]
+    ? Value | readonly Element[]
+    : Value extends object
       ? {
-          [K in keyof T]: K extends
+          [Key in keyof Value]: Key extends
             | 'files'
             | 'ignores'
             | `config${string}`
             | `linterOptions${string}`
-            ? AcceptReadonlyFilesAndIgnores<T[K]>
-            : T[K];
+            ? AcceptReadonlyFilesAndIgnores<Value[Key]>
+            : Value[Key];
         }
-      : T;
+      : Value;
 
 type ConfigsOption = {
-  [K in keyof (EslintConfigUnOptions['configs'] & {})]?: AcceptReadonlyFilesAndIgnores<
-    (EslintConfigUnOptions['configs'] & {})[K]
+  [Key in keyof (EslintConfigUnOptions['configs'] & {})]?: AcceptReadonlyFilesAndIgnores<
+    (EslintConfigUnOptions['configs'] & {})[Key]
   >;
 };
 
@@ -42,7 +42,7 @@ type UnOption = AcceptReadonlyFilesAndIgnores<OmitStrict<EslintConfigUnOptions, 
 
 // The generator never mutates `files` and `ignores`, so read-only arrays are fine at runtime
 const asEslintConfigUnOptions = (options: Prettify<UnOption & {configs: ConfigsOption}>) =>
-  // eslint-disable-next-line un/no-type-assertion -- intentional cast
+  // eslint-disable-next-line un/no-type-assertion -- Intentional cast
   options as EslintConfigUnOptions;
 
 export const computeEslintConfig = async (
@@ -203,7 +203,7 @@ export const testEslintConfig = async <
   FixturePaths extends string
     ? readonly ESLint.LintResult[]
     : {
-        [K in keyof FixturePaths]: readonly ESLint.LintResult[];
+        [Key in keyof FixturePaths]: readonly ESLint.LintResult[];
       }
 > => {
   // See the comment in `computeEslintConfig` for why this is a dynamic import
@@ -257,9 +257,9 @@ export const testEslintConfig = async <
   );
 
   return typeof fixturePaths === 'string'
-    ? // @ts-expect-error -- TS doesn't support conditional return types
-      // eslint-disable-next-line ts/no-non-null-assertion -- each requested fixture produces a lint result
+    ? // @ts-expect-error TS doesn't support conditional return types
+      // eslint-disable-next-line ts/no-non-null-assertion -- Each requested fixture produces a lint result
       lintResults[0]!
-    : // @ts-expect-error -- TS doesn't support conditional return types
+    : // @ts-expect-error TS doesn't support conditional return types
       lintResults;
 };

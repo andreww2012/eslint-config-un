@@ -185,8 +185,8 @@ async function generateRuleTypes() {
     ),
   ]);
 
-  // eslint-disable-next-line ts/no-shadow -- fine
-  const perPluginCode = `${perPluginCodeRaw.map((pluginCode) => pluginCode.code).join('\n\n')}
+  const perPluginCode = // eslint-disable-line ts/no-shadow -- Fine
+    `${perPluginCodeRaw.map((pluginCode) => pluginCode.code).join('\n\n')}
 
 export type RuleOptionsPerPlugin = {
 ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCode.exportTypeName};`).join('\n')}
@@ -201,7 +201,7 @@ ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCo
     })
     .filter(({fixableRuleNames}) => fixableRuleNames.length > 0);
 
-  // eslint-disable-next-line ts/no-shadow -- fine
+  // eslint-disable-next-line ts/no-shadow -- Fine
   const fixableRulesOnlyCode = `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
 ${fixableRulesPerPluginEntries
   .map(
@@ -223,7 +223,7 @@ export type FixableRuleNames = {
 }[keyof typeof FIXABLE_RULES_PER_PLUGIN_RAW];
 `;
 
-  // eslint-disable-next-line ts/no-shadow -- fine
+  // eslint-disable-next-line ts/no-shadow -- Fine
   const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
 ${perPluginCodeRaw
   .map(({pluginName, plugin}) => {

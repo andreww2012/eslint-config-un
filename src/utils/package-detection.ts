@@ -49,10 +49,10 @@ const isInstalledInSharedStore = (() => {
 
 const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
   try {
-    // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json:
+    // `getPackageInfo` from `local-pkg` isn't always able to find the correct `package.json`:
     // https://github.com/antfu-collective/local-pkg/issues/16
     // This trick uses the patched version of `import-meta-resolve` that after calling
-    // `resolvePackage` updates the last resolved package's package.json path
+    // `resolvePackage` updates the last resolved package's `package.json` path
     resolvePackage(packageName, parentUrl);
     return getLastResolvedPackageJsonUrl();
   } catch {
@@ -117,7 +117,7 @@ const readPackageInfo = async (packageJsonPath: Nullable<string | URL>) => {
     return null;
   }
 
-  /* v8 ignore next - No package in `node_modules` declares a missing or non-numeric version */
+  /* v8 ignore next No package in `node_modules` declares a missing or non-numeric version */
   const fullVersion = packageInfo.version || '';
 
   const majorVersionRaw = Number.parseInt(fullVersion, 10);
@@ -319,7 +319,8 @@ const createProjectPackageFinder = async (
           ([packageName, specifier]) => [packageName, {directory, specifier}] as const,
         ),
       )
-      .toReversed(),
+      // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
+      .reverse(),
   );
 
   // Packages declared under other names, like `"vue3": "npm:vue@^3"`, by their own names
@@ -397,6 +398,6 @@ export const fetchProjectPackagesInfo = async <PackageName extends string>(
         [packageName, await findPackage(aliases[packageName] || packageName)] as const,
     ),
   );
-  // eslint-disable-next-line un/no-type-assertion -- the entries cover every package
+  // eslint-disable-next-line un/no-type-assertion -- The entries cover every package
   return Object.fromEntries(packagesInfo) as Record<PackageName, PackageInfo | null>;
 };

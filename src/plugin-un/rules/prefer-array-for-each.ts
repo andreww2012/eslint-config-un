@@ -326,9 +326,12 @@ const rule: Eslint.Rule.RuleModule = {
     // Closest first, up to the nearest function
     const getAncestorsInFunction = (node: ESTree.Node) => {
       const ancestors = sourceCode.getAncestors(node);
-      return ancestors
-        .slice(ancestors.findLastIndex((ancestor) => FUNCTION_TYPES.has(ancestor.type)) + 1)
-        .toReversed();
+      return (
+        ancestors
+          .slice(ancestors.findLastIndex((ancestor) => FUNCTION_TYPES.has(ancestor.type)) + 1)
+          // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
+          .reverse()
+      );
     };
 
     // For `await`, `yield`, `return` and `var`, which change their meaning inside a callback
@@ -590,7 +593,10 @@ const rule: Eslint.Rule.RuleModule = {
         );
         const elementAccesses = bodyIdentifiers.flatMap((identifier) => {
           // Closest first, starting with `array[index]` itself
-          const [member, ...ancestors] = sourceCode.getAncestors(identifier).toReversed();
+          const [member, ...ancestors] = sourceCode
+            .getAncestors(identifier)
+            // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
+            .reverse();
           if (
             member?.type !== 'MemberExpression' ||
             member.property !== identifier ||

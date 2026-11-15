@@ -77,22 +77,22 @@ type AddRuleInternalOptions = EmptyObject;
 
 interface ConfigEntryChain<DefaultPrefix extends PluginPrefix | null> {
   config: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'>;
-  addRule: <N extends GetRuleNamesInPlugin<DefaultPrefix>>(
-    ruleName: N,
+  addRule: <RuleName extends GetRuleNamesInPlugin<DefaultPrefix>>(
+    ruleName: RuleName,
     severity: RuleSeverity | null,
-    ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N, 'all'>>,
+    ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, RuleName, 'all'>>,
     options?: AddRuleInternalOptions,
   ) => ConfigEntryChain<DefaultPrefix>;
-  addAnyRule: <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
-    prefix: P,
-    ruleName: N,
+  addAnyRule: <Prefix extends PluginPrefix, RuleName extends GetRuleNamesInPlugin<Prefix>>(
+    prefix: Prefix,
+    ruleName: RuleName,
     severity: RuleSeverity | null,
-    ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
+    ruleOptions?: NoInfer<GetRuleOptions<Prefix, RuleName, 'all'>>,
     options?: AddRuleInternalOptions,
   ) => ConfigEntryChain<DefaultPrefix>;
-  disableAnyRule: <P extends PluginPrefix>(
-    plugin: P,
-    ruleNameUnprefixed: GetRuleNamesInPlugin<P>,
+  disableAnyRule: <Prefix extends PluginPrefix>(
+    plugin: Prefix,
+    ruleNameUnprefixed: GetRuleNamesInPlugin<Prefix>,
   ) => ConfigEntryChain<DefaultPrefix>;
   addOverrides: (options?: {onlyAny?: boolean}) => ConfigEntryChain<DefaultPrefix>;
   addBulkRules: (rules: Prettify<UnRulesConfig> | Falsy) => ConfigEntryChain<DefaultPrefix>;
@@ -141,7 +141,7 @@ interface FlatConfigMetadata {
 
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
-  // eslint-disable-next-line ts/no-explicit-any -- the default must accept every plugin prefix without narrowing rule names
+  // eslint-disable-next-line ts/no-explicit-any -- The default must accept every plugin prefix without narrowing rule names
   DefaultPrefix extends PluginPrefix | null = any,
 > {
   private readonly pluginPrefix: DefaultPrefix;
@@ -211,7 +211,7 @@ export class ConfigEntryBuilder<
       typeof configNameOrMetadata === 'string'
         ? this.configs.get(configNameOrMetadata)?.[1]
         : configNameOrMetadata;
-    /* v8 ignore else - The metadata of a config being modified is always present */
+    /* v8 ignore else The metadata of a config being modified is always present */
     if (configMetadata) {
       if (severity === OFF) {
         if (!hasEnabledDisableAutofixCounterpart) {
@@ -528,7 +528,7 @@ export class ConfigEntryBuilder<
       ruleOptions,
     ) => {
       if (severity == null || isConfigDisabled) {
-        // eslint-disable-next-line ts/no-use-before-define -- the callback runs after the chain object is initialized
+        // eslint-disable-next-line ts/no-use-before-define -- The callback runs after the chain object is initialized
         return result;
       }
 
@@ -579,7 +579,7 @@ export class ConfigEntryBuilder<
         severity: eslintToUnRuleSeverity(severityResolved),
       });
 
-      // eslint-disable-next-line ts/no-use-before-define -- the callback runs after the chain object is initialized
+      // eslint-disable-next-line ts/no-use-before-define -- The callback runs after the chain object is initialized
       return result;
     };
 
@@ -683,7 +683,7 @@ export class ConfigEntryBuilder<
             }
 
             const addedRulesForPlugin = Object.entries(
-              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- the test mode initializes these records before the callback runs
+              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- The test mode initializes these records before the callback runs
               addedRules![pluginPrefixToTest]! || {},
             );
             const addedRulesForPluginNamesSet = new Set(
@@ -739,7 +739,7 @@ export class ConfigEntryBuilder<
               );
             }
 
-            // eslint-disable-next-line ts/no-non-null-assertion -- the test mode initializes this record before the callback runs
+            // eslint-disable-next-line ts/no-non-null-assertion -- The test mode initializes this record before the callback runs
             const duplicateRulesForPlugin = duplicateRules![pluginPrefixToTest] || new Set();
             if (duplicateRulesForPlugin.size > 0) {
               errorMessages.push(

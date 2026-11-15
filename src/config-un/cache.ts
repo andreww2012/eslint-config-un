@@ -52,7 +52,7 @@ const computeCacheKey = async (context: UnConfigContext) => {
 
   const packageJsonPath = packageUtils.up();
 
-  /* v8 ignore next - Every known package manager has its lockfiles grouped */
+  /* v8 ignore next Every known package manager has its lockfiles grouped */
   const lockfilePaths = (
     packageManagerInfo
       ? (LOCKFILES_PER_PACKAGE_MANAGER[packageManagerInfo.name] || []).map(
@@ -72,11 +72,11 @@ const computeCacheKey = async (context: UnConfigContext) => {
     }),
     packageJsonPath && readFileSafe(packageJsonPath, true),
     Promise.all(
-      // eslint-disable-next-line ts/await-thenable -- fine: some values are promises
+      // eslint-disable-next-line ts/await-thenable -- Fine: some values are promises
       lockfilePaths.map((lockfilePath) => (lockfilePath ? readFileSafe(lockfilePath, true) : null)),
     ).then((files) => files.find((file) => file != null)),
     Promise.all(
-      // eslint-disable-next-line ts/await-thenable -- fine: some values are promises
+      // eslint-disable-next-line ts/await-thenable -- Fine: some values are promises
       eslintConfigPaths.map((eslintConfigPath) =>
         eslintConfigPath ? readFileSafe(eslintConfigPath, true) : null,
       ),
@@ -155,7 +155,7 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
 
 interface CacheDataStoredInFs extends CacheDataInFs, CacheMetadata {}
 
-// eslint-disable-next-line unicorn/consistent-boolean-name -- acceptable
+// eslint-disable-next-line unicorn/consistent-boolean-name -- Acceptable
 export const saveCacheToFs = async (
   context: UnConfigContext,
   cacheData: CacheDataInFs<false>,
@@ -206,19 +206,19 @@ export const saveCacheToFs = async (
     const isUnserializable =
       typeof value === 'function' ||
       (isObject(value) &&
-        // eslint-disable-next-line ts/no-unnecessary-condition -- doesn't change the type, but performs additional checks
+        // eslint-disable-next-line ts/no-unnecessary-condition -- Doesn't change the type, but performs additional checks
         !isPlainObject(value));
     if (isUnserializable) {
       unserializablePaths.push([valuePath, value]);
     }
   });
   if (unserializablePaths.length > 0) {
-    /* v8 ignore next - A group produced by `Object.groupBy` is never empty */
+    /* v8 ignore next A group produced by `Object.groupBy` is never empty */
     const unserializablePathsGrouped = Object.entries(
       Object.groupBy(
         unserializablePaths,
         (unserializablePath) =>
-          // eslint-disable-next-line ts/no-non-null-assertion -- safe
+          // eslint-disable-next-line ts/no-non-null-assertion -- Safe
           unserializablePath[0][0]!,
       ),
     ).map((values) => ({
@@ -230,7 +230,7 @@ export const saveCacheToFs = async (
       `Could not serialize configs to store in cache because they contain unserializable data at paths:\n${unserializablePathsGrouped
         .map(
           ({configIndex, configName, valuePaths}) =>
-            `Config #${configIndex} ${configName ? `"${configName}"` : /* v8 ignore next - Every generated config is named */ '[unnamed]'}:\n${valuePaths
+            `Config #${configIndex} ${configName ? `"${configName}"` : /* v8 ignore next Every generated config is named */ '[unnamed]'}:\n${valuePaths
               .map((valuePath) => `  - ${valuePath.slice(1).join('.')}`)
               .join('\n')}`,
         )
@@ -279,7 +279,7 @@ interface CacheDataInMemory {
 
 interface CacheDataStoredInMemory extends CacheDataInMemory, CacheMetadata {}
 
-// eslint-disable-next-line no-shadow-restricted-names, sonar/no-globals-shadowing -- safe extension
+// eslint-disable-next-line no-shadow-restricted-names, sonar/no-globals-shadowing -- Safe extension
 declare const globalThis: typeof global & {
   eslintConfigUnResolvedConfig?: CacheDataStoredInMemory;
 };

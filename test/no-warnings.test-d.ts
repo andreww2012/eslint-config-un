@@ -100,8 +100,10 @@ describe('option: `noWarnings` (type level)', () => {
         noWarnings: true,
         configs: {
           ts: {
-            // @ts-expect-error `warn` severity in overrides is forbidden by `noWarnings`
-            overrides: {'ts/array-type': ['warn']},
+            overrides: {
+              // @ts-expect-error `warn` severity in overrides is forbidden by `noWarnings`
+              'ts/array-type': ['warn'],
+            },
           },
         },
       });

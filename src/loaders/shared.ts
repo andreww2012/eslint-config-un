@@ -23,16 +23,20 @@ export const MODULE_NOT_FOUND_ERROR_CODES: readonly string[] = [
 
 export type ModuleLoaderContext = Pick<UnConfigContext, 'rootOptions' | 'missingPackages'>;
 
-export type ModuleLoader<T, N extends string = string, PackageNullable extends boolean = true> = ((
+export type ModuleLoader<
+  Module,
+  PackageName extends string = string,
+  PackageNullable extends boolean = true,
+> = ((
   context: ModuleLoaderContext,
   options?: {
     throwIfNotFound?: boolean;
   },
 ) => Promise<{
-  packageName: N;
-  module: T | (PackageNullable extends true ? null : never);
+  packageName: PackageName;
+  module: Module | (PackageNullable extends true ? null : never);
 }>) & {
-  packageName: N;
+  packageName: PackageName;
 };
 
 // ESM says "package" for bare specifiers and "module" for paths, CJS always says "module"
@@ -45,21 +49,21 @@ const PATH_SPECIFIER_REGEXP = /^(?:[./\\]|[a-z]:)/i;
 // loading: https://nodejs.org/api/errors.html#err_require_esm_race_condition
 const moduleLoadingMutex = new Mutex();
 
-function createModuleLoader<T, N extends string>(
+function createModuleLoader<Module, PackageName extends string>(
   property: string,
-  packageName: N,
-  module: () => MaybePromise<T | {default: T}>,
+  packageName: PackageName,
+  module: () => MaybePromise<Module | {default: Module}>,
   ignoredErrors?: string | readonly string[],
-): ModuleLoader<T, N> {
-  const result: ModuleLoader<T, N> = async (context, options) => {
+): ModuleLoader<Module, PackageName> {
+  const result: ModuleLoader<Module, PackageName> = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     await moduleLoadingMutex.acquire();
     try {
       const {plugins} = context.rootOptions;
       const providedPlugin = plugins && isKeyIn(property, plugins) && plugins[property]?.plugin;
       const overriddenPluginModule = providedPlugin
-        ? // eslint-disable-next-line un/no-type-assertion -- the user is trusted to provide the right module
-          ((await interopDefault(maybeCall(providedPlugin))) as T)
+        ? // eslint-disable-next-line un/no-type-assertion -- The user is trusted to provide the right module
+          ((await interopDefault(maybeCall(providedPlugin))) as Module)
         : null;
 
       // Otherwise the import could load another project's copy, which is not installed for us
@@ -74,8 +78,8 @@ function createModuleLoader<T, N extends string>(
       }
 
       return {
-        // eslint-disable-next-line un/no-type-assertion -- `T` is the module or its default export
-        module: overriddenPluginModule || ((await interopDefault(module())) as T),
+        // eslint-disable-next-line un/no-type-assertion -- `Module` is the module or its default export
+        module: overriddenPluginModule || ((await interopDefault(module())) as Module),
         packageName,
       };
     } catch (error) {
@@ -92,7 +96,7 @@ function createModuleLoader<T, N extends string>(
 
       // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load,
       // might not be
-      /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
+      /* v8 ignore else Every ignored error a loader declares is a module-not-found one */
       if (MODULE_NOT_FOUND_ERROR_CODES.includes(error.code)) {
         const missingPackageNameMatch = error.message.match(MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP);
         const missingPackageName = missingPackageNameMatch?.[1];
@@ -117,28 +121,28 @@ function createModuleLoader<T, N extends string>(
   return result;
 }
 
-type ResolvesToNull<N extends string, IgnoredErrors> = IgnoredErrors extends undefined
-  ? N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES
+type ResolvesToNull<PackageName extends string, IgnoredErrors> = IgnoredErrors extends undefined
+  ? PackageName extends keyof typeof OPTIONAL_PEER_DEPENDENCIES
     ? true
     : false
   : true;
 
 type ModuleLoaderFactory<EraseModuleType extends boolean> = <
-  T,
-  N extends string,
+  Module,
+  PackageName extends string,
   IgnoredErrors extends string | readonly string[] | undefined = undefined,
 >(
   property: string,
-  packageName: N,
+  packageName: PackageName,
   module: () => MaybePromise<
-    | (EraseModuleType extends true ? NoInfer<T> : T)
-    | {default: EraseModuleType extends true ? NoInfer<T> : T}
+    | (EraseModuleType extends true ? NoInfer<Module> : Module)
+    | {default: EraseModuleType extends true ? NoInfer<Module> : Module}
   >,
   ignoreErrors?: IgnoredErrors,
-) => ModuleLoader<T, N, ResolvesToNull<N, IgnoredErrors>>;
+) => ModuleLoader<Module, PackageName, ResolvesToNull<PackageName, IgnoredErrors>>;
 
-/* eslint-disable un/no-type-assertion -- these only change how the type of the module is inferred */
+/* eslint-disable un/no-type-assertion -- These only change how the type of the module is inferred */
 export const generateModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
 
 export const generateInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;
-/* eslint-enable un/no-type-assertion -- only the module type helpers above need assertions */
+/* eslint-enable un/no-type-assertion -- Only the module type helpers above need assertions */

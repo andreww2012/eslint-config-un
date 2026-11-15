@@ -63,8 +63,8 @@ export default {
     'splattributes', // Ember
     'tsrx',
     'npmx',
-    'gypfile', // package.json field
-    'libc', // package.json field
+    'gypfile', // `package.json` field
+    'libc', // `package.json` field
     'oxlint',
     'TSES', // `TSESTree` type from `@typescript-eslint/types`
     'humanwhocodes',

@@ -155,16 +155,16 @@ const renderJsDoc = (lines: readonly string[], indent: string) =>
     `${indent} */`,
   ].join('\n');
 
-const topologicallySort = <T>(
-  items: readonly T[],
-  getKey: (item: T) => string,
-  getDependencies: (item: T) => readonly string[],
+const topologicallySort = <Item>(
+  items: readonly Item[],
+  getKey: (item: Item) => string,
+  getDependencies: (item: Item) => readonly string[],
 ) => {
   const itemsByKey = new Map(items.map((item) => [getKey(item), item]));
   const visited = new Set<string>();
   const inProgress = new Set<string>();
   const cycles: (readonly string[])[] = [];
-  const sorted: T[] = [];
+  const sorted: Item[] = [];
 
   const visit = (key: string, trail: readonly string[]) => {
     if (visited.has(key)) {
@@ -418,7 +418,8 @@ const renderIndexDts = (configs: readonly DiscoveredConfig[], allConfigKeys: rea
 
   const results = configs
     .filter(({resultInterfaceName}) => resultInterfaceName)
-    .toSorted((a, b) => a.key.localeCompare(b.key))
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+    .sort((a, b) => a.key.localeCompare(b.key))
     .map(
       ({key, modulePath, resultInterfaceName}) =>
         `  ${key}: import('${modulePath}').${resultInterfaceName} | null;`,
@@ -517,7 +518,10 @@ const generateConfigArtifacts = async () => {
     .map((key) => configsByKey.get(key))
     .filter((config) => config != null);
 
-  const allConfigKeys = configs.map(({key}) => key).toSorted();
+  const allConfigKeys = configs
+    .map(({key}) => key)
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+    .sort();
 
   return {
     indexDtsCode: renderIndexDts(configs, allConfigKeys),

@@ -26,7 +26,7 @@ const argv = cli({
   flags: {
     sort: {
       type: (value) => SortingZod.parse(value),
-      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- wrong
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- Wrong
       default: 'score' satisfies Sorting as Sorting,
     },
     sortInverse: {
@@ -122,7 +122,7 @@ const analyze = Effect.gen(function* () {
       const status = eslintPluginsDb[name];
       if (
         status == null ||
-        // eslint-disable-next-line ts/no-unnecessary-condition -- types are lying, `value` can be `null`
+        // eslint-disable-next-line ts/no-unnecessary-condition -- Types are lying, `value` can be `null`
         info == null ||
         'error' in info
       ) {

@@ -159,11 +159,12 @@ const renderPackageRequesters = (
   const reasons = objectKeysUnsafe(PACKAGE_REQUESTER_RENDERERS).flatMap((requesterType) => {
     const names = (requestersByType[requesterType] || [])
       .map((requester) => substringAfter(requester, ':'))
-      .toSorted((nameA, nameB) => collator.compare(nameA, nameB));
+      // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
+      .sort((nameA, nameB) => collator.compare(nameA, nameB));
     return names.length > 0 ? PACKAGE_REQUESTER_RENDERERS[requesterType](names) : [];
   });
 
-  /* v8 ignore next - Everything requested is requested by someone */
+  /* v8 ignore next Everything requested is requested by someone */
   return reasons.length > 0 ? reasons.join(', ') : styleText('gray', 'Unknown');
 };
 
@@ -415,7 +416,7 @@ ${renderInstallationCommand(
       ...getRuleNameAndPluginPrefixByFullName(context, ruleName),
       isAutofixDisabled,
     })),
-    /* v8 ignore next - The rules listed in the option are always prefixed */
+    /* v8 ignore next The rules listed in the option are always prefixed */
     (item) => item.pluginPrefixCanonical || '',
   );
 
@@ -462,10 +463,10 @@ ${renderInstallationCommand(
   };
 
   const plugins = internalOptions.disableAutofixForAllFixableRulesOnly
-    ? /* v8 ignore next - `disableAutofixForAllFixableRulesOnly` is not passed anywhere yet */ {}
+    ? /* v8 ignore next `disableAutofixForAllFixableRulesOnly` is not passed anywhere yet */ {}
     : Object.fromEntries(
         objectEntriesUnsafe(loadedPlugins).map(([pluginPrefixCanonical, plugin]) => {
-          /* v8 ignore next - The vanilla rules are not registered as a plugin */
+          /* v8 ignore next The vanilla rules are not registered as a plugin */
           const pluginPrefix = resolvePluginPrefix(context, pluginPrefixCanonical);
           const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
             (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
@@ -490,7 +491,7 @@ ${renderInstallationCommand(
             false;
           // Selected by name: checking `meta.fixable` here would load every lazily loaded rule
           const rulesToDisableAutofixFor = Object.keys(
-            /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
+            /* v8 ignore next A plugin whose autofixes are disabled always has rules */
             plugin.rules || {},
           ).filter(
             (ruleName) =>
@@ -514,7 +515,7 @@ ${renderInstallationCommand(
             {
               ...plugin,
               rules: mapPluginRules(
-                /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
+                /* v8 ignore next A plugin whose autofixes are disabled always has rules */
                 plugin.rules || {},
                 rulesToDisableAutofixFor,
                 (rule) => (rule.meta?.fixable ? disableRuleAutofix(rule) : rule),
@@ -558,7 +559,7 @@ ${renderInstallationCommand(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...arguments_)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion -- restore a cached transform from trusted config code
+                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion -- Restore a cached transform from trusted config code
                         fn: new Function('...arguments_', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },
@@ -590,13 +591,13 @@ ${renderInstallationCommand(
           valueTransformFn
             ? valueTransformFn.fn.call(
                 valueTransformFn.scope,
-                // @ts-expect-error keys type is lost
+                // @ts-expect-error Keys type is lost
                 loadedPackagesForConfig,
                 getByPath(config, fullPath),
               )
             : Object.keys(loadedPackagesForConfig).length === 1
               ? Object.values(loadedPackagesForConfig)[0]
-              : /* v8 ignore next - No config loads several packages without a transform */ loadedPackagesForConfig,
+              : /* v8 ignore next No config loads several packages without a transform */ loadedPackagesForConfig,
         );
       },
     );

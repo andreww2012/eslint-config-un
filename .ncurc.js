@@ -126,7 +126,7 @@ export default ncuConfig({
       ) &&
       (!ALIASES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
         currentVersionSemver?.major === upgradedVersionSemver?.major) &&
-      (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection -- the list stays empty until a dependency needs this filter */
+      (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonar/no-empty-collection -- The list stays empty until a dependency needs this filter */
         .has(packageName) ||
         !(
           currentVersionSemver &&

@@ -10,8 +10,12 @@ describe('`unicorn` config `overrides` (type level)', () => {
   it('forbids overriding a rule moved to the `configAnyLanguage` sub-config', () => {
     void eslintConfig({
       configs: {
-        // @ts-expect-error `unicorn/prefer-https` is declared in `configAnyLanguage`
-        unicorn: {overrides: {'unicorn/prefer-https': 0}},
+        unicorn: {
+          overrides: {
+            // @ts-expect-error `unicorn/prefer-https` is declared in `configAnyLanguage`
+            'unicorn/prefer-https': 0,
+          },
+        },
       },
     });
   });
@@ -34,8 +38,12 @@ describe('`unicorn` config `overrides` (type level)', () => {
     void eslintConfig({
       configs: {
         unicorn: {
-          // @ts-expect-error `unicorn/no-lonely-if` does not support CSS
-          configCss: {overrides: {'unicorn/no-lonely-if': 0}},
+          configCss: {
+            overrides: {
+              // @ts-expect-error `unicorn/no-lonely-if` does not support CSS
+              'unicorn/no-lonely-if': 0,
+            },
+          },
         },
       },
     });
@@ -45,10 +53,18 @@ describe('`unicorn` config `overrides` (type level)', () => {
     void eslintConfig({
       configs: {
         unicorn: {
-          // @ts-expect-error `unicorn/require-frontmatter-fields` is Markdown-only
-          configCss: {overrides: {'unicorn/require-frontmatter-fields': 0}},
-          // @ts-expect-error `unicorn/no-transition-all` does not support JSON
-          configJson: {overrides: {'unicorn/no-transition-all': 0}},
+          configCss: {
+            overrides: {
+              // @ts-expect-error `unicorn/require-frontmatter-fields` is Markdown-only
+              'unicorn/require-frontmatter-fields': 0,
+            },
+          },
+          configJson: {
+            overrides: {
+              // @ts-expect-error `unicorn/no-transition-all` does not support JSON
+              'unicorn/no-transition-all': 0,
+            },
+          },
         },
       },
     });

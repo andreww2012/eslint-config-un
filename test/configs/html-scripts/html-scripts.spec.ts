@@ -352,7 +352,7 @@ describe('options', () => {
     });
 
     it('merges user-provided `languageOptions`', async () => {
-      const GLOBALS = Object.freeze({myGlobal: 'readonly'} as const);
+      const GLOBALS = Object.freeze({myGlobal: 'readonly'});
 
       const configResult = await computeEslintConfig({
         htmlScripts: {languageOptions: {globals: GLOBALS, ecmaVersion: 2020}},

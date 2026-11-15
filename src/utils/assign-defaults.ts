@@ -5,17 +5,19 @@ import {castToSafe, isObject} from '../utils';
 // assignment-compatible with regular object/interface types that lack an
 // explicit index signature (`Foo extends Record<string, unknown>` is `false`,
 // but `Foo extends Record<string, any>` is `true`). Without `any` the
-// `Extract<S, Input>` filter below collapses to `never` for user-defined
-// option interfaces and the merged result loses all of `S`'s keys.
-// eslint-disable-next-line ts/no-explicit-any -- need to use for assignability
+// `Extract<Source, Input>` filter below collapses to `never` for user-defined
+// option interfaces and the merged result loses all of `Source`'s keys
+// eslint-disable-next-line ts/no-explicit-any -- Need to use for assignability
 type AssignDefaultsInput = Record<PropertyKey, any>;
 
-type SourceObjectShape<S> = Extract<Exclude<S, readonly unknown[]>, AssignDefaultsInput>;
+type SourceObjectShape<Source> = Extract<Exclude<Source, readonly unknown[]>, AssignDefaultsInput>;
 
-type ValidateDefaults<S, D> = [SourceObjectShape<S>] extends [never]
+type ValidateDefaults<Source, Defaults> = [SourceObjectShape<Source>] extends [never]
   ? unknown
-  : (D extends Partial<SourceObjectShape<S>> ? unknown : Partial<SourceObjectShape<S>>) &
-      Record<Exclude<keyof D, keyof SourceObjectShape<S>>, never>;
+  : (Defaults extends Partial<SourceObjectShape<Source>>
+      ? unknown
+      : Partial<SourceObjectShape<Source>>) &
+      Record<Exclude<keyof Defaults, keyof SourceObjectShape<Source>>, never>;
 
 /**
  * Shallow-merge user-provided options with defaults: each defined top-level key in `source`
@@ -26,37 +28,44 @@ type ValidateDefaults<S, D> = [SourceObjectShape<S>] extends [never]
  * `defaults` is constrained to be a partial of `source`'s object shape, so call sites no longer
  * need a `satisfies SomeOptions` annotation to type-check the defaults object
  */
-export const assignDefaults = <S, const D extends AssignDefaultsInput>(
-  source: S,
-  defaults: D & ValidateDefaults<S, D>,
+export const assignDefaults = <Source, const Defaults extends AssignDefaultsInput>(
+  source: Source,
+  defaults: Defaults & ValidateDefaults<Source, Defaults>,
 ) => {
   // TODO void required?
-  // eslint-disable-next-line ts/no-invalid-void-type -- functions returning void can supply an absent source
+  // eslint-disable-next-line ts/no-invalid-void-type -- Functions returning void can supply an absent source
   type NullishOrVoid = null | undefined | void;
 
-  type MutableShallow<T> = T extends readonly (infer U)[] ? U[] : T;
+  type MutableShallow<Value> = Value extends readonly (infer Item)[] ? Item[] : Value;
 
-  type MergeValue<SValue, DValue> = [Extract<SValue, NullishOrVoid>] extends [never]
-    ? SValue
-    : [MutableShallow<Exclude<DValue, NullishOrVoid>>] extends [Exclude<SValue, NullishOrVoid>]
-      ? // `DValue` is structurally a subset of `SValue` (e.g. `{}` default for an object option,
-        // or `never[]` default for an array option); without it, code that reads keys of the
-        // result doesn't have to handle the empty-literal arm of the union
-        Exclude<SValue, NullishOrVoid>
-      : Exclude<SValue, NullishOrVoid> | MutableShallow<Exclude<DValue, NullishOrVoid>>;
+  type MergeValue<SourceValue, DefaultsValue> = [Extract<SourceValue, NullishOrVoid>] extends [
+    never,
+  ]
+    ? SourceValue
+    : [MutableShallow<Exclude<DefaultsValue, NullishOrVoid>>] extends [
+          Exclude<SourceValue, NullishOrVoid>,
+        ]
+      ? // `DefaultsValue` is structurally a subset of `SourceValue` (e.g. `{}` default for an
+        // object option, or `never[]` default for an array option); without it, code that reads
+        // keys of the result doesn't have to handle the empty-literal arm of the union
+        Exclude<SourceValue, NullishOrVoid>
+      : Exclude<SourceValue, NullishOrVoid> | MutableShallow<Exclude<DefaultsValue, NullishOrVoid>>;
 
-  type SourceMaybeAbsent = [Exclude<S, AssignDefaultsInput>] extends [never] ? false : true;
+  type SourceMaybeAbsent = [Exclude<Source, AssignDefaultsInput>] extends [never] ? false : true;
 
   type MergeShallow<
-    Source extends AssignDefaultsInput,
-    Defaults extends AssignDefaultsInput,
-  > = Source extends Defaults
-    ? Source
-    : // eslint-disable-next-line ts/no-restricted-types -- keep omission non-distributive so unions expose only their shared properties
-      Omit<Defaults, keyof Source & keyof Defaults> &
-        // eslint-disable-next-line ts/no-restricted-types -- keep omission non-distributive so unions expose only their shared properties
-        Omit<Source, keyof Source & keyof Defaults> & {
-          -readonly [K in keyof Source & keyof Defaults]: MergeValue<Source[K], Defaults[K]>;
+    SourceShape extends AssignDefaultsInput,
+    DefaultsShape extends AssignDefaultsInput,
+  > = SourceShape extends DefaultsShape
+    ? SourceShape
+    : // eslint-disable-next-line ts/no-restricted-types -- Keep omission non-distributive so unions expose only their shared properties
+      Omit<DefaultsShape, keyof SourceShape & keyof DefaultsShape> &
+        // eslint-disable-next-line ts/no-restricted-types -- Keep omission non-distributive so unions expose only their shared properties
+        Omit<SourceShape, keyof SourceShape & keyof DefaultsShape> & {
+          -readonly [Key in keyof SourceShape & keyof DefaultsShape]: MergeValue<
+            SourceShape[Key],
+            DefaultsShape[Key]
+          >;
         };
 
   const result: Record<PropertyKey, unknown> = {...defaults};
@@ -74,13 +83,15 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
     });
   }
 
-  // eslint-disable-next-line un/no-type-assertion -- the loop above builds this very shape
+  // eslint-disable-next-line un/no-type-assertion -- The loop above builds this very shape
   return result as Prettify<
-    [SourceObjectShape<S>] extends [never]
-      ? D
+    [SourceObjectShape<Source>] extends [never]
+      ? Defaults
       : MergeShallow<
-          SourceMaybeAbsent extends true ? Partial<SourceObjectShape<S>> : SourceObjectShape<S>,
-          D
+          SourceMaybeAbsent extends true
+            ? Partial<SourceObjectShape<Source>>
+            : SourceObjectShape<Source>,
+          Defaults
         >
   >;
 };

@@ -40,7 +40,7 @@ export const startRegistry = async ({
 }) => {
   const tarballPath = `/${name}/-/${name}-${version}.tgz`;
   const dist = {
-    // eslint-disable-next-line sonar/hashing -- the packument format requires SHA-1 alongside SHA-512
+    // eslint-disable-next-line sonar/hashing -- The packument format requires SHA-1 alongside SHA-512
     shasum: crypto.createHash('sha1').update(tarball).digest('hex'),
     integrity: `sha512-${crypto.createHash('sha512').update(tarball).digest('base64')}`,
   };

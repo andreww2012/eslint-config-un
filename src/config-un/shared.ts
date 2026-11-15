@@ -141,15 +141,15 @@ type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Prettify
   }
 >;
 
-type ValueOrEslintConfigWithValue<T> =
-  | T
+type ValueOrEslintConfigWithValue<Value> =
+  | Value
   | MaybeArray<
       Prettify<
         UnFilesAndIgnoresPatterns & {
           /**
            * The value to apply to the matched files
            */
-          value?: T;
+          value?: Value;
         }
       >
     >;
@@ -1036,10 +1036,10 @@ export const processUnOrFlatConfig = (
         ruleNameUnprefixed: ruleName,
         fullRuleNameWithResolvedPrefix: ruleEntryName,
       } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
-      // eslint-disable-next-line un/no-type-assertion -- the prefix of an extra plugin is not a `PluginPrefix`, but is stored all the same
+      // eslint-disable-next-line un/no-type-assertion -- The prefix of an extra plugin is not a `PluginPrefix`, but is stored all the same
       const pluginPrefix = pluginPrefixCanonical as PluginPrefix;
 
-      // eslint-disable-next-line un/no-type-assertion -- anything but a regular rule entry is ignored below
+      // eslint-disable-next-line un/no-type-assertion -- Anything but a regular rule entry is ignored below
       const existingRuleRecord = (config as EslintFlatConfigEntry).rules?.[ruleEntryName];
 
       const rawSeverityInitial = Array.isArray(existingRuleRecord)
@@ -1051,7 +1051,7 @@ export const processUnOrFlatConfig = (
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
-      // eslint-disable-next-line unicorn/consistent-boolean-name -- fine for ergonomics
+      // eslint-disable-next-line unicorn/consistent-boolean-name -- Fine for ergonomics
       const isRuleEntryRawObject =
         ruleEntryRaw &&
         typeof ruleEntryRaw === 'object' &&
@@ -1085,8 +1085,7 @@ export const processUnOrFlatConfig = (
       });
 
       if (disableAutofix != null) {
-        const ruleNameWithDisableAutofixPrefix =
-          `${DISABLE_AUTOFIX_WITH_SLASH}${ruleEntryName}` as const;
+        const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleEntryName}`;
 
         newRuleEntries.push([
           ruleNameWithDisableAutofixPrefix,
@@ -1114,13 +1113,13 @@ export const processUnOrFlatConfig = (
         }
       }
 
-      // eslint-disable-next-line unicorn/consistent-boolean-name -- fine for ergonomics
+      // eslint-disable-next-line unicorn/consistent-boolean-name -- Fine for ergonomics
       const shouldCreateDistinctConfigForRule =
         isRuleEntryRawObject &&
         (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length || 0) > 0 &&
         config.files?.length !== 0;
       if (shouldCreateDistinctConfigForRule) {
-        /* v8 ignore next - A config an override is applied to is always named */
+        /* v8 ignore next A config an override is applied to is always named */
         const parentConfigName = config.name || '';
 
         const extraConfig: SetRequired<EslintFlatConfigEntry, 'name'> = {

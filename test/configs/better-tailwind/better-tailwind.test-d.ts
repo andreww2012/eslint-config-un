@@ -32,13 +32,13 @@ describe('`plugins.better-tailwindcss.settings`', () => {
     ({
       entryPoint: 'src/index.css',
       tailwindConfig: 'tailwind.config.js',
-      // @ts-expect-error - assertion
+      // @ts-expect-error Assertion
     }) satisfies Settings;
   });
 
   it('does not allow omitting both `entryPoint` and `tailwindConfig`', () => {
     ({
-      // @ts-expect-error - assertion
+      // @ts-expect-error Assertion
     }) satisfies Settings;
   });
 });

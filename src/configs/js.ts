@@ -156,7 +156,7 @@ export default defineUnConfig<JsEslintConfigOptions, readonly [], JsConfigResult
     .addRule('block-scoped-var', ERROR) /** @since 0.1.0 */
     .addRule('camelcase', ERROR, [
       {
-        properties: 'never' as const,
+        properties: 'never',
         ignoreGlobals: true,
         allow: [String.raw`\d_\d`],
       },

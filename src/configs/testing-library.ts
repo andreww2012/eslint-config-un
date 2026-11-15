@@ -213,7 +213,7 @@ export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary
   >;
   type SupportedModules = keyof {
     [
-      K in keyof ModuleConfigOptions as K extends `config${infer ModuleName}`
+      Key in keyof ModuleConfigOptions as Key extends `config${infer ModuleName}`
         ? Lowercase<ModuleName>
         : never
     ]: unknown;

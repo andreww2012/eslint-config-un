@@ -717,7 +717,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
       parserOptions: {
         ...(isTypescriptEnabled &&
           generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
-        sourceType: 'module' as const,
+        sourceType: 'module',
       },
     },
     entryProperties: generatePackageToLoadProperty(

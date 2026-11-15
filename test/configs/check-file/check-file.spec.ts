@@ -217,7 +217,7 @@ describe('options', () => {
 
     it('enables `check-file/filename-naming-convention` rule when provided as array', async () => {
       const CONVENTIONS = [
-        {'**/*': 'KEBAB_CASE' as const},
+        {'**/*': 'KEBAB_CASE'},
         {ignoreMiddleExtensions: true},
       ] as const satisfies NonEmptyTuple;
 
@@ -254,7 +254,7 @@ describe('options', () => {
 
     it('enables `check-file/folder-naming-convention` rule when provided as array', async () => {
       const CONVENTIONS = [
-        {'**/*': 'KEBAB_CASE' as const},
+        {'**/*': 'KEBAB_CASE'},
         {errorMessage: 'use kebab-case folders'},
       ] as const satisfies NonEmptyTuple;
 

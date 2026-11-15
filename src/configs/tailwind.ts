@@ -27,7 +27,7 @@ const DEFAULT_PLUGIN_SETTINGS = {
   ignoredKeys: ['defaultVariants', 'compoundVariants', 'compoundSlots'],
 } as const;
 
-type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
+type OverwriteOrDeriveFromDefault<Value> = Value | ((defaultValue: Value) => Value);
 
 export type TailwindPluginSettings = {
   [Key in keyof EslintPluginTailwindcssSettings]?: Key extends keyof typeof DEFAULT_PLUGIN_SETTINGS

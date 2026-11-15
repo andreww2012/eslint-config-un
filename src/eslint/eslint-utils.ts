@@ -30,7 +30,7 @@ export function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.Ru
             context.report(descriptor);
           },
         },
-      }) as Eslint.Rule.RuleContext; // eslint-disable-line un/no-type-assertion -- only `report` is replaced
+      }) as Eslint.Rule.RuleContext; // eslint-disable-line un/no-type-assertion -- Only `report` is replaced
       return rule.create(patchedContext);
     },
   };
@@ -138,13 +138,14 @@ export const getRuleSeverityFromEslintRuleEntry = (
 const FLAT_CONFIG_UN_NAME_PREFIX = 'eslint-config-un/';
 export const generateFlatConfigEntryName = (name: string, {isGlobalSetup = false} = {}) =>
   `${FLAT_CONFIG_UN_NAME_PREFIX}${isGlobalSetup ? 'global-setup/' : ''}${name}`;
-/* v8 ignore next - Every generated config is named */
+/* v8 ignore next Every generated config is named */
 export const isUnFlatConfigEntry = (flatConfigEntry: EslintFlatConfigEntry) =>
   (flatConfigEntry.name || '').startsWith(FLAT_CONFIG_UN_NAME_PREFIX);
 
 /**
  * Copies the rules, replacing the given ones with what `mapRule` returns for them.
- * Rules defined as getters, like typescript-eslint's, are mapped on first access to keep them
+ * Rules defined as getters, like the ones of `typescript-eslint`, are mapped on first access to keep
+ * them
  * lazily loaded
  */
 export const mapPluginRules = (
@@ -163,7 +164,7 @@ export const mapPluginRules = (
         get: () => {
           if (!mappedRule) {
             const rule = rules[ruleName];
-            /* v8 ignore next - The getter returns a rule */
+            /* v8 ignore next The getter returns a rule */
             mappedRule = rule && mapRule(rule);
           }
           return mappedRule;
@@ -172,7 +173,7 @@ export const mapPluginRules = (
       return;
     }
     const rule = rules[ruleName];
-    /* v8 ignore else - Only the names of existing rules are passed */
+    /* v8 ignore else Only the names of existing rules are passed */
     if (descriptor && rule) {
       descriptor.value = mapRule(rule);
     }
@@ -218,7 +219,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
     Object.entries(
-      /* v8 ignore next - A plugin whose autofixes are disabled always has rules */ plugin.rules ||
+      /* v8 ignore next A plugin whose autofixes are disabled always has rules */ plugin.rules ||
         {},
     ).flatMap(([ruleId, ruleImplementation]) =>
       ruleImplementation.meta?.fixable

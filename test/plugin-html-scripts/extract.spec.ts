@@ -229,8 +229,6 @@ describe('indent option', () => {
     });
   });
 
-  /* eslint-disable un/no-multiple-consecutive-spaces -- tabs after the spaces of the template
-  literal indentation are what these tests are about */
   it('absolute indent with tabs', () => {
     expectExtraction({
       input: `
@@ -270,7 +268,6 @@ describe('indent option', () => {
       expected: ['a;\n\ta;\na;\n'],
     });
   });
-  /* eslint-enable un/no-multiple-consecutive-spaces -- the indentation-specific test cases end here */
 });
 
 it('works with crlf new lines', () => {

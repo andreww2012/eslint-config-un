@@ -37,7 +37,7 @@ const parsePackageToCheck = (packageToCheck: PackageToCheck) => {
   };
 
   return {
-    // eslint-disable-next-line un/no-type-assertion -- the part before the version range is the package name
+    // eslint-disable-next-line un/no-type-assertion -- The part before the version range is the package name
     packageName: name as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     ...(version && {versionRangeToSatisfy: version}),
   };
@@ -108,7 +108,7 @@ function getIsConfigEnabled(
     reason ??=
       packagesList.length > 1
         ? `none of these packages is installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
-        : `package ${stylePackageName(/* v8 ignore next - The list is never empty here */ packagesList[0]?.packageName || '')} is not installed`;
+        : `package ${stylePackageName(/* v8 ignore next The list is never empty here */ packagesList[0]?.packageName || '')} is not installed`;
   }
 
   if (preCondition) {
@@ -227,7 +227,7 @@ export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
   this: UnConfigContext,
   pluginPrefix: Plugin,
 ) {
-  // eslint-disable-next-line un/no-type-assertion -- picks out this plugin's settings, and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
+  // eslint-disable-next-line un/no-type-assertion -- Picks out this plugin's settings, and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
   const pluginOptions = this.rootOptions.plugins?.[pluginPrefix] as
     | {settings?: Prettify<PluginSettingsMap[Plugin]>}
     | undefined;
@@ -258,7 +258,7 @@ export const savePackagesToLoadFromConfig = (
         return;
       }
 
-      // eslint-disable-next-line un/no-type-assertion -- nothing else is stored under this symbol
+      // eslint-disable-next-line un/no-type-assertion -- Nothing else is stored under this symbol
       const info = value as PackageToLoadInfo;
       arrayify(info.package).forEach((packageId) => {
         mapGetOrInsert(context.usedPackages, packageId, []).push({

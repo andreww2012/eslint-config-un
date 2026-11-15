@@ -137,7 +137,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      // eslint-disable-next-line no-template-curly-in-string, un/no-multiple-consecutive-spaces -- snapshot
+      // eslint-disable-next-line no-template-curly-in-string, un/no-multiple-consecutive-spaces -- Snapshot
       '"Expressions must not be quoted inside templates  (e.g. `foo="${bar}"`)"',
     );
   });

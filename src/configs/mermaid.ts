@@ -75,7 +75,10 @@ export default defineUnConfig<MermaidEslintConfigOptions>('mermaid', {
     .addRule('class-no-ignored-text', ERROR) /** @since 0.1.0 */
     .addRule('class-no-inline-comment', ERROR) /** @since 0.1.0 */ // 🔴
     .addRule('class-no-redefined-class', ERROR) /** @since 0.1.0 */
-    .addRule('class-no-unclosed-backquote', ERROR) /** @since 0.1.0 */ // cspell:disable-line
+    .addRule(
+      'class-no-unclosed-backquote', // cspell:disable-line
+      ERROR,
+    ) /** @since 0.1.0 */
     .addRule('class-no-undef', ERROR) /** @since 0.1.0 */
     .addRule('cynefin-no-duplicate-description', ERROR) /** @since 0.1.0 */
     .addRule('cynefin-no-duplicate-title', ERROR) /** @since 0.1.0 */

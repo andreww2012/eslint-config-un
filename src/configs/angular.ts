@@ -13,7 +13,7 @@ import {
   defineUnConfig,
 } from './index';
 
-type PartialObjectsOnly<T> = T extends readonly unknown[] ? T : Partial<T>;
+type PartialObjectsOnly<Value> = Value extends readonly unknown[] ? Value : Partial<Value>;
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22] as const;
@@ -313,7 +313,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
   // ♿ - in accessibility (latest version)
   // 🌐 - i18n related rules
   // 🔴 - deprecated
-  // eslint-disable-next-line no-secrets/no-secrets -- false positive
+  // eslint-disable-next-line no-secrets/no-secrets -- False positive
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
   const [angularEslintPlugin, angularTemplateEslintPlugin] = await Promise.all([

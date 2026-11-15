@@ -5,7 +5,7 @@ export {getRuleSeverityFromEslintRuleEntry} from '../../src/eslint/eslint-utils'
 
 export const getAllRulesSeverities = (
   config: Nullable<EslintFlatConfigEntry>,
-  // eslint-disable-next-line unicorn/consistent-boolean-name -- fine
+  // eslint-disable-next-line unicorn/consistent-boolean-name -- Fine
   ruleFilter?: (ruleName: string) => boolean,
 ) =>
   // TODO `e18e/prefer-array-to-sorted` shouldn't trigger here - report

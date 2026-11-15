@@ -15,7 +15,7 @@ import {
 const setPluginRuleSchemas = <Plugin extends EslintPlugin>(plugin: Plugin): Plugin => ({
   ...plugin,
   rules: mapValues(
-    /* v8 ignore next -- every plugin passed here has rules */ plugin.rules || {},
+    /* v8 ignore next Every plugin passed here has rules */ plugin.rules || {},
     (rule) => ({
       ...rule,
       meta: {
@@ -29,14 +29,14 @@ const setPluginRuleSchemas = <Plugin extends EslintPlugin>(plugin: Plugin): Plug
 
 // The `typescript-eslint` typings of a plugin fail `@eslint/core`'s, but describe the same object
 export const castTsEslintTypedPlugin = (plugin: PluginTypedByEslintCoreOrTsEslint) =>
-  // eslint-disable-next-line un/no-type-assertion -- intentional cast
+  // eslint-disable-next-line un/no-type-assertion -- Intentional cast
   plugin as EslintPlugin;
 
-/* v8 ignore next - The preset always contains the requested plugin */
+/* v8 ignore next The preset always contains the requested plugin */
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
     (module) =>
-      // eslint-disable-next-line un/no-type-assertion -- the preset declares the plugins it uses
+      // eslint-disable-next-line un/no-type-assertion -- The preset declares the plugins it uses
       (module.default.configs.all as {plugins: Record<string, EslintPlugin>}).plugins[pluginName] ||
       null,
   );
@@ -74,7 +74,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-awscdk'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'barrel-files': generateModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
@@ -94,7 +94,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-case-police'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'check-file': generateModuleLoader('check-file', 'eslint-plugin-check-file', () =>
@@ -109,7 +109,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-clsx'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   command: generateModuleLoader('command', 'eslint-plugin-command', () =>
@@ -128,7 +128,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-css'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   cssicorn: generateModuleLoader('cssicorn', 'eslint-cssicorn', () =>
@@ -147,10 +147,10 @@ export const pluginsLoaders = {
     'docusaurus',
     '@docusaurus/eslint-plugin',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@docusaurus/eslint-plugin'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   drizzle: generateModuleLoader('drizzle', 'eslint-plugin-drizzle', () =>
@@ -166,10 +166,10 @@ export const pluginsLoaders = {
     'erasable-syntax-only',
     'eslint-plugin-erasable-syntax-only',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('eslint-plugin-erasable-syntax-only'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   es: generateModuleLoader('es', 'eslint-plugin-es-x', () =>
@@ -190,10 +190,10 @@ export const pluginsLoaders = {
     'expect-type',
     'eslint-plugin-expect-type',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('eslint-plugin-expect-type'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   expo: generateModuleLoader('expo', 'eslint-plugin-expo', () =>
@@ -221,7 +221,7 @@ export const pluginsLoaders = {
     >,
     '@graphql-eslint/eslint-plugin'
   >('graphql', '@graphql-eslint/eslint-plugin', () =>
-    // @ts-expect-error types mismatch
+    // @ts-expect-error Types mismatch
     interopDefault(import('@graphql-eslint/eslint-plugin')),
   ),
   header: generateModuleLoader('header', 'eslint-plugin-header', () =>
@@ -316,7 +316,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-math'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   mdx: generateModuleLoader('mdx', 'eslint-plugin-mdx', () =>
@@ -374,10 +374,10 @@ export const pluginsLoaders = {
     'nx',
     '@nx/eslint-plugin',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@nx/eslint-plugin'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'package-json': generateModuleLoader('package-json', 'eslint-plugin-package-json', () =>
@@ -392,7 +392,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-pinia'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   playwright: generateModuleLoader('playwright', 'eslint-plugin-playwright', () =>
@@ -427,7 +427,7 @@ export const pluginsLoaders = {
     () =>
       interopDefault(
         import('eslint-plugin-react-hooks'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'react-refresh': generateModuleLoader('react-refresh', 'eslint-plugin-react-refresh', () =>
@@ -445,10 +445,10 @@ export const pluginsLoaders = {
     'remeda',
     'eslint-plugin-remeda',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('eslint-plugin-remeda'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   rxjs: generateModuleLoader('rxjs', '@smarttools/eslint-plugin-rxjs', () =>
@@ -481,13 +481,14 @@ export const pluginsLoaders = {
     'storybook',
     'eslint-plugin-storybook',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('eslint-plugin-storybook'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue:
+  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by
+  // `eslint-plugin-vue`:
   // https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113
   // and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see
   // https://github.com/nodejs/node/issues/54577
@@ -508,30 +509,30 @@ export const pluginsLoaders = {
     'tanstack-query',
     '@tanstack/eslint-plugin-query',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@tanstack/eslint-plugin-query'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'tanstack-router': generateModuleLoader(
     'tanstack-router',
     '@tanstack/eslint-plugin-router',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@tanstack/eslint-plugin-router'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'tanstack-start': generateModuleLoader(
     'tanstack-start',
     '@tanstack/eslint-plugin-start',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@tanstack/eslint-plugin-start'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'testing-library': generateModuleLoader('testing-library', 'eslint-plugin-testing-library', () =>
@@ -571,10 +572,10 @@ export const pluginsLoaders = {
     'unocss',
     '@unocss/eslint-plugin',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@unocss/eslint-plugin'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'unused-imports': generateModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
@@ -584,10 +585,10 @@ export const pluginsLoaders = {
     'valibot',
     'eslint-plugin-valibot',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('eslint-plugin-valibot'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   vitest: generateInferredModuleLoader('vitest', '@vitest/eslint-plugin', () =>
@@ -600,10 +601,10 @@ export const pluginsLoaders = {
     'vue-i18n',
     '@intlify/eslint-plugin-vue-i18n',
     () =>
-      // @ts-expect-error types mismatch
+      // @ts-expect-error Types mismatch
       interopDefault(
         import('@intlify/eslint-plugin-vue-i18n'),
-        // @ts-expect-error types mismatch
+        // @ts-expect-error Types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'vue-scoped-css': generateModuleLoader('vue-scoped-css', 'eslint-plugin-vue-scoped-css', () =>
