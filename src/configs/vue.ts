@@ -18,6 +18,7 @@ import {
   allUnionMembers,
   arrayUnique,
   getKeysOfTruthyValues,
+  isVersionAtLeast,
   joinPaths,
   mergeArrayOrBooleanRecords,
   objectFromKeys,
@@ -666,16 +667,16 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     );
   }
 
-  const vuePackageFullVersion: number = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
+  const vueMajorAndMinorVersion = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
 
   const isVue2 = vueMajorVersion === 2;
   const isVue3 = vueMajorVersion === 3;
-  const isMin3_3 = isVue3 && vuePackageFullVersion >= 3.3;
-  const isMin3_4 = isVue3 && vuePackageFullVersion >= 3.4;
-  const isMin3_5 = isVue3 && vuePackageFullVersion >= 3.5;
-  const isLess2_5 = isVue2 && vuePackageFullVersion < 2.5;
-  const isLess2_6 = isVue2 && vuePackageFullVersion < 2.6;
-  const isLess3_1 = vuePackageFullVersion < 3.1;
+  const isMin3_3 = isVue3 && isVersionAtLeast(vueMajorAndMinorVersion, '3.3');
+  const isMin3_4 = isVue3 && isVersionAtLeast(vueMajorAndMinorVersion, '3.4');
+  const isMin3_5 = isVue3 && isVersionAtLeast(vueMajorAndMinorVersion, '3.5');
+  const isLess2_5 = isVue2 && !isVersionAtLeast(vueMajorAndMinorVersion, '2.5');
+  const isLess2_6 = isVue2 && !isVersionAtLeast(vueMajorAndMinorVersion, '2.6');
+  const isLess3_1 = !isVersionAtLeast(vueMajorAndMinorVersion, '3.1');
 
   optionsResolved.preferUseTemplateRef ??= isMin3_5;
   const {preferUseTemplateRef} = optionsResolved;
@@ -1053,7 +1054,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
     // TODO enable if script setup is enforced and only in JS?
     .addRule('no-undef-properties', OFF) /** @since 7.20.0 */
     .addRule('no-unsupported-features', ERROR, [
-      {version: `^${vuePackageFullVersion}`},
+      {version: `^${vueMajorAndMinorVersion}`},
     ]) /** @since 6.1.0 */
     .addRule('no-unused-emit-declarations', ERROR) /** @since 9.19.0 */
     .addRule('no-unused-properties', ERROR) /** @since 7.0.0 */

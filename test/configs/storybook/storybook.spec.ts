@@ -150,6 +150,16 @@ describe('rules', async () => {
         configResult.getRuleEntrySeverity('storybook', 'storybook/meta-satisfies-type'),
       ).not.toBe(0);
     });
+
+    it('enables `storybook/meta-satisfies-type` if `typescript` minor version has two digits', async () => {
+      addInstalledPackages({typescript: '4.10.0'});
+
+      const configResult = await computeEslintConfig('storybook');
+
+      expect(
+        configResult.getRuleEntrySeverity('storybook', 'storybook/meta-satisfies-type'),
+      ).not.toBe(0);
+    });
   });
 });
 

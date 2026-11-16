@@ -15,6 +15,8 @@ type PackageDetectionModule = typeof import('../../src/utils/package-detection')
  */
 const installedPackages = new Map<string, string>();
 
+const MAJOR_AND_MINOR_VERSION_REGEXP = /^\d+(?:\.\d+)?/;
+
 export const addInstalledPackages = (packages: Record<string, string>) => {
   Object.entries(packages).forEach(([packageName, version]) => {
     installedPackages.set(packageName, version);
@@ -34,10 +36,7 @@ const fetchPackageInfo: PackageDetectionModule['fetchPackageInfo'] = (packageNam
 
   const majorVersionRaw = Number.parseInt(version, 10);
   const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
-  const majorAndMinorVersionRaw = Number.parseFloat(version);
-  const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
-    ? null
-    : majorAndMinorVersionRaw;
+  const majorAndMinorVersion = MAJOR_AND_MINOR_VERSION_REGEXP.exec(version)?.[0] ?? null;
   return Promise.resolve({
     info: {name: packageName, version},
     versions: {full: version, major: majorVersion, majorAndMinor: majorAndMinorVersion},

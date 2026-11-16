@@ -12,6 +12,7 @@ import {
   objectFromKeys,
 } from 'utilery';
 import {readFileSafe} from 'utilery/server';
+import {coerce, satisfies} from 'verkit';
 import type {Falsy, Nullable} from './types';
 
 export {
@@ -180,6 +181,14 @@ export const sha256 = (input: string | Buffer) => {
 // eslint-disable-next-line ts/no-redundant-type-constituents -- False positive
 export const joinPaths = (...paths: readonly (string | Falsy)[]) =>
   path.posix.join(...arrayWithoutFalsy(paths));
+
+/**
+ * Whether the version is at least the minimum one
+ */
+export const isVersionAtLeast = (version: number | string, minimumVersion: string) => {
+  const versionCoerced = coerce(String(version));
+  return versionCoerced != null && satisfies(versionCoerced, `>=${minimumVersion}`);
+};
 
 export const readAndParseJson = async <Result>(
   filePath: string | URL | undefined,

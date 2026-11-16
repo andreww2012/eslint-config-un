@@ -5,6 +5,7 @@ import {
   findArrayInversions,
   getKeysOfTruthyValues,
   isNonEmptyArray,
+  isVersionAtLeast,
   readAndParseJson,
   styleRuleName,
   styleText,
@@ -119,6 +120,32 @@ describe('isNonEmptyArray', () => {
 
   it('returns `false` for `null`', () => {
     expect(isNonEmptyArray(null)).toBe(false);
+  });
+});
+
+describe('isVersionAtLeast', () => {
+  it('compares a minor version of 10 or more as a number, not as a decimal fraction', () => {
+    expect(isVersionAtLeast('5.10', '5.9')).toBe(true);
+    expect(isVersionAtLeast('5.9', '5.10')).toBe(false);
+  });
+
+  it('reads a number as a major and a minor version', () => {
+    expect(isVersionAtLeast(3.46, '3.46')).toBe(true);
+    expect(isVersionAtLeast(3.5, '3.46')).toBe(false);
+  });
+
+  it('accepts versions without the minor or patch numbers', () => {
+    expect(isVersionAtLeast(5, '5')).toBe(true);
+    expect(isVersionAtLeast('5', '5.1')).toBe(false);
+    expect(isVersionAtLeast('5.1.2', '5.1')).toBe(true);
+  });
+
+  it('ignores the prerelease part of the version', () => {
+    expect(isVersionAtLeast('5.9.0-beta', '5.9')).toBe(true);
+  });
+
+  it('returns `false` for a version that is not one', () => {
+    expect(isVersionAtLeast('latest', '1')).toBe(false);
   });
 });
 

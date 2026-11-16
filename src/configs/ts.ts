@@ -20,6 +20,7 @@ import {
   arrayUnion,
   arrayUnique,
   isKeyIn,
+  isVersionAtLeast,
   maybeCall,
   omit,
 } from '../utils';
@@ -614,8 +615,6 @@ export default defineUnConfig<
   const vueResolvedOptions = vue?.optionsResolved || null;
   const svelteResolvedOptions = svelte?.optionsResolved || null;
 
-  const typescriptPackageInfo = context.packagesInfo.typescript;
-
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
     configDisableNoUnsafe: false,
@@ -627,17 +626,17 @@ export default defineUnConfig<
     ].filter((value) => value !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   });
-  optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
     configTypeAware,
     configDisableNoUnsafe,
     configSortTsconfigKeys,
     extraFileExtensions,
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
-    typescriptVersion,
     allowDefaultProject,
     extraVariableTypesToRemove,
   } = optionsResolved;
+  const typescriptVersion =
+    optionsResolved.typescriptVersion ?? context.packagesInfo.typescript?.versions.majorAndMinor;
 
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
@@ -945,7 +944,8 @@ export default defineUnConfig<
     .markCategory('Additional rules')
     .addRule('consistent-type-imports', ERROR, [
       {
-        ...(typescriptVersion && typescriptVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
+        ...(typescriptVersion != null &&
+          isVersionAtLeast(typescriptVersion, '4.5') && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
     ]) /** @since 4.0.0 */

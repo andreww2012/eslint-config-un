@@ -109,7 +109,18 @@ describe('fetchPackageInfo', () => {
     expect(packageInfo?.info.name).toBe('verkit');
     expect(packageInfo?.versions.full).toBeString();
     expect(packageInfo?.versions.major).toBeNumber();
-    expect(packageInfo?.versions.majorAndMinor).toBeNumber();
+    expect(packageInfo?.versions.majorAndMinor).toBeString();
+  });
+
+  it('keeps a minor version of 10 or more intact', async () => {
+    const packageName = 'this-package-has-a-two-digit-minor-version';
+    await stubProjectWithPackage(packageName, '5.10.2');
+
+    expect((await fetchPackageInfo(packageName))?.versions).toStrictEqual({
+      full: '5.10.2',
+      major: 5,
+      majorAndMinor: '5.10',
+    });
   });
 
   it('resolves a scoped package', async () => {

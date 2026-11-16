@@ -4,7 +4,7 @@ import {ERROR, GLOB_SVELTE, GLOB_SVELTE_SCRIPT, OFF, WARNING} from '../constants
 import type {EslintSeverity} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
-import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
+import {arrayIncludes, getKeysOfTruthyValues, isVersionAtLeast} from '../utils';
 import {
   generateUseBaselineRuleOptions,
   noRestrictedHtmlElementsDefault,
@@ -214,8 +214,6 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     configHtml: true,
     configKitAppTemplate:
       context.configsMeta.html.enabled && context.packagesInfo['@sveltejs/kit'] != null,
-    svelteVersion:
-      context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
   });
   const svelteRulesFiles = resolveFilesOption(optionsResolved.files, [
@@ -236,10 +234,13 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     configHtml,
     configKitAppTemplate,
     svelteKitConfig,
-    svelteVersion,
     isPrettierPluginSvelteUsed,
     reportUnusedDisableDirectives,
   } = optionsResolved;
+  const svelteVersion =
+    optionsResolved.svelteVersion ??
+    context.packagesInfo.svelte?.versions.majorAndMinor ??
+    LATEST_SVELTE_MAJOR_VERSION;
 
   if (
     !isPrettierPluginSvelteInstalled &&
@@ -414,8 +415,14 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     .addRule('prefer-attribute-interpolation', ERROR) /** @since 3.23.0 */ // 💅
     .addRule('prefer-class-directive', ERROR) /** @since 0.0.1 */
     // "Style directive were added in Svelte v3.46"
-    .addRule('prefer-style-directive', svelteVersion >= 3.46 ? WARNING : OFF) /** @since 0.22.0 */
-    .addRule('require-event-prefix', svelteVersion >= 5 ? ERROR : OFF) /** @since 3.6.0 */ // 💅
+    .addRule(
+      'prefer-style-directive',
+      isVersionAtLeast(svelteVersion, '3.46') ? WARNING : OFF,
+    ) /** @since 0.22.0 */
+    .addRule(
+      'require-event-prefix',
+      isVersionAtLeast(svelteVersion, '5') ? ERROR : OFF,
+    ) /** @since 3.6.0 */ // 💅
     .addRule('shorthand-attribute', ERROR) /** @since 0.5.0 */ // 💅
     .addRule('shorthand-directive', ERROR) /** @since 0.24.0 */ // 💅
     .addRule('sort-attributes', ERROR) /** @since 2.4.0 */

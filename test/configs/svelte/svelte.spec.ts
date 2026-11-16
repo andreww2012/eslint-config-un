@@ -224,6 +224,20 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
     });
 
+    it('disables `svelte/prefer-style-directive` rule when set to a minor version below 46 with fewer digits', async () => {
+      const configResult = await computeEslintConfig({svelte: {svelteVersion: 3.5}});
+
+      expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
+    });
+
+    it('disables `svelte/prefer-style-directive` rule when installed `svelte` minor version is below 46 but has fewer digits', async () => {
+      setInstalledPackages({svelte: '3.5.0'});
+
+      const configResult = await computeEslintConfig('svelte');
+
+      expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
+    });
+
     it('disables `svelte/prefer-style-directive` rule by default when installed `svelte` version is < 3.46', async () => {
       setInstalledPackages({svelte: '3'});
 

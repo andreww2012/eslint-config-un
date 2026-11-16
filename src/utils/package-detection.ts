@@ -25,6 +25,8 @@ import {
   readFileSafe,
 } from '../utils';
 
+const MAJOR_AND_MINOR_VERSION_REGEXP = /^\d+(?:\.\d+)?/;
+
 // Yarn PnP has no `node_modules` for `import-meta-resolve` to traverse
 // eslint-disable-next-line ts/no-unsafe-assignment -- `pnpapi` has no bundled types
 const pnpApi: {resolveToUnqualified: (request: string, issuer: string) => string | null} | null =
@@ -118,11 +120,9 @@ const readPackageInfo = async (packageJsonPath: Nullable<string | URL>) => {
   /* v8 ignore next */
   const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
 
-  const majorAndMinorVersionRaw = Number.parseFloat(fullVersion);
+  // A string, as a number can't tell minor version 10 from 1
   /* v8 ignore next */
-  const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
-    ? null
-    : majorAndMinorVersionRaw;
+  const majorAndMinorVersion = MAJOR_AND_MINOR_VERSION_REGEXP.exec(fullVersion)?.[0] ?? null;
 
   return {
     info: packageInfo,

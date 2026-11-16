@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {isVersionAtLeast} from '../utils';
 import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
@@ -21,7 +22,7 @@ export default defineUnConfig<StorybookEslintConfigOptions>('storybook', {
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const typescriptVersion = context.packagesInfo.typescript?.versions.majorAndMinor || 0;
+  const typescriptVersion = context.packagesInfo.typescript?.versions.majorAndMinor;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'storybook');
 
@@ -48,7 +49,10 @@ export default defineUnConfig<StorybookEslintConfigOptions>('storybook', {
     .addRule('default-exports', ERROR) /** @since 0.0.1-alpha.0 */ // 🟢🩷
     .addRule('hierarchy-separator', ERROR) /** @since 0.0.1-alpha.0 */ // 🟡🩷
     .addRule('meta-inline-properties', WARNING) /** @since 0.0.1-alpha.0 */
-    .addRule('meta-satisfies-type', typescriptVersion >= 4.9 ? WARNING : OFF) /** @since 0.12.0 */
+    .addRule(
+      'meta-satisfies-type',
+      typescriptVersion != null && isVersionAtLeast(typescriptVersion, '4.9') ? WARNING : OFF,
+    ) /** @since 0.12.0 */
     .addRule('no-redundant-story-name', ERROR) /** @since 0.0.1-alpha.0 */ // 🟡🩷
     .addRule('no-renderer-packages', ERROR) /** @since 0.13.0--canary.f263fb3.0 */ // 🟢
     .addRule('no-stories-of', ERROR) /** @since 0.0.1-alpha.0 */ // ❤️
