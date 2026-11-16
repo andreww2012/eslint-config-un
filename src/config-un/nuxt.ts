@@ -40,9 +40,9 @@ const extractDeclaredNames = (regex: RegExp, source: string | null) =>
 const relativeDirectoryWithin = (from: string, to: string) => {
   const relativePath = path.relative(from, to);
   // No ESLint pattern can reach outside the directory it is resolved against
-  return relativePath.startsWith('..') || path.isAbsolute(relativePath)
-    ? null
-    : toForwardSlashes(relativePath);
+  return relativePath.length === 0 || isSafeRelativePath(relativePath)
+    ? toForwardSlashes(relativePath)
+    : null;
 };
 
 type NuxtComponentsOption =

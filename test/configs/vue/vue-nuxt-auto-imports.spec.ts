@@ -7,6 +7,7 @@ import type {
   NuxtLayerDirectories,
   resolveNuxtAutoImports,
 } from '../../../src/config-un/nuxt';
+import {writeJsonFile} from '../../../src/utils';
 import {SHARED_STORE_PACKAGE_JSON_PATH} from '../../helpers/shared-store';
 
 const FIXTURES = {
@@ -66,10 +67,11 @@ const createNuxtProject = async (nuxtKitSource?: string) => {
     const nuxtDirectory = path.join(projectDirectory, 'node_modules', 'nuxt');
     await fs.mkdir(nuxtDirectory, {recursive: true});
     await Promise.all([
-      fs.writeFile(
-        path.join(nuxtDirectory, 'package.json'),
-        JSON.stringify({name: 'nuxt', type: 'module', exports: {'./kit': './kit.js'}}),
-      ),
+      writeJsonFile(path.join(nuxtDirectory, 'package.json'), {
+        name: 'nuxt',
+        type: 'module',
+        exports: {'./kit': './kit.js'},
+      }),
       fs.writeFile(path.join(nuxtDirectory, 'kit.js'), nuxtKitSource),
     ]);
   }
@@ -585,6 +587,25 @@ describe('vue: `resolveNuxtAutoImports`', () => {
     const result = await resolveFromFixture({cwd: projectDirectory});
 
     expect(result?.layers?.map((layer) => layer.app)).toStrictEqual(['']);
+  });
+
+  it('keeps the layers in directories whose names start with two dots', async () => {
+    // Nuxt reports the real path of a layer, which differs where the temporary directory is a
+    // symbolic link, like on macOS
+    const projectDirectory = await fs.realpath(await createNuxtProject());
+    const layerDirectory = path.join(projectDirectory, '..layer');
+    await fs.mkdir(layerDirectory);
+    await Promise.all([
+      fs.writeFile(path.join(layerDirectory, 'nuxt.config.ts'), 'export default {};\n'),
+      fs.writeFile(
+        path.join(projectDirectory, 'nuxt.config.ts'),
+        "export default {extends: ['./..layer']};\n",
+      ),
+    ]);
+
+    const result = await resolveFromFixture({cwd: projectDirectory});
+
+    expect(result?.layers?.map((layer) => layer.app)).toStrictEqual(['', '..layer']);
   });
 
   it('collects the component directories the way Nuxt does', async () => {
