@@ -23,6 +23,8 @@ ruleTester.run(RULE_NAME, vueNoLeadingTextWhitespace, {
       '<p>\n  <i></i>\n  Loading...</p>',
       '<p>{{ label }}<i v-if="isShown"> (optional)</i></p>',
       '<p><i></i><b>\n  Loading...</b></p>',
+      '<p>Total:<span><b> 5</b></span></p>',
+      '<p>Total:<span><template v-if="isShown">\n  <!-- Comment -->\n  <b> 5</b></template></span></p>',
       '<p>&#32;Loading...</p>',
       '<pre>\n  Loading...</pre>',
       '<pre><b>\n  Loading...</b></pre>',
@@ -41,11 +43,21 @@ ruleTester.run(RULE_NAME, vueNoLeadingTextWhitespace, {
         output: '<div>\n  <p>Done.</p>\n  <p>You can close the window.</p>\n</div>',
       },
       {template: '<p>Total: <b> 5</b></p>', output: '<p>Total: <b>5</b></p>'},
+      {
+        template: '<p>Total: <span>\n  <b> 5</b></span></p>',
+        output: '<p>Total: <span>\n  <b>5</b></span></p>',
+      },
     ].map(({template, output}) => ({
       ...toTestCase(template),
       output: toTestCase(output).code,
       errors: [{messageId: 'leading'}],
     })),
+    {
+      code: '<script setup></script><template><span><b> 5</b></span></template>',
+      output: '<script setup></script><template><span><b>5</b></span></template>',
+      filename: 'component.vue',
+      errors: [{messageId: 'leading'}],
+    },
     {
       ...toTestCase('<code-block>\n  Loading...</code-block>'),
       output: toTestCase('<code-block>Loading...</code-block>').code,

@@ -3,8 +3,13 @@ import type {JSONSchema4} from 'json-schema';
 import type {AST} from 'vue-eslint-parser';
 import {toKebabCase} from '../utils';
 
+export type ElementChild = AST.VElement['children'][number];
+
 // Vue keeps the whitespace inside these as written
 const PREFORMATTED_ELEMENT_NAMES: ReadonlySet<string> = new Set(['pre', 'textarea']);
+
+// Vue treats only these characters as whitespace
+const WHITESPACE_ONLY_REGEX = /^[\t\n\f\r ]*$/;
 
 export const IGNORED_ELEMENTS_OPTION_SCHEMA = {
   type: 'array',
@@ -13,6 +18,9 @@ export const IGNORED_ELEMENTS_OPTION_SCHEMA = {
   },
   uniqueItems: true,
 } as const satisfies JSONSchema4;
+
+export const isWhitespaceOnly = (node: ElementChild) =>
+  node.type === 'VText' && WHITESPACE_ONLY_REGEX.test(node.value);
 
 export const defineElementVisitor = (
   context: Eslint.Rule.RuleContext,

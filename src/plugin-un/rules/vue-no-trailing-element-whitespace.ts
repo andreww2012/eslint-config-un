@@ -1,8 +1,12 @@
 import type * as Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
-import type {AST} from 'vue-eslint-parser';
-import {IGNORED_ELEMENTS_OPTION_SCHEMA, defineElementVisitor} from '../vue-template';
+import {
+  type ElementChild,
+  IGNORED_ELEMENTS_OPTION_SCHEMA,
+  defineElementVisitor,
+  isWhitespaceOnly,
+} from '../vue-template';
 
 const RULE_OPTIONS_SCHEMA = {
   type: 'object',
@@ -17,20 +21,13 @@ const RULE_OPTIONS_SCHEMA = {
 
 type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
-type ElementChild = AST.VElement['children'][number];
-
-// Vue treats only these characters as whitespace
-const WHITESPACE_ONLY_REGEX = /^[\t\n\f\r ]*$/;
-// The source of joined text still has the comments
+// Vue treats only these characters as whitespace. The source of joined text still has the comments
 const TRAILING_WHITESPACE_REGEX =
   /(?<![\t\n\f\r ])[\t\n\f\r ](?:[\t\n\f\r ]|<!--(?:(?!-->)[\s\S])*-->)*$/;
 const NEWLINE_REGEX = /[\n\r]/;
 
 // Elements with these directives may render nothing or be hidden
 const OPTIONAL_ELEMENT_DIRECTIVES: ReadonlySet<string> = new Set(['else-if', 'for', 'if', 'show']);
-
-const isWhitespaceOnly = (node: ElementChild) =>
-  node.type === 'VText' && WHITESPACE_ONLY_REGEX.test(node.value);
 
 const isOptionalElement = (node: ElementChild) =>
   node.type === 'VElement' &&

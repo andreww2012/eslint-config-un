@@ -2,7 +2,11 @@ import type * as Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {AST} from 'vue-eslint-parser';
-import {IGNORED_ELEMENTS_OPTION_SCHEMA, defineElementVisitor} from '../vue-template';
+import {
+  IGNORED_ELEMENTS_OPTION_SCHEMA,
+  defineElementVisitor,
+  isWhitespaceOnly,
+} from '../vue-template';
 
 const RULE_OPTIONS_SCHEMA = {
   type: 'object',
@@ -43,13 +47,21 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
     const getText = (node: AST.HasLocation) => sourceCode.text.slice(...node.range);
 
     // The whitespace at the start of such an element is what separates its text from that content
-    const isRightAfterContent = (element: AST.VElement) => {
-      const siblings = element.parent.children;
-      const previous = siblings[siblings.indexOf(element) - 1];
-      return (
-        previous != null &&
-        (previous.type !== 'VText' || !ENDING_WHITESPACE_REGEX.test(getText(previous)))
-      );
+    const isRightAfterContent = (element: AST.VElement): boolean => {
+      const {parent} = element;
+      // The content before the component is in the templates that use it
+      if (parent.type !== 'VElement') {
+        return false;
+      }
+
+      const index = parent.children.indexOf(element);
+      // Vue drops the whitespace at the start of an element, so the text starts where the parent does
+      if (parent.children.slice(0, index).every(isWhitespaceOnly)) {
+        return isRightAfterContent(parent);
+      }
+
+      const previous = parent.children[index - 1];
+      return previous?.type !== 'VText' || !ENDING_WHITESPACE_REGEX.test(getText(previous));
     };
 
     return defineElementVisitor(context, options?.ignoredElements, (element) => {
