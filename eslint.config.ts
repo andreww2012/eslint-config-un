@@ -270,7 +270,14 @@ export default eslintConfig({
     },
     {
       name: 'forbid-utility-package-imports',
-      ignores: ['src/utils.ts', 'src/types.ts', 'scripts/**'],
+      ignores: [
+        'src/utils.ts',
+        'src/types.ts',
+        'scripts/**',
+        // Vite's config loader warns about the imports without file extensions if utilities
+        // were imported from the shared files above
+        'vitest.config.ts',
+      ],
       rules: {
         'no-restricted-imports': [
           2,

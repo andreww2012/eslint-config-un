@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {toForwardSlashes} from 'utilery/path';
 import {configDefaults, defineConfig} from 'vitest/config';
 
 const exclude = [
@@ -17,7 +18,7 @@ const isolatedTestFiles = fs
   .globSync('test/**/*.{test,spec}.ts', {exclude})
   .filter((filePath) => CODE_NEEDING_ISOLATION_REGEXP.test(fs.readFileSync(filePath, 'utf8')))
   // Globs only use forward slashes
-  .map((filePath) => filePath.replaceAll('\\', '/'));
+  .map((filePath) => toForwardSlashes(filePath));
 
 export default defineConfig({
   test: {

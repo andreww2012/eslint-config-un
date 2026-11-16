@@ -7,9 +7,11 @@ import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
 import type {Ms, Prettify, SetFieldType} from '../types';
 import {
+  arrayWithoutFalsy,
   exec,
   isObject,
   isPlainObject,
+  mapMapValues,
   omit,
   readAndParseJson,
   readFileSafe,
@@ -173,23 +175,19 @@ export const saveCacheToFs = async (
     key: cacheKeyHash,
     ...cacheData,
     packageRequesters: Object.fromEntries(
-      Array.from(cacheData.packageRequesters, ([packageName, requesters]) => [
-        packageName,
-        [...requesters],
-      ]),
+      mapMapValues(cacheData.packageRequesters, (requesters) => [...requesters]),
     ),
     usedParsers: Object.fromEntries(cacheData.usedParsers),
     usedPackages: Object.fromEntries(
-      Array.from(cacheData.usedPackages, ([packageId, entries]) => [
-        packageId,
+      mapMapValues(cacheData.usedPackages, (entries) =>
         entries.map((info) => ({
           ...omit(info, ['valueTransformFn', 'path']),
-          property: [info.path, info.property].filter(Boolean).join('.'),
+          property: arrayWithoutFalsy([info.path, info.property]).join('.'),
           ...(info.valueTransformFn && {
             valueTransformFn: [info.valueTransformFn.fn.toString(), info.valueTransformFn.scope],
           }),
         })),
-      ]),
+      ),
     ),
   };
 
@@ -204,10 +202,7 @@ export const saveCacheToFs = async (
   const unserializablePaths: (readonly [path: readonly PropertyKey[], value: unknown])[] = [];
   traverseForEach(dataToStore.configs, ({path: valuePath}, value: unknown) => {
     const isUnserializable =
-      typeof value === 'function' ||
-      (isObject(value) &&
-        // eslint-disable-next-line ts/no-unnecessary-condition -- Doesn't change the type, but performs additional checks
-        !isPlainObject(value));
+      typeof value === 'function' || (isObject(value) && !isPlainObject(value));
     if (isUnserializable) {
       unserializablePaths.push([valuePath, value]);
     }

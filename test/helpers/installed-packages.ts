@@ -1,3 +1,5 @@
+import type {ReturnTypeAwaited} from '../../src/types';
+
 type PackageDetectionModule = typeof import('../../src/utils/package-detection');
 
 /**
@@ -57,7 +59,7 @@ export const mockPackageDetection = (
     // eslint-disable-next-line un/no-type-assertion -- The entries cover every package
     return Object.fromEntries(entries) as Record<
       (typeof packageNames)[number],
-      Awaited<ReturnType<typeof fetchPackageInfo>>
+      ReturnTypeAwaited<typeof fetchPackageInfo>
     >;
   },
 });

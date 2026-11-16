@@ -38,6 +38,8 @@ import {
 import type {ObjectValues} from '../types';
 import {
   type MaybeArray,
+  arrayIsSubset,
+  arrayUnion,
   arrayUnique,
   arrayify,
   isObject,
@@ -798,14 +800,14 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
       resultConfigs.push(config);
 
       entry.layers?.forEach((layer) => {
-        const layerIgnores = arrayUnique([...(entry.ignores || []), ...(layer.ignores || [])]);
+        const layerIgnores = arrayUnion(entry.ignores || [], layer.ignores || []);
         const layerLanguageOptions = mergeLanguageOptions(
           {...layer.languageOptions},
           entry.languageOptionsFromUser,
         );
         // A layer only ever covers part of what the entry parses, so it cannot reach past it
         const layerFiles = layer.files?.length
-          ? layer.files.every((glob) => entryFiles.includes(glob))
+          ? arrayIsSubset(entryFiles, layer.files)
             ? layer.files
             : intersectParentConfigFilesWithProvidedFiles(entryFiles, layer.files)
           : entryFiles;

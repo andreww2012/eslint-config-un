@@ -4,7 +4,15 @@ import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {toSafeString as normalizeIdentifier} from 'json-schema-to-typescript/dist/src/utils.js';
-import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from 'utilery';
+import {
+  type NonEmptyTuple,
+  arrayWithoutFalsy,
+  arrayify,
+  capitalize,
+  forEachAsync,
+  invariant,
+  regexEscape,
+} from 'utilery';
 import {readFileSafe} from 'utilery/server';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
@@ -163,7 +171,10 @@ async function generateRuleTypes() {
           },
         );
         code = code.replaceAll(
-          new RegExp(String.raw`'${pluginName ? `${pluginName}/` : ''}([^']*)'\?:`, 'g'),
+          new RegExp(
+            String.raw`'${pluginName ? `${regexEscape(pluginName, {onlySyntaxCharacters: true})}/` : ''}([^']*)'\?:`,
+            'g',
+          ),
           "'$1':",
         );
 
@@ -238,20 +249,19 @@ ${perPluginCodeRaw
           languages,
           type: ruleType,
         } = ruleDefinition.meta || {};
-        const comment = [
+        const comment = arrayWithoutFalsy(
           [
-            ruleType === 'problem' && '💥',
-            ruleType === 'suggestion' && '🤔',
-            ruleType === 'layout' && '💅',
-          ],
-          [languages?.join(',')],
-          [docs?.dialects?.join(',')],
-          [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
-          [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
-        ]
-          .map((icons) => icons.filter(Boolean).join(''))
-          .filter(Boolean)
-          .join('|');
+            [
+              ruleType === 'problem' && '💥',
+              ruleType === 'suggestion' && '🤔',
+              ruleType === 'layout' && '💅',
+            ],
+            [languages?.join(',')],
+            [docs?.dialects?.join(',')],
+            [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
+            [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
+          ].map((icons) => arrayWithoutFalsy(icons).join('')),
+        ).join('|');
         return `    '${ruleName}',${comment ? ` // ${comment}` : ''}`;
       })
       .join('\n')}\n  ],`;
@@ -263,9 +273,7 @@ ${perPluginCodeRaw
   const categorizedRulesPerPlugin = await Promise.all(
     Object.entries(RULE_CATEGORIZATIONS).map(async ([pluginName, categorizations]) => {
       const plugin = allPlugins[pluginName];
-      if (!plugin) {
-        throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
-      }
+      invariant(plugin, `Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
 
       const errors: string[] = [];
       const rulesPerCategory = new Map<string, string[]>();

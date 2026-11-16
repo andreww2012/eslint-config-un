@@ -4,6 +4,7 @@ import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
+import {isEmptyValue} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   generateConfigNoOnlyTests,
@@ -296,8 +297,8 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {
   const defaultJestFiles = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
   const defaultJestTypescriptFiles = generateDefaultTestFiles(GLOB_TS_X_EXTENSION);
 
-  const hasRestrictedMethods = Object.keys(restrictedMethods || {}).length > 0;
-  const hasRestrictedMatchers = Object.keys(restrictedMatchers || {}).length > 0;
+  const hasRestrictedMethods = !isEmptyValue(restrictedMethods);
+  const hasRestrictedMatchers = !isEmptyValue(restrictedMatchers);
 
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;

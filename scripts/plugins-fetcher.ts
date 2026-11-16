@@ -6,7 +6,7 @@ import {Context, Effect, Layer, Ref} from 'effect';
 import PQueue from 'p-queue';
 import {type Storage as UnStorage, createStorage} from 'unstorage';
 import unstorageFsDriver from 'unstorage/drivers/fs';
-import type {Ms, ObjectValues} from 'utilery';
+import {type Ms, type ObjectValues, isEmptyValue} from 'utilery';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {
   type EslintPluginsDb,
@@ -313,9 +313,7 @@ const fetchPackageInfo = (packageName: string) =>
     }
 
     const shouldRefetchStats =
-      cachedInfo != null &&
-      Object.keys(cachedInfo.stats || {}).length === 0 &&
-      isPackageLikelyEslintPlugin;
+      cachedInfo != null && isEmptyValue(cachedInfo.stats) && isPackageLikelyEslintPlugin;
     if (shouldRefetchStats) {
       logger.info(`Attempting to refetch stats of ${styledPackageName}`);
     }

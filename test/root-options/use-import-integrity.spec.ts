@@ -1,10 +1,11 @@
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
+import type {ReturnTypeAwaited} from '../../src/types';
 
 const SETTINGS_CONFIG_NAME = 'global-setup/import-integrity';
 
 const REPLACED_RULE_NAMES = ['no-cycle', 'no-named-as-default', 'no-unresolved'] as const;
 
-type ConfigResult = Awaited<ReturnType<typeof computeEslintConfig>>;
+type ConfigResult = ReturnTypeAwaited<typeof computeEslintConfig>;
 
 // The replacing rules keep the names of the rules they replace, so the only way to tell the two
 // implementations apart is the documentation link

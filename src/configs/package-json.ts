@@ -2,7 +2,7 @@ import type {AgentName} from 'package-manager-detector';
 import {coerce, satisfies} from 'verkit';
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
-import {getKeysOfTruthyValues} from '../utils';
+import {getKeysOfTruthyValues, isEmptyValue} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -320,7 +320,7 @@ export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
           }),
         )
     : [];
-  const hasBannedTopLevelProperties = Object.keys(banTopLevelProperties).length > 0;
+  const hasBannedTopLevelProperties = !isEmptyValue(banTopLevelProperties);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 

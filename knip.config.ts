@@ -31,7 +31,10 @@ const config: KnipConfig = {
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
   cycles: {
-    allow: [['src/utils.ts', 'src/utils/assign-defaults.ts']],
+    allow: [
+      ['src/utils.ts', 'src/utils/array-or-boolean-record.ts'],
+      ['src/utils.ts', 'src/utils/assign-defaults.ts'],
+    ],
   },
 };
 

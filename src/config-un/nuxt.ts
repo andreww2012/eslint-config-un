@@ -2,7 +2,15 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
 import type {NuxtOptions} from 'nuxt/schema';
-import {getErrorMessage, readFileSafe, sha256, toForwardSlashes, toKebabCase} from '../utils';
+import {
+  arrayUnique,
+  getErrorMessage,
+  isSafeRelativePath,
+  readFileSafe,
+  sha256,
+  toForwardSlashes,
+  toKebabCase,
+} from '../utils';
 import {isOwnCopyImportable, resolveFromProject} from '../utils/package-detection';
 
 const NUXT_CONFIG_FILE_NAMES = Object.freeze(
@@ -320,17 +328,15 @@ export const resolveNuxtAutoImports = async ({
     componentNames: extractDeclaredNames(NUXT_COMPONENT_DECLARATION_REGEX, componentsSource).filter(
       (name) => name !== 'componentNames',
     ),
-    directiveNames: [
-      // The rule's schema rejects duplicates
-      ...new Set(
-        appGlobals.flatMap((name) =>
-          NUXT_DIRECTIVE_NAME_REGEX.test(name)
-            ? // The rule kebab-cases `vHTMLSafe` differently, so both spellings are needed
-              [name.slice(1), toKebabCase(name.slice(1))]
-            : [],
-        ),
+    // The rule's schema rejects duplicates
+    directiveNames: arrayUnique(
+      appGlobals.flatMap((name) =>
+        NUXT_DIRECTIVE_NAME_REGEX.test(name)
+          ? // The rule kebab-cases `vHTMLSafe` differently, so both spellings are needed
+            [name.slice(1), toKebabCase(name.slice(1))]
+          : [],
       ),
-    ],
+    ),
     cacheKey: sha256(
       JSON.stringify([
         {buildDir: buildDirectory, layers, isV4DirectoryStructure, error: loadResult?.error},

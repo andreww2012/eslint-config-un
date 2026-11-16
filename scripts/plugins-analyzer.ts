@@ -5,7 +5,7 @@ import {cli} from 'cleye';
 import {renderTable} from 'console-table-printer';
 import {differenceInMonths, formatDistanceToNow} from 'date-fns';
 import {Effect, Layer, Ref} from 'effect';
-import {type ObjectValues, sum} from 'utilery';
+import {type ObjectValues, identity, interpolateInverse, mean, round} from 'utilery';
 import * as z from 'zod';
 import {type EslintPluginsDb, readEslintPluginsDb} from './plugins/plugins-db';
 import {
@@ -64,46 +64,18 @@ const ESLINT_PLUGIN_STATUSES_META: Readonly<
   fetched: {emoji: '⏭️', priority: 7},
 };
 
+/**
+ * From 0 at the bad boundary or beyond it to 1 at the good one or beyond it. The good boundary may
+ * be higher than the bad one (like for downloads) or lower
+ */
 const scoreMetric = (
   value: number,
   goodBoundary: number,
   badBoundary: number,
-  options: {
-    logarithmic?: boolean;
-    /** True if higher values are better (like downloads) */
-    inverse?: boolean;
-  } = {},
-): number => {
-  const {logarithmic = false, inverse = false} = options;
-
-  const good = goodBoundary;
-  const bad = badBoundary;
-
-  if (inverse) {
-    if (value >= good) {
-      return 1;
-    }
-    if (value <= bad) {
-      return 0;
-    }
-  } else {
-    if (value <= good) {
-      return 1;
-    }
-    if (value >= bad) {
-      return 0;
-    }
-  }
-
-  if (logarithmic) {
-    const logValue = Math.log10(value);
-    const logGood = Math.log10(good);
-    const logBad = Math.log10(bad);
-
-    return (logValue - logBad) / (logGood - logBad);
-  }
-
-  return (value - bad) / (good - bad);
+  {logarithmic = false}: {logarithmic?: boolean} = {},
+) => {
+  const scale = logarithmic ? Math.log10 : identity;
+  return interpolateInverse(scale(badBoundary), scale(goodBoundary), scale(value), true);
 };
 
 const analyze = Effect.gen(function* () {
@@ -131,18 +103,13 @@ const analyze = Effect.gen(function* () {
 
       const statusMeta = ESLINT_PLUGIN_STATUSES_META[status.status];
 
-      const downloadsPerDay = Object.values(info.stats || {});
-      const totalDownloads = sum(downloadsPerDay);
-      const downloadsPerDayAverage = totalDownloads / downloadsPerDay.length || 0;
+      const downloadsPerDayAverage = mean(Object.values(info.stats || {})) || 0;
       const lastUpdated = new Date(info.metadata.time[info.metadata.version || ''] || '');
 
       const yearsSinceLastUpdated = differenceInMonths(new Date(), lastUpdated);
       const scoreRecency = scoreMetric(yearsSinceLastUpdated, 3, 12 * 10 /* 10 years */);
 
-      const scoreDownloads = scoreMetric(downloadsPerDayAverage, 100_000, 300, {
-        inverse: true,
-        logarithmic: true,
-      });
+      const scoreDownloads = scoreMetric(downloadsPerDayAverage, 100_000, 300, {logarithmic: true});
 
       const allDirectDependencies = getActualDependencyNames(info.metadata.dependencies);
       const scoreDependencies = scoreMetric(allDirectDependencies.length, 3, 20, {
@@ -159,7 +126,7 @@ const analyze = Effect.gen(function* () {
       const pluginInfo = info.eslintPluginInfo;
 
       const rulesCount = pluginInfo && !('error' in pluginInfo) ? pluginInfo.customRules.length : 0;
-      const scoreRulesCount = scoreMetric(rulesCount, 5, 1, {inverse: true});
+      const scoreRulesCount = scoreMetric(rulesCount, 5, 1);
 
       let score =
         scoreRecency * ANALYSIS_CRITERION_WEIGHTS.recency +
@@ -265,7 +232,7 @@ const analyze = Effect.gen(function* () {
           ).toLocaleString(),
 
           'Last updated': formatDistanceToNow(plugin.lastUpdated),
-          Score: styleText('gray', Number(plugin.score.toFixed(3)).toString()),
+          Score: styleText('gray', round(plugin.score, 3).toString()),
         };
       }),
     );

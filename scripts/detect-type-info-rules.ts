@@ -2,6 +2,7 @@ import {createRequire} from 'node:module';
 import {cli} from 'cleye';
 import consola from 'consola';
 import pathe from 'pathe';
+import {mapGetOrInsertComputed, sum} from 'utilery';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../src/eslint-rule-categories.gen';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
@@ -169,10 +170,7 @@ const main = async () => {
     return;
   }
   const onlyPrefixes = new Set(argv.flags.plugin.flatMap((name) => prefixesByName.get(name) || []));
-  const ruleCount = plugins.reduce(
-    (total, {plugin}) => total + Object.keys(plugin.rules || {}).length,
-    0,
-  );
+  const ruleCount = sum(plugins, ({plugin}) => Object.keys(plugin.rules || {}).length);
   logger.info(`Loaded ${plugins.length} plugin(s), ${ruleCount} rule(s)`);
 
   // A rejected candidate is a decision already taken, and it says why
@@ -187,13 +185,12 @@ const main = async () => {
 
   const detections = new Map<string, Detection>();
   const addDetection = (fullRuleName: string, reason: string, requirement?: Requirement) => {
-    const existing = detections.get(fullRuleName);
-    if (existing) {
-      existing.reasons.push(reason);
-      existing.requirement = requirement || existing.requirement;
-    } else {
-      detections.set(fullRuleName, {requirement: requirement || null, reasons: [reason]});
-    }
+    const detection = mapGetOrInsertComputed(detections, fullRuleName, () => ({
+      requirement: null,
+      reasons: [],
+    }));
+    detection.reasons.push(reason);
+    detection.requirement = requirement || detection.requirement;
   };
 
   plugins.forEach(({prefix, plugin}) => {

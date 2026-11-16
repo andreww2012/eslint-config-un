@@ -5,7 +5,13 @@ import {exec} from 'tinyexec';
 import {inject} from 'vitest';
 import * as z from 'zod';
 import packageJson from '../../package.json' with {type: 'json'};
-import {objectFromKeys, pathExists, substringAfterLast} from '../../src/utils';
+import {
+  arrayWithoutFalsy,
+  arrayify,
+  objectFromKeys,
+  pathExists,
+  substringAfterLast,
+} from '../../src/utils';
 
 type CommandLine = readonly [command: string, ...arguments: string[]];
 
@@ -240,7 +246,7 @@ const installPackageManager = async (npmPackage: string) => {
 
 const getEnabledRuleNames = (printConfigOutput: string) =>
   Object.entries(PrintConfigZod.parse(JSON.parse(printConfigOutput)).rules)
-    .filter(([, ruleEntry]) => [ruleEntry].flat()[0] !== 0)
+    .filter(([, ruleEntry]) => arrayify(ruleEntry)[0] !== 0)
     .map(([ruleName]) => ruleName);
 
 const getMessagesByFileName = (lintOutput: string) =>
@@ -262,9 +268,11 @@ const setUpProject = async (
   const packageManagerBinDirectory = npmPackage && (await installPackageManager(npmPackage));
   const env = {
     ...CHILD_PROCESS_ENV,
-    PATH: [packageManagerBinDirectory, path.dirname(process.execPath), process.env['PATH']]
-      .filter(Boolean)
-      .join(path.delimiter),
+    PATH: arrayWithoutFalsy([
+      packageManagerBinDirectory,
+      path.dirname(process.execPath),
+      process.env['PATH'],
+    ]).join(path.delimiter),
   };
 
   const registryUrl = inject('registryUrl');

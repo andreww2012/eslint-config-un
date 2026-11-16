@@ -57,6 +57,7 @@ export type {
   PrettifyDeep,
   ReadonlyDeep,
   RequireExactlyOne,
+  ReturnTypeAwaited,
   SetFieldType,
   SetRequired,
   ToCamelCase,

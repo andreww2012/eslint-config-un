@@ -1,3 +1,4 @@
+import {arrayify} from 'utilery';
 import type {RuleCategorization} from './shared';
 
 const isInDocsCategory = (rule: {meta?: {docs?: unknown}}, docsCategory: string) => {
@@ -7,7 +8,7 @@ const isInDocsCategory = (rule: {meta?: {docs?: unknown}}, docsCategory: string)
   }
 
   const {category} = docs;
-  return Array.isArray(category) ? category.includes(docsCategory) : category === docsCategory;
+  return arrayify(category).includes(docsCategory);
 };
 
 export const createDocsCategoryCategorization = <CategoryId extends string>(

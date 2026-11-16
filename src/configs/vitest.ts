@@ -3,7 +3,7 @@ import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {pluginsLoaders} from '../loaders';
 import type {Prettify} from '../types';
-import {allUnionMembers} from '../utils';
+import {allUnionMembers, isEmptyValue, objectFromKeys} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
@@ -320,8 +320,8 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     includeVitestBenchmarkFiles: true,
   });
 
-  const hasRestrictedMethods = Object.keys(restrictedMethods || {}).length > 0;
-  const hasRestrictedMatchers = Object.keys(restrictedMatchers || {}).length > 0;
+  const hasRestrictedMethods = !isEmptyValue(restrictedMethods);
+  const hasRestrictedMatchers = !isEmptyValue(restrictedMatchers);
 
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
@@ -352,13 +352,10 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
       enforceEachOrFor === false
         ? []
         : [
-            Object.fromEntries(
-              FUNCTIONS_WITH_EACH_OR_FOR.map((fnName) => [
-                fnName,
-                typeof enforceEachOrFor === 'string'
-                  ? enforceEachOrFor
-                  : enforceEachOrFor[fnName] || enforceEachOrFor.default,
-              ]),
+            objectFromKeys(FUNCTIONS_WITH_EACH_OR_FOR, (fnName) =>
+              typeof enforceEachOrFor === 'string'
+                ? enforceEachOrFor
+                : enforceEachOrFor[fnName] || enforceEachOrFor.default,
             ),
           ],
     ) /** @since 1.4.4 */ // (warns in all)
@@ -419,14 +416,12 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule(
       'no-restricted-matchers',
       hasRestrictedMatchers ? ERROR : OFF,
-      /* v8 ignore next */
-      hasRestrictedMatchers ? [restrictedMatchers || {}] : [],
+      hasRestrictedMatchers ? [restrictedMatchers] : [],
     ) /** @since 0.0.54 */
     .addRule(
       'no-restricted-vi-methods',
       hasRestrictedMethods ? ERROR : OFF,
-      /* v8 ignore next */
-      hasRestrictedMethods ? [restrictedMethods || {}] : [],
+      hasRestrictedMethods ? [restrictedMethods] : [],
     ) /** @since 0.0.43 */
     .addRule('no-standalone-expect', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
     .addRule('no-test-prefixes', ERROR) /** @since 0.0.54 */ // (warns in all)

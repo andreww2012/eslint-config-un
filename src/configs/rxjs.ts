@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {getKeysOfTruthyValues, objectFromKeys} from '../utils';
+import {getKeysOfTruthyValues, isEmptyValue, objectFromKeys} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -77,12 +77,12 @@ export default defineUnConfig<RxjsEslintConfigOptions>('rxjs', {enabledBy: {pack
   } = optionsResolved;
 
   const banObservables = getKeysOfTruthyValues(banObservablesRaw, 'object');
-  const hasBannedObservables = Object.keys(banObservables).length > 0;
+  const hasBannedObservables = !isEmptyValue(banObservables);
 
   const banOperators = Array.isArray(banOperatorsRaw)
     ? objectFromKeys(banOperatorsRaw, () => true)
     : getKeysOfTruthyValues({tap: true, ...banOperatorsRaw}, 'object');
-  const hasBannedOperators = Object.keys(banOperators).length > 0;
+  const hasBannedOperators = !isEmptyValue(banOperators);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'rxjs');
 

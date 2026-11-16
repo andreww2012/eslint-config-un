@@ -31,12 +31,17 @@ import {RULES_TO_DISABLE_IN_OFFLINE_MODE} from '../plugins.gen';
 import type {Falsy, MaybePromise, OmitStrict, PartialDeep, Prettify} from '../types';
 import {
   type MaybeArray,
+  arrayFindDuplicates,
   arrayIncludes,
+  arrayUnique,
+  arrayWithoutFalsy,
   arrayify,
   assignDefaults,
   isInCi,
   isInEditor,
   isPlainObject,
+  mapGetOrInsertComputed,
+  mapMapValues,
   maybeCall,
   objectEntriesUnsafe,
   omit,
@@ -334,13 +339,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     debug("Could not restore configs from cache - it's either stale or an error occurred");
   }
 
-  const requiredPluginPrefixes = [
-    ...new Set(
-      Object.values(CONFIG_MANIFESTS).flatMap(({requires}) =>
-        requires ? requires.pluginLoadable : [],
-      ),
+  const requiredPluginPrefixes = arrayUnique(
+    Object.values(CONFIG_MANIFESTS).flatMap(({requires}) =>
+      requires ? requires.pluginLoadable : [],
     ),
-  ];
+  );
 
   const [packagesInfo, loadablePluginsRaw] = await Promise.all([
     fetchProjectPackagesInfo(PACKAGES_TO_GET_INFO_FOR, {
@@ -503,11 +506,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   };
 
   const configSetups = new Map<ManifestConfigKey, ReturnType<typeof setupManifestConfig>>();
-  const loadManifestConfig = (configKey: ManifestConfigKey) => {
-    const setup = configSetups.get(configKey) || setupManifestConfig(configKey);
-    configSetups.set(configKey, setup);
-    return setup;
-  };
+  const loadManifestConfig = (configKey: ManifestConfigKey) =>
+    mapGetOrInsertComputed(configSetups, configKey, setupManifestConfig);
 
   await loadManifestConfig('js');
   await Promise.all([
@@ -699,17 +699,17 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       )
     )
       .map((unresolvedConfigs) =>
-        unresolvedConfigs
-          .map((unConfigOrEntryBuilders) =>
-            arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
-              configOrBuilder instanceof ConfigEntryBuilder
-                ? configOrBuilder.resolveAllConfigs()
-                : configOrBuilder,
-            ),
-          )
-          .flat(2)
-          // eslint-disable-next-line no-implicit-coercion -- Need to preserve the boolean type predicate
-          .filter((value) => !!value),
+        arrayWithoutFalsy(
+          unresolvedConfigs
+            .map((unConfigOrEntryBuilders) =>
+              arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
+                configOrBuilder instanceof ConfigEntryBuilder
+                  ? configOrBuilder.resolveAllConfigs()
+                  : configOrBuilder,
+              ),
+            )
+            .flat(2),
+        ),
       )
       .flatMap((configs, cascadeIndex) =>
         configsOrderResolved[cascadeIndex] === 'parsing' ? resolveParsingConfigs(context) : configs,
@@ -767,17 +767,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   /* v8 ignore start */
   let testErrors: TestError[] | undefined;
   if (context.isTestMode) {
-    const duplicateConfigNames: string[] = [];
-    const uniqueConfigNames = new Set<string>();
-    configsResolved.forEach(({name: configName}) => {
-      if (configName) {
-        if (uniqueConfigNames.has(configName)) {
-          duplicateConfigNames.push(configName);
-        } else {
-          uniqueConfigNames.add(configName);
-        }
-      }
-    });
+    const duplicateConfigNames = arrayFindDuplicates(
+      arrayWithoutFalsy(configsResolved.map(({name}) => name)),
+    );
 
     if (duplicateConfigNames.length > 0) {
       context.tests.push(
@@ -825,30 +817,24 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       configs: configsToCache,
       usedPlugins: usedPluginPrefixes,
       packageRequesters: context.packageRequesters,
-      usedParsers: new Map(
-        Array.from(context.usedParsers, ([parserPrefix, configs]) => [
-          parserPrefix,
-          configs.map((config) => config.name).filter((name) => typeof name === 'string'),
-        ]),
+      usedParsers: mapMapValues(context.usedParsers, (configs) =>
+        configs.map((config) => config.name).filter((name) => typeof name === 'string'),
       ),
-      usedPackages: new Map(
-        Array.from(context.usedPackages, ([packagePrefix, usedPackagesInfo]) => [
-          packagePrefix,
-          usedPackagesInfo
-            .map(({config, path, info}) => {
-              const configName = config.name;
-              /* v8 ignore next Every config using a package is named */
-              if (!configName) {
-                return null;
-              }
-              return {
-                configName,
-                path,
-                ...info,
-              };
-            })
-            .filter((value) => value != null),
-        ]),
+      usedPackages: mapMapValues(context.usedPackages, (usedPackagesInfo) =>
+        usedPackagesInfo
+          .map(({config, path, info}) => {
+            const configName = config.name;
+            /* v8 ignore next Every config using a package is named */
+            if (!configName) {
+              return null;
+            }
+            return {
+              configName,
+              path,
+              ...info,
+            };
+          })
+          .filter((value) => value != null),
       ),
     });
   }

@@ -2,7 +2,7 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
-import {isKeyIn, memoize} from '../utils';
+import {memoize} from '../utils';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -388,11 +388,9 @@ export const buildEsConfigs = (
   });
   // `grs` means "get rule severity"
   const grs = <Version extends EcmaVersion>(version: Version, feature: EcmaFeatures[Version]) => {
-    const esFeatures = getEsVersionFeatures(version);
-    const isFeatureSupported =
-      // eslint-disable-next-line ts/no-unnecessary-condition -- False positive
-      (isKeyIn(feature, esFeatures) ? esFeatures[feature] : null) ?? esFeatures.default;
-    return isFeatureSupported ? OFF : ERROR;
+    const esFeatures: {default: boolean} & Partial<Record<string, boolean>> =
+      getEsVersionFeatures(version);
+    return (esFeatures[feature] ?? esFeatures.default) ? OFF : ERROR;
   };
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'es');

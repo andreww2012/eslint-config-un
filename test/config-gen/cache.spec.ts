@@ -6,7 +6,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {CacheDataInFs} from '../../src/config-un/cache';
 import type {Environment} from '../../src/config-un/shared';
 import type {Prettify} from '../../src/types';
-import {exec, jsonParseSafe, mapValues} from '../../src/utils';
+import {exec, jsonParseSafe, mapValues, pathExists, writeJsonFile} from '../../src/utils';
 
 vi.mock(import('empathic/package'), async (importOriginal) => {
   const original = await importOriginal();
@@ -52,11 +52,7 @@ type CacheFileContents = Prettify<CacheDataInFs & {key: string; date: string}>;
 const readCacheFile = async () =>
   jsonParseSafe<CacheFileContents>(await fs.readFile(CACHE_FILE_PATH, 'utf8'));
 
-const doesCacheFileExist = () =>
-  fs
-    .stat(CACHE_FILE_PATH)
-    .then(() => true)
-    .catch(() => false);
+const doesCacheFileExist = () => pathExists(CACHE_FILE_PATH);
 
 const clearMemoryCache = () => {
   Reflect.deleteProperty(globalThis, MEMORY_CACHE_GLOBAL_NAME);
@@ -77,15 +73,11 @@ const MARKER_CONFIG_POSTFIX = 'only-in-the-cache';
 const markStoredConfigs = async (patch?: Partial<CacheFileContents>) => {
   const cacheFile = await readCacheFile();
 
-  await fs.writeFile(
-    CACHE_FILE_PATH,
-    JSON.stringify({
-      ...cacheFile,
-      configs: [...cacheFile.configs, {name: `eslint-config-un/${MARKER_CONFIG_POSTFIX}`}],
-      ...patch,
-    }),
-    'utf8',
-  );
+  await writeJsonFile(CACHE_FILE_PATH, {
+    ...cacheFile,
+    configs: [...cacheFile.configs, {name: `eslint-config-un/${MARKER_CONFIG_POSTFIX}`}],
+    ...patch,
+  });
   clearMemoryCache();
 };
 
@@ -389,19 +381,15 @@ describe('option: `cacheConfigs`', () => {
       await computeCachedConfig(CONFIGS_USING_PACKAGES);
       const cacheFile = await readCacheFile();
 
-      await fs.writeFile(
-        CACHE_FILE_PATH,
-        JSON.stringify({
-          ...cacheFile,
-          usedPackages: mapValues(cacheFile.usedPackages, (packageUses) =>
-            packageUses?.map((packageUse) => ({
-              ...packageUse,
-              configName: 'eslint-config-un/no-longer-generated',
-            })),
-          ),
-        }),
-        'utf8',
-      );
+      await writeJsonFile(CACHE_FILE_PATH, {
+        ...cacheFile,
+        usedPackages: mapValues(cacheFile.usedPackages, (packageUses) =>
+          packageUses?.map((packageUse) => ({
+            ...packageUse,
+            configName: 'eslint-config-un/no-longer-generated',
+          })),
+        ),
+      });
       clearMemoryCache();
 
       const restored = await computeCachedConfig(CONFIGS_USING_PACKAGES);

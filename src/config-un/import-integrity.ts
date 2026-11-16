@@ -1,8 +1,7 @@
 import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 import type {EslintPlugin, GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import type {PluginPrefix} from '../loaders';
-import type {NonEmptyTuple} from '../types';
-import {objectEntriesUnsafe} from '../utils';
+import {mapEntries} from '../utils';
 import type {UnConfigContext} from './shared';
 
 /**
@@ -44,16 +43,11 @@ export const replaceImportRulesImplementationWithIntegrityPlugin = (
     ...originalPlugin,
     rules: {
       ...originalPlugin.rules,
-      ...Object.fromEntries(
-        objectEntriesUnsafe(IMPORT_RULES_TO_REPLACE)
-          .map(([originalRuleName, fastRuleName]) => {
-            const fastRuleImplementation = fastPlugin.rules?.[fastRuleName];
-            if (!fastRuleImplementation || replaceRules?.[originalRuleName] === false) {
-              return null;
-            }
-
-            const fastRuleSchema = fastRuleImplementation.meta?.schema;
-            return [
+      ...mapEntries(IMPORT_RULES_TO_REPLACE, (originalRuleName, fastRuleName) => {
+        const fastRuleImplementation = fastPlugin.rules?.[fastRuleName];
+        const fastRuleSchema = fastRuleImplementation?.meta?.schema;
+        return fastRuleImplementation && replaceRules?.[originalRuleName] !== false
+          ? [
               originalRuleName,
               {
                 ...fastRuleImplementation,
@@ -66,10 +60,9 @@ export const replaceImportRulesImplementationWithIntegrityPlugin = (
                       : [{type: 'object'}], // Allows any properties
                 },
               },
-            ] satisfies NonEmptyTuple;
-          })
-          .filter((value) => value != null),
-      ),
+            ]
+          : undefined;
+      }),
     },
   };
 

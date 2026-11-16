@@ -5,14 +5,18 @@ import {styleText} from 'node:util';
 import {cli} from 'cleye';
 import consola from 'consola';
 import {exec} from 'tinyexec';
-import {jsonParseSafe as jsonParse, mapGetOrInsert} from 'utilery';
-import {pathExists, writeJsonFile} from 'utilery/server';
 import {
-  compare as compareVersions,
-  isValidRange,
-  tryParse as parseSemver,
-  satisfies as rangeSatisfies,
-} from 'verkit';
+  arrayChunks,
+  compareSemver,
+  isEmptyValue,
+  isSemverInRange,
+  iterableCount,
+  jsonParse,
+  mapGetOrInsertComputed,
+  parseSemver,
+} from 'utilery';
+import {pathExists, writeJsonFile} from 'utilery/server';
+import {isValidRange} from 'verkit';
 import {stringify as yamlStringify} from 'yaml';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
@@ -222,7 +226,10 @@ const mergeRulesPresenceResults = (
 
   results.forEach(({rules}) => {
     rules.forEach(({ruleName, versions, deprecatedVersions}) => {
-      const existing = mapGetOrInsert(ruleMap, ruleName, {versions: [], deprecatedVersions: []});
+      const existing = mapGetOrInsertComputed(ruleMap, ruleName, () => ({
+        versions: [],
+        deprecatedVersions: [],
+      }));
       existing.versions.push(...versions);
       existing.deprecatedVersions.push(...deprecatedVersions);
     });
@@ -230,7 +237,7 @@ const mergeRulesPresenceResults = (
 
   return {
     rules: Array.from(ruleMap, ([ruleName, {versions, deprecatedVersions}]) => {
-      const versionsSorted = versions.toSorted((a, b) => compareVersions(a, b));
+      const versionsSorted = versions.toSorted((a, b) => compareSemver(a, b));
       return {
         ruleName,
         minVersion: versionsSorted[0],
@@ -283,7 +290,7 @@ const run = async ({
   const versionsIgnoredByPrereleaseRegexes: string[] = [];
   const versionsSorted = allVersions
     .map((version, i) => {
-      if (ignoreVersions.some((rangeToIgnore) => rangeSatisfies(version, rangeToIgnore))) {
+      if (ignoreVersions.some((rangeToIgnore) => isSemverInRange(version, rangeToIgnore))) {
         versionsIgnoredByRange.push(version);
         return null;
       }
@@ -303,7 +310,7 @@ const run = async ({
     })
     .filter((value) => value != null)
     .sort((a, b) => a.date.getTime() - b.date.getTime())
-    .filter(({version}) => !packageVersionsRange || rangeSatisfies(version, packageVersionsRange));
+    .filter(({version}) => !packageVersionsRange || isSemverInRange(version, packageVersionsRange));
 
   const ignoredVersionsCount = allVersions.length - versionsSorted.length;
   logger.log(
@@ -345,7 +352,7 @@ const run = async ({
   // workspace root for the temp project. Without it, pnpm would walk up and pick up the parent
   // eslint-config-un workspace settings
   const pnpmWorkspaceYamlContent = yamlStringify(
-    Object.keys(pnpmOverrides).length > 0 ? {overrides: pnpmOverrides} : {},
+    isEmptyValue(pnpmOverrides) ? {} : {overrides: pnpmOverrides},
   );
   const pnpmWorkspaceYamlPath = generatePathInProject('pnpm-workspace.yaml');
 
@@ -396,11 +403,9 @@ const run = async ({
     }
   }
 
-  const batches = versionsSorted.flatMap((_, i) =>
-    i % batchSize === 0 ? [versionsSorted.slice(i, i + batchSize)] : [],
-  );
+  const batches = arrayChunks(versionsSorted, batchSize);
 
-  const extraDepth = [...packageName.matchAll(/\//g)].length;
+  const extraDepth = iterableCount(packageName.matchAll(/\//g));
 
   const generateRunnerScriptSource = (allBatches: readonly (typeof versionsSorted)[]) => `
 import {createRequire} from 'module';

@@ -78,8 +78,7 @@ function createModuleLoader<Module, PackageName extends string>(
       }
 
       return {
-        // eslint-disable-next-line un/no-type-assertion -- `Module` is the module or its default export
-        module: overriddenPluginModule || ((await interopDefault(module())) as Module),
+        module: overriddenPluginModule || (await interopDefault(module())),
         packageName,
       };
     } catch (error) {

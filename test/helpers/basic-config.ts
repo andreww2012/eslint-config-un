@@ -1,9 +1,9 @@
 import type {UnConfigs} from '../../src/configs';
-import type {Prettify} from '../../src/types';
+import type {Prettify, ReturnTypeAwaited} from '../../src/types';
 import {arrayify} from '../../src/utils';
 import {computeEslintConfig} from './test-eslint-config';
 
-type ConfigResultType = Awaited<ReturnType<typeof computeEslintConfig>>;
+type ConfigResultType = ReturnTypeAwaited<typeof computeEslintConfig>;
 type ComputeOptions = Parameters<typeof computeEslintConfig>[1];
 
 /**

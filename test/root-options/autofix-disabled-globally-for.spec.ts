@@ -1,6 +1,8 @@
+import type {ReturnTypeAwaited} from '../../src/types';
+
 // A rule is left autofixable <=> its `meta.fixable` survives in the registered plugin
 const isAutofixable = (
-  configResult: Awaited<ReturnType<typeof computeEslintConfig>>,
+  configResult: ReturnTypeAwaited<typeof computeEslintConfig>,
   ruleName: string,
 ) => Boolean(configResult.getLoadedPlugin('unicorn')?.rules?.[ruleName]?.meta?.fixable);
 

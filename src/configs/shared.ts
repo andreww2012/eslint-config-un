@@ -24,7 +24,10 @@ import {
   arrayUnique,
   arrayify,
   isNonEmptyArray,
+  maybeCall,
   objectEntriesUnsafe,
+  objectFromKeys,
+  objectHasOwn,
   pick,
 } from '../utils';
 import type {JestEslintConfigOptions} from './jest';
@@ -41,10 +44,7 @@ import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 export const resolveFilesOption = (
   files: UnFlatConfigEntryFilesAndIgnores['files'],
   filesDefault: readonly string[],
-) =>
-  (typeof files === 'function' ? files({filesDefault: [...filesDefault]}) : files) || [
-    ...filesDefault,
-  ];
+) => maybeCall(files, {filesDefault: [...filesDefault]}) || [...filesDefault];
 
 /**
  * Same as {@link resolveFilesOption}, but for `ignores`.
@@ -56,9 +56,7 @@ export const resolveFilesOption = (
 export const resolveIgnoresOption = (
   ignores: UnFlatConfigEntryFilesAndIgnores['ignores'],
   ignoresDefault: string[],
-) =>
-  (typeof ignores === 'function' ? ignores({ignoresDefault, ignoresImplicit: []}) : ignores) ||
-  ignoresDefault;
+) => maybeCall(ignores, {ignoresDefault, ignoresImplicit: []}) || ignoresDefault;
 
 export const generateDefaultTestFiles = (
   extensions: string,
@@ -203,9 +201,7 @@ type ValidHtmlTags = 'a' | 'abbr' | 'address' | 'area' | 'article' | 'aside' | '
 type InvalidHtmlTags = (typeof INVALID_HTML_TAGS)[number];
 export type ValidAndInvalidHtmlTags = ValidHtmlTags | InvalidHtmlTags;
 
-export const noRestrictedHtmlElementsDefault = Object.fromEntries(
-  INVALID_HTML_TAGS.map((tag) => [tag, true]),
-);
+export const noRestrictedHtmlElementsDefault = objectFromKeys(INVALID_HTML_TAGS, () => true);
 
 export const generateUseBaselineRuleOptions = (context: UnConfigContext) => ({
   available: context.rootOptions.baselineAvailability ?? 'widely',
@@ -362,7 +358,7 @@ export const resolveAllowedValues = <Value extends string>(
   const allowedValues = Array.isArray(allowedValuesRaw)
     ? arrayUnique(allowedValuesRaw)
     : allValues.filter((value) =>
-        allowedValuesRaw && Object.hasOwn(allowedValuesRaw, value) ? allowedValuesRaw[value] : true,
+        objectHasOwn(allowedValuesRaw, value) ? allowedValuesRaw[value] : true,
       );
 
   return isNonEmptyArray(allowedValues) && allowedValues.length < allValues.length

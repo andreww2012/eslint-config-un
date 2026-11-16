@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 import http from 'node:http';
 import https from 'node:https';
 import {pipeline} from 'node:stream/promises';
-import {omit} from '../../src/utils';
+import {invariant, omit} from '../../src/utils';
 
 const UPSTREAM_REGISTRY_URL = 'https://registry.npmjs.org';
 
@@ -110,9 +110,10 @@ export const startRegistry = async ({
   });
 
   const address = server.address();
-  if (address == null || typeof address === 'string') {
-    throw new Error('Registry server is not listening on a TCP port');
-  }
+  invariant(
+    address != null && typeof address !== 'string',
+    'Registry server is not listening on a TCP port',
+  );
 
   return {
     url: `http://localhost:${address.port}/`,

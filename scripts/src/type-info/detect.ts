@@ -4,7 +4,13 @@ import {inspect} from 'node:util';
 import * as tsParser from '@typescript-eslint/parser';
 import {Linter} from 'eslint';
 import pathe from 'pathe';
-import {getErrorMessage, mapValues} from 'utilery';
+import {
+  getErrorMessage,
+  isEmptyValue,
+  mapEntries,
+  mapGetOrInsertComputed,
+  mapValues,
+} from 'utilery';
 import type {EslintPlugin} from '../../../src/eslint/eslint-types';
 import {FIXTURE_FILES} from './fixture';
 
@@ -139,14 +145,8 @@ export const probeRules = async (
   let currentRuleName: string | null = null;
 
   const recordAccess = (key: string) => {
-    if (currentRuleName == null) {
-      return;
-    }
-    const keys = accessed.get(currentRuleName);
-    if (keys) {
-      keys.add(key);
-    } else {
-      accessed.set(currentRuleName, new Set([key]));
+    if (currentRuleName != null) {
+      mapGetOrInsertComputed(accessed, currentRuleName, () => new Set()).add(key);
     }
   };
 
@@ -156,9 +156,7 @@ export const probeRules = async (
     try {
       return run();
     } catch (error) {
-      if (!threw.has(ruleName)) {
-        threw.set(ruleName, describeError(error).slice(0, 200));
-      }
+      mapGetOrInsertComputed(threw, ruleName, () => describeError(error).slice(0, 200));
       return fallback;
     } finally {
       currentRuleName = previous;
@@ -190,52 +188,44 @@ export const probeRules = async (
   };
 
   const wrapVisitor = (ruleName: string, visitor: Record<string, unknown> | null | undefined) =>
-    Object.fromEntries(
-      Object.entries(visitor || {}).flatMap(([key, listener]) =>
-        isVisitorListener(listener) && !EMPTY_SELECTOR_GROUP_REGEX.test(key)
-          ? [
-              [
-                key,
-                (...listenerArguments: readonly unknown[]) =>
-                  withCurrentRule(ruleName, () => listener(...listenerArguments), undefined),
-              ] as const,
-            ]
-          : [],
-      ),
+    mapEntries(visitor || {}, (key, listener) =>
+      isVisitorListener(listener) && !EMPTY_SELECTOR_GROUP_REGEX.test(key)
+        ? [
+            key,
+            (...listenerArguments: readonly unknown[]) =>
+              withCurrentRule(ruleName, () => listener(...listenerArguments), undefined),
+          ]
+        : undefined,
     );
 
+  const wrapRule = (fullRuleName: string, rule: NonNullable<EslintPlugin['rules']>[string]) => {
+    // eslint-disable-next-line un/no-type-assertion -- The probe only calls `create` and reads what it returns
+    const {create} = rule as unknown as {
+      create: (context: unknown) => Record<string, unknown> | null | undefined;
+    };
+    return {
+      ...rule,
+      // Options are never passed, so a schema requiring them would fail config
+      // validation before the rule ever runs
+      meta: {...rule.meta, languages: undefined, schema: false as const},
+      create: (context: unknown) =>
+        withCurrentRule(
+          fullRuleName,
+          () => {
+            const visitor = wrapVisitor(fullRuleName, create(context));
+            if (!isEmptyValue(visitor)) {
+              registeredListeners.add(fullRuleName);
+            }
+            return visitor;
+          },
+          {},
+        ),
+    };
+  };
+
   const wrappedPlugins = mapValues(plugins, (plugin, prefix) => ({
-    rules: Object.fromEntries(
-      Object.entries(plugin.rules || {})
-        .filter(([, rule]) => doesRunOnJavascript(rule))
-        .map(([ruleName, rule]) => {
-          const fullRuleName = `${prefix}/${ruleName}`;
-          // eslint-disable-next-line un/no-type-assertion -- The probe only calls `create` and reads what it returns
-          const {create} = rule as unknown as {
-            create: (context: unknown) => Record<string, unknown> | null | undefined;
-          };
-          return [
-            ruleName,
-            {
-              ...rule,
-              // Options are never passed, so a schema requiring them would fail config
-              // validation before the rule ever runs
-              meta: {...rule.meta, languages: undefined, schema: false as const},
-              create: (context: unknown) =>
-                withCurrentRule(
-                  fullRuleName,
-                  () => {
-                    const visitor = wrapVisitor(fullRuleName, create(context));
-                    if (Object.keys(visitor).length > 0) {
-                      registeredListeners.add(fullRuleName);
-                    }
-                    return visitor;
-                  },
-                  {},
-                ),
-            },
-          ];
-        }),
+    rules: mapEntries(plugin.rules || {}, (ruleName, rule) =>
+      doesRunOnJavascript(rule) ? [ruleName, wrapRule(`${prefix}/${ruleName}`, rule)] : undefined,
     ),
   }));
 

@@ -8,7 +8,7 @@ import type {
 } from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
 import type {NonEmptyTuple, OmitStrict, Prettify} from '../../src/types';
-import {arrayify, isObject, mapValues} from '../../src/utils';
+import {arrayify, isObject, mapValues, substringAfter} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
@@ -113,7 +113,7 @@ export const computeEslintConfig = async (
           return null;
         }
 
-        const namePrefixless = config.name.slice(UN_ESLINT_CONFIGS_PREFIX.length);
+        const namePrefixless = substringAfter(config.name, UN_ESLINT_CONFIGS_PREFIX);
         if (Array.isArray(predicateOrList) && !predicateOrList.includes(namePrefixless)) {
           return null;
         }
@@ -143,7 +143,7 @@ export const computeEslintConfig = async (
 
   const getRuleEntryOptions = (configName: string, ruleName: string) => {
     const ruleEntry = getRuleEntry(configName, ruleName);
-    return Array.isArray(ruleEntry) ? ruleEntry.slice(1) : [];
+    return arrayify(ruleEntry).slice(1);
   };
 
   const getRuleEntryParsed = (configName: string, ruleName: string) => ({
@@ -187,9 +187,7 @@ export const computeEslintConfig = async (
   };
 };
 
-export const testEslintConfig = async <
-  const FixturePaths extends string | readonly [string, ...string[]],
->(
+export const testEslintConfig = async <const FixturePaths extends string | NonEmptyTuple<string>>(
   configsOrSingleConfigName: ConfigsOption | keyof (EslintConfigUnOptions['configs'] & {}),
   fixturePaths: FixturePaths,
   optionsOrFixtureSearchRelativeToPath?:

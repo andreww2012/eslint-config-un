@@ -1,4 +1,5 @@
 import type {Falsy} from '../types';
+import {isArray} from '../utils';
 
 export type ArrayOrBooleanRecord<
   Key extends PropertyKey = string,
@@ -16,9 +17,6 @@ export type ArrayOrBooleanRecord<
       >
     >;
 
-// `Array.isArray` does not narrow read-only arrays
-const isReadonlyArray = (value: unknown): value is readonly unknown[] => Array.isArray(value);
-
 /**
  * Applies the given lists in order, where the object notation additionally allows removing an entry
  * that an earlier list added by setting its value to a falsy value
@@ -30,7 +28,7 @@ export const mergeArrayOrBooleanRecords = (
 
   sources.forEach((source) => {
     if (source) {
-      (isReadonlyArray(source) ? source : Object.entries(source)).forEach((entry) => {
+      (isArray(source) ? source : Object.entries(source)).forEach((entry) => {
         const isEntryPlainKey = typeof entry === 'string';
 
         const key = isEntryPlainKey ? entry : entry[0];

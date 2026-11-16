@@ -1,9 +1,11 @@
+import type {ReturnTypeAwaited} from '../../src/types';
+
 const FIXTURES = {
   plainObjectJson: 'plain-object.json',
 } as const;
 
 const getRulesWithLanguages = (
-  configResult: Awaited<ReturnType<typeof computeEslintConfig>>,
+  configResult: ReturnTypeAwaited<typeof computeEslintConfig>,
 ): readonly string[] =>
   Object.entries(configResult.getConfigByUnPostfix('global-setup/plugins')?.plugins || {}).flatMap(
     ([pluginPrefix, plugin]) =>

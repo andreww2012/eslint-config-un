@@ -11,7 +11,7 @@ import eslintPluginHtmlScripts, {
   parser as eslintPluginHtmlScriptsParser,
 } from '../../src/plugin-html-scripts';
 import {deleteFileScripts, setFileScripts} from '../../src/plugin-html-scripts/scope-sharing';
-import {pick} from '../../src/utils';
+import {invariant, pick} from '../../src/utils';
 
 const FIXTURES = {
   crlfNewlines: 'crlf-newlines.html',
@@ -82,9 +82,7 @@ const createESLint = (eslintOptions: eslint.ESLint.Options) =>
   });
 
 const getSingleResult = ([result]: readonly eslint.ESLint.LintResult[]) => {
-  if (!result) {
-    throw new Error('Nothing was linted');
-  }
+  invariant(result, 'Nothing was linted');
   return result;
 };
 

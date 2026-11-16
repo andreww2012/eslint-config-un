@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {parseNpmPackageSpecifier} from 'utilery';
+import {arrayWithoutFalsy, invariant, keyedBy, parseNpmPackageSpecifier} from 'utilery';
 import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
 import {PACKAGES_INSTALLED_THROUGH} from '../../../src/constants';
 import {PLUGIN_PACKAGES_META, type PluginPackageMeta} from '../../shared/packages-meta';
@@ -20,7 +20,7 @@ const CONFIG_KEY_REGEXP = /^[a-z][\dA-Za-z]*$/;
 const npmxLink = (packageName: string) => `[\`${packageName}\`](https://npmx.dev/${packageName})`;
 
 const joinWithOr = (items: readonly string[]) =>
-  [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' or ');
+  arrayWithoutFalsy([items.slice(0, -1).join(', '), items.at(-1)]).join(' or ');
 
 const parsePackageCondition = (packageNameAndMaybeRange: string) =>
   parseNpmPackageSpecifier(packageNameAndMaybeRange) || {
@@ -87,12 +87,10 @@ const renderDefaultTag = (enabledBy: ConfigEnabledBy = true) => {
   const isEnabledByDefault =
     typeof enabledBy === 'boolean' ? enabledBy : !('default' in enabledBy) || enabledBy.default;
   const overrides = typeof enabledBy === 'boolean' ? null : enabledBy;
-  const condition = [
+  const condition = arrayWithoutFalsy([
     overrides?.text || deriveEnabledByCondition(enabledBy),
     overrides?.textAddendum,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  ]).join(' ');
   return `@default ${isEnabledByDefault}${condition ? ` <=> ${condition}` : ''}`;
 };
 
@@ -160,7 +158,7 @@ const topologicallySort = <Item>(
   getKey: (item: Item) => string,
   getDependencies: (item: Item) => readonly string[],
 ) => {
-  const itemsByKey = new Map(items.map((item) => [getKey(item), item]));
+  const itemsByKey = keyedBy(items, getKey);
   const visited = new Set<string>();
   const inProgress = new Set<string>();
   const cycles: (readonly string[])[] = [];
@@ -507,12 +505,13 @@ const generateConfigArtifacts = async () => {
   ]);
 
   const errors = [...discoveryErrors, ...validate(configs, {documentedMiscGroupConfigs})];
-  if (errors.length > 0) {
-    throw new Error(`Invalid Config manifests:\n${errors.map((error) => `- ${error}`).join('\n')}`);
-  }
+  invariant(
+    errors.length === 0,
+    `Invalid Config manifests:\n${errors.map((error) => `- ${error}`).join('\n')}`,
+  );
 
   const cascadeOrder = resolveCascadeOrder(configs);
-  const configsByKey = new Map(configs.map((config) => [config.key, config]));
+  const configsByKey = keyedBy(configs, (config) => config.key);
   const orderedConfigs = cascadeOrder
     .map((key) => configsByKey.get(key))
     .filter((config) => config != null);

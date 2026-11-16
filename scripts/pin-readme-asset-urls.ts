@@ -3,15 +3,16 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
 import {cli} from 'cleye';
-import {arrayUnique} from 'utilery';
+import {arrayUnique, invariant} from 'utilery';
 import packageJson from '../package.json' with {type: 'json'};
 
 const REPOSITORY_SLUG_REGEXP = /github\.com\/([^/]+\/[^./]+)/;
 
 const repositorySlug = packageJson.repository.url.match(REPOSITORY_SLUG_REGEXP)?.[1];
-if (repositorySlug == null) {
-  throw new Error(`Cannot derive a GitHub repository from \`${packageJson.repository.url}\``);
-}
+invariant(
+  repositorySlug != null,
+  `Cannot derive a GitHub repository from \`${packageJson.repository.url}\``,
+);
 
 const README_PATH = path.join(import.meta.dirname, '../README.md');
 

@@ -7,6 +7,7 @@ import {
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   GLOB_MD_X_CODE_BLOCKS,
 } from '../../../src/constants';
+import type {ReturnTypeAwaited} from '../../../src/types';
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
@@ -454,7 +455,7 @@ describe('options', () => {
       'import/no-deprecated',
     ] as const;
 
-    const getSeverities = (configResult: Awaited<ReturnType<typeof computeEslintConfig>>) =>
+    const getSeverities = (configResult: ReturnTypeAwaited<typeof computeEslintConfig>) =>
       RULES_DISABLED_WITH_TYPESCRIPT.map((ruleName) =>
         configResult.getRuleEntrySeverity('import', ruleName),
       );

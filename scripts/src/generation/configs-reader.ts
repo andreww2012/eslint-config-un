@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import pathe from 'pathe';
 import ts from 'typescript';
+import {invariant, lowerFirst, substringAfter} from 'utilery';
 import {
   type AnyConfigManifest,
   CASCADE_ANCHORS,
@@ -183,9 +184,7 @@ export const readDocumentedMiscGroupConfigs = async () => {
     optionsInterface &&
     ts.isInterfaceDeclaration(optionsInterface) &&
     optionsInterface.members.find((member) => member.name?.getText() === 'defaultConfigsStatus');
-  if (!optionDeclaration) {
-    throw new Error('Could not locate the `defaultConfigsStatus` option declaration');
-  }
+  invariant(optionDeclaration, 'Could not locate the `defaultConfigsStatus` option declaration');
 
   const docLines = getJsDocLines(optionDeclaration);
   const miscBulletIndex = docLines.findIndex((line) => line.startsWith('- `misc-enabled`'));
@@ -267,9 +266,7 @@ export const discoverConfigs = async () => {
     configModulePaths.map(async (filePath) => {
       const sourceFile = program.getSourceFile(filePath);
       /* v8 ignore next 3 */
-      if (!sourceFile) {
-        throw new Error(`Could not read \`${filePath}\``);
-      }
+      invariant(sourceFile, `Could not read \`${filePath}\``);
 
       const relativePath = pathe.relative(CONFIGS_DIRECTORY, filePath);
       const defaultExport = getDefaultExportExpression(sourceFile);
@@ -359,7 +356,7 @@ export const discoverConfigs = async () => {
         subConfigs: checker
           .getPropertiesOfType(checker.getDeclaredTypeOfSymbol(optionsSymbol))
           .filter(({name}) => SUB_CONFIG_PROPERTY_REGEXP.test(name))
-          .map(({name}) => name.slice(6, 7).toLowerCase() + name.slice(7))
+          .map(({name}) => lowerFirst(substringAfter(name, 'config')))
           .sort(),
       });
     }),

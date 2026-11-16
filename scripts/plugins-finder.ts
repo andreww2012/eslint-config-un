@@ -6,7 +6,7 @@ import {cli} from 'cleye';
 import consola from 'consola';
 import {Data, Effect, Ref} from 'effect';
 import puppeteer, {type Browser, type Page} from 'puppeteer';
-import {isJson as isValidJsonInternal} from 'utilery';
+import {isJson as isValidJsonInternal, jsonParse, substringAfter} from 'utilery';
 import checkNpmPackageNameValidity from 'validate-npm-package-name';
 import * as z from 'zod';
 import {
@@ -143,7 +143,7 @@ const solveCaptchaAsync = (browserPage: Page) =>
             return;
           }
 
-          const params: unknown = JSON.parse(messageText.replace('intercepted-params:', ''));
+          const params = jsonParse(substringAfter(messageText, 'intercepted-params:'));
 
           void solveCaptcha(
             // @ts-expect-error Assuming params are of right type

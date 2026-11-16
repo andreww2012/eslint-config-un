@@ -13,10 +13,13 @@ import {parse as parseYaml} from 'yaml';
 import type {Nullable, PackageJson} from '../types';
 import {
   arrayPartition,
+  arrayUnique,
   arrayWithoutFalsy,
+  attempt,
   isObject,
   jsonParseSafe,
   mapGetOrInsertComputed,
+  objectHasOwn,
   once,
   readAndParseJson,
   readFileSafe,
@@ -47,19 +50,16 @@ const isInstalledInSharedStore = (() => {
   );
 })();
 
-const resolvePackageJsonUrl = (packageName: string, parentUrl: string) => {
-  try {
+const resolvePackageJsonUrl = (packageName: string, parentUrl: string) =>
+  // An unresolved module throws
+  attempt(() => {
     // `getPackageInfo` from `local-pkg` isn't always able to find the correct `package.json`:
     // https://github.com/antfu-collective/local-pkg/issues/16
     // This trick uses the patched version of `import-meta-resolve` that after calling
     // `resolvePackage` updates the last resolved package's `package.json` path
     resolvePackage(packageName, parentUrl);
     return getLastResolvedPackageJsonUrl();
-  } catch {
-    // If module is not resolved, the error is thrown
-    return null;
-  }
-};
+  })[1];
 
 // aube's global virtual store hoists the packages of every project above ours, so only what is
 // linked next to us is ours
@@ -77,22 +77,16 @@ export const isOwnCopyImportable = (packageName: string) =>
   !isInstalledInSharedStore || resolveOwnPackageJsonUrl(packageName) != null;
 
 /** Resolves the module the way the project itself would, which our own `import()` may not */
-export const resolveFromProject = (specifier: string, projectDirectory: string) => {
-  try {
-    return resolvePackage(specifier, url.pathToFileURL(`${projectDirectory}${path.sep}`).href);
-  } catch {
-    return null;
-  }
-};
+export const resolveFromProject = (specifier: string, projectDirectory: string) =>
+  attempt(() =>
+    resolvePackage(specifier, url.pathToFileURL(`${projectDirectory}${path.sep}`).href),
+  )[1];
 
-const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) => {
-  try {
+const resolvePackageJsonPathWithPnp = (packageName: string, issuer: string) =>
+  attempt(
     // Unqualified resolution skips `exports`, so `package.json` is found even if not exported
-    return pnpApi?.resolveToUnqualified(`${packageName}/package.json`, issuer) || null;
-  } catch {
-    return null;
-  }
-};
+    () => pnpApi?.resolveToUnqualified(`${packageName}/package.json`, issuer) || null,
+  )[1];
 
 /** Resolves the package the way the code in the given directory would */
 const resolvePackageJsonPathFrom = (packageName: string, issuerDirectory: string) => {
@@ -225,13 +219,7 @@ const readManifest = async (directory: string) => {
 
 type Manifest = NonNullable<Awaited<ReturnType<typeof readManifest>>>;
 
-const parseYamlSafe = (yaml: string): unknown => {
-  try {
-    return parseYaml(yaml);
-  } catch {
-    return null;
-  }
-};
+const parseYamlSafe = (yaml: string) => attempt((): unknown => parseYaml(yaml))[1];
 
 const findWorkspacePackageDirectories = async ({directory, workspacePatterns}: Manifest) => {
   const workspaceFiles = await Promise.all(
@@ -264,15 +252,13 @@ const findWorkspacePackageDirectories = async ({directory, workspacePatterns}: M
       },
     ),
   );
-  return [
-    ...new Set(
-      manifestPaths.map((manifestPath) => path.resolve(directory, path.dirname(manifestPath))),
-    ),
-  ];
+  return arrayUnique(
+    manifestPaths.map((manifestPath) => path.resolve(directory, path.dirname(manifestPath))),
+  );
 };
 
 const hasDependency = ({info}: PackageInfo, packageName: string) =>
-  INSTALLED_DEPENDENCY_FIELDS.some((field) => Object.hasOwn(info[field] || {}, packageName));
+  INSTALLED_DEPENDENCY_FIELDS.some((field) => objectHasOwn(info[field], packageName));
 
 interface FoundPackage {
   packageInfo: PackageInfo;

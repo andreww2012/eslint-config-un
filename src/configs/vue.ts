@@ -16,9 +16,12 @@ import type {OmitStrict, PickKeysStartingWith} from '../types';
 import {
   type MaybeArray,
   allUnionMembers,
+  arrayUnique,
   getKeysOfTruthyValues,
   joinPaths,
   mergeArrayOrBooleanRecords,
+  objectFromKeys,
+  regexEscape,
 } from '../utils';
 import {
   type ValidAndInvalidHtmlTags,
@@ -49,12 +52,6 @@ type WellKnownSfcBlocks =
   | 'style[scoped]';
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
-
-const REGEX_SYNTAX_CHARACTER_REGEXP = /[$()*+.?[\\\]^{|}]/g;
-
-// Unlike `RegExp.escape`, keeps the first letter, so users can disable `^Name$` spelled as is
-const escapeComponentName = (name: string) =>
-  name.replaceAll(REGEX_SYNTAX_CHARACTER_REGEXP, String.raw`\$&`);
 
 interface EnforceTypescriptInScriptionSectionConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
@@ -765,7 +762,9 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
   const knownComponentNames = mergeArrayOrBooleanRecords(
     VUE_KNOWN_COMPONENT_NAME_PATTERNS,
     configNuxt && NUXT_KNOWN_COMPONENT_NAME_PATTERNS,
-    nuxtAutoImports?.componentNames.map((name) => `^${escapeComponentName(name)}$`),
+    nuxtAutoImports?.componentNames.map(
+      (name) => `^${regexEscape(name, {onlySyntaxCharacters: true})}$`,
+    ),
     optionsResolved.knownComponentNames,
   );
   const knownDirectiveNames = mergeArrayOrBooleanRecords(
@@ -1380,7 +1379,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
             files,
             ...(ignores?.length && {ignores}),
             languageOptions: {
-              globals: Object.fromEntries(autoImportedNames.map((name) => [name, 'readonly'])),
+              globals: objectFromKeys(autoImportedNames, () => 'readonly'),
             },
           },
         );
@@ -1390,25 +1389,23 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
 
   configBuilder
     ?.addConfig(['vue/allow-single-word-component-names', {applyUserFilesAndIgnores: false}], {
-      files: [
-        ...new Set(
-          [
-            resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
-            resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
-            configNuxt &&
-              nuxtLayers.flatMap((layer) => [
-                joinPaths(layer.app, layer.pages, '**/*.vue'),
-                joinPaths(layer.app, layer.layouts, '**/*.vue'),
-                joinPaths(layer.app, 'app.vue'),
-                joinPaths(layer.app, 'error.vue'),
-              ]),
+      files: arrayUnique(
+        [
+          resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
+          resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
+          configNuxt &&
+            nuxtLayers.flatMap((layer) => [
+              joinPaths(layer.app, layer.pages, '**/*.vue'),
+              joinPaths(layer.app, layer.layouts, '**/*.vue'),
+              joinPaths(layer.app, 'app.vue'),
+              joinPaths(layer.app, 'error.vue'),
+            ]),
 
-            optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
-          ]
-            .flat()
-            .filter((value) => typeof value === 'string'),
-        ),
-      ],
+          optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
+        ]
+          .flat()
+          .filter((value) => typeof value === 'string'),
+      ),
     })
     .addRule('multi-word-component-names', OFF);
 

@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import pathe from 'pathe';
 import {pluginsLoaders} from '../../../src/loaders/plugins';
-import {capitalize} from '../../../src/utils';
+import {capitalize, invariant} from '../../../src/utils';
 import {readPluginMetadata} from '../../shared/plugin-metadata';
 
 const README_PATH = pathe.join(import.meta.dirname, '../../../README.md');
@@ -90,9 +90,7 @@ const renderRenamesTable = (rows: readonly RenameRow[], readme: string) => {
 const replaceBetweenMarkers = (readme: string, marker: string, content: string) => {
   const start = readme.indexOf(`<!-- ${marker}:START`);
   const end = readme.indexOf(`<!-- ${marker}:END -->`);
-  if (start === -1 || end === -1) {
-    throw new Error(`The \`${marker}\` markers are missing from the readme`);
-  }
+  invariant(start !== -1 && end !== -1, `The \`${marker}\` markers are missing from the readme`);
   return [
     readme.slice(0, start),
     `<!-- ${marker}:START - ${GENERATED_NOTICE} -->\n`,

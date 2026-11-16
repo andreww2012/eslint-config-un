@@ -1,4 +1,5 @@
 import type {NonEmptyTuple} from '../../../src/types';
+import {substringAfter} from '../../../src/utils';
 
 const FIXTURES = {
   packageLockJson: 'npm/package-lock.json',
@@ -27,7 +28,7 @@ describe('basic tests', () => {
     );
 
     expect(
-      allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+      allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
     ).toStrictEqual(ENABLED_PARSERS);
     expect(config?.files).toMatchInlineSnapshot(
       '["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]',
@@ -142,7 +143,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -156,7 +157,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -168,7 +169,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['yaml']);
     });
 
@@ -180,7 +181,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['yaml']);
     });
 
@@ -192,7 +193,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['jsonc']);
     });
 
@@ -204,7 +205,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['json']);
     });
 
@@ -216,7 +217,7 @@ describe('un options', () => {
       );
 
       expect(
-        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+        allParserConfigs.map(({name}) => substringAfter(name, PARSER_CONFIG_PREFIX)).sort(),
       ).toStrictEqual(['plain']);
     });
 

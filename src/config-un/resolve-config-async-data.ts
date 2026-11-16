@@ -25,14 +25,18 @@ import {
   pluginsLoaders,
 } from '../loaders';
 import {RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT} from '../plugins.gen';
-import type {NonEmptyTuple} from '../types';
 import {
   arrayPartition,
+  arrayWithoutFalsy,
   arrayify,
+  callAll,
   capitalize,
   getByPath,
+  isEmptyValue,
   isKeyIn,
+  keyedBy,
   mapGetOrInsert,
+  mapMapValues,
   maybeCall,
   objectEntriesUnsafe,
   objectFromKeys,
@@ -194,16 +198,7 @@ export const resolveConfigAsyncData = async (
       : options;
 
   const cacheData = 'cachedData' in options ? options.cachedData : null;
-  const cachedConfigsByName = Object.fromEntries(
-    (cacheData?.configs || [])
-      .map((config) =>
-        config.name
-          ? ([config.name, config] satisfies NonEmptyTuple)
-          : // Every cached config is named
-            /* v8 ignore next */ null,
-      )
-      .filter((value) => value != null),
-  );
+  const cachedConfigsByName = keyedBy(cacheData?.configs || [], (config) => config.name);
 
   const packagesToManuallyInstallOrUpdate = new Map<
     string,
@@ -217,9 +212,7 @@ export const resolveConfigAsyncData = async (
 
   const configModifyFns: (() => void)[] = [];
   const modifyConfigs = () => {
-    configModifyFns.forEach((fn) => {
-      fn();
-    });
+    callAll(...configModifyFns)();
   };
 
   const [loadedPluginsRaw, , loadedPackages] = await Promise.all([
@@ -270,7 +263,7 @@ export const resolveConfigAsyncData = async (
 
         const configs = cacheData
           ? cacheData.usedParsers[parserPrefix]
-              ?.map((configName) => cachedConfigsByName[configName])
+              ?.map((configName) => cachedConfigsByName.get(configName))
               .filter((value) => value != null)
           : context.usedParsers.get(parserPrefix);
         configModifyFns.push(() => {
@@ -306,17 +299,14 @@ export const resolveConfigAsyncData = async (
     ),
   ]);
 
-  const packageRequesters = new Map<string, Set<PackageRequester>>(
-    cacheData
-      ? Object.entries(cacheData.packageRequesters).map(([packageName, requesters]) => [
-          packageName,
-          new Set(requesters),
-        ])
-      : Array.from(context.packageRequesters, ([packageName, requesters]) => [
+  const packageRequesters: Map<string, Set<PackageRequester>> = cacheData
+    ? new Map(
+        Object.entries(cacheData.packageRequesters).map(([packageName, requesters]) => [
           packageName,
           new Set(requesters),
         ]),
-  );
+      )
+    : mapMapValues(context.packageRequesters, (requesters) => new Set(requesters));
 
   // Must be read only after the modules above were loaded: any of them might have failed to
   // resolve a dependency of its own. Nothing is cached when missing packages are found
@@ -354,14 +344,13 @@ export const resolveConfigAsyncData = async (
         return;
       }
       const isUpdates = index === 0;
-      const packageTypes = arrayPartition(packages, (item) => packagesBackingPlugins.has(item.name))
-        .map(
+      const packageTypes = arrayWithoutFalsy(
+        arrayPartition(packages, (item) => packagesBackingPlugins.has(item.name)).map(
           (packagesOfType, i) =>
             packagesOfType.length > 0 &&
             `${i === 0 ? 'plugin' : 'package'}${packagesOfType.length === 1 ? '' : 's'}`,
-        )
-        .filter(Boolean)
-        .join(' and ');
+        ),
+      ).join(' and ');
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
         `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'}${isUpdates ? '' : ' to make this error disappear'}:
@@ -475,10 +464,8 @@ ${renderInstallationCommand(
 
           if (
             !plugin ||
-            !(
-              autofixDisabledGloballyFor === true ||
-              Object.keys(pluginRulesAutofixDisabledStatuses).length > 0
-            )
+            (autofixDisabledGloballyFor !== true &&
+              isEmptyValue(pluginRulesAutofixDisabledStatuses))
           ) {
             return [pluginPrefix, plugin];
           }
@@ -534,7 +521,7 @@ ${renderInstallationCommand(
     ? objectEntriesUnsafe(cacheData.usedPackages).flatMap(([, packageUses = []]) =>
         packageUses
           .map(({configName, package: packagesToLoad, property, valueTransformFn}) => {
-            const config = cachedConfigsByName[configName];
+            const config = cachedConfigsByName.get(configName);
             if (!config) {
               return null;
             }
@@ -572,7 +559,7 @@ ${renderInstallationCommand(
     : [...context.usedPackages.values()].flatMap((packageUses) =>
         packageUses.map((packageUse) => ({
           ...packageUse,
-          path: [packageUse.path, packageUse.info.property].filter(Boolean).join('.'),
+          path: arrayWithoutFalsy([packageUse.path, packageUse.info.property]).join('.'),
         })),
       );
 

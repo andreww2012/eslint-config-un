@@ -1,4 +1,4 @@
-import {compare} from 'verkit';
+import {arrayPartition, compareSemver, jsonParse, mapGetOrInsertComputed} from 'utilery';
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import {castTsEslintTypedPlugin} from '../../src/loaders/plugins';
 import {interopDefault} from '../../src/utils';
@@ -48,14 +48,13 @@ export const generateEslintPluginsRulesPresence = (
     version: string;
   })[],
 ) => {
-  const ruleVersions = new Map<string, readonly {version: string; deprecated?: boolean}[]>();
+  const ruleVersions = new Map<string, {version: string; deprecated?: boolean}[]>();
+  const [failedPlugins, plugins] = arrayPartition(
+    loadedPlugins,
+    (pluginInfo) => 'error' in pluginInfo,
+  );
 
-  loadedPlugins.forEach((pluginInfo) => {
-    if ('error' in pluginInfo) {
-      return;
-    }
-
-    const {plugin, version} = pluginInfo;
+  plugins.forEach(({plugin, version}) => {
     if (plugin.rules && typeof plugin.rules === 'object') {
       Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
         const isDeprecated =
@@ -67,20 +66,17 @@ export const generateEslintPluginsRulesPresence = (
           typeof rule.meta === 'object' &&
           'deprecated' in rule.meta &&
           Boolean(rule.meta.deprecated);
-        ruleVersions.set(ruleName, [
-          ...(ruleVersions.get(ruleName) || []),
-          {
-            version,
-            ...(isDeprecated && {deprecated: true}),
-          },
-        ]);
+        mapGetOrInsertComputed(ruleVersions, ruleName, () => []).push({
+          version,
+          ...(isDeprecated && {deprecated: true}),
+        });
       });
     }
   });
 
   return {
     rules: Array.from(ruleVersions, ([ruleName, versions]) => {
-      const versionsSorted = versions.toSorted((a, b) => compare(a.version, b.version));
+      const versionsSorted = versions.toSorted((a, b) => compareSemver(a.version, b.version));
       return {
         ruleName,
         minVersion: versionsSorted[0]?.version,
@@ -92,8 +88,9 @@ export const generateEslintPluginsRulesPresence = (
           .map(({version}) => version),
       };
     }),
-    errors: loadedPlugins
-      .filter((pluginInfo) => 'error' in pluginInfo)
-      .map((pluginInfo) => ({...pluginInfo, error: JSON.parse(pluginInfo.error) as unknown})),
+    errors: failedPlugins.map((pluginInfo) => ({
+      ...pluginInfo,
+      error: jsonParse(pluginInfo.error),
+    })),
   };
 };

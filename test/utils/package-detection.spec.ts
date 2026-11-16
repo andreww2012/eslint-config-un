@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {PACKAGES_INSTALLED_THROUGH} from '../../src/constants';
 import type {PackageJson} from '../../src/types';
+import {mapValues} from '../../src/utils';
 import {SHARED_STORE_PACKAGE_JSON_PATH} from '../helpers/shared-store';
 
 type PackageDetectionModule = typeof import('../../src/utils/package-detection');
@@ -92,10 +93,9 @@ const stubProjectWithPackage = async (packageName: string, version: string) => {
 const fetchProjectPackageVersions = async (
   ...arguments_: Parameters<typeof fetchProjectPackagesInfo<string>>
 ) =>
-  Object.fromEntries(
-    Object.entries(await fetchProjectPackagesInfo(...arguments_)).map(
-      ([packageName, packageInfo]) => [packageName, packageInfo?.versions.full ?? null],
-    ),
+  mapValues(
+    await fetchProjectPackagesInfo(...arguments_),
+    (packageInfo) => packageInfo?.versions.full ?? null,
   );
 
 describe('fetchPackageInfo', () => {

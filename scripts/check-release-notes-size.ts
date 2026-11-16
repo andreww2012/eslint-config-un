@@ -1,6 +1,7 @@
 import {styleText} from 'node:util';
 import {readPreState} from '@changesets/pre';
 import {readChangesets} from '@changesets/read';
+import {sum} from 'utilery';
 
 // https://docs.github.com/en/rest/releases/releases#create-a-release
 const MAX_RELEASE_NOTES_LENGTH = 125_000;
@@ -26,7 +27,7 @@ const entries = pendingChangesets
     length: summary.replaceAll('\n', '\n  ').length + LINKS_LENGTH_PER_CHANGESET,
   }))
   .sort((first, second) => second.length - first.length);
-const totalLength = entries.reduce((acc, {length}) => acc + length, 0);
+const totalLength = sum(entries, ({length}) => length);
 
 if (totalLength > MAX_RELEASE_NOTES_LENGTH) {
   console.error(

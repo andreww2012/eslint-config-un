@@ -42,6 +42,8 @@ import {
   type MaybeFn,
   allUnionMembers,
   arrayify,
+  callAll,
+  cartesianProduct,
   castToWritableUnsafe,
   maybeCall,
 } from '../utils';
@@ -1002,9 +1004,10 @@ export const intersectParentConfigFilesWithProvidedFiles = (
   parentConfigFiles: EslintFlatConfigEntry['files'] & {},
   files: EslintFlatConfigEntry['files'] & {},
 ) =>
-  parentConfigFiles.flatMap((configFilesEntry) =>
-    files.map((ourFileEntry) => [...arrayify(configFilesEntry), ...arrayify(ourFileEntry)]),
-  );
+  cartesianProduct(parentConfigFiles, files).map(([configFilesEntry, ourFileEntry]) => [
+    ...arrayify(configFilesEntry),
+    ...arrayify(ourFileEntry),
+  ]);
 
 export const processUnOrFlatConfig = (
   context: UnConfigContext,
@@ -1149,9 +1152,7 @@ export const processUnOrFlatConfig = (
         removedRules.push(...newRuleEntries.map(([ruleNameToRemove]) => ruleNameToRemove));
       }
 
-      insertMetadataFns.forEach((fn) => {
-        fn();
-      });
+      callAll(...insertMetadataFns)();
 
       return shouldCreateDistinctConfigForRule ? [] : newRuleEntries;
     }),

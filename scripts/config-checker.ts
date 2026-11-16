@@ -2,7 +2,13 @@ import consola from 'consola';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
 import {CONFIG_MANIFESTS, MISC_GROUP_CONFIGS} from '../src/configs/manifests.gen';
-import {arrayify, styleConfigName, stylePackageName} from '../src/utils';
+import {
+  arrayPartition,
+  arrayWithoutFalsy,
+  arrayify,
+  styleConfigName,
+  stylePackageName,
+} from '../src/utils';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from '../tsdown.config';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {CONFIGS_META, PACKAGES_META} from './shared/packages-meta';
@@ -94,8 +100,11 @@ const directDependenciesServingOnlyDisabledConfigs = Object.entries(PACKAGES_MET
   },
 );
 
-const packagesToMoveToOptionalPeerDependencies =
-  directDependenciesServingOnlyDisabledConfigs.filter(({isReasonNeedless}) => !isReasonNeedless);
+const [packagesWithNeedlessDirectDependencyReason, packagesToMoveToOptionalPeerDependencies] =
+  arrayPartition(
+    directDependenciesServingOnlyDisabledConfigs,
+    ({isReasonNeedless}) => isReasonNeedless,
+  );
 if (packagesToMoveToOptionalPeerDependencies.length > 0) {
   errors.push({
     severity: 'error',
@@ -109,8 +118,6 @@ if (packagesToMoveToOptionalPeerDependencies.length > 0) {
   });
 }
 
-const packagesWithNeedlessDirectDependencyReason =
-  directDependenciesServingOnlyDisabledConfigs.filter(({isReasonNeedless}) => isReasonNeedless);
 if (packagesWithNeedlessDirectDependencyReason.length > 0) {
   errors.push({
     severity: 'error',
@@ -139,7 +146,7 @@ errors.forEach(({severity, message}) => {
 
 if (errorsCount + warningsCount > 0) {
   logger[errorsCount > 0 ? 'fatal' : 'error'](
-    `Test failed with ${[errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`].filter(Boolean).join(' and ')}`,
+    `Test failed with ${arrayWithoutFalsy([errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`]).join(' and ')}`,
   );
 }
 

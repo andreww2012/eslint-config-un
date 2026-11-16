@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import pathe from 'pathe';
+import {invariant, keyedBy, mapEntries} from 'utilery';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../../../src/eslint-rule-categories.gen';
 import {ALL_RULES_PER_PLUGIN} from '../../../src/eslint-rules.gen';
 import {FIXABLE_RULES_PER_PLUGIN} from '../../../src/eslint-types-fixable-only.gen';
@@ -32,12 +33,10 @@ const PLUGIN_LOADERS: Readonly<Partial<Record<string, {packageName: string}>>> =
  * Listing a rule by hand there is an override, and only allowed when it says something the plugin
  * does not
  */
-const TYPE_AWARE_CATEGORIES: Readonly<Partial<Record<string, readonly string[]>>> =
-  Object.fromEntries(
-    Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
-      'typeAware' in categories ? [[prefix, categories.typeAware]] : [],
-    ),
-  );
+const TYPE_AWARE_CATEGORIES: Readonly<Partial<Record<string, readonly string[]>>> = mapEntries(
+  RULE_CATEGORIES_PER_PLUGIN,
+  (prefix, categories) => ('typeAware' in categories ? [prefix, categories.typeAware] : undefined),
+);
 
 interface TraitEntry {
   value: boolean | string;
@@ -401,7 +400,7 @@ const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) =
     );
   }
 
-  const pluginsByPrefix = new Map(plugins.map((plugin) => [plugin.prefix, plugin]));
+  const pluginsByPrefix = keyedBy(plugins, (plugin) => plugin.prefix);
   const list = collectTrait(plugins, 'autofixDisabled')
     .map(({prefix, ruleName, fullRuleName}) => {
       const plugin = pluginsByPrefix.get(prefix);
@@ -419,9 +418,10 @@ export const writePluginMetadataArtifacts = async (format: (code: string) => Pro
   const plugins = await readPluginMetadata();
 
   const {errors, warnings} = validate(plugins);
-  if (errors.length > 0) {
-    throw new Error(`Invalid plugin metadata:\n${errors.map((error) => `- ${error}`).join('\n')}`);
-  }
+  invariant(
+    errors.length === 0,
+    `Invalid plugin metadata:\n${errors.map((error) => `- ${error}`).join('\n')}`,
+  );
 
   const code = await format(renderArtifacts(plugins));
   await Promise.all([

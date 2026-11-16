@@ -7,7 +7,14 @@ import {
 } from '../config-un/css-syntax';
 import {ERROR, GLOB_CSS, GLOB_SCSS, OFF, SASS_PACKAGES, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
-import {type MaybeFn, arrayUnique, getKeysOfTruthyValues, isNonEmptyArray} from '../utils';
+import {
+  type MaybeFn,
+  arrayUnique,
+  arrayWithoutFalsy,
+  getKeysOfTruthyValues,
+  isEmptyValue,
+  isNonEmptyArray,
+} from '../utils';
 import {
   generateUseBaselineRuleOptions,
   isBaselineFeatureAvailable,
@@ -340,7 +347,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
 
     configBuilder
       ?.addConfig([
-        ['css', configPostfix].filter(Boolean).join('/'),
+        arrayWithoutFalsy(['css', configPostfix]).join('/'),
         {
           ...(isScss && {filesDefault: [GLOB_SCSS]}),
           parseWith: 'css',
@@ -419,7 +426,7 @@ export default defineUnConfig<CssEslintConfigOptions, readonly [], CssConfigResu
   const errorIfBaselineAvailable = (featureId: BaselineFeatureId) =>
     isBaselineFeatureAvailable(context, featureId) ? ERROR : OFF;
 
-  const hasCustomProperties = Object.keys(customProperties).length > 0;
+  const hasCustomProperties = !isEmptyValue(customProperties);
 
   const configBuilderUnicorn = context.createConfigBuilder(configUnicorn, 'cssicorn');
   configBuilderUnicorn

@@ -1,6 +1,6 @@
 // cspell:ignore jsons
 import {styleText} from 'node:util';
-import {arrayUnique} from 'utilery';
+import {arrayUnique, isEmptyValue} from 'utilery';
 import packageJson from '../package.json' with {type: 'json'};
 import {fetchPackageInfo} from '../src/utils/package-detection';
 
@@ -51,7 +51,7 @@ packageJsonsResult.forEach(({packageName, isDev, packageInfo}) => {
   }
 
   const {peerDependencies = {}} = packageInfo.info;
-  if (Object.keys(peerDependencies).length === 0) {
+  if (isEmptyValue(peerDependencies)) {
     return;
   }
 

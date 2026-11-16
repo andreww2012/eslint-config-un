@@ -4,7 +4,14 @@ import matter from '@11ty/gray-matter';
 import {writeChangeset} from '@changesets/write';
 import {cli} from 'cleye';
 import {exec} from 'tinyexec';
-import {jsonParseSafe, regexTyped} from 'utilery';
+import {
+  arrayWithoutFalsy,
+  jsonParseSafe,
+  mapValues,
+  regexEscape,
+  regexTyped,
+  substringAfter,
+} from 'utilery';
 import {isNodeError, styleText} from 'utilery/server';
 import {parse as parseYaml} from 'yaml';
 import * as z from 'zod';
@@ -51,18 +58,16 @@ const resolveCatalogSpecifiers = (
   const {catalog, catalogs} = PnpmWorkspaceCatalogsZod.parse(
     (pnpmWorkspaceYaml && parseYaml(pnpmWorkspaceYaml)) || {},
   );
-  return Object.fromEntries(
-    Object.entries(dependencies).map(([dependency, specifier]) => {
-      if (!specifier.startsWith(CATALOG_PROTOCOL)) {
-        return [dependency, specifier];
-      }
-      const catalogName = specifier.slice(CATALOG_PROTOCOL.length) || 'default';
-      // The default catalog can be defined in either field
-      const catalogVersions =
-        catalogName === 'default' ? catalog || catalogs?.['default'] : catalogs?.[catalogName];
-      return [dependency, catalogVersions?.[dependency] || specifier];
-    }),
-  );
+  return mapValues(dependencies, (specifier, dependency) => {
+    if (!specifier.startsWith(CATALOG_PROTOCOL)) {
+      return specifier;
+    }
+    const catalogName = substringAfter(specifier, CATALOG_PROTOCOL) || 'default';
+    // The default catalog can be defined in either field
+    const catalogVersions =
+      catalogName === 'default' ? catalog || catalogs?.['default'] : catalogs?.[catalogName];
+    return catalogVersions?.[dependency] || specifier;
+  });
 };
 
 // Only the needed field is validated: a full `package.json` schema models plenty of valid fields
@@ -281,16 +286,13 @@ const getCompareDiffUrl = (
 };
 
 const INLINE_CODE_SPANS_REGEXP = /`[^\n`]+`/g;
-const REGEXP_SPECIAL_CHARS_REGEXP = /[$()*+.?[\\\]^{|}]/g;
 const ESCAPED_BRACES_REGEXP = /\\\{([^{}]+)\\\}/g;
 
 // Package names are often "compressed" when several of them are updated at once:
 // `@angular-eslint/*`, `@tsrx/eslint-{plugin,parser}`
 const isDependencyMentionedIn = (changesetSummary: string, dependency: string) =>
   (changesetSummary.match(INLINE_CODE_SPANS_REGEXP) || []).some((codeSpan) => {
-    const pattern = codeSpan
-      .slice(1, -1)
-      .replaceAll(REGEXP_SPECIAL_CHARS_REGEXP, (specialChar) => `\\${specialChar}`)
+    const pattern = regexEscape(codeSpan.slice(1, -1), {onlySyntaxCharacters: true})
       .replaceAll(
         ESCAPED_BRACES_REGEXP,
         (_, alternatives: string) => `(?:${alternatives.replaceAll(',', '|')})`,
@@ -571,7 +573,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   );
 
   const pluginPrefix = PLUGIN_PACKAGES_META[dependency]?.pluginPrefix;
-  const sampleRuleNameWithPrefix = [pluginPrefix, SAMPLE_RULE_NAME].filter(Boolean).join('/');
+  const sampleRuleNameWithPrefix = arrayWithoutFalsy([pluginPrefix, SAMPLE_RULE_NAME]).join('/');
   const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
 
   const ruleDocsUrlForMd = ruleDocsUrl

@@ -1,6 +1,7 @@
 import path from 'node:path';
 import {Data, Effect, FileSystem} from 'effect';
 import jsonStringifyCompact from 'json-stringify-pretty-compact';
+import {sortKeys} from 'utilery';
 import * as z from 'zod';
 
 const EslintPluginsDbZod = z.record(
@@ -43,9 +44,7 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
 
-    const dataWritten = Object.fromEntries(
-      Object.entries(data).sort(([nameA], [nameB]) => nameA.localeCompare(nameB)),
-    );
+    const dataWritten = sortKeys(data, (nameA, nameB) => nameA.localeCompare(nameB));
 
     // Renaming the temp file avoids `UNKNOWN` errors thrown by `fs.writeFile` when the file is
     // already locked on Windows

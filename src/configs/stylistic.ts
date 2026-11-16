@@ -4,7 +4,7 @@ import type {EslintRuleEntry} from '../eslint/eslint-types';
 import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
-import {mapKeys} from '../utils';
+import {mapKeys, substringAfter} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -58,7 +58,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
         /* v8 ignore start */
         {},
       /* v8 ignore stop */
-      (_, key) => key.slice('@stylistic/'.length),
+      (_, key) => substringAfter(key, '@stylistic/'),
     );
   }
 

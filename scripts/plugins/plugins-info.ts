@@ -3,7 +3,7 @@ import {Worker} from 'node:worker_threads';
 import {Data, DateTime, Duration, Effect, Semaphore} from 'effect';
 import {HttpClient, HttpClientError, HttpClientRequest} from 'effect/http';
 import * as packageFetcher from 'package-json';
-import type {Ms} from 'utilery';
+import {type Ms, isEmptyValue} from 'utilery';
 import * as z from 'zod';
 import {
   type ExecuteAnyEslintPluginWorkerInitialData,
@@ -132,7 +132,7 @@ export const fetchPackageStats = (packageName: string) =>
 
       const result = parseResult[packageName] || {};
 
-      if (Object.keys(result).length === 0) {
+      if (isEmptyValue(result)) {
         logger.warn(
           `Package ${styledName} stats are empty, request URL was ${statsUrl}, response was:`,
           responseJson,

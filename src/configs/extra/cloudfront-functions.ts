@@ -1,5 +1,6 @@
 import globals from 'globals';
 import {ERROR, OFF} from '../../constants';
+import {arrayDifference, arrayWithoutFalsy} from '../../utils';
 import {buildEsConfigs} from '../es';
 import {
   type ExtraPluginsType,
@@ -38,16 +39,14 @@ const generateSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) 
   `${syntax} ${isPlural ? 'are' : 'is'} not allowed in CloudFront functions`;
 
 const getAllowedImports = (isV2 = true): readonly string[] =>
-  ['querystring', 'crypto', isV2 && 'cloudfront'].filter(
-    (moduleName) => typeof moduleName === 'string',
-  );
+  arrayWithoutFalsy(['querystring', 'crypto', isV2 && 'cloudfront']);
 
 // Turning Node.js globals off makes `no-undef` report the ones missing in CloudFront
 const getGlobals = (isV2: boolean) =>
   Object.fromEntries([
-    ...Object.keys(globals.node)
-      .filter((name) => !Object.hasOwn(globals.builtin, name))
-      .map((name) => [name, 'off'] as const),
+    ...arrayDifference(Object.keys(globals.node), Object.keys(globals.builtin)).map(
+      (name) => [name, 'off'] as const,
+    ),
     ...[
       'console',
       'InternalError',

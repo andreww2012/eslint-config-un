@@ -3,7 +3,7 @@ import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
 import type {Nullable} from '../types';
-import {arrayIncludes, isKeyIn, omit} from '../utils';
+import {arrayIncludes, isKeyIn, mapEntries, omit} from '../utils';
 import type {
   EslintFlatConfigEntry,
   EslintPlugin,
@@ -217,18 +217,13 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   pluginNamespace: string,
   plugin: Plugin,
 ): Plugin['rules'] & {} =>
-  Object.fromEntries(
-    Object.entries(
-      /* v8 ignore next A plugin whose autofixes are disabled always has rules */ plugin.rules ||
-        {},
-    ).flatMap(([ruleId, ruleImplementation]) =>
+  mapEntries(
+    /* v8 ignore next A plugin whose autofixes are disabled always has rules */ plugin.rules || {},
+    (ruleId, ruleImplementation) =>
       ruleImplementation.meta?.fixable
         ? [
-            [
-              `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`,
-              disableRuleAutofix(ruleImplementation),
-            ] as const,
+            `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`,
+            disableRuleAutofix(ruleImplementation),
           ]
-        : [],
-    ),
+        : undefined,
   );

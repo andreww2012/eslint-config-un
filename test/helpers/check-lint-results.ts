@@ -22,7 +22,7 @@ export function findLintMessageFromLintResults(
 ): Linter.LintMessage | readonly Linter.LintMessage[] | undefined {
   const fileName = substringAfterLast(filePath, '/');
   const fileResult = lintResult.find(
-    (result) => fileName && pathe.normalize(result.filePath).split('/').at(-1) === fileName,
+    (result) => fileName && substringAfterLast(pathe.normalize(result.filePath), '/') === fileName,
   );
   return options?.all
     ? fileResult?.messages.filter((message) => message.ruleId === ruleId) || []

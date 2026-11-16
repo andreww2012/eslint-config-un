@@ -1,7 +1,7 @@
 import type {EslintConfigUnOptions} from '../config-un/shared';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import type {PathsBracketed, RequireExactlyOne} from '../types';
-import {allUnionMembers} from '../utils';
+import {allUnionMembers, arrayWithoutFalsy} from '../utils';
 import {resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
   type ExtraPluginsType,
@@ -238,7 +238,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css'
 
     configBuilder
       ?.addConfig([
-        ['better-tailwindcss', configPostfix].filter(Boolean).join('/'),
+        arrayWithoutFalsy(['better-tailwindcss', configPostfix]).join('/'),
         {
           ...(configPostfix === 'css' && {
             filesDefault: cssFiles,

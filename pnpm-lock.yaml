@@ -992,8 +992,8 @@ importers:
         specifier: 2.0.0-beta.0
         version: 2.0.0-beta.0
       utilery:
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.4.0
+        version: 0.4.0
       validate-npm-package-name:
         specifier: 8.0.0
         version: 8.0.0
@@ -12883,9 +12883,9 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  utilery@0.3.0:
-    resolution: {integrity: sha512-LXxVlsR4NSRwB6mkq/MY6c8irun6gdQ7fcaCnNUGSHHnXzHmoueYz4GhwfIZYdYQOKwXzYdmdg1nEk8CCUQdJw==}
-    engines: {node: ^22.23.1 || ^24.18.0 || >=26.4.0}
+  utilery@0.4.0:
+    resolution: {integrity: sha512-zAjAWaFSP8e8eg192o7HISUE5zn5blCVb5LpRM3JSwbYvw1fCn818VGsOScl6Y3guMgMm3yb1HNitbyv7avKBg==}
+    engines: {bun: '>=1.4.0', node: ^22.23.1 || ^24.18.0 || >=26.4.0}
 
   valibot@1.5.0:
     resolution: {integrity: sha512-nil6AkP2TChWL43Z5uJ6GTxX01CUA+g8LWUM+N/rB9NBbkUMaUsi9PUNzlUPgoKASgmx9f7eGOYpJ04/fSa6FQ==}
@@ -26951,7 +26951,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  utilery@0.3.0: {}
+  utilery@0.4.0: {}
 
   valibot@1.5.0(@typescript/typescript6@6.0.2):
     optionalDependencies:

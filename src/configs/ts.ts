@@ -732,12 +732,10 @@ export default defineUnConfig<
       ? merged
       : {
           ...merged,
-          extraFileExtensions: [
-            ...new Set([
-              ...(merged.extraFileExtensions || []),
-              ...extraFileExtensions.map((extension) => `.${extension}`),
-            ]),
-          ],
+          extraFileExtensions: arrayUnion(
+            merged.extraFileExtensions || [],
+            extraFileExtensions.map((extension) => `.${extension}`),
+          ),
         };
   };
 

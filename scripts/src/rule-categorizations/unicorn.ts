@@ -1,4 +1,4 @@
-import {type ObjectValues, isKeyIn, objectValuesUnsafe} from 'utilery';
+import {type ObjectValues, arrayUnique, isKeyIn, objectValuesUnsafe} from 'utilery';
 import type {CategorizeRule, RuleCategorization} from './shared';
 
 const UNICORN_LANGUAGES_TO_CATEGORIES = {
@@ -25,19 +25,17 @@ const categorizeUnicornRule: CategorizeRule<
   }
 
   const errors: string[] = [];
-  const categories = [
-    ...new Set(
-      languages
-        .map((language) => {
-          if (isKeyIn(language, UNICORN_LANGUAGES_TO_CATEGORIES)) {
-            return UNICORN_LANGUAGES_TO_CATEGORIES[language];
-          }
-          errors.push(`unknown language \`${language}\``);
-          return null;
-        })
-        .filter((value) => value != null),
-    ),
-  ];
+  const categories = arrayUnique(
+    languages
+      .map((language) => {
+        if (isKeyIn(language, UNICORN_LANGUAGES_TO_CATEGORIES)) {
+          return UNICORN_LANGUAGES_TO_CATEGORIES[language];
+        }
+        errors.push(`unknown language \`${language}\``);
+        return null;
+      })
+      .filter((value) => value != null),
+  );
 
   return {categories, errors};
 };

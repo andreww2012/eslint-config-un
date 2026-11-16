@@ -41,6 +41,8 @@ import {
   arrayPartition,
   arrayUnique,
   findArrayInversions,
+  invariant,
+  keyedBy,
   mapGetOrInsert,
   objectEntriesUnsafe,
   styleConfigName,
@@ -161,11 +163,7 @@ export class ConfigEntryBuilder<
   >();
 
   addFlatConfig(config: SetRequired<EslintFlatConfigEntry, 'name'>) {
-    /* v8 ignore start */
-    if (this.configs.has(config.name)) {
-      throw new Error(`Config with name '${config.name}' already exists`);
-    }
-    /* v8 ignore stop */
+    invariant(!this.configs.has(config.name), `Config with name '${config.name}' already exists`);
     const metadata: FlatConfigMetadata = {};
     this.configs.set(config.name, [config, metadata]);
     return metadata;
@@ -582,11 +580,7 @@ export class ConfigEntryBuilder<
       config: configFinal,
 
       addRule: (ruleName, severity, ruleOptions) => {
-        /* v8 ignore start */
-        if (this.pluginPrefix == null) {
-          throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
-        }
-        /* v8 ignore stop */
+        invariant(this.pluginPrefix != null, 'Cannot use `addRule` when `pluginPrefix` is `null`');
         // Inferred type arguments make TS compare the options of every rule, taking seconds, so
         // we're setting them manually
         return addAnyRule<DefaultPrefix & PluginPrefix, typeof ruleName>(
@@ -763,17 +757,9 @@ export class ConfigEntryBuilder<
                 if (rulesToSwapPositionsOf.size === 0) {
                   return;
                 }
-                const rulesToSwapNormalized = Object.entries(
-                  Object.groupBy(
-                    Array.from(rulesToSwapPositionsOf, ([left, right]) => ({
-                      left,
-                      right: right.at(-1) || '',
-                    })),
-                    (pair) => pair.right,
-                  ),
-                ).map(
-                  ([right, rules = []]) =>
-                    [rules.at(-1)?.left || '', right] satisfies NonEmptyTuple<string>,
+                const rulesToSwapNormalized = Array.from(
+                  keyedBy(rulesToSwapPositionsOf, ([, rights]) => rights.at(-1) || ''),
+                  ([right, [left]]) => [left, right] satisfies NonEmptyTuple<string>,
                 );
                 errorMessages.push(
                   `↔️ Rules out of order${groupName ? ` in group ${styleText('cyan', groupName)}` : ''}:\n${rulesToSwapNormalized

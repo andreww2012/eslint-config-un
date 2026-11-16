@@ -2,11 +2,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {text} from 'node:stream/consumers';
 import {parse as parseToml} from 'smol-toml';
+import {invariant} from 'utilery';
 
 const configPaths = process.argv.slice(2);
-if (configPaths.length === 0) {
-  throw new Error('Expected one or more lychee config paths to read `extensions` from');
-}
+invariant(
+  configPaths.length > 0,
+  'Expected one or more lychee config paths to read `extensions` from',
+);
 
 const configs = await Promise.all(
   configPaths.map(async (configPath) => parseToml(await fs.readFile(configPath, 'utf8'))),

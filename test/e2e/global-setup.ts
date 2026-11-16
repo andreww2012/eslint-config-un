@@ -4,7 +4,7 @@ import path from 'node:path';
 import {exec} from 'tinyexec';
 import type {TestProject} from 'vitest/node';
 import packageJson from '../../package.json' with {type: 'json'};
-import {isPlainObject, readAndParseJson, writeJsonFile} from '../../src/utils';
+import {invariant, isPlainObject, readAndParseJson, writeJsonFile} from '../../src/utils';
 import {startRegistry} from './registry-server';
 
 declare module 'vitest' {
@@ -42,18 +42,17 @@ export const setup = async (project: TestProject) => {
   const packedTarballName = (await fs.readdir(temporaryDirectory)).find((fileName) =>
     fileName.endsWith('.tgz'),
   );
-  if (packedTarballName == null) {
-    throw new Error(`\`pnpm pack\` did not produce a tarball in ${temporaryDirectory}`);
-  }
+  invariant(
+    packedTarballName != null,
+    `\`pnpm pack\` did not produce a tarball in ${temporaryDirectory}`,
+  );
   await run('tar', ['-xzf', packedTarballName], temporaryDirectory);
 
   // Package managers cache tarballs by name and version, so a stable one would get a stale build
   const version = `${packageJson.version}${packageJson.version.includes('-') ? '.' : '-'}e2e.${Date.now()}`;
   const manifestPath = path.join(temporaryDirectory, 'package', 'package.json');
   const packedManifest = await readAndParseJson(manifestPath);
-  if (!isPlainObject(packedManifest)) {
-    throw new Error(`${manifestPath} does not contain an object`);
-  }
+  invariant(isPlainObject(packedManifest), `${manifestPath} does not contain an object`);
   const manifest = {...packedManifest, version};
   await writeJsonFile(manifestPath, manifest);
 
