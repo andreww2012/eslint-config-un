@@ -10,7 +10,7 @@ import {
 } from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {OmitStrict, Prettify} from '../types';
-import {allUnionMembers} from '../utils';
+import {allUnionMembers, isVersionAtLeast} from '../utils';
 import {
   generateUseBaselineRuleOptions,
   noRestrictedHtmlElementsDefault,
@@ -511,9 +511,10 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Detected automatically from a major version of the installed version of `react` package, but
-   * can also be specified manually here
+   * can also be specified manually here.
+   * Pass a string like `'19.10'` for a minor version that a number can't express
    */
-  reactVersion?: number;
+  reactVersion?: number | string;
 
   /**
    * A flag indicating
@@ -708,7 +709,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     pluginX,
     shorthandBoolean,
     shorthandFragment,
-    reactVersion: reactMajorVersion,
+    reactVersion,
   } = optionsResolved;
 
   const pluginSettings = context.getPluginSettings('react');
@@ -719,8 +720,8 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
       optionsResolved.reactVersion,
   );
 
-  const isMinVersion17 = reactMajorVersion >= 17;
-  const isMinVersion19 = reactMajorVersion >= 19;
+  const isMinVersion17 = isVersionAtLeast(reactVersion, '17');
+  const isMinVersion19 = isVersionAtLeast(reactVersion, '19');
 
   optionsResolved.newJsxTransform ??= isMinVersion17;
   const {newJsxTransform} = optionsResolved;

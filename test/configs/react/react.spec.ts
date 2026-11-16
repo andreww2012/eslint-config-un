@@ -304,6 +304,20 @@ describe('options', () => {
       ).toBe(0);
     });
 
+    it('reads a string as is and passes it to the plugins', async () => {
+      const configResult = await computeEslintConfig({react: {reactVersion: '19.10'}});
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'react/plugin-original',
+          'react/forbid-foreign-prop-types',
+        ),
+      ).toBe(0);
+      expect(
+        configResult.getConfigByUnPostfix('react/plugin-original')?.settings?.['react'],
+      ).toStrictEqual({version: '19.10'});
+    });
+
     it('enables `react/forbid-foreign-prop-types` when `reactVersion` is 18', async () => {
       const configResult = await computeEslintConfig({react: {reactVersion: 18}});
 

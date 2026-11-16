@@ -218,6 +218,12 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(1);
     });
 
+    it('reads a string as is', async () => {
+      const configResult = await computeEslintConfig({svelte: {svelteVersion: '3.50'}});
+
+      expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(1);
+    });
+
     it('disables `svelte/prefer-style-directive` rule when set to <3.46', async () => {
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 3}});
 

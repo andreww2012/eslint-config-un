@@ -142,10 +142,11 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
   /**
    * `svelte` package version, possibly including a minor version.
+   * Pass a string like `'5.10'` for a minor version that a number can't express.
    * Normally should not be set manually as it will be detected automatically
    * @default auto-detected or `5` if cannot be detected
    */
-  svelteVersion?: number;
+  svelteVersion?: number | string;
 
   /**
    * Whether [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte) is used.

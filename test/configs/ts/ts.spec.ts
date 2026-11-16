@@ -358,6 +358,14 @@ describe('options', () => {
       ).toMatchObject([{fixStyle: 'inline-type-imports'}]);
     });
 
+    it('reads a string as is', async () => {
+      const configResult = await computeEslintConfig({ts: {typescriptVersion: '4.10'}});
+
+      expect(
+        configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'ts/consistent-type-imports'),
+      ).toMatchObject([{fixStyle: 'inline-type-imports'}]);
+    });
+
     it('does not use `inline-type-imports` fix style for `ts/consistent-type-imports` when set to <4.5', async () => {
       const configResult = await computeEslintConfig({ts: {typescriptVersion: 4.4}});
 

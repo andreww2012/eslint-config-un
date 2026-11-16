@@ -499,10 +499,11 @@ export interface TsEslintConfigOptions<
 
   /**
    * By default it will be auto-detected from the installed `typescript` package.
-   * It will contain major and minor version numbers, e.g. even if you installed TypeScript 5.8.1,
-   * `typescriptVersion` will be `5.8`
+   * Only major and minor version numbers matter, e.g. even if you installed TypeScript 5.8.1,
+   * `typescriptVersion` will be `5.8`.
+   * Pass a string like `'5.10'` for a minor version that a number can't express
    */
-  typescriptVersion?: number;
+  typescriptVersion?: number | string;
 
   /**
    * Globs of files to allow running with the default project compiler options despite not being
