@@ -44,6 +44,7 @@ minimumReleaseAgeExclude: # []
   - '@oxfmt/binding-win32-ia32-msvc@0.79.0'
   - '@oxfmt/binding-win32-x64-msvc@0.79.0'
   - oxfmt@0.79.0
+  - eslint-plugin-jsdoc@65.4.10
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
