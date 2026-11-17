@@ -367,7 +367,7 @@
     "vue-eslint-parser": "10.4.2",
     "web-features": "3.46.0",
     "zod": "4.6.7",
-    "zod-package-json": "2.1.0"
+    "zod-package-json": "3.0.0"
   },
   "peerDependencies": {
     "@angular-eslint/eslint-plugin": ">=13 <23",
