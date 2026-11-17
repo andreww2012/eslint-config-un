@@ -116,7 +116,7 @@
     "@html-eslint/eslint-plugin": "0.68.0",
     "@html-eslint/eslint-plugin-react": "0.68.0",
     "@html-eslint/parser": "0.68.0",
-    "@stylistic/eslint-plugin": "6.0.0",
+    "@stylistic/eslint-plugin": "6.0.1",
     "@typescript-eslint/eslint-plugin": "8.72.2",
     "@typescript-eslint/parser": "8.72.2",
     "@typescript-eslint/types": "8.72.2",

@@ -2,7 +2,7 @@
 "eslint-config-un": patch
 ---
 
-stylistic: updated [`@stylistic/eslint-plugin` from v5.10.0 to v6.0.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.10.0...v6.0.0):
+stylistic: updated [`@stylistic/eslint-plugin` from v5.10.0 to v6.0.1](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.10.0...v6.0.1):
 
 - 🔴 not enabled the following rules, as the `shorthandBoolean` and `shorthandFragment` options of the `react` config already control the same checks:
   - [`stylistic/jsx-shorthand-boolean`](https://eslint.style/rules/jsx-shorthand-boolean)
