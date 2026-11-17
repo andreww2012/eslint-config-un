@@ -557,14 +557,18 @@ export const buildJsxA11yConfigs = (
         },
       ],
     ) /** @since 1.0.0 */
-    .addRule(rn('interactive-supports-focus'), isForLit ? null : ERROR, [
-      {
-        tabbable: getKeysOfTruthyValues({
-          ...defaultTabbableRoles,
-          ...tabbableRoles,
-        }),
-      },
-    ]) /** @since 5.0.0 */
+    .addRule(
+      rn('interactive-supports-focus'),
+      isForLit ? null : tabbableRoles === false ? OFF : ERROR,
+      [
+        {
+          tabbable: getKeysOfTruthyValues({
+            ...defaultTabbableRoles,
+            ...(tabbableRoles !== true && tabbableRoles),
+          }),
+        },
+      ],
+    ) /** @since 5.0.0 */
     .addRule(rn('label-has-associated-control'), isForLit ? null : ERROR, [
       {
         ...(labelAttributes?.length && {labelAttributes}),
