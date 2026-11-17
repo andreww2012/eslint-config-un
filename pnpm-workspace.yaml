@@ -14,36 +14,6 @@ lockfile:
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
-  - prettier@3.10.1
-  - '@eslint-zod/utils@7.0.0'
-  - eslint-plugin-zod-core@2.1.4
-  - eslint-plugin-zod-mini@2.2.0
-  - eslint-plugin-zod@5.3.0
-  - eslint-mdx@3.10.1
-  - eslint-plugin-mdx@3.10.1
-  - eslint-plugin-perfectionist@5.14.0
-  - eslint-plugin-react-refresh@0.5.8
-  - eslint-plugin-unicorn@80.0.0
-  - '@oxfmt/binding-android-arm-eabi@0.79.0'
-  - '@oxfmt/binding-android-arm64@0.79.0'
-  - '@oxfmt/binding-darwin-arm64@0.79.0'
-  - '@oxfmt/binding-darwin-x64@0.79.0'
-  - '@oxfmt/binding-freebsd-x64@0.79.0'
-  - '@oxfmt/binding-linux-arm-gnueabihf@0.79.0'
-  - '@oxfmt/binding-linux-arm-musleabihf@0.79.0'
-  - '@oxfmt/binding-linux-arm64-gnu@0.79.0'
-  - '@oxfmt/binding-linux-arm64-musl@0.79.0'
-  - '@oxfmt/binding-linux-ppc64-gnu@0.79.0'
-  - '@oxfmt/binding-linux-riscv64-gnu@0.79.0'
-  - '@oxfmt/binding-linux-riscv64-musl@0.79.0'
-  - '@oxfmt/binding-linux-s390x-gnu@0.79.0'
-  - '@oxfmt/binding-linux-x64-gnu@0.79.0'
-  - '@oxfmt/binding-linux-x64-musl@0.79.0'
-  - '@oxfmt/binding-openharmony-arm64@0.79.0'
-  - '@oxfmt/binding-win32-arm64-msvc@0.79.0'
-  - '@oxfmt/binding-win32-ia32-msvc@0.79.0'
-  - '@oxfmt/binding-win32-x64-msvc@0.79.0'
-  - oxfmt@0.79.0
   - eslint-plugin-jsdoc@65.4.10
   - eslint-plugin-ember@13.11.0
   - '@tsrx/core@0.6.2'
@@ -62,6 +32,18 @@ minimumReleaseAgeExclude: # []
   - typescript-eslint@8.73.0
   - browserslist@4.29.6
   - update-browserslist-db@1.4.0
+  - '@intlify/core-base@11.4.21'
+  - '@intlify/devtools-types@11.4.21'
+  - '@intlify/message-compiler@11.4.21'
+  - '@intlify/shared@11.4.21'
+  - '@vercel/nft@1.11.5'
+  - bare-buffer@3.7.3
+  - bare-url@2.5.8
+  - baseline-browser-mapping@2.11.38
+  - content-tag@4.3.0
+  - electron-to-chromium@1.5.487
+  - ignore@7.0.16
+  - minimatch@11.0.9
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
