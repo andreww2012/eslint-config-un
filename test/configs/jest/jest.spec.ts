@@ -187,6 +187,14 @@ describe('options', () => {
       );
     });
 
+    it('enables `jest/consistent-test-it` with default options when set to `true`', async () => {
+      const configResult = await computeEslintConfig({jest: {testDefinitionKeyword: true}});
+
+      expect(configResult.getRuleEntry('jest', 'jest/consistent-test-it')).toMatchInlineSnapshot(
+        '[2, {"fn": "it", "withinDescribe": "it"}]',
+      );
+    });
+
     it('disables `jest/consistent-test-it` when set to `false`', async () => {
       const configResult = await computeEslintConfig({jest: {testDefinitionKeyword: false}});
 

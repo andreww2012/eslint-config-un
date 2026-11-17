@@ -215,6 +215,14 @@ describe('options', () => {
       );
     });
 
+    it('enforces `.yml` extension when set to `true`', async () => {
+      const configResult = await computeEslintConfig({yaml: {enforceExtension: true}});
+
+      expect(configResult.getRuleEntry('yaml', 'yaml/file-extension')).toMatchInlineSnapshot(
+        '[2, {"extension": "yml"}]',
+      );
+    });
+
     it('enforces `.yml` extension when set to `"yml"`', async () => {
       const configResult = await computeEslintConfig({yaml: {enforceExtension: 'yml'}});
 
@@ -241,6 +249,14 @@ describe('options', () => {
   describe('option: `quotes`', () => {
     it('enforces single quotes by default', async () => {
       const configResult = await computeEslintConfig('yaml');
+
+      expect(configResult.getRuleEntry('yaml', 'yaml/quotes')).toMatchInlineSnapshot(
+        '[2, {"prefer": "single"}]',
+      );
+    });
+
+    it('enforces single quotes when set to `true`', async () => {
+      const configResult = await computeEslintConfig({yaml: {quotes: true}});
 
       expect(configResult.getRuleEntry('yaml', 'yaml/quotes')).toMatchInlineSnapshot(
         '[2, {"prefer": "single"}]',

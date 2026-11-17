@@ -260,13 +260,14 @@ export interface UnicornEslintConfigOptions<
    * - `dataset`: use
    *   [the `.dataset` API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset);
    * - `attributes`: use `{get,set,remove,has}Attribute`;
+   * - `true`: same as the default value;
    * - `false`: do not enforce the style.
    *
    * Affected rule:
    * - [`unicorn/dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md)
    * @default 'dataset'
    */
-  domDataAttributesStyle?: false | 'dataset' | 'attributes';
+  domDataAttributesStyle?: boolean | 'dataset' | 'attributes';
 
   /**
    * Enforce that boolean variables, parameters, functions, and optionally object properties have
@@ -296,13 +297,14 @@ export interface UnicornEslintConfigOptions<
    * arguments, such as `fs.readFile(file, 'utf8')`.
    * - `'no-dash'`: enforce lower case and the dash-less variant for UTF-8 encoding.
    * - `'dash'`: enforce lower case and the variant with a dash for UTF-8 encoding.
+   * - `true`: same as the default value.
    * - `false`: do not enforce anything.
    *
    * Affected rule:
    * - [`unicorn/text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/text-encoding-identifier-case.md)
    * @default 'no-dash'
    */
-  enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
+  enforceTextEncodingCaseAndNotation?: boolean | 'no-dash' | 'dash';
 
   /**
    * Enforce or disallow explicit `setTimeout`/`setInterval` delay (the second parameter), even if

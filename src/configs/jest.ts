@@ -129,7 +129,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * Enforces the keyword tests are defined with.
    * Will be merged with the default value.
-   * `false` disables the rule.
+   * `true` is the same as the default value, `false` disables the rule.
    *
    * When string, will be set for the properties of the object.
    *
@@ -138,9 +138,9 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * @default {fn: 'it', withinDescribe: 'it'}
    */
   testDefinitionKeyword?:
+    | boolean
     | GetRuleOptions<'jest', 'consistent-test-it'>
-    | ObjectValues<GetRuleOptions<'jest', 'consistent-test-it'>>
-    | false;
+    | ObjectValues<GetRuleOptions<'jest', 'consistent-test-it'>>;
 
   /**
    * Enforces the maximum number of assertion calls a test may make.

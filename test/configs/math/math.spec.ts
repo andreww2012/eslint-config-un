@@ -181,6 +181,16 @@ describe('options', () => {
       );
     });
 
+    it('enables `math/abs` rule with `Math.abs` preference when `absoluteValuesConversionMethod` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        math: {absoluteValuesConversionMethod: true},
+      });
+
+      expect(configResult.getRuleEntry('math', 'math/abs')).toMatchInlineSnapshot(
+        '[2, {"prefer": "Math.abs"}]',
+      );
+    });
+
     it('enables `math/abs` rule with `expression` preference when `absoluteValuesConversionMethod` is `"expression"`', async () => {
       const configResult = await computeEslintConfig({
         math: {absoluteValuesConversionMethod: 'expression'},

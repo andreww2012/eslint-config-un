@@ -30,6 +30,10 @@ const DEFAULT_IGNORE_PATTERNS = [
   /* eslint-enable case-police/string-check -- Only the technical suffix patterns allow mixed capitalization */
 ] as const;
 
+// `true` or no value means the default value
+const resolveNestedOption = <Value>(value: boolean | Value | undefined, defaultValue: Value) =>
+  value == null || value === true ? defaultValue : value;
+
 /**
  * An ESLint plugin that helps enforce consistent writing style and formatting conventions in
  * Markdown files.
@@ -41,13 +45,14 @@ export interface MarkdownPreferencesEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-preferences'> {
   /**
    * Sets the style for emphasized, strong, emphasized strong and strikethrough text.
+   * `true` is the same as the default value, `false` disables both rules.
    *
    * Affected rules:
    * - [`markdown-preferences/emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
    * - [`markdown-preferences/strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
    */
   delimitersStyle?:
-    | false
+    | boolean
     | {
         /**
          * Choose the style of emphasized, strong, or emphasized strong text.
@@ -55,6 +60,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * - `'*'`: use `*text*` for emphasized text and `**text**` for strong text (default);
          * - `'_'`: same as above, but use `_` instead of `*`;
          * - `object`: directly configure the rule's options;
+         * - `true`: same as the default value;
          * - `false`: style not enforced.
          *
          * Note: style for emphasized strong text is automatically determined from the emphasis and
@@ -66,21 +72,21 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * @default '*'
          */
         emphasis?:
-          | false
+          | boolean
           | '*'
           | '_'
           | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
 
         /**
          * Choose the delimiter style for strikethrough text.
-         * Set `false` to not enforce.
+         * `true` is the same as the default value, `false` disables the rule.
          *
          * Affected rule:
          * - [`markdown-preferences/strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
          * @default '~~'
          */
         strikethrough?:
-          | false
+          | boolean
           | GetRuleOptions<'markdown-preferences', 'strikethrough-delimiters-style'>['delimiter'];
       };
 
@@ -155,6 +161,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
 
   /**
    * Enforces ordered lists numbering style and start number.
+   * `true` is the same as the default value, `false` disables all the rules.
    *
    * Affected rules:
    * - [`markdown-preferences/ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
@@ -162,40 +169,43 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - [`markdown-preferences/ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
    */
   orderedLists?:
-    | false
+    | boolean
     | {
         /**
          * Enforces ordered lists numbering style:
          * - `'sequential'` (default): enforces sequential numbering style (1, 2, 3, ...);
          * - `'fixed'`: fixed numbering style (1, 1, 1, ...).
+         * - `true`: same as the default value.
          * - `false`: does not enforce the numbering style.
          *
          * Affected rule:
          * - [`markdown-preferences/ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
          * @default 'sequential'
          */
-        numbering?: false | 'sequential' | 'fixed';
+        numbering?: boolean | 'sequential' | 'fixed';
 
         /**
          * Enforces that ordered lists start with a specific number (1 or 0).
+         * `true` is the same as the default value, `false` disables the rule.
          *
          * Affected rule:
          * - [`markdown-preferences/ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
          * @default 1
          */
         start?:
-          | false
+          | boolean
           | (GetRuleOptions<'markdown-preferences', 'ordered-list-marker-start'>['start'] & {});
 
         /**
          * Enforces ordered lists style.
+         * `true` is the same as the default value, `false` disables the rule.
          *
          * Affected rule:
          * - [`markdown-preferences/ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
          * @default 'n.'
          */
         style?:
-          | false
+          | boolean
           | (GetRuleOptions<'markdown-preferences', 'ordered-list-marker-style'>['prefer'] & {})
           | GetRuleOptions<'markdown-preferences', 'ordered-list-marker-style'>;
       };
@@ -267,17 +277,30 @@ export default defineUnConfig<
   const enforcedCasingForHeadings = getEnforcedCasing('headings');
   const enforcedCasingForTableHeaders = getEnforcedCasing('tableHeaders');
 
-  const emphasisStyle =
-    delimitersStyle === false ? delimitersStyle : (delimitersStyle?.emphasis ?? '*');
-  const strikethroughStyle =
-    delimitersStyle === false ? delimitersStyle : (delimitersStyle?.strikethrough ?? '~~');
+  const emphasisStyle = resolveNestedOption(
+    typeof delimitersStyle === 'object' ? delimitersStyle.emphasis : delimitersStyle,
+    '*',
+  );
+  const strikethroughStyle = resolveNestedOption(
+    typeof delimitersStyle === 'object' ? delimitersStyle.strikethrough : delimitersStyle,
+    '~~',
+  );
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-preferences');
 
-  const orderedLists: Required<MarkdownPreferencesEslintConfigOptions['orderedLists'] & object> = {
-    numbering: orderedListsRaw !== false && (orderedListsRaw?.numbering ?? 'sequential'),
-    start: orderedListsRaw !== false && (orderedListsRaw?.start ?? 1),
-    style: orderedListsRaw !== false && (orderedListsRaw?.style ?? 'n.'),
+  const orderedLists = {
+    numbering: resolveNestedOption(
+      typeof orderedListsRaw === 'object' ? orderedListsRaw.numbering : orderedListsRaw,
+      'sequential',
+    ),
+    start: resolveNestedOption(
+      typeof orderedListsRaw === 'object' ? orderedListsRaw.start : orderedListsRaw,
+      1,
+    ),
+    style: resolveNestedOption(
+      typeof orderedListsRaw === 'object' ? orderedListsRaw.style : orderedListsRaw,
+      'n.',
+    ),
   };
 
   // Legend:

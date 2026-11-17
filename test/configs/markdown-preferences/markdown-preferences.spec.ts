@@ -249,6 +249,19 @@ describe('options', () => {
         ).toMatchInlineSnapshot('[2, {"emphasis": "*", "strong": "**"}]');
       });
 
+      it('uses `*` emphasis style when `emphasis` is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          markdownPreferences: {delimitersStyle: {emphasis: true}},
+        });
+
+        expect(
+          configResult.getRuleEntry(
+            'markdown-preferences',
+            'markdown-preferences/emphasis-delimiters-style',
+          ),
+        ).toMatchInlineSnapshot('[2, {"emphasis": "*", "strong": "**"}]');
+      });
+
       it("uses `_` emphasis style when `emphasis` is `'_'`", async () => {
         const configResult = await computeEslintConfig({
           markdownPreferences: {delimitersStyle: {emphasis: '_'}},
@@ -303,6 +316,19 @@ describe('options', () => {
         ).toMatchInlineSnapshot('[2, {"delimiter": "~~"}]');
       });
 
+      it('uses `~~` strikethrough style when `strikethrough` is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          markdownPreferences: {delimitersStyle: {strikethrough: true}},
+        });
+
+        expect(
+          configResult.getRuleEntry(
+            'markdown-preferences',
+            'markdown-preferences/strikethrough-delimiters-style',
+          ),
+        ).toMatchInlineSnapshot('[2, {"delimiter": "~~"}]');
+      });
+
       it("uses `~` strikethrough style when `strikethrough` is `'~'`", async () => {
         const configResult = await computeEslintConfig({
           markdownPreferences: {delimitersStyle: {strikethrough: '~'}},
@@ -347,6 +373,25 @@ describe('options', () => {
           'markdown-preferences/strikethrough-delimiters-style',
         ),
       ).toBe(0);
+    });
+
+    it('uses default styles in `markdown-preferences/emphasis-delimiters-style` and `markdown-preferences/strikethrough-delimiters-style` rules when `delimitersStyle` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        markdownPreferences: {delimitersStyle: true},
+      });
+
+      expect(
+        configResult.getRuleEntry(
+          'markdown-preferences',
+          'markdown-preferences/emphasis-delimiters-style',
+        ),
+      ).toMatchInlineSnapshot('[2, {"emphasis": "*", "strong": "**"}]');
+      expect(
+        configResult.getRuleEntry(
+          'markdown-preferences',
+          'markdown-preferences/strikethrough-delimiters-style',
+        ),
+      ).toMatchInlineSnapshot('[2, {"delimiter": "~~"}]');
     });
   });
 
@@ -683,6 +728,32 @@ describe('options', () => {
           'markdown-preferences/ordered-list-marker-style',
         ),
       ).toBe(0);
+    });
+
+    it.each([
+      ['`orderedLists` is `true`', true],
+      ['every sub-option is `true`', {numbering: true, start: true, style: true}],
+    ] as const)('uses default ordered-list rules options when %s', async (_, orderedLists) => {
+      const configResult = await computeEslintConfig({markdownPreferences: {orderedLists}});
+
+      expect(
+        configResult.getRuleEntry(
+          'markdown-preferences',
+          'markdown-preferences/ordered-list-marker-sequence',
+        ),
+      ).toStrictEqual([2, {increment: 'always'}]);
+      expect(
+        configResult.getRuleEntry(
+          'markdown-preferences',
+          'markdown-preferences/ordered-list-marker-start',
+        ),
+      ).toStrictEqual([2, {start: 1}]);
+      expect(
+        configResult.getRuleEntry(
+          'markdown-preferences',
+          'markdown-preferences/ordered-list-marker-style',
+        ),
+      ).toStrictEqual([2, {prefer: 'n.'}]);
     });
   });
 

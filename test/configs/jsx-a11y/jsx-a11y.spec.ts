@@ -159,6 +159,15 @@ describe('options', () => {
       );
     });
 
+    it('includes default elements in `jsx-a11y/alt-text` rule when set to `true`', async () => {
+      const configResult = await computeEslintConfig({jsxA11y: {altTextCheckForElements: true}});
+      const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/alt-text');
+
+      expect(rule).toMatchInlineSnapshot(
+        '[2, {"elements": ["img", "object", "area", "input[type="image"]"]}]',
+      );
+    });
+
     it('disables `jsx-a11y/alt-text` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({jsxA11y: {altTextCheckForElements: false}});
 
@@ -196,6 +205,15 @@ describe('options', () => {
       expect(rule).toMatchInlineSnapshot('[2, {"aspects": ["noHref", "invalidHref"]}]');
     });
 
+    it('checks default aspects in `jsx-a11y/anchor-is-valid` rule when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        jsxA11y: {anchorIsValidCheckedAspects: true},
+      });
+      const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-is-valid');
+
+      expect(rule).toMatchInlineSnapshot('[2, {"aspects": ["noHref", "invalidHref"]}]');
+    });
+
     it('disables `jsx-a11y/anchor-is-valid` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         jsxA11y: {anchorIsValidCheckedAspects: false},
@@ -228,6 +246,28 @@ describe('options', () => {
   describe('option: `ambiguousWordsForAnchorText`', () => {
     it('uses default ambiguous words in `jsx-a11y/anchor-ambiguous-text` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
+      const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-ambiguous-text');
+
+      expect(rule).toMatchInlineSnapshot(
+        '[1, {"words": ["click here", "here", "link", "a link", "learn more"]}]',
+      );
+    });
+
+    it('uses default ambiguous words in `jsx-a11y/anchor-ambiguous-text` rule when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        jsxA11y: {ambiguousWordsForAnchorText: true},
+      });
+      const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-ambiguous-text');
+
+      expect(rule).toMatchInlineSnapshot(
+        '[1, {"words": ["click here", "here", "link", "a link", "learn more"]}]',
+      );
+    });
+
+    it('uses default ambiguous words in `jsx-a11y/anchor-ambiguous-text` rule when a function returns `true`', async () => {
+      const configResult = await computeEslintConfig({
+        jsxA11y: {ambiguousWordsForAnchorText: () => true},
+      });
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-ambiguous-text');
 
       expect(rule).toMatchInlineSnapshot(
@@ -280,6 +320,14 @@ describe('options', () => {
       const configResult = await computeEslintConfig('jsxA11y');
 
       expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/img-redundant-alt')).toBe(1);
+    });
+
+    it('uses `warn` severity and no custom words for `jsx-a11y/img-redundant-alt` rule when set to `true`', async () => {
+      const configResult = await computeEslintConfig({jsxA11y: {imageWords: true}});
+
+      expect(
+        configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/img-redundant-alt'),
+      ).toMatchInlineSnapshot('[1, {}]');
     });
 
     it('disables `jsx-a11y/img-redundant-alt` rule when set to `false`', async () => {
@@ -402,13 +450,21 @@ describe('options', () => {
       );
     });
 
-    it('uses default roles when set to `false`', async () => {
-      const configResult = await computeEslintConfig({jsxA11y: {tabbableRoles: false}});
+    it('uses default tabbable roles in `jsx-a11y/interactive-supports-focus` rule when set to `true`', async () => {
+      const configResult = await computeEslintConfig({jsxA11y: {tabbableRoles: true}});
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/interactive-supports-focus');
 
       expect(rule).toMatchInlineSnapshot(
         '[2, {"tabbable": ["button", "checkbox", "link", "searchbox", "spinbutton", "switch", "textbox"]}]',
       );
+    });
+
+    it('disables `jsx-a11y/interactive-supports-focus` rule when set to `false`', async () => {
+      const configResult = await computeEslintConfig({jsxA11y: {tabbableRoles: false}});
+
+      expect(
+        configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/interactive-supports-focus'),
+      ).toBe(0);
     });
 
     it('removes a role from `jsx-a11y/interactive-supports-focus` rule when disabled in option', async () => {

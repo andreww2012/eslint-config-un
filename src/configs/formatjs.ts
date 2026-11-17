@@ -49,21 +49,23 @@ export interface FormatjsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'formatjs'> {
   /**
    * Enforce `defaultMessage` in the message descriptor.
+   * `true` is the same as the default value, `false` disables the corresponding rule.
    *
    * Affected rule:
    * - [`formatjs/enforce-default-message`](https://formatjs.github.io/docs/tooling/linter#enforce-default-message)
    * @default 'anything'
    */
-  enforceDefaultMessage?: GetRuleOptions<'formatjs', 'enforce-default-message'> | false;
+  enforceDefaultMessage?: boolean | GetRuleOptions<'formatjs', 'enforce-default-message'>;
 
   /**
    * Enforce `description` in the message descriptor.
+   * `true` is the same as the default value, `false` disables the corresponding rule.
    *
    * Affected rule:
    * - [`formatjs/enforce-description`](https://formatjs.github.io/docs/tooling/linter#enforce-description)
    * @default 'anything'
    */
-  enforceDescription?: GetRuleOptions<'formatjs', 'enforce-description'> | false;
+  enforceDescription?: boolean | GetRuleOptions<'formatjs', 'enforce-description'>;
 
   /**
    * Enforce or ban explicit ID in `MessageDescriptor`.
@@ -105,8 +107,8 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
   phase: 'last',
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    enforceDefaultMessage: 'anything',
-    enforceDescription: 'anything',
+    enforceDefaultMessage: true,
+    enforceDescription: true,
   });
 
   const {
@@ -146,13 +148,15 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
     .addRule(
       'enforce-default-message',
       enforceDefaultMessage ? ERROR : OFF,
-      enforceDefaultMessage ? [enforceDefaultMessage] : [],
+      enforceDefaultMessage
+        ? [enforceDefaultMessage === true ? 'anything' : enforceDefaultMessage]
+        : [],
     ) /** @since 1.6.0 */ // 🟢
     // Default options in `recommended`: 'literal'
     .addRule(
       'enforce-description',
       enforceDescription ? ERROR : OFF,
-      enforceDescription ? [enforceDescription] : [],
+      enforceDescription ? [enforceDescription === true ? 'anything' : enforceDescription] : [],
     ) /** @since 1.1.0 */ // 🟢
     // Default options in `recommended`: {idInterpolationPattern: '[sha512:contenthash:base64:10]'}
     .addRule('enforce-id', enforceId === 'always' ? ERROR : OFF) /** @since 2.6.0 */ // 🟣

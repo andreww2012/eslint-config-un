@@ -310,7 +310,15 @@ describe('options', async () => {
     it('enables `github-actions/prefer-step-uses-style` rule expecting commit SHAs by default', () => {
       expect(
         configResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
-      ).toMatchInlineSnapshot(`[2, {"allowRepository": true, "commit": true}]`);
+      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true}]');
+    });
+
+    it('enables `github-actions/prefer-step-uses-style` rule expecting commit SHAs when set to `true`', async () => {
+      const customConfigResult = await computeEslintConfig({githubActions: {usesStyle: true}});
+
+      expect(
+        customConfigResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
+      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true}]');
     });
 
     describe('actions lockfile exists', () => {
@@ -332,7 +340,18 @@ describe('options', async () => {
             'github-actions',
             'github-actions/prefer-step-uses-style',
           ),
-        ).toMatchInlineSnapshot(`[2, {"allowRepository": true, "release": true}]`);
+        ).toMatchInlineSnapshot('[2, {"allowRepository": true, "release": true}]');
+      });
+
+      it('enables `github-actions/prefer-step-uses-style` rule expecting release tags when set to `true`', async () => {
+        const customConfigResult = await computeEslintConfig({githubActions: {usesStyle: true}});
+
+        expect(
+          customConfigResult.getRuleEntry(
+            'github-actions',
+            'github-actions/prefer-step-uses-style',
+          ),
+        ).toMatchInlineSnapshot('[2, {"allowRepository": true, "release": true}]');
       });
     });
 

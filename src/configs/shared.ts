@@ -180,7 +180,7 @@ export const generateConsistentTestItOptions = ({
     : {
         fn: 'it',
         withinDescribe: 'it',
-        ...testDefinitionKeyword,
+        ...(typeof testDefinitionKeyword === 'object' && testDefinitionKeyword),
       },
 ];
 

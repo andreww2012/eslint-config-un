@@ -31,6 +31,8 @@ Wrap type intersections in `Prettify`, but only where it actually flattens in th
 If you need a union type of literals and all its values available in runtime, don't use an array as the source of truth: use the type instead.
 Declare the corresponding array using `allUnionMembers` helper.
 
+In the public options API, never use a lone `true` or `false` in a union - use `boolean` instead.
+
 When referencing rule names in the docs, always wrap it in a link to the rule's docs page if it's available.
 
 Check new or changed links with lychee as [CI](./.github/workflows/ci.yml) does (local report: `.lychee.report.md`).

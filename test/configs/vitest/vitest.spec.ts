@@ -198,6 +198,18 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for')).toBe(2);
     });
 
+    it('uses `each` style when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {enforceEachOrFor: true},
+      });
+
+      expect(
+        configResult.getRuleEntry('vitest', 'vitest/consistent-each-for'),
+      ).toMatchInlineSnapshot(
+        '[2, {"describe": "each", "it": "each", "suite": "each", "test": "each"}]',
+      );
+    });
+
     it('disables `consistent-each-for` when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         vitest: {enforceEachOrFor: false},
@@ -224,6 +236,15 @@ describe('options', () => {
   describe('option: `enforceToBeCalledStyle`', () => {
     it('enforces `once` style by default', async () => {
       const configResult = await computeEslintConfig('vitest');
+
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-once')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-times')).toBe(0);
+    });
+
+    it('enforces `once` style when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {enforceToBeCalledStyle: true},
+      });
 
       expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-once')).toBe(2);
       expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-times')).toBe(0);
@@ -368,6 +389,16 @@ describe('options', () => {
   describe('option: `testDefinitionKeyword`', () => {
     it('enables `consistent-test-it` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
+
+      expect(
+        configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),
+      ).toMatchInlineSnapshot('[2, {"fn": "it", "withinDescribe": "it"}]');
+    });
+
+    it('enables `consistent-test-it` with default options when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {testDefinitionKeyword: true},
+      });
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),

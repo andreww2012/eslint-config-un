@@ -48,14 +48,15 @@ export interface GithubActionsEslintConfigOptions<
    * By default, release tags are expected if the
    * [actions lockfile](https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles)
    * exists, as it pins their commits, and commit SHAs otherwise.
-   * Same-repository `$/` references are ignored, as the rule reports them as branches.
+   *
+   * `true` is the same as the default value, `false` disables the corresponding rule.
    *
    * Affected rule:
    * - [`github-actions/prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style.html)
-   * @default {release: true, allowRepository: true, ignores: ['^\\$/']} <=> `.github/workflows/actions.lock`
-   * exists, otherwise `commit: true` instead of `release: true`
+   * @default {release: true, allowRepository: true} <=> `.github/workflows/actions.lock` exists,
+   * otherwise `commit: true` instead of `release: true`
    */
-  usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
+  usesStyle?: boolean | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
 }
 
 export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions', {
@@ -64,13 +65,19 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
   after: ['yaml'],
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    usesStyle: {
-      ...(findUp.file('.github/workflows/actions.lock') == null ? {commit: true} : {release: true}),
-      allowRepository: true,
-    },
+    usesStyle: true,
   });
 
-  const {maxJobsPerAction, usesStyle} = optionsResolved;
+  const {maxJobsPerAction, usesStyle: usesStyleRaw} = optionsResolved;
+  const usesStyle =
+    usesStyleRaw === true
+      ? {
+          ...(findUp.file('.github/workflows/actions.lock') == null
+            ? {commit: true}
+            : {release: true}),
+          allowRepository: true,
+        }
+      : usesStyleRaw;
   const require: GithubActionsEslintConfigOptions['require'] & {} = {
     actionName: true,
     jobName: true,
@@ -108,8 +115,8 @@ export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions',
     .addRule('prefer-file-extension', OFF) /** @since 0.0.8 */ // 🟢
     .addRule(
       'prefer-step-uses-style',
-      usesStyle === false ? OFF : ERROR,
-      usesStyle === false ? [] : [usesStyle],
+      usesStyle ? ERROR : OFF,
+      usesStyle ? [usesStyle] : [],
     ) /** @since 0.0.7 */
     .addRule('require-action-name', require.actionName ? ERROR : OFF) /** @since 0.0.0 */ // 🟢
     .addRule('require-action-run-name', require.actionRunName ? ERROR : OFF) /** @since 0.0.9 */

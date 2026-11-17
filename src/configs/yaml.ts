@@ -39,13 +39,13 @@ export interface YamlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'yaml'> {
   /**
-   * Set to `false` to not enforce the extension.
+   * `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`yaml/file-extension`](https://ota-meshi.github.io/eslint-plugin-yml/rules/file-extension.html)
    * @default 'yml'
    */
-  enforceExtension?: 'yml' | 'yaml' | false;
+  enforceExtension?: boolean | 'yml' | 'yaml';
 
   /**
    * Enforce a specific casing style for keys.
@@ -59,13 +59,13 @@ export interface YamlEslintConfigOptions<
   casing?: GetRuleOptions<'yaml', 'key-name-casing'>;
 
   /**
-   * `false` to not enforce quotes style
+   * `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`yaml/quotes`](https://ota-meshi.github.io/eslint-plugin-yml/rules/quotes.html)
    * @default 'single'
    */
-  quotes?: 'single' | 'double' | false;
+  quotes?: boolean | 'single' | 'double';
 
   /**
    * `yaml-eslint-parser` parser options (used by `eslint-plugin-yml` under the hood)
@@ -84,10 +84,11 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
   enabledBy: {group: 'misc'},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    enforceExtension: 'yml',
+    enforceExtension: true,
+    quotes: true,
   });
 
-  const {enforceExtension, parserOptions} = optionsResolved;
+  const {enforceExtension, parserOptions, quotes} = optionsResolved;
 
   const pluginSettings = context.getPluginSettings('yaml');
 
@@ -124,7 +125,7 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
     .addRule(
       'file-extension',
       enforceExtension ? ERROR : OFF,
-      enforceExtension ? [{extension: enforceExtension}] : [],
+      enforceExtension ? [{extension: enforceExtension === true ? 'yml' : enforceExtension}] : [],
     ) /** @since 1.2.0 */
     .addRule('indent', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
@@ -140,8 +141,8 @@ export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
     .addRule('no-trailing-zeros', OFF) /** @since 1.6.0 */
     // TODO option to ignore if a string is ISO 8601 date?
     .addRule('plain-scalar', ERROR) /** @since 0.3.0 */ // 🟣
-    .addRule('quotes', optionsResolved.quotes === false ? OFF : ERROR, [
-      {prefer: optionsResolved.quotes || 'single'},
+    .addRule('quotes', quotes ? ERROR : OFF, [
+      {prefer: typeof quotes === 'string' ? quotes : 'single'},
     ]) /** @since 0.3.0 */ // 🟣
     .addRule('require-string-key', OFF) /** @since 0.3.0 */
     .addRule('sort-keys', OFF) /** @since 0.3.0 */

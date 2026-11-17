@@ -32,13 +32,13 @@ export interface MathEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'math'> {
   /**
    * Enforces the method of conversion to absolute values.
-   * Set to `false` not enforce it.
+   * `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`math/abs`](https://ota-meshi.github.io/eslint-plugin-math/rules/abs.html)
    * @default 'Math.abs'
    */
-  absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];
+  absoluteValuesConversionMethod?: boolean | GetRuleOptions<'math', 'abs'>['prefer'];
 }
 
 export default defineUnConfig<MathEslintConfigOptions>(
@@ -46,7 +46,7 @@ export default defineUnConfig<MathEslintConfigOptions>(
   true,
 )((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    absoluteValuesConversionMethod: 'Math.abs',
+    absoluteValuesConversionMethod: true,
   });
 
   const {absoluteValuesConversionMethod} = optionsResolved;
@@ -69,8 +69,17 @@ export default defineUnConfig<MathEslintConfigOptions>(
     ])
     .addRule(
       'abs',
-      absoluteValuesConversionMethod === false ? OFF : ERROR,
-      absoluteValuesConversionMethod === false ? [] : [{prefer: absoluteValuesConversionMethod}],
+      absoluteValuesConversionMethod ? ERROR : OFF,
+      absoluteValuesConversionMethod
+        ? [
+            {
+              prefer:
+                absoluteValuesConversionMethod === true
+                  ? 'Math.abs'
+                  : absoluteValuesConversionMethod,
+            },
+          ]
+        : [],
     ) /** @since 0.3.0 */
     .addRule('no-static-infinity-calculations', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('no-static-nan-calculations', ERROR) /** @since 0.5.0 */ // 🟢

@@ -347,6 +347,17 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[1, {"order": "official"}]');
     });
 
+    it('enables `better-tailwindcss/enforce-consistent-class-order` rule with "official" order when set to `true`', async () => {
+      const configResult = await computeEslintConfig({betterTailwind: {classOrder: true}});
+
+      expect(
+        configResult.getRuleEntry(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-consistent-class-order',
+        ),
+      ).toMatchInlineSnapshot('[1, {"order": "official"}]');
+    });
+
     it('enables `better-tailwindcss/enforce-consistent-class-order` rule with custom order when set to string', async () => {
       const configResult = await computeEslintConfig(
         {

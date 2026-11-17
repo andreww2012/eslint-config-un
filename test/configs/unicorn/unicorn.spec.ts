@@ -255,6 +255,16 @@ describe('options', () => {
       expect(error).toBeUndefined();
     });
 
+    it('enforces the dash-less variant when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {enforceTextEncodingCaseAndNotation: true},
+      });
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/text-encoding-identifier-case'),
+      ).toMatchInlineSnapshot('[2, {"withDash": false}]');
+    });
+
     it('triggers for dash-less encoding when set to `dash`', async () => {
       const results = await testEslintConfig(
         {unicorn: {enforceTextEncodingCaseAndNotation: 'dash'}},
@@ -386,6 +396,14 @@ describe('options', () => {
   describe('option: `domDataAttributesStyle`', () => {
     it('enforces the `.dataset` API by default', async () => {
       const configResult = await computeEslintConfig('unicorn');
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/dom-node-dataset'),
+      ).toMatchInlineSnapshot('[2, {"preferAttributes": false}]');
+    });
+
+    it('enforces the `.dataset` API when set to `true`', async () => {
+      const configResult = await computeEslintConfig({unicorn: {domDataAttributesStyle: true}});
 
       expect(
         configResult.getRuleEntry('unicorn', 'unicorn/dom-node-dataset'),

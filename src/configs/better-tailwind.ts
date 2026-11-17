@@ -150,15 +150,15 @@ export interface BetterTailwindEslintConfigOptions<
 
   /**
    * Enforces consistent Tailwind class order.
-   * `false` disables the corresponding rule.
+   * `true` is the same as the default value, `false` disables the corresponding rule.
    *
    * Affected rule:
    * - [`better-tailwindcss/enforce-consistent-class-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-class-order.md)
    * @default 'official'
    */
   classOrder?:
-    | GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order']
-    | false;
+    | boolean
+    | GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order'];
 
   /**
    * Class names, as regular expressions, that are not allowed to be used.
@@ -178,7 +178,7 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css'
 )((context, optionsRaw, {css}) => {
   const cssResolvedOptions = css?.optionsResolved;
   const optionsResolved = assignDefaults(optionsRaw, {
-    classOrder: 'official',
+    classOrder: true,
   });
 
   const {breakUpClassesIntoMultipleLines, classOrder, restrictedClasses} = optionsResolved;
@@ -255,8 +255,8 @@ export default defineUnConfig<BetterTailwindEslintConfigOptions, readonly ['css'
       .addRule('enforce-canonical-classes', isV3 ? OFF : ERROR) /** @since 4.0.0 */ // 🟢
       .addRule(
         'enforce-consistent-class-order',
-        typeof classOrder === 'string' ? WARNING : OFF,
-        typeof classOrder === 'string' ? [{order: classOrder}] : [],
+        classOrder ? WARNING : OFF,
+        classOrder ? [{order: classOrder === true ? 'official' : classOrder}] : [],
       ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
       .addRule('enforce-consistent-important-position', isV3 ? ERROR : OFF, [
         {position: 'legacy'},

@@ -178,6 +178,16 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "anything"]');
     });
 
+    it("enforces default message with `'anything'` option when set to `true`", async () => {
+      const configResult = await computeEslintConfig({
+        formatJs: {enforceDefaultMessage: true},
+      });
+
+      expect(
+        configResult.getRuleEntry('formatjs', 'formatjs/enforce-default-message'),
+      ).toMatchInlineSnapshot('[2, "anything"]');
+    });
+
     it("enforces default message with `'literal'` when set to `'literal'`", async () => {
       const configResult = await computeEslintConfig({
         formatJs: {enforceDefaultMessage: 'literal'},
@@ -202,6 +212,16 @@ describe('options', () => {
   describe('option: `enforceDescription`', () => {
     it("enforces description with `'anything'` option by default", async () => {
       const configResult = await computeEslintConfig('formatJs');
+
+      expect(
+        configResult.getRuleEntry('formatjs', 'formatjs/enforce-description'),
+      ).toMatchInlineSnapshot('[2, "anything"]');
+    });
+
+    it("enforces description with `'anything'` option when set to `true`", async () => {
+      const configResult = await computeEslintConfig({
+        formatJs: {enforceDescription: true},
+      });
 
       expect(
         configResult.getRuleEntry('formatjs', 'formatjs/enforce-description'),

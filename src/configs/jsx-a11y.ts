@@ -134,13 +134,13 @@ export interface JsxA11yEslintConfigOptions<
    *
    * By default, `<img>`, `<area>`, `<input type="image">`, and `<object>` elements are checked.
    * Using the object syntax, you can disable the default checks or specify additional elements.
-   * Setting to `false` will disable the rule.
+   * Setting to `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`jsx-a11y/alt-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/alt-text.md)
    */
   altTextCheckForElements?:
-    | false
+    | boolean
     | Partial<Record<AltTextCheckDefaultElements | (string & {}), boolean>>;
 
   /**
@@ -148,19 +148,19 @@ export interface JsxA11yEslintConfigOptions<
    *
    * By default, `noHref` and `invalidHref` aspects are checked.
    * Using the object syntax, you can disable the default checks or specify additional aspects.
-   * Setting to `false` will disable the rule.
+   * Setting to `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`jsx-a11y/anchor-is-valid`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/anchor-is-valid.md)
    */
-  anchorIsValidCheckedAspects?: false | Partial<Record<AnchorIsValidAspectsToCheck, boolean>>;
+  anchorIsValidCheckedAspects?: boolean | Partial<Record<AnchorIsValidAspectsToCheck, boolean>>;
 
   /**
    * List of words that will be considered ambiguous in anchor texts and will be flagged.
    *
-   * Can be either an array or a function to which the default words will be passed as the only
+   * Can be either an object or a function to which the default words will be passed as the only
    * argument.
-   * Setting to `false` will disable the rule.
+   * Setting to `true` is the same as the default value, `false` disables the rule.
    *
    * Default rule severity is `warn` and the list of words is the same as listed in the rule docs.
    *
@@ -168,7 +168,7 @@ export interface JsxA11yEslintConfigOptions<
    * - [`jsx-a11y/anchor-ambiguous-text`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/anchor-ambiguous-text.md)
    */
   ambiguousWordsForAnchorText?: MaybeFn<
-    false | WordsListAndOptionalSeverity,
+    boolean | WordsListAndOptionalSeverity,
     readonly [defaultWords: readonly string[]]
   >;
 
@@ -202,14 +202,14 @@ export interface JsxA11yEslintConfigOptions<
    *
    * Will be merged with the default words listed in the rule docs, and this behavior cannot be
    * changed.
-   * Setting to `false` will disable the rule.
+   * Setting to `true` is the same as not setting the option, `false` disables the rule.
    *
    * Default rule severity is `warn`.
    *
    * Affected rule:
    * - [`jsx-a11y/img-redundant-alt`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/img-redundant-alt.md)
    */
-  imageWords?: false | WordsListAndOptionalSeverity;
+  imageWords?: boolean | WordsListAndOptionalSeverity;
 
   /**
    * "A list of attributes to check on the label component and its children for a label.
@@ -231,12 +231,12 @@ export interface JsxA11yEslintConfigOptions<
    * `['button', 'checkbox', 'link', 'searchbox', 'spinbutton', 'switch', 'textbox']`.
    *
    * Using the object syntax, you can disable the default roles or specify additional ones.
-   * Setting to `false` will disable the rule.
+   * Setting to `true` is the same as the default value, `false` disables the rule.
    *
    * Affected rule:
    * - [`jsx-a11y/interactive-supports-focus`](https://github.com/eslint-community/eslint-plugin-jsx-a11y-x/blob/HEAD/docs/rules/interactive-supports-focus.md)
    */
-  tabbableRoles?: false | Partial<Record<PossibleTabbableRoles, boolean>>;
+  tabbableRoles?: boolean | Partial<Record<PossibleTabbableRoles, boolean>>;
 
   /**
    * Various custom components that will be checked by various rules
@@ -361,10 +361,7 @@ export const buildJsxA11yConfigs = (
   const optionsRaw =
     (customConfig?.options || optionsRawFromParameters) ?? context.rootOptions.configs?.jsxA11y;
   const optionsResolved = assignDefaults(optionsRaw, {
-    ambiguousWordsForAnchorText: {
-      // eslint-disable-next-line unicorn/prefer-spread -- `assignDefaults` would infer a spread as read-only
-      words: DEFAULT_AMBIGUOUS_WORDS.slice(),
-    },
+    ambiguousWordsForAnchorText: true,
     customComponents: {},
   });
 
@@ -372,7 +369,7 @@ export const buildJsxA11yConfigs = (
     altTextCheckForElements,
     anchorIsValidCheckedAspects,
     ambiguousWordsForAnchorText,
-    imageWords,
+    imageWords: imageWordsRaw,
     hoverInHandlersRequiringOnFocus,
     hoverOutHandlersRequiringOnBlur,
     labelAttributes,
@@ -380,11 +377,14 @@ export const buildJsxA11yConfigs = (
     customComponents,
   } = optionsResolved;
 
-  const ambiguousWords = maybeCall(ambiguousWordsForAnchorText, [...DEFAULT_AMBIGUOUS_WORDS]);
+  const ambiguousWordsRaw = maybeCall(ambiguousWordsForAnchorText, [...DEFAULT_AMBIGUOUS_WORDS]);
+  const ambiguousWords: false | WordsListAndOptionalSeverity =
+    ambiguousWordsRaw === true ? {words: DEFAULT_AMBIGUOUS_WORDS} : ambiguousWordsRaw;
+  const imageWords = imageWordsRaw === true ? undefined : imageWordsRaw;
   const anchorIsValidFinalCheckedAspects = getKeysOfTruthyValues(
     {
       ...anchorIsValidDefaultAspectsToCheck,
-      ...anchorIsValidCheckedAspects,
+      ...(anchorIsValidCheckedAspects !== true && anchorIsValidCheckedAspects),
     },
     'nonEmptyArray',
   );
@@ -432,7 +432,7 @@ export const buildJsxA11yConfigs = (
             {
               elements: getKeysOfTruthyValues({
                 ...altTextCheckDefaultElements,
-                ...altTextCheckForElements,
+                ...(altTextCheckForElements !== true && altTextCheckForElements),
               }),
               ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
               ...(customComponents.objectElements?.length && {

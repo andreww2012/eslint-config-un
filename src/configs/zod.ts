@@ -113,13 +113,14 @@ export interface ZodEslintConfigOptions<
    * Enforce zod array style:
    * - `'function'`: `z.array(z.string())`
    * - `'method'`: `z.string().array()`
+   * - `true`: same as the default value
    * - `false`: not enforced
    *
    * Affected rule:
    * - [`zod/array-style`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/array-style.md)
    * @default 'method'
    */
-  arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
+  arrayStyle?: boolean | GetRuleOptions<'zod', 'array-style'>['style'];
 
   /**
    * Rules for [`zod/v4/core`](https://zod.dev/packages/core).
@@ -268,7 +269,7 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
   enabledBy: {package: 'zod@^3||^4'},
 })((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    arrayStyle: 'method',
+    arrayStyle: true,
     configCore: true,
     configMini: true,
     enforceConsistentImport: true,
@@ -302,8 +303,8 @@ export default defineUnConfig<ZodEslintConfigOptions>('zod', {
     ?.addConfig('zod')
     .addRule(
       'array-style',
-      arrayStyle === false ? OFF : ERROR,
-      arrayStyle === false ? [] : [{style: arrayStyle}],
+      arrayStyle ? ERROR : OFF,
+      arrayStyle ? [{style: arrayStyle === true ? 'method' : arrayStyle}] : [],
     ) /** @since 0.0.1 */ // 🎨
     .addRule(
       'consistent-import',

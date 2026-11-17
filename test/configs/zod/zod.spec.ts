@@ -230,6 +230,14 @@ describe('options', () => {
       );
     });
 
+    it("uses `'method'` style when set to `true`", async () => {
+      const configResult = await computeEslintConfig({zod: {arrayStyle: true}});
+
+      expect(configResult.getRuleEntry('zod', 'zod/array-style')).toMatchInlineSnapshot(
+        '[2, {"style": "method"}]',
+      );
+    });
+
     it("uses `'function'` style when set to `'function'`", async () => {
       const configResult = await computeEslintConfig({zod: {arrayStyle: 'function'}});
 

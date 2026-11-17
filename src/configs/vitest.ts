@@ -115,6 +115,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    *   `describe`, `suite`).
    *   You may also set the `default` property to specify the method preferred by default,
    *   otherwise both will be allowed.
+   * - `true`: same as the default value.
    * - `false`: no enforcement.
    *
    * Affected rule:
@@ -122,7 +123,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * @default 'each'
    */
   enforceEachOrFor?:
-    | false
+    | boolean
     | EachOrFor
     | Prettify<
         ConsistentEachForRuleOptions & {
@@ -137,6 +138,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * - `once`: prefer `toBeCalledOnce()` or `toHaveBeenCalledOnce()` over `toBeCalledTimes(1)` or
    *   `toHaveBeenCalledTimes(1)`.
    * - `times`: prefer the opposite.
+   * - `true`: same as the default value.
    * - `false`: do not enforce any style.
    *
    * Affected rules:
@@ -144,7 +146,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * - [`vitest/prefer-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-times.md)
    * @default 'once'
    */
-  enforceToBeCalledStyle?: false | 'once' | 'times';
+  enforceToBeCalledStyle?: boolean | 'once' | 'times';
 
   /**
    * Enforces the maximum number of assertion calls a test may make.
@@ -226,7 +228,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Enforces the keyword tests are defined with.
    * Will be merged with the default value.
-   * `false` disables the rule.
+   * `true` is the same as the default value, `false` disables the rule.
    *
    * When string, will be set for the properties of the object.
    *
@@ -280,8 +282,8 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
     configTypescript: isTsConfigEnabled,
-    enforceEachOrFor: 'each',
-    enforceToBeCalledStyle: 'once',
+    enforceEachOrFor: true,
+    enforceToBeCalledStyle: true,
     vitestGlobalsImporting: 'enforce',
     paddingAround: true,
   });
@@ -290,8 +292,8 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     configNoOnlyTests,
     configTypescript,
     additionalAssertions,
-    enforceEachOrFor,
-    enforceToBeCalledStyle,
+    enforceEachOrFor: enforceEachOrForRaw,
+    enforceToBeCalledStyle: enforceToBeCalledStyleRaw,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -301,6 +303,9 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     vitestGlobalsImporting,
     paddingAround,
   } = optionsResolved;
+  const enforceEachOrFor = enforceEachOrForRaw === true ? 'each' : enforceEachOrForRaw;
+  const enforceToBeCalledStyle =
+    enforceToBeCalledStyleRaw === true ? 'once' : enforceToBeCalledStyleRaw;
 
   const pluginSettings = context.getPluginSettings('vitest');
 
