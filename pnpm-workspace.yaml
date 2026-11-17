@@ -46,6 +46,9 @@ minimumReleaseAgeExclude: # []
   - oxfmt@0.79.0
   - eslint-plugin-jsdoc@65.4.10
   - eslint-plugin-ember@13.11.0
+  - '@tsrx/core@0.6.2'
+  - '@tsrx/eslint-parser@0.7.2'
+  - '@tsrx/eslint-plugin@0.7.2'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
