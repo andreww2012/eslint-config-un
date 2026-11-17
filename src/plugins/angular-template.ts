@@ -44,6 +44,7 @@ export default definePluginMetadata('angular-template', {
     'no-positive-tabindex': {disableInCodeBlocks: 'runtimeOnly'},
     'prefer-contextual-for-variables': {stylistic: true},
     'prefer-control-flow': {disableInCodeBlocks: 'runtimeOnly'},
+    'prefer-let-for-async-pipe': {disableInCodeBlocks: 'performance'},
     'prefer-ngsrc': {disableInCodeBlocks: 'performance'},
     'prefer-self-closing-tags': {stylistic: true},
     'prefer-style-binding': {stylistic: true},

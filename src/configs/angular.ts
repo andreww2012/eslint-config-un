@@ -692,6 +692,9 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
       ...getTemplatePluginRuleSeverity('prefer-control-flow', preferControlFlow ? ERROR : OFF),
     ) /** @since 17.1.0 */ // 🟢
     .addRule(
+      ...getTemplatePluginRuleSeverity('prefer-let-for-async-pipe', ERROR),
+    ) /** @since 22.7.0 */
+    .addRule(
       ...getTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
     ) /** @since 16.2.0 */
     .addRule(...getTemplatePluginRuleSeverity('prefer-self-closing-tags', OFF)) /** @since 16.1.0 */
