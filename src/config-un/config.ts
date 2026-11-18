@@ -715,22 +715,21 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         configsOrderResolved[cascadeIndex] === 'parsing' ? resolveParsingConfigs(context) : configs,
       );
 
-  const usedPluginPrefixes: string[] =
+  const pluginPrefixesLoadedAnyway: readonly string[] =
     loadPluginsOnDemand === false
-      ? [...LOADABLE_PLUGIN_PREFIXES_LIST]
-      : // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
-        [...context.usedPlugins].sort();
-  if (typeof loadPluginsOnDemand === 'object') {
-    usedPluginPrefixes.push(...loadPluginsOnDemand.alwaysLoad);
-  }
-  (loadPluginsOnDemand === false
-    ? LOADABLE_PLUGIN_PREFIXES_LIST
-    : typeof loadPluginsOnDemand === 'object'
-      ? loadPluginsOnDemand.alwaysLoad
-      : []
-  ).forEach((pluginPrefix) => {
+      ? LOADABLE_PLUGIN_PREFIXES_LIST
+      : typeof loadPluginsOnDemand === 'object'
+        ? loadPluginsOnDemand.alwaysLoad
+        : [];
+  pluginPrefixesLoadedAnyway.forEach((pluginPrefix) => {
     context.recordPackageRequester('plugin', pluginPrefix, 'option:loadPluginsOnDemand');
   });
+
+  const usedPluginPrefixes = arrayUnique([
+    // Sorting ensures that plugins will be present in the resulting config in the consistent order
+    ...[...context.usedPlugins].sort(),
+    ...pluginPrefixesLoadedAnyway,
+  ]);
   const usedParserPrefixes = [...context.usedParsers.keys()];
   const usedPackagesPrefixes = [...context.usedPackages.keys()];
 

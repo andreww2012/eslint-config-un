@@ -20,7 +20,7 @@ describe('option: `loadPluginsOnDemand`', () => {
   });
 
   it('loads every loadable plugin when set to `false`', async () => {
-    await expect(getPluginPrefixes(false)).resolves.toStrictEqual([
+    await expect(getPluginPrefixes(false)).resolves.toIncludeSameMembers([
       ...LOADABLE_PLUGIN_PREFIXES_LIST,
       'disable-autofix',
     ]);

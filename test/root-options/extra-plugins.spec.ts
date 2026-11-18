@@ -25,6 +25,16 @@ const getPluginPrefixes = async <const ExtraPlugins extends ExtraPluginsType>(
 };
 
 describe('option: `extraPlugins`', () => {
+  it('registers the plugin when one of its rules is used and every loadable plugin is loaded', async () => {
+    await expect(
+      getPluginPrefixes({
+        loadPluginsOnDemand: false,
+        extraPlugins: {extra: EXTRA_PLUGIN},
+        extraConfigs: [{rules: {'extra/my-rule': 'error'}}],
+      }),
+    ).resolves.toContain('extra');
+  });
+
   it('registers the plugin when one of its rules is used', async () => {
     await expect(
       getPluginPrefixes({
