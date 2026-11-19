@@ -154,11 +154,13 @@ jobs:
           cat "${RUNNER_TEMP}/changed-files.txt"
           echo "count=$(wc -l < "${RUNNER_TEMP}/changed-files.txt")" >> "$GITHUB_OUTPUT"
       - name: Restore lychee cache
+        id: lychee-cache
         if: steps.changed-files.outputs.count != '0'
-        uses: actions/cache@v6.1.0
+        uses: actions/cache/restore@v6.1.0
         with:
           path: .lycheecache # cspell:disable-line
-          key: lychee-${{ github.run_id }}
+          # A re-run keeps the run ID, and an existing cache key can't be saved again
+          key: lychee-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: lychee-
       - name: Check links
         if: steps.changed-files.outputs.count != '0'
@@ -170,6 +172,12 @@ jobs:
             --config node_modules/lychee-config-nick2bad4u/lychee.toml
             --config lychee.toml
             --files-from ${{ runner.temp }}/changed-files.txt
+      - name: Save lychee cache
+        if: ${{ !cancelled() && steps.lychee-cache.outcome == 'success' }}
+        uses: actions/cache/save@v6.1.0
+        with:
+          path: .lycheecache # cspell:disable-line
+          key: ${{ steps.lychee-cache.outputs.cache-primary-key }}
 
   test:
     name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }})
