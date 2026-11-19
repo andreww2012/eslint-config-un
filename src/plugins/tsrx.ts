@@ -9,5 +9,6 @@ export default definePluginMetadata('tsrx', {
     'no-await-in-loop': {disableInCodeBlocks: 'performance'},
     'no-unreachable': {disableInCodeBlocks: 'alternatives'},
     'no-unused-vars': {disableInCodeBlocks: 'unused'},
+    'no-useless-assignment': {disableInCodeBlocks: 'unused'},
   },
 });

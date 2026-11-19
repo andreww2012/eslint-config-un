@@ -27,6 +27,7 @@ const CORE_RULES_REPLACED_IN_TSRX_FILES: readonly string[] = [
   'no-await-in-loop',
   'no-unreachable',
   'no-unused-vars',
+  'no-useless-assignment',
 ];
 
 export default defineUnConfig<TsrxEslintConfigOptions, readonly ['js']>('tsrx', {
@@ -66,6 +67,12 @@ export default defineUnConfig<TsrxEslintConfigOptions, readonly ['js']>('tsrx', 
       'no-unused-vars',
       ...getRuleUnSeverityAndOptionsFromEntry(js?.finalFlatConfigRules['no-unused-vars'] ?? ERROR),
     ) /** @since 0.7.0 */ // 🔴
+    .addRule(
+      'no-useless-assignment',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        js?.finalFlatConfigRules['no-useless-assignment'] ?? ERROR,
+      ),
+    ) /** @since 0.7.6 */ // 🔴
     .disableBulkRules(CORE_RULES_REPLACED_IN_TSRX_FILES);
 
   configBuilder
