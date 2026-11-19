@@ -81,6 +81,12 @@ describe('basic tests', () => {
 
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tests');
+  // Tests skip moving the rules that throw without type information into a separate config, so
+  // those that the default configs enable would crash on the files that don't have it
+  const optionsWithTypeInfoSplit = {
+    searchFixturesRelativeToPath: import.meta.dirname,
+    internalOptions: {},
+  };
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('tests')).toMatchObject({
@@ -103,7 +109,7 @@ describe('rules', async () => {
 
   it('`no-empty-function` rule does not fire in a test file', async () => {
     const results = await testEslintConfig({}, FIXTURES.emptyFunctionInTestFile, {
-      searchFixturesRelativeToPath: import.meta.dirname,
+      ...optionsWithTypeInfoSplit,
       un: {defaultConfigsStatus: undefined},
     });
 
@@ -118,7 +124,7 @@ describe('rules', async () => {
 
   it('`no-empty-function` rule fires in the same code placed in a non-test file', async () => {
     const results = await testEslintConfig({}, FIXTURES.emptyFunction, {
-      searchFixturesRelativeToPath: import.meta.dirname,
+      ...optionsWithTypeInfoSplit,
       un: {defaultConfigsStatus: undefined},
     });
 
@@ -129,7 +135,7 @@ describe('rules', async () => {
 
   it('`extraConfigs` can re-enable a rule disabled in test files', async () => {
     const results = await testEslintConfig({}, FIXTURES.emptyFunctionInTestFile, {
-      searchFixturesRelativeToPath: import.meta.dirname,
+      ...optionsWithTypeInfoSplit,
       un: {
         defaultConfigsStatus: undefined,
         extraConfigs: [{name: 'user', rules: {'no-empty-function': 2}}],

@@ -168,7 +168,6 @@ export default eslintConfig({
         'un/consistent-nullish-comparison': 2,
         'un/no-type-assertion': 2,
         'un/prefer-array-for-each': 2,
-        'un/prefer-logical-or': 2,
       },
     },
     vitest: {

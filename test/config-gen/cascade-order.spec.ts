@@ -196,6 +196,7 @@ describe('cascade order', () => {
       eslint-config-un/tsrx
       eslint-config-un/turbo
       eslint-config-un/un
+      eslint-config-un/un/@type-information
       eslint-config-un/unhead
       eslint-config-un/unnecessary-abstractions
       eslint-config-un/unocss

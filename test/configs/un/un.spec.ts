@@ -77,6 +77,12 @@ describe('basic tests', () => {
 
 describe('rules', async () => {
   const configResult = await computeEslintConfig('un');
+  // Tests skip moving the rules that throw without type information into a separate config,
+  // so these rules would crash on the files that don't have it
+  const optionsWithTypeInfoSplit = {
+    searchFixturesRelativeToPath: import.meta.dirname,
+    internalOptions: {},
+  };
 
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('un')).toMatchObject({
@@ -87,7 +93,11 @@ describe('rules', async () => {
   });
 
   it('`un/no-multiple-consecutive-spaces` fires on a file with consecutive spaces in a string', async () => {
-    const results = await testEslintConfig('un', FIXTURES.consecutiveSpaces, import.meta.dirname);
+    const results = await testEslintConfig(
+      'un',
+      FIXTURES.consecutiveSpaces,
+      optionsWithTypeInfoSplit,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
@@ -121,7 +131,11 @@ describe('rules', async () => {
   });
 
   it('`un/no-typeof-like-comparisons` only fires on operands not holding a `typeof` result', async () => {
-    const results = await testEslintConfig('un', FIXTURES.typeofComparisons, import.meta.dirname);
+    const results = await testEslintConfig(
+      'un',
+      FIXTURES.typeofComparisons,
+      optionsWithTypeInfoSplit,
+    );
 
     const errors = findLintMessageFromLintResults(
       results,
@@ -140,7 +154,7 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       {un: {overrides: {'un/prefer-array-for-each': 'error'}}},
       FIXTURES.forOfLoopOverArray,
-      import.meta.dirname,
+      optionsWithTypeInfoSplit,
     );
 
     const error = findLintMessageFromLintResults(
@@ -156,7 +170,7 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       {un: {overrides: {'un/no-array-sort': 'error'}}},
       FIXTURES.arraySorting,
-      import.meta.dirname,
+      optionsWithTypeInfoSplit,
     );
 
     const errors = findLintMessageFromLintResults(
@@ -175,7 +189,7 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       {un: {overrides: {'un/no-array-reverse': 'error'}}},
       FIXTURES.arrayReversing,
-      import.meta.dirname,
+      optionsWithTypeInfoSplit,
     );
 
     const errors = findLintMessageFromLintResults(
@@ -194,7 +208,7 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       {un: {overrides: {'un/no-array-splice': 'error'}}},
       FIXTURES.arraySplicing,
-      import.meta.dirname,
+      optionsWithTypeInfoSplit,
     );
 
     const error = findLintMessageFromLintResults(
@@ -234,9 +248,9 @@ describe('rules', async () => {
     );
   });
 
-  it('`un/prefer-logical-or` rule fires on `??` with a left operand that cannot be falsy when enabled', async () => {
+  it('`un/prefer-logical-or` rule fires on `??` with a left operand that cannot be falsy', async () => {
     const results = await testEslintConfig(
-      {ts: true, un: {overrides: {'un/prefer-logical-or': 'error'}}},
+      {ts: true, un: true},
       FIXTURES.nullishCoalescing,
       import.meta.dirname,
     );
@@ -252,6 +266,19 @@ describe('rules', async () => {
     expect(errors[0]?.message).toMatchInlineSnapshot(
       '"Use `||` instead of `??`: they work the same here, because the left side cannot be `false`, `0`, `0n`, `NaN` or an empty string."',
     );
+  });
+
+  it('enables `un/prefer-logical-or` rule only in files with type information', async () => {
+    const configResultWithTypeInfoSplit = await computeEslintConfig('un', {
+      internalOptions: {},
+    });
+
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('un')).not.toHaveProperty(
+      'un/prefer-logical-or',
+    );
+    expect(configResultWithTypeInfoSplit.getRuleSeverities('un/@type-information')).toStrictEqual({
+      'un/prefer-logical-or': 2,
+    });
   });
 
   it('`un/consistent-nullish-comparison` rule fires on strict comparisons with `null` and `undefined` that `== null` can replace when enabled', async () => {
@@ -293,7 +320,7 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       {un: true, htmlScripts: true},
       FIXTURES.consecutiveSpacesInsideHtml,
-      import.meta.dirname,
+      optionsWithTypeInfoSplit,
     );
 
     const error = findLintMessageFromLintResults(
