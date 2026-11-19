@@ -21,6 +21,7 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/core@0.6.6'
   - '@tsrx/eslint-parser@0.7.6'
   - '@tsrx/eslint-plugin@0.7.6'
+  - eslint-plugin-ember@13.11.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
