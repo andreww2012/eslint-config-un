@@ -15,6 +15,7 @@ minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
 minimumReleaseAgeExclude: # []
   - '@andreww2012/commitlint-config@0.2.0'
+  - eslint-plugin-jsdoc@65.5.0
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
