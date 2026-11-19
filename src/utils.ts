@@ -113,6 +113,13 @@ export {assignDefaults} from './utils/assign-defaults';
 export const isNonEmptyArray = <Item>(value?: readonly Item[] | null): value is [Item, ...Item[]] =>
   arrayHasMinElements(value || [], 1);
 
+/**
+ * The form of an English word or phrase that goes after `count`: `singular` for 1, `plural` (by
+ * default, `singular` with `s` added) otherwise
+ */
+export const pluralize = (count: number, singular: string, plural = `${singular}s`) =>
+  count === 1 ? singular : plural;
+
 export function findArrayInversions<Item>(
   array: readonly Item[],
   compareFn: (a: Item, b: Item) => number,

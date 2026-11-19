@@ -41,6 +41,7 @@ import {
   objectEntriesUnsafe,
   objectFromKeys,
   objectKeysUnsafe,
+  pluralize,
   readAndParseJson,
   setByPath,
   styleConfigName,
@@ -141,9 +142,9 @@ const generateInstallationCommand = (
 
 const PACKAGE_REQUESTER_RENDERERS = {
   config: (configKeys) =>
-    `${configKeys.map((configKey) => styleConfigName(configKey)).join(', ')} config${configKeys.length === 1 ? '' : 's'}`,
+    `${configKeys.map((configKey) => styleConfigName(configKey)).join(', ')} ${pluralize(configKeys.length, 'config')}`,
   option: (optionNames) =>
-    `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} option${optionNames.length === 1 ? '' : 's'}`,
+    `${optionNames.map((optionName) => styleText('cyan', optionName)).join(', ')} ${pluralize(optionNames.length, 'option')}`,
   package: (packageNames) =>
     `a dependency of ${packageNames.map((packageName) => stylePackageName(packageName)).join(', ')}`,
 } as const satisfies Record<string, (names: readonly string[]) => string>;
@@ -346,12 +347,12 @@ export const resolveConfigAsyncData = async (
         arrayPartition(packages, (item) => packagesBackingPlugins.has(item.name)).map(
           (packagesOfType, i) =>
             packagesOfType.length > 0 &&
-            `${i === 0 ? 'plugin' : 'package'}${packagesOfType.length === 1 ? '' : 's'}`,
+            pluralize(packagesOfType.length, i === 0 ? 'plugin' : 'package'),
         ),
       ).join(' and ');
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
-        `${capitalize(packageTypes)} listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${packages.length === 1 ? (isUpdates ? 'does not satisfy the supported version range' : 'is not installed') : isUpdates ? 'do not satisfy the supported version ranges' : 'are not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} yourself or disable the corresponding config${packages.length === 1 ? '' : 's'}${isUpdates ? '' : ' to make this error disappear'}:
+        `${capitalize(packageTypes)} listed in optional peer dependencies ${pluralize(packages.length, 'was', 'were')} used, but ${isUpdates ? `${pluralize(packages.length, 'does', 'do')} not satisfy the supported version ${pluralize(packages.length, 'range')}` : `${pluralize(packages.length, 'is', 'are')} not installed`}. Please ${isUpdates ? 'update' : 'install'} ${pluralize(packages.length, 'it', 'them')} yourself or disable the corresponding ${pluralize(packages.length, 'config')}${isUpdates ? '' : ' to make this error disappear'}:
 ${renderTable(
   packages.map(({name, versionRange}) => ({
     Name: stylePackageName(name),
@@ -362,7 +363,7 @@ ${renderTable(
   })),
   {shouldDisableColors: !areColorsEnabled},
 )}
-${isUpdates ? 'Update' : 'Install'} ${packages.length === 1 ? 'it' : 'them'} in the package that depends on ${stylePackageName('eslint-config-un')}, with:
+${isUpdates ? 'Update' : 'Install'} ${pluralize(packages.length, 'it', 'them')} in the package that depends on ${stylePackageName('eslint-config-un')}, with:
 ${renderInstallationCommand(packages.map(({name}) => name))}
 ... with explicit version ranges:
 ${renderInstallationCommand(packages.map(({name, versionRange}) => `${name}@${versionRange || 'latest'}`))}

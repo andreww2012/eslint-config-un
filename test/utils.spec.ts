@@ -6,6 +6,7 @@ import {
   getKeysOfTruthyValues,
   isNonEmptyArray,
   isVersionAtLeast,
+  pluralize,
   readAndParseJson,
   styleRuleName,
   styleText,
@@ -120,6 +121,22 @@ describe('isNonEmptyArray', () => {
 
   it('returns `false` for `null`', () => {
     expect(isNonEmptyArray(null)).toBe(false);
+  });
+});
+
+describe('pluralize', () => {
+  it('returns the singular form for 1', () => {
+    expect(pluralize(1, 'rule')).toBe('rule');
+  });
+
+  it('returns the plural form for 0 and for more than 1', () => {
+    expect(pluralize(0, 'rule')).toBe('rules');
+    expect(pluralize(2, 'rule')).toBe('rules');
+  });
+
+  it('returns the given plural form', () => {
+    expect(pluralize(1, 'rule was', 'rules were')).toBe('rule was');
+    expect(pluralize(3, 'rule was', 'rules were')).toBe('rules were');
   });
 });
 

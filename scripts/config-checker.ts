@@ -6,6 +6,7 @@ import {
   arrayPartition,
   arrayWithoutFalsy,
   arrayify,
+  pluralize,
   styleConfigName,
   stylePackageName,
 } from '../src/utils';
@@ -61,7 +62,7 @@ if (packagesToMoveToDirectDependencies.length > 0) {
       'The following packages should be moved to direct dependencies because they are used in configs from the `misc-enabled` group, or their plugin metadata should explain why they stay optional peer dependencies:',
       ...packagesToMoveToDirectDependencies.map(
         ({packageName, configs}) =>
-          `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+          `\n- ${stylePackageName(packageName)} (used in ${pluralize(configs.length, 'config')}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
       ),
     ],
   });
@@ -112,7 +113,7 @@ if (packagesToMoveToOptionalPeerDependencies.length > 0) {
       'The following packages should be moved to optional peer dependencies because every config they serve is disabled by default, or their plugin metadata should explain why they stay direct dependencies:',
       ...packagesToMoveToOptionalPeerDependencies.map(
         ({packageName, configs}) =>
-          `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+          `\n- ${stylePackageName(packageName)} (used in ${pluralize(configs.length, 'config')}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
       ),
     ],
   });
@@ -125,7 +126,7 @@ if (packagesWithNeedlessDirectDependencyReason.length > 0) {
       'The following packages needlessly explain why they stay direct dependencies as some config they serve is enabled by default:',
       ...packagesWithNeedlessDirectDependencyReason.map(
         ({packageName, configs}) =>
-          `\n- ${stylePackageName(packageName)} (used in config${configs.length > 1 ? 's' : ''}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
+          `\n- ${stylePackageName(packageName)} (used in ${pluralize(configs.length, 'config')}: ${configs.map((config) => styleConfigName(config)).join(', ')})`,
       ),
     ],
   });
@@ -146,7 +147,7 @@ errors.forEach(({severity, message}) => {
 
 if (errorsCount + warningsCount > 0) {
   logger[errorsCount > 0 ? 'fatal' : 'error'](
-    `Test failed with ${arrayWithoutFalsy([errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`]).join(' and ')}`,
+    `Test failed with ${arrayWithoutFalsy([errorsCount > 0 && `${errorsCount} ${pluralize(errorsCount, 'error')}`, warningsCount > 0 && `${warningsCount} ${pluralize(warningsCount, 'warning')}`]).join(' and ')}`,
   );
 }
 

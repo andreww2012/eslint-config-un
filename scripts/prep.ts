@@ -23,7 +23,7 @@ import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
-import {styleRuleName} from '../src/utils';
+import {pluralize, styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {formatTypescript} from './shared/format';
 import {collectRuleReplacementsOnByDefault, readPluginMetadata} from './shared/plugin-metadata';
@@ -64,7 +64,7 @@ const [
   writeBaselineArtifacts(formatTypescript),
 ]);
 console.log(
-  `Generated the Baseline statuses of ${styleText('bold', String(featuresCount))} feature(s)`,
+  `Generated the Baseline statuses of ${styleText('bold', String(featuresCount))} ${pluralize(featuresCount, 'feature')}`,
 );
 
 const [allRuleTypesCode, perPluginCode] = await Promise.all([
@@ -117,20 +117,24 @@ const {pluginsCount, warnings: pluginMetadataWarnings} =
   await import('./src/generation/plugins').then((module) =>
     module.writePluginMetadataArtifacts(formatTypescript),
   );
-console.log(`Generated the metadata of ${styleText('bold', String(pluginsCount))} plugin(s)`);
+console.log(
+  `Generated the metadata of ${styleText('bold', String(pluginsCount))} ${pluralize(pluginsCount, 'plugin')}`,
+);
 pluginMetadataWarnings.forEach((warning) => {
   console.warn(`  ${styleText('yellow', '⚠', {stream: process.stderr})} ${warning}`);
 });
 
 const {renamesCount} = await writeReadmeArtifacts();
 console.log(
-  `Generated the readme table of ${styleText('bold', String(renamesCount))} plugin prefix rename(s)`,
+  `Generated the readme table of ${styleText('bold', String(renamesCount))} plugin prefix ${pluralize(renamesCount, 'rename')}`,
 );
 
 // MUST come last: generating the config artifacts imports every Config module, and several of them
 // may import the rule artifacts written above, which may not exist yet
 const {configsCount} = await writeConfigArtifacts(formatTypescript);
-console.log(`Generated the artifacts of ${styleText('bold', String(configsCount))} config(s)`);
+console.log(
+  `Generated the artifacts of ${styleText('bold', String(configsCount))} ${pluralize(configsCount, 'config')}`,
+);
 
 async function generateRuleTypes() {
   const [
@@ -250,11 +254,11 @@ ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCo
     .filter(({fixableRuleNames}) => fixableRuleNames.length > 0);
 
   const fixableRulesOnlyCode = // eslint-disable-line ts/no-shadow -- Fine
-    `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
+    `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} ${pluralize(fixableRulesPerPluginEntries.length, 'plugin')} */ {
 ${fixableRulesPerPluginEntries
   .map(
     ({pluginName, fixableRuleNames}) =>
-      `  '${pluginName}': /* ${fixableRuleNames.length} rule${fixableRuleNames.length === 1 ? '' : 's'} */ {
+      `  '${pluginName}': /* ${fixableRuleNames.length} ${pluralize(fixableRuleNames.length, 'rule')} */ {
 ${fixableRuleNames.map((ruleName) => `    '${ruleName}': true,`).join('\n')}
   },`,
   )
@@ -272,12 +276,12 @@ export type FixableRuleNames = {
 `;
 
   const allRulesCode = // eslint-disable-line ts/no-shadow -- Fine
-    `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
+    `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} ${pluralize(perPluginCodeRaw.length, 'plugin')} */ {
 ${perPluginCodeRaw
   .map(({pluginName, plugin}) => {
     const pluginRules = Object.entries(plugin.rules || {});
     const rulesCount = pluginRules.length;
-    return `  '${pluginName}': /* ${rulesCount} rule${rulesCount === 1 ? '' : 's'} */ [\n${pluginRules
+    return `  '${pluginName}': /* ${rulesCount} ${pluralize(rulesCount, 'rule')} */ [\n${pluginRules
       .map(([ruleName, ruleDefinition]) => {
         const {
           deprecated,
@@ -372,7 +376,7 @@ ${categorizedRulesPerPlugin
 ${Array.from(
   rulesPerCategory,
   ([category, ruleNames]) =>
-    `    ${category}: /* ${ruleNames.length} rule${ruleNames.length === 1 ? '' : 's'} */ [\n${ruleNames.map((ruleName) => `      '${ruleName}',`).join('\n')}\n    ],`,
+    `    ${category}: /* ${ruleNames.length} ${pluralize(ruleNames.length, 'rule')} */ [\n${ruleNames.map((ruleName) => `      '${ruleName}',`).join('\n')}\n    ],`,
 ).join('\n')}
   },`,
   )

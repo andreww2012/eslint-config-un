@@ -3,6 +3,7 @@ import path from 'node:path';
 import {arrayWithoutFalsy, invariant, keyedBy, parseNpmPackageSpecifier} from 'utilery';
 import type {ConfigEnabledBy} from '../../../src/config-un/define-config';
 import {PACKAGES_INSTALLED_THROUGH} from '../../../src/constants';
+import {pluralize} from '../../../src/utils';
 import {PLUGIN_PACKAGES_META, type PluginPackageMeta} from '../../shared/packages-meta';
 import {
   CASCADE_LAYOUT,
@@ -417,7 +418,7 @@ const renderIndexDts = (configs: readonly DiscoveredConfig[], allConfigKeys: rea
         subConfigs.length > 0
           ? [
               '',
-              `⚙️ Sub config${subConfigs.length === 1 ? '' : 's'}: ${subConfigs.map((name) => `\`${name}\``).join(', ')}`,
+              `⚙️ Sub ${pluralize(subConfigs.length, 'config')}: ${subConfigs.map((name) => `\`${name}\``).join(', ')}`,
             ]
           : [];
       return `${renderJsDoc([...prose, ...renderMainPluginLines(key), ...subConfigsLine, renderDefaultTag(manifest.enabledBy)], '  ')}

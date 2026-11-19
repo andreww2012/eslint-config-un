@@ -20,6 +20,7 @@ import {isValidRange} from 'verkit';
 import {stringify as yamlStringify} from 'yaml';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
+import {pluralize} from '../src/utils';
 import type {generateEslintPluginsRulesPresence} from './shared';
 import {formatTypescript} from './shared/format';
 
@@ -315,7 +316,7 @@ const run = async ({
 
   const ignoredVersionsCount = allVersions.length - versionsSorted.length;
   logger.log(
-    `${allVersions.length} version${allVersions.length === 1 ? '' : 's'} found${ignoredVersionsCount > 0 ? `, ${ignoredVersionsCount} ignored (${versionsIgnoredByRange.length} by range, ${versionsIgnoredByPrereleaseRegexes.length} by prerelease regexes)` : ''}`,
+    `${allVersions.length} ${pluralize(allVersions.length, 'version')} found${ignoredVersionsCount > 0 ? `, ${ignoredVersionsCount} ignored (${versionsIgnoredByRange.length} by range, ${versionsIgnoredByPrereleaseRegexes.length} by prerelease regexes)` : ''}`,
   );
 
   const generatedPackageJson: PackageJson = {
@@ -459,8 +460,9 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
   const batchResults: ReturnType<typeof generateEslintPluginsRulesPresence>[] = [];
 
   for (const [batchIndex, batchVersions] of batches.entries()) {
+    const versionsCount = batchIndex * batchSize + batchVersions.length;
     logger.log(
-      `Running batch ${batchIndex + 1}/${batches.length} (${batchIndex * batchSize + batchVersions.length} versions)...`,
+      `Running batch ${batchIndex + 1}/${batches.length} (${versionsCount} ${pluralize(versionsCount, 'version')})...`,
     );
 
     const {
@@ -491,7 +493,7 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
     console.warn(
       styleText(
         'red',
-        `${pluginLoadingErrors.length} plugin${pluginLoadingErrors.length === 1 ? '' : 's'} failed to load:`,
+        `${pluginLoadingErrors.length} ${pluralize(pluginLoadingErrors.length, 'plugin')} failed to load:`,
       ),
     );
     pluginLoadingErrors.forEach(({error, version}) => {

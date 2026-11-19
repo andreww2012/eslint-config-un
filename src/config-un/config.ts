@@ -46,6 +46,7 @@ import {
   objectEntriesUnsafe,
   objectFromEntriesUnsafe,
   omit,
+  pluralize,
   readAndParseJson,
   styleConfigName,
   stylePluginPrefix,
@@ -770,7 +771,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   if (offlineMode) {
     const {requiresNetwork: rulesRequiringNetwork} = context.ruleTraits;
     debug(
-      `Offline mode is active, the following ${rulesRequiringNetwork.length} rules were disabled: ${rulesRequiringNetwork.map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
+      `Offline mode is active, the following ${rulesRequiringNetwork.length} ${pluralize(rulesRequiringNetwork.length, 'rule was', 'rules were')} disabled: ${rulesRequiringNetwork.map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
     );
 
     configsResolved.push({
@@ -809,7 +810,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   }
   /* v8 ignore stop */
 
-  debug(`Final config resolved: ${configsResolved.length} flat config items`);
+  debug(
+    `Final config resolved: ${configsResolved.length} flat config ${pluralize(configsResolved.length, 'item')}`,
+  );
 
   if (cacheConfigs) {
     debug('Attempting to save resolved configs to memory and file system cache');

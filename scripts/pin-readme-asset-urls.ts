@@ -5,6 +5,7 @@ import {styleText} from 'node:util';
 import {cli} from 'cleye';
 import {arrayUnique, invariant} from 'utilery';
 import packageJson from '../package.json' with {type: 'json'};
+import {pluralize} from '../src/utils';
 
 const REPOSITORY_SLUG_REGEXP = /github\.com\/([^/]+\/[^./]+)/;
 
@@ -70,6 +71,6 @@ if (replacementsCount > 0) {
 
 console.log(
   isUnpinning
-    ? `Restored ${styleText('bold', String(replacementsCount))} relative readme asset reference(s)`
-    : `Pinned ${styleText('bold', String(replacementsCount))} readme asset reference(s) to ${styleText('cyan', pinnedAssetsPrefix)}`,
+    ? `Restored ${styleText('bold', String(replacementsCount))} relative readme asset ${pluralize(replacementsCount, 'reference')}`
+    : `Pinned ${styleText('bold', String(replacementsCount))} readme asset ${pluralize(replacementsCount, 'reference')} to ${styleText('cyan', pinnedAssetsPrefix)}`,
 );

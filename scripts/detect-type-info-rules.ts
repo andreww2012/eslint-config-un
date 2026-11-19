@@ -10,6 +10,7 @@ import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {RULES_REQUIRING_TYPE_INFORMATION} from '../src/plugins.gen';
 import {
   arrayPartition,
+  pluralize,
   readAndParseJson,
   stylePluginPrefix,
   styleRuleName,
@@ -167,7 +168,9 @@ const main = async () => {
   }
   const onlyPrefixes = new Set(argv.flags.plugin.flatMap((name) => prefixesByName.get(name) || []));
   const ruleCount = sum(plugins, ({plugin}) => Object.keys(plugin.rules || {}).length);
-  logger.info(`Loaded ${plugins.length} plugin(s), ${ruleCount} rule(s)`);
+  logger.info(
+    `Loaded ${plugins.length} ${pluralize(plugins.length, 'plugin')}, ${ruleCount} ${pluralize(ruleCount, 'rule')}`,
+  );
 
   // A rejected candidate is a decision already taken, and it says why
   const rejected = new Set(
@@ -322,7 +325,7 @@ const main = async () => {
   // Strict mode only says how many there are, to keep an automated run quiet
   if (argv.flags.strict) {
     console.log(
-      `\n${styleText('dim', `${undetected.length} declared rule(s) the probe did not reach, ${contradicted.length} whose requirement it read differently. Run \`nr type-info-rules\` for the detail.`, REPORT_STYLE_OPTIONS)}`,
+      `\n${styleText('dim', `${undetected.length} declared ${pluralize(undetected.length, 'rule')} the probe did not reach, ${contradicted.length} whose requirement it read differently. Run \`nr type-info-rules\` for the detail.`, REPORT_STYLE_OPTIONS)}`,
     );
   } else {
     report('Declared but nothing detected', undetected, ({declared}) =>
@@ -354,7 +357,7 @@ const main = async () => {
   }
 
   logger.error(
-    `${undeclared.length} rule(s) consume type information without saying so. Declare each one in its plugin metadata file, or record why it does not count with \`requiresTypeInfo: [false, 'reason']\``,
+    `${undeclared.length} ${pluralize(undeclared.length, 'rule consumes', 'rules consume')} type information without saying so. Declare each one in its plugin metadata file, or record why it does not count with \`requiresTypeInfo: [false, 'reason']\``,
   );
   process.exitCode = 1;
 };

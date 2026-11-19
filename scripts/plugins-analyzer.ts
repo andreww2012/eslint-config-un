@@ -7,6 +7,7 @@ import {differenceInMonths, formatDistanceToNow} from 'date-fns';
 import {Effect, Layer, Ref} from 'effect';
 import {type ObjectValues, identity, interpolateInverse, mean, round} from 'utilery';
 import * as z from 'zod';
+import {pluralize} from '../src/utils';
 import {type EslintPluginsDb, readEslintPluginsDb} from './plugins/plugins-db';
 import {
   EslintPluginsDbRefTag,
@@ -224,7 +225,7 @@ const analyze = Effect.gen(function* () {
                 ? styleText('yellow', `Error (${styleText('gray', pluginInfo.error.code)})`)
                 : pluginInfo.customRules.length === 0
                   ? styleText('red', 'No rules')
-                  : `${pluginInfo.customRules.length} rule${pluginInfo.customRules.length === 1 ? '' : 's'}`,
+                  : `${pluginInfo.customRules.length} ${pluralize(pluginInfo.customRules.length, 'rule')}`,
 
           'Deps (plugins)': `${styleText(dependenciesCount === 0 ? 'green' : dependenciesCount < 10 ? 'yellow' : 'red', dependenciesCount.toString())}${pluginsDependenciesCount > 0 ? styleText(pluginsDependenciesCount < 2 ? 'yellow' : 'red', ` (${pluginsDependenciesCount})`) : ''}`,
 
@@ -244,8 +245,9 @@ const analyze = Effect.gen(function* () {
     (plugin) => plugin.status.status !== 'accepted' && plugin.status.status !== 'fetched',
   ).length;
 
+  const pluginsToWorkOnCount = pluginsAnalyzed.length - pluginsWithFinalStatusCount;
   logger.info(
-    `${pluginsAnalyzed.length} plugins are shown in the table, ${pluginsAnalyzed.length - pluginsWithFinalStatusCount} of them are to be worked on`,
+    `${pluginsAnalyzed.length} ${pluralize(pluginsAnalyzed.length, 'plugin is', 'plugins are')} shown in the table, ${pluginsToWorkOnCount} of them ${pluralize(pluginsToWorkOnCount, 'is', 'are')} to be worked on`,
   );
 });
 

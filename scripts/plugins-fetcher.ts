@@ -8,6 +8,7 @@ import {type Storage as UnStorage, createStorage} from 'unstorage';
 import unstorageFsDriver from 'unstorage/drivers/fs';
 import {type Ms, type ObjectValues, isEmptyValue} from 'utilery';
 import ourPackageJson from '../package.json' with {type: 'json'};
+import {pluralize} from '../src/utils';
 import {
   type EslintPluginsDb,
   readEslintPluginsDb,
@@ -434,7 +435,10 @@ const mainProgram = Effect.gen(function* () {
 
   const db = yield* Ref.get(dbRef);
 
-  logger.info(`${Object.keys(db).length} ESLint plugins are in the plugins DB`);
+  const dbPluginsCount = Object.keys(db).length;
+  logger.info(
+    `${dbPluginsCount} ESLint ${pluralize(dbPluginsCount, 'plugin is', 'plugins are')} in the plugins DB`,
+  );
 
   if (cliFlags.clear) {
     logger.info('Cache cleared');
@@ -466,9 +470,10 @@ const mainProgram = Effect.gen(function* () {
   const finalDb = yield* Ref.get(dbRef);
   const newPackagesToCheck = yield* Ref.get(newPackagesToCheckRef);
   const dbSize = Object.keys(finalDb).length;
+  const fetchedPackagesCount = dbSize + newPackagesToCheck.size;
 
   logger.info(
-    `${dbSize + newPackagesToCheck.size} packages info fetched: ${styleText('blueBright', dbSize.toString())} known and ${styleText('green', newPackagesToCheck.size.toString())} new`,
+    `${fetchedPackagesCount} ${pluralize(fetchedPackagesCount, 'package')} info fetched: ${styleText('blueBright', dbSize.toString())} known and ${styleText('green', newPackagesToCheck.size.toString())} new`,
   );
 
   yield* updateEslintPluginsDb(finalDb);
