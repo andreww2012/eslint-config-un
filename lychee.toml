@@ -21,7 +21,9 @@ max_redirects = 0
 # copy is suggested instead of the URL the link actually moved to
 suggest = false
 remap = [
-  '^https://npmx\.dev/((?:[\w.-]+|@[\w.-]+/[\w.-]+)(?:\?[^/]*)?)$ https://npmx.dev/package/$1',
+  # npmx.dev often responds with 429 bot challenge. `/latest` keeps the response small
+  '^https://npmx\.dev/(?:package/)?((?:@[\w.-]+/)?[\w.-]+)(?:\?[^/#]*)?$ https://registry.npmjs.org/$1/latest',
+  '^https://npmx\.dev/package-code/((?:@[\w.-]+/)?[\w.-]+)/v/([\w.-]+)/([^?#]+)(?:#L\d+(?:-L\d+)?)?$ https://cdn.jsdelivr.net/npm/$1@$2/$3',
   # GitHub throttles logged-out `blob` page views with 503s, hitting CI runners hardest. The raw
   # file still has Markdown heading fragments to verify; line anchors (`#L42`) are dropped
   '^https://github\.com/([\w.-]+/[\w.-]+)/blob/([^?#]+)(?:\?[^#]*)?(?:#L\d+(?:-L\d+)?)?(#.*)?$ https://raw.githubusercontent.com/$1/$2$3',
@@ -39,7 +41,6 @@ remap = [
   # Drop anchors lychee cannot verify because they are inserted by JS after load;
   # the fragment-less page is valid
   '^(https://github\.com/[\w.-]+/[\w.-]+/(?:issues|pull)/\d+)#issuecomment-\d+$ $1',
-  '^(https://npmx\.dev/package-code/(?:@[\w.-]+/)?[\w.-]+/v/[\w.-]+/[\w./-]+)#L\d+$ $1',
 
   # Stupid redirects:
   # Extra trailing slash, except on `.html` pages which are real files that 404
