@@ -17,6 +17,7 @@ minimumReleaseAgeExclude: # []
   - '@andreww2012/commitlint-config@0.2.0'
   - eslint-plugin-jsdoc@65.5.0
   - eslint-plugin-cypress@7.0.6
+  - eslint-plugin-expect-type@0.7.2
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
