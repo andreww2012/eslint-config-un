@@ -16,6 +16,9 @@ export default definePluginMetadata('valibot', {
     'no-single-member-union': {stylistic: true},
     'no-unguarded-parse': {disableInCodeBlocks: 'runtimeOnly', disableInTestFiles: true},
     'no-unknown-schema': {disableInCodeBlocks: 'typeStrictness'},
+    'prefer-exact-pipe-constraint': {
+      stylistic: [false, 'the exact action reports a different validation issue'],
+    },
     'prefer-nullable-over-union-null': {stylistic: true},
     'prefer-nullish': {stylistic: true},
     'prefer-optional-over-union-undefined': {stylistic: true},

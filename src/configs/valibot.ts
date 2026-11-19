@@ -129,6 +129,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
     ) /** @since 0.1.0 */ // 🎨
     .addRule('no-any-schema', WARNING) /** @since 0.1.0 */ // 🔵
     .addRule('no-async-action-in-sync-pipe', ERROR) /** @since 1.3.0 */ // 🟢
+    .addRule('no-async-callback-in-sync-validation', ERROR) /** @since 1.6.0 */
     .addRule('no-async-schema-in-sync-parent', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-conflicting-pipe-actions', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-discarded-safe-parse', ERROR) /** @since 1.5.0 */
@@ -142,6 +143,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
       allowedObjectSchemaTypes ? ERROR : OFF,
       allowedObjectSchemaTypes ? [{allow: allowedObjectSchemaTypes}] : [],
     ) /** @since 0.1.0 */ // 🔵
+    .addRule('no-object-reshape-after-pipe', ERROR) /** @since 1.6.0 */
     .addRule('no-recreated-schemas', ERROR) /** @since 0.1.0 */ // 🔵
     .addRule('no-redundant-schema-wrappers', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-redundant-transformation', ERROR) /** @since 1.1.0 */ // 🟢
@@ -150,6 +152,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
     .addRule('no-single-member-union', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-throw-in-check', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-transform-in-record-key', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-truthy-string-coercion', ERROR) /** @since 1.6.0 */
     .addRule(
       'no-unawaited-parse-async', // cspell:disable-line
       ERROR,
@@ -158,6 +161,7 @@ export default defineUnConfig<ValibotEslintConfigOptions>('valibot', {
     // A throw at module scope is usually intended, like when validating environment variables
     .addRule('no-unguarded-parse', ERROR, [{allowAtModuleScope: true}]) /** @since 0.1.0 */ // 🟢
     .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */ // 🔵
+    .addRule('prefer-exact-pipe-constraint', ERROR) /** @since 1.6.0 */
     .addRule('prefer-flatten-pipe', ERROR) /** @since 1.2.0 */ // 🟡
     .addRule('prefer-nullable-over-union-null', ERROR) /** @since 0.1.0 */ // 🟡
     .addRule('prefer-nullish', ERROR) /** @since 0.1.0 */ // 🟡
