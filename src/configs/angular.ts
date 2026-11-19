@@ -444,6 +444,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule(
       ...getPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
     ) /** @since 0.0.1-alpha.23 */
+    .addRule(...getPluginRuleSeverity('no-global-document', ERROR)) /** @since 22.8.0 */
     // See https://github.com/angular/angular/pull/54084,
     // https://angular.dev/guide/components/host-elements
     .addRule(
@@ -667,6 +668,9 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     .addRule(
       ...getTemplatePluginRuleSeverity('no-interpolation-in-attributes', ERROR),
     ) /** @since 15.2.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('no-multi-token-class-key', ERROR),
+    ) /** @since 22.8.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('no-negated-async', ERROR),
     ) /** @since 0.0.1-alpha.20 */ // 🟢

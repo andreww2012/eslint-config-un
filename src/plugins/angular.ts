@@ -25,6 +25,7 @@ export default definePluginMetadata('angular', {
     'no-developer-preview': {requiresTypeInfo: true},
     'no-empty-lifecycle-method': {disableInCodeBlocks: 'emptiness'},
     'no-experimental': {requiresTypeInfo: true},
+    'no-global-document': {disableInCodeBlocks: 'runtimeOnly'},
     'no-pipe-impure': {disableInCodeBlocks: 'performance'},
     'no-uncalled-signals': {requiresTypeInfo: true},
     'pipe-prefix': {stylistic: true},
