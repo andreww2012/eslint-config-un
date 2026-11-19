@@ -50,7 +50,10 @@ export default definePluginMetadata('ts', {
     'no-empty-function': {disableInCodeBlocks: 'emptiness', disableInTestFiles: true},
     'no-empty-interface': {disableInCodeBlocks: 'emptiness'},
     'no-empty-object-type': {disableInCodeBlocks: 'emptiness'},
-    'no-explicit-any': {disableInCodeBlocks: 'typeStrictness'},
+    'no-explicit-any': {
+      disableInCodeBlocks: 'typeStrictness',
+      disableInCivetCompiledCode: [true, 'injected helpers'],
+    },
     'no-extraneous-class': {disableInCodeBlocks: 'tooStrict', disableInTestFiles: true},
     'no-import-type-side-effects': {disableInCodeBlocks: 'runtimeOnly'},
     'no-inferrable-types': {stylistic: true},

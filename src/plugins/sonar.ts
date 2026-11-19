@@ -118,12 +118,18 @@ export default definePluginMetadata('sonar', {
     'no-internal-api-use': {disableInCodeBlocks: 'imports'},
     'no-intrusive-permissions': {disableInCodeBlocks: 'runtimeOnly'},
     'no-invalid-regexp': {requiresTypeInfo: 'optional'},
-    'no-inverted-boolean-check': {stylistic: true},
+    'no-inverted-boolean-check': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, '`unless` and `when` conditions'],
+    },
     'no-labels': {disableInCodeBlocks: 'tooStrict'},
     'no-misleading-array-reverse': {requiresTypeInfo: SILENT_WITHOUT_TYPE_INFO},
     'no-misleading-character-class': {requiresTypeInfo: 'optional'},
     'no-os-command-from-path': {disableInCodeBlocks: 'runtimeOnly'},
-    'no-redundant-jump': {disableInCodeBlocks: 'tooStrict'},
+    'no-redundant-jump': {
+      disableInCodeBlocks: 'tooStrict',
+      disableInCivetCompiledCode: [true, 'implicit returns'],
+    },
     'no-redundant-optional': {
       requiresTypeInfo: 'optional',
       stylistic: true,

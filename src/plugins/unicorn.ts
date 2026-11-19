@@ -39,13 +39,17 @@ export default definePluginMetadata('unicorn', {
         // Won't fix: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/599
         'when `error` is already taken, the fix picks a name like `error_` instead of a descriptive one',
       ],
+      disableInCivetCompiledCode: [true, '`try` without `catch`'],
     },
     'comma-spacing': {stylistic: true},
     'consistent-arrow-return-style': {stylistic: true},
     'consistent-assert': {stylistic: true},
     'consistent-boolean-name': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'consistent-class-member-order': {stylistic: true},
-    'consistent-conditional-object-spread': {stylistic: true},
+    'consistent-conditional-object-spread': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'optional object properties'],
+    },
     'consistent-date-clone': {stylistic: true},
     'consistent-destructuring': {stylistic: true},
     'consistent-existence-index-check': {stylistic: true},
@@ -65,6 +69,7 @@ export default definePluginMetadata('unicorn', {
         // Partly fixed: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1266
         '`!value.length` becomes `value.length === 0`, which is false when the property is missing',
       ],
+      disableInCivetCompiledCode: [true, 'pattern matching'],
     },
     'filename-case': {stylistic: true},
     'import-style': {stylistic: true},
@@ -75,6 +80,7 @@ export default definePluginMetadata('unicorn', {
       disableInCodeBlocks: 'tooStrict',
     },
     'name-replacements': {stylistic: true},
+    'new-for-builtins': {disableInCivetCompiledCode: [true, 'injected helpers']},
     'no-abusive-eslint-disable': {
       disableInCodeBlocks: [
         false,
@@ -128,6 +134,9 @@ export default definePluginMetadata('unicorn', {
       requiresTypeInfo: ['optional', 'indirect'],
       disableInCodeBlocks: 'performance',
     },
+    'no-empty-file': {
+      disableInCivetCompiledCode: [true, 'TypeScript syntax compiled to JavaScript'],
+    },
     'no-for-each': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'no-for-loop': {requiresTypeInfo: 'optional', stylistic: true},
     'no-global-object-property-assignment': {disableInCodeBlocks: 'runtimeOnly'},
@@ -158,8 +167,14 @@ export default definePluginMetadata('unicorn', {
     'no-missing-local-resource': {disableInCodeBlocks: 'imports'},
     'no-named-default': {stylistic: true},
     'no-negated-array-predicate': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
-    'no-negated-comparison': {stylistic: true},
-    'no-negated-condition': {stylistic: true},
+    'no-negated-comparison': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, '`unless` and `when` conditions'],
+    },
+    'no-negated-condition': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, '`unless` and `when` conditions'],
+    },
     'no-negation-in-equality-check': {stylistic: true},
     'no-nested-ternary': {stylistic: true, prettierIncompatible: true},
     'no-new-array': {disableInCodeBlocks: 'runtimeOnly'},
@@ -270,7 +285,7 @@ export default definePluginMetadata('unicorn', {
     'no-useless-collection-argument': {stylistic: true},
     'no-useless-concat': {stylistic: true},
     'no-useless-continue': {stylistic: true},
-    'no-useless-else': {stylistic: true},
+    'no-useless-else': {stylistic: true, disableInCivetCompiledCode: [true, 'implicit returns']},
     'no-useless-fallback-in-spread': {stylistic: true},
     'no-useless-iterator-to-array': {
       requiresTypeInfo: [
@@ -292,6 +307,7 @@ export default definePluginMetadata('unicorn', {
         true,
         'dropping a returned `undefined` turns the inferred return type into `void`, and dropping a parameter default changes the function `length`',
       ],
+      disableInCivetCompiledCode: [true, '`let x?` declarations and `for first` reductions'],
     },
     'no-zero-fractions': {stylistic: true},
     'number-literal-case': {stylistic: true, prettierIncompatible: true},
@@ -336,6 +352,7 @@ export default definePluginMetadata('unicorn', {
         // Partly fixed: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3838
         'without type information, it also rewrites array-likes like `NodeList`, which have no `at()` method',
       ],
+      disableInCivetCompiledCode: [true, 'negative indexes'],
     },
     'prefer-await': {requiresTypeInfo: 'optional'},
     'prefer-bigint-literals': {stylistic: true},
@@ -457,7 +474,10 @@ export default definePluginMetadata('unicorn', {
     'prefer-object-from-entries': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-object-iterable-methods': {stylistic: true},
     'prefer-observer-apis': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
-    'prefer-optional-catch-binding': {disableInCodeBlocks: 'emptiness'},
+    'prefer-optional-catch-binding': {
+      disableInCodeBlocks: 'emptiness',
+      disableInCivetCompiledCode: [true, '`try` without `catch`'],
+    },
     'prefer-options-parameter': {requiresTypeInfo: 'optional'},
     'prefer-path2d': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
     'prefer-private-class-fields': {
@@ -490,9 +510,15 @@ export default definePluginMetadata('unicorn', {
       disableInCodeBlocks: 'runtimeOnly',
     },
     'prefer-set-size': {requiresTypeInfo: ['optional', 'indirect']},
-    'prefer-short-arrow-method': {stylistic: true},
+    'prefer-short-arrow-method': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'implicit returns'],
+    },
     'prefer-short-escape-sequences': {stylistic: true},
-    'prefer-simple-condition-first': {stylistic: true},
+    'prefer-simple-condition-first': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'pattern matching'],
+    },
     'prefer-simple-sort-comparator': {requiresTypeInfo: ['optional', 'indirect']},
     'prefer-simplified-conditions': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-single-array-predicate': {requiresTypeInfo: ['optional', 'indirect']},
@@ -510,7 +536,11 @@ export default definePluginMetadata('unicorn', {
       ],
     },
     'prefer-string-pad-start-end': {requiresTypeInfo: ['optional', 'indirect']},
-    'prefer-string-raw': {requiresTypeInfo: 'optional', stylistic: true},
+    'prefer-string-raw': {
+      requiresTypeInfo: 'optional',
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'interpolated `///` regexes'],
+    },
     'prefer-string-repeat': {stylistic: true},
     'prefer-string-replace-all': {
       requiresTypeInfo: ['optional', 'indirect'],
@@ -539,7 +569,7 @@ export default definePluginMetadata('unicorn', {
     },
     'prefer-string-trim-start-end': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-structured-clone': {stylistic: true},
-    'prefer-switch': {stylistic: true},
+    'prefer-switch': {stylistic: true, disableInCivetCompiledCode: [true, 'pattern matching']},
     'prefer-temporal': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'prefer-temporal-conversion': {
       requiresTypeInfo: 'optional',
@@ -548,7 +578,11 @@ export default definePluginMetadata('unicorn', {
         'the direct methods keep the precision below a millisecond and the calendar that some of the reported reconstructions drop',
       ],
     },
-    'prefer-ternary': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
+    'prefer-ternary': {
+      requiresTypeInfo: ['optional', 'indirect'],
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'implicit returns'],
+    },
     'prefer-then-catch': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'runtimeOnly'},
     'prefer-toggle-attribute': {requiresTypeInfo: ['optional', 'indirect'], stylistic: true},
     'prefer-top-level-await': {
@@ -577,12 +611,15 @@ export default definePluginMetadata('unicorn', {
     'require-array-join-separator': {requiresTypeInfo: ['optional', 'indirect']},
     'require-array-sort-compare': {requiresTypeInfo: ['optional', 'indirect']},
     'require-frontmatter-fields': {disableInCodeBlocks: 'fragment'},
-    'require-module-specifiers': {disableInCodeBlocks: 'emptiness'},
+    'require-module-specifiers': {
+      disableInCodeBlocks: 'emptiness',
+      disableInCivetCompiledCode: [true, 'TypeScript syntax compiled to JavaScript'],
+    },
     'require-passive-events': {disableInCodeBlocks: 'performance'},
     'require-post-message-target-origin': {requiresTypeInfo: 'optional'},
     'require-spread-parentheses': {stylistic: true},
     'single-line-block-comment-style': {stylistic: true},
-    'switch-case-braces': {stylistic: true},
+    'switch-case-braces': {stylistic: true, disableInCivetCompiledCode: [true, '`case` blocks']},
     'template-indent': {
       stylistic: true,
       prettierIncompatible: [

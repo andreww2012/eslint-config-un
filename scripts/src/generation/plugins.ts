@@ -152,6 +152,15 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
         );
       }
 
+      if (
+        readTrait(traits, 'prettierIncompatible')?.value === true &&
+        readTrait(traits, 'disableInCivetCompiledCode')?.value
+      ) {
+        errors.push(
+          `${styleRuleName(fullRuleName)} is incompatible with Prettier, so it is disabled in the code compiled from Civet files already: drop its ${styleTrait('disableInCivetCompiledCode')} entry`,
+        );
+      }
+
       const autofixDisabled = readTrait(traits, 'autofixDisabled');
       if (autofixDisabled?.value !== true) {
         return;
@@ -405,6 +414,7 @@ const renderArtifacts = (plugins: readonly DiscoveredPlugin[]) => {
       collectTrait(plugins, 'disableInCodeBlocks'),
       typeInfoAuthored,
     ),
+    disableInCivetCompiledCode: collectTrait(plugins, 'disableInCivetCompiledCode'),
     disableInTestFiles: collectTrait(plugins, 'disableInTestFiles'),
     cliFiles: collectTrait(plugins, 'cliFiles'),
   };
@@ -439,6 +449,10 @@ ${fullRuleNames(tables.autofixDisabled)
   .map((ruleName) => `  '${ruleName}': true,`)
   .join('\n')}
 };
+
+export const RULES_TO_DISABLE_IN_CIVET_COMPILED_CODE: readonly string[] = [
+${renderFlatList(fullRuleNames(tables.disableInCivetCompiledCode))}
+];
 
 export const RULES_TO_DISABLE_IN_TEST_FILES: readonly string[] = [
 ${renderFlatList(fullRuleNames(tables.disableInTestFiles))}

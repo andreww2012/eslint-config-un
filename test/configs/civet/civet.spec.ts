@@ -108,6 +108,16 @@ describe('rules', () => {
     });
   });
 
+  it('disables the rules of JS plugins conflicting with Prettier in the compiled code', async () => {
+    const severities = (await computeEslintConfig('civet')).getRuleSeverities('civet/compiled');
+
+    expect(severities).toMatchObject({
+      'react/jsx-indent': 0,
+      'stylistic/max-len': 0,
+    });
+    expect(severities).not.toContainKey('vue/html-indent');
+  });
+
   it('reports the problems of the compiled code at their positions in the Civet file', async () => {
     const results = await testEslintConfig(
       {civet: true, js: true},

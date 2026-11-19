@@ -86,6 +86,7 @@ export default definePluginMetadata('stylistic', {
         false,
         'by default this rule is configured in a Prettier-compatible way by us',
       ],
+      disableInCivetCompiledCode: [true, 'unquoted strings, like import sources and object keys'],
     },
     'rest-spread-spacing': {prettierIncompatible: true},
     semi: {prettierIncompatible: true},

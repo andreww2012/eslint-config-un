@@ -85,6 +85,13 @@ export interface RuleTraits {
   disableInCodeBlocks?: MaybeWithReason<CodeBlocksReason>;
 
   /**
+   * The rule is turned off in the code compiled from Civet files, as it reports the code the
+   * compiler generates.
+   * `prettierIncompatible` implies it
+   */
+  disableInCivetCompiledCode?: MaybeWithReason<true>;
+
+  /**
    * The rule is turned off in test files by the `tests` Config
    */
   disableInTestFiles?: MaybeWithReason<true>;
@@ -119,6 +126,7 @@ export const RULE_TRAITS_ORDERED = allUnionMembers<keyof RuleTraits, {readonly: 
   'prettierIncompatible',
   'autofixDisabled',
   'disableInCodeBlocks',
+  'disableInCivetCompiledCode',
   'disableInTestFiles',
   'cliFiles',
 ]);

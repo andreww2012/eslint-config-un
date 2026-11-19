@@ -10,6 +10,7 @@ export default definePluginMetadata('math', {
       requiresTypeInfo: 'optional',
       autofixDisabled: [true, 'the ternary form it rewrites keeps -0, the method returns +0'],
     },
+    'no-static-infinity-calculations': {disableInCivetCompiledCode: [true, 'inclusive slices']},
     'prefer-exponentiation-operator': {
       stylistic: true,
       autofixDisabled: [

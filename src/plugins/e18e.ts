@@ -73,6 +73,7 @@ export default definePluginMetadata('e18e', {
         'the string methods throw on a non-string value the regex test would turn into a string, and values typed `any` are rewritten too',
       ],
       disableInCodeBlocks: 'performance',
+      disableInCivetCompiledCode: [true, 'pattern matching'],
     },
     'prefer-inline-equality': {requiresTypeInfo: 'optional', disableInCodeBlocks: 'performance'},
     'prefer-nullish-coalescing': {

@@ -13,6 +13,7 @@ import {
   RULES_INCOMPATIBLE_WITH_PRETTIER,
   RULES_REQUIRING_TYPE_INFORMATION,
   RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
+  RULES_TO_DISABLE_IN_CIVET_COMPILED_CODE,
   RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS,
   RULES_TO_DISABLE_IN_OFFLINE_MODE,
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -27,6 +28,7 @@ const generatedRuleTraits = {
   prettierIncompatible: RULES_INCOMPATIBLE_WITH_PRETTIER,
   autofixDisabled: RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
   disableInCodeBlocks: RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS,
+  disableInCivetCompiledCode: RULES_TO_DISABLE_IN_CIVET_COMPILED_CODE,
   disableInTestFiles: RULES_TO_DISABLE_IN_TEST_FILES,
   cliFiles: RULES_ADJUSTED_FOR_CLI_FILES,
 } satisfies Record<RuleTrait, unknown>;
@@ -118,6 +120,7 @@ const TRAIT_TABLES_ACCESS: Readonly<{
   prettierIncompatible: createRulesPerPluginAccess(),
   autofixDisabled: ruleRecordAccess,
   disableInCodeBlocks: ruleListAccess,
+  disableInCivetCompiledCode: ruleListAccess,
   disableInTestFiles: ruleListAccess,
   cliFiles: createRulesPerPluginAccess(),
 };
@@ -196,6 +199,10 @@ const withOverriddenTraits = (
     traits.disableInCodeBlocks,
     // Code blocks never get type information
     overrides.disableInCodeBlocks ?? (overrides.requiresTypeInfo === true || undefined),
+  ),
+  disableInCivetCompiledCode: overrideTrait(
+    traits.disableInCivetCompiledCode,
+    overrides.disableInCivetCompiledCode,
   ),
   disableInTestFiles: overrideTrait(traits.disableInTestFiles, overrides.disableInTestFiles),
   cliFiles: overrideTrait(traits.cliFiles, overrides.cliFiles),

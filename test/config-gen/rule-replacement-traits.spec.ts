@@ -91,7 +91,12 @@ describe('traits of the replaced rules', () => {
           replacements: {
             'no-null': {
               rule: RULE,
-              traits: {stylistic: false, requiresNetwork: true, disableInTestFiles: true},
+              traits: {
+                stylistic: false,
+                requiresNetwork: true,
+                disableInCivetCompiledCode: true,
+                disableInTestFiles: true,
+              },
             },
           },
         },
@@ -100,6 +105,7 @@ describe('traits of the replaced rules', () => {
 
     expect(ruleTraits.stylistic['unicorn']).not.toContainKey('no-null');
     expect(ruleTraits.requiresNetwork).toContain('unicorn/no-null');
+    expect(ruleTraits.disableInCivetCompiledCode).toContain('unicorn/no-null');
     expect(ruleTraits.disableInTestFiles).toContain('unicorn/no-null');
   });
 });

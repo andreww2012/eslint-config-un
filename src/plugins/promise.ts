@@ -10,7 +10,10 @@ export default definePluginMetadata('promise', {
     'no-callback-in-promise': {disableInCodeBlocks: 'runtimeOnly'},
     'no-native': {disableInCodeBlocks: 'runtimeOnly'},
     'no-promise-in-callback': {disableInCodeBlocks: 'runtimeOnly'},
-    'param-names': {stylistic: true},
+    'param-names': {
+      stylistic: true,
+      disableInCivetCompiledCode: [true, 'parameters renamed by the compiler'],
+    },
     'prefer-catch': {
       autofixDisabled: [
         true,
