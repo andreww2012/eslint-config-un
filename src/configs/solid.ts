@@ -31,6 +31,7 @@ export interface SolidPluginSettings {
    * - [`solid/no-unused-signal`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-unused-signal.md)
    * - [`solid/no-write-in-pure-computation`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/no-write-in-pure-computation.md)
    * - [`solid/reactivity`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/reactivity.md)
+   * - [`solid/removed-api`](https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/removed-api.md)
    * @default []
    */
   moduleSources?: readonly string[];
