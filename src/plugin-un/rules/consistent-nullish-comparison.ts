@@ -3,7 +3,13 @@ import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type * as ts from 'typescript';
 import {allUnionMembers} from '../../utils';
-import {getTypeInformation, isGlobalReference, unwrapTypeOnlyWrappers} from '../rule-utils';
+import {
+  getConstituents,
+  getTypeInformation,
+  isGlobalReference,
+  isIndexSignatureRead,
+  unwrapTypeOnlyWrappers,
+} from '../rule-utils';
 
 type Mode = 'non-strict' | 'strict';
 
@@ -67,48 +73,12 @@ const createLooselyNullishValuesGetter = (
     undefined: checker.getUndefinedType(),
   };
 
-  // Union members, with generic types replaced by their constraints
-  const getConstituents = (type: ts.Type): ts.Type[] => {
-    if (type.isUnion()) {
-      return type.types.flatMap(getConstituents);
-    }
-
-    const constraint = checker.getBaseConstraintOfType(type);
-    return constraint == null || constraint === type ? [type] : getConstituents(constraint);
-  };
-
   const canBe = (type: ts.Type, value: NullishValue) =>
     checker.isTypeAssignableTo(nullishTypes[value], type) ||
     // A type that fits neither `{}` nor the other nullish value may hold this one, like `void` or
     // a generic type without a constraint (`T[K]`)
     (!checker.isTypeAssignableTo(type, emptyObjectType) &&
       !checker.isTypeAssignableTo(type, nullishTypes[OTHER_NULLISH_VALUE[value]]));
-
-  // A key missing from an index signature gives `undefined`, which the type of the access only has
-  // with `noUncheckedIndexedAccess`
-  const isIndexSignatureAccess = (node: ESTree.Node) => {
-    const access = node.type === 'ChainExpression' ? node.expression : node;
-    if (access.type !== 'MemberExpression' || access.property.type === 'PrivateIdentifier') {
-      return false;
-    }
-
-    const {computed, object, property} = access;
-    const key =
-      computed && property.type === 'Literal'
-        ? String(property.value)
-        : !computed && property.type === 'Identifier'
-          ? property.name
-          : undefined;
-    const objectType = getType(object);
-    return (
-      key == null ||
-      objectType == null ||
-      getConstituents(objectType).some(
-        (constituent) =>
-          checker.getPropertyOfType(checker.getApparentType(constituent), key) == null,
-      )
-    );
-  };
 
   return (node: ESTree.Node) => {
     // The asserted type may leave out a value the expression can hold
@@ -118,13 +88,15 @@ const createLooselyNullishValuesGetter = (
       return UNKNOWN_TYPE_VALUES_SET;
     }
 
-    const constituents = getConstituents(type);
+    const constituents = getConstituents(checker, type);
     const values = new Set<LooselyNullishValue>(
       NULLISH_VALUES.filter((value) =>
         constituents.some((constituent) => canBe(constituent, value)),
       ),
     );
-    if (isIndexSignatureAccess(expression)) {
+    // A key missing from an index signature gives `undefined`, which the type of the read only has
+    // with `noUncheckedIndexedAccess`
+    if (isIndexSignatureRead(typeInformation, expression)) {
       values.add('undefined');
     }
     if (

@@ -153,6 +153,12 @@ typeAwareRuleTester.run(`${RULE_NAME} (type information)`, consistentNullishComp
       'declare const object: {key: string | null} & Record<string, unknown>; object.key === null;',
       'declare const object: {key: string | null} & Record<string, unknown>; object.key == null;',
     ),
+    // Every key the type allows is declared
+    withReport(
+      'replaceByType',
+      "declare const record: Record<'a' | 'b', string | null>; declare const key: 'a' | 'b'; record[key] === null;",
+      "declare const record: Record<'a' | 'b', string | null>; declare const key: 'a' | 'b'; record[key] == null;",
+    ),
     withReport(
       'replaceByType',
       'declare const x: string | null; (x as string | null | undefined) === null;',

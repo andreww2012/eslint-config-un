@@ -112,6 +112,50 @@ export const getTypeInformation = (sourceCode: Eslint.SourceCode) => {
   return hasTypeInformation(parserServices) ? createTypeInformation(parserServices) : undefined;
 };
 
+/**
+ * Returns the members of a union type, with generic types replaced by their constraints
+ */
+export const getConstituents = (checker: ts.TypeChecker, type: ts.Type): ts.Type[] => {
+  if (type.isUnion()) {
+    return type.types.flatMap((member) => getConstituents(checker, member));
+  }
+
+  const constraint = checker.getBaseConstraintOfType(type);
+  return constraint == null || constraint === type ? [type] : getConstituents(checker, constraint);
+};
+
+/**
+ * Tells whether the expression reads a key through an index signature, like `items[0]` or
+ * `record.key`
+ */
+export const isIndexSignatureRead = (
+  {checker, getType}: ReturnType<typeof createTypeInformation>,
+  node: ESTree.Node,
+) => {
+  const access = node.type === 'ChainExpression' ? node.expression : node;
+  if (access.type !== 'MemberExpression' || access.property.type === 'PrivateIdentifier') {
+    return false;
+  }
+
+  const {computed, object, property} = access;
+  const key =
+    computed && property.type === 'Literal'
+      ? String(property.value)
+      : !computed && property.type === 'Identifier'
+        ? property.name
+        : undefined;
+  const objectType = getType(object);
+  return (
+    objectType == null ||
+    getConstituents(checker, objectType).some((constituent) => {
+      const apparentType = checker.getApparentType(constituent);
+      return key == null
+        ? checker.getIndexInfosOfType(apparentType).length > 0
+        : checker.getPropertyOfType(apparentType, key) == null;
+    })
+  );
+};
+
 const getStatementSiblings = (parent: Eslint.Rule.Node | null): readonly ESTree.BaseNode[] => {
   switch (parent?.type) {
     case 'BlockStatement':

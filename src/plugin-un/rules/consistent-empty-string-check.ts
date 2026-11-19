@@ -8,6 +8,7 @@ import {
   MEMBER_OBJECT_TYPES,
   TYPE_ONLY_WRAPPER_TYPES,
   getTypeInformation,
+  isIndexSignatureRead,
   needsLeadingSemicolon,
 } from '../rule-utils';
 
@@ -138,37 +139,6 @@ const rule: Eslint.JSRuleDefinition<{
         : canBeEmpty(constraint);
     };
 
-    // Without `noUncheckedIndexedAccess`, a value read through an index signature, like `items[0]`,
-    // is typed as present even when it is missing
-    const isIndexSignatureRead = (node: ESTree.Node): boolean => {
-      if (node.type === 'ChainExpression') {
-        return isIndexSignatureRead(node.expression);
-      }
-
-      if (node.type !== 'MemberExpression') {
-        return false;
-      }
-
-      const objectType = getType(node.object);
-      if (objectType == null) {
-        return true;
-      }
-
-      const apparentType = checker.getApparentType(objectType);
-      const {property} = node;
-      const propertyName = node.computed
-        ? property.type === 'Literal'
-          ? String(property.value)
-          : undefined
-        : property.type === 'Identifier'
-          ? property.name
-          : undefined;
-      return (
-        (propertyName == null || apparentType.getProperty(propertyName) == null) &&
-        checker.getIndexInfosOfType(apparentType).length > 0
-      );
-    };
-
     // Whether `(` added before the node would continue the previous statement
     const needsSemicolonBefore = (node: Eslint.Rule.Node): boolean =>
       node.type === 'ExpressionStatement'
@@ -197,8 +167,9 @@ const rule: Eslint.JSRuleDefinition<{
         type == null ||
         !isString(type) ||
         isNarrowable(type) ||
-        // `.length` would throw where the value is missing
-        isIndexSignatureRead(operand)
+        // `.length` would throw where the value is missing, and the type of such a read only says it
+        // can be with `noUncheckedIndexedAccess`
+        isIndexSignatureRead(typeInformation, operand)
       ) {
         return;
       }
