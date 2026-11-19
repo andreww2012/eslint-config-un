@@ -14,6 +14,10 @@ import {
   regexEscape,
 } from 'utilery';
 import {readFileSafe} from 'utilery/server';
+import {
+  BUILTIN_RULE_REPLACEMENTS_DOCS_URL,
+  withReplacedRules,
+} from '../src/config-un/replace-plugin-rules';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
@@ -21,6 +25,7 @@ import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {styleRuleName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {formatTypescript} from './shared/format';
+import {collectRuleReplacementsOnByDefault, readPluginMetadata} from './shared/plugin-metadata';
 import {writeBaselineArtifacts} from './src/generation/baseline';
 import {writeConfigArtifacts} from './src/generation/configs';
 import {writeReadmeArtifacts} from './src/generation/readme';
@@ -35,6 +40,9 @@ const PLUGIN_LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {
   rootOptions: {},
   missingPackages: new Map(),
 };
+
+// Not a plugin prefix: names the types of the rules that the replacements on by default hide
+const ORIGINAL_RULES_PSEUDO_PLUGIN_NAME = 'original';
 
 const [
   {
@@ -125,6 +133,7 @@ async function generateRuleTypes() {
     loadedPlugins,
     {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate},
     pluginsWithAddedRuleOptionSchemas,
+    pluginsMetadata,
   ] = await Promise.all([
     Promise.all(
       Object.entries(pluginsLoaders).map(
@@ -134,6 +143,8 @@ async function generateRuleTypes() {
     ),
     generateAngularPluginsWithOldRules(),
     addMissingRuleOptionsSchemas(),
+    // Read here, since the generated tables may not exist yet or be outdated
+    readPluginMetadata(),
   ]);
 
   const allPlugins: Record<string, EslintPlugin> = Object.fromEntries(
@@ -151,40 +162,56 @@ async function generateRuleTypes() {
     pluginsWithAddedRuleOptionSchemas,
   );
 
-  const [allRuleTypesCodeRaw, perPluginCodeRaw] = await Promise.all([
-    pluginsToRulesDTS(allPlugins, {
+  // The rule types, docs links and fixable lists describe what users get by default, while the
+  // categorization reads the rules of each plugin itself
+  const defaultReplacements = collectRuleReplacementsOnByDefault(pluginsMetadata);
+  const pluginsWithDefaultReplacements: Record<string, EslintPlugin> = {
+    ...allPlugins,
+    ...Object.fromEntries(
+      Array.from(
+        Map.groupBy(defaultReplacements, ({targetPrefix}) => targetPrefix),
+        ([pluginPrefix, replacements]) => {
+          const plugin = allPlugins[pluginPrefix];
+          invariant(
+            plugin,
+            `Cannot replace the rules of the not loaded \`${pluginPrefix}\` plugin`,
+          );
+          return [
+            pluginPrefix,
+            withReplacedRules(
+              plugin,
+              replacements.map(({targetRuleName, source, sourcePrefix = '', sourceRuleName}) => ({
+                ruleName: targetRuleName,
+                sourceName: source,
+                getRule: () => allPlugins[sourcePrefix]?.rules?.[sourceRuleName],
+                docsUrl: BUILTIN_RULE_REPLACEMENTS_DOCS_URL,
+              })),
+            ),
+          ];
+        },
+      ),
+    ),
+  };
+  const originalRulesPseudoPlugin: EslintPlugin = {
+    rules: Object.fromEntries(
+      defaultReplacements.flatMap(({targetPrefix, targetRuleName, target}) => {
+        const rule = allPlugins[targetPrefix]?.rules?.[targetRuleName];
+        return rule ? [[target, rule]] : [];
+      }),
+    ),
+  };
+
+  const [allRuleTypesCodeRaw, perPluginCodeRaw, originalRuleTypesCode] = await Promise.all([
+    pluginsToRulesDTS(pluginsWithDefaultReplacements, {
       includeAugmentation: false,
       compileOptions: COMPILE_OPTIONS,
     }),
 
     Promise.all(
-      Object.entries(allPlugins).map(async ([pluginName, plugin]) => {
+      Object.entries(pluginsWithDefaultReplacements).map(async ([pluginName, plugin]) => {
         const exportTypeName = normalizeIdentifier(`Plugin${capitalize(pluginName || 'js')}`);
-        let code = await pluginsToRulesDTS(
-          {[pluginName]: plugin},
-          {
-            includeAugmentation: false,
-            exportTypeName,
-            includeIgnoreComments: false,
-            includeTypeImports: false,
-            compileOptions: COMPILE_OPTIONS,
-          },
-        );
-        code = code.replaceAll(
-          new RegExp(
-            String.raw`'${pluginName ? `${regexEscape(pluginName, {onlySyntaxCharacters: true})}/` : ''}([^']*)'\?:`,
-            'g',
-          ),
-          "'$1':",
-        );
-
-        // This forces the per-rule option type aliases to be exported.
-        // When a config's emitted `.d.ts` references one of these by name, `rolldown-plugin-dts`
-        // needs a matching export to import, otherwise it warns with `IMPORT_IS_UNDEFINED`
-        code = code.replaceAll(/^type /gm, 'export type ');
-
         return {
-          code,
+          code: await generatePluginRuleTypes(pluginName, plugin, exportTypeName),
           exportTypeName,
           pluginName,
           plugin,
@@ -192,10 +219,18 @@ async function generateRuleTypes() {
         };
       }),
     ),
+
+    generatePluginRuleTypes(
+      ORIGINAL_RULES_PSEUDO_PLUGIN_NAME,
+      originalRulesPseudoPlugin,
+      'OriginalOptionsOfRulesReplacedByDefault',
+    ),
   ]);
 
   const perPluginCode = // eslint-disable-line ts/no-shadow -- Fine
     `${perPluginCodeRaw.map((pluginCode) => pluginCode.code).join('\n\n')}
+
+${originalRuleTypesCode}
 
 export type RuleOptionsPerPlugin = {
 ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCode.exportTypeName};`).join('\n')}
@@ -350,6 +385,41 @@ ${Array.from(
   };
 }
 
+/**
+ * Generates the declarations of the rule option types of a single plugin.
+ * The rule names are written without the plugin prefix, and every option type is exported
+ */
+async function generatePluginRuleTypes(
+  pluginName: string,
+  plugin: EslintPlugin,
+  exportTypeName: string,
+) {
+  const code = await pluginsToRulesDTS(
+    {[pluginName]: plugin},
+    {
+      includeAugmentation: false,
+      exportTypeName,
+      includeIgnoreComments: false,
+      includeTypeImports: false,
+      compileOptions: COMPILE_OPTIONS,
+    },
+  );
+  return (
+    code
+      .replaceAll(
+        new RegExp(
+          String.raw`'${pluginName ? `${regexEscape(pluginName, {onlySyntaxCharacters: true})}/` : ''}([^']*)'\?:`,
+          'g',
+        ),
+        "'$1':",
+      )
+      // This forces the per-rule option type aliases to be exported.
+      // When a config's emitted `.d.ts` references one of these by name, `rolldown-plugin-dts`
+      // needs a matching export to import, otherwise it warns with `IMPORT_IS_UNDEFINED`
+      .replaceAll(/^type /gm, 'export type ')
+  );
+}
+
 function resolveInOutDirectory(...paths: readonly string[]) {
   return path.join(__dirname, '../temp/eslint-types', ...paths);
 }
@@ -373,7 +443,7 @@ function getDiffAsPatch(a: string, b: string) {
 
 async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: string) {
   const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDirectory()))
-    // eslint-disable-next-line un/no-array-sort -- `toSorted` is redundant
+    // eslint-disable-next-line unicorn/no-array-sort -- `toSorted` is redundant
     .sort()
     .at(-1);
   let diffString = '';

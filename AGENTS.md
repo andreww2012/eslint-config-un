@@ -14,9 +14,13 @@ Only ever run the full test suite if you've made the core logic changes and it h
 Running it fully takes a lot of resources (time especially and memory too) to complete.
 
 Don't typecheck with TypeScript 6: it only exists for ESLint to work.
-Use TypeScript 7.
+Use TypeScript 7 only.
 
 Avoid mentioning this package's name in internal comments.
+
+JSDoc should include what the symbol does or is, the way someone hovering over it needs to read it.
+Keep reasons and implementation details out of it.
+They should go, if needed, into regular comments next to the code.
 
 Never statically import at runtime any Config file matching `src/configs/**/*.ts` or the plugin metadata files (`src/plugins/*.ts` except `shared.ts`).
 

@@ -407,6 +407,9 @@ importers:
       is-in-editor:
         specifier: 0.4.0
         version: 0.4.0
+      json-schema-to-ts:
+        specifier: 3.1.1
+        version: 3.1.1
       jsonc-eslint-parser:
         specifier: catalog:node-dependencies
         version: 3.3.0
@@ -906,9 +909,6 @@ importers:
       json-schema:
         specifier: 0.4.0
         version: 0.4.0
-      json-schema-to-ts:
-        specifier: 3.1.1
-        version: 3.1.1
       json-schema-to-typescript:
         specifier: 16.0.0
         version: 16.0.0

@@ -35,7 +35,10 @@ export default definePluginMetadata('import', {
     'no-amd': {disableInCodeBlocks: 'imports'},
     'no-anonymous-default-export': {disableInCodeBlocks: 'imports'},
     'no-commonjs': {disableInCodeBlocks: 'imports'},
-    'no-cycle': {disableInCodeBlocks: 'imports'},
+    'no-cycle': {
+      disableInCodeBlocks: 'imports',
+      replacedBy: {isOptIn: true, rule: 'import-integrity/no-cycle'},
+    },
     'no-default-export': {disableInCodeBlocks: 'imports'},
     'no-duplicates': {stylistic: true, disableInCodeBlocks: 'alternatives'},
     'no-dynamic-require': {disableInCodeBlocks: 'imports'},
@@ -44,7 +47,10 @@ export default definePluginMetadata('import', {
     'no-import-module-exports': {disableInCodeBlocks: 'imports'},
     'no-internal-modules': {disableInCodeBlocks: 'imports'},
     'no-mutable-exports': {disableInCodeBlocks: 'imports'},
-    'no-named-as-default': {disableInCodeBlocks: 'imports'},
+    'no-named-as-default': {
+      disableInCodeBlocks: 'imports',
+      replacedBy: {isOptIn: true, rule: 'import-integrity/no-named-as-default'},
+    },
     'no-named-as-default-member': {disableInCodeBlocks: 'imports'},
     'no-named-export': {disableInCodeBlocks: 'imports'},
     'no-nodejs-modules': {disableInCodeBlocks: 'runtimeOnly'},
@@ -53,7 +59,10 @@ export default definePluginMetadata('import', {
     'no-rename-default': {disableInCodeBlocks: 'imports'},
     'no-restricted-paths': {disableInCodeBlocks: 'imports'},
     'no-unassigned-import': {disableInCodeBlocks: 'imports'},
-    'no-unresolved': {disableInCodeBlocks: 'imports'},
+    'no-unresolved': {
+      disableInCodeBlocks: 'imports',
+      replacedBy: {isOptIn: true, rule: 'import-integrity/no-unresolved-imports'},
+    },
     'no-unused-modules': {disableInCodeBlocks: 'imports'},
     'no-useless-path-segments': {stylistic: true},
     'no-webpack-loader-syntax': {

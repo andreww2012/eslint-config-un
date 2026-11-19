@@ -1,33 +1,13 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
 import type {UnRulesConfig} from '../../eslint/eslint-types';
-import {type CliAdjustedRuleName, RULES_ADJUSTED_FOR_CLI_FILES} from '../../plugins.gen';
+import {prefixRuleName} from '../../eslint/eslint-utils';
+import type {CliAdjustedRuleName} from '../../plugins.gen';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
 } from '../index';
-
-const CLI_RULES_FLAT = Object.freeze(
-  Object.entries(RULES_ADJUSTED_FOR_CLI_FILES).flatMap(([pluginPrefix, rules]) =>
-    Object.entries(rules).map(
-      ([ruleName, severity]) =>
-        [`${pluginPrefix ? `${pluginPrefix}/` : ''}${ruleName}`, severity] as const,
-    ),
-  ),
-);
-
-const RULES_ENABLED_BY_DEFAULT = Object.freeze(
-  Object.fromEntries(
-    CLI_RULES_FLAT.filter(([, severity]) => severity === 'error').map(
-      ([ruleName]) => [ruleName, ERROR] as const,
-    ),
-  ),
-);
-
-const RULE_NAMES_DISABLED_BY_DEFAULT = Object.freeze(
-  CLI_RULES_FLAT.filter(([, severity]) => severity === 'off').map(([ruleName]) => ruleName),
-);
 
 /**
  * A config specific to files meant to be executed.
@@ -56,6 +36,12 @@ export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
 
   const {onlyTopLevelDirs} = optionsResolved;
 
+  const cliRules = Object.entries(context.ruleTraits.cliFiles).flatMap(([pluginPrefix, rules]) =>
+    Object.entries(rules || {}).map(
+      ([ruleName, severity]) => [prefixRuleName(pluginPrefix, ruleName), severity] as const,
+    ),
+  );
+
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
   configBuilder
@@ -73,7 +59,15 @@ export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
         ],
       },
     ])
-    .addBulkRules(RULES_ENABLED_BY_DEFAULT)
-    .disableBulkRules(RULE_NAMES_DISABLED_BY_DEFAULT)
+    .addBulkRules(
+      Object.fromEntries(
+        cliRules.flatMap(([ruleName, severity]) =>
+          severity === 'error' ? [[ruleName, ERROR]] : [],
+        ),
+      ),
+    )
+    .disableBulkRules(
+      cliRules.flatMap(([ruleName, severity]) => (severity === 'off' ? ruleName : [])),
+    )
     .addOverrides();
 });

@@ -23,10 +23,10 @@ import {
   eslintToUnRuleSeverity,
   generateFlatConfigEntryName,
   getRuleNameAndPluginPrefixByFullName,
-  resolveFullRuleName,
+  prefixRuleName,
+  resolvePluginPrefix,
 } from '../eslint/eslint-utils';
 import type {PluginPrefix} from '../loaders';
-import {RULES_REQUIRING_TYPE_INFORMATION} from '../plugins.gen';
 import type {
   Falsy,
   NonEmptyString,
@@ -57,6 +57,7 @@ import {
   type ParsingLanguagesWithDialects,
   getLanguageFiles,
 } from './parsing';
+import {shouldDropOptionsSetByConfigs} from './rule-replacements';
 import {
   type ExtraPluginsType,
   type UnConfigContext,
@@ -117,8 +118,19 @@ const TYPE_AWARE_PARSING_DEFAULT = {
   ignores: [GLOB_MD_X_CODE_BLOCKS, GLOB_CIVET_COMPILED],
 } as const;
 
-const doesRuleThrowWithoutTypeInfo = (rule: {plugin: PluginPrefix; ruleName: string}) =>
-  RULES_REQUIRING_TYPE_INFORMATION[rule.plugin]?.rules[rule.ruleName] === true;
+const doesRuleThrowWithoutTypeInfo = (
+  context: UnConfigContext,
+  rule: {plugin: PluginPrefix; ruleName: string},
+) => context.ruleTraits.requiresTypeInfo[rule.plugin]?.rules[rule.ruleName] === true;
+
+/**
+ * Returns the full name of a rule, with the prefix the user gave the plugin, if any
+ */
+const resolveFullRuleName = (
+  context: UnConfigContext,
+  pluginPrefix: PluginPrefix,
+  ruleNameUnprefixed: string,
+) => prefixRuleName(resolvePluginPrefix(context, pluginPrefix), ruleNameUnprefixed);
 
 export const configIndexProperty = Symbol('ConfigIndex');
 
@@ -211,7 +223,8 @@ export class ConfigEntryBuilder<
           configMetadata.rulesRequiringTypeInfo?.delete(ruleEntryName);
         }
       } else {
-        const typeInfoRequirement = RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName];
+        const typeInfoRequirement =
+          this.context.ruleTraits.requiresTypeInfo[plugin]?.rules[ruleName];
         if (typeInfoRequirement != null) {
           (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, {
             plugin,
@@ -536,9 +549,11 @@ export class ConfigEntryBuilder<
         : severityRaw;
       const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
-      configFinal.rules[ruleNameResolved] = ruleOptions?.length
-        ? [severityResolved, ...ruleOptions]
-        : severityResolved;
+      configFinal.rules[ruleNameResolved] =
+        ruleOptions?.length &&
+        !shouldDropOptionsSetByConfigs(this.context, plugin, ruleNameUnprefixed)
+          ? [severityResolved, ...ruleOptions]
+          : severityResolved;
 
       /* v8 ignore start */
       if (addedRules && duplicateRules) {
@@ -822,7 +837,7 @@ export class ConfigEntryBuilder<
 
         if (typeInfoModeResolved === 'disabled') {
           rulesRequiringTypeInfo.forEach((rule, ruleEntryName) => {
-            if (doesRuleThrowWithoutTypeInfo(rule) && config.rules) {
+            if (doesRuleThrowWithoutTypeInfo(this.context, rule) && config.rules) {
               config.rules[ruleEntryName] = OFF;
             }
           });
@@ -835,7 +850,7 @@ export class ConfigEntryBuilder<
         // Rules working without type information are only copied, and only in `standalone` mode,
         // where the split config is what sets up the parser for them
         const rulesToSplit = [...rulesRequiringTypeInfo].filter(
-          ([, rule]) => shouldConfigureParser || doesRuleThrowWithoutTypeInfo(rule),
+          ([, rule]) => shouldConfigureParser || doesRuleThrowWithoutTypeInfo(this.context, rule),
         );
         if (rulesToSplit.length === 0) {
           return config;
@@ -848,11 +863,11 @@ export class ConfigEntryBuilder<
         let extraFileExtensions: Set<string> | undefined;
         const rulesEntries = rulesToSplit.map(([ruleEntryName, rule]) => {
           const entry = config.rules?.[ruleEntryName];
-          if (doesRuleThrowWithoutTypeInfo(rule)) {
+          if (doesRuleThrowWithoutTypeInfo(this.context, rule)) {
             Reflect.deleteProperty(config.rules || {}, ruleEntryName);
           }
 
-          const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[rule.plugin];
+          const pluginInfo = this.context.ruleTraits.requiresTypeInfo[rule.plugin];
           pluginInfo?.extraPatterns?.forEach((pattern) => {
             possibleFiles.add(pattern);
           });

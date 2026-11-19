@@ -583,7 +583,7 @@ const rule: Eslint.Rule.RuleModule = {
           // Closest first, starting with `array[index]` itself
           const [member, ...ancestors] = sourceCode
             .getAncestors(identifier)
-            // eslint-disable-next-line un/no-array-reverse -- `toReversed` is redundant
+            // eslint-disable-next-line unicorn/no-array-reverse -- `toReversed` is redundant
             .reverse();
           if (
             member?.type !== 'MemberExpression' ||

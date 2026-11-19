@@ -30,6 +30,16 @@ export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 export type UnAllRuleNames = keyof UnRulesConfig;
 
 /**
+ * The name of a plugin's rule together with the prefix of the plugin, like `unicorn/no-null`.
+ * Any rule of any plugin by default, which `Prefix` narrows down to the rules of one plugin, and
+ * `RuleName` to the given rules
+ */
+export type EslintFullRuleName<
+  Prefix extends string = string,
+  RuleName extends string = string,
+> = `${Prefix}/${RuleName}`;
+
+/**
  * `files` and `ignores` accepting the patterns only, i.e. with no support for the function form
  */
 export interface UnFilesAndIgnoresPatterns {
@@ -125,10 +135,13 @@ export type UnFlatConfigEntryOverridesType<Rules> = {
 };
 
 export type UnExtraPluginsRules<ExtraPlugins extends ExtraPluginsType> = ObjectValues<{
-  [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof ((Awaited<
-    ExtraPlugins[PluginKey] extends () => infer Plugin ? Plugin : ExtraPlugins[PluginKey]
-  > & {rules?: unknown})['rules'] & {}) &
-    string}`;
+  [PluginKey in keyof ExtraPlugins & string]: EslintFullRuleName<
+    PluginKey,
+    keyof ((Awaited<
+      ExtraPlugins[PluginKey] extends () => infer Plugin ? Plugin : ExtraPlugins[PluginKey]
+    > & {rules?: unknown})['rules'] & {}) &
+      string
+  >;
 }>;
 
 export type UnExtraPluginsRulesConfig<ExtraPlugins extends ExtraPluginsType> = Partial<
@@ -138,7 +151,7 @@ export type UnExtraPluginsRulesConfig<ExtraPlugins extends ExtraPluginsType> = P
 type PluginAndPrefixToFullRuleName<
   Prefix extends PluginPrefix,
   RuleName extends string,
-> = Prefix extends '' ? RuleName : `${Prefix}/${RuleName}`;
+> = Prefix extends '' ? RuleName : EslintFullRuleName<Prefix, RuleName>;
 
 type UnRulesConfigRelaxed = Record<string, EslintRuleEntry> & UnRulesConfig;
 

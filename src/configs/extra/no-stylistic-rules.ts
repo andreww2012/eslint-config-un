@@ -1,6 +1,7 @@
 import type {UnExtraPluginsRules} from '../../eslint/eslint-types';
+import {prefixRuleName} from '../../eslint/eslint-utils';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
-import {ALL_STYLISTIC_RULES, type AllStylisticRules} from '../../plugins.gen';
+import type {AllStylisticRules} from '../../plugins.gen';
 import {isKeyIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
@@ -9,9 +10,6 @@ import {
   assignDefaults,
   defineUnConfig,
 } from '../index';
-
-const STYLISTIC_RULES_PER_PLUGIN: Readonly<Partial<Record<string, Partial<Record<string, true>>>>> =
-  ALL_STYLISTIC_RULES;
 
 /**
  * If you integrate eslint-config-un into an existing project, you might encounter a lot of reports
@@ -65,6 +63,8 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
     additionalRules,
   } = optionsResolved;
 
+  const {stylistic: stylisticRulesPerPlugin} = context.ruleTraits;
+
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
   configBuilder
@@ -77,9 +77,9 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
     .disableBulkRules(
       enabledRules !== true &&
         [
-          ...Object.entries(ALL_STYLISTIC_RULES).flatMap(([pluginName, rules]) =>
+          ...Object.entries(stylisticRulesPerPlugin).flatMap(([pluginName, rules = {}]) =>
             Object.keys(rules).map((ruleName) => {
-              const ruleNameWithPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
+              const ruleNameWithPrefix = prefixRuleName(pluginName, ruleName);
               return enabledRules &&
                 isKeyIn(ruleNameWithPrefix, enabledRules) &&
                 enabledRules[ruleNameWithPrefix]
@@ -107,8 +107,8 @@ export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticR
         objectEntriesUnsafe(ALL_RULES_PER_PLUGIN)
           .flatMap(([pluginName, rules]) =>
             rules.map((ruleName) => {
-              const ruleNameWithPluginPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
-              return ruleName in (STYLISTIC_RULES_PER_PLUGIN[pluginName] || {}) &&
+              const ruleNameWithPluginPrefix = prefixRuleName(pluginName, ruleName);
+              return ruleName in (stylisticRulesPerPlugin[pluginName] || {}) &&
                 !(
                   additionalRules &&
                   isKeyIn(ruleNameWithPluginPrefix, additionalRules) &&

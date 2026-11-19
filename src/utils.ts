@@ -60,6 +60,7 @@ export {
   memoize,
   Mutex,
   objectEntriesUnsafe,
+  objectFromEntriesUnsafe,
   objectFromKeys,
   objectHasOwn,
   objectKeysUnsafe,

@@ -1,26 +1,29 @@
 import fs from 'node:fs/promises';
 import pathe from 'pathe';
-import {invariant, keyedBy, mapEntries} from 'utilery';
+import {invariant, keyedBy, mapEntries, mapValues} from 'utilery';
+import {prefixRuleName} from '../../../src/eslint/eslint-utils';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../../../src/eslint-rule-categories.gen';
 import {ALL_RULES_PER_PLUGIN} from '../../../src/eslint-rules.gen';
 import {FIXABLE_RULES_PER_PLUGIN} from '../../../src/eslint-types-fixable-only.gen';
 import {pluginsLoaders} from '../../../src/loaders/plugins';
 import {
   type MaybeWithReason,
-  RULE_TRAIT_ORDER,
-  type RuleMetadata,
+  RULE_TRAITS_ORDERED,
+  type RuleTrait,
+  type RuleTraits,
 } from '../../../src/plugins/shared';
 import {stylePluginPrefix, styleRuleName, styleText} from '../../../src/utils';
 import {
   type DiscoveredPlugin,
+  collectRuleReplacements,
+  collectRuleReplacementsOnByDefault,
   getRuleDocsUrl,
   readPluginMetadata,
 } from '../../shared/plugin-metadata';
 
 const ROOT_DIRECTORY = pathe.join(import.meta.dirname, '../../..');
-type Trait = keyof RuleMetadata;
 
-const styleTrait = (trait: Trait) => styleText('cyan', trait);
+const styleTrait = (trait: RuleTrait) => styleText('cyan', trait);
 const styleFileName = (fileName: string) => styleText('yellow', fileName);
 
 const RULE_NAMES_PER_PLUGIN: Readonly<Partial<Record<string, readonly string[]>>> =
@@ -46,7 +49,7 @@ interface TraitEntry {
 /**
  * Collapses the terse and the annotated notations into the same pair
  */
-const readTrait = (traits: RuleMetadata, trait: Trait): TraitEntry | null => {
+const readTrait = (traits: RuleTraits, trait: RuleTrait): TraitEntry | null => {
   const entry: MaybeWithReason<boolean | string> | undefined = traits[trait];
   if (entry == null) {
     return null;
@@ -55,9 +58,6 @@ const readTrait = (traits: RuleMetadata, trait: Trait): TraitEntry | null => {
     ? {value: entry[0], reason: entry[1]}
     : {value: entry, reason: null};
 };
-
-const prefixRuleName = (prefix: string, ruleName: string) =>
-  prefix ? `${prefix}/${ruleName}` : ruleName;
 
 const ruleEntries = ({prefix, metadata}: DiscoveredPlugin) =>
   Object.entries(metadata.rules).map(([ruleName, traits]) => ({
@@ -124,7 +124,7 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
         return;
       }
 
-      RULE_TRAIT_ORDER.forEach((trait) => {
+      RULE_TRAITS_ORDERED.forEach((trait) => {
         const entry = readTrait(traits, trait);
         if (!entry) {
           return;
@@ -165,6 +165,24 @@ const validate = (plugins: readonly DiscoveredPlugin[]) => {
     });
   });
 
+  const replacements = collectRuleReplacements(plugins);
+  const replacedRuleNames: ReadonlySet<string> = new Set(replacements.map(({target}) => target));
+  replacements.forEach(({targetPrefix, target, source, sourcePrefix, sourceRuleName}) => {
+    if (targetPrefix.length === 0) {
+      errors.push(`${styleRuleName(target)} is a rule of ESLint itself, which cannot be replaced`);
+    }
+    if (sourcePrefix == null || !RULE_NAMES_PER_PLUGIN[sourcePrefix]?.includes(sourceRuleName)) {
+      errors.push(
+        `${styleRuleName(target)} is replaced by ${styleRuleName(source)}, which is not a rule of any plugin`,
+      );
+    }
+    if (replacedRuleNames.has(source)) {
+      errors.push(
+        `${styleRuleName(target)} is replaced by ${styleRuleName(source)}, which is replaced itself`,
+      );
+    }
+  });
+
   return {errors, warnings};
 };
 
@@ -190,7 +208,7 @@ const withAllStylisticRules = (plugins: readonly DiscoveredPlugin[], rules: Coll
  */
 const collectTrait = (
   plugins: readonly DiscoveredPlugin[],
-  trait: Trait,
+  trait: RuleTrait,
   {includeRejections = false} = {},
 ) =>
   plugins.flatMap((plugin) =>
@@ -313,55 +331,123 @@ const renderPrettierLanguages = (plugins: readonly DiscoveredPlugin[]) =>
     .sort()
     .join('\n');
 
-const renderArtifacts = (plugins: readonly DiscoveredPlugin[]) => {
-  const typeInfo = withTypeAwareCategories(plugins, collectTrait(plugins, 'requiresTypeInfo'));
-  const codeBlocks = withRulesThrowingWithoutTypeInfo(
-    plugins,
-    collectTrait(plugins, 'disableInCodeBlocks'),
-    typeInfo,
+type Replacements = ReturnType<typeof collectRuleReplacements>;
+
+/**
+ * Returns the collected rules as they are by default: a rule replaced by default is listed with
+ * the traits of the rule replacing it, not with its own
+ */
+const withDefaultReplacements = (rules: CollectedRules, replacements: Replacements) => {
+  const replacedRuleNames: ReadonlySet<string> = new Set(replacements.map(({target}) => target));
+  return [
+    ...rules.filter(({fullRuleName}) => !replacedRuleNames.has(fullRuleName)),
+    ...replacements.flatMap(({targetPrefix, targetRuleName, target, source}) =>
+      rules
+        .filter(({fullRuleName}) => fullRuleName === source)
+        .map((rule) => ({
+          ...rule,
+          prefix: targetPrefix,
+          ruleName: targetRuleName,
+          fullRuleName: target,
+        })),
+    ),
+  ];
+};
+
+/**
+ * Returns the traits the tables list a rule with.
+ * `disableInCodeBlocks` is `true` there, without the reason
+ */
+const readTraitValues = (fullRuleName: string, tables: Record<RuleTrait, CollectedRules>) =>
+  Object.fromEntries(
+    Object.entries(tables).flatMap(([trait, rules]) => {
+      const rule = rules.find((candidate) => candidate.fullRuleName === fullRuleName);
+      return rule ? [[trait, trait === 'disableInCodeBlocks' || rule.value]] : [];
+    }),
   );
-  const stylistic = withAllStylisticRules(plugins, collectTrait(plugins, 'stylistic'));
-  const autofix = collectTrait(plugins, 'autofixDisabled');
-  const prettier = collectTrait(plugins, 'prettierIncompatible');
+
+const renderReplacements = (
+  replacements: Replacements,
+  tablesWithoutReplacements: Record<RuleTrait, CollectedRules>,
+) =>
+  Array.from(
+    Map.groupBy(replacements, ({targetPrefix}) => targetPrefix),
+    ([prefix, pluginReplacements]) => {
+      const renderedRules = pluginReplacements
+        .map(({targetRuleName, target, source, isOnByDefault}) => {
+          const originalTraits =
+            isOnByDefault && JSON.stringify(readTraitValues(target, tablesWithoutReplacements));
+          return `    '${targetRuleName}': {rule: '${source}', isOnByDefault: ${String(isOnByDefault)}${originalTraits ? `, originalTraits: ${originalTraits}` : ''}},`;
+        })
+        .join('\n');
+      return `  '${prefix}': {\n${renderedRules}\n  },`;
+    },
+  ).join('\n');
+
+const renderArtifacts = (plugins: readonly DiscoveredPlugin[]) => {
+  const typeInfoAuthored = withTypeAwareCategories(
+    plugins,
+    collectTrait(plugins, 'requiresTypeInfo'),
+  );
+  const tablesWithoutReplacements: Record<RuleTrait, CollectedRules> = {
+    requiresTypeInfo: typeInfoAuthored,
+    requiresNetwork: collectTrait(plugins, 'requiresNetwork'),
+    stylistic: withAllStylisticRules(plugins, collectTrait(plugins, 'stylistic')),
+    prettierIncompatible: collectTrait(plugins, 'prettierIncompatible'),
+    autofixDisabled: collectTrait(plugins, 'autofixDisabled'),
+    disableInCodeBlocks: withRulesThrowingWithoutTypeInfo(
+      plugins,
+      collectTrait(plugins, 'disableInCodeBlocks'),
+      typeInfoAuthored,
+    ),
+    disableInTestFiles: collectTrait(plugins, 'disableInTestFiles'),
+    cliFiles: collectTrait(plugins, 'cliFiles'),
+  };
+
+  const replacements = collectRuleReplacements(plugins);
+  const defaultReplacements = collectRuleReplacementsOnByDefault(plugins);
+  const tables = mapValues(tablesWithoutReplacements, (rules) =>
+    withDefaultReplacements(rules, defaultReplacements),
+  );
   // A rejected rule stays configurable through the config's own options, so it stays in the union
-  const prettierMentioned = collectTrait(plugins, 'prettierIncompatible', {
-    includeRejections: true,
-  });
-  const testFiles = collectTrait(plugins, 'disableInTestFiles');
-  const cliFiles = collectTrait(plugins, 'cliFiles');
-  const network = collectTrait(plugins, 'requiresNetwork');
+  const prettierMentioned = withDefaultReplacements(
+    collectTrait(plugins, 'prettierIncompatible', {includeRejections: true}),
+    defaultReplacements,
+  );
 
-  return `import type {TypeInfoRequirement} from './plugins/shared';
+  // The table of a trait is declared with the shape it has, and not `as const`: the type of each
+  // table also describes it after the rule replacements of the user changed it
+  return `import type {BuiltinRuleReplacement, RulesPerPlugin, TypeInfoRequirement} from './plugins/shared';
 
-export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
-${renderFlatList(fullRuleNames(codeBlocks))}
-] as const;
+export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: readonly string[] = [
+${renderFlatList(fullRuleNames(tables.disableInCodeBlocks))}
+];
 
-export type RulesDisabledInEmbeddedCodeBlocksByDefault =${renderUnion(fullRuleNames(codeBlocks))};
+export type RulesDisabledInEmbeddedCodeBlocksByDefault =${renderUnion(fullRuleNames(tables.disableInCodeBlocks))};
 
-export const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
-${renderFlatList(fullRuleNames(network))}
-] as const;
+export const RULES_TO_DISABLE_IN_OFFLINE_MODE: readonly string[] = [
+${renderFlatList(fullRuleNames(tables.requiresNetwork))}
+];
 
-export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT = {
-${fullRuleNames(autofix)
+export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: Readonly<Partial<Record<string, boolean>>> = {
+${fullRuleNames(tables.autofixDisabled)
   .map((ruleName) => `  '${ruleName}': true,`)
   .join('\n')}
-} as const;
+};
 
-export const RULES_TO_DISABLE_IN_TEST_FILES = [
-${renderFlatList(fullRuleNames(testFiles))}
-] as const;
+export const RULES_TO_DISABLE_IN_TEST_FILES: readonly string[] = [
+${renderFlatList(fullRuleNames(tables.disableInTestFiles))}
+];
 
-export const ALL_STYLISTIC_RULES = {
-${renderPerPlugin(stylistic, () => 'true')}
-} as const;
+export const ALL_STYLISTIC_RULES: RulesPerPlugin<true> = {
+${renderPerPlugin(tables.stylistic, () => 'true')}
+};
 
-export type AllStylisticRules =${renderUnion(fullRuleNames(stylistic))};
+export type AllStylisticRules =${renderUnion(fullRuleNames(tables.stylistic))};
 
-export const RULES_INCOMPATIBLE_WITH_PRETTIER = {
-${renderPerPlugin(prettier, () => 'true')}
-} as const;
+export const RULES_INCOMPATIBLE_WITH_PRETTIER: RulesPerPlugin<true> = {
+${renderPerPlugin(tables.prettierIncompatible, () => 'true')}
+};
 
 export type PrettierIncompatibleRuleName =${renderUnion(fullRuleNames(prettierMentioned))};
 
@@ -369,15 +455,26 @@ export const PLUGINS_BY_PRETTIER_LANGUAGE = {
 ${renderPrettierLanguages(plugins)}
 } as const;
 
-export const RULES_ADJUSTED_FOR_CLI_FILES = {
-${renderPerPlugin(cliFiles, (value) => `'${String(value)}'`)}
-} as const;
+export const RULES_ADJUSTED_FOR_CLI_FILES: RulesPerPlugin<'off' | 'error'> = {
+${renderPerPlugin(tables.cliFiles, (value) => `'${String(value)}'`)}
+};
 
-export type CliAdjustedRuleName =${renderUnion(fullRuleNames(cliFiles))};
+export type CliAdjustedRuleName =${renderUnion(fullRuleNames(tables.cliFiles))};
 
 export const RULES_REQUIRING_TYPE_INFORMATION: Readonly<Partial<Record<string, TypeInfoRequirement>>> = {
-${renderTypeInfo(plugins, typeInfo)}
+${renderTypeInfo(plugins, tables.requiresTypeInfo)}
 };
+
+/**
+ * The rules that have a built-in replacement, keyed by the canonical plugin prefix and the rule
+ * name.
+ * The tables above list a rule replaced by default with the traits of the rule replacing it
+ */
+export const BUILTIN_RULE_REPLACEMENTS: Readonly<Partial<Record<string, Partial<Record<string, BuiltinRuleReplacement>>>>> = {
+${renderReplacements(replacements, tablesWithoutReplacements)}
+};
+
+export type BuiltinReplacedRuleName =${renderUnion(replacements.map(({target}) => target))};
 `;
 };
 
@@ -401,7 +498,10 @@ const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) =
   }
 
   const pluginsByPrefix = keyedBy(plugins, (plugin) => plugin.prefix);
-  const list = collectTrait(plugins, 'autofixDisabled')
+  const list = withDefaultReplacements(
+    collectTrait(plugins, 'autofixDisabled'),
+    collectRuleReplacementsOnByDefault(plugins),
+  )
     .map(({prefix, ruleName, fullRuleName}) => {
       const plugin = pluginsByPrefix.get(prefix);
       const url = plugin && getRuleDocsUrl(plugin.metadata, ruleName);

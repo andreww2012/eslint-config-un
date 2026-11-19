@@ -6,6 +6,7 @@ import type {Nullable} from '../types';
 import {arrayIncludes, isKeyIn, mapEntries, omit} from '../utils';
 import type {
   EslintFlatConfigEntry,
+  EslintFullRuleName,
   EslintPlugin,
   EslintRuleEntry,
   EslintRuleMetaWithLanguages,
@@ -13,7 +14,7 @@ import type {
 } from './eslint-types';
 
 type EslintPluginRules = NonNullable<EslintPlugin['rules']>;
-type EslintPluginRule = EslintPluginRules[string];
+export type EslintPluginRule = EslintPluginRules[string];
 
 const isDefinedAsGetter = (descriptor: PropertyDescriptor) => 'get' in descriptor;
 
@@ -62,7 +63,7 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
 };
 
 const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
-  context: UnConfigContext<ExtraPlugins>,
+  context: Pick<UnConfigContext<ExtraPlugins>, 'rootOptions'>,
   ruleName: string,
 ): PluginPrefix | keyof ExtraPlugins => {
   const ruleNameSplitted = ruleName.split('/');
@@ -83,7 +84,7 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
 };
 
 export const resolvePluginPrefix = (
-  context: UnConfigContext,
+  context: Pick<UnConfigContext, 'rootOptions'>,
   pluginPrefix: PluginPrefix | (string & {}),
 ) => {
   const {plugins} = context.rootOptions;
@@ -93,7 +94,7 @@ export const resolvePluginPrefix = (
 };
 
 export const getRuleNameAndPluginPrefixByFullName = (
-  context: UnConfigContext,
+  context: Pick<UnConfigContext, 'rootOptions'>,
   fullRuleName: string,
 ) => {
   const pluginPrefixCanonical = getPluginPrefixByFullRuleName(context, fullRuleName);
@@ -114,16 +115,12 @@ export const getRuleNameAndPluginPrefixByFullName = (
   };
 };
 
-export const resolveFullRuleName = (
-  context: UnConfigContext,
-  pluginPrefix: PluginPrefix,
-  ruleNameUnprefixed: string,
-) => {
-  const pluginPrefixResolved = resolvePluginPrefix(context, pluginPrefix);
-  return pluginPrefixResolved
-    ? `${pluginPrefixResolved}/${ruleNameUnprefixed}`
-    : ruleNameUnprefixed;
-};
+/**
+ * Builds the full name of a rule: `unicorn` and `no-null` give `unicorn/no-null`.
+ * An empty prefix gives the rule name as it is
+ */
+export const prefixRuleName = (pluginPrefix: string, ruleName: string) =>
+  pluginPrefix ? (`${pluginPrefix}/${ruleName}` satisfies EslintFullRuleName) : ruleName;
 
 export const eslintToUnRuleSeverity = (
   maybeEslintSeverity: EslintSeverity | undefined,

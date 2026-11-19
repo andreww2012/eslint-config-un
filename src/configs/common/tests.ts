@@ -1,4 +1,3 @@
-import {RULES_TO_DISABLE_IN_TEST_FILES} from '../../plugins.gen';
 import {
   type ExtraPluginsType,
   type UnFlatConfigEntryBase,
@@ -56,6 +55,6 @@ export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'extra'
       ],
       {},
     )
-    .disableBulkRules([...RULES_TO_DISABLE_IN_TEST_FILES])
+    .disableBulkRules(context.ruleTraits.disableInTestFiles)
     .addOverrides();
 });

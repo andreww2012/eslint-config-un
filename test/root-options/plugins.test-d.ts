@@ -29,7 +29,9 @@ describe('option: `plugins`', () => {
 
   describe('`settings`', () => {
     it('is absent for a plugin that has no shared settings', () => {
-      expectTypeOf<keyof (PluginsOption['unicorn'] & {})>().toEqualTypeOf<'prefix' | 'plugin'>();
+      expectTypeOf<keyof (PluginsOption['unicorn'] & {})>().toEqualTypeOf<
+        'prefix' | 'plugin' | 'replacements'
+      >();
 
       ({
         unicorn: {
@@ -41,7 +43,7 @@ describe('option: `plugins`', () => {
 
     it('is present and typed for a plugin that has them', () => {
       expectTypeOf<keyof (PluginsOption['regexp'] & {})>().toEqualTypeOf<
-        'prefix' | 'plugin' | 'settings'
+        'prefix' | 'plugin' | 'replacements' | 'settings'
       >();
 
       ({

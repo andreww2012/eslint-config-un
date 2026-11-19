@@ -12,8 +12,10 @@ const getPluginPrefixes = async (
   );
 
 describe('option: `loadPluginsOnDemand`', () => {
+  // `un` provides the rules replacing some `unicorn` ones by default
   it('loads only the plugins used by the enabled configs by default', async () => {
     await expect(getPluginPrefixes(undefined)).resolves.toStrictEqual([
+      'un',
       'unicorn',
       'disable-autofix',
     ]);
@@ -28,6 +30,7 @@ describe('option: `loadPluginsOnDemand`', () => {
 
   it('loads the plugins listed in `alwaysLoad` in addition to the used ones', async () => {
     await expect(getPluginPrefixes({alwaysLoad: ['regexp']})).resolves.toStrictEqual([
+      'un',
       'unicorn',
       'regexp',
       'disable-autofix',

@@ -19,7 +19,7 @@ const RULE_OPTIONS_SCHEMA = {
   properties: {
     unneededCopies: {
       description:
-        "Copies of new arrays that nothing else uses, like the result of `Array#filter()`: `'report'` (default) reports them, `'allow'` allows them, and `'require'` asks for them, like the `unicorn` rule of the same name",
+        "Copies of new arrays that nothing else uses, like the result of `Array#filter()`: `'report'` (default) reports them, `'allow'` allows them, and `'require'` asks for them, like the rule of the same name in `eslint-plugin-unicorn`",
       enum: ['report', 'allow', 'require'],
     },
   },
@@ -294,7 +294,8 @@ const getParent = (sourceCode: Eslint.SourceCode, node: ESTree.Node) =>
 const getOuterCall = (node: ESTree.CallExpression & Eslint.Rule.NodeParentExtension) =>
   node.parent.type === 'ChainExpression' ? node.parent : node;
 
-// Thrown away by an expression statement or the comma operator, like the `unicorn` rules check it
+// Thrown away by an expression statement or the comma operator, like the rules of
+// `eslint-plugin-unicorn` check it
 const isDiscarded = (sourceCode: Eslint.SourceCode, node: ESTree.Node): boolean => {
   const parent = getParent(sourceCode, node);
   switch (parent?.type) {
@@ -784,8 +785,8 @@ export const createArrayMutationRule = (
       ) => {
         const {object: receiver, property} = callee;
         if (unneededCopies === 'require') {
-          // Like the `unicorn` rules, which allow in-place changes as statements, unless the array
-          // is a copy made with a spread
+          // Like the rules of `eslint-plugin-unicorn`, which allow in-place changes as statements,
+          // unless the array is a copy made with a spread
           if (!isDiscarded(sourceCode, node)) {
             if (returnsArray && mayHaveMethod(receiver, copyingMethod)) {
               reportCopy(receiver, property);

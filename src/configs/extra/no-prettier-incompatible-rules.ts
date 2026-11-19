@@ -1,9 +1,6 @@
 import type {UnRulesConfig} from '../../eslint/eslint-types';
-import {
-  PLUGINS_BY_PRETTIER_LANGUAGE,
-  type PrettierIncompatibleRuleName,
-  RULES_INCOMPATIBLE_WITH_PRETTIER,
-} from '../../plugins.gen';
+import {prefixRuleName} from '../../eslint/eslint-utils';
+import {PLUGINS_BY_PRETTIER_LANGUAGE, type PrettierIncompatibleRuleName} from '../../plugins.gen';
 import {isKeyIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
@@ -71,6 +68,19 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
     );
   };
 
+  const {prettierIncompatible: rulesPerPlugin} = context.ruleTraits;
+  const pluginsByLanguage = objectEntriesUnsafe(PLUGINS_BY_PRETTIER_LANGUAGE);
+  const pluginsOfLanguages: ReadonlySet<string> = new Set(
+    pluginsByLanguage.flatMap(([, plugins]) => plugins),
+  );
+  const pluginPrefixes = [
+    ...pluginsByLanguage
+      .filter(([language]) => isLanguageEnabled(language))
+      .flatMap(([, plugins]) => plugins),
+    // Only a rule replacement can give the trait to a rule of such a plugin
+    ...Object.keys(rulesPerPlugin).filter((pluginPrefix) => !pluginsOfLanguages.has(pluginPrefix)),
+  ];
+
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
   configBuilder
@@ -81,15 +91,11 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
       },
     ])
     .disableBulkRules(
-      objectEntriesUnsafe(PLUGINS_BY_PRETTIER_LANGUAGE)
-        .filter(([language]) => isLanguageEnabled(language))
-        .flatMap(([, plugins]) =>
-          plugins.flatMap((pluginPrefix) =>
-            Object.keys(RULES_INCOMPATIBLE_WITH_PRETTIER[pluginPrefix]).map(
-              (ruleName) => `${pluginPrefix ? `${pluginPrefix}/` : ''}${ruleName}`,
-            ),
-          ),
+      pluginPrefixes.flatMap((pluginPrefix) =>
+        Object.keys(rulesPerPlugin[pluginPrefix] || {}).map((ruleName) =>
+          prefixRuleName(pluginPrefix, ruleName),
         ),
+      ),
     )
     .addOverrides();
 });

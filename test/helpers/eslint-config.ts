@@ -17,6 +17,6 @@ export const getAllRulesSeverities = (
       )
       .map(([, ruleEntry]) => getRuleSeverityFromEslintRuleEntry(ruleEntry)),
   );
-  // eslint-disable-next-line un/no-array-sort -- The array is a fresh copy
+  // eslint-disable-next-line unicorn/no-array-sort -- The array is a fresh copy
   return severities.sort((a, b) => a - b);
 };

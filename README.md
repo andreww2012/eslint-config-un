@@ -594,6 +594,86 @@ To rename those back, or to rename any other plugin, set `plugins.<canonical pre
 > [!WARNING]
 > Rules inside `eslint-disable-*` comments are not renamed for you: after a rename you have to update those comments yourself.
 
+### Replacing rule implementations (`plugins.<pluginName>.replacements` option)
+
+Any rule of a built-in plugin, except the rules of ESLint itself, can run another implementation under its own name.
+Our Configs keep configuring it as usual, and you keep using the same name in `overrides` and in `eslint-disable` comments.
+
+Some rules have [built-in replacements](#built-in-replacements), and a few of those are on by default.
+To change that, or to replace a rule yourself, use `plugins.<canonical prefix>.replacements`, keyed by the rule names without the prefix:
+
+```ts
+import {defineRuleReplacements, eslintConfig} from 'eslint-config-un';
+
+export default eslintConfig({
+  plugins: {
+    unicorn: {
+      replacements: {
+        // Turns a built-in replacement off
+        'no-array-sort': false,
+        // The name of any other known rule, written with the canonical prefix
+        'no-null': 'my-plugin/no-null',
+        // A rule object
+        'no-for-loop': myRule,
+        // A function returning a rule, called only if the plugin is used
+        'prefer-at': () => import('./rules/prefer-at.js').then((module) => module.default),
+        // The object form adds some settings to any of the above
+        'no-nested-ternary': {
+          rule: 'my-plugin/no-nested-ternary',
+          traits: {stylistic: true},
+          dropOptionsSetByConfigs: true,
+        },
+      },
+    },
+    // `false` turns off every built-in replacement of the plugin
+    import: {replacements: false},
+  },
+});
+```
+
+A function that declares a parameter gets the plugin's own rule, so it can wrap it.
+TypeScript can't type that parameter inside `eslintConfig(...)`, so build such an object with `defineRuleReplacements` first:
+
+```ts
+const unicornReplacements = defineRuleReplacements('unicorn', {
+  'no-null': (original) => ({...original, meta: {...original.meta, fixable: undefined}}),
+});
+
+export default eslintConfig({plugins: {unicorn: {replacements: unicornReplacements}}});
+```
+
+Some things to know:
+
+- A rule given by name is always the rule of its own plugin, even when that rule is replaced itself.
+  Its plugin is loaded when the plugin of the replaced rule is.
+- The types of the rule options in `overrides`, `overridesAny` and `extraConfigs` follow the replacement.
+  A rule that declares no options accepts any options, and ignores them.
+- `dropOptionsSetByConfigs: true` drops the options our Configs set for the rule, for when the replacement takes different options.
+  The options you set in `overrides` and `overridesAny` are always kept.
+- Our Configs decide what to do with a rule by its traits: whether it is stylistic, requires type information, makes network requests and so on.
+  A rule given by the name of a built-in plugin rule takes the traits of that rule.
+  Any other rule keeps the traits of the rule it replaces, except for one: an autofix disabled by default.
+  That trait belongs to the implementation, so only a function wrapping the original rule keeps it.
+  `traits` changes them in every case.
+- The replacements that are on by default are not applied to a plugin you provide via [`plugins.<pluginName>.plugin`][plugins option], but your own entries and `useImportIntegrity` are.
+  The option types don't know about that and assume the built-in replacements are applied.
+- The autofix settings you set yourself, like [`autofixDisabledGloballyFor`](#autofixdisabledgloballyfor) and `disableAutofix`, apply to whichever implementation runs under the rule name.
+
+#### Built-in replacements
+
+| Rule                                                                                                                         | Replaced by                                                                                                             | On by default                                       | How it differs                                                                                                                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`unicorn/no-array-reverse`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-reverse.md) | `un/no-array-reverse`                                                                                                   | Yes                                                 | Doesn't ask to copy new arrays that nothing else uses, like the result of `.filter()`, and reports such copies instead. The `unneededCopies` option controls that, `'require'` works like the original rule                |
+| [`unicorn/no-array-sort`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-sort.md)       | `un/no-array-sort`                                                                                                      | Yes                                                 | Same as above                                                                                                                                                                                                              |
+| [`unicorn/no-array-splice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-splice.md)   | `un/no-array-splice`                                                                                                    | Yes                                                 | Reports assigning the result of `.toSpliced()` back to the variable holding the only reference to its array, instead of reporting `.splice()`. The `unneededCopies: 'require'` option makes it work like the original rule |
+| [`import/no-cycle`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-cycle.md)                        | [`import-integrity/no-cycle`](https://nebrius.github.io/import-integrity-lint/rules/no-cycle)                           | No, see [`useImportIntegrity`](#useimportintegrity) | Faster, but doesn't support the options of the original rule, which are ignored                                                                                                                                            |
+| [`import/no-named-as-default`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-named-as-default.md)  | [`import-integrity/no-named-as-default`](https://nebrius.github.io/import-integrity-lint/rules/no-named-as-default)     | No                                                  | Same as above                                                                                                                                                                                                              |
+| [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md)              | [`import-integrity/no-unresolved-imports`](https://nebrius.github.io/import-integrity-lint/rules/no-unresolved-imports) | No                                                  | Same as above                                                                                                                                                                                                              |
+
+The `un/*` rules stay available under their own names too, off by default.
+
+The documentation link of a replaced rule leads here.
+
 ### Disabling rule autofix
 
 ESLint still [has no way to disable autofix for a single rule](https://github.com/eslint/rfcs/pull/125).
@@ -1039,7 +1119,7 @@ When enabled:
 
 ### `plugins`
 
-**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin | TSESLint.FlatConfig.Plugin; settings?: object}>>`
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, {prefix?: string; plugin?: EslintPlugin | TSESLint.FlatConfig.Plugin; replacements?: boolean | object; settings?: object}>>`
 
 Per-plugin options, keyed by the "canonical" plugin prefix.
 
@@ -1047,6 +1127,8 @@ Per-plugin options, keyed by the "canonical" plugin prefix.
 
 `plugin` replaces the plugin implementation.
 This is useful when you lint the repository of one of the built-in plugins with this config and want to use its development version.
+
+`replacements` replaces the implementations of single rules, see [Replacing rule implementations].
 
 `settings` are the plugin's [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings).
 They are available only for the plugins that accept settings, and are typed per plugin.
@@ -1096,6 +1178,9 @@ Rules that should stay enabled in embedded code blocks even though we disable th
 Replaces the implementation of a few [`eslint-plugin-import-x`] rules with the faster ones from [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
 Disabled by default.
 The rule names stay the same, the JSDoc lists which rules can be replaced, and the options of the replaced rules are silently ignored, because the new implementations do not support them.
+
+This option only turns on the [built-in replacements](#built-in-replacements) of these rules.
+[`plugins.import.replacements`][Replacing rule implementations] wins over it.
 
 The plugin's settings are set through [`plugins.import-integrity.settings`][plugins option].
 
@@ -1250,6 +1335,11 @@ See the [`offlineMode`] option.
 
 The function that builds the config.
 See [Usage](#usage).
+
+#### `defineRuleReplacements`
+
+Returns the rule replacements of a plugin as they are, typed.
+See [Replacing rule implementations].
 
 #### `globals`
 
@@ -1529,6 +1619,8 @@ Non-breaking improvements ship continuously as minor and patch releases of the c
     </tr>
   </tfoot>
 </table>
+
+[Replacing rule implementations]: #replacing-rule-implementations-pluginspluginnamereplacements-option
 
 [@eslint-community/eslint-plugin-eslint-comments]: https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments
 

@@ -24,7 +24,6 @@ import {
   parsersLoaders,
   pluginsLoaders,
 } from '../loaders';
-import {RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT} from '../plugins.gen';
 import {
   arrayPartition,
   arrayWithoutFalsy,
@@ -37,6 +36,7 @@ import {
   keyedBy,
   mapGetOrInsert,
   mapMapValues,
+  mapValues,
   maybeCall,
   objectEntriesUnsafe,
   objectFromKeys,
@@ -53,7 +53,7 @@ import {
 } from '../utils';
 import {fetchPackageInfo} from '../utils/package-detection';
 import type {CacheDataInFs} from './cache';
-import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
+import {withRuleReplacements} from './rule-replacements';
 import type {EslintConfigUnOptions, PackageRequester, UnConfigContext} from './shared';
 
 const checkIfModuleCorrectlyLoaded = async (
@@ -392,7 +392,7 @@ ${renderInstallationCommand(
       : {
           ...autofixDisabledGloballyForRaw,
           rules: {
-            ...RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
+            ...context.ruleTraits.autofixDisabled,
             ...autofixDisabledGloballyForRaw?.rules,
           },
         });
@@ -415,15 +415,14 @@ ${renderInstallationCommand(
     ruleNames,
   }));
 
-  const loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>> = Object.fromEntries(
-    loadedPluginsRaw
-      .filter((value) => value != null)
-      .map(([pluginPrefix, plugin]) => [
-        pluginPrefix,
-        internalOptions.keepRuleMetaLanguages ? plugin : removeRuleLanguagesFromPlugin(plugin),
-      ]),
+  const loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>> = mapValues(
+    await withRuleReplacements(
+      context,
+      Object.fromEntries(loadedPluginsRaw.filter((value) => value != null)),
+    ),
+    (plugin) =>
+      internalOptions.keepRuleMetaLanguages ? plugin : removeRuleLanguagesFromPlugin(plugin),
   );
-  replaceImportRulesImplementationWithIntegrityPlugin(context, loadedPlugins);
 
   const disableAutofixPlugin: EslintPlugin = {
     meta: {

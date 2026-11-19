@@ -15,6 +15,7 @@ import {
   GLOB_CJS_CTS_X,
   GLOB_CONFIG_FILES,
   GLOB_PLAIN_JS,
+  OFF,
   PACKAGES_INSTALLED_THROUGH,
   PACKAGES_TO_GET_INFO_FOR,
   WARNING,
@@ -27,7 +28,6 @@ import {
   type PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import {RULES_TO_DISABLE_IN_OFFLINE_MODE} from '../plugins.gen';
 import type {Falsy, MaybePromise, OmitStrict, PartialDeep, Prettify} from '../types';
 import {
   type MaybeArray,
@@ -44,6 +44,7 @@ import {
   mapMapValues,
   maybeCall,
   objectEntriesUnsafe,
+  objectFromEntriesUnsafe,
   omit,
   readAndParseJson,
   styleConfigName,
@@ -71,10 +72,18 @@ import {
 } from './config-utils';
 import {type AnyConfigManifest, CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import {resolveGitignore} from './gitignore';
-import {withDefaultPackageRootDirectory} from './import-integrity';
+import {
+  getImportIntegrityRuleReplacements,
+  withDefaultPackageRootDirectory,
+} from './import-integrity';
 import {resolveNuxtAutoImports} from './nuxt';
 import {createRequestParsing, resolveParsingConfigs} from './parsing';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
+import {
+  isRuleReplacementSourcePlugin,
+  registerRuleReplacementSources,
+  resolveRuleReplacements,
+} from './rule-replacements';
 import {
   ENVIRONMENTS,
   type Environment,
@@ -259,6 +268,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     );
   }
 
+  const {replacements: ruleReplacements, ruleTraits} = resolveRuleReplacements(
+    optionsResolved,
+    getImportIntegrityRuleReplacements(optionsResolved.useImportIntegrity),
+  );
+
   const parsingRequests: UnConfigContext['parsingRequests'] = new Map();
   const context = Object.freeze({
     packagesInfo: {},
@@ -267,6 +281,8 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     configsMeta: {},
     typeInfoRulesResolved,
     disabledAutofixes: {},
+    ruleReplacements,
+    ruleTraits,
     fixableRulesPerPlugin,
     usedPlugins: new Set(),
     packageRequesters: new Map(),
@@ -376,10 +392,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     linterOptionsReportUnusedInlineConfigs,
     noWarnings,
   } = optionsResolved;
-
-  if (useImportIntegrity) {
-    context.registerUsedPlugin('import-integrity', 'option:useImportIntegrity');
-  }
 
   const pluginRenames = objectEntriesUnsafe(pluginsOptions).flatMap(
     ([pluginPrefix, pluginOptions]) =>
@@ -642,8 +654,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           },
         },
       },
-      useImportIntegrity && {
+      (useImportIntegrity || isRuleReplacementSourcePlugin(context, 'import-integrity')) && {
         name: generateFlatConfigEntryName('import-integrity', {isGlobalSetup: true}),
+        // The plugin's rules exit the process without the settings
         settings: {
           'import-integrity': withDefaultPackageRootDirectory(
             pluginsOptions['import-integrity']?.settings,
@@ -725,6 +738,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     context.recordPackageRequester('plugin', pluginPrefix, 'option:loadPluginsOnDemand');
   });
 
+  registerRuleReplacementSources(
+    context,
+    (pluginPrefix) =>
+      context.usedPlugins.has(pluginPrefix) || pluginPrefixesLoadedAnyway.includes(pluginPrefix),
+  );
+
   const usedPluginPrefixes = arrayUnique([
     // Sorting ensures that plugins will be present in the resulting config in the consistent order
     ...[...context.usedPlugins].sort(),
@@ -747,17 +766,14 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   /* Offline mode */
 
   if (offlineMode) {
+    const {requiresNetwork: rulesRequiringNetwork} = context.ruleTraits;
     debug(
-      `Offline mode is active, the following ${RULES_TO_DISABLE_IN_OFFLINE_MODE.length} rules were disabled: ${RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
+      `Offline mode is active, the following ${rulesRequiringNetwork.length} rules were disabled: ${rulesRequiringNetwork.map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
     );
 
     configsResolved.push({
       name: generateFlatConfigEntryName('offline-mode'),
-      rules: Object.fromEntries(
-        // eslint-disable-next-line ts/ban-ts-comment -- Error only in `tsc`, not in `tsgo`
-        // @ts-ignore "TS2590: Expression produces a union type that is too complex to represent" for whatever reason
-        RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => [ruleName, 0]),
-      ),
+      rules: objectFromEntriesUnsafe(rulesRequiringNetwork.map((ruleName) => [ruleName, OFF])),
     });
   }
 

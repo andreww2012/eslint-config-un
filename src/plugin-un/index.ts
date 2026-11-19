@@ -1,3 +1,4 @@
+import ourPackageJson from '../../package.json' with {type: 'json'};
 import type {EslintPlugin} from '../eslint/eslint-types';
 import {noArrayReverse} from './rules/no-array-reverse';
 import {noArraySort} from './rules/no-array-sort';
@@ -14,6 +15,7 @@ import {vueNoTrailingElementWhitespace} from './rules/vue-no-trailing-element-wh
 const eslintPluginUn: EslintPlugin = {
   meta: {
     name: 'eslint-plugin-un',
+    version: ourPackageJson.version,
   },
   rules: {
     'no-array-reverse': noArrayReverse,

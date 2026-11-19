@@ -1,8 +1,9 @@
 import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
-import type {EslintPlugin, GetRuleNamesInPlugin} from '../eslint/eslint-types';
-import type {PluginPrefix} from '../loaders';
-import {mapEntries} from '../utils';
-import type {UnConfigContext} from './shared';
+import type {EslintFullRuleName} from '../eslint/eslint-types';
+import {BUILTIN_RULE_REPLACEMENTS, type BuiltinReplacedRuleName} from '../plugins.gen';
+import {mapValues} from '../utils';
+import {type RuleReplacementRequests, toReplacementRequests} from './rule-replacements';
+import type {EslintConfigUnOptions} from './shared';
 
 /**
  * The plugin rejects `packageRootDir` in the monorepo form, so it can only be defaulted when the
@@ -15,56 +16,34 @@ export const withDefaultPackageRootDirectory = (
     ? settings
     : {packageRootDir: process.cwd(), ...settings};
 
-// TODO: move to configs/import-integrity
+type RuleNameInPlugin<Name extends EslintFullRuleName, Prefix extends string> =
+  Name extends EslintFullRuleName<Prefix, infer RuleName> ? RuleName : never;
 
-const IMPORT_RULES_TO_REPLACE = {
-  'no-cycle': 'no-cycle',
-  'no-named-as-default': 'no-named-as-default',
-  'no-unresolved': 'no-unresolved-imports',
-} as const satisfies Partial<
-  Record<GetRuleNamesInPlugin<'import'>, GetRuleNamesInPlugin<'import-integrity'>>
->;
+/**
+ * The `import` rules `useImportIntegrity` can replace
+ */
+export type ImportPluginReplaceableRules = RuleNameInPlugin<BuiltinReplacedRuleName, 'import'>;
 
-export type ImportPluginReplaceableRules = keyof typeof IMPORT_RULES_TO_REPLACE;
-
-export const replaceImportRulesImplementationWithIntegrityPlugin = (
-  context: UnConfigContext,
-  loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>>,
-): void => {
-  const {useImportIntegrity} = context.rootOptions;
-  const {import: originalPlugin, 'import-integrity': fastPlugin} = loadedPlugins;
-  if (!useImportIntegrity || !originalPlugin || !fastPlugin) {
-    return;
+/**
+ * Returns the rule replacements `useImportIntegrity` asks for, keyed by the plugin prefix: every
+ * built-in replacement of an `import` rule, except the ones `replaceRules` turns off
+ */
+export const getImportIntegrityRuleReplacements = (
+  useImportIntegrity: EslintConfigUnOptions['useImportIntegrity'],
+): Partial<Record<string, RuleReplacementRequests>> => {
+  if (!useImportIntegrity) {
+    return {};
   }
 
-  const {replaceRules} = typeof useImportIntegrity === 'object' ? useImportIntegrity : {};
-
-  const originalPluginPatched: EslintPlugin = {
-    ...originalPlugin,
-    rules: {
-      ...originalPlugin.rules,
-      ...mapEntries(IMPORT_RULES_TO_REPLACE, (originalRuleName, fastRuleName) => {
-        const fastRuleImplementation = fastPlugin.rules?.[fastRuleName];
-        const fastRuleSchema = fastRuleImplementation?.meta?.schema;
-        return fastRuleImplementation && replaceRules?.[originalRuleName] !== false
-          ? [
-              originalRuleName,
-              {
-                ...fastRuleImplementation,
-                meta: {
-                  ...fastRuleImplementation.meta,
-                  schema:
-                    fastRuleSchema &&
-                    !(Array.isArray(fastRuleSchema) && fastRuleSchema.length === 0)
-                      ? fastRuleSchema
-                      : [{type: 'object'}], // Allows any properties
-                },
-              },
-            ]
-          : undefined;
-      }),
-    },
+  const replaceRules: Partial<Record<string, boolean>> =
+    (typeof useImportIntegrity === 'object' && useImportIntegrity.replaceRules) || {};
+  return {
+    import: toReplacementRequests(
+      mapValues(
+        BUILTIN_RULE_REPLACEMENTS['import'] || {},
+        (_replacement, ruleName) => replaceRules[ruleName] !== false,
+      ),
+      'option:useImportIntegrity',
+    ),
   };
-
-  loadedPlugins.import = originalPluginPatched;
 };

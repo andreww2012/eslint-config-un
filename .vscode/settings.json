@@ -25,7 +25,7 @@
     "editor.defaultFormatter": "oxc.oxc-vscode",
   },
 
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript-7/lib",
   // The same TypeScript 7 as the `ts` script
   "js/ts.experimental.useTsgo": true,
   // Same as `header-max-length` in the commitlint config

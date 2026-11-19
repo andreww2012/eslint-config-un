@@ -1,5 +1,6 @@
 import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import type {ReturnTypeAwaited} from '../../src/types';
+import {filterRulesReplacedByBuiltins} from '../helpers/rule-replacements';
 
 const SETTINGS_CONFIG_NAME = 'global-setup/import-integrity';
 
@@ -7,14 +8,8 @@ const REPLACED_RULE_NAMES = ['no-cycle', 'no-named-as-default', 'no-unresolved']
 
 type ConfigResult = ReturnTypeAwaited<typeof computeEslintConfig>;
 
-// The replacing rules keep the names of the rules they replace, so the only way to tell the two
-// implementations apart is the documentation link
 const getReplacedRuleNames = (configResult: ConfigResult) =>
-  REPLACED_RULE_NAMES.filter((ruleName) =>
-    configResult
-      .getLoadedPlugin('import')
-      ?.rules?.[ruleName]?.meta?.docs?.url?.includes('import-integrity-lint'),
-  );
+  filterRulesReplacedByBuiltins(configResult.getLoadedPlugin('import'), REPLACED_RULE_NAMES);
 
 const computeImportConfig = (
   useImportIntegrity: ((Parameters<
@@ -39,9 +34,7 @@ describe('option: `useImportIntegrity`', () => {
   it('allows any options to be passed to a replacing rule without a schema of its own', async () => {
     const configResult = await computeImportConfig(true);
 
-    expect(configResult.getLoadedPlugin('import')?.rules?.['no-cycle']?.meta?.schema).toStrictEqual(
-      [{type: 'object'}],
-    );
+    expect(configResult.getLoadedPlugin('import')?.rules?.['no-cycle']?.meta?.schema).toBe(false);
   });
 
   it('keeps the schema of a replacing rule that declares one', async () => {
@@ -67,6 +60,16 @@ describe('option: `useImportIntegrity`', () => {
     });
 
     expect(getReplacedRuleNames(configResult)).toStrictEqual([]);
+  });
+
+  it('replaces the rules of a plugin provided via `plugins.import.plugin` too', async () => {
+    const {default: importPlugin} = await import('eslint-plugin-import-x');
+
+    const configResult = await computeEslintConfig('import', {
+      un: {useImportIntegrity: true, plugins: {import: {plugin: importPlugin}}},
+    });
+
+    expect(getReplacedRuleNames(configResult)).toStrictEqual(REPLACED_RULE_NAMES);
   });
 
   it('keeps the original implementation of a rule opted out in `replaceRules`', async () => {

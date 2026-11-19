@@ -86,7 +86,8 @@ ruleTester.run(`${RULE_NAME} (unneededCopies: require)`, noArraySplice, {
     'let items = getItems(); items.splice(1, 1);',
     'let items = [1, 2, 3]; bar(items); items.splice(1, 1);',
     'let items = [1, 2, 3]; for (const item of items) { items.splice(0, 1); }',
-    // Like `unicorn/no-array-splice`, only reported when thrown away unconditionally
+    // Like the rule of the same name in `eslint-plugin-unicorn`, only reported when thrown away
+    // unconditionally
     'let items = [1, 2, 3]; isEmpty || items.splice(0, 1);',
     'let items = [1, 2, 3]; void items.splice(0, 1);',
   ].map((code) => ({code, options: [{unneededCopies: 'require'}]})),

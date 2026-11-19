@@ -100,10 +100,9 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
   it('names every root option that asked for the package', async () => {
     mockUnresolvablePackage(IMPORT_INTEGRITY_PACKAGE);
 
-    await computeEslintConfig(
-      {},
-      {un: {useImportIntegrity: true, loadPluginsOnDemand: {alwaysLoad: ['import-integrity']}}},
-    );
+    await computeEslintConfig('import', {
+      un: {useImportIntegrity: true, loadPluginsOnDemand: {alwaysLoad: ['import-integrity']}},
+    });
 
     expect(stderrOutput()).toContain('loadPluginsOnDemand, useImportIntegrity options');
   });

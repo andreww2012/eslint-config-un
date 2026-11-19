@@ -56,6 +56,8 @@ import type {ImportPluginReplaceableRules} from './import-integrity';
 import type {NuxtAutoImportsResult} from './nuxt';
 import type {ParsingLanguages, ParsingOptions, ParsingRequest} from './parsing';
 import type {PluginSettingsMap} from './plugin-settings';
+import type {RuleReplacementResolved} from './rule-replacements';
+import type {RuleTraitTables} from './rule-trait-tables';
 
 export type ExtraPluginsType = Record<
   string,
@@ -63,13 +65,14 @@ export type ExtraPluginsType = Record<
 >;
 
 /**
- * A bag of options whose values influence the *types* of other options (currently only
- * `noWarnings`).
- * Passed as the second type parameter of `EslintConfigUnOptions` so the severity-typed surfaces can
+ * A bag of options whose values influence the *types* of other options: `noWarnings` and the
+ * entry types of the rules `plugins.<pluginName>.replacements` replaced.
+ * Passed as the second type parameter of `EslintConfigUnOptions` so the rule-typed surfaces can
  * react to them
  */
 interface TypeAffectingOptionsType {
   noWarnings?: boolean;
+  replacedRuleEntries?: Record<string, unknown>;
 }
 
 // `StripWarnFromConfig` removes the `warning` (`1`/`'warn'`) severity from every severity-typed
@@ -134,6 +137,46 @@ type EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions extends TypeAff
 type MaybeStripWarningSeverity<Config, TypeAffectingOptions extends TypeAffectingOptionsType> =
   NoWarningsEnabled<TypeAffectingOptions> extends true ? StripWarnFromConfig<Config> : Config;
 
+type ReplacedRuleEntriesOf<TypeAffectingOptions extends TypeAffectingOptionsType> =
+  TypeAffectingOptions extends {replacedRuleEntries: infer Entries} ? Entries : never;
+
+type ReplaceRuleEntries<RulesRecord, Entries> = RulesRecord extends object
+  ? {
+      [RuleName in keyof RulesRecord]: RuleName extends keyof Entries
+        ? Entries[RuleName]
+        : RulesRecord[RuleName];
+    }
+  : RulesRecord;
+
+// Visits the same surfaces as `StripWarnFromConfig`, for the same reasons
+type ReplaceRuleEntriesInConfig<Config, Entries, Depth extends number = 4> = Config extends (
+  ...arguments_: never[]
+) => unknown
+  ? Config
+  : Config extends object
+    ? {
+        [Key in keyof Config]: Key extends 'overrides' | 'overridesAny' | 'rules'
+          ? ReplaceRuleEntries<Config[Key], Entries>
+          : Key extends `config${string}`
+            ? Depth extends 0
+              ? Config[Key]
+              : ReplaceRuleEntriesInConfig<Config[Key], Entries, StripWarnConfigDepth[Depth]>
+            : Config[Key];
+      }
+    : Config;
+
+type ApplyTypeAffectingOptions<
+  Config,
+  TypeAffectingOptions extends TypeAffectingOptionsType,
+> = MaybeStripWarningSeverity<
+  [ReplacedRuleEntriesOf<TypeAffectingOptions>] extends [never]
+    ? Config
+    : [keyof ReplacedRuleEntriesOf<TypeAffectingOptions>] extends [never]
+      ? Config
+      : ReplaceRuleEntriesInConfig<Config, ReplacedRuleEntriesOf<TypeAffectingOptions>>,
+  TypeAffectingOptions
+>;
+
 type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Prettify<
   OmitStrict<EslintFlatConfigEntry, 'rules'> & {
     /**
@@ -188,11 +231,11 @@ export interface EslintConfigUnOptions<
   configs?: {
     [Key in keyof UnConfigs<ExtraPlugins>]?:
       | boolean
-      | MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>
+      | ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>
       | (Key extends UnConfigsSupportingArraysGenerated
           ? [
-              MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>,
-              ...MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>[],
+              ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>,
+              ...ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>[],
             ]
           : never);
   };
@@ -317,7 +360,7 @@ export interface EslintConfigUnOptions<
    * eslint-config-un's configs, and before the config which disables Prettier incompatible rules
    * for all files
    */
-  extraConfigs?: readonly MaybeStripWarningSeverity<
+  extraConfigs?: readonly ApplyTypeAffectingOptions<
     UnFlagConfigEntry<ExtraPlugins>,
     TypeAffectingOptions
   >[];
@@ -413,6 +456,31 @@ export interface EslintConfigUnOptions<
               : PluginTypedByEslintCoreOrTsEslint
           >
         >;
+
+        /**
+         * Replaces the implementations of the plugin's rules, which keep their names.
+         * Keyed by the rule names without the prefix.
+         *
+         * - `false` turns off all the built-in replacements of the plugin, `true` keeps them.
+         * - A `boolean` for a rule turns its built-in replacement on or off.
+         * - The full name of another rule (with the canonical prefix), a rule object, or a function
+         *   returning a rule (may be async, for lazy loading) replaces the rule.
+         *   A function declaring a parameter gets the plugin's own rule, for example to wrap it.
+         * - The object form adds `traits` and `dropOptionsSetByConfigs` to any of the above.
+         *
+         * The types of the rule options in `overrides`, `overridesAny` and `extraConfigs` follow the
+         * replacement.
+         * If the object contains a function whose parameter would be untyped, build it with
+         * `defineRuleReplacements` first.
+         *
+         * The replacements that are on by default are not applied to a plugin provided via
+         * `plugin`, but the explicit entries and `useImportIntegrity` still are
+         * @example
+         * {unicorn: {replacements: {'no-null': 'my-plugin/no-null'}}}
+         */
+        // The precise type only lives in the signature of `eslintConfig`: computing it for every
+        // plugin here would make type checking several times slower
+        replacements?: unknown;
       } & (Plugin extends keyof PluginSettingsMap
         ? {
             /**
@@ -868,6 +936,17 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    * Rule names must be UNprefixed
    */
   disabledAutofixes: Partial<Record<PluginPrefix, readonly string[]>>;
+
+  /**
+   * The active rule replacements, keyed by the full rule name with the canonical prefix
+   */
+  ruleReplacements: ReadonlyMap<string, RuleReplacementResolved>;
+
+  /**
+   * The rules having each trait, the replacements included.
+   * Our code reads the traits only from here, never from the generated tables
+   */
+  ruleTraits: Readonly<RuleTraitTables>;
 
   /**
    * Maps canonical plugin prefix → unprefixed rule name → whether the rule supports autofix.

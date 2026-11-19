@@ -1,11 +1,14 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import oxfmtConfig from './oxfmt.config';
 import {eslintConfig, isInCi} from './src';
-import {PLUGIN_METADATA_KEY_ORDER, RULE_TRAIT_ORDER} from './src/plugins/shared';
+import {PLUGIN_METADATA_KEY_ORDER, RULE_METADATA_KEY_ORDER} from './src/plugins/shared';
 import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
-const PLUGIN_METADATA_GROUP_ORDER = [...PLUGIN_METADATA_KEY_ORDER, ...RULE_TRAIT_ORDER] as const;
+const PLUGIN_METADATA_GROUP_ORDER = [
+  ...PLUGIN_METADATA_KEY_ORDER,
+  ...RULE_METADATA_KEY_ORDER,
+] as const;
 
 const noRestrictedSyntaxPlugin = createNoRestrictedSyntaxRule('local-rules', {
   name: 'no-catch-parameter-type-annotation',
@@ -161,20 +164,9 @@ export default eslintConfig({
     },
     un: {
       overrides: {
-        'un/no-array-reverse': 2,
-        'un/no-array-sort': 2,
-        'un/no-array-splice': 2,
         'un/no-type-assertion': 2,
         'un/prefer-array-for-each': 2,
         'un/prefer-logical-or': 2,
-      },
-    },
-    unicorn: {
-      overrides: {
-        // Replaced by the `un` rules of the same names, which don't ask to copy new arrays
-        'unicorn/no-array-reverse': 0,
-        'unicorn/no-array-sort': 0,
-        'unicorn/no-array-splice': 0,
       },
     },
     vitest: {

@@ -1,6 +1,7 @@
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
+  arraySorting: 'array-sorting.js',
   nestedIfWithoutElse: 'nested-if-without-else.js',
   nestedIfWithoutElseInsideHtml: 'nested-if-without-else-inside-html.html',
   combinedCondition: 'combined-condition.js',
@@ -135,6 +136,39 @@ describe('rules', async () => {
     );
 
     expect(error).toBeUndefined();
+  });
+
+  it('triggers `unicorn/no-array-sort` with the implementation of `un/no-array-sort`, replacing it by default', async () => {
+    const results = await testEslintConfig('unicorn', FIXTURES.arraySorting, import.meta.dirname);
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.arraySorting,
+      'unicorn/no-array-sort',
+      {all: true},
+    );
+
+    expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
+      '["Use `.toSorted()` instead of `.sort()`, which changes the array in place.", "`.toSorted()` copies an array that nothing else uses. Use `.sort()` to change it in place instead."]',
+    );
+  });
+
+  it('triggers the original `unicorn/no-array-sort` when its replacement is turned off', async () => {
+    const results = await testEslintConfig('unicorn', FIXTURES.arraySorting, {
+      searchFixturesRelativeToPath: import.meta.dirname,
+      un: {plugins: {unicorn: {replacements: {'no-array-sort': false}}}},
+    });
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.arraySorting,
+      'unicorn/no-array-sort',
+      {all: true},
+    );
+
+    expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
+      '["Use `Array#toSorted()` instead of `Array#sort()`."]',
+    );
   });
 
   it('triggers `unicorn/no-top-level-side-effects` for a global mutation', async () => {

@@ -18,7 +18,6 @@ import type {
   UnFlatConfigEntryFilesAndIgnores,
 } from '../eslint/eslint-types';
 import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
-import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from '../plugins.gen';
 import {
   type ArrayOrBooleanRecord,
   arrayUnique,
@@ -320,16 +319,17 @@ export const CORE_RULES_REPLACED_BY_TS_EXTENSION_RULES: readonly GetRuleNamesInP
   'no-useless-constructor',
 ];
 
-export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigContext) =>
-  [
-    ...RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS.filter(
-      (ruleName) => context.rootOptions.markdownCodeBlocksRules?.doNotDisable?.[ruleName] !== true,
-    ),
+export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigContext) => {
+  const doNotDisable: Partial<Record<string, boolean>> =
+    context.rootOptions.markdownCodeBlocksRules?.doNotDisable || {};
+  return [
+    ...context.ruleTraits.disableInCodeBlocks.filter((ruleName) => doNotDisable[ruleName] !== true),
     ...objectEntriesUnsafe(
       // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition, ts/no-non-null-asserted-optional-chain -- Added to preserve the type
       context.rootOptions.markdownCodeBlocksRules?.additionalDisabledRules! || {},
     ).map(([ruleName, shouldDisable]) => (shouldDisable ? ruleName : null)),
   ].filter((value) => value != null);
+};
 
 /** Folds the `allowDefaultProject` shortcut into `projectService`, winning over the existing one */
 export const withAllowDefaultProject = (
