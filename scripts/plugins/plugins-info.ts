@@ -200,7 +200,7 @@ export const executePackageAsEslintPlugin = (packageName: string) =>
                 styleText('gray', JSON.stringify(message.error)),
               );
             } else {
-              if (message === null) {
+              if (message == null) {
                 logger.warn(
                   `Package ${styledName} is probably not an ESLint plugin or module evaluation resulted in no exports`,
                 );

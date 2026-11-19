@@ -12,6 +12,7 @@ import {
   type TypeOnlyWrapperExpression,
   getTypeInformation,
   isGlobalReference,
+  unwrapTypeOnlyWrappers,
 } from './rule-utils';
 
 const RULE_OPTIONS_SCHEMA = {
@@ -136,22 +137,6 @@ const RECEIVER_RETURNING_METHODS: ReadonlySet<string> = new Set([
 
 // The iterators they return see the later changes of the array
 const ITERATOR_METHODS: ReadonlySet<string> = new Set(['entries', 'keys', 'values']);
-
-const unwrapTypeOnlyWrappers = (node: ESTree.Node | TypeOnlyWrapperExpression): ESTree.Node => {
-  switch (node.type) {
-    case 'TSAsExpression':
-    case 'TSInstantiationExpression':
-    case 'TSNonNullExpression':
-    case 'TSSatisfiesExpression':
-    case 'TSTypeAssertion': {
-      return unwrapTypeOnlyWrappers(node.expression);
-    }
-
-    default: {
-      return node;
-    }
-  }
-};
 
 // Typed arrays are left out: `Buffer#slice()`, for example, returns a view of the same memory
 const isArrayType = (checker: ts.TypeChecker, type: ts.Type): boolean => {

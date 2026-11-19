@@ -42,6 +42,27 @@ export const TYPE_ONLY_WRAPPER_TYPES: ReadonlySet<string> = new Set(
   ]),
 );
 
+/**
+ * Returns the expression inside TypeScript-only wrappers, like `value as T` or `value!`
+ */
+export const unwrapTypeOnlyWrappers = (
+  node: ESTree.Node | TypeOnlyWrapperExpression,
+): ESTree.Node => {
+  switch (node.type) {
+    case 'TSAsExpression':
+    case 'TSInstantiationExpression':
+    case 'TSNonNullExpression':
+    case 'TSSatisfiesExpression':
+    case 'TSTypeAssertion': {
+      return unwrapTypeOnlyWrappers(node.expression);
+    }
+
+    default: {
+      return node;
+    }
+  }
+};
+
 // Expressions that can be the object of a member access without parentheses
 export const MEMBER_OBJECT_TYPES: ReadonlySet<string> = new Set([
   'ArrayExpression',

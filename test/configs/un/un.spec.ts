@@ -7,6 +7,7 @@ const FIXTURES = {
   forOfLoopOverArray: 'for-of-loop-over-array.js',
   neverConditionalTypes: 'never-conditional-types.ts',
   nullishCoalescing: 'nullish-coalescing.ts',
+  nullishComparisons: 'nullish-comparisons.ts',
   typeAssertions: 'type-assertions.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
@@ -249,6 +250,25 @@ describe('rules', async () => {
     expect(errors).toHaveLength(1);
     expect(errors[0]?.message).toMatchInlineSnapshot(
       '"Use `||` instead of `??`: they work the same here, because the left side cannot be `false`, `0`, `0n`, `NaN` or an empty string."',
+    );
+  });
+
+  it('`un/consistent-nullish-comparison` rule fires on strict comparisons with `null` and `undefined` that `== null` can replace when enabled', async () => {
+    const results = await testEslintConfig(
+      {ts: true, un: {overrides: {'un/consistent-nullish-comparison': 'error'}}},
+      FIXTURES.nullishComparisons,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.nullishComparisons,
+      'un/consistent-nullish-comparison',
+      {all: true},
+    );
+
+    expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
+      '["Use `!= null` instead of `!== undefined`: they work the same here, because the value cannot be `null`.", "Use `== null` instead of separate comparisons with `null` and `undefined`: it works the same."]',
     );
   });
 
