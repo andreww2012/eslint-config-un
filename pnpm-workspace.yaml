@@ -23,6 +23,7 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/eslint-plugin@0.7.6'
   - eslint-plugin-ember@13.11.2
   - '@tanstack/eslint-plugin-query@5.108.1'
+  - '@andreww2012/cspell-config@0.0.1'
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -36,7 +37,7 @@ audit:
   ignorePrune: true
 
 allowBuilds:
-  # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native
+  # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hard link to the native
   # executable - not strictly needed even if we actually used `esbuild` from cli
   esbuild@0.28.2: true
   # Critical: sets up git hooks

@@ -182,6 +182,7 @@
     "@11ty/gray-matter": "3.0.0",
     "@2captcha/captcha-solver": "1.4.0",
     "@andreww2012/commitlint-config": "0.2.0",
+    "@andreww2012/cspell-config": "0.0.1",
     "@andreww2012/npm-check-updates-config": "0.1.1",
     "@angular-eslint/eslint-plugin": "22.8.0",
     "@angular-eslint/eslint-plugin-template": "22.8.0",

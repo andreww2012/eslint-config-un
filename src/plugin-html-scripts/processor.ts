@@ -153,11 +153,7 @@ export const createProcessor = ({
 
     preprocess: (text, filename) => {
       // ESLint's locations and ranges don't count the BOM
-      const html = text.startsWith(
-        '\u{FEFF}', // cspell:disable-line
-      )
-        ? text.slice(1)
-        : text;
+      const html = text.startsWith('\u{FEFF}') ? text.slice(1) : text;
       const extractResult = extract(html, {
         isXml: xmlExtensions.includes(path.extname(filename).toLowerCase()),
         indent: indentDescriptor,
