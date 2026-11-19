@@ -164,6 +164,7 @@ export default eslintConfig({
     },
     un: {
       overrides: {
+        'un/consistent-empty-string-check': 2,
         'un/consistent-nullish-comparison': 2,
         'un/no-type-assertion': 2,
         'un/prefer-array-for-each': 2,

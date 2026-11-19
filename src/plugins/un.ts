@@ -3,6 +3,7 @@ import {definePluginMetadata} from './shared';
 export default definePluginMetadata('un', {
   configs: ['un'],
   rules: {
+    'consistent-empty-string-check': {requiresTypeInfo: true, stylistic: true},
     'consistent-nullish-comparison': {requiresTypeInfo: 'optional', stylistic: true},
     'no-array-reverse': {requiresTypeInfo: 'optional'},
     'no-array-sort': {requiresTypeInfo: 'optional'},

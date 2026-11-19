@@ -1,5 +1,6 @@
 import ourPackageJson from '../../package.json' with {type: 'json'};
 import type {EslintPlugin} from '../eslint/eslint-types';
+import {consistentEmptyStringCheck} from './rules/consistent-empty-string-check';
 import {consistentNullishComparison} from './rules/consistent-nullish-comparison';
 import {noArrayReverse} from './rules/no-array-reverse';
 import {noArraySort} from './rules/no-array-sort';
@@ -19,6 +20,7 @@ const eslintPluginUn: EslintPlugin = {
     version: ourPackageJson.version,
   },
   rules: {
+    'consistent-empty-string-check': consistentEmptyStringCheck,
     'consistent-nullish-comparison': consistentNullishComparison,
     'no-array-reverse': noArrayReverse,
     'no-array-sort': noArraySort,

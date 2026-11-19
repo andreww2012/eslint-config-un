@@ -60,7 +60,7 @@ const createLooselyNullishValuesGetter = (
     return () => UNKNOWN_TYPE_VALUES_SET;
   }
 
-  const {checker, getTsNode} = typeInformation;
+  const {checker, getType} = typeInformation;
   const emptyObjectType = checker.getNonNullableType(checker.getUnknownType());
   const nullishTypes: Readonly<Record<NullishValue, ts.Type>> = {
     null: checker.getNullType(),
@@ -99,11 +99,11 @@ const createLooselyNullishValuesGetter = (
         : !computed && property.type === 'Identifier'
           ? property.name
           : undefined;
-    const objectTsNode = getTsNode(object);
+    const objectType = getType(object);
     return (
       key == null ||
-      objectTsNode == null ||
-      getConstituents(checker.getTypeAtLocation(objectTsNode)).some(
+      objectType == null ||
+      getConstituents(objectType).some(
         (constituent) =>
           checker.getPropertyOfType(checker.getApparentType(constituent), key) == null,
       )
@@ -113,12 +113,12 @@ const createLooselyNullishValuesGetter = (
   return (node: ESTree.Node) => {
     // The asserted type may leave out a value the expression can hold
     const expression = unwrapTypeOnlyWrappers(node);
-    const tsNode = getTsNode(expression);
-    if (!tsNode) {
+    const type = getType(expression);
+    if (!type) {
       return UNKNOWN_TYPE_VALUES_SET;
     }
 
-    const constituents = getConstituents(checker.getTypeAtLocation(tsNode));
+    const constituents = getConstituents(type);
     const values = new Set<LooselyNullishValue>(
       NULLISH_VALUES.filter((value) =>
         constituents.some((constituent) => canBe(constituent, value)),

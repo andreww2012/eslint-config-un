@@ -612,8 +612,8 @@ export const createArrayMutationRule = (
 
       // Without type information, or for `any`, the type tells nothing
       const getType = (node: ESTree.Node) => {
-        const tsNode = typeInformation?.getTsNode(node);
-        const type = tsNode && checker?.getNonNullableType(checker.getTypeAtLocation(tsNode));
+        const nullableType = typeInformation?.getType(node);
+        const type = nullableType && checker?.getNonNullableType(nullableType);
         return type?.flags === checker?.getAnyType().flags ? undefined : type;
       };
 

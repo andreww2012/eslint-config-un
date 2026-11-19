@@ -33,7 +33,7 @@ const rule: Eslint.Rule.RuleModule = {
       );
     }
 
-    const {checker, getTsNode} = typeInformation;
+    const {checker, getType} = typeInformation;
     const falsyTypes = [
       checker.getFalseType(),
       checker.getNumberLiteralType(0),
@@ -93,8 +93,7 @@ const rule: Eslint.Rule.RuleModule = {
     };
 
     const canBeReplaced = ({left}: ESTree.AssignmentExpression | ESTree.LogicalExpression) => {
-      const leftTsNode = getTsNode(left);
-      const leftType = leftTsNode && checker.getTypeAtLocation(leftTsNode);
+      const leftType = getType(left);
       return (
         leftType != null &&
         // An always nullish left side is more likely typed wrong than written on purpose

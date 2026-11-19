@@ -9,6 +9,7 @@ import {
   TYPE_ONLY_WRAPPER_TYPES,
   getTypeInformation,
   isGlobalReference,
+  needsLeadingSemicolon,
 } from '../rule-utils';
 
 // `sparse` arrays have holes, which loops visit, but `forEach` skips
@@ -51,16 +52,6 @@ const LOOP_TYPES: ReadonlySet<string> = new Set([
 ]);
 
 const BREAKABLE_TYPES: ReadonlySet<string> = new Set([...LOOP_TYPES, 'SwitchStatement']);
-
-// A line starting with `(` or `[` continues these statements if they don't end with a semicolon
-const EXPRESSION_ENDING_STATEMENT_TYPES: ReadonlySet<string> = new Set([
-  'ExportDefaultDeclaration',
-  'ExportNamedDeclaration',
-  'ExpressionStatement',
-  'ReturnStatement',
-  'ThrowStatement',
-  'VariableDeclaration',
-]);
 
 // ASI stands for "Automatic semicolon insertion"
 const ASI_HAZARD_REGEX = /^[([]/;
@@ -263,24 +254,6 @@ const isElementWriteOrCall = (
   }
 };
 
-const getStatementSiblings = (parent: Eslint.Rule.Node | null): readonly ESTree.BaseNode[] => {
-  switch (parent?.type) {
-    case 'BlockStatement':
-    case 'Program':
-    case 'StaticBlock': {
-      return parent.body;
-    }
-
-    case 'SwitchCase': {
-      return parent.consequent;
-    }
-
-    default: {
-      return [];
-    }
-  }
-};
-
 const getAvailableName = (usedNames: ReadonlySet<string>, suffix = 1): string => {
   const name = suffix === 1 ? 'element' : `element${suffix}`;
   return usedNames.has(name) ? getAvailableName(usedNames, suffix + 1) : name;
@@ -355,16 +328,6 @@ const rule: Eslint.Rule.RuleModule = {
       });
     };
 
-    const needsLeadingSemicolon = (node: Eslint.Rule.Node) => {
-      const siblings = getStatementSiblings(node.parent);
-      const previous = siblings[siblings.indexOf(node) - 1];
-      return (
-        previous != null &&
-        EXPRESSION_ENDING_STATEMENT_TYPES.has(previous.type) &&
-        sourceCode.getTokenBefore(node)?.value !== ';'
-      );
-    };
-
     // The whole line if the statement is alone on it
     const getRemovalRange = (statement: ESTree.Node): Eslint.AST.Range => {
       const {line} = sourceCode.getLoc(statement).start;
@@ -411,14 +374,11 @@ const rule: Eslint.Rule.RuleModule = {
       const {receiver} = candidate;
       const syntaxArrayState = getArrayState(sourceCode, receiver);
       // Holes are invisible to types, and an unhelpful type leaves only the syntax to rely on
-      const receiverTsNode =
-        syntaxArrayState === 'sparse' ? undefined : typeInformation?.getTsNode(receiver);
+      const receiverType =
+        syntaxArrayState === 'sparse' ? undefined : typeInformation?.getType(receiver);
       const typeArrayState =
-        typeInformation && receiverTsNode
-          ? getTypeArrayState(
-              typeInformation.checker.getTypeAtLocation(receiverTsNode),
-              typeInformation.checker,
-            )
+        typeInformation && receiverType
+          ? getTypeArrayState(receiverType, typeInformation.checker)
           : 'unknown';
       const arrayState = typeArrayState === 'unknown' ? syntaxArrayState : typeArrayState;
       if (arrayState !== 'nonArray') {
@@ -453,7 +413,9 @@ const rule: Eslint.Rule.RuleModule = {
         return [
           fixer.replaceTextRange(
             [sourceCode.getRange(node)[0], bodyStart],
-            ASI_HAZARD_REGEX.test(head) && needsLeadingSemicolon(node) ? `;${head}` : head,
+            ASI_HAZARD_REGEX.test(head) && needsLeadingSemicolon(sourceCode, node)
+              ? `;${head}`
+              : head,
           ),
           ...replacements.map(([range, text]) => fixer.replaceTextRange(range, text)),
           ...continueStatements.map((statement) => {

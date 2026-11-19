@@ -63,6 +63,16 @@ export const unwrapTypeOnlyWrappers = (
   }
 };
 
+// A line starting with `(` or `[` continues these statements if they don't end with a semicolon
+const EXPRESSION_ENDING_STATEMENT_TYPES: ReadonlySet<string> = new Set([
+  'ExportDefaultDeclaration',
+  'ExportNamedDeclaration',
+  'ExpressionStatement',
+  'ReturnStatement',
+  'ThrowStatement',
+  'VariableDeclaration',
+]);
+
 // Expressions that can be the object of a member access without parentheses
 export const MEMBER_OBJECT_TYPES: ReadonlySet<string> = new Set([
   'ArrayExpression',
@@ -83,14 +93,56 @@ const hasTypeInformation = (
   'program' in parserServices &&
   parserServices.program != null;
 
+const createTypeInformation = ({
+  program,
+  esTreeNodeToTSNodeMap,
+}: ParserServicesWithTypeInformation) => {
+  const checker = program.getTypeChecker();
+  return {
+    checker,
+    getType: (node: ESTree.Node) => {
+      const tsNode = esTreeNodeToTSNodeMap.get(node);
+      return tsNode && checker.getTypeAtLocation(tsNode);
+    },
+  };
+};
+
 export const getTypeInformation = (sourceCode: Eslint.SourceCode) => {
   const parserServices: unknown = sourceCode.parserServices;
-  return hasTypeInformation(parserServices)
-    ? {
-        checker: parserServices.program.getTypeChecker(),
-        getTsNode: (node: ESTree.Node) => parserServices.esTreeNodeToTSNodeMap.get(node),
-      }
-    : undefined;
+  return hasTypeInformation(parserServices) ? createTypeInformation(parserServices) : undefined;
+};
+
+const getStatementSiblings = (parent: Eslint.Rule.Node | null): readonly ESTree.BaseNode[] => {
+  switch (parent?.type) {
+    case 'BlockStatement':
+    case 'Program':
+    case 'StaticBlock': {
+      return parent.body;
+    }
+
+    case 'SwitchCase': {
+      return parent.consequent;
+    }
+
+    default: {
+      return [];
+    }
+  }
+};
+
+// Whether code starting with `(` or `[` put at the start of the statement would continue the
+// previous one
+export const needsLeadingSemicolon = (
+  sourceCode: Eslint.SourceCode,
+  statement: Eslint.Rule.Node,
+) => {
+  const siblings = getStatementSiblings(statement.parent);
+  const previous = siblings[siblings.indexOf(statement) - 1];
+  return (
+    previous != null &&
+    EXPRESSION_ENDING_STATEMENT_TYPES.has(previous.type) &&
+    sourceCode.getTokenBefore(statement)?.value !== ';'
+  );
 };
 
 // Whether the name refers to the global, like `Array`, rather than to a declaration that shadows it

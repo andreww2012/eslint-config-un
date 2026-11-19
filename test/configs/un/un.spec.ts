@@ -4,6 +4,7 @@ const FIXTURES = {
   arraySplicing: 'array-splicing.js',
   consecutiveSpaces: 'consecutive-spaces.js',
   consecutiveSpacesInsideHtml: 'consecutive-spaces-inside-html.html',
+  emptyStringComparison: 'empty-string-comparison.ts',
   forOfLoopOverArray: 'for-of-loop-over-array.js',
   neverConditionalTypes: 'never-conditional-types.ts',
   nullishCoalescing: 'nullish-coalescing.ts',
@@ -270,6 +271,22 @@ describe('rules', async () => {
     expect(errors.map(({message}) => message)).toMatchInlineSnapshot(
       '["Use `!= null` instead of `!== undefined`: they work the same here, because the value cannot be `null`.", "Use `== null` instead of separate comparisons with `null` and `undefined`: it works the same."]',
     );
+  });
+
+  it('`un/consistent-empty-string-check` rule fires on a comparison with an empty string when enabled', async () => {
+    const results = await testEslintConfig(
+      {ts: true, un: {overrides: {'un/consistent-empty-string-check': 'error'}}},
+      FIXTURES.emptyStringComparison,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.emptyStringComparison,
+      'un/consistent-empty-string-check',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`"Use \`.length === 0\` instead of \`=== ''\`."`);
   });
 
   it('`un/no-multiple-consecutive-spaces` rule fires inside a `<script>` tag when `html-scripts` config is enabled', async () => {
