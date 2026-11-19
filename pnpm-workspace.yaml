@@ -13,37 +13,7 @@ lockfile:
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeStrict: false # Auto-adds too-new versions to the exclude list instead of prompting or failing
-minimumReleaseAgeExclude: # []
-  - eslint-plugin-jsdoc@65.4.10
-  - eslint-plugin-ember@13.11.0
-  - '@tsrx/core@0.6.2'
-  - '@tsrx/eslint-parser@0.7.2'
-  - '@tsrx/eslint-plugin@0.7.2'
-  - '@typescript-eslint/eslint-plugin@8.73.0'
-  - '@typescript-eslint/parser@8.73.0'
-  - '@typescript-eslint/project-service@8.73.0'
-  - '@typescript-eslint/scope-manager@8.73.0'
-  - '@typescript-eslint/tsconfig-utils@8.73.0'
-  - '@typescript-eslint/type-utils@8.73.0'
-  - '@typescript-eslint/types@8.73.0'
-  - '@typescript-eslint/typescript-estree@8.73.0'
-  - '@typescript-eslint/utils@8.73.0'
-  - '@typescript-eslint/visitor-keys@8.73.0'
-  - typescript-eslint@8.73.0
-  - browserslist@4.29.6
-  - update-browserslist-db@1.4.0
-  - '@intlify/core-base@11.4.21'
-  - '@intlify/devtools-types@11.4.21'
-  - '@intlify/message-compiler@11.4.21'
-  - '@intlify/shared@11.4.21'
-  - '@vercel/nft@1.11.5'
-  - bare-buffer@3.7.3
-  - bare-url@2.5.8
-  - baseline-browser-mapping@2.11.38
-  - content-tag@4.3.0
-  - electron-to-chromium@1.5.487
-  - ignore@7.0.16
-  - minimatch@11.0.9
+minimumReleaseAgeExclude: []
 minimumReleaseAgeExcludePrune: true
 
 trustPolicy: no-downgrade
@@ -127,6 +97,9 @@ peerDependencyRules:
     '@tanstack/eslint-plugin-start@^0.1>eslint': '>=10'
     eslint-plugin-jest-extended@^3>eslint: '>=10'
     eslint-plugin-react@^7>eslint: '>=10'
+
+    eslint-plugin-markdown-links@^0.9>@eslint/markdown: ^9
+    eslint-plugin-markdown-preferences@^0.43>@eslint/markdown: ^9
 
     eslint-plugin-vue@^10>@stylistic/eslint-plugin: ^6
 

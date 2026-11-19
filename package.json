@@ -111,7 +111,7 @@
     "@eslint-community/eslint-utils": "4.10.1",
     "@eslint/core": "1.2.1",
     "@eslint/css": "2.0.1",
-    "@eslint/markdown": "8.0.3",
+    "@eslint/markdown": "9.0.0",
     "@eslint/plugin-kit": "catalog:html-scripts",
     "@html-eslint/eslint-plugin": "0.68.0",
     "@html-eslint/eslint-plugin-react": "0.68.0",

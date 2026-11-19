@@ -925,9 +925,12 @@ Reports you may see:
 - *Parsing error* in a block whose language needs its own parser, like Vue, Svelte or GraphQL.
   Blocks are ordinary files for ESLint, so such a language needs a parser set up for its extension, and the `files` patterns do not have to mention Markdown: `**/*.vue` covers `README.md/0_0.vue` as well.
   Such blocks are only linted if a parser is set up for their extension, by an enabled Config or the [`parsing`](#parsing) root option (`parsing: {graphql: true}`), so this error means that the parser fails on the block itself; leave it out of linting with the [`ignores`][ignores option] root option (`ignores: ['**/*.md/**/*.graphql']`).
-- *Unused eslint-disable directive*: the comment before a block also counts as a directive for the Markdown file itself, where it is almost always unused.
-  You also see this report when the rule is already disabled in code blocks by default.
-  Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.
+- *Unused eslint-disable directive* on the comment before a block:
+  - The comment also counts as a directive for the Markdown file itself, where it is almost always unused.
+    Its autofix removes the comment even if the block needs it.
+    Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.
+  - In Markdown files, the comment is also reported if the directive is unused in the block itself, for example when the rule is already disabled in code blocks by default.
+    This report comes from the block's virtual file, so the setting above keeps it.
 - [`eslint-comments/disable-enable-pair`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/disable-enable-pair.html) in MDX files, because they are parsed as code: add `{/* eslint-enable eqeqeq */}` after the block.
 
 ### Tailwind CSS
