@@ -1,4 +1,5 @@
 import {GLOB_HTML_SCRIPTS} from '../../../src/constants';
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
@@ -204,7 +205,9 @@ describe('options', () => {
     });
 
     it('enables `check-file/filename-naming-convention` rule when provided as object', async () => {
-      const CONVENTIONS = Object.freeze({'**/*': 'KEBAB_CASE'});
+      const CONVENTIONS: Readonly<GetRuleOptions<'check-file', 'filename-naming-convention'>> = {
+        '**/*': 'KEBAB_CASE',
+      };
 
       const configResult = await computeEslintConfig({
         checkFile: {fileNamingConventions: CONVENTIONS},
@@ -241,7 +244,9 @@ describe('options', () => {
     });
 
     it('enables `check-file/folder-naming-convention` rule when provided as object', async () => {
-      const CONVENTIONS = Object.freeze({'**/*': 'KEBAB_CASE'});
+      const CONVENTIONS: Readonly<GetRuleOptions<'check-file', 'folder-naming-convention'>> = {
+        '**/*': 'KEBAB_CASE',
+      };
 
       const configResult = await computeEslintConfig({
         checkFile: {folderNamingConventions: CONVENTIONS},

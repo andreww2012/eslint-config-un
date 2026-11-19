@@ -299,7 +299,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     // Crashes on `statement.expression.type` (`expression` is null)
     .disableAnyRule('sonar', 'no-unused-collection')
     .enableConfigTesterForPlugin('svelte', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
     });
 
@@ -442,7 +442,7 @@ export default defineUnConfig<SvelteEslintConfigOptions, readonly [], SvelteConf
     .markCategory('System')
     // Added in the system config
     .enableConfigTesterForPlugin('svelte', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
     })
     .addOverrides();

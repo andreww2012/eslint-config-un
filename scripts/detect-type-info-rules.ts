@@ -1,4 +1,5 @@
 import {createRequire} from 'node:module';
+import type {StyleTextOptions} from 'node:util';
 import {cli} from 'cleye';
 import consola from 'consola';
 import pathe from 'pathe';
@@ -24,26 +25,20 @@ import {
 
 const logger = consola.withTag('type-info-rules');
 
-const REPORT_STYLE_OPTIONS = Object.freeze({stream: process.stdout} satisfies Parameters<
-  typeof styleText
->[2]);
+const REPORT_STYLE_OPTIONS: Readonly<StyleTextOptions> = {stream: process.stdout};
 
 const require = createRequire(import.meta.url);
 
 const LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {rootOptions: {}, missingPackages: new Map()};
 
-/**
- * Both take over the process when their prerequisites are missing, which kills the probe
- */
+// Both take over the process when their prerequisites are missing, which kills the probe
 const PLUGINS_BREAKING_THE_PROBE: ReadonlySet<string> = new Set([
   'file-progress',
   'import-integrity',
 ]);
 
-/**
- * Their entries are derived from what the plugin itself declares, so a candidate the plugin does
- * not flag is a decision taken upstream, not a gap here
- */
+// Their entries are derived from what the plugin itself declares, so a candidate the plugin does
+// not flag is a decision taken upstream, not a gap here
 const PREFIXES_DECLARING_TYPE_INFO_THEMSELVES: ReadonlySet<string> = new Set(
   Object.entries(RULE_CATEGORIES_PER_PLUGIN).flatMap(([prefix, categories]) =>
     'typeAware' in categories ? prefix : [],
@@ -128,6 +123,7 @@ const report = (
 const main = async () => {
   const argv = cli({
     name: 'detect-type-info-rules',
+    strictFlags: true,
     flags: {
       plugin: {
         type: [String],

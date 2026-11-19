@@ -135,7 +135,7 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
     .addRule('use-test', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('use-true-false', ERROR) /** @since 2.2.0 */ // 🟢
     .enableConfigTesterForPlugin('ava', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => ruleName === 'no-ava-in-dependencies',
     })
     .addOverrides();
@@ -155,7 +155,7 @@ export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {packag
     ])
     .addRule('no-ava-in-dependencies', ERROR) /** @since 16.0.0 */ // 🟢
     .enableConfigTesterForPlugin('ava', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => ruleName !== 'no-ava-in-dependencies',
     })
     .addOverrides();

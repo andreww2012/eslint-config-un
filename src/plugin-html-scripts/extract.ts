@@ -80,8 +80,9 @@ const parseHtml = (
     ignore: 'none',
   });
   const chunks: (HtmlChunk | ScriptChunk)[] = [createHtmlChunk(0)];
-  // eslint-disable-next-line ts/no-non-null-assertion -- There is always a chunk
-  const getCurrentChunk = () => chunks.at(-1)!;
+  const getCurrentChunk = () =>
+    // eslint-disable-next-line ts/no-non-null-assertion -- There is always a chunk
+    chunks.at(-1)!;
 
   const parser = new Parser(
     {

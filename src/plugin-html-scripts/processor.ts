@@ -60,15 +60,13 @@ export interface HtmlProcessorOptions {
 }
 
 // No type, an empty type, or (application|text)/(x-)?(javascript|babel|ecmascript-6)
-const CLASSIC_SCRIPT_TYPES = Object.freeze(
-  ['application', 'text'].flatMap((prefix) =>
-    ['', 'x-'].flatMap((variant) =>
-      ['javascript', 'babel', 'ecmascript-6'].map((name) => `${prefix}/${variant}${name}`),
-    ),
+const CLASSIC_SCRIPT_TYPES: readonly string[] = ['application', 'text'].flatMap((prefix) =>
+  ['', 'x-'].flatMap((variant) =>
+    ['javascript', 'babel', 'ecmascript-6'].map((name) => `${prefix}/${variant}${name}`),
   ),
 );
 
-const DEFAULT_SCRIPT_TAGS: readonly HtmlProcessorScriptTag[] = Object.freeze([
+const DEFAULT_SCRIPT_TAGS: readonly HtmlProcessorScriptTag[] = [
   {
     match: [
       'script:not([type]):not([src])',
@@ -77,9 +75,9 @@ const DEFAULT_SCRIPT_TAGS: readonly HtmlProcessorScriptTag[] = Object.freeze([
     ].join(', '),
   },
   {match: 'script[type="module" i]:not([src])', module: true},
-]);
+];
 
-const DEFAULT_XML_EXTENSIONS: readonly string[] = Object.freeze(['.xhtml', '.xml']);
+const DEFAULT_XML_EXTENSIONS: readonly string[] = ['.xhtml', '.xml'];
 
 const BAD_INDENT_SEVERITIES: Readonly<
   Record<Exclude<HtmlProcessorOptions['reportBadIndent'] & {}, 'off'>, 1 | 2>
@@ -97,10 +95,8 @@ const parseIndent = (indent: HtmlProcessorOptions['indent']) => {
     : undefined;
 };
 
-/**
- * When linting the markup, ESLint reports the HTML comments of this plugin as its own unused
- * directives, which `--fix` would even empty
- */
+// When linting the markup, ESLint reports the HTML comments of this plugin as its own unused
+// directives, which `--fix` would even empty
 const omitDirectiveCommentMessages = (
   messages: readonly Eslint.Linter.LintMessage[],
   {
@@ -188,7 +184,7 @@ export const createProcessor = ({
 
     postprocess: (messagesLists, filename) => {
       const preprocessResult = preprocessResults.get(filename);
-      /* v8 ignore next 3 ESLint always preprocesses a file before postprocessing it */
+      /* v8 ignore next ESLint always preprocesses a file before postprocessing it */
       if (!preprocessResult) {
         return messagesLists.flat();
       }

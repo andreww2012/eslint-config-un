@@ -42,8 +42,7 @@ export const collectRuleReplacements = (plugins: readonly DiscoveredPlugin[]) =>
     .sort((left, right) => right.length - left.length);
 
   return plugins.flatMap(({prefix, metadata}) =>
-    Object.entries(metadata.rules).flatMap(([ruleName, traits]) => {
-      const {replacedBy} = traits;
+    Object.entries(metadata.rules).flatMap(([ruleName, {replacedBy}]) => {
       if (replacedBy == null) {
         return [];
       }
@@ -68,9 +67,7 @@ export const collectRuleReplacementsOnByDefault = (plugins: readonly DiscoveredP
   collectRuleReplacements(plugins).filter(({isOnByDefault}) => isOnByDefault);
 
 /**
- * Loads every plugin metadata module.
- * They are never imported statically, so that nothing they carry for the tooling only ends up in
- * the published package
+ * Loads every plugin metadata module
  */
 export const readPluginMetadata = async () => {
   const fileNames = (await fs.readdir(PLUGINS_DIRECTORY))
@@ -86,10 +83,13 @@ export const readPluginMetadata = async () => {
     fileNames.map(async (fileName): Promise<DiscoveredPlugin> => {
       // Windows would otherwise read the drive letter of an absolute path as a URL scheme
       const moduleUrl = pathToFileURL(pathe.join(PLUGINS_DIRECTORY, fileName)).href;
-      // eslint-disable-next-line un/no-type-assertion -- The path comes from the plugins directory
-      const module = (await import(moduleUrl)) as {
-        default: Prettify<PluginMetadata & {prefix: PluginPrefix}>;
-      };
+      // Imported dynamically, so that what the modules carry only for the tooling doesn't end up in
+      // the published package
+      const module =
+        // eslint-disable-next-line un/no-type-assertion -- The path comes from the plugins directory
+        (await import(moduleUrl)) as {
+          default: Prettify<PluginMetadata & {prefix: PluginPrefix}>;
+        };
       const {prefix, ...metadata} = module.default;
       return {prefix, fileName, metadata};
     }),

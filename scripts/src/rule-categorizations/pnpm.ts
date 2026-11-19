@@ -1,10 +1,14 @@
+import {allUnionMembers} from 'utilery';
 import type {CategorizeRule, RuleCategorization} from './shared';
 
-const PNPM_RULE_NAME_PREFIXES = ['json', 'yaml'] as const;
+type PnpmRuleNamePrefix = 'json' | 'yaml';
 
-const categorizePnpmRule: CategorizeRule<(typeof PNPM_RULE_NAME_PREFIXES)[number]> = ({
-  ruleName,
-}) => {
+const PNPM_RULE_NAME_PREFIXES = allUnionMembers<PnpmRuleNamePrefix, {readonly: true}>()([
+  'json',
+  'yaml',
+]);
+
+const categorizePnpmRule: CategorizeRule<PnpmRuleNamePrefix> = ({ruleName}) => {
   const prefix = PNPM_RULE_NAME_PREFIXES.find((candidate) => ruleName.startsWith(`${candidate}-`));
 
   return prefix
@@ -20,4 +24,4 @@ const categorizePnpmRule: CategorizeRule<(typeof PNPM_RULE_NAME_PREFIXES)[number
 export const pnpmRuleCategorization = {
   categories: PNPM_RULE_NAME_PREFIXES,
   createRuleCategorizer: () => categorizePnpmRule,
-} satisfies RuleCategorization<(typeof PNPM_RULE_NAME_PREFIXES)[number]>;
+} satisfies RuleCategorization<PnpmRuleNamePrefix>;

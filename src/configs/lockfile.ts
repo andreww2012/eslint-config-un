@@ -3,6 +3,7 @@ import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
 import {
   type MaybeArray,
+  allUnionMembers,
   arrayify,
   getKeysOfTruthyValues,
   isKeyIn,
@@ -10,7 +11,6 @@ import {
 } from '../utils';
 import {
   type ExtraPluginsType,
-  type GetRuleNamesInPlugin,
   type GetRuleOptions,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
@@ -18,13 +18,10 @@ import {
   defineUnConfig,
 } from './index';
 
-const LOCKFILE_RULES_FOR_PACKAGE_JSON = [
-  'no-weakening-config',
-  'tracked',
-] as const satisfies readonly GetRuleNamesInPlugin<'lockfile'>[];
+type LockfileRuleForPackageJson = 'no-weakening-config' | 'tracked';
 
 const LOCKFILE_RULES_FOR_PACKAGE_JSON_SET: ReadonlySet<string> = new Set(
-  LOCKFILE_RULES_FOR_PACKAGE_JSON,
+  allUnionMembers<LockfileRuleForPackageJson>()(['no-weakening-config', 'tracked']),
 );
 
 type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, string>;
@@ -44,12 +41,7 @@ export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  Prettify<
-    OmitStrict<
-      UnRulesConfigPartial<'lockfile'>,
-      `lockfile/${(typeof LOCKFILE_RULES_FOR_PACKAGE_JSON)[number]}`
-    >
-  >
+  Prettify<OmitStrict<UnRulesConfigPartial<'lockfile'>, `lockfile/${LockfileRuleForPackageJson}`>>
 > {
   /**
    * Rules specific to `package.json` files.
@@ -61,12 +53,7 @@ export interface LockfileEslintConfigOptions<
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Prettify<
-          Pick<
-            UnRulesConfigPartial<'lockfile'>,
-            `lockfile/${(typeof LOCKFILE_RULES_FOR_PACKAGE_JSON)[number]}`
-          >
-        >
+        Prettify<Pick<UnRulesConfigPartial<'lockfile'>, `lockfile/${LockfileRuleForPackageJson}`>>
       >;
 
   /**
@@ -169,9 +156,8 @@ const LOCKFILES_INFO_MAP: Readonly<
   },
 };
 
-const LOCKFILE_LANGUAGE_BY_NAME = Object.freeze(
-  Object.values(LOCKFILES_INFO_MAP).flatMap((lockfiles) => objectEntriesUnsafe(lockfiles)),
-);
+const LOCKFILE_LANGUAGE_BY_NAME: readonly [string, keyof typeof LOCKFILE_LANGUAGES][] =
+  Object.values(LOCKFILES_INFO_MAP).flatMap((lockfiles) => objectEntriesUnsafe(lockfiles));
 
 export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
   enabledBy: {group: 'misc'},
@@ -236,7 +222,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       enforceLockfileVersion ? [enforceLockfileVersion] : [],
     ) /** @since 1.0.0 */ // 🟢
     .enableConfigTesterForPlugin('lockfile', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => LOCKFILE_RULES_FOR_PACKAGE_JSON_SET.has(ruleName),
     })
     .addOverrides().config;
@@ -294,7 +280,7 @@ export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
       packageManagerFinal.length > 0 ? [packageManagerFinal] : [],
     ) /** @since 1.4.0 */ // 🟢
     .enableConfigTesterForPlugin('lockfile', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !LOCKFILE_RULES_FOR_PACKAGE_JSON_SET.has(ruleName),
     })
     .addOverrides();

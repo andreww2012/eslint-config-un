@@ -3,8 +3,10 @@
  * produces `logger.fatal`, which take the whole test worker down
  */
 export const spyOnProcessOutput = () => {
-  // eslint-disable-next-line un/no-type-assertion -- Unlike `process.exit`, the mock returns
-  const exit = vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never);
+  const exit = vi.spyOn(process, 'exit').mockImplementation(
+    // eslint-disable-next-line un/no-type-assertion -- Unlike `process.exit`, the mock returns
+    (() => undefined) as never,
+  );
   const stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
 
   onTestFinished(() => {

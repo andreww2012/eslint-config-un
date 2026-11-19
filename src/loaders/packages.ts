@@ -119,8 +119,9 @@ export const packagesLoaders = {
   ),
   vueProcessor: generateInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')).then(
-      // eslint-disable-next-line un/no-type-assertion -- The plugin types its processors as `any`
-      (module) => module.processors['.vue'] as EslintProcessor,
+      (module) =>
+        // eslint-disable-next-line un/no-type-assertion -- The plugin types its processors as `any`
+        module.processors['.vue'] as EslintProcessor,
     ),
   ),
 };

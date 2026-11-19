@@ -12,6 +12,12 @@ import {arrayify, isObject, mapValues, substringAfter} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
+const DEFAULT_INTERNAL_OPTIONS: Readonly<OmitStrict<EslintConfigUnInternalOptions, 'testMode'>> = {
+  skipTypeInfoSplit: true,
+};
+
+const DEFAULT_FIXTURES_ROOT_PATH = path.join(import.meta.dirname, '..');
+
 /**
  * Lets specs pass read-only arrays (CONSTANT_CASE constants) as `files` and `ignores`, including
  * those of Sub-configs and of the root `linterOptions*` options
@@ -86,9 +92,7 @@ export const computeEslintConfig = async (
             }
           : configsOrSingleConfigName,
     }),
-    options?.internalOptions || {
-      skipTypeInfoSplit: true,
-    },
+    options?.internalOptions || DEFAULT_INTERNAL_OPTIONS,
   );
 
   const eslintConfigsByName = Object.fromEntries(
@@ -223,9 +227,8 @@ export const testEslintConfig = async <const FixturePaths extends string | NonEm
           : configsOrSingleConfigName,
     }),
     (typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
-      optionsOrFixtureSearchRelativeToPath.internalOptions) || {
-      skipTypeInfoSplit: true,
-    },
+      optionsOrFixtureSearchRelativeToPath.internalOptions) ||
+      DEFAULT_INTERNAL_OPTIONS,
   );
 
   const eslint = new ESLint({
@@ -237,7 +240,7 @@ export const testEslintConfig = async <const FixturePaths extends string | NonEm
     (typeof optionsOrFixtureSearchRelativeToPath === 'string'
       ? optionsOrFixtureSearchRelativeToPath
       : optionsOrFixtureSearchRelativeToPath?.searchFixturesRelativeToPath) ||
-    path.join(import.meta.dirname, '..');
+    DEFAULT_FIXTURES_ROOT_PATH;
 
   const fixtures = await Promise.all(
     arrayify(fixturePaths).map(async (fixturePath) => ({

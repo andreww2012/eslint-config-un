@@ -86,11 +86,12 @@ const getOrInsertPromise = <Value>(
 const loadDprintPlugin = async (source: string) => {
   if (source.startsWith(DPRINT_PACKAGE_PREFIX)) {
     const dprintPackageUrl = url.pathToFileURL(projectRequire.resolve(source)).href;
-    // eslint-disable-next-line un/no-type-assertion -- Only `@dprint/*` packages, which all export these, are imported
-    const dprintPackage = (await import(dprintPackageUrl)) as {
-      getBuffer?: () => ArrayBufferView;
-      getPath?: () => string;
-    };
+    const dprintPackage =
+      // eslint-disable-next-line un/no-type-assertion -- Only `@dprint/*` packages, which all export these, are imported
+      (await import(dprintPackageUrl)) as {
+        getBuffer?: () => ArrayBufferView;
+        getPath?: () => string;
+      };
 
     const buffer = dprintPackage.getBuffer?.();
     if (buffer) {

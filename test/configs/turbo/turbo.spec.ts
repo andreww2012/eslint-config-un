@@ -1,4 +1,5 @@
 import path from 'node:path';
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
 
 const FIXTURES = {
   processEnvAccess: 'process-env-access.js',
@@ -166,7 +167,9 @@ describe('options', () => {
     });
 
     it('passes provided options to `turbo/no-undeclared-env-vars` rule when `undeclaredEnvVarsOptions` is set', async () => {
-      const OPTIONS = Object.freeze({allowList: ['^CI_']});
+      const OPTIONS: Readonly<GetRuleOptions<'turbo', 'no-undeclared-env-vars'>> = {
+        allowList: ['^CI_'],
+      };
 
       const configResult = await computeEslintConfig({
         turbo: {undeclaredEnvVarsOptions: OPTIONS},

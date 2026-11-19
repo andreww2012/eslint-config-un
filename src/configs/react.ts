@@ -1037,7 +1037,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     .addRule('static-property-placement', ERROR) /** @since 7.13.0 */
     .addRule('style-prop-object', OFF) /** @since 6.2.0 */
     .enableConfigTesterForPlugin('react', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => REACT_ORIGINAL_DOM_RULES.has(ruleName),
     })
     .addOverrides();
@@ -1291,7 +1291,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     .addAnyRule('react-debug', 'is-from-react', OFF) /** @since 1.10.0 */
     .addAnyRule('react-debug', 'jsx', OFF) /** @since 1.41.0 */
     .enableConfigTesterForPlugin('eslint-react', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         REACT_X_TYPE_AWARE_RULES.has(ruleName) ||
         ['x', 'dom', 'web-api'].some((prefix) => ruleName.startsWith(`${prefix}-`)) ||
@@ -1321,7 +1321,7 @@ export default defineUnConfig<ReactEslintConfigOptions, readonly ['ts']>('react'
     ) /** @since 0.3.0 */ // 🟡 🔄️`jsx-no-leaked-render` (worse)
     .addRule('no-unused-props', WARNING) /** @since 2.0.0 */
     .enableConfigTesterForPlugin('eslint-react', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
     .addOverrides();

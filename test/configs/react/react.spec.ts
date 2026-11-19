@@ -1,3 +1,5 @@
+import type {ReactPluginSettings} from '../../../src/configs/react';
+
 const FIXTURES = {
   functionDeclarationEventHandler: 'function-declaration-event-handler.jsx',
   multipleComponents: 'multiple-components.jsx',
@@ -217,12 +219,12 @@ describe('options', () => {
     });
 
     it('assigns the settings read from the `settings` root outside of the `react` property', async () => {
-      const ROOT_SETTINGS = Object.freeze({
+      const ROOT_SETTINGS: Readonly<ReactPluginSettings> = {
         componentWrapperFunctions: ['observer'],
         formComponents: ['CustomForm'],
         linkComponents: ['Hyperlink'],
         propWrapperFunctions: ['forbidExtraProps'],
-      });
+      };
 
       const configResult = await computeEslintConfig('react', {
         un: {plugins: {react: {settings: ROOT_SETTINGS}}},

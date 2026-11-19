@@ -1,3 +1,5 @@
+import type {MochaPluginSettings} from '../../../src/configs/mocha';
+
 const FIXTURES = {
   arrowFunctions: 'arrow-functions/test.spec.js',
   functionCallbacks: 'test/function-callbacks.js',
@@ -209,11 +211,9 @@ describe('options', () => {
     });
 
     it('sets mocha settings when provided', async () => {
-      const SETTINGS = Object.freeze({
-        additionalCustomNames: [
-          {name: 'myDescribe', type: 'suite' as const, interface: 'BDD' as const},
-        ],
-      });
+      const SETTINGS: Readonly<MochaPluginSettings> = {
+        additionalCustomNames: [{name: 'myDescribe', type: 'suite', interface: 'BDD'}],
+      };
 
       const configResult = await computeEslintConfig('mocha', {
         un: {plugins: {mocha: {settings: SETTINGS}}},

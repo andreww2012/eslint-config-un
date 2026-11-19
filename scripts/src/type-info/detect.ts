@@ -29,10 +29,8 @@ const TYPE_INFO_SERVICE_KEYS: ReadonlySet<string> = new Set([
   'tsNodeToESTreeNodeMap',
 ]);
 
-/**
- * A rule may build a visitor key out of its options, and an empty selector group like `:matches()`
- * makes ESLint abort the whole run instead of just that rule
- */
+// A rule may build a visitor key out of its options, and an empty selector group like `:matches()`
+// makes ESLint abort the whole run instead of just that rule
 const EMPTY_SELECTOR_GROUP_REGEX = /\(\s*\)/;
 
 const SOURCE_FILE_REGEX = /\.tsx?$/;
@@ -40,13 +38,11 @@ const SOURCE_FILE_REGEX = /\.tsx?$/;
 const TS_CHECKER_TOKENS_REGEX =
   /createBuiltinTypeCheckers|createTypeCheckers|esTreeNodeToTSNodeMap|getTypeAtLocation|getTypeChecker|hasFullTypeInformation|tsNodeToESTreeNodeMap|(?:Services|parserServices|services)[^\n.]{0,24}\.program\b/;
 
-/**
- * A plugin may define its own `getParserServices` returning something else entirely, so the name
- * only counts next to a `typescript-eslint` import
- */
+// A plugin may define its own `getParserServices` returning something else entirely, so the name
+// only counts next to a `typescript-eslint` import
 const TS_ESLINT_PACKAGE_REGEX = /@typescript-eslint\/(?:typescript-estree|utils)/;
 
-const RULE_DIRECTORY_CANDIDATES = [
+const RULE_DIRECTORY_CANDIDATES: readonly string[] = [
   'rules',
   'lib/rules',
   'dist/rules',
@@ -54,7 +50,7 @@ const RULE_DIRECTORY_CANDIDATES = [
   'dist/lib/rules',
   'lib/src/rules',
   'build/rules',
-] as const;
+];
 
 const JS_FILE_REGEX = /\.[cm]?js$/;
 
@@ -70,9 +66,7 @@ const IMPORT_ALIAS_REGEX = /\bas\b/;
 const DEFAULT_EXPORT_NAME = 'default';
 const NAMESPACE_IMPORT_NAME = '*';
 
-/**
- * A name resolving to a barrel says nothing about which of its exports is checker-backed
- */
+// A name resolving to a barrel says nothing about which of its exports is checker-backed
 const OPAQUE_MODULE_NAMES: ReadonlySet<string> = new Set(['index.js', 'utils.js']);
 
 const isVisitorListener = (
@@ -81,15 +75,14 @@ const isVisitorListener = (
 
 const describeError = (error: unknown) => getErrorMessage(error, '') || inspect(error);
 
+const OUTPUT_STREAMS: readonly NodeJS.WriteStream[] = [process.stdout, process.stderr];
+
 /**
- * Enabling every rule of every plugin at once makes a good number of them announce a missing
- * dependency, a deprecation or an absent setting.
- * None of it is about the rule being probed
+ * Runs `run` with everything written to stdout and stderr dropped, calling `onOutput` instead
  */
 const withSilencedOutput = <Result>(run: () => Result, onOutput: () => void) => {
-  const streams = [process.stdout, process.stderr];
-  const originalWrites = streams.map((stream) => stream.write.bind(stream));
-  streams.forEach((stream) => {
+  const originalWrites = OUTPUT_STREAMS.map((stream) => stream.write.bind(stream));
+  OUTPUT_STREAMS.forEach((stream) => {
     stream.write = () => {
       onOutput();
       return true;
@@ -99,7 +92,7 @@ const withSilencedOutput = <Result>(run: () => Result, onOutput: () => void) => 
   try {
     return run();
   } finally {
-    streams.forEach((stream, index) => {
+    OUTPUT_STREAMS.forEach((stream, index) => {
       const originalWrite = originalWrites[index];
       if (originalWrite) {
         stream.write = originalWrite;
@@ -199,10 +192,11 @@ export const probeRules = async (
     );
 
   const wrapRule = (fullRuleName: string, rule: NonNullable<EslintPlugin['rules']>[string]) => {
-    // eslint-disable-next-line un/no-type-assertion -- The probe only calls `create` and reads what it returns
-    const {create} = rule as unknown as {
-      create: (context: unknown) => Record<string, unknown> | null | undefined;
-    };
+    const {create} =
+      // eslint-disable-next-line un/no-type-assertion -- The probe only calls `create` and reads what it returns
+      rule as unknown as {
+        create: (context: unknown) => Record<string, unknown> | null | undefined;
+      };
     return {
       ...rule,
       // Options are never passed, so a schema requiring them would fail config
@@ -249,6 +243,9 @@ export const probeRules = async (
     .filter(([name]) => SOURCE_FILE_REGEX.test(name))
     .forEach(([name, source]) => {
       try {
+        // Enabling every rule of every plugin at once makes a good number of them announce a
+        // missing dependency, a deprecation or an absent setting.
+        // None of it is about the rule being probed
         const messages = withSilencedOutput(
           () =>
             linter.verify(

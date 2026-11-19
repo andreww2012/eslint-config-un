@@ -2,12 +2,12 @@ const FIXTURES = {
   sqlTaggedQuery: 'sql-tagged-query.ts',
 } as const;
 
-const UNREACHABLE_CONNECTION = Object.freeze({
+const unreachableConnection = {
   databaseUrl: 'postgres://postgres:postgres@127.0.0.1:1/postgres',
   targets: [{tag: 'sql'}],
-});
+};
 
-const CONFIGURED = Object.freeze({safeql: {options: {connections: UNREACHABLE_CONNECTION}}});
+const CONFIGURED = {safeql: {options: {connections: unreachableConnection}}} as const;
 
 beforeEach(() => {
   addInstalledPackages({'@ts-safeql/sql-tag': '0.2.2'});
@@ -216,7 +216,7 @@ describe('options', () => {
 
       expect(configResult.getRuleEntryParsed('safeql', 'safeql/check-sql')).toStrictEqual({
         severity: 2,
-        options: [{connections: UNREACHABLE_CONNECTION}],
+        options: [{connections: unreachableConnection}],
       });
 
       expect(processOutput.getStderrOutput()).toBe('');

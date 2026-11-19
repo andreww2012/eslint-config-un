@@ -1,4 +1,3 @@
-// cspell:ignore selectordinal
 import {ERROR, OFF} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
@@ -138,6 +137,7 @@ export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
         },
       },
     ])
+    // cspell:disable-next-line
     // Default options in `recommended`: ['selectordinal']
     .addRule(
       'blocklist-elements',

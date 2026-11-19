@@ -8,6 +8,8 @@ const RULE_NAME = 'consistent-nullish-comparison';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const withReport = (messageId: string, code: string, output: string | null) => ({
   code,
   output,
@@ -21,7 +23,7 @@ const withStrictMode = <TestCase extends object>(testCase: TestCase) => ({
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 const ruleTester = new RuleTester();

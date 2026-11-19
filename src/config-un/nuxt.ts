@@ -13,8 +13,8 @@ import {
 } from '../utils';
 import {isOwnCopyImportable, resolveFromProject} from '../utils/package-detection';
 
-const NUXT_CONFIG_FILE_NAMES = Object.freeze(
-  ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map((extension) => `nuxt.config.${extension}`),
+const NUXT_CONFIG_FILE_NAMES: readonly string[] = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'].map(
+  (extension) => `nuxt.config.${extension}`,
 );
 
 /**
@@ -277,7 +277,7 @@ export const resolveNuxtAutoImports = async ({
 
   const nuxtOptions = loadResult?.options || null;
   const buildDirectoryRaw = buildDirectoryOption || nuxtOptions?.buildDir;
-  /* v8 ignore next 3 Either the option provided the directory or the config was loaded */
+  /* v8 ignore next Either the option provided the directory or the config was loaded */
   if (buildDirectoryRaw == null) {
     return null;
   }

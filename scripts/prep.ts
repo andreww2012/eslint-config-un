@@ -3,6 +3,7 @@ import path from 'node:path';
 import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
+import type {Options as CompileOptions} from 'json-schema-to-typescript';
 import {toSafeString as normalizeIdentifier} from 'json-schema-to-typescript/dist/src/utils.js';
 import {
   type NonEmptyTuple,
@@ -34,7 +35,10 @@ import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schem
 
 const __dirname = import.meta.dirname;
 
-const COMPILE_OPTIONS = {bannerComment: '', format: false} as const;
+const COMPILE_OPTIONS: Readonly<Partial<CompileOptions>> = {bannerComment: '', format: false};
+
+const TYPE_ALIAS_DECLARATION_REGEXP = /^type /gm;
+const LINTER_RULE_ENTRY_REGEXP = /: Linter.RuleEntry<([^>]*)>/g;
 
 const PLUGIN_LOADER_CONTEXT: Readonly<ModuleLoaderContext> = {
   rootOptions: {},
@@ -234,7 +238,7 @@ ${originalRuleTypesCode}
 
 export type RuleOptionsPerPlugin = {
 ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCode.exportTypeName};`).join('\n')}
-}\n`.replaceAll(/: Linter.RuleEntry<([^>]*)>/g, ': $1;');
+}\n`.replaceAll(LINTER_RULE_ENTRY_REGEXP, ': $1;');
 
   const fixableRulesPerPluginEntries = perPluginCodeRaw
     .map(({pluginName, plugin}) => {
@@ -245,8 +249,8 @@ ${perPluginCodeRaw.map((pluginCode) => `  '${pluginCode.pluginName}': ${pluginCo
     })
     .filter(({fixableRuleNames}) => fixableRuleNames.length > 0);
 
-  // eslint-disable-next-line ts/no-shadow -- Fine
-  const fixableRulesOnlyCode = `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
+  const fixableRulesOnlyCode = // eslint-disable-line ts/no-shadow -- Fine
+    `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
 ${fixableRulesPerPluginEntries
   .map(
     ({pluginName, fixableRuleNames}) =>
@@ -267,8 +271,8 @@ export type FixableRuleNames = {
 }[keyof typeof FIXABLE_RULES_PER_PLUGIN_RAW];
 `;
 
-  // eslint-disable-next-line ts/no-shadow -- Fine
-  const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
+  const allRulesCode = // eslint-disable-line ts/no-shadow -- Fine
+    `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
 ${perPluginCodeRaw
   .map(({pluginName, plugin}) => {
     const pluginRules = Object.entries(plugin.rules || {});
@@ -416,7 +420,7 @@ async function generatePluginRuleTypes(
       // This forces the per-rule option type aliases to be exported.
       // When a config's emitted `.d.ts` references one of these by name, `rolldown-plugin-dts`
       // needs a matching export to import, otherwise it warns with `IMPORT_IS_UNDEFINED`
-      .replaceAll(/^type /gm, 'export type ')
+      .replaceAll(TYPE_ALIAS_DECLARATION_REGEXP, 'export type ')
   );
 }
 

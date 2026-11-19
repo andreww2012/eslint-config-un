@@ -30,7 +30,7 @@ export const eslintConfig = <
   > = {},
 ) =>
   eslintConfigInternal(
-    // eslint-disable-next-line un/no-type-assertion -- Casting is in place here merely to avoid a prohibitively expensive structural relate of the two huge config types here (it would make the type checker instantiate the per-key warn-stripping for every config)
+    // eslint-disable-next-line un/no-type-assertion -- Comparing the two huge config types would be very slow: the type checker would adjust the type of every config to `noWarnings` and the rule replacements
     options as EslintConfigUnOptions<ExtraPlugins>,
   );
 

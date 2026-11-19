@@ -25,7 +25,7 @@ describe('option: `files`', () => {
   });
 
   it('passes nested array `files` patterns as-is', async () => {
-    const FILES = Object.freeze([['**/*.gjs', '**/*.gts']]);
+    const FILES: readonly string[][] = [['**/*.gjs', '**/*.gts']];
 
     const configResult = await computeEslintConfig({}, {un: {files: FILES}});
 

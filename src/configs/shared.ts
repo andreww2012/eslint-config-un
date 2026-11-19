@@ -20,6 +20,7 @@ import type {
 import {eslintToUnRuleSeverity} from '../eslint/eslint-utils';
 import {
   type ArrayOrBooleanRecord,
+  allUnionMembers,
   arrayUnique,
   arrayify,
   isNonEmptyArray,
@@ -91,12 +92,13 @@ export const generateDefaultTestFiles = (
   ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}`] : []), // 115k, 2.2k
 ];
 
-export const TESTS_CONFIG_DEFAULT_FILES = Object.freeze(
-  generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+export const TESTS_CONFIG_DEFAULT_FILES: readonly string[] = generateDefaultTestFiles(
+  GLOB_JS_TS_X_EXTENSION,
+  {
     includeCypressTests: true,
     includeStorybookStories: true,
     includeVitestBenchmarkFiles: true,
-  }),
+  },
 );
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
@@ -184,20 +186,26 @@ export const generateConsistentTestItOptions = ({
 ];
 
 // prettier-ignore
-const INVALID_HTML_TAGS = [
+type InvalidHtmlTags =
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements#obsolete_and_deprecated_elements
   // `image` is left out: the rules can't tell the obsolete HTML element from the valid SVG one
-  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
+  | 'acronym' | 'big' | 'center' | 'content' | 'dir' | 'font' | 'frame' | 'frameset' | 'marquee' | 'menuitem' | 'nobr' | 'noembed' | 'noframes' | 'param' | 'plaintext' | 'rb' | 'rtc' | 'shadow' | 'strike' | 'tt' | 'xmp'
   // https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement
+  | 'applet' | 'bgsound' | 'blink' | 'isindex' | 'keygen' | 'multicol' | 'nextid' | 'spacer'
+  | 'basefont' | 'listing'
+  // https://udn.realityripple.com/docs/Web/HTML/Element
+  | 'command' | 'element';
+
+// prettier-ignore
+const INVALID_HTML_TAGS = allUnionMembers<InvalidHtmlTags, {readonly: true}>()([
+  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
   'applet', 'bgsound', 'blink', 'isindex', 'keygen', 'multicol', 'nextid', 'spacer',
   'basefont', 'listing',
-  // https://udn.realityripple.com/docs/Web/HTML/Element
   'command', 'element',
-] as const;
+]);
 
 // prettier-ignore
 type ValidHtmlTags = 'a' | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b' | 'base' | 'bdi' | 'bdo' | 'blockquote' | 'body' | 'br' | 'button' | 'canvas' | 'caption' | 'cite' | 'code' | 'col' | 'colgroup' | 'data' | 'datalist' | 'dd' | 'del' | 'details' | 'dfn' | 'dialog' | 'div' | 'dl' | 'dt' | 'em' | 'embed' | 'fieldset' | 'figcaption' | 'figure' | 'footer' | 'form' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'head' | 'header' | 'hgroup' | 'hr' | 'html' | 'i' | 'iframe' | 'img' | 'input' | 'ins' | 'kbd' | 'label' | 'legend' | 'li' | 'link' | 'main' | 'map' | 'mark' | 'math' | 'menu' | 'meta' | 'meter' | 'nav' | 'noscript' | 'object' | 'ol' | 'optgroup' | 'option' | 'output' | 'p' | 'picture' | 'pre' | 'progress' | 'q' | 'rbc' | 'rp' | 'rt' | 'ruby' | 's' | 'samp' | 'script' | 'search' | 'section' | 'select' | 'slot' | 'small' | 'source' | 'span' | 'strong' | 'style' | 'sub' | 'summary' | 'sup' | 'svg' | 'table' | 'tbody' | 'td' | 'template' | 'textarea' | 'tfoot' | 'th' | 'thead' | 'time' | 'title' | 'tr' | 'track' | 'u' | 'ul' | 'var' | 'video' | 'wbr';
-type InvalidHtmlTags = (typeof INVALID_HTML_TAGS)[number];
 export type ValidAndInvalidHtmlTags = ValidHtmlTags | InvalidHtmlTags;
 
 export const noRestrictedHtmlElementsDefault = objectFromKeys(INVALID_HTML_TAGS, () => true);
@@ -226,22 +234,14 @@ export const isBaselineFeatureAvailable = (
  * does not see the directives in, such as the contents of a Vue `<template>`, should be set up.
  * Unless the Config says otherwise, they take the severity from the root option setting the same
  * for the directives ESLint itself handles, which in turn defaults to what ESLint defaults to.
- *
- * A rule severity cannot vary per file the way that option can, so only its entries applying to
- * every file are taken into account.
- *
- * `off` is the one value that does not map to the rule severity.
- * The rules are also what makes the directives work in the first place, so turning them off would
- * silently stop every `eslint-disable` in that code from being honored.
- * They are instead left on, with their own `reportUnusedDisableDirectives` option set to `false`,
- * which is what actually silences them; the severity they carry is then a filler nothing is ever
- * reported at
+ * Only the entries of that option applying to every file are taken into account
  */
 export const resolveUnusedDisableDirectivesReporting = (
   context: UnConfigContext,
   severityFromConfig?: EslintSeverity,
 ) => {
   const rootOption = context.rootOptions.linterOptionsReportUnusedDisableDirectives;
+  // A rule severity can't vary per file the way the root option can
   const severityFromRootOption =
     typeof rootOption === 'object'
       ? arrayify(rootOption).findLast(
@@ -251,6 +251,10 @@ export const resolveUnusedDisableDirectivesReporting = (
   const severity = eslintToUnRuleSeverity(severityFromConfig ?? severityFromRootOption, WARNING);
   const shouldReport = severity !== OFF;
 
+  // The rules are also what makes the directives work in the first place, so turning them off
+  // would silently stop every `eslint-disable` in that code from being honored. Instead, they stay
+  // on and their own option to report unused directives silences them, so this severity is a
+  // filler nothing is ever reported at
   return {
     shouldReport,
     severity: shouldReport ? severity : ERROR,

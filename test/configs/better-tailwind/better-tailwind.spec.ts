@@ -546,8 +546,11 @@ describe('options', () => {
 
       await computeEslintConfig(
         {
-          // eslint-disable-next-line un/no-type-assertion -- An unsupported version
-          betterTailwind: {tailwindVersion: 2 as 4},
+          betterTailwind: {
+            tailwindVersion:
+              // eslint-disable-next-line un/no-type-assertion -- An unsupported version
+              2 as 4,
+          },
         },
         {un: {plugins: {'better-tailwindcss': {settings: TW3_SETTINGS}}}},
       );
@@ -562,8 +565,11 @@ describe('options', () => {
 
       await computeEslintConfig(
         {
-          // eslint-disable-next-line un/no-type-assertion -- An unsupported version
-          betterTailwind: {tailwindVersion: 5 as 4},
+          betterTailwind: {
+            tailwindVersion:
+              // eslint-disable-next-line un/no-type-assertion -- An unsupported version
+              5 as 4,
+          },
         },
         {un: {plugins: {'better-tailwindcss': {settings: TW3_SETTINGS}}}},
       );

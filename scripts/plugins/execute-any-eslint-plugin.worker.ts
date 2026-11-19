@@ -36,9 +36,12 @@ try {
     sendMessageToParent({
       error: {
         code: 'INSTALLATION',
-        // TODO review
-        // eslint-disable-next-line sonar/super-linear-regex -- Might be false positive
-        cause: cause.match(/^\s*(ERR_PNPM_\w+\s+(?:\S.*)?)$/m)?.[1] || cause,
+        cause:
+          cause.match(
+            // TODO review
+            // eslint-disable-next-line sonar/super-linear-regex -- Might be false positive
+            /^\s*(ERR_PNPM_\w+\s+(?:\S.*)?)$/m,
+          )?.[1] || cause,
       },
     });
     process.exit(0);

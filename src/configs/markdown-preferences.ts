@@ -174,8 +174,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
         /**
          * Enforces ordered lists numbering style:
          * - `'sequential'` (default): enforces sequential numbering style (1, 2, 3, ...);
-         * - `'fixed'`: fixed numbering style (1, 1, 1, ...).
-         * - `true`: same as the default value.
+         * - `'fixed'`: fixed numbering style (1, 1, 1, ...);
+         * - `true`: same as the default value;
          * - `false`: does not enforce the numbering style.
          *
          * Affected rule:

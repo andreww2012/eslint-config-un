@@ -7,8 +7,8 @@ import type {Prettify} from '../types';
 import {allUnionMembers} from '../utils';
 
 /**
- * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are erased
- * at runtime and therefore never change the value of the expression they wrap
+ * TypeScript-only expression wrappers, which are absent from `ESTree` types and never change the
+ * value of the expression they wrap
  */
 export interface TypeOnlyWrapperExpression {
   type:

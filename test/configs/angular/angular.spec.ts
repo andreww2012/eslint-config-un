@@ -282,25 +282,25 @@ describe('options', () => {
     });
 
     it('merges object options passed to `componentSelector` with defaults on `angular/component-selector` rule', async () => {
-      const OPTIONS = Object.freeze({prefix: ['app']});
+      const options = {prefix: ['app']};
 
-      const configResult = await computeEslintConfig({angular: {componentSelector: OPTIONS}});
+      const configResult = await computeEslintConfig({angular: {componentSelector: options}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/component-selector'),
-      ).toStrictEqual([{type: ['element'], style: 'kebab-case', ...OPTIONS}]);
+      ).toStrictEqual([{type: ['element'], style: 'kebab-case', ...options}]);
     });
 
     it('uses raw array options on `angular/component-selector` rule when `componentSelector` is array', async () => {
-      const SELECTOR = Object.freeze([
+      const selector = [
         {type: 'element' as const, prefix: ['app'], style: 'kebab-case' as const},
-      ] satisfies NonEmptyTuple);
+      ] satisfies NonEmptyTuple;
 
-      const configResult = await computeEslintConfig({angular: {componentSelector: [...SELECTOR]}});
+      const configResult = await computeEslintConfig({angular: {componentSelector: selector}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/component-selector'),
-      ).toStrictEqual([SELECTOR]);
+      ).toStrictEqual([selector]);
     });
   });
 
@@ -388,13 +388,13 @@ describe('options', () => {
     });
 
     it('merges options passed to `directiveSelector` with default ones and sets them on `angular/directive-selector` rule', async () => {
-      const OPTIONS = Object.freeze({type: ['element' as const], prefix: 'foo'});
+      const options = {type: ['element' as const], prefix: 'foo'};
 
-      const configResult = await computeEslintConfig({angular: {directiveSelector: OPTIONS}});
+      const configResult = await computeEslintConfig({angular: {directiveSelector: options}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/directive-selector'),
-      ).toStrictEqual([{style: 'camelCase', ...OPTIONS}]);
+      ).toStrictEqual([{style: 'camelCase', ...options}]);
     });
 
     it('disables `angular/directive-selector` rule when set to `false`', async () => {
@@ -406,15 +406,15 @@ describe('options', () => {
     });
 
     it('uses raw array options on `angular/directive-selector` rule when `directiveSelector` is array', async () => {
-      const SELECTOR = Object.freeze([
+      const selector = [
         {type: 'attribute' as const, prefix: ['app'], style: 'camelCase' as const},
-      ] satisfies NonEmptyTuple);
+      ] satisfies NonEmptyTuple;
 
-      const configResult = await computeEslintConfig({angular: {directiveSelector: [...SELECTOR]}});
+      const configResult = await computeEslintConfig({angular: {directiveSelector: selector}});
 
       expect(
         configResult.getRuleEntryOptions('angular/general', 'angular/directive-selector'),
-      ).toStrictEqual([SELECTOR]);
+      ).toStrictEqual([selector]);
     });
   });
 

@@ -38,12 +38,16 @@ const LockfileZod = z.object({
 });
 
 const git = (...arguments_: readonly string[]) =>
-  // eslint-disable-next-line sonar/no-os-command-from-path -- Safe
-  execFileSync('git', arguments_, {
-    cwd: ROOT_DIRECTORY,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  execFileSync(
+    // eslint-disable-next-line sonar/no-os-command-from-path -- Safe
+    'git',
+    arguments_,
+    {
+      cwd: ROOT_DIRECTORY,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    },
+  );
 
 const isCommit = (ref: string) => {
   try {
@@ -53,11 +57,9 @@ const isCommit = (ref: string) => {
   }
 };
 
-/**
- * pnpm writes its own installation into a document of its own, before the project's one
- */
 const readDependencyVersions = (lockfileText: string) =>
   new Map(
+    // pnpm writes its own installation into a document of its own, before the project's one
     parseAllDocuments(lockfileText).flatMap((document) => {
       const parsed = LockfileZod.safeParse(document.toJS());
       if (!parsed.success) {

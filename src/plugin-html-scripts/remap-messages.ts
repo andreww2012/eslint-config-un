@@ -18,7 +18,7 @@ interface RemapContext {
 
 /**
  * Maps the exclusive end from the last targeted character, and takes in the lost indentation of
- * the line the fix joins to the previous one, so it doesn't stay in the middle of the line
+ * the line the fix joins to the previous one
  */
 const remapRangeEnd = (
   end: number,
@@ -31,6 +31,7 @@ const remapRangeEnd = (
   }
 
   const nextCharacter = code.originalIndex(end);
+  // The lost indentation is taken in, so it doesn't stay in the middle of the line
   return INDENTATION_OR_EMPTY_REGEXP.test(html.slice(afterLastCharacter, nextCharacter))
     ? nextCharacter
     : afterLastCharacter;

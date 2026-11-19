@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as findUp from 'empathic/find';
 import * as packageUtils from 'empathic/package';
+import type {AgentName} from 'package-manager-detector';
 import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector/constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
@@ -20,11 +21,11 @@ import {
 } from '../utils';
 import type {PackageRequester, UnConfigContext} from './shared';
 
-const LOCKFILES_PER_PACKAGE_MANAGER = Object.freeze(
-  Object.groupBy(
-    Object.entries(packageManagerLockfilesReversed),
-    ([, packageManager]) => packageManager,
-  ),
+const LOCKFILES_PER_PACKAGE_MANAGER: Readonly<
+  Partial<Record<AgentName, [lockfileName: string, packageManager: AgentName][]>>
+> = Object.groupBy(
+  Object.entries(packageManagerLockfilesReversed),
+  ([, packageManager]) => packageManager,
 );
 
 // Source: https://github.com/eslint/eslint/blob/3822e1b768bb4a64b72b73b5657737a6ee5c8afe/lib/config/config-loader.js#L43

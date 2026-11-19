@@ -8,6 +8,7 @@ import {FIXABLE_RULES_PER_PLUGIN} from '../../../src/eslint-types-fixable-only.g
 import {pluginsLoaders} from '../../../src/loaders/plugins';
 import {
   type MaybeWithReason,
+  type PluginMetadata,
   RULE_TRAITS_ORDERED,
   type RuleTrait,
   type RuleTraits,
@@ -240,10 +241,10 @@ const renderPerPlugin = (rules: CollectedRules, renderValue: (value: boolean | s
   ).join('\n');
 
 /**
- * What the plugin reports itself, minus the rules a hand-written entry already speaks for: the
- * plugin only says that type information is used, never whether the rule survives without it
+ * Adds what the plugin reports itself, minus the rules a hand-written entry already speaks for
  */
 const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) => {
+  // The plugin only says that type information is used, never whether the rule survives without it
   const writtenByHand = new Set(
     collectTrait(plugins, 'requiresTypeInfo', {includeRejections: true}).map(
       ({fullRuleName}) => fullRuleName,
@@ -268,8 +269,7 @@ const withTypeAwareCategories = (plugins: readonly DiscoveredPlugin[], rules: Co
 };
 
 /**
- * Code blocks never get type information, so the rules that throw without it are disabled there
- * too, unless an explicit `false` keeps one enabled
+ * Adds the rules that throw without type information, unless an explicit `false` keeps one enabled
  */
 const withRulesThrowingWithoutTypeInfo = (
   plugins: readonly DiscoveredPlugin[],
@@ -284,6 +284,7 @@ const withRulesThrowingWithoutTypeInfo = (
   const listed = new Set(codeBlocks.map(({fullRuleName}) => fullRuleName));
   const pluginIndexes = new Map(plugins.map(({prefix}, index) => [prefix, index]));
 
+  // Code blocks never get type information
   return [
     ...codeBlocks,
     ...typeInfo.filter(
@@ -297,19 +298,23 @@ const withRulesThrowingWithoutTypeInfo = (
   );
 };
 
+const TYPE_INFO_EXTRA_KEYS: readonly (keyof NonNullable<PluginMetadata['typeInfo']>)[] = [
+  'extraPatterns',
+  'extraFileExtensions',
+];
+
 const renderTypeInfo = (plugins: readonly DiscoveredPlugin[], rules: CollectedRules) =>
   Array.from(
     Map.groupBy(rules, ({prefix}) => prefix),
     ([prefix, pluginRules]) => {
       const extra = plugins.find((plugin) => plugin.prefix === prefix)?.metadata.typeInfo;
+      pluginRules.sort((left, right) => left.ruleName.localeCompare(right.ruleName));
       return [
         `  '${prefix}': {`,
         '    rules: {',
-        ...pluginRules
-          .toSorted((left, right) => left.ruleName.localeCompare(right.ruleName))
-          .map(({ruleName, value}) => `      '${ruleName}': ${JSON.stringify(value)},`),
+        ...pluginRules.map(({ruleName, value}) => `      '${ruleName}': ${JSON.stringify(value)},`),
         '    },',
-        ...(['extraPatterns', 'extraFileExtensions'] as const).flatMap((key) =>
+        ...TYPE_INFO_EXTRA_KEYS.flatMap((key) =>
           extra?.[key] ? `    ${key}: ${JSON.stringify(extra[key])},` : [],
         ),
         '  },',
@@ -485,7 +490,7 @@ const AUTOFIX_DEFAULTS_JSDOC_INTRO =
 const JSDOC_EMPTY_LINE = '   *\n';
 
 /**
- * The JSDoc of the root option lists the rules too, so that it shows up on hover
+ * Lists the rules with autofix disabled by default in the JSDoc of the root option
  */
 const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) => {
   const source = await fs.readFile(CONFIG_UN_SHARED_PATH, 'utf8');
@@ -508,6 +513,7 @@ const writeAutofixDefaultsJsdoc = async (plugins: readonly DiscoveredPlugin[]) =
       return `   * - ${url ? `[\`${fullRuleName}\`](${url})` : `\`${fullRuleName}\``}\n`;
     })
     .join('');
+  // The rules are listed in the JSDoc too, so that they show up on hover
   await fs.writeFile(
     CONFIG_UN_SHARED_PATH,
     `${source.slice(0, intro + AUTOFIX_DEFAULTS_JSDOC_INTRO.length)}${list}${source.slice(listEnd)}`,

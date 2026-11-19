@@ -5,7 +5,7 @@ import type {MockInstance} from 'vitest';
 /* eslint-disable vars-on-top -- Ambient globals are declarations rather than runtime variables */
 declare global {
   var projectGraph: Record<string, unknown> | undefined;
-  var projectRootMappings: Map<string, string> | undefined;
+  var projectRootMappings: ReadonlyMap<string, string> | undefined;
   var projectFileMap: Record<string, unknown[]> | undefined;
 }
 /* eslint-enable vars-on-top -- The ambient globals block ends here */
@@ -57,12 +57,10 @@ const MOCK_PROJECT_GRAPH = {
   },
 } as const;
 
-const MOCK_PROJECT_ROOT_MAPPINGS = Object.freeze(
-  new Map([
-    ['.', 'test-project'],
-    [PROJECT_B_ROOT, 'project-b'],
-  ]),
-);
+const MOCK_PROJECT_ROOT_MAPPINGS: ReadonlyMap<string, string> = new Map([
+  ['.', 'test-project'],
+  [PROJECT_B_ROOT, 'project-b'],
+]);
 
 let originalProcessArgv1: string;
 

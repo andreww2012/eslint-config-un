@@ -517,7 +517,7 @@ export class ConfigEntryBuilder<
       savePackagesToLoadFromConfig(this.context, configFinal);
     }
 
-    /* v8 ignore start */
+    /* v8 ignore start Only needed in the test mode */
     let currentCategory = '';
     const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> | null =
       this.context.isTestMode ? {} : null;
@@ -555,7 +555,7 @@ export class ConfigEntryBuilder<
           ? [severityResolved, ...ruleOptions]
           : severityResolved;
 
-      /* v8 ignore start */
+      /* v8 ignore start Only needed in the test mode */
       if (addedRules && duplicateRules) {
         if (addedRules[plugin] && ruleNameUnprefixed in addedRules[plugin]) {
           (duplicateRules[plugin] ||= new Set()).add(ruleNameUnprefixed);
@@ -674,7 +674,7 @@ export class ConfigEntryBuilder<
 
       enableConfigTesterForPlugin: (pluginPrefixToTest, options = {}) => {
         const {includeDeprecated = false, allowUnsorted, rulesToSkipInConfig} = options;
-        /* v8 ignore start */
+        /* v8 ignore start Only needed in the test mode */
         if (!isConfigDisabled && this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {
             const commonErrorMessagePrefix = `[config:${styleConfigName(configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
@@ -743,8 +743,9 @@ export class ConfigEntryBuilder<
               );
             }
 
-            // eslint-disable-next-line ts/no-non-null-assertion -- The test mode initializes this record before the callback runs
-            const duplicateRulesForPlugin = duplicateRules![pluginPrefixToTest] || new Set();
+            const duplicateRulesForPlugin =
+              // eslint-disable-next-line ts/no-non-null-assertion -- The test mode initializes this record before the callback runs
+              duplicateRules![pluginPrefixToTest] || new Set();
             if (duplicateRulesForPlugin.size > 0) {
               errorMessages.push(
                 `⚠️ Duplicate rules: ${styleRuleNames([...duplicateRulesForPlugin])}`,

@@ -19,6 +19,7 @@ import {isLikelyEslintPlugin} from './plugins/shared';
 const logger = consola.create({});
 
 const argv = cli({
+  strictFlags: true,
   flags: {
     headful: {
       type: Boolean,
@@ -45,8 +46,9 @@ if (!captchaSolverApiKey) {
 }
 const captchaSolver = new CaptchaSolver(captchaSolverApiKey);
 
-// eslint-disable-next-line ts/no-unnecessary-type-conversion -- Discard the type predicate so invalid JSON strings are not narrowed to never
-const isValidJson = (value: unknown) => Boolean(isValidJsonInternal(value));
+const isValidJson = (value: unknown) =>
+  // eslint-disable-next-line ts/no-unnecessary-type-conversion -- Discard the type predicate so invalid JSON strings are not narrowed to never
+  Boolean(isValidJsonInternal(value));
 
 const ResponseSchemaZod = z.looseObject({
   packages: z

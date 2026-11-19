@@ -105,7 +105,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
         ERROR,
       ) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
-        /* v8 ignore next */
+        /* v8 ignore next Only called in the test mode */
         rulesToSkipInConfig: (ruleName) => !arrayIncludes(RULE_CATEGORIES.modernization, ruleName),
       })
       .addOverrides();
@@ -137,7 +137,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
         },
       ]) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
-        /* v8 ignore start */
+        /* v8 ignore start Only called in the test mode */
         rulesToSkipInConfig: (ruleName) =>
           !arrayIncludes(RULE_CATEGORIES.moduleReplacements, ruleName),
         /* v8 ignore stop */
@@ -177,7 +177,7 @@ export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {grou
       .addRule('prefer-throw-if-no-entry', ERROR) /** @since 0.6.0 */ // 🔴
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
-        /* v8 ignore start */
+        /* v8 ignore start Only called in the test mode */
         rulesToSkipInConfig: (ruleName) =>
           !arrayIncludes(RULE_CATEGORIES.performanceImprovements, ruleName),
         /* v8 ignore stop */

@@ -1,3 +1,5 @@
+import type {LitPluginSettings} from '../../../src/configs/lit';
+
 const FIXTURES = {
   htmlAttributeWithQuotedTemplateExpression: 'html-attribute-with-quoted-template-expression.ts',
 } as const;
@@ -192,15 +194,13 @@ describe('options', () => {
     });
 
     it('assigns `elementBaseClasses` to `lit` settings property', async () => {
-      const ELEMENT_BASE_CLASSES = Object.freeze({elementBaseClasses: ['MyBaseElement']});
+      const SETTINGS: Readonly<LitPluginSettings> = {elementBaseClasses: ['MyBaseElement']};
 
       const configResult = await computeEslintConfig('lit', {
-        un: {plugins: {lit: {settings: ELEMENT_BASE_CLASSES}}},
+        un: {plugins: {lit: {settings: SETTINGS}}},
       });
 
-      expect(configResult.getConfigByUnPostfix('lit')?.settings?.['lit']).toStrictEqual(
-        ELEMENT_BASE_CLASSES,
-      );
+      expect(configResult.getConfigByUnPostfix('lit')?.settings?.['lit']).toStrictEqual(SETTINGS);
     });
   });
 });

@@ -705,8 +705,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         configsOrderResolved.map(
           async (entry) =>
             await (arrayIncludes(CASCADE_ANCHORS, entry)
-              ? // eslint-disable-next-line ts/await-thenable -- Most of the anchors contribute plain entries
-                Promise.all(cascadeAnchorEntries[entry])
+              ? Promise.all(
+                  // eslint-disable-next-line ts/await-thenable -- Most of the anchors contribute plain entries
+                  cascadeAnchorEntries[entry],
+                )
               : loadManifestConfig(entry)),
         ),
       )
@@ -779,7 +781,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   /* Testing */
 
-  /* v8 ignore start */
+  /* v8 ignore start Only needed in the test mode */
   let testErrors: TestError[] | undefined;
   if (context.isTestMode) {
     const duplicateConfigNames = arrayFindDuplicates(

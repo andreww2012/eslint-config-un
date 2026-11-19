@@ -8,6 +8,8 @@ const RULE_NAME = 'no-array-splice';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const withFix = (code: string, output: string) => ({
   code,
   output,
@@ -139,5 +141,5 @@ typeAwareRuleTester.run(`${RULE_NAME} (type information)`, noArraySplice, {
       'let items = [1, 2, 3]; items = items.toSpliced(1, 1); items.push(4);',
       'let items = [1, 2, 3]; items.splice(1, 1); items.push(4);',
     ),
-  ].map((testCase) => ({...testCase, filename: path.join(FIXTURES_DIRECTORY, 'file.ts')})),
+  ].map((testCase) => ({...testCase, filename: TYPED_FILE_PATH})),
 });

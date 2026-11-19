@@ -32,8 +32,13 @@ describe('option: `plugins.<pluginName>.replacements` (type level)', () => {
         configs: {
           unicorn: {
             overrides: {
-              // @ts-expect-error Only the original rule has this option
-              'unicorn/no-array-sort': [2, {allowExpressionStatement: false}],
+              'unicorn/no-array-sort': [
+                2,
+                {
+                  // @ts-expect-error Only the original rule has this option
+                  allowExpressionStatement: false,
+                },
+              ],
             },
           },
         },
@@ -114,14 +119,24 @@ describe('option: `plugins.<pluginName>.replacements` (type level)', () => {
         configs: {
           unicorn: {
             overrides: {
-              // @ts-expect-error Not a member of the enum
-              'unicorn/no-null': [2, {mode: 'other'}],
+              'unicorn/no-null': [
+                2,
+                {
+                  // @ts-expect-error Not a member of the enum
+                  mode: 'other',
+                },
+              ],
             },
           },
           import: {
             overrides: {
-              // @ts-expect-error The options of the original rule are gone
-              'import/no-cycle': [2, {maxDepth: 1}],
+              'import/no-cycle': [
+                2,
+                {
+                  // @ts-expect-error The options of the original rule are gone
+                  maxDepth: 1,
+                },
+              ],
             },
           },
         },
@@ -154,8 +169,13 @@ describe('option: `plugins.<pluginName>.replacements` (type level)', () => {
         extraConfigs: [
           {
             rules: {
-              // @ts-expect-error The options of the original rule are gone
-              'ts/array-type': [2, {default: 'generic'}],
+              'ts/array-type': [
+                2,
+                {
+                  // @ts-expect-error The options of the original rule are gone
+                  default: 'generic',
+                },
+              ],
             },
           },
         ],
@@ -232,10 +252,12 @@ describe('option: `plugins.<pluginName>.replacements` (type level)', () => {
           unicorn: {
             replacements: {
               'no-array-sort': 'un/no-array-sort',
-              /* eslint-disable ts/no-unsafe-return -- The parameter is untyped on purpose */
-              // @ts-expect-error The parameter is not typed from the context
-              'no-for-loop': (original) => ({...original}),
-              /* eslint-enable ts/no-unsafe-return -- Only the function above returns an untyped value */
+              'no-for-loop': (
+                // @ts-expect-error The parameter is not typed from the context
+                original,
+              ) =>
+                // eslint-disable-next-line ts/no-unsafe-return -- The parameter is untyped on purpose
+                ({...original}),
             },
           },
         },
@@ -369,10 +391,20 @@ describe('option: `plugins.<pluginName>.replacements` (type level)', () => {
         configs: {
           unicorn: {
             overrides: {
-              // @ts-expect-error Only the rule replacing the original one by default has this option
-              'unicorn/no-array-sort': [2, {unneededCopies: 'allow'}],
-              // @ts-expect-error Same as above
-              'unicorn/no-array-reverse': [2, {unneededCopies: 'allow'}],
+              'unicorn/no-array-sort': [
+                2,
+                {
+                  // @ts-expect-error Only the rule replacing the original one by default has this option
+                  unneededCopies: 'allow',
+                },
+              ],
+              'unicorn/no-array-reverse': [
+                2,
+                {
+                  // @ts-expect-error Same as above
+                  unneededCopies: 'allow',
+                },
+              ],
             },
           },
         },

@@ -63,14 +63,17 @@ const ALIASES_WITH_PINNED_MAJOR_VERSION = new Set([
   'angular-eslint-plugin18',
 ]);
 
+/** @type {readonly string[]} */
 const ALL_DEPENDENCY_NAMES = Object.keys({
   ...packageJson.dependencies,
   ...packageJson.devDependencies,
   ...packageJson.peerDependencies,
 });
 
-const ESLINT_GROUP = Object.freeze({icon: '🟡', priority: 3});
-const NON_ESLINT_GROUP = Object.freeze({icon: '✨', priority: null});
+/** @type {Readonly<import('@andreww2012/npm-check-updates-config').PackageGroup>} */
+const ESLINT_GROUP = {icon: '🟡', priority: 3};
+/** @type {Readonly<import('@andreww2012/npm-check-updates-config').PackageGroup>} */
+const NON_ESLINT_GROUP = {icon: '✨', priority: null};
 
 /** @param {string} packageName Real package name, not an alias */
 const isEslintPlugin = (packageName) => {
@@ -84,12 +87,13 @@ const isEslintPlugin = (packageName) => {
 };
 
 /**
- * A scope group would also take in the scope's plugins, which are reviewed one by one
+ * Lists the given packages and the dependencies of the scope that are not ESLint plugins
  * @param {string} scope Like `@eslint`
  * @param {string[]} packages Extra packages of the group
  */
 const getScopePackagesWithoutPlugins = (scope, ...packages) => [
   ...packages,
+  // A scope group would also take in the scope's plugins, which are reviewed one by one
   ...ALL_DEPENDENCY_NAMES.filter(
     (packageName) => packageName.startsWith(`${scope}/`) && !isEslintPlugin(packageName),
   ),

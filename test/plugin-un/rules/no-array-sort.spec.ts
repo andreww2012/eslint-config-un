@@ -10,6 +10,8 @@ const RULE_NAME = 'no-array-sort';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const withSuggestion = (code: string, output: string) => ({
   code,
   errors: [{messageId: 'preferCopy', suggestions: [{messageId: 'switchToCopy', output}]}],
@@ -29,7 +31,7 @@ const withInPlaceSuggestion = (code: string, output: string) => ({
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 const ruleTester = new RuleTester();

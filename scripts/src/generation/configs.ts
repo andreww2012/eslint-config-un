@@ -17,6 +17,17 @@ const CONFIGS_DIRECTORY = path.join(import.meta.dirname, '../../../src/configs')
 
 const CONFIG_KEY_REGEXP = /^[a-z][\dA-Za-z]*$/;
 
+const CONFIG_REFERENCE_PROPERTIES = ['after', 'needs'] as const;
+
+const STATIC_MANIFEST_PROPERTIES = [
+  'enabledBy',
+  'requires',
+  'phase',
+  'after',
+  'needs',
+  'supportsMultipleConfigs',
+] as const;
+
 const npmxLink = (packageName: string) => `[\`${packageName}\`](https://npmx.dev/${packageName})`;
 
 const joinWithOr = (items: readonly string[]) =>
@@ -105,12 +116,12 @@ const PLUGINS_BY_CONFIG_KEY: ReadonlyMap<
 );
 
 /**
- * The plugin the `🧩 Main plugin` line of a Config names.
- * A Config served by several plugins says which of them is the main one in `packages-meta.ts`,
- * since a manifest knows nothing about plugins
+ * The plugin the `🧩 Main plugin` line of a Config names
  */
 const resolveMainPlugin = (configKey: string) => {
   const plugins = PLUGINS_BY_CONFIG_KEY.get(configKey) || [];
+  // A Config served by several plugins says which of them is the main one in `packages-meta.ts`,
+  // since a manifest knows nothing about plugins
   const mainPlugins = plugins.filter(({meta}) => meta.isMainPlugin);
 
   if (plugins.length < 2) {
@@ -311,7 +322,7 @@ const validate = (
       );
     }
 
-    (['after', 'needs'] as const).forEach((property) => {
+    CONFIG_REFERENCE_PROPERTIES.forEach((property) => {
       const referencedKeys = manifest[property] || [];
       const seenReferences = new Set<string>();
       referencedKeys.forEach((referencedKey) => {
@@ -362,7 +373,7 @@ const validate = (
     report(key, 'is listed in the `defaultConfigsStatus` option docs but is not in the misc group');
   });
 
-  (['after', 'needs'] as const).forEach((property) => {
+  CONFIG_REFERENCE_PROPERTIES.forEach((property) => {
     const {cycles} = topologicallySort(
       configs,
       ({key}) => key,
@@ -461,11 +472,9 @@ const renderManifests = (configs: readonly DiscoveredConfig[], cascadeOrder: rea
     .map(({key}) => key);
 
   const serializeStaticFacts = ({manifest}: DiscoveredConfig) =>
-    (['enabledBy', 'requires', 'phase', 'after', 'needs', 'supportsMultipleConfigs'] as const)
-      .flatMap((property) =>
-        manifest[property] == null ? [] : `    ${property}: ${JSON.stringify(manifest[property])},`,
-      )
-      .join('\n');
+    STATIC_MANIFEST_PROPERTIES.flatMap((property) =>
+      manifest[property] == null ? [] : `    ${property}: ${JSON.stringify(manifest[property])},`,
+    ).join('\n');
 
   return `import type {CascadeAnchor, ConfigModuleLoader} from '../config-un/define-config';
 import type {ConfigKey} from './index.gen';

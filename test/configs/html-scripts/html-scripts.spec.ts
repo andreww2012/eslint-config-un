@@ -1,3 +1,4 @@
+import type {Linter} from 'eslint';
 import globals from 'globals';
 import {GLOB_HTM_HTML} from '../../../src/constants';
 
@@ -352,7 +353,7 @@ describe('options', () => {
     });
 
     it('merges user-provided `languageOptions`', async () => {
-      const GLOBALS = Object.freeze({myGlobal: 'readonly'});
+      const GLOBALS: Readonly<Linter.Globals> = {myGlobal: 'readonly'};
 
       const configResult = await computeEslintConfig({
         htmlScripts: {languageOptions: {globals: GLOBALS, ecmaVersion: 2020}},
@@ -388,10 +389,10 @@ describe('options', () => {
     });
 
     it('uses the user-provided `parser` instead of its own', async () => {
-      const PARSER = Object.freeze({
+      const PARSER: Readonly<Linter.Parser> = {
         meta: {name: 'custom-parser'},
         parse: () => ({type: 'Program', body: [], sourceType: 'script'}),
-      });
+      };
 
       const configResult = await computeEslintConfig({
         htmlScripts: {languageOptions: {parser: PARSER}},

@@ -746,7 +746,7 @@ export const resolveParsingConfigs = (context: UnConfigContext) => {
 
       const {dialects}: ParsingLanguageDefinition = PARSING_LANGUAGES[language];
       const dialectDefinition = dialects[entry.dialect];
-      /* v8 ignore next 3 The dialect is validated by the option types */
+      /* v8 ignore next The dialect is validated by the option types */
       if (!dialectDefinition) {
         return;
       }

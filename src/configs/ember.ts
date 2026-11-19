@@ -413,7 +413,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .markCategory('Testing')
     .addRule('no-test-support-import', ERROR) /** @since 9.2.0 */ // 🟢
     .enableConfigTesterForPlugin('ember', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => arrayIncludes(EMBER_TESTING_RELATED_RULES, ruleName),
     })
     .addOverrides();
@@ -451,7 +451,7 @@ export default defineUnConfig<EmberEslintConfigOptions>('ember', {
     .addRule('prefer-ember-test-helpers', ERROR) /** @since 8.4.0 */ // 🟢
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) /** @since 9.4.0 */ // 🟢
     .enableConfigTesterForPlugin('ember', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !arrayIncludes(EMBER_TESTING_RELATED_RULES, ruleName),
     })
     .addOverrides();

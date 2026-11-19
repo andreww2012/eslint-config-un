@@ -76,11 +76,12 @@ const readRuleReplacementRequests = (
 ): RuleReplacementRequests => {
   const {plugins = {}} = rootOptions;
   const pluginOptions = isKeyIn(pluginPrefix, plugins) ? plugins[pluginPrefix] : undefined;
-  // eslint-disable-next-line un/no-type-assertion -- Typed `unknown` to keep the type check fast
-  const replacements = pluginOptions?.replacements as
-    | boolean
-    | Partial<Record<string, RuleReplacement<string>>>
-    | undefined;
+  const replacements =
+    // eslint-disable-next-line un/no-type-assertion -- Typed `unknown` to keep the type check fast
+    pluginOptions?.replacements as
+      | boolean
+      | Partial<Record<string, RuleReplacement<string>>>
+      | undefined;
   const areDefaultsApplied = replacements !== false && pluginOptions?.plugin == null;
   return {
     ...toReplacementRequests(
@@ -152,8 +153,9 @@ const resolveRuleReplacement = (
   return {
     targetPrefix: pluginPrefix,
     targetRuleName: ruleName,
-    // eslint-disable-next-line un/no-type-assertion -- The option types accept a rule typed in any way, which can't be checked at runtime, so they are trusted
-    source: replacementAsObject.rule as RuleReplacementResolved['source'],
+    source:
+      // eslint-disable-next-line un/no-type-assertion -- The option types accept a rule typed in any way, which can't be checked at runtime, so they are trusted
+      replacementAsObject.rule as RuleReplacementResolved['source'],
     ...(sourceByName && {
       sourceByName: {
         pluginPrefix: sourceByName.pluginPrefixCanonical,
@@ -174,11 +176,11 @@ const resolveRuleReplacement = (
  *
  * `requestsOfOtherOptions` are the replacements that options other than
  * `plugins.<pluginName>.replacements` ask for, keyed by the plugin prefix.
- * The user made them, so unlike the default ones they also apply to a plugin provided through
- * `plugins.<pluginName>.plugin`.
- *
- * Only reads the options, so the result is the same when the config is restored from the cache
+ * Unlike the default ones, they also apply to a plugin provided through
+ * `plugins.<pluginName>.plugin`
  */
+// The requests of other options are made by the user, so they apply to a provided plugin too.
+// Only the options are read, so the result is the same when the config is restored from the cache
 export const resolveRuleReplacements = (
   rootOptions: UnConfigContext['rootOptions'],
   requestsOfOtherOptions: Partial<Record<string, RuleReplacementRequests>> = {},
@@ -211,7 +213,7 @@ export const resolveRuleReplacements = (
           replacements.set(prefixRuleName(pluginPrefix, ruleName), replacement);
         }
 
-        const sourceByName = replacement ? replacement.sourceByName : undefined;
+        const sourceByName = replacement?.sourceByName;
         const hasSourceKnownTraits =
           sourceByName != null && arrayIncludes(PLUGIN_PREFIXES_LIST, sourceByName.pluginPrefix);
         const traitsChange = getRuleTraitsChange(

@@ -56,8 +56,10 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
     severity,
     severityOrOptionsOverride?.[1] ||
       (Array.isArray(entry)
-        ? // eslint-disable-next-line un/no-type-assertion -- ESLint types the options as partial, as they may be omitted
-          structuredClone(entry.slice(1) as Options)
+        ? structuredClone(
+            // eslint-disable-next-line un/no-type-assertion -- ESLint types the options as partial, as they may be omitted
+            entry.slice(1) as Options,
+          )
         : []),
   ];
 };

@@ -76,14 +76,14 @@ export const generateEslintPluginsRulesPresence = (
 
   return {
     rules: Array.from(ruleVersions, ([ruleName, versions]) => {
-      const versionsSorted = versions.toSorted((a, b) => compareSemver(a.version, b.version));
+      versions.sort((a, b) => compareSemver(a.version, b.version));
       return {
         ruleName,
-        minVersion: versionsSorted[0]?.version,
-        maxVersion: versionsSorted.at(-1)?.version,
+        minVersion: versions[0]?.version,
+        maxVersion: versions.at(-1)?.version,
         totalVersions: versions.length,
-        versions: versionsSorted.map(({version}) => version),
-        deprecatedVersions: versionsSorted
+        versions: versions.map(({version}) => version),
+        deprecatedVersions: versions
           .filter(({deprecated}) => deprecated)
           .map(({version}) => version),
       };

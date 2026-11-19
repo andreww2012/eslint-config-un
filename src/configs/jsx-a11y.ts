@@ -698,7 +698,7 @@ export const buildJsxA11yConfigs = (
     .addRule(rn('tabindex-no-positive'), ERROR) /** @since 1.0.0 */
     .addRule('valid-lang', isForLit ? ERROR : null)
     .enableConfigTesterForPlugin(prefixFinal, {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         prefixFinal === 'astro' && !ruleName.startsWith('astro/jsx-a11y/'),
     })

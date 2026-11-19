@@ -1311,7 +1311,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
       .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        /* v8 ignore next */
+        /* v8 ignore next Only called in the test mode */
         rulesToSkipInConfig: (ruleName) => NUXT_CONFIG_RULES.has(ruleName),
       });
   }
@@ -1331,7 +1331,7 @@ export default defineUnConfig<VueEslintConfigOptions, readonly ['js'], VueConfig
       .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR) /** @since 0.6.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        /* v8 ignore next */
+        /* v8 ignore next Only called in the test mode */
         rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_RULES.has(ruleName),
       });
   }

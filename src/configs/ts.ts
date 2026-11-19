@@ -1059,7 +1059,7 @@ export default defineUnConfig<
       ),
     ) /** @since 1.2.0 */ // 🟣
     .enableConfigTesterForPlugin('ts', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -1250,7 +1250,7 @@ export default defineUnConfig<
     ) /** @since 1.13.0 */ // 🟣
     .disableAnyRule('', 'require-await')
     .enableConfigTesterForPlugin('ts', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -1278,7 +1278,7 @@ export default defineUnConfig<
     .addRule('no-unsafe-return', OFF)
     .addRule('no-unsafe-type-assertion', OFF)
     .enableConfigTesterForPlugin('ts', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_NO_UNSAFE_RULES_SET.has(ruleName),
     })
     .addOverrides();

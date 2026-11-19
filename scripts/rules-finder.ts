@@ -218,6 +218,7 @@ const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
 const DEFAULT_NPM_PACKAGE_OVERRIDE = 'npm:-';
 
 const PNPM_INSTALL_NOISE_LINE_REGEX = /^(?:Progress: |\s+WARN\s+)/;
+const SLASH_REGEX = /\//g;
 
 const mergeRulesPresenceResults = (
   results: readonly ReturnType<typeof generateEslintPluginsRulesPresence>[],
@@ -237,13 +238,13 @@ const mergeRulesPresenceResults = (
 
   return {
     rules: Array.from(ruleMap, ([ruleName, {versions, deprecatedVersions}]) => {
-      const versionsSorted = versions.toSorted((a, b) => compareSemver(a, b));
+      versions.sort((a, b) => compareSemver(a, b));
       return {
         ruleName,
-        minVersion: versionsSorted[0],
-        maxVersion: versionsSorted.at(-1),
-        totalVersions: versionsSorted.length,
-        versions: versionsSorted,
+        minVersion: versions[0],
+        maxVersion: versions.at(-1),
+        totalVersions: versions.length,
+        versions,
         deprecatedVersions,
       };
     }),
@@ -405,7 +406,7 @@ const run = async ({
 
   const batches = arrayChunks(versionsSorted, batchSize);
 
-  const extraDepth = iterableCount(packageName.matchAll(/\//g));
+  const extraDepth = iterableCount(packageName.matchAll(SLASH_REGEX));
 
   const generateRunnerScriptSource = (allBatches: readonly (typeof versionsSorted)[]) => `
 import {createRequire} from 'module';

@@ -1,3 +1,5 @@
+import type {PlaywrightPluginSettings} from '../../../src/configs/playwright';
+
 const FIXTURES = {
   testWithOnlyModifier: 'only-modifier/test.spec.ts',
   testWithoutExpectCall: 'test-without-expect-call/test.spec.ts',
@@ -182,7 +184,7 @@ describe('options', () => {
     });
 
     it('sets `playwright` settings when `settings` is provided', async () => {
-      const SETTINGS = Object.freeze({globalAliases: {test: ['myTest']}});
+      const SETTINGS: Readonly<PlaywrightPluginSettings> = {globalAliases: {test: ['myTest']}};
 
       const configResult = await computeEslintConfig('playwright', {
         un: {plugins: {playwright: {settings: SETTINGS}}},

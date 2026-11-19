@@ -113,7 +113,7 @@ export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
 
   configBuilderEnableCheckFileProcessor?.addConfig(
     'check-file/processor',
-    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'
     {
       ...generatePackageToLoadProperty('processor', 'checkFileProcessor'),
     },

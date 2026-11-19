@@ -1,3 +1,5 @@
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
+
 const FIXTURES = {
   sideEffects: 'side-effects/side-effects.js',
 } as const;
@@ -161,7 +163,8 @@ describe('options', () => {
     });
 
     it('passes provided options to `tree-shaking/no-side-effects-in-initialization` rule when `options` is set', async () => {
-      const OPTIONS = Object.freeze({noSideEffectsWhenCalled: [{function: 'define'}]});
+      const OPTIONS: Readonly<GetRuleOptions<'tree-shaking', 'no-side-effects-in-initialization'>> =
+        {noSideEffectsWhenCalled: [{function: 'define'}]};
 
       const configResult = await computeEslintConfig({treeShaking: {options: OPTIONS}});
 

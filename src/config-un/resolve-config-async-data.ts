@@ -148,14 +148,13 @@ const PACKAGE_REQUESTER_RENDERERS = {
     `a dependency of ${packageNames.map((packageName) => stylePackageName(packageName)).join(', ')}`,
 } as const satisfies Record<string, (names: readonly string[]) => string>;
 
+const collator = new Intl.Collator();
+
 /**
  * Turns the requesters of a single package into the reason it is needed, such as
  * "vue, svelte configs"
  */
-const renderPackageRequesters = (
-  requesters: ReadonlySet<PackageRequester> | undefined,
-  collator: Intl.Collator,
-) => {
+const renderPackageRequesters = (requesters: ReadonlySet<PackageRequester> | undefined) => {
   const requestersByType = Object.groupBy(requesters || [], (requester) =>
     substringBefore(requester, ':'),
   );
@@ -322,7 +321,6 @@ export const resolveConfigAsyncData = async (
   );
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
-    const collator = new Intl.Collator();
     const {usedPackageManager} = context.meta;
     // Without a lockfile, the package manager running ESLint is the best guess
     const packageManagerName = usedPackageManager?.name || getUserAgent();
@@ -360,7 +358,7 @@ ${renderTable(
     'Required version range': versionRange
       ? styleText('green', versionRange)
       : styleText('gray', 'Unknown'),
-    'Required by': renderPackageRequesters(packageRequesters.get(name), collator),
+    'Required by': renderPackageRequesters(packageRequesters.get(name)),
   })),
   {shouldDisableColors: !areColorsEnabled},
 )}
@@ -544,8 +542,9 @@ ${renderInstallationCommand(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...arguments_)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion -- Restore a cached transform from trusted config code
-                        fn: new Function('...arguments_', functionBody) as ValueTransformFn['fn'],
+                        fn:
+                          // eslint-disable-next-line no-new-func, ts/no-implied-eval, un/no-type-assertion -- Restore a cached transform from trusted config code
+                          new Function('...arguments_', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },
                     };

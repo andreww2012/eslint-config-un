@@ -26,8 +26,9 @@ const argv = cli({
   flags: {
     sort: {
       type: (value) => SortingZod.parse(value),
-      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- Wrong
-      default: 'score' satisfies Sorting as Sorting,
+      default:
+        // eslint-disable-next-line ts/no-unnecessary-type-assertion -- Wrong
+        'score' satisfies Sorting as Sorting,
     },
     sortInverse: {
       type: Boolean,
@@ -65,8 +66,8 @@ const ESLINT_PLUGIN_STATUSES_META: Readonly<
 };
 
 /**
- * From 0 at the bad boundary or beyond it to 1 at the good one or beyond it. The good boundary may
- * be higher than the bad one (like for downloads) or lower
+ * Scores the value from 0 at the bad boundary or beyond it to 1 at the good one or beyond it.
+ * The good boundary may be higher than the bad one (like for downloads) or lower
  */
 const scoreMetric = (
   value: number,
@@ -106,8 +107,8 @@ const analyze = Effect.gen(function* () {
       const downloadsPerDayAverage = mean(Object.values(info.stats || {})) || 0;
       const lastUpdated = new Date(info.metadata.time[info.metadata.version || ''] || '');
 
-      const yearsSinceLastUpdated = differenceInMonths(new Date(), lastUpdated);
-      const scoreRecency = scoreMetric(yearsSinceLastUpdated, 3, 12 * 10 /* 10 years */);
+      const monthsSinceLastUpdated = differenceInMonths(new Date(), lastUpdated);
+      const scoreRecency = scoreMetric(monthsSinceLastUpdated, 3, 12 * 10 /* 10 years */);
 
       const scoreDownloads = scoreMetric(downloadsPerDayAverage, 100_000, 300, {logarithmic: true});
 

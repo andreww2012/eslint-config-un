@@ -281,7 +281,7 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
       getRuleEnforcingMetaPropertySeverity('type', 'enforce'),
     ) /** @since 2.0.0 */ // 🟢
     .enableConfigTesterForPlugin('eslint-plugin', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         arrayIncludes(ESLINT_PLUGIN_TESTING_RELATED_RULES, ruleName),
       /* v8 ignore stop */
@@ -312,7 +312,7 @@ export default defineUnConfig<EslintPluginEslintConfigOptions>(
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
     .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(ESLINT_PLUGIN_TESTING_RELATED_RULES, ruleName),
       /* v8 ignore stop */

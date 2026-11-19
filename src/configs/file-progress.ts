@@ -1,4 +1,3 @@
-// cspell:ignore terminfo
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
@@ -54,6 +53,7 @@ export interface FileProgressEslintConfigOptions<
 const isProgressDrawnInPlace =
   process.stderr.isTTY &&
   process.stdout.isTTY &&
+  // cspell:disable-next-line
   // `dumb` is the terminfo type of terminals that can't move the cursor, so the spinner library
   // treats it as no terminal
   process.env['TERM'] !== 'dumb' &&

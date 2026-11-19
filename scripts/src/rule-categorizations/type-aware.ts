@@ -1,9 +1,7 @@
 import type {CategorizeRule, RuleCategorization} from './shared';
 
-/**
- * `requiresTypeChecking` is a `typescript-eslint` convention followed by a number of other plugins,
- * not a part of ESLint's own `meta.docs`
- */
+// `requiresTypeChecking` is a `typescript-eslint` convention followed by a number of other plugins,
+// not a part of ESLint's own `meta.docs`
 const requiresTypeChecking = (rule: {meta?: {docs?: object}}) => {
   const docs = rule.meta?.docs;
   return docs != null && 'requiresTypeChecking' in docs && docs.requiresTypeChecking === true;

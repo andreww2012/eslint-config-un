@@ -382,6 +382,8 @@ typescriptRuleTester.run(`${RULE_NAME} (TypeScript)`, preferArrayForEach, {
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const typeAwareRuleTester = new RuleTester({
   languageOptions: {
     parser: typescriptParser,
@@ -391,7 +393,7 @@ const typeAwareRuleTester = new RuleTester({
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 typeAwareRuleTester.run(`${RULE_NAME} (type information)`, preferArrayForEach, {

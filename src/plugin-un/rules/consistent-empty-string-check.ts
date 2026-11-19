@@ -3,6 +3,7 @@ import type * as Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
 import type * as ts from 'typescript';
+import type {Prettify} from '../../types';
 import {allUnionMembers} from '../../utils';
 import {
   MEMBER_OBJECT_TYPES,
@@ -16,7 +17,7 @@ type Style = 'empty-string' | 'length';
 
 type OperatorMap = Readonly<Partial<Record<ESTree.BinaryOperator, ESTree.BinaryOperator>>>;
 
-type BinaryExpression = ESTree.BinaryExpression & Eslint.Rule.NodeParentExtension;
+type BinaryExpression = Prettify<ESTree.BinaryExpression & Eslint.Rule.NodeParentExtension>;
 
 const RULE_OPTIONS_SCHEMA: Readonly<JSONSchema4> = {
   enum: allUnionMembers<Style>()(['empty-string', 'length']),
@@ -111,7 +112,8 @@ const rule: Eslint.JSRuleDefinition<{
     const emptyStringType = checker.getStringLiteralType('');
 
     // Also true for string literal, template literal and branded string types, and for type
-    // parameters constrained to them. `any` and `never` are assignable to both `string` and `number`
+    // parameters constrained to them. `any` and `never` are assignable to both `string` and
+    // `number`
     const isString = (type: ts.Type) =>
       checker.isTypeAssignableTo(type, stringType) && !checker.isTypeAssignableTo(type, numberType);
 
@@ -167,8 +169,8 @@ const rule: Eslint.JSRuleDefinition<{
         type == null ||
         !isString(type) ||
         isNarrowable(type) ||
-        // `.length` would throw where the value is missing, and the type of such a read only says it
-        // can be with `noUncheckedIndexedAccess`
+        // `.length` would throw where the value is missing, and the type of such a read only says
+        // it can be with `noUncheckedIndexedAccess`
         isIndexSignatureRead(typeInformation, operand)
       ) {
         return;

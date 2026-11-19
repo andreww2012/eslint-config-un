@@ -1,3 +1,5 @@
+import type {FunctionalPluginSettings} from '../../../src/configs/functional';
+
 const FIXTURES = {
   letDeclaration: 'let-declaration.ts',
   letDeclarationInsideHtml: 'let-declaration-inside-html.html',
@@ -176,9 +178,9 @@ describe('options', () => {
     });
 
     it('sets user-provided `immutability` settings on `functional` eslint config', async () => {
-      const PLUGIN_SETTINGS = Object.freeze({
-        overrides: [{type: 'ReadonlyDeep', to: 'Immutable'} as const],
-      });
+      const PLUGIN_SETTINGS: Readonly<FunctionalPluginSettings> = {
+        overrides: [{type: 'ReadonlyDeep', to: 'Immutable'}],
+      };
 
       const configResult = await computeEslintConfig('functional', {
         un: {plugins: {functional: {settings: PLUGIN_SETTINGS}}},

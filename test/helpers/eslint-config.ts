@@ -6,17 +6,16 @@ export {getRuleSeverityFromEslintRuleEntry} from '../../src/eslint/eslint-utils'
 
 export const getAllRulesSeverities = (
   config: Nullable<EslintFlatConfigEntry>,
-  // eslint-disable-next-line unicorn/consistent-boolean-name -- Fine
+  // eslint-disable-next-line unicorn/consistent-boolean-name -- Reads better as a filter than with a boolean prefix
   ruleFilter?: (ruleName: string) => boolean,
-) => {
-  const severities = arrayUnique(
+) =>
+  arrayUnique(
     Object.entries(config?.rules || {})
       .filter(
         ([ruleName]) =>
           !ruleName.startsWith('disable-autofix/') && (!ruleFilter || ruleFilter(ruleName)),
       )
       .map(([, ruleEntry]) => getRuleSeverityFromEslintRuleEntry(ruleEntry)),
-  );
-  // eslint-disable-next-line unicorn/no-array-sort -- The array is a fresh copy
-  return severities.sort((a, b) => a - b);
-};
+  )
+    // eslint-disable-next-line unicorn/no-array-sort -- The array is a fresh copy
+    .sort((a, b) => a - b);

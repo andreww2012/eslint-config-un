@@ -726,7 +726,7 @@ it('should report correct eol-last message position', async () => {
 });
 
 describe('scope sharing', () => {
-  const NOT_YET_DECLARED_MESSAGES = Object.freeze([
+  const NOT_YET_DECLARED_MESSAGES: readonly string[] = [
     "13:7 no-undef 'varNotYetGloballyDeclared' is not defined.",
     "14:7 no-undef 'letNotYetGloballyDeclared' is not defined.",
     "15:7 no-undef 'functionNotYetGloballyDeclared' is not defined.",
@@ -735,7 +735,7 @@ describe('scope sharing', () => {
     "21:11 no-unused-vars 'letNotYetGloballyDeclared' is assigned a value but never used.",
     "22:16 no-unused-vars 'functionNotYetGloballyDeclared' is defined but never used.",
     "23:13 no-unused-vars 'ClassNotYetGloballyDeclared' is defined but never used.",
-  ]);
+  ];
 
   it('should export global variables between script scopes', async () => {
     const messages = await executeWithScopeSharing(FIXTURES.variablesAcrossScripts, {

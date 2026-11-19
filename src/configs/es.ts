@@ -388,7 +388,7 @@ export const buildEsConfigs = (
   });
   // `grs` means "get rule severity"
   const grs = <Version extends EcmaVersion>(version: Version, feature: EcmaFeatures[Version]) => {
-    const esFeatures: {default: boolean} & Partial<Record<string, boolean>> =
+    const esFeatures: Prettify<{default: boolean} & Partial<Record<string, boolean>>> =
       getEsVersionFeatures(version);
     return (esFeatures[feature] ?? esFeatures.default) ? OFF : ERROR;
   };

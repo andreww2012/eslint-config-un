@@ -16,7 +16,7 @@ export interface NestJsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nestjs'> {}
 
 export default defineUnConfig<NestJsEslintConfigOptions>(
-  // eslint-disable-next-line case-police/string-check -- Can't touch this
+  // eslint-disable-next-line case-police/string-check -- Preserve the public option name
   'nestJs',
   {
     enabledBy: {package: '@nestjs/core'},

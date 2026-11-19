@@ -1,4 +1,5 @@
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
 
 const FIXTURES = {
   distTagDependency: 'dist-tag-dependency/package.json',
@@ -542,7 +543,9 @@ describe('options', () => {
     });
 
     it('passes rule options as-is when set to an object', async () => {
-      const RULE_OPTIONS = Object.freeze({allowedFor: ['devDependencies' as const]});
+      const RULE_OPTIONS: Readonly<GetRuleOptions<'package-json', 'restrict-dist-tags'>> = {
+        allowedFor: ['devDependencies'],
+      };
 
       const configResult = await computeEslintConfig({
         packageJson: {allowedDistTags: RULE_OPTIONS},

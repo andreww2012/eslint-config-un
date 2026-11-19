@@ -1,3 +1,5 @@
+import type {FormatjsPluginSettings} from '../../../src/configs/formatjs';
+
 const FIXTURES = {
   withEmoji: 'with-emoji.js',
 } as const;
@@ -154,10 +156,10 @@ describe('options', () => {
     });
 
     it('sets `formatjs` settings when provided', async () => {
-      const SETTINGS = Object.freeze({
+      const SETTINGS: Readonly<FormatjsPluginSettings> = {
         additionalFunctionNames: ['$t'],
         additionalComponentNames: ['Trans'],
-      });
+      };
 
       const configResult = await computeEslintConfig('formatJs', {
         un: {plugins: {formatjs: {settings: SETTINGS}}},

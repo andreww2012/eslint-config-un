@@ -1,3 +1,5 @@
+import type {WebComponentsPluginSettings} from '../../../src/configs/web-components';
+
 const FIXTURES = {
   customElementNameWithoutDash: 'custom-element-name-without-dash/index.js',
   customElementNameWithoutDashInsideHtml: 'custom-element-name-without-dash-inside-html.html',
@@ -178,7 +180,9 @@ describe('options', () => {
     });
 
     it('sets `wc` settings when `settings` is provided', async () => {
-      const SETTINGS = Object.freeze({elementBaseClasses: ['LitElement', 'PolymerElement']});
+      const SETTINGS: Readonly<WebComponentsPluginSettings> = {
+        elementBaseClasses: ['LitElement', 'PolymerElement'],
+      };
 
       const configResult = await computeEslintConfig('webComponents', {
         un: {plugins: {wc: {settings: SETTINGS}}},

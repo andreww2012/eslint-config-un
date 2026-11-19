@@ -1,3 +1,5 @@
+import type {SonarPluginSettings} from '../../../src/configs/sonar';
+
 const FIXTURES = {
   usingIncludesOnEmptyArray: 'using-includes-on-empty-array.js',
   usingIncludesOnEmptyArrayInsideHtml: 'using-includes-on-empty-array-inside-html.html',
@@ -192,10 +194,10 @@ describe('options', () => {
     });
 
     it('sets sonar settings when `settings` is provided', async () => {
-      const SETTINGS = Object.freeze({
+      const SETTINGS: Readonly<SonarPluginSettings> = {
         testFileExtensions: ['.ts'],
         predefinedGlobals: ['myGlobal'],
-      });
+      };
 
       const configResult = await computeEslintConfig('sonar', {
         un: {plugins: {sonar: {settings: SETTINGS}}},

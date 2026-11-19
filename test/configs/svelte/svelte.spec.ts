@@ -1,3 +1,4 @@
+import type {SveltePluginSettings} from '../../../src/configs/svelte';
 import {GLOB_SVELTE} from '../../../src/constants';
 
 const FIXTURES = {
@@ -387,7 +388,7 @@ describe('options', () => {
     });
 
     it('sets svelte settings when `settings` is provided', async () => {
-      const SETTINGS = Object.freeze({ignoreWarnings: ['some-rule']});
+      const SETTINGS: Readonly<SveltePluginSettings> = {ignoreWarnings: ['some-rule']};
 
       const configResult = await computeEslintConfig('svelte', {
         un: {plugins: {svelte: {settings: SETTINGS}}},
@@ -409,15 +410,13 @@ describe('options', () => {
     });
 
     it('sets `svelteConfig` in parserOptions when `svelteKitConfig` is provided', async () => {
-      const SVELTE_KIT_CONFIG = {};
+      const svelteKitConfig = {};
 
-      const configResult = await computeEslintConfig({
-        svelte: {svelteKitConfig: SVELTE_KIT_CONFIG},
-      });
+      const configResult = await computeEslintConfig({svelte: {svelteKitConfig}});
 
       expect(
         configResult.getConfigByUnPostfix('parsing/svelte')?.languageOptions?.['parserOptions'],
-      ).toHaveProperty('svelteConfig', SVELTE_KIT_CONFIG);
+      ).toHaveProperty('svelteConfig', svelteKitConfig);
     });
   });
 

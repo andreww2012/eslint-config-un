@@ -1,5 +1,6 @@
 /* eslint-disable case-police/string-check -- The tests cover intentionally different capitalization styles */
 import {GLOB_MARKDOWN} from '../../../src/constants';
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
 
 const FIXTURES = {
   headingWithNonSentenceCase: 'heading-non-sentence-case.md',
@@ -688,10 +689,8 @@ describe('options', () => {
     });
 
     it('directly passes options passed to `style` to `markdown-preferences/ordered-list-marker-style` rule', async () => {
-      const OPTIONS = Object.freeze({
-        overrides: [{level: 2, parentMarker: 'bullet' as const}],
-        prefer: 'n)',
-      });
+      const OPTIONS: Readonly<GetRuleOptions<'markdown-preferences', 'ordered-list-marker-style'>> =
+        {overrides: [{level: 2, parentMarker: 'bullet'}], prefer: 'n)'};
 
       const configResult = await computeEslintConfig({
         markdownPreferences: {orderedLists: {style: OPTIONS}},

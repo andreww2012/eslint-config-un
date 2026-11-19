@@ -7,8 +7,11 @@ import {castToSafe, isObject} from '../utils';
 // but `Foo extends Record<string, any>` is `true`). Without `any` the
 // `Extract<Source, Input>` filter below collapses to `never` for user-defined
 // option interfaces and the merged result loses all of `Source`'s keys
-// eslint-disable-next-line ts/no-explicit-any -- Need to use for assignability
-type AssignDefaultsInput = Record<PropertyKey, any>;
+type AssignDefaultsInput = Record<
+  PropertyKey,
+  // eslint-disable-next-line ts/no-explicit-any -- Need to use for assignability
+  any
+>;
 
 type SourceObjectShape<Source> = Extract<Exclude<Source, readonly unknown[]>, AssignDefaultsInput>;
 

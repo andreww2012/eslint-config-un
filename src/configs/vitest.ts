@@ -271,7 +271,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
   context.registerUsedPlugin('vitest');
-  /* v8 ignore start */
+  /* v8 ignore start Tests always have the plugin installed */
   if (!eslintPluginVitest) {
     return;
   }
@@ -529,7 +529,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('valid-title', ERROR) /** @since 0.0.54 */ // 🟢
     .addRule('warn-todo', WARNING) /** @since 1.3.3 */
     .enableConfigTesterForPlugin('vitest', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),
     })
     .addOverrides();
@@ -552,7 +552,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // (warns in all)
     .disableAnyRule('ts', 'unbound-method')
     .enableConfigTesterForPlugin('vitest', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),
     })
     .addOverrides();

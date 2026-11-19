@@ -9,13 +9,15 @@ const RULE_NAME = 'consistent-empty-string-check';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const STRING_DECLARATION = 'declare const value: string;';
 
 const EMPTY_STRING_STYLE = 'empty-string';
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 const withLengthFix = (code: string, output: string, errorCount = 1) =>

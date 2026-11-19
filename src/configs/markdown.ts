@@ -337,7 +337,7 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
       .addRule('no-space-in-emphasis', ERROR) /** @since 7.2.0 */ // 🟢
       .addRule('no-unused-definitions', ERROR) /** @since 7.0.0 */ // 🟢
       .addRule('require-alt-text', ERROR) /** @since 6.5.0 */ // 🟢
-      .addRule('table-column-count', ERROR, [{checkMissingCells: true} /** @since 6.5.0 */])
+      .addRule('table-column-count', ERROR, [{checkMissingCells: true}]) /** @since 6.5.0 */
       .enableConfigTesterForPlugin('markdown')
       .addOverrides();
 

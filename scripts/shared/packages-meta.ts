@@ -170,16 +170,16 @@ export const PACKAGES_META: Readonly<Record<string, PackageMeta>> = {
   },
 };
 
-export const CONFIGS_META = Object.freeze(
-  objectFromEntriesUnsafe(
-    Array.from(
-      Map.groupBy(
-        Object.entries(PACKAGES_META).flatMap(([packageName, packageMeta]) =>
-          packageMeta.configs.map((config) => ({config, packageName})),
-        ),
-        (entry) => entry.config,
+export const CONFIGS_META: Readonly<
+  Partial<Record<keyof UnConfigs, {packages: readonly string[]}>>
+> = objectFromEntriesUnsafe(
+  Array.from(
+    Map.groupBy(
+      Object.entries(PACKAGES_META).flatMap(([packageName, packageMeta]) =>
+        packageMeta.configs.map((config) => ({config, packageName})),
       ),
-      ([config, entries]) => [config, {packages: entries.map((entry) => entry.packageName)}],
+      (entry) => entry.config,
     ),
+    ([config, entries]) => [config, {packages: entries.map((entry) => entry.packageName)}],
   ),
 );

@@ -55,7 +55,7 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     const {customize} = await pluginsLoaders.stylistic(context).then(({module}) => module.configs);
     configProducedByCustomize = mapKeys(
       customize(customizeOptions).rules ||
-        /* v8 ignore start */
+        /* v8 ignore start The customized config always has rules */
         {},
       /* v8 ignore stop */
       (_, key) => substringAfter(key, '@stylistic/'),
@@ -80,8 +80,12 @@ export default defineUnConfig<StylisticEslintConfigOptions>(
     const optionsFinal = Array.isArray(customizedRuleEntry)
       ? customizedRuleEntry.slice(1)
       : options || [];
-    // eslint-disable-next-line un/no-type-assertion -- The options come from the preset of the same plugin
-    return [ruleName, severityFinal, optionsFinal as _RuleOptions];
+    return [
+      ruleName,
+      severityFinal,
+      // eslint-disable-next-line un/no-type-assertion -- The options come from the preset of the same plugin
+      optionsFinal as _RuleOptions,
+    ];
   };
 
   // Legend:

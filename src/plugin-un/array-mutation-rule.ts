@@ -302,7 +302,8 @@ const isDiscarded = (sourceCode: Eslint.SourceCode, node: ESTree.Node): boolean 
   }
 };
 
-// Also covers the values only used to decide what to evaluate next, like in `isSorted || array.sort();`
+// Also covers the values only used to decide what to evaluate next, like in
+// `isSorted || array.sort();`
 const isValueUnused = (sourceCode: Eslint.SourceCode, node: ESTree.Node): boolean => {
   if (isDiscarded(sourceCode, node)) {
     return true;
@@ -378,16 +379,16 @@ const getLocalArray = (
 ) => {
   const variable = findVariable(sourceCode.getScope(identifier), identifier);
   const definition = variable?.defs.length === 1 ? variable.defs[0] : undefined;
-  const init = definition?.type === 'Variable' ? definition.node.init : undefined;
-  return init != null &&
+  const initializer = definition?.type === 'Variable' ? definition.node.init : undefined;
+  return initializer != null &&
     variable != null &&
     definition?.type === 'Variable' &&
     definition.node.id === definition.name &&
     // Other scripts and modules can reach these
     variable.scope.type !== 'global' &&
     getParent(sourceCode, definition.parent)?.type !== 'ExportNamedDeclaration' &&
-    isNewArray(sourceCode, init, check)
-    ? {variable, definition, init}
+    isNewArray(sourceCode, initializer, check)
+    ? {variable, definition, init: initializer}
     : undefined;
 };
 
@@ -650,7 +651,7 @@ export const createArrayMutationRule = (
       const knownDenseArrayCheck: NewArrayCheck = {
         areHolesAllowed: false,
         isNewArrayMethodCall: (object, methodName) =>
-          isKnownNewArrayMethodCall(object, methodName) ?? false,
+          isKnownNewArrayMethodCall(object, methodName) || false,
       };
 
       // Nothing else references the receiver after the call
@@ -772,14 +773,17 @@ export const createArrayMutationRule = (
         if (unneededCopies === 'require') {
           // Like the rules of `eslint-plugin-unicorn`, which allow in-place changes as statements,
           // unless the array is a copy made with a spread
-          if (!isDiscarded(sourceCode, node)) {
-            if (returnsArray && mayHaveMethod(receiver, copyingMethod)) {
+          const isResultDiscarded = isDiscarded(sourceCode, node);
+          if (returnsArray) {
+            if (
+              isResultDiscarded
+                ? getSpreadArgument(receiver)
+                : mayHaveMethod(receiver, copyingMethod)
+            ) {
               reportCopy(receiver, property);
             }
-          } else if (!returnsArray) {
+          } else if (isResultDiscarded) {
             reportAssignedCopy(node, callee);
-          } else if (getSpreadArgument(receiver)) {
-            reportCopy(receiver, property);
           }
 
           return;
@@ -799,13 +803,14 @@ export const createArrayMutationRule = (
         node: ESTree.CallExpression & Eslint.Rule.NodeParentExtension,
         {object: receiver, property}: ESTree.MemberExpression,
       ) => {
-        const assignment = getParent(sourceCode, getOuterCall(node));
+        const outerCall = getOuterCall(node);
+        const assignment = getParent(sourceCode, outerCall);
 
         // `array = array.toSorted()` -> `array.sort()`
         if (
           assignment?.type === 'AssignmentExpression' &&
           assignment.operator === '=' &&
-          assignment.right === getOuterCall(node) &&
+          assignment.right === outerCall &&
           assignment.left.type === 'Identifier' &&
           receiver.type === 'Identifier' &&
           assignment.left.name === receiver.name &&

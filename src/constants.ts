@@ -1,12 +1,12 @@
 // cspell:ignore nuxtjs
 import ourPackageJson from '../package.json' with {type: 'json'};
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
-import type {Branded} from './types';
-import {omit} from './utils';
+import type {Branded, OmitStrict} from './types';
+import {allUnionMembers, omit} from './utils';
 
-export const OPTIONAL_PEER_DEPENDENCIES = Object.freeze(
-  omit(ourPackageJson.peerDependencies, ['eslint']),
-);
+export const OPTIONAL_PEER_DEPENDENCIES: Readonly<
+  OmitStrict<typeof ourPackageJson.peerDependencies, 'eslint'>
+> = omit(ourPackageJson.peerDependencies, ['eslint']);
 
 /* Error levels */
 
@@ -239,17 +239,19 @@ export const CHECKED_LODASH_METHODS = [
   'values',
 ] as const;
 
-const REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES = ['react', 'node', 'serve', 'dev'] as const;
-export const REMIX_PACKAGES = Object.freeze(
+type RemixAndReactRouterPackageSuffix = 'react' | 'node' | 'serve' | 'dev';
+const REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES = allUnionMembers<
+  RemixAndReactRouterPackageSuffix,
+  {readonly: true}
+>()(['react', 'node', 'serve', 'dev']);
+export const REMIX_PACKAGES: readonly `@remix-run/${RemixAndReactRouterPackageSuffix}`[] =
   REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
     (packageName) => `@remix-run/${packageName}` as const,
-  ),
-);
-export const REACT_ROUTER_PACKAGES = Object.freeze(
+  );
+export const REACT_ROUTER_PACKAGES: readonly `@react-router/${RemixAndReactRouterPackageSuffix}`[] =
   REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
     (packageName) => `@react-router/${packageName}` as const,
-  ),
-);
+  );
 
 // `node-sass` is not here because it's deprecated and has order of magnitude less downloads
 export const SASS_PACKAGES = ['sass', 'sass-embedded'] as const;

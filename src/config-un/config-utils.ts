@@ -37,8 +37,9 @@ const parsePackageToCheck = (packageToCheck: PackageToCheck) => {
   };
 
   return {
-    // eslint-disable-next-line un/no-type-assertion -- The part before the version range is the package name
-    packageName: name as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+    packageName:
+      // eslint-disable-next-line un/no-type-assertion -- The part before the version range is the package name
+      name as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     ...(version && {versionRangeToSatisfy: version}),
   };
 };
@@ -71,7 +72,7 @@ function getIsConfigEnabled(
   let reason: string | undefined;
 
   const providedConfig = configs[configName];
-  /* v8 ignore start */
+  /* v8 ignore start Only needed in the test mode */
   if (this.isTestMode) {
     enabledBySystem ??= true;
     reason ??= 'all configs are enabled in the test mode';
@@ -224,10 +225,11 @@ export function getPluginSettings<Plugin extends keyof PluginSettingsMap>(
   this: UnConfigContext,
   pluginPrefix: Plugin,
 ) {
-  // eslint-disable-next-line un/no-type-assertion -- Picks out this plugin's settings, and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
-  const pluginOptions = this.rootOptions.plugins?.[pluginPrefix] as
-    | {settings?: Prettify<PluginSettingsMap[Plugin]>}
-    | undefined;
+  const pluginOptions =
+    // eslint-disable-next-line un/no-type-assertion -- Picks out this plugin's settings, and `Prettify` gives the interfaces an index signature so that the type is assignable to `Record<string, unknown>`
+    this.rootOptions.plugins?.[pluginPrefix] as
+      | {settings?: Prettify<PluginSettingsMap[Plugin]>}
+      | undefined;
   return pluginOptions?.settings;
 }
 
@@ -255,8 +257,9 @@ export const savePackagesToLoadFromConfig = (
         return;
       }
 
-      // eslint-disable-next-line un/no-type-assertion -- Nothing else is stored under this symbol
-      const info = value as PackageToLoadInfo;
+      const info =
+        // eslint-disable-next-line un/no-type-assertion -- Nothing else is stored under this symbol
+        value as PackageToLoadInfo;
       arrayify(info.package).forEach((packageId) => {
         mapGetOrInsert(context.usedPackages, packageId, []).push({
           config,

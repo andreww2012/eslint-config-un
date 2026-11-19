@@ -1,3 +1,5 @@
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
+
 const FIXTURES = {
   pnpmWorkspace: 'pnpm-workspace.yaml',
   pnpmWorkspaceWithCatalog: 'with-catalog/pnpm-workspace.yaml',
@@ -123,7 +125,9 @@ describe('pnpm: sub config `pnpmWorkspace`', () => {
       });
 
       it('enables `pnpm/yaml-enforce-settings` rule with options when `enforcePnpmWorkspaceSettings` is provided', async () => {
-        const SETTINGS = Object.freeze({requiredFields: ['catalogs']});
+        const SETTINGS: Readonly<GetRuleOptions<'pnpm', 'yaml-enforce-settings'>> = {
+          requiredFields: ['catalogs'],
+        };
 
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {enforcePnpmWorkspaceSettings: SETTINGS}},

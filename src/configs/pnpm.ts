@@ -130,7 +130,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
     ) /** @since 0.2.0 */ /** @aka prefer-workspace-settings */
     .addRule('json-valid-catalog', ERROR) /** @since 0.1.0 */ /** @aka valid-catalog */
     .enableConfigTesterForPlugin('pnpm', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         arrayIncludes(RULE_CATEGORIES_PER_FILE_TYPE.yaml, ruleName),
       /* v8 ignore stop */
@@ -159,7 +159,7 @@ export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
     .addRule('yaml-no-unused-catalog-item', ERROR) /** @since 0.3.0 */
     .addRule('yaml-valid-packages', ERROR) /** @since 1.2.0 */
     .enableConfigTesterForPlugin('pnpm', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_FILE_TYPE.yaml, ruleName),
       /* v8 ignore stop */

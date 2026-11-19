@@ -509,7 +509,7 @@ export default defineUnConfig<JsdocEslintConfigOptions>(
     .addRule('require-property-type', OFF) /** @since 19.0.0 */ // 🔵(off)
     .addRule('require-returns-type', OFF) /** @since 2.0.1 */ // 🔵(off)
     .enableConfigTesterForPlugin('jsdoc', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: () => true,
     })
     .addOverrides();

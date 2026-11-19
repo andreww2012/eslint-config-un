@@ -177,11 +177,13 @@ const getTypeArrayState = (type: ts.Type, checker: ts.TypeChecker): ArrayState =
   // A type parameter is judged by its constraint
   const constraint = checker.getBaseConstraintOfType(type) || type;
   if (constraint.isUnion()) {
+    // `for...of` and `forEach` throw on nullish values alike
+    const nullishTypeFlags: ReadonlySet<ts.TypeFlags> = new Set([
+      checker.getNullType().flags,
+      checker.getUndefinedType().flags,
+    ]);
     const memberStates = constraint.types.flatMap((member) =>
-      // `for...of` and `forEach` throw on nullish values alike
-      [checker.getNullType().flags, checker.getUndefinedType().flags].includes(member.flags)
-        ? []
-        : getTypeArrayState(member, checker),
+      nullishTypeFlags.has(member.flags) ? [] : getTypeArrayState(member, checker),
     );
     return memberStates.every((state) => state === memberStates[0])
       ? memberStates[0] || 'unknown'

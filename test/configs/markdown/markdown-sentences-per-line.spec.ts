@@ -1,3 +1,5 @@
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
+
 const FIXTURES = {
   lineWithAbbreviation: 'line-with-abbreviation.md',
   twoSentencesPerLine: 'two-sentences-per-line.md',
@@ -183,7 +185,9 @@ describe('markdown: sub config `sentencesPerLine`', () => {
 
   describe('options', () => {
     describe('option: `options`', () => {
-      const OPTIONS = Object.freeze({additionalAbbreviations: ['Mme.']});
+      const OPTIONS: Readonly<GetRuleOptions<'sentences-per-line', 'one'>> = {
+        additionalAbbreviations: ['Mme.'],
+      };
 
       it('does not pass options to `sentences-per-line/one` rule by default', async () => {
         const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});

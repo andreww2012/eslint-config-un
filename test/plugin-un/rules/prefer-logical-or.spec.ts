@@ -9,6 +9,8 @@ const RULE_NAME = 'prefer-logical-or';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const withFix = (code: string, output: string, errorCount = 1) => ({
   code,
   output,
@@ -17,7 +19,7 @@ const withFix = (code: string, output: string, errorCount = 1) => ({
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 const typeAwareRuleTester = new RuleTester({

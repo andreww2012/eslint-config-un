@@ -1,3 +1,5 @@
+import type {ClsxPluginSettings} from '../../../src/configs/clsx';
+
 const FIXTURES = {
   clsxWithArrayExpression: 'clsx-with-array-expression.js',
 } as const;
@@ -168,7 +170,7 @@ describe('options', () => {
     });
 
     it('assigns `settings` to `clsxOptions` settings property', async () => {
-      const SETTINGS = Object.freeze({clsx: ['cn', 'cx'], classnames: 'default'});
+      const SETTINGS: Readonly<ClsxPluginSettings> = {clsx: ['cn', 'cx'], classnames: 'default'};
 
       const configResult = await computeEslintConfig('clsx', {
         un: {plugins: {clsx: {settings: SETTINGS}}},

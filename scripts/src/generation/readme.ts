@@ -14,11 +14,9 @@ const PLUGIN_LOADERS: Readonly<Partial<Record<string, {packageName: string}>>> =
 
 const LINK_REFERENCE_DEFINITION_REGEXP = /^\[([^\]]+)\]: (\S+)$/gm;
 
-/**
- * The readme defines a reference for some of the packages, and `markdown-preferences` insists on
- * those being used wherever the same URL appears again
- */
 const createPackageLinkRenderer = (readme: string) => {
+  // The readme defines a reference for some of the packages, and `markdown-preferences` insists on
+  // those being used wherever the same URL appears again
   const labelsByUrl = new Map(
     Array.from(readme.matchAll(LINK_REFERENCE_DEFINITION_REGEXP), ([, label, url]) => [url, label]),
   );
@@ -29,10 +27,8 @@ const createPackageLinkRenderer = (readme: string) => {
   };
 };
 
-/**
- * The readme is not formatted by Prettier, so the columns are padded here
- */
 const renderTable = (header: readonly string[], rows: readonly (readonly string[])[]) => {
+  // The readme is not formatted by Prettier, so the columns are padded here
   const widths = header.map((_, column) =>
     Math.max(...[header, ...rows].map((cells) => cells[column]?.length || 0)),
   );
@@ -55,16 +51,15 @@ interface RenameRow {
 }
 
 /**
- * Rows sharing a reason are kept together so that only the first of them spells it out, which is
- * what the hand-written table did with its `^` references
+ * Keeps the rows sharing a reason together, with only the first of them spelling it out
  */
 const orderRows = (rows: readonly RenameRow[]) =>
   Array.from(
     Map.groupBy(rows, ({reason}) => reason),
-    ([reason, group]) => ({
-      reason,
-      group: group.toSorted((a, b) => a.packageName.localeCompare(b.packageName)),
-    }),
+    ([reason, group]) => {
+      group.sort((a, b) => a.packageName.localeCompare(b.packageName));
+      return {reason, group};
+    },
   )
     .sort((a, b) => b.group.length - a.group.length || a.reason.localeCompare(b.reason))
     .flatMap(({group}) =>

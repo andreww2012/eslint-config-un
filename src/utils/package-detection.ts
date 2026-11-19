@@ -117,12 +117,12 @@ const readPackageInfo = async (packageJsonPath: Nullable<string | URL>) => {
   const fullVersion = packageInfo.version || '';
 
   const majorVersionRaw = Number.parseInt(fullVersion, 10);
-  /* v8 ignore next */
+  /* v8 ignore next No package in `node_modules` declares a non-numeric version */
   const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
 
   // A string, as a number can't tell minor version 10 from 1
-  /* v8 ignore next */
-  const majorAndMinorVersion = MAJOR_AND_MINOR_VERSION_REGEXP.exec(fullVersion)?.[0] ?? null;
+  /* v8 ignore next No package in `node_modules` declares a non-numeric version */
+  const majorAndMinorVersion = MAJOR_AND_MINOR_VERSION_REGEXP.exec(fullVersion)?.[0] || null;
 
   return {
     info: packageInfo,

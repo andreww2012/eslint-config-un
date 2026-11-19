@@ -14,6 +14,8 @@ const RULE_NAME = 'no-type-assertion';
 
 const FIXTURES_DIRECTORY = path.join(import.meta.dirname, 'fixtures');
 
+const TYPED_FILE_PATH = path.join(FIXTURES_DIRECTORY, 'file.ts');
+
 const MESSAGE_ID = 'noTypeAssertion';
 
 const withSuggestions = (code: string, outputs: {annotation?: string; satisfies: string}) => ({
@@ -219,7 +221,7 @@ const typeAwareRuleTester = new RuleTester({
 
 const withTypedFile = <TestCase extends {code: string}>(testCase: TestCase) => ({
   ...testCase,
-  filename: path.join(FIXTURES_DIRECTORY, 'file.ts'),
+  filename: TYPED_FILE_PATH,
 });
 
 const withWideningAllowed = <TestCase extends {code: string}>(testCase: TestCase) =>

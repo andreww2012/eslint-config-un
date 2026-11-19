@@ -68,7 +68,7 @@ export default defineUnConfig<UnusedImportsEslintConfigOptions>('unusedImports',
     ?.addConfig('unused-imports/no-unused-imports')
     .addRule('no-unused-imports', ERROR) /** @since 0.0.2 */
     .enableConfigTesterForPlugin('unused-imports', {
-      /* v8 ignore next 2 */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         ruleName === ('no-unused-vars' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })
@@ -89,7 +89,7 @@ export default defineUnConfig<UnusedImportsEslintConfigOptions>('unusedImports',
     .disableAnyRule('sonar', 'no-unused-vars')
     .disableAnyRule('ts', 'no-unused-vars')
     .enableConfigTesterForPlugin('unused-imports', {
-      /* v8 ignore next 2 */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         ruleName === ('no-unused-imports' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })

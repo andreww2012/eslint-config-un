@@ -16,10 +16,10 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: readonly string[] = [
 ];
 
 // Inlined plugins spawn these by file path, so they're never part of the main module graph
-const INLINED_PLUGIN_WORKERS = [
+const INLINED_PLUGIN_WORKERS: readonly string[] = [
   'eslint-plugin-arrow-return-style-x/dist/workers/prettier-worker.mjs',
   'eslint-plugin-node-dependencies/dist/worker.mjs',
-] as const;
+];
 
 const MJS_EXTENSION_REGEXP = /\.mjs$/;
 

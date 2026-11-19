@@ -1,7 +1,7 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, Prettify} from '../types';
-import {arrayIncludes, arrayLast} from '../utils';
+import {allUnionMembers, arrayIncludes, arrayLast} from '../utils';
 import type {fetchPackageInfo} from '../utils/package-detection';
 import {generateUseBaselineRuleOptions, resolveFilesOption, resolveIgnoresOption} from './shared';
 import {
@@ -15,9 +15,11 @@ import {
 
 type PartialObjectsOnly<Value> = Value extends readonly unknown[] ? Value : Partial<Value>;
 
+type SupportedAngularVersion = 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22;
 // Please keep ascending order
-const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22] as const;
-type SupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[number];
+const SUPPORTED_ANGULAR_VERSIONS = allUnionMembers<SupportedAngularVersion, {readonly: true}>()([
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+]);
 const LATEST_SUPPORTED_ANGULAR_VERSION = arrayLast(SUPPORTED_ANGULAR_VERSIONS);
 
 interface ConfigTemplateSubConfigOptions<
@@ -338,9 +340,11 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
     }
   });
 
-  // `|| {}` is unreachable (plugin always loads); start/stop needed to suppress inline branches
+  // `start` and `stop` are needed to ignore the inline branches
   const angularEslintPluginRules = Object.keys(
-    /* v8 ignore start */ angularEslintPlugin?.rules || {} /* v8 ignore stop */,
+    /* v8 ignore start The plugin always loads */
+    angularEslintPlugin?.rules || {},
+    /* v8 ignore stop */
   );
 
   const getPluginRuleSeverity = <
@@ -362,7 +366,7 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
           filesDefault: [GLOB_JS_TS_X],
         },
       ],
-      // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
+      // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'
       {
         ...(processInlineTemplates &&
           generatePackageToLoadProperty('processor', 'angularExtractInlineHtmlProcessor')),
@@ -550,9 +554,11 @@ export default defineUnConfig<AngularEslintConfigOptions>('angular', {
 
   // TEMPLATE CONFIG
 
-  // same rationale for ignore comments as above
+  // Same as above
   const angularTemplateEslintPluginRules = Object.keys(
-    /* v8 ignore start */ angularTemplateEslintPlugin?.rules || {} /* v8 ignore stop */,
+    /* v8 ignore start The plugin always loads */
+    angularTemplateEslintPlugin?.rules || {},
+    /* v8 ignore stop */
   );
 
   const getTemplatePluginRuleSeverity = <RuleName extends GetRuleNamesInPlugin<'angular-template'>>(

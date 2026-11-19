@@ -1,3 +1,5 @@
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
+
 const FIXTURES = {
   componentWithPlainText: 'component-with-plain-text.jsx',
 } as const;
@@ -185,7 +187,10 @@ describe('options', () => {
     });
 
     it('passes the provided options to `i18next/no-literal-string`', async () => {
-      const OPTIONS = Object.freeze({mode: 'jsx-only' as const, callees: {exclude: ['logger.*']}});
+      const OPTIONS: Readonly<GetRuleOptions<'i18next', 'no-literal-string'>> = {
+        mode: 'jsx-only',
+        callees: {exclude: ['logger.*']},
+      };
 
       const configResult = await computeEslintConfig({i18next: {options: OPTIONS}});
 

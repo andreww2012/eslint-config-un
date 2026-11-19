@@ -170,7 +170,7 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
         filesDefault: [GLOB_JS_TS_X, GLOB_FLOW, GLOB_SVELTE, GLOB_ASTRO, GLOB_EMBER_GLIMMER],
       },
     ],
-    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'
     {
       ...generatePackageToLoadProperty('processor', 'eslintPluginGraphql', {
         valueTransformFn: {
@@ -235,7 +235,7 @@ export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
     .addRule(
       'lone-executable-definition',
       ERROR,
-      // @ts-expect-error Too strict type: `ignore` can only have so much elements, which the assigned variable cannot express
+      // @ts-expect-error Too strict type: `ignore` can only have so many elements, which the assigned variable cannot express
       isNonEmptyArray(doNotRequireSeparateFilesFor) ? [{ignore: doNotRequireSeparateFilesFor}] : [],
     ) /** @since 3.14.0 */
     .addRule('lone-schema-definition', ERROR) /** @since 0.6.0 */ // 🟢📦

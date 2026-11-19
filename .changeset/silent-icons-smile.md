@@ -2,4 +2,4 @@
 "eslint-config-un": patch
 ---
 
-Fixed an issue resulting in plugins you pass in `extraPlugins`, which rules were used, not being loaded in `loadPluginsOnDemand: false` mode
+Fixed the plugins passed in `extraPlugins` not being loaded in `loadPluginsOnDemand: false` mode even when their rules are used

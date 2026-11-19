@@ -348,7 +348,7 @@ describe('options', () => {
 
     it("passes options to `format/oxfmt` rule when `formatter` is `['oxfmt', options]`", async () => {
       addInstalledPackages({oxfmt: '0.72.0'});
-      const OPTIONS = Object.freeze({printWidth: 100});
+      const OPTIONS = {printWidth: 100} as const;
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['oxfmt', OPTIONS]},
@@ -360,7 +360,7 @@ describe('options', () => {
     });
 
     it("passes options to `format/prettier` rule when `formatter` is `['prettier', options]`", async () => {
-      const OPTIONS = Object.freeze({singleQuote: false, printWidth: 120});
+      const OPTIONS = {singleQuote: false, printWidth: 120} as const;
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['prettier', OPTIONS]},
@@ -373,10 +373,10 @@ describe('options', () => {
 
     it("passes options to `format/dprint` rule when `formatter` is `['dprint', options]`", async () => {
       addInstalledPackages({'@dprint/formatter': '0.5.1'});
-      const OPTIONS = Object.freeze({
+      const OPTIONS = {
         plugins: [],
         typescript: 'https://plugins.dprint.dev/typescript-0.93.0.wasm',
-      });
+      } as const;
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['dprint', OPTIONS]},
@@ -412,7 +412,7 @@ describe('options', () => {
     });
 
     it('stops `format/prettier` rule from reading the Prettier config when set to `false`', async () => {
-      const OPTIONS = Object.freeze({printWidth: 120});
+      const OPTIONS = {printWidth: 120} as const;
 
       const configResult = await computeEslintConfig({
         format: {formatter: ['prettier', OPTIONS], readFormatterConfig: false},

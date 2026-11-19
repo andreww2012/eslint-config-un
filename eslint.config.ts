@@ -5,10 +5,10 @@ import {PLUGIN_METADATA_KEY_ORDER, RULE_METADATA_KEY_ORDER} from './src/plugins/
 import {createNoRestrictedSyntaxRule, forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
-const PLUGIN_METADATA_GROUP_ORDER = [
+const PLUGIN_METADATA_GROUP_ORDER: readonly string[] = [
   ...PLUGIN_METADATA_KEY_ORDER,
   ...RULE_METADATA_KEY_ORDER,
-] as const;
+];
 
 const noRestrictedSyntaxPlugin = createNoRestrictedSyntaxRule('local-rules', {
   name: 'no-catch-parameter-type-annotation',

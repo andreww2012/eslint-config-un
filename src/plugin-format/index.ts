@@ -1,6 +1,7 @@
 // cspell:ignore Invisibles Syncify
 import path from 'node:path';
 import type * as Eslint from 'eslint';
+import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {FormatConfig as OxfmtOptions} from 'oxfmt';
@@ -19,7 +20,7 @@ const MESSAGES: Readonly<Record<Difference['operation'], string>> = {
   replace: 'Replace `{{ deleteText }}` with `{{ insertText }}`',
 };
 
-const FILE_START_POSITION = {line: 1, column: 0} as const;
+const FILE_START_POSITION: Readonly<ESTree.Position> = {line: 1, column: 0};
 
 // Prettier appends the position to the message, which ESLint shows on its own
 const MESSAGE_POSITION_SUFFIX_REGEXP = / \(\d+:\d+\)$/;

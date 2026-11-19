@@ -173,7 +173,7 @@ describe('options', () => {
     });
 
     it('enables `rxjs/ban-observables` rule when set to non-empty object', async () => {
-      const BANNED_OBSERVABLES = Object.freeze({Observable: 'Use Subject instead'});
+      const BANNED_OBSERVABLES = {Observable: 'Use Subject instead'} as const;
 
       const configResult = await computeEslintConfig({rxjs: {banObservables: BANNED_OBSERVABLES}});
 
@@ -205,7 +205,7 @@ describe('options', () => {
     });
 
     it('merges user-provided operators with default `tap: true` when set to object', async () => {
-      const BANNED_OPERATORS = Object.freeze({switchMap: true});
+      const BANNED_OPERATORS = {switchMap: true} as const;
 
       const configResult = await computeEslintConfig({
         rxjs: {banOperators: BANNED_OPERATORS},
@@ -229,11 +229,7 @@ describe('options', () => {
     });
 
     it('allows overriding `tap` when set to object with `tap: false`', async () => {
-      const BANNED_OPERATORS = Object.freeze({tap: false});
-
-      const configResult = await computeEslintConfig({
-        rxjs: {banOperators: BANNED_OPERATORS},
-      });
+      const configResult = await computeEslintConfig({rxjs: {banOperators: {tap: false}}});
 
       // falsy values get filtered out
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-operators')).toStrictEqual([]);

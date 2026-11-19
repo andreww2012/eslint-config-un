@@ -12,8 +12,9 @@ export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
           ruleName,
           {
             enumerable: true,
-            // eslint-disable-next-line ts/no-deprecated -- The built-in rules are needed to expose their metadata
-            get: () => eslintBuiltinRules.get(ruleName),
+            get: () =>
+              // eslint-disable-next-line ts/no-deprecated -- The built-in rules are needed to expose their metadata
+              eslintBuiltinRules.get(ruleName),
           },
         ],
       ),

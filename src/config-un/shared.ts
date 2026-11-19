@@ -332,7 +332,7 @@ export interface EslintConfigUnOptions<
    * cannot vary per file.
    * Both Configs have a `reportUnusedDisableDirectives` option of their own to override it.
    *
-   * The `markdown/codeBlocks` sub-config sets it to `off` for the Markdown files whose code blocks it
+   * The `markdown/codeBlocks` Sub-config sets it to `off` for the Markdown files whose code blocks it
    * lints, regardless of this option, so in these files it only applies to the code blocks
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
@@ -1121,11 +1121,13 @@ export const processUnOrFlatConfig = (
         ruleNameUnprefixed: ruleName,
         fullRuleNameWithResolvedPrefix: ruleEntryName,
       } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
-      // eslint-disable-next-line un/no-type-assertion -- The prefix of an extra plugin is not a `PluginPrefix`, but is stored all the same
-      const pluginPrefix = pluginPrefixCanonical as PluginPrefix;
+      const pluginPrefix =
+        // eslint-disable-next-line un/no-type-assertion -- The prefix of an extra plugin is not a `PluginPrefix`, but is stored all the same
+        pluginPrefixCanonical as PluginPrefix;
 
-      // eslint-disable-next-line un/no-type-assertion -- Anything but a regular rule entry is ignored below
-      const existingRuleRecord = (config as EslintFlatConfigEntry).rules?.[ruleEntryName];
+      const existingRuleRecord =
+        // eslint-disable-next-line un/no-type-assertion -- Anything but a regular rule entry is ignored below
+        (config as EslintFlatConfigEntry).rules?.[ruleEntryName];
 
       const rawSeverityInitial = Array.isArray(existingRuleRecord)
         ? existingRuleRecord[0]

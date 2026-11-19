@@ -39,7 +39,7 @@ interface FileState {
 // Keyed by the filename given to `preprocess`, the dirname of the virtual files of its scripts
 const filesStates = new Map<string, FileState>();
 
-const EMPTY_GLOBALS: ScriptGlobals = Object.freeze({declared: [], through: []});
+const EMPTY_GLOBALS: Readonly<ScriptGlobals> = {declared: [], through: []};
 
 const commentParser = new ConfigCommentParser();
 
@@ -170,7 +170,7 @@ const getTopLevelScope = (globalScope: Eslint.Scope.Scope, ast: Eslint.AST.Progr
 // Must run before any global is added to the scope manager
 const collectGlobals = ({ast, scopeManager}: ParseResult, isModule: boolean) => {
   const {globalScope} = scopeManager;
-  /* v8 ignore next 3 Every scope manager made for ESLint has a global scope */
+  /* v8 ignore next Every scope manager made for ESLint has a global scope */
   if (!globalScope) {
     return EMPTY_GLOBALS;
   }
@@ -194,7 +194,7 @@ const haveSameOptions = (first: ParseOptions, second: ParseOptions) =>
 /** Parses another script of the file ahead of time, with the options of the current one */
 const getScriptGlobals = (file: FileState, index: number, currentScript: FileScript) => {
   const script = file.scripts[index];
-  /* v8 ignore next 3 The index always points to a script of the file */
+  /* v8 ignore next The index always points to a script of the file */
   if (!script) {
     return EMPTY_GLOBALS;
   }

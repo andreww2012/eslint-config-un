@@ -55,7 +55,8 @@ const rule: Eslint.JSRuleDefinition<{RuleOptions: [RuleOptions?]}> = {
       }
 
       const index = parent.children.indexOf(element);
-      // Vue drops the whitespace at the start of an element, so the text starts where the parent does
+      // Vue drops the whitespace at the start of an element, so the text starts where the parent
+      // does
       if (parent.children.slice(0, index).every(isWhitespaceOnly)) {
         return isRightAfterContent(parent);
       }

@@ -1170,7 +1170,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('throw-new-error', ERROR) /** @since 0.1.0 */
     .addRule('try-complexity', OFF) /** @since 65.0.0 */ // 🔴
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         objectKeysUnsafe(RULE_CATEGORIES_PER_LANGUAGE).some(
           (languageId) =>
@@ -1195,7 +1195,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('no-leading-empty-lines', ERROR) /** @since 77.0.0 */ // 🟣
     .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.anyLanguage, ruleName),
       /* v8 ignore stop */
@@ -1240,7 +1240,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       textEncodingOptions,
     ) /** @since 41.0.0 */
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.css, ruleName),
     })
     .addOverrides();
@@ -1271,7 +1271,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
       textEncodingOptions,
     ) /** @since 41.0.0 */
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.html, ruleName),
       /* v8 ignore stop */
@@ -1307,7 +1307,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('single-line-block-comment-style', OFF)
     .addRule('string-content', OFF)
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.json, ruleName),
       /* v8 ignore stop */
@@ -1332,7 +1332,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('relative-url-style', ERROR, ['always'])
     .addRule('require-frontmatter-fields', ERROR)
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.markdown, ruleName),
       /* v8 ignore stop */
@@ -1371,7 +1371,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('single-line-block-comment-style', OFF)
     .addRule('string-content', OFF)
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.soml, ruleName),
       /* v8 ignore stop */
@@ -1403,7 +1403,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('prefer-short-escape-sequences', ERROR)
     .addRule('string-content', OFF)
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.toml, ruleName),
       /* v8 ignore stop */
@@ -1433,7 +1433,7 @@ export default defineUnConfig<UnicornEslintConfigOptions>(
     .addRule('number-literal-case', OFF)
     .addRule('string-content', OFF)
     .enableConfigTesterForPlugin('unicorn', {
-      /* v8 ignore start */
+      /* v8 ignore start Only called in the test mode */
       rulesToSkipInConfig: (ruleName) =>
         !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.yaml, ruleName),
       /* v8 ignore stop */

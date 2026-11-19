@@ -69,8 +69,9 @@ export default defineUnConfig<NoSecretsEslintConfigOptions>(
     ...noSecretsOptionsProvided,
   };
   const noSecretsSeverity = eslintToUnRuleSeverity(noSecretsSeverityRaw, ERROR);
-  // eslint-disable-next-line un/no-type-assertion -- Its types say otherwise, but the plugin has defaults for the options left out
-  const noSecretsRuleOptions = noSecretsOptions as NoSecretsOptions;
+  const noSecretsRuleOptions =
+    // eslint-disable-next-line un/no-type-assertion -- Its types say otherwise, but the plugin has defaults for the options left out
+    noSecretsOptions as NoSecretsOptions;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-secrets');
 

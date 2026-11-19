@@ -61,8 +61,8 @@ const SPACE_CODE_POINT = ' '.codePointAt(0);
 const TAB_CODE_POINT = '\t'.codePointAt(0);
 const BACKSLASH_CODE_POINT = '\\'.codePointAt(0);
 const ESCAPE_SEQUENCE_CODE_POINT_REGEXP = /^\\(?:x|u\{?)([\dA-Fa-f]+)\}?$/;
-const ESCAPED_LINE_BREAKS = [String.raw`\n`, String.raw`\r`] as const;
-const LITERAL_AND_ESCAPED_LINE_BREAKS = ['\n', '\r', ...ESCAPED_LINE_BREAKS] as const;
+const ESCAPED_LINE_BREAKS: readonly string[] = [String.raw`\n`, String.raw`\r`];
+const LITERAL_AND_ESCAPED_LINE_BREAKS: readonly string[] = ['\n', '\r', ...ESCAPED_LINE_BREAKS];
 
 const getCodePoint = (token: string) => {
   const escapedCodePoint = ESCAPE_SEQUENCE_CODE_POINT_REGEXP.exec(token)?.[1];

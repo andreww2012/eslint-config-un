@@ -437,7 +437,7 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {
     .addRule('valid-mock-module-path', ERROR) /** @since 29.2.0 */
     .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
     .enableConfigTesterForPlugin('jest', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();
@@ -470,7 +470,7 @@ export default defineUnConfig<JestEslintConfigOptions>('jest', {
     .disableAnyRule('ts', 'unbound-method')
     .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */
     .enableConfigTesterForPlugin('jest', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => !JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();

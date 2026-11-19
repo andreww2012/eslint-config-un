@@ -20,7 +20,7 @@ import {
 import {omit} from '../utils';
 import type {RuleReplacementTraits} from './rule-replacement-types';
 
-const GENERATED_RULE_TRAITS = {
+const generatedRuleTraits = {
   requiresTypeInfo: RULES_REQUIRING_TYPE_INFORMATION,
   requiresNetwork: RULES_TO_DISABLE_IN_OFFLINE_MODE,
   stylistic: ALL_STYLISTIC_RULES,
@@ -34,7 +34,7 @@ const GENERATED_RULE_TRAITS = {
 /**
  * The rules having each trait, in the shapes the generated tables have
  */
-export type RuleTraitTables = typeof GENERATED_RULE_TRAITS;
+export type RuleTraitTables = typeof generatedRuleTraits;
 
 interface TraitValueChange<Value> {
   pluginPrefix: string;
@@ -122,15 +122,17 @@ const TRAIT_TABLES_ACCESS: Readonly<{
   cliFiles: createRulesPerPluginAccess(),
 };
 
-// eslint-disable-next-line ts/no-unnecessary-type-parameters -- Only a type parameter makes the body checked per trait
-const withDefaultTrait = <Trait extends RuleTrait>(
+const withDefaultTrait = <
+  // eslint-disable-next-line ts/no-unnecessary-type-parameters -- Only a type parameter makes the body checked per trait
+  Trait extends RuleTrait,
+>(
   traits: RuleTraitValues,
   trait: Trait,
   pluginPrefix: string,
   ruleName: string,
 ) => {
   traits[trait] = TRAIT_TABLES_ACCESS[trait].read(
-    GENERATED_RULE_TRAITS[trait],
+    generatedRuleTraits[trait],
     pluginPrefix,
     ruleName,
   );
@@ -146,14 +148,16 @@ export interface RuleTraitsChange {
   traits: RuleTraitValues;
 }
 
-// eslint-disable-next-line ts/no-unnecessary-type-parameters -- Only a type parameter makes the body checked per trait
-const withChangedTraitTable = <Trait extends RuleTrait>(
+const withChangedTraitTable = <
+  // eslint-disable-next-line ts/no-unnecessary-type-parameters -- Only a type parameter makes the body checked per trait
+  Trait extends RuleTrait,
+>(
   tables: RuleTraitTables,
   trait: Trait,
   changes: readonly RuleTraitsChange[],
 ) => {
   tables[trait] = TRAIT_TABLES_ACCESS[trait].withChanges(
-    GENERATED_RULE_TRAITS[trait],
+    generatedRuleTraits[trait],
     changes.map(({pluginPrefix, ruleName, traits}) => ({
       pluginPrefix,
       ruleName,
@@ -232,6 +236,6 @@ export const resolveRuleTraitTables = (
   changes.length > 0
     ? RULE_TRAITS_ORDERED.reduce<RuleTraitTables>(
         (acc, trait) => withChangedTraitTable(acc, trait, changes),
-        {...GENERATED_RULE_TRAITS},
+        {...generatedRuleTraits},
       )
-    : GENERATED_RULE_TRAITS;
+    : generatedRuleTraits;

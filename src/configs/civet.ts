@@ -1,4 +1,3 @@
-// cspell:ignore heregexes
 import {GLOB_CIVET, GLOB_CIVET_COMPILED} from '../constants';
 import {
   type ExtraPluginsType,
@@ -74,6 +73,7 @@ const RULES_REPORTING_GENERATED_CODE: readonly UnAllRuleNames[] = [
   'no-useless-rename',
   // Optional object properties
   'unicorn/consistent-conditional-object-spread',
+  // cspell:disable-next-line
   // Interpolated heregexes
   'unicorn/prefer-string-raw',
   // Tee pipes

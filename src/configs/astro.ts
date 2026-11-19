@@ -139,7 +139,7 @@ export default defineUnConfig<AstroEslintConfigOptions, readonly [], AstroConfig
     .addRule('semi', OFF) /** @since 0.19.0 */
     .disableAnyRule('node', 'no-top-level-await') // False positives in the frontmatter, which is compiled into a function
     .enableConfigTesterForPlugin('astro', {
-      /* v8 ignore next */
+      /* v8 ignore next Only called in the test mode */
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),
     })
     .addOverrides();

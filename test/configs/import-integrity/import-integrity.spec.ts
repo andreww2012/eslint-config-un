@@ -1,3 +1,5 @@
+import type {GetRuleOptions} from '../../../src/eslint/eslint-types';
+
 const FIXTURES = {
   nodeImportWithoutNodeProtocolPrefix: 'node-import-without-node-protocol-prefix.js',
 } as const;
@@ -219,9 +221,10 @@ describe('options', () => {
     });
 
     it('enables `import-integrity/no-restricted-imports` rule when `restrictImports` is provided', async () => {
-      const OPTIONS = Object.freeze({
-        rules: [{type: 'built-in' as const, moduleSpecifier: 'fs', denied: ['*']}],
-      });
+      const OPTIONS: Readonly<GetRuleOptions<'import-integrity', 'no-restricted-imports'>> = {
+        rules: [{type: 'built-in', moduleSpecifier: 'fs', denied: ['*']}],
+      };
+
       const configResult = await computeEslintConfig({
         importIntegrity: {restrictImports: OPTIONS},
       });

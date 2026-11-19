@@ -18,6 +18,8 @@ const CONFIG_UN_SHARED_PATH = pathe.join(ROOT_DIRECTORY, 'src/config-un/shared.t
 
 const NON_CONFIG_MODULES: ReadonlySet<string> = new Set(['index.ts', 'shared.ts']);
 
+const KNOWN_PLUGIN_PREFIXES: ReadonlySet<string> = new Set(LOADABLE_PLUGIN_PREFIXES_LIST);
+
 const MISC_GROUP_BULLET_REGEXP = /^ {2}- `([^`]+)`$/;
 const JS_DOC_OPENING_REGEXP = /^\/\*\*/;
 const JS_DOC_LINE_PREFIX_REGEXP = /^\*/;
@@ -234,8 +236,6 @@ export const discoverConfigs = async () => {
   const program = ts.createProgram(configModulePaths, {...parsedTsConfig.options, noEmit: true});
   const checker = program.getTypeChecker();
 
-  const knownPluginPrefixes = new Set<string>(LOADABLE_PLUGIN_PREFIXES_LIST);
-
   const errors: string[] = [];
   const configs: DiscoveredConfig[] = [];
 
@@ -265,7 +265,6 @@ export const discoverConfigs = async () => {
   await Promise.all(
     configModulePaths.map(async (filePath) => {
       const sourceFile = program.getSourceFile(filePath);
-      /* v8 ignore next 3 */
       invariant(sourceFile, `Could not read \`${filePath}\``);
 
       const relativePath = pathe.relative(CONFIGS_DIRECTORY, filePath);
@@ -334,9 +333,9 @@ export const discoverConfigs = async () => {
 
       // A `file://` URL rather than the path itself: Windows reads the `<disk_letter>:`
       // of an absolute path as a URL scheme and refuses to load it
-      const manifest =
+      const {default: manifest} =
         // eslint-disable-next-line un/no-type-assertion -- The path comes from the configs directory
-        ((await import(pathToFileURL(filePath).href)) as {default: AnyConfigManifest}).default;
+        (await import(pathToFileURL(filePath).href)) as {default: AnyConfigManifest};
 
       configs.push({
         key,
@@ -351,7 +350,7 @@ export const discoverConfigs = async () => {
           false,
         resultInterfaceName: resultInterface,
         isRequiredPluginKnown:
-          !manifest.requires || knownPluginPrefixes.has(manifest.requires.pluginLoadable),
+          !manifest.requires || KNOWN_PLUGIN_PREFIXES.has(manifest.requires.pluginLoadable),
         prose: getJsDocLines(optionsDeclaration),
         subConfigs: checker
           .getPropertiesOfType(checker.getDeclaredTypeOfSymbol(optionsSymbol))
@@ -362,8 +361,6 @@ export const discoverConfigs = async () => {
     }),
   );
 
-  return {
-    configs: configs.toSorted((a, b) => a.key.localeCompare(b.key)),
-    errors,
-  };
+  configs.sort((a, b) => a.key.localeCompare(b.key));
+  return {configs, errors};
 };

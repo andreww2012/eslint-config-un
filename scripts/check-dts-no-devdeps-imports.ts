@@ -15,7 +15,7 @@ interface PackageJson {
 }
 
 /**
- * Extract bare-specifier imports from a declaration file using the TypeScript AST.
+ * Extract bare-specifier imports from a declaration file.
  * Covers `import ... from 'pkg'`, `export ... from 'pkg'`, and `import 'pkg'`
  */
 function extractBareImports(filePath: string, content: string): readonly string[] {
@@ -51,13 +51,14 @@ const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
 /**
  * Collect allowed package names from `dependencies` + `peerDependencies`.
  * Handles npm aliases: `"alias": "npm:actual-pkg@version"` → adds both the alias and the resolved
- * package name, since TypeScript imports use the real name
+ * package name
  */
 function resolveAllowedPackages(packageJson: PackageJson): ReadonlySet<string> {
   const allowed = new Set<string>();
   (['dependencies', 'peerDependencies'] as const).forEach((section) => {
     Object.entries(packageJson[section] || {}).forEach(([name, version]) => {
       allowed.add(name);
+      // TypeScript imports use the real name
       const resolvedAlias = version.match(NPM_ALIAS_REGEX)?.[1];
       if (resolvedAlias) {
         allowed.add(resolvedAlias);

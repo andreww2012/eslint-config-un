@@ -207,8 +207,9 @@ const main = async () => {
   const result = await Promise.all(
     changedDependencies.map(async ([dependency, newVersion]) => {
       const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
-      // eslint-disable-next-line ts/no-non-null-assertion -- The dependency list contains only entries from the previous manifest
-      const oldVersion = dependenciesBeforeChanges[dependency]!;
+      const oldVersion =
+        // eslint-disable-next-line ts/no-non-null-assertion -- The dependency list contains only entries from the previous manifest
+        dependenciesBeforeChanges[dependency]!;
       const codeDiffResult = await exec('npm', [
         'diff',
         '--force',
@@ -464,8 +465,9 @@ const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | unde
 };
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
-  // eslint-disable-next-line ts/no-non-null-assertion -- The loop bounds guarantee an entry exists
-  const updatedDependencyInfo = updatedDependenciesInfo[i]!;
+  const updatedDependencyInfo =
+    // eslint-disable-next-line ts/no-non-null-assertion -- The loop bounds guarantee an entry exists
+    updatedDependenciesInfo[i]!;
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependencyInfo;
 
   if (i > 0) {

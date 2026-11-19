@@ -143,7 +143,7 @@ export function findArrayInversions<Item>(
       const comparatorResult = compareFn(aForComparator, bForComparator);
 
       if (comparatorResult === 1) {
-        /* v8 ignore next */
+        /* v8 ignore next The comparator argument order is implementation-defined */
         const pairIndex =
           aIndex < bIndex ? (`${aIndex}-${bIndex}` as const) : (`${bIndex}-${aIndex}` as const);
         /* v8 ignore else Reachability depends on the engine's sort algorithm: V8's TimSort does compare the same pair twice, while a plain insertion sort never does */
@@ -153,7 +153,7 @@ export function findArrayInversions<Item>(
         }
       }
 
-      /* v8 ignore next */
+      /* v8 ignore next The comparator argument order is implementation-defined */
       return aIndex < bIndex ? comparatorResult : -comparatorResult;
     });
 
@@ -178,10 +178,11 @@ export const sha256 = (input: string | Buffer) => {
   return hashInstance.digest('hex');
 };
 
-// TODO should report?
-// eslint-disable-next-line ts/no-redundant-type-constituents -- False positive
-export const joinPaths = (...paths: readonly (string | Falsy)[]) =>
-  path.posix.join(...arrayWithoutFalsy(paths));
+export const joinPaths = (
+  // TODO should report?
+  // eslint-disable-next-line ts/no-redundant-type-constituents -- False positive
+  ...paths: readonly (string | Falsy)[]
+) => path.posix.join(...arrayWithoutFalsy(paths));
 
 /**
  * Whether the version is at least the minimum one

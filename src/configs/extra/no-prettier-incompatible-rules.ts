@@ -18,6 +18,10 @@ const PACKAGES_ENABLING_LANGUAGE = {
 
 type PrettierLanguage = keyof typeof PLUGINS_BY_PRETTIER_LANGUAGE;
 
+const PLUGINS_OF_PRETTIER_LANGUAGES: ReadonlySet<string> = new Set(
+  Object.values(PLUGINS_BY_PRETTIER_LANGUAGE).flat(),
+);
+
 /**
  * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io) or
  * [oxfmt](https://oxc.rs/docs/guide/usage/formatter), which follows Prettier's output.
@@ -69,16 +73,14 @@ export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
   };
 
   const {prettierIncompatible: rulesPerPlugin} = context.ruleTraits;
-  const pluginsByLanguage = objectEntriesUnsafe(PLUGINS_BY_PRETTIER_LANGUAGE);
-  const pluginsOfLanguages: ReadonlySet<string> = new Set(
-    pluginsByLanguage.flatMap(([, plugins]) => plugins),
-  );
   const pluginPrefixes = [
-    ...pluginsByLanguage
+    ...objectEntriesUnsafe(PLUGINS_BY_PRETTIER_LANGUAGE)
       .filter(([language]) => isLanguageEnabled(language))
       .flatMap(([, plugins]) => plugins),
     // Only a rule replacement can give the trait to a rule of such a plugin
-    ...Object.keys(rulesPerPlugin).filter((pluginPrefix) => !pluginsOfLanguages.has(pluginPrefix)),
+    ...Object.keys(rulesPerPlugin).filter(
+      (pluginPrefix) => !PLUGINS_OF_PRETTIER_LANGUAGES.has(pluginPrefix),
+    ),
   ];
 
   const configBuilder = context.createConfigBuilder(optionsResolved, null);

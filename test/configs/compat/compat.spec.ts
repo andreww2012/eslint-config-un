@@ -1,3 +1,5 @@
+import type {CompatPluginSettings} from '../../../src/configs/compat';
+
 const FIXTURES = {
   fetchApi: 'fetch-api.js',
   fetchApiInsideHtml: 'fetch-api-inside-html.html',
@@ -166,7 +168,7 @@ describe('options', () => {
     });
 
     it('sets compat settings when provided', async () => {
-      const SETTINGS = Object.freeze({targets: ['ie 11'], polyfills: ['fetch']});
+      const SETTINGS: Readonly<CompatPluginSettings> = {targets: ['ie 11'], polyfills: ['fetch']};
 
       const configResult = await computeEslintConfig('compat', {
         un: {plugins: {compat: {settings: SETTINGS}}},

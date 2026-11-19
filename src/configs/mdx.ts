@@ -180,7 +180,7 @@ export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
         parseWith: 'mdx',
       },
     ],
-    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'
     {
       ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
         valueTransformFn: {
