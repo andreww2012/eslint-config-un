@@ -925,12 +925,10 @@ Reports you may see:
 - *Parsing error* in a block whose language needs its own parser, like Vue, Svelte or GraphQL.
   Blocks are ordinary files for ESLint, so such a language needs a parser set up for its extension, and the `files` patterns do not have to mention Markdown: `**/*.vue` covers `README.md/0_0.vue` as well.
   Such blocks are only linted if a parser is set up for their extension, by an enabled Config or the [`parsing`](#parsing) root option (`parsing: {graphql: true}`), so this error means that the parser fails on the block itself; leave it out of linting with the [`ignores`][ignores option] root option (`ignores: ['**/*.md/**/*.graphql']`).
-- *Unused eslint-disable directive* on the comment before a block:
-  - The comment also counts as a directive for the Markdown file itself, where it is almost always unused.
-    Its autofix removes the comment even if the block needs it.
-    Turn the report off for documentation files: `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.md', '**/*.mdx']}`.
-  - In Markdown files, the comment is also reported if the directive is unused in the block itself, for example when the rule is already disabled in code blocks by default.
-    This report comes from the block's virtual file, so the setting above keeps it.
+- *Unused eslint-disable directive* on the comment before a block.
+  In Markdown files, the directive is unused in the block, for example because the rule is already disabled in code blocks by default.
+  The `codeBlocks` sub-config turns off these reports for the Markdown text itself.
+  In MDX files, the comment is also reported for the MDX text, where it is almost always unused, and the autofix removes it even if the block needs it: turn this off with `linterOptionsReportUnusedDisableDirectives: {ignores: ['**/*.mdx']}`.
 - [`eslint-comments/disable-enable-pair`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/disable-enable-pair.html) in MDX files, because they are parsed as code: add `{/* eslint-enable eqeqeq */}` after the block.
 
 ### Tailwind CSS
@@ -1078,7 +1076,10 @@ type ValueOrEslintConfigWithValue<Value> =
 
 Sets [`linterOptions.{noInlineConfig,reportUnusedDisableDirectives,reportUnusedInlineConfigs}`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=linterOptions) globally or for certain files only.
 
-An entry with `ignores` and no `value` reads as "turn this option off for these paths", so `{ignores: ['**/*.md']}` is enough to silence the option in Markdown files.
+An entry with `ignores` and no `value` reads as "turn this option off for these paths", so `{ignores: ['**/*.mdx']}` is enough to silence the option in MDX files.
+
+`reportUnusedDisableDirectives` does not apply to the text of Markdown files whose code blocks are linted.
+For the reason, see [Disabling a rule in a code block](#disabling-a-rule-in-a-code-block).
 
 `reportUnusedDisableDirectives` is also inherited by the rules doing the same job where ESLint does not see the directives itself: [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html) and [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive).
 They can only take a single severity, so only the entries applying to every file are taken into account; `off` makes them stop reporting unused directives without turning the rules themselves off, as they are what makes the directives work in the first place.

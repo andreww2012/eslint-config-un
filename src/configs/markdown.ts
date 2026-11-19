@@ -97,6 +97,11 @@ export interface MarkdownEslintConfigOptions<
    * `files` and `ignores` of this config select the ***Markdown*** files whose fenced code blocks
    * will be linted, not the code blocks themselves.
    *
+   * In these Markdown files,
+   * [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives)
+   * is set to `off`, so unused `eslint-disable` directives are only reported in their code blocks.
+   * To report them in the Markdown text too, set it back for these files in an `extraConfigs` entry.
+   *
    * 📁 Default `files`: <code>**&#47;*.md</code>
    * @default true
    * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoredLanguages: ['yml']}
@@ -369,8 +374,10 @@ export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: '
         parsingIgnoresInheritedFrom: ['markdown'],
       },
     ],
-    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
     {
+      // Directives before a block are unused in the Markdown text, and `--fix` would remove them.
+      // The blocks still report their own unused directives
+      linterOptions: {reportUnusedDisableDirectives: 'off'},
       ...generatePackageToLoadProperty(
         'processor',
         ['eslintPluginMarkdown', 'eslintMergeProcessors'],

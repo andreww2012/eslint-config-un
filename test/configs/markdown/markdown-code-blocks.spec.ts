@@ -1,5 +1,6 @@
 const FIXTURES = {
   codeBlockWithConsoleCall: 'code-block-with-console-call.md',
+  codeBlocksWithDisableDirectives: 'code-blocks-with-disable-directives.md',
   nestedMarkdownCodeBlock: 'nested-markdown-code-block.md',
   yamlCodeBlock: 'yaml-code-block.md',
 } as const;
@@ -160,6 +161,38 @@ describe('markdown: sub config `codeBlocks`', () => {
       expect(
         findLintMessageFromLintResults(results, FIXTURES.codeBlockWithConsoleCall, 'no-console'),
       ).toBeUndefined();
+    });
+  });
+
+  describe('unused `eslint-disable` directives', () => {
+    it('turns off `linterOptions.reportUnusedDisableDirectives` in `markdown/code-blocks-processor` eslint config', async () => {
+      const configResult = await computeEslintConfig('markdown');
+
+      expect(
+        configResult.getConfigByUnPostfix('markdown/code-blocks-processor')?.linterOptions,
+      ).toStrictEqual({reportUnusedDisableDirectives: 'off'});
+    });
+
+    it('reports a directive comment before a code block only if the directive is unused in the block', async () => {
+      const results = await testEslintConfig(
+        {markdown: {configCodeBlocks: {overrides: {eqeqeq: 2}}}},
+        FIXTURES.codeBlocksWithDisableDirectives,
+        {
+          searchFixturesRelativeToPath: import.meta.dirname,
+          un: {linterOptionsReportUnusedDisableDirectives: 'error'},
+        },
+      );
+
+      expect(
+        findLintMessageFromLintResults(results, FIXTURES.codeBlocksWithDisableDirectives, 'eqeqeq'),
+      ).toBeUndefined();
+      expect(
+        results.flatMap(({messages}) =>
+          messages.filter(({ruleId}) => ruleId == null).map(({line, message}) => ({line, message})),
+        ),
+      ).toMatchInlineSnapshot(
+        `[{"line": 11, "message": "Unused eslint-disable directive (no problems were reported from 'no-console')."}]`,
+      );
     });
   });
 

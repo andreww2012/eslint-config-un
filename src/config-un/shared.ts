@@ -330,7 +330,10 @@ export interface EslintConfigUnOptions<
    * [`svelte/comment-directive`](https://sveltejs.github.io/eslint-plugin-svelte/rules/comment-directive))
    * inherit this severity, but only from the entries applying to every file, since a rule severity
    * cannot vary per file.
-   * Both Configs have a `reportUnusedDisableDirectives` option of their own to override it
+   * Both Configs have a `reportUnusedDisableDirectives` option of their own to override it.
+   *
+   * The `markdown/codeBlocks` sub-config sets it to `off` for the Markdown files whose code blocks it
+   * lints, regardless of this option, so in these files it only applies to the code blocks
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
