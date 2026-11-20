@@ -12,6 +12,7 @@ For usage examples, concepts and API documentation, see [`README.md`](./README.m
 
 Only ever run the full test suite if you've made the core logic changes and it has a high chance of affecting majority of test files.
 Running it fully takes a lot of resources (time especially and memory too) to complete.
+When you add or remove Configs or rules within them, it's a good idea to update the cascade order test snapshot.
 
 Don't typecheck with TypeScript 6: it only exists for ESLint to work.
 Use TypeScript 7 only.
