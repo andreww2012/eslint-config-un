@@ -36,7 +36,14 @@ import type {
   pluginsLoaders,
 } from '../loaders';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../plugins.gen';
-import type {MaybePromise, Nullable, OmitStrict, Prettify, SetRequired} from '../types';
+import type {
+  MaybePromise,
+  Nullable,
+  OmitStrict,
+  OverrideProperties,
+  Prettify,
+  SetRequired,
+} from '../types';
 import {
   type MaybeArray,
   type MaybeFn,
@@ -104,7 +111,7 @@ type StripWarnRulesRecord<RulesRecord> = RulesRecord extends object
   ? {[RuleName in keyof RulesRecord]: StripWarnOverrideEntry<RulesRecord[RuleName]>}
   : RulesRecord;
 
-type StripWarnConfigDepth = readonly [never, 0, 1, 2, 3, 4];
+type SubConfigDepth = readonly [never, 0, 1, 2, 3, 4];
 
 type StripWarnFromConfig<Config, Depth extends number = 4> = Config extends (
   ...arguments_: never[]
@@ -119,7 +126,7 @@ type StripWarnFromConfig<Config, Depth extends number = 4> = Config extends (
             : Key extends `config${string}`
               ? Depth extends 0
                 ? Config[Key]
-                : StripWarnFromConfig<Config[Key], StripWarnConfigDepth[Depth]>
+                : StripWarnFromConfig<Config[Key], SubConfigDepth[Depth]>
               : Config[Key];
       }
     : Config;
@@ -160,7 +167,7 @@ type ReplaceRuleEntriesInConfig<Config, Entries, Depth extends number = 4> = Con
           : Key extends `config${string}`
             ? Depth extends 0
               ? Config[Key]
-              : ReplaceRuleEntriesInConfig<Config[Key], Entries, StripWarnConfigDepth[Depth]>
+              : ReplaceRuleEntriesInConfig<Config[Key], Entries, SubConfigDepth[Depth]>
             : Config[Key];
       }
     : Config;
@@ -176,6 +183,17 @@ type ApplyTypeAffectingOptions<
       : ReplaceRuleEntriesInConfig<Config, ReplacedRuleEntriesOf<TypeAffectingOptions>>,
   TypeAffectingOptions
 >;
+
+// Lets every Sub-config at any depth be set to a string, the shorthand for `files`.
+// Kept a plain homomorphic mapped type and applied before the type-affecting options: a
+// conditional type on a `Config` that is still generic makes checking the options many times slower
+type WithSubConfigFilesShorthand<Config, Depth extends number = 4> = {
+  [Key in keyof Config]: Key extends `config${string}`
+    ? Depth extends 0
+      ? Config[Key]
+      : string | WithSubConfigFilesShorthand<Config[Key], SubConfigDepth[Depth]>
+    : Config[Key];
+};
 
 type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Prettify<
   OmitStrict<EslintFlatConfigEntry, 'rules'> & {
@@ -226,16 +244,29 @@ export interface EslintConfigUnOptions<
 
   /**
    * Enables, disables and configures the individual Configs.
+   * A Config or Sub-config set to a string is a shorthand for its `files` with only this pattern.
    * The Configs supporting the array notation may be configured several times
+   * @example
+   * {configs: {node: 'backend/**'}} // Same as `{configs: {node: {files: ['backend/**']}}}`
    */
   configs?: {
     [Key in keyof UnConfigs<ExtraPlugins>]?:
       | boolean
-      | ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>
+      | string
+      | ApplyTypeAffectingOptions<
+          WithSubConfigFilesShorthand<UnConfigs<ExtraPlugins>[Key]>,
+          TypeAffectingOptions
+        >
       | (Key extends UnConfigsSupportingArraysGenerated
           ? [
-              ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>,
-              ...ApplyTypeAffectingOptions<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>[],
+              ApplyTypeAffectingOptions<
+                WithSubConfigFilesShorthand<UnConfigs<ExtraPlugins>[Key]>,
+                TypeAffectingOptions
+              >,
+              ...ApplyTypeAffectingOptions<
+                WithSubConfigFilesShorthand<UnConfigs<ExtraPlugins>[Key]>,
+                TypeAffectingOptions
+              >[],
             ]
           : never);
   };
@@ -866,6 +897,28 @@ export interface EslintConfigUnOptions<
   // #endregion
 }
 
+/**
+ * The `configs` root option with every Config and Sub-config set to a string turned into the
+ * object form
+ */
+export type ConfigsOptionResolved<ExtraPlugins extends ExtraPluginsType = never> = {
+  [Key in keyof UnConfigs<ExtraPlugins>]?:
+    | boolean
+    | UnConfigs<ExtraPlugins>[Key]
+    | (Key extends UnConfigsSupportingArraysGenerated
+        ? [UnConfigs<ExtraPlugins>[Key], ...UnConfigs<ExtraPlugins>[Key][]]
+        : never);
+};
+
+/**
+ * The root options with every Config and Sub-config set to a string turned into the object form
+ */
+export type EslintConfigUnOptionsResolved<ExtraPlugins extends ExtraPluginsType = never> =
+  OverrideProperties<
+    EslintConfigUnOptions<ExtraPlugins>,
+    {configs?: ConfigsOptionResolved<ExtraPlugins>}
+  >;
+
 export interface EslintConfigUnInternalOptions {
   disableAutofixForAllFixableRulesOnly?: boolean;
 
@@ -897,7 +950,7 @@ export interface EslintConfigUnInternalOptions {
 }
 
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
-  rootOptions: EslintConfigUnOptions<ExtraPlugins>;
+  rootOptions: EslintConfigUnOptionsResolved<ExtraPlugins>;
   internalOptions: EslintConfigUnInternalOptions;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],

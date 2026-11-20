@@ -1,4 +1,47 @@
 describe('option: `files`', () => {
+  describe('string form of a config', () => {
+    const FILE = 'tests/**';
+
+    it('enables the config with only the given pattern if the config is set to a string', async () => {
+      const configResult = await computeEslintConfig({vitest: FILE});
+
+      expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual([FILE]);
+    });
+
+    it('enables the sub-config with only the given pattern if the sub-config is set to a string', async () => {
+      const configResult = await computeEslintConfig({vitest: {configTypescript: FILE}});
+
+      expect(configResult.getConfigByUnPostfix('vitest/ts')?.files).toStrictEqual([FILE]);
+    });
+
+    it('supports nested sub-configs', async () => {
+      const configResult = await computeEslintConfig({
+        ember: {configTestFiles: {configNoOnlyTests: FILE}},
+      });
+
+      expect(configResult.getConfigByUnPostfix('ember/no-only-tests')?.files).toStrictEqual([FILE]);
+    });
+
+    it('passes the pattern down to the sub-configs inheriting `files` from the sub-config set to a string', async () => {
+      const configResult = await computeEslintConfig({ember: {configTestFiles: FILE}});
+
+      expect(configResult.getConfigByUnPostfix('ember/tests')?.files).toStrictEqual([FILE]);
+      expect(configResult.getConfigByUnPostfix('ember/no-only-tests')?.files).toStrictEqual([FILE]);
+    });
+
+    it('supports sub-configs of the configs in array notation', async () => {
+      addInstalledPackages({prettier: '3.9.9'});
+
+      const configResult = await computeEslintConfig({
+        format: [{configFencedCodeBlocks: FILE}, {configFencedCodeBlocks: true}],
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('format/prettier/fenced-code-blocks#0')?.files,
+      ).toStrictEqual([FILE]);
+    });
+  });
+
   describe('function form', () => {
     it('receives the patterns `files` would be resolved to if the option was not passed', async () => {
       const receivedParams: {readonly filesDefault: readonly string[]}[] = [];

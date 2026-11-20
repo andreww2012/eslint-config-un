@@ -102,6 +102,7 @@ They are similar to ESLint flat config objects, but with a few useful extensions
 Every Config is *usually* tied to one or more ESLint plugins, and produces one or more ESLint flat config items.
 
 You can enable any Config by setting it to `true` or an object with the Config's options.
+A Config can also be set to a string, which is a shorthand for its `files` with only this pattern: `node: 'backend/**'` is the same as `node: {files: ['backend/**']}`.
 Passing `false` disables the Config.
 Passing an empty array to `files` disables the Config, but not its Sub-configs.
 
@@ -132,6 +133,7 @@ type UnRuleEntry<RuleName extends string> =
 
 type UnConfig =
   | boolean
+  | string // Same as `{files: [string]}`
   | {
       files?: string[] | ((params: {filesDefault: string[]}) => string[] | undefined);
       ignores?:
@@ -992,7 +994,7 @@ noPrettierIncompatibleRules: {
 
 ### `configs`
 
-**Type**: `Record<string, boolean | object | [object, ...object[]]>`
+**Type**: `Record<string, boolean | string | object | [object, ...object[]]>`
 
 Enables, disables and configures the individual Configs.
 See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).

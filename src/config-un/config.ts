@@ -42,6 +42,7 @@ import {
   isPlainObject,
   mapGetOrInsertComputed,
   mapMapValues,
+  mapValues,
   maybeCall,
   objectEntriesUnsafe,
   objectFromEntriesUnsafe,
@@ -86,6 +87,7 @@ import {
   resolveRuleReplacements,
 } from './rule-replacements';
 import {
+  type ConfigsOptionResolved,
   ENVIRONMENTS,
   type Environment,
   type EslintConfigUnInternalOptions,
@@ -124,6 +126,34 @@ export function createConfigBuilder<Prefix extends PluginPrefix | null>(
 }
 
 const PLUGINS_CONFIG_NAME = generateFlatConfigEntryName('plugins', {isGlobalSetup: true});
+
+/**
+ * Turns the Config or Sub-config set to a string, and every such Sub-config of it at any depth,
+ * into the object form with only `files`
+ */
+const resolveConfigOptions = (configOptions: unknown): unknown => {
+  if (typeof configOptions === 'string') {
+    return {files: [configOptions]};
+  }
+  if (Array.isArray(configOptions)) {
+    return configOptions.map((configOptionsItem) => resolveConfigOptions(configOptionsItem));
+  }
+  return isPlainObject(configOptions)
+    ? mapValues(configOptions, (value, key) =>
+        typeof key === 'string' && key.startsWith('config') ? resolveConfigOptions(value) : value,
+      )
+    : configOptions;
+};
+
+/**
+ * Turns every Config and Sub-config set to a string into the object form with only `files`
+ */
+const resolveConfigsOption = <ExtraPlugins extends ExtraPluginsType>(
+  configs: EslintConfigUnOptions<ExtraPlugins>['configs'],
+) =>
+  configs &&
+  // eslint-disable-next-line un/no-type-assertion -- The type of each value can't be tied to its key here
+  (mapValues(configs, resolveConfigOptions) as ConfigsOptionResolved<ExtraPlugins>);
 
 interface TestError {
   message: MaybeArray<string>;
@@ -201,16 +231,19 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     }`,
   );
 
-  const optionsResolved = assignDefaults(options, {
-    mode: 'app',
-    extraConfigs: [],
-    loadPluginsOnDemand: true,
-    offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
-  });
+  const optionsResolved = {
+    ...assignDefaults(options, {
+      mode: 'app',
+      extraConfigs: [],
+      loadPluginsOnDemand: true,
+      offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
+    }),
+    configs: resolveConfigsOption(options.configs),
+    cacheConfigs:
+      options.cacheConfigs ??
+      (environment === 'editor' || Boolean(process.env['ESLINT_CONFIG_UN_CACHE_CONFIGS'])),
+  };
 
-  optionsResolved.cacheConfigs =
-    options.cacheConfigs ??
-    (environment === 'editor' || Boolean(process.env['ESLINT_CONFIG_UN_CACHE_CONFIGS']));
   const {cacheConfigs} = optionsResolved;
   debug(`Is config caching enabled: ${cacheConfigs}`);
 

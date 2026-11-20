@@ -247,6 +247,19 @@ describe('options', () => {
       ).toStrictEqual([{devDependencies: [...IGNORE_PATTERNS, ...GLOB_CONFIG_FILES]}]);
     });
 
+    it('respects the `files` of `tests` config set to a string in the default ignore patterns when `mode` is `lib`', async () => {
+      const FILE = 'tests/**';
+
+      const configResult = await computeEslintConfig(
+        {import: true, tests: FILE},
+        {un: {mode: 'lib'}},
+      );
+
+      expect(
+        configResult.getRuleEntryOptions('import', 'import/no-extraneous-dependencies'),
+      ).toStrictEqual([{devDependencies: [FILE, ...GLOB_CONFIG_FILES]}]);
+    });
+
     it('uses the default value when option is `true`', async () => {
       const configResult = await computeEslintConfig(
         {import: {extraneousDependenciesCheck: true}},

@@ -52,6 +52,7 @@ export type {
   ObjectValues,
   OmitIndexSignature,
   OmitStrict,
+  OverrideProperties,
   PartialDeep,
   Prettify,
   PrettifyDeep,
