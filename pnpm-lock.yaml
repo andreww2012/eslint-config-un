@@ -553,8 +553,8 @@ importers:
         specifier: 30.5.2
         version: 30.5.2(supports-color@7.2.0)
       '@mmd-toolkit/eslint-plugin':
-        specifier: 0.5.0
-        version: 0.5.0(eslint@10.15.0)
+        specifier: 0.5.1
+        version: 0.5.1(eslint@10.15.0)
       '@next/eslint-plugin-next':
         specifier: 16.4.6
         version: 16.4.6(eslint@10.15.0)
@@ -3368,8 +3368,8 @@ packages:
   '@microsoft/tsdoc@0.17.1':
     resolution: {integrity: sha512-VHyYyyoH63jFoO3shpw9Zfijk5v/9p/VrClW35z0/q6ooK7sSmxpzOkS4iZPxs3vO4XtBW4H38HRAKkAMIK7DA==}
 
-  '@mmd-toolkit/eslint-plugin@0.5.0':
-    resolution: {integrity: sha512-Hl5kDZwSxg7bXUFGyPuL+Cl1C+83RUx7gOS/BdQTqkwnjc81a/nx1B7uSacHV2gPExecbkeGCqlAXk8txYRseg==}
+  '@mmd-toolkit/eslint-plugin@0.5.1':
+    resolution: {integrity: sha512-xuf+KESJ4RsOm45AJ3pb+SJVlTNvrxg/0Xo7B+i3P7hNL6X/P97AI0A2Y8wItd79n+WZewYnlYTFD7J/0RvMoA==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       '@mmd-toolkit/ast': '*'
@@ -3378,11 +3378,11 @@ packages:
       '@mmd-toolkit/ast':
         optional: true
 
-  '@mmd-toolkit/parser@0.4.0':
-    resolution: {integrity: sha512-ZbLGseBETDlwVT/5b/kjPLblW7Vj4VmEz0d3a7xcQUNU8kQWdds4JyAZ9E2nuuvbe8mPzH2MfH2GMcaoXaSg6w==}
+  '@mmd-toolkit/parser@0.4.1':
+    resolution: {integrity: sha512-TTek1uGsBUPnYDRasE6uFQpO6sWKVwjMFKT0K0qVN6b+3CES2ujko7ospZROTIT2sR2AmQHkEQEMYBOXCbILdg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
-      '@mmd-toolkit/ast': ^0.4.0
+      '@mmd-toolkit/ast': ^0.4.1
     peerDependenciesMeta:
       '@mmd-toolkit/ast':
         optional: true
@@ -16245,15 +16245,15 @@ snapshots:
 
   '@microsoft/tsdoc@0.17.1': {}
 
-  '@mmd-toolkit/eslint-plugin@0.5.0(eslint@10.15.0)':
+  '@mmd-toolkit/eslint-plugin@0.5.1(eslint@10.15.0)':
     dependencies:
       '@eslint/core': 1.2.1
       '@eslint/plugin-kit': 0.7.3
-      '@mmd-toolkit/parser': 0.4.0
+      '@mmd-toolkit/parser': 0.4.1
       '@ota-meshi/ast-token-store': 0.3.0
       eslint: 10.15.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  '@mmd-toolkit/parser@0.4.0': {}
+  '@mmd-toolkit/parser@0.4.1': {}
 
   '@modelcontextprotocol/client@2.4.0':
     dependencies:
