@@ -184,9 +184,9 @@ type ApplyTypeAffectingOptions<
   TypeAffectingOptions
 >;
 
-// Lets every Sub-config at any depth be set to a string, the shorthand for `files`.
+// Lets every Sub-config at any depth be set to a string, the shorthand for its file patterns.
 // Kept a plain homomorphic mapped type and applied before the type-affecting options: a
-// conditional type on a `Config` that is still generic makes checking the options many times slower
+// conditional type on Config options that are still generic makes checking them much slower
 type WithSubConfigFilesShorthand<Config, Depth extends number = 4> = {
   [Key in keyof Config]: Key extends `config${string}`
     ? Depth extends 0
@@ -913,7 +913,7 @@ export type ConfigsOptionResolved<ExtraPlugins extends ExtraPluginsType = never>
 /**
  * The root options with every Config and Sub-config set to a string turned into the object form
  */
-export type EslintConfigUnOptionsResolved<ExtraPlugins extends ExtraPluginsType = never> =
+type EslintConfigUnOptionsResolved<ExtraPlugins extends ExtraPluginsType = never> =
   OverrideProperties<
     EslintConfigUnOptions<ExtraPlugins>,
     {configs?: ConfigsOptionResolved<ExtraPlugins>}

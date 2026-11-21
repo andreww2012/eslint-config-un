@@ -16,6 +16,7 @@ When you add or remove Configs or rules within them, it's a good idea to update 
 
 Don't typecheck with TypeScript 6: it only exists for ESLint to work.
 Use TypeScript 7 only.
+After changing types, typecheck from a clean build (an incremental one can miss errors in tests) and run the type tests through Vitest too.
 
 Avoid mentioning this package's name in internal comments.
 
@@ -52,6 +53,7 @@ For example, marking rules as stylistic only changes what `noStylisticRules` dis
 
 In changesets, describe only what changes in this package, like its output, options or API.
 Don't describe behavior changes inside a dependency, like a rule that now reports more cases.
+Don't add a changeset for changes that don't affect the output, options or API, like performance or other internal improvements.
 
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -- The heading introduces a list -->
 ## When you're asked to...
