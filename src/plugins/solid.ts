@@ -2,9 +2,9 @@ import {definePluginMetadata} from './shared';
 
 export default definePluginMetadata('solid', {
   configs: ['solid'],
-  docsUrl: 'https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/README.md',
+  docsUrl: 'https://github.com/solidjs/eslint-plugin-solid/blob/HEAD/README.md',
   ruleDocsUrl: (ruleName) =>
-    `https://github.com/solidjs-community/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/${ruleName}.md`,
+    `https://github.com/solidjs/eslint-plugin-solid/blob/HEAD/packages/eslint-plugin-solid/docs/${ruleName}.md`,
   rules: {
     imports: {stylistic: true},
     'jsx-no-undef': {disableInCodeBlocks: 'tooStrict'},

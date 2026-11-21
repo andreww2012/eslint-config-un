@@ -826,8 +826,8 @@ importers:
         specifier: 0.1.6
         version: 0.1.6(jiti@2.7.0)(supports-color@7.2.0)
       eslint-plugin-solid:
-        specifier: 0.20.0
-        version: 0.20.0(eslint@10.15.0)
+        specifier: 0.20.1
+        version: 0.20.1(eslint@10.15.0)
       eslint-plugin-sonarjs:
         specifier: 4.2.2
         version: 4.2.2(eslint@10.15.0)
@@ -8489,8 +8489,8 @@ packages:
   eslint-plugin-sentences-per-line@0.1.6:
     resolution: {integrity: sha512-2uYFopwmLlvc6IsqfSGT/7qoQoC6mvMvTZKvDBlV6u+GtaMBaTo0JgFug6GoJ3i/pxUiaDw3PsC2h4VsLoRfDQ==}
 
-  eslint-plugin-solid@0.20.0:
-    resolution: {integrity: sha512-+cA9Yz+ON+Sr3sfl2RJePrPDXZmIAleS3D6W5rRuP/BKRqnt2DcSXi2YMFi52oClWGoOfBl29FdtLere7qoJUQ==}
+  eslint-plugin-solid@0.20.1:
+    resolution: {integrity: sha512-HPBVDgkGCOqXpfMQUyMP273AXo/VUwm/hqvTWWovVSJKPBzrKhq7w04Yn0PtTgj9g+7ZdlcAAJ9dwgBGeJQ4Gg==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -21580,7 +21580,7 @@ snapshots:
       - jiti
       - supports-color
 
-  eslint-plugin-solid@0.20.0(eslint@10.15.0):
+  eslint-plugin-solid@0.20.1(eslint@10.15.0):
     dependencies:
       eslint-visitor-keys: 3.4.3
       estraverse: 5.3.0
