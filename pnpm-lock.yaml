@@ -703,8 +703,8 @@ importers:
         specifier: 7.0.2
         version: 7.0.2(eslint@10.15.0)
       eslint-plugin-cypress:
-        specifier: 7.0.6
-        version: 7.0.6(@typescript-eslint/parser@8.73.0)(eslint@10.15.0)
+        specifier: 7.1.0
+        version: 7.1.0(@typescript-eslint/parser@8.73.0)(eslint@10.15.0)
       eslint-plugin-de-morgan:
         specifier: 2.3.0
         version: 2.3.0(eslint@10.15.0)
@@ -8015,8 +8015,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-cypress@7.0.6:
-    resolution: {integrity: sha512-mKMOQFeXBVAFLdZixUbOb0wOGiW0dECjw9H/P3McAPntZCjDKjk/LEyhLRX93CqlHYblo7SW0TDDQWcCuglYUA==}
+  eslint-plugin-cypress@7.1.0:
+    resolution: {integrity: sha512-aCTx12rYVF/JEVRLL+hEpxGw0VUyvYm36lLqlFLTN74Y5B/nsh7HAFYIPP+RexisCFVCAiWMt0qrbQTCHGIT2w==}
     peerDependencies:
       '@typescript-eslint/parser': '>=8'
       eslint: '>=10'
@@ -20868,7 +20868,7 @@ snapshots:
       known-css-properties: 0.37.0
       postcss-value-parser: 4.2.0
 
-  eslint-plugin-cypress@7.0.6(@typescript-eslint/parser@8.73.0)(eslint@10.15.0):
+  eslint-plugin-cypress@7.1.0(@typescript-eslint/parser@8.73.0)(eslint@10.15.0):
     dependencies:
       eslint: 10.15.0(jiti@2.7.0)(supports-color@7.2.0)
       globals: 17.14.0
