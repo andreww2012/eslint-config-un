@@ -715,8 +715,8 @@ importers:
         specifier: 0.2.3
         version: 0.2.3(eslint@10.15.0)
       eslint-plugin-ember:
-        specifier: 13.11.2
-        version: 13.11.2(@typescript-eslint/parser@8.73.0)(@typescript/typescript6@6.0.2)(eslint@10.15.0)
+        specifier: 13.11.3
+        version: 13.11.3(@typescript-eslint/parser@8.73.0)(@typescript/typescript6@6.0.2)(eslint@10.15.0)
       eslint-plugin-erasable-syntax-only:
         specifier: 0.7.2
         version: 0.7.2(@typescript-eslint/parser@8.73.0)(@typescript/typescript6@6.0.2)(eslint@10.15.0)(supports-color@7.2.0)
@@ -8043,8 +8043,8 @@ packages:
     peerDependencies:
       eslint: '>=8.0.0'
 
-  eslint-plugin-ember@13.11.2:
-    resolution: {integrity: sha512-quq6yHknOdp/rQ1EUyqN8SIkIqfkZh7RdIg6du1m0iZllJgeZTlsWYqJVMLnl5NuU6Vjg3ZeoefUA636A1qcaQ==}
+  eslint-plugin-ember@13.11.3:
+    resolution: {integrity: sha512-f2vbfUfAMpou+sZlW8e/yGVJhTt/c1gzkFXEugQIPCzv+62DxyWkk6sXaid8qrS7GOpp4rzFv7Z5PVpGetgpaw==}
     engines: {node: '>= 20.19'}
     peerDependencies:
       '@typescript-eslint/parser': '*'
@@ -20890,7 +20890,7 @@ snapshots:
     dependencies:
       eslint: 10.15.0(jiti@2.7.0)(supports-color@7.2.0)
 
-  eslint-plugin-ember@13.11.2(@typescript-eslint/parser@8.73.0)(@typescript/typescript6@6.0.2)(eslint@10.15.0):
+  eslint-plugin-ember@13.11.3(@typescript-eslint/parser@8.73.0)(@typescript/typescript6@6.0.2)(eslint@10.15.0):
     dependencies:
       '@ember-data/rfc395-data': 0.0.4
       aria-query: 5.3.2
