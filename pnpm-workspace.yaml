@@ -21,7 +21,6 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/eslint-parser@0.7.6'
   - '@tsrx/eslint-plugin@0.7.6'
   - eslint-plugin-ember@13.11.2
-  - '@tanstack/eslint-plugin-query@5.108.1'
   - '@andreww2012/cspell-config@0.0.1'
 minimumReleaseAgeExcludePrune: true
 
