@@ -403,7 +403,8 @@ export default defineUnConfig<SonarEslintConfigOptions>('sonar', {
     // Note: in TypeScript code, calling a literal is already a type error
     .addRule('no-literal-call', ERROR) /** @since 1.0.4-alpha.0 */ // [S6958] 🟢
     .addRule('no-mime-sniff', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5734] 🟢 📦 `helmet`
-    .addRule('no-misleading-array-reverse', ERROR) /** @since 1.0.4-alpha.0 */ // [S4043] 🟢
+    // `{un,unicorn}/no-array-reverse` are better alternatives
+    .addRule('no-misleading-array-reverse', OFF) /** @since 1.0.4-alpha.0 */ // [S4043] 🟢
     // ⚠️ `regexp/no-misleading-unicode-character`
     .addRule('no-misleading-character-class', OFF) /** @since 3.0.0 */ // [S5868] 🟢🔤
     .addRule('no-mixed-completion-style', testRulesSeverity) /** @since 4.2.0 */ // [S8960] 🧪 📦 `jest`, `@jest/globals`, `mocha`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`
