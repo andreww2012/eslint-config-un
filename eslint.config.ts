@@ -172,7 +172,7 @@ export default eslintConfig({
     },
     vitest: {
       additionalAssertions: ['expectConfigState', 'expectExtraction'],
-      vitestGlobalsImporting: 'disallow',
+      useGlobalApis: 'always',
     },
   },
 

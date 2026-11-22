@@ -239,16 +239,20 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   testDefinitionKeyword?: JestEslintConfigOptions<ExtraPlugins>['testDefinitionKeyword'];
 
   /**
-   * Enforces whether importing [Vitest globals](https://vitest.dev/config/globals) is required or
-   * disallowed.
-   * The default follows Vitest, which requires importing them unless its `globals` option is on.
+   * Whether to use [global Vitest APIs](https://vitest.dev/config/globals) (`describe`, `it`,
+   * `expect` and so on) instead of importing them from `vitest`.
+   *
+   * Possible values:
+   * - `never`: the APIs must be imported, which matches Vitest's default;
+   * - `always`: the APIs must not be imported (Vitest's `globals` option must be on for that);
+   * - `optional`: both styles are allowed.
    *
    * Affected rules:
    * - [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
    * - [`vitest/prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
-   * @default 'enforce'
+   * @default 'never'
    */
-  vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';
+  useGlobalApis?: 'always' | 'never' | 'optional';
 }
 
 // Mirrors `defaultOptions` of `vitest/expect-expect`. The `typecheck`-conditional
@@ -284,7 +288,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     configTypescript: isTsConfigEnabled,
     enforceEachOrFor: true,
     enforceToBeCalledStyle: true,
-    vitestGlobalsImporting: 'enforce',
+    useGlobalApis: 'never',
     paddingAround: true,
   });
 
@@ -300,7 +304,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     restrictedMatchers,
     asyncMatchers,
     minAndMaxExpectArgs,
-    vitestGlobalsImporting,
+    useGlobalApis,
     paddingAround,
   } = optionsResolved;
   const enforceEachOrFor = enforceEachOrForRaw === true ? 'each' : enforceEachOrForRaw;
@@ -413,7 +417,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('no-import-node-test', ERROR) /** @since 0.3.14 */ // 🟢
     .addRule(
       'no-importing-vitest-globals',
-      vitestGlobalsImporting === 'disallow' ? ERROR : OFF,
+      useGlobalApis === 'always' ? ERROR : OFF,
     ) /** @since 1.2.3 */ // (warns in all)
     .addRule('no-interpolation-in-snapshots', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
     .addRule('no-large-snapshots', OFF) /** @since 0.0.54 */ // (warns in all)
@@ -482,7 +486,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     ]) /** @since 1.3.15 */ // (warns in all)
     .addRule(
       'prefer-importing-vitest-globals',
-      vitestGlobalsImporting === 'enforce' ? ERROR : OFF,
+      useGlobalApis === 'never' ? ERROR : OFF,
     ) /** @since 1.2.3 */ // (warns in all)
     .addRule('prefer-lowercase-title', ERROR) /** @since 0.0.5 */ /** @aka lower-case-title */ // (warns in all)
     .addRule(

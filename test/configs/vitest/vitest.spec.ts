@@ -269,8 +269,8 @@ describe('options', () => {
     });
   });
 
-  describe('option: `vitestGlobalsImporting`', () => {
-    it('enforces importing vitest globals by default', async () => {
+  describe('option: `useGlobalApis`', () => {
+    it('requires importing Vitest APIs by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(
@@ -281,9 +281,9 @@ describe('options', () => {
       ).toBe(2);
     });
 
-    it('disallows importing vitest globals when set to `disallow`', async () => {
+    it('disallows importing Vitest APIs when set to `always`', async () => {
       const configResult = await computeEslintConfig({
-        vitest: {vitestGlobalsImporting: 'disallow'},
+        vitest: {useGlobalApis: 'always'},
       });
 
       expect(
@@ -294,9 +294,9 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('allows both styles when set to `any`', async () => {
+    it('allows both styles when set to `optional`', async () => {
       const configResult = await computeEslintConfig({
-        vitest: {vitestGlobalsImporting: 'any'},
+        vitest: {useGlobalApis: 'optional'},
       });
 
       expect(
