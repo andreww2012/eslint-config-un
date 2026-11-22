@@ -476,6 +476,93 @@ describe('options', () => {
     });
   });
 
+  describe('option: `additionalSuiteFunctions`', () => {
+    it('does not pass options to `vitest/require-hook` by default', async () => {
+      const configResult = await computeEslintConfig('vitest');
+
+      expect(configResult.getRuleEntryOptions('vitest', 'vitest/require-hook')).toStrictEqual([]);
+    });
+
+    it('sets `allowedFunctionCalls` of `vitest/require-hook`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalSuiteFunctions: ['describeWithFixtures', 'ruleTester.run']},
+      });
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/require-hook')).toMatchInlineSnapshot(
+        '[1, {"allowedFunctionCalls": ["describeWithFixtures", "ruleTester.run"]}]',
+      );
+    });
+
+    it('does not pass options to `vitest/require-hook` when set to an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalSuiteFunctions: []},
+      });
+
+      expect(configResult.getRuleEntryOptions('vitest', 'vitest/require-hook')).toStrictEqual([]);
+    });
+  });
+
+  describe('option: `additionalTestFunctions`', () => {
+    const RULES_WITH_OPTIONS = [
+      'vitest/expect-expect',
+      'vitest/no-standalone-expect',
+      'vitest/require-hook',
+    ] as const;
+
+    it('does not pass options to `vitest/expect-expect`, `vitest/no-standalone-expect` and `vitest/require-hook` by default', async () => {
+      const configResult = await computeEslintConfig('vitest');
+
+      RULES_WITH_OPTIONS.forEach((ruleName) => {
+        expect(configResult.getRuleEntryOptions('vitest', ruleName)).toStrictEqual([]);
+      });
+    });
+
+    it('sets options of `vitest/expect-expect`, `vitest/no-standalone-expect` and `vitest/require-hook`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalTestFunctions: ['testWithDatabase', 'helpers.test']},
+      });
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
+        '[2, {"additionalTestBlockFunctions": ["testWithDatabase", "helpers.test"]}]',
+      );
+      expect(
+        configResult.getRuleEntry('vitest', 'vitest/no-standalone-expect'),
+      ).toMatchInlineSnapshot(
+        '[2, {"additionalTestBlockFunctions": ["testWithDatabase", "helpers.test"]}]',
+      );
+      expect(configResult.getRuleEntry('vitest', 'vitest/require-hook')).toMatchInlineSnapshot(
+        '[1, {"allowedFunctionCalls": ["testWithDatabase", "helpers.test"]}]',
+      );
+    });
+
+    it('does not pass options to `vitest/expect-expect`, `vitest/no-standalone-expect` and `vitest/require-hook` when set to an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalTestFunctions: []},
+      });
+
+      RULES_WITH_OPTIONS.forEach((ruleName) => {
+        expect(configResult.getRuleEntryOptions('vitest', ruleName)).toStrictEqual([]);
+      });
+    });
+
+    it('is combined with `additionalAssertions` and `additionalSuiteFunctions`', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {
+          additionalAssertions: ['assertThat'],
+          additionalSuiteFunctions: ['describeWithFixtures'],
+          additionalTestFunctions: ['testWithDatabase'],
+        },
+      });
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
+        '[2, {"additionalTestBlockFunctions": ["testWithDatabase"], "assertFunctionNames": ["expect", "assert", "assertThat"]}]',
+      );
+      expect(configResult.getRuleEntry('vitest', 'vitest/require-hook')).toMatchInlineSnapshot(
+        '[1, {"allowedFunctionCalls": ["describeWithFixtures", "testWithDatabase"]}]',
+      );
+    });
+  });
+
   describe('vitest version', () => {
     it('disables `vitest/prefer-called-exactly-once-with` rule for vitest 2', async () => {
       const configResult = await computeEslintConfig('vitest');

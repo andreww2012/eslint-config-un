@@ -79,6 +79,31 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   additionalAssertions?: readonly string[];
 
   /**
+   * Names of custom functions that declare groups of tests, like `describe` does.
+   * Calls to them are allowed outside of hooks.
+   * For method calls, use the full name, like `ruleTester.run`.
+   * For functions that define a single test, use `additionalTestFunctions` instead.
+   *
+   * Affected rule:
+   * - [`vitest/require-hook`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-hook.md)
+   */
+  additionalSuiteFunctions?: readonly string[];
+
+  /**
+   * Names of custom functions that define a single test, like `it` or `test` do.
+   * Their callbacks are checked like test bodies: they must have assertions, and `expect` can be
+   * called in them.
+   * Calls to them are also allowed outside of hooks.
+   * For method calls, use the full name, like `helpers.testWithDatabase`.
+   *
+   * Affected rules:
+   * - [`vitest/expect-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/expect-expect.md)
+   * - [`vitest/no-standalone-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-standalone-expect.md)
+   * - [`vitest/require-hook`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-hook.md)
+   */
+  additionalTestFunctions?: readonly string[];
+
+  /**
    * Allows specifying which matchers return promises, and so should be considered async when
    * checking if an `expect` should be returned or awaited.
    *
@@ -296,6 +321,8 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     configNoOnlyTests,
     configTypescript,
     additionalAssertions,
+    additionalSuiteFunctions,
+    additionalTestFunctions,
     enforceEachOrFor: enforceEachOrForRaw,
     enforceToBeCalledStyle: enforceToBeCalledStyleRaw,
     maxAssertionCalls,
@@ -331,6 +358,22 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
 
   const hasRestrictedMethods = !isEmptyValue(restrictedMethods);
   const hasRestrictedMatchers = !isEmptyValue(restrictedMatchers);
+
+  const expectExpectOptions = {
+    ...(additionalAssertions?.length && {
+      assertFunctionNames: [
+        ...EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES,
+        ...additionalAssertions,
+      ],
+    }),
+    ...(additionalTestFunctions?.length && {
+      additionalTestBlockFunctions: [...additionalTestFunctions],
+    }),
+  };
+  const requireHookAllowedFunctionCalls = [
+    ...(additionalSuiteFunctions || []),
+    ...(additionalTestFunctions || []),
+  ];
 
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
@@ -380,16 +423,7 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule(
       'expect-expect',
       ERROR,
-      additionalAssertions?.length
-        ? [
-            {
-              assertFunctionNames: [
-                ...EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES,
-                ...additionalAssertions,
-              ],
-            },
-          ]
-        : [],
+      isEmptyValue(expectExpectOptions) ? [] : [expectExpectOptions],
     ) /** @since 0.0.17 */ // 🟢
     .addRule('hoisted-apis-on-top', ERROR) /** @since 1.3.7 */ // (warns in all)
     .addRule(
@@ -432,7 +466,13 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
       hasRestrictedMethods ? ERROR : OFF,
       hasRestrictedMethods ? [restrictedMethods] : [],
     ) /** @since 0.0.43 */
-    .addRule('no-standalone-expect', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
+    .addRule(
+      'no-standalone-expect',
+      ERROR,
+      additionalTestFunctions?.length
+        ? [{additionalTestBlockFunctions: [...additionalTestFunctions]}]
+        : [],
+    ) /** @since 0.0.54 */ // 🟢(since 1.5.0)
     .addRule('no-test-prefixes', ERROR) /** @since 0.0.54 */ // (warns in all)
     .addRule('no-test-return-statement', ERROR) /** @since 0.0.54 */ // (warns in all)
     .addRule('no-unneeded-async-expect-function', ERROR) /** @since 1.5.3 */ // 🟢
@@ -508,7 +548,13 @@ export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
     .addRule('prefer-todo', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // (warns in all)
     .addRule('require-awaited-expect-poll', WARNING) /** @since 1.4.2 */ // (warns in all)
-    .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
+    .addRule(
+      'require-hook',
+      WARNING,
+      requireHookAllowedFunctionCalls.length > 0
+        ? [{allowedFunctionCalls: requireHookAllowedFunctionCalls}]
+        : [],
+    ) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
     .addRule('require-mock-type-parameters', WARNING) /** @since 1.1.27 */
     .addRule('require-test-timeout', OFF) /** @since 1.6.6 */
