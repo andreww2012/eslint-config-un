@@ -1,5 +1,20 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-rc.9
+
+### Minor Changes
+
+- [`abf0342`](https://github.com/andreww2012/eslint-config-un/commit/abf034225739fdb6674012692e97cb390509779c) - vitest: added options to list custom test helpers:
+  
+  - `additionalSuiteFunctions`, for functions that group tests, like `describe`. [`vitest/require-hook`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-hook.md) allows calling them outside of hooks
+  - `additionalTestFunctions`, for functions that define a single test, like `it`. [`vitest/expect-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/expect-expect.md), [`vitest/no-standalone-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-standalone-expect.md) and [`vitest/require-hook`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-hook.md) treat them as tests
+
+### Patch Changes
+
+- [`d2bbfa4`](https://github.com/andreww2012/eslint-config-un/commit/d2bbfa4bc113c85790086570eaed8acfb1bf0aaf) - [**BREAKING**] vitest: renamed `vitestGlobalsImporting` option to `useGlobalApis`. Its values were renamed too: `enforce` to `never` (still the default), `disallow` to `always` and `any` to `optional`
+
+- [`28a1156`](https://github.com/andreww2012/eslint-config-un/commit/28a1156df20e3c71c6150f9f99ad9a3cc63a8df8) - nodeDependencies: stopped [`node-dependencies/compat-engines`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/compat-engines.html) from checking `devDependencies`. The rule only knows about `engines`, which is meant for package consumers. `devEngines` is the right field to check the engines against for dev dependencies, and it's not supported yet by this plugin
+
 ## 1.0.0-rc.8
 
 ### Minor Changes
